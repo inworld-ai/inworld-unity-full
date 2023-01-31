@@ -1,0 +1,27 @@
+name: Check script headers
+
+on: [push]
+
+jobs:
+  header-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Get all .cs files
+      run: |
+        find . -type f -name "*.cs" ! -path "./ThirdParty/*" -print0 | xargs -0 grep -L "/*************************************************************************************************
+        * Copyright 2022 Theai, Inc. (DBA Inworld)
+        *
+        * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+        * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+        *************************************************************************************************/"
+        
+    - name: Report results
+      if: steps.get-files.outputs.result != ''
+      run: |
+        echo "The following .cs files are missing headers:"
+        echo "${steps.get-files.outputs.result}"
+        exit 1
