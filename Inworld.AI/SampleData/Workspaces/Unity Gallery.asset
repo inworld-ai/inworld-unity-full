@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 679553faa086cdc48a58556300e27230, type: 3}
+  m_Name: Unity Gallery
+  m_EditorClassIdentifier: 
+  title: Unity Gallery
+  fullName: workspaces/unitytest
+  characters:
+  - {fileID: 11400000, guid: a1e2f696e9d0c8748a95e29797fcc202, type: 2}
+  scenes:
+  - {fileID: 11400000, guid: c096bae5b40fbde42ae7e8457557ee8b, type: 2}
+  integrations:
+  - {fileID: 11400000, guid: ce212608d6b0e3346a17fdc3547a48ab, type: 2}
+  index: 0

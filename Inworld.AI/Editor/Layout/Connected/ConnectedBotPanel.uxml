@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement name="ConnectedBotPanel" style="flex-direction: column; margin-top: 0; margin-bottom: 20px; justify-content: space-around; align-items: center;">
+        <ui:Button text="Add Player Controller to Unity Scene" display-tooltip-when-elided="true" name="BtnAddCtrl" style="width: 300px; height: 30px; font-size: 14px; -unity-font-style: bold; -unity-font: url(&apos;project://database/Assets/Inworld.AI/Fonts/DMSans-Regular.ttf?fileID=12800000&amp;guid=2c9ee65233da755438228fafa684047d&amp;type=3#DMSans-Regular&apos;); -unity-font-definition: none;" />
+        <ui:VisualElement style="flex-direction: row; justify-content: center; margin-top: 20px;">
+            <ui:Button text="Refresh" display-tooltip-when-elided="true" name="BtnRefresh" style="width: 120px; height: 30px; font-size: 14px; -unity-font-style: bold; margin-left: 20px; margin-right: 20px; -unity-font: url(&apos;project://database/Assets/Inworld.AI/Fonts/DMSans-Regular.ttf?fileID=12800000&amp;guid=2c9ee65233da755438228fafa684047d&amp;type=3#DMSans-Regular&apos;); -unity-font-definition: none;" />
+            <ui:Button text="Log out" display-tooltip-when-elided="true" name="BtnLogout" style="width: 120px; height: 30px; font-size: 14px; -unity-font-style: bold; margin-left: 20px; margin-right: 20px; -unity-font: url(&apos;project://database/Assets/Inworld.AI/Fonts/DMSans-Regular.ttf?fileID=12800000&amp;guid=2c9ee65233da755438228fafa684047d&amp;type=3#DMSans-Regular&apos;); -unity-font-definition: none;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

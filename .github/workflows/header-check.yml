@@ -3,25 +3,47 @@ name: Check script headers
 on: [push]
 
 jobs:
-  header-check:
+  file-get:
     runs-on: ubuntu-latest
+
+    outputs:
+      files: ${{ steps.get-files.outputs.files }}
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Get all .cs files
+    - id: get-files
       run: |
-        find . -type f -name "*.cs" ! -path "./ThirdParty/*" -print0 | xargs -0 grep -L "/*************************************************************************************************
+        files=$(find . -type f -name "*.cs" ! -path "./ThirdParty/**/*" ! -path "./ThirdParty/**/*")
+
+  file-check:
+    runs-on: ubuntu-latest
+    needs: file-get
+    steps:
+    - id: check-files
+      run: |
+        echo "Checking files: ${{needs.file-get.outputs.files}}"
+
+  license-check:
+    runs-on: ubuntu-latest
+    needs: file-get
+    outputs:
+      missing_files: ${{ needs.check-licenses.outputs.missing_files }}    
+    steps:
+    - id: check-licenses
+      run: |
+        missing_files=$(grep -L "/*************************************************************************************************
         * Copyright 2022 Theai, Inc. (DBA Inworld)
         *
         * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
         * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
-        *************************************************************************************************/"
-        
+        *************************************************************************************************/" <<< "$(echo "${steps.get-files.outputs.files}" | tr '\n' '\0')"
+        echo "::set-output name=missing_files::$missing_files"
+
     - name: Report results
-      if: steps.get-files.outputs.result != ''
+      if: steps.check-licenses.outputs.missing_files != ''
       run: |
         echo "The following .cs files are missing headers:"
-        echo "${steps.get-files.outputs.result}"
+        echo "${steps.check-licenses.outputs.missing_files}"
         exit 1

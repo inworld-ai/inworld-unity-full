@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <ui:VisualElement name="Header" style="flex-direction: row; min-width: auto; min-height: auto;">
+        <ui:VisualElement name="Title" style="width: 273px; height: 58px; justify-content: flex-start; background-image: url(&apos;project://database/Assets/Inworld.AI/Textures/Banners/logo_inworld-04.png?fileID=2800000&amp;guid=27826f5951914a745bd751c0b8d249c8&amp;type=3#logo_inworld-04&apos;); margin-left: 20px; margin-top: 20px;" />
+    </ui:VisualElement>
+    <ui:Label display-tooltip-when-elided="true" name="Title" style="height: 70px; font-size: 16px; -unity-font-style: bold; -unity-text-align: lower-left; margin-left: 20px; -unity-font: url(&apos;project://database/Assets/Inworld.AI/Fonts/DMSans-Bold.ttf?fileID=12800000&amp;guid=ac1308377b6e09a4d8349fc0033248ed&amp;type=3#DMSans-Bold&apos;); -unity-font-definition: none;" />
+    <ui:Label display-tooltip-when-elided="true" name="TxtErrorMsg" style="margin-left: 20px; margin-right: 20px; margin-top: 0; margin-bottom: 0; font-size: 14px; -unity-font-style: bold; color: rgb(255, 0, 0); white-space: normal; -unity-font: url(&apos;project://database/Assets/Inworld.AI/Fonts/DMSans-Regular.ttf?fileID=12800000&amp;guid=2c9ee65233da755438228fafa684047d&amp;type=3#DMSans-Regular&apos;); -unity-font-definition: none;" />
+</ui:UXML>

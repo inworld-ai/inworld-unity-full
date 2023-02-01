@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3ad0515a2868cd4282589144c7820fd, type: 3}
+  m_Name: olympus-theatre
+  m_EditorClassIdentifier: 
+  fullName: workspaces/inworld-sandbox/scenes/olympus-theatre
+  shortName: 
+  description: Zeus and Hermes are in the Olympus Theatre where they are watching
+    a new performance from talented humans. It is nighttime and they are surrounded
+    by floating lanterns. A variety of acts are happening at the same time.
+  characters:
+  - workspaces/inworld-sandbox/characters/hermes01200722
+  - workspaces/inworld-sandbox/characters/zeus9273
+  triggers:
+  - olympus-earthquake
