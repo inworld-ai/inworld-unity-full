@@ -1,49 +1,34 @@
-name: Check script headers
+# /*************************************************************************************************
+# * Copyright 2022 Theai, Inc. (DBA Inworld)
+# *
+# * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+# * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+# *************************************************************************************************/
 
-on: [push]
+name: Check license header
+
+on:
+  pull_request:
+    branches: [main]
 
 jobs:
-  file-get:
+  check_header:
     runs-on: ubuntu-latest
-
-    outputs:
-      files: ${{ steps.get-files.outputs.files }}
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - id: get-files
-      run: |
-        files=$(find . -type f -name "*.cs" ! -path "./ThirdParty/**/*" ! -path "./ThirdParty/**/*")
+    - name: Fix License Header
+      uses: apache/skywalking-eyes@v0.4.0
+      with:
+        mode: fix
 
-  file-check:
-    runs-on: ubuntu-latest
-    needs: file-get
-    steps:
-    - id: check-files
-      run: |
-        echo "Checking files: ${{needs.file-get.outputs.files}}"
-
-  license-check:
-    runs-on: ubuntu-latest
-    needs: file-get
-    outputs:
-      missing_files: ${{ needs.check-licenses.outputs.missing_files }}    
-    steps:
-    - id: check-licenses
-      run: |
-        missing_files=$(grep -L "/*************************************************************************************************
-        * Copyright 2022 Theai, Inc. (DBA Inworld)
-        *
-        * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
-        * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
-        *************************************************************************************************/" <<< "$(echo "${steps.get-files.outputs.files}" | tr '\n' '\0')"
-        echo "::set-output name=missing_files::$missing_files"
-
-    - name: Report results
-      if: steps.check-licenses.outputs.missing_files != ''
-      run: |
-        echo "The following .cs files are missing headers:"
-        echo "${steps.check-licenses.outputs.missing_files}"
-        exit 1
+    - name: Apply Changes
+      uses: EndBug/add-and-commit@v4
+      env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        author_name: Divakar Dev
+        author_email: divakar@inworld.ai
+        message: 'Automatic application of license header'    
