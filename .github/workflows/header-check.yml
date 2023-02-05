@@ -22,4 +22,4 @@ jobs:
     - name: Check License Header
       uses: apache/skywalking-eyes@v0.4.0
       with:
-        mode: Check   
+        mode: check
