@@ -87,8 +87,7 @@ header:
     - '**/*.mask'
     - '**/*.controller'
     - '**/*.yaml'
-    - '**/*.yml'
-    
+    - '**/*.yml'    
     
   comment: on-failure
 
