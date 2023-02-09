@@ -1,0 +1,74 @@
+  name: Create Release
+
+  on:
+    pull_request_target:
+      types:
+        - closed
+        
+  env:
+    IMAGE_TAG: $(git rev-parse --short "$GITHUB_SHA")
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+  jobs:
+    if_merged:
+      if: github.event.pull_request.merged == true
+      runs-on: ubuntu-latest
+      steps:
+      - run: |
+          echo The PR was merged
+    
+    set-release-name: 
+      runs-on: ubuntu-latest
+      needs: if_merged
+      steps: 
+      - name: Set Release Name
+        run: |
+          echo ::set-env name=TAG_NAME::"v$(date +%Y%m%d)-${{ env.RELEASE_COUNTER }}"
+          echo ::set-output name=tag_name::"v$(date +%Y%m%d)-${{ env.RELEASE_COUNTER }}"
+          echo ::add-mask::${{ env.RELEASE_COUNTER }}
+    
+    build:
+      name: Build
+      runs-on: ubuntu-20.04
+      concurrency:
+        group: build-a-${{ github.ref }}
+        cancel-in-progress: true
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+          with:
+            lfs: true
+        - uses: actions/cache@v2
+          with:
+            path: Library
+            key: Library-build
+            restore-keys: Library-build
+        - uses: game-ci/unity-builder@v2
+          with:
+            unityVersion: 2021.3.6f1
+            buildMethod: ExportPackage.Editor.UnityPackageExporter.Export
+        - uses: actions/upload-artifact@v2
+          with:
+            name: inworld-sdk
+            path: Build/ai.inworld.runtime-sdk.unitypackage  
+    
+    create-release:
+      needs: [if_merged, set-release-name, build]
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v3
+          with:
+            fetch-depth: 0
+            lfs: true
+        - uses: softprops/action-gh-release@v1
+          if: startsWith(github.ref_name, 'refs/tags/')
+          with:
+            files:   ${{ steps.upload-artifact.outputs.artifact-path }}/ai.inworld.runtime-sdk.unitypackage
+            tag_name: ${{ github.ref }}
+            release_name: "Release ${{ github.ref }}"
+            draft: false
+            prerelease: false
+            token: ${{ env.GITHUB_TOKEN }}
+    
