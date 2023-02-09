@@ -18,16 +18,6 @@
       - run: |
           echo The PR was merged
     
-    set-release-name: 
-      runs-on: ubuntu-latest
-      needs: if_merged
-      steps: 
-      - name: Set Release Name
-        run: |
-          echo ::set-env name=TAG_NAME::"v$(date +%Y%m%d)-${{ env.RELEASE_COUNTER }}"
-          echo ::set-output name=tag_name::"v$(date +%Y%m%d)-${{ env.RELEASE_COUNTER }}"
-          echo ::add-mask::${{ env.RELEASE_COUNTER }}
-    
     build:
       name: Build
       runs-on: ubuntu-20.04
@@ -54,7 +44,7 @@
             path: Build/ai.inworld.runtime-sdk.unitypackage  
     
     create-release:
-      needs: [if_merged, set-release-name, build]
+      needs: [if_merged, build]
       runs-on: ubuntu-latest
       steps:
         - name: Checkout
