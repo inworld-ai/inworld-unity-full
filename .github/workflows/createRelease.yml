@@ -10,13 +10,7 @@
     UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
     UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
 
-  jobs:
-    if_merged:
-      runs-on: ubuntu-latest
-      steps:
-      - run: |
-          echo The PR was merged
-    
+  jobs:   
     build:
       name: Build
       runs-on: ubuntu-latest
@@ -43,7 +37,7 @@
             path: Build/ai.inworld.runtime-sdk.unitypackage  
     
     create-release:
-      needs: [if_merged, build]
+      needs: [build]
       runs-on: ubuntu-latest
       steps:
         - name: Checkout
