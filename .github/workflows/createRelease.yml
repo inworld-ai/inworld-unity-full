@@ -1,12 +1,9 @@
   name: Create Release
 
   on:
-    pull_request_target:
-      types:
-        - closed
+    workflow_dispatch:
         
   env:
-    IMAGE_TAG: $(git rev-parse --short "$GITHUB_SHA")
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
     UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
@@ -14,7 +11,6 @@
 
   jobs:
     if_merged:
-      if: github.event.pull_request.merged == true
       runs-on: ubuntu-latest
       steps:
       - run: |
