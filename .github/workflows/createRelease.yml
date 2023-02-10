@@ -12,7 +12,6 @@
     UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
     UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
 
-
   jobs:
     if_merged:
       if: github.event.pull_request.merged == true
@@ -61,6 +60,7 @@
             files:   ${{ steps.upload-artifact.outputs.artifact-path }}/ai.inworld.runtime-sdk.unitypackage
             tag_name: ${{ github.ref }}
             release_name: "Release ${{ github.ref }}"
+            generate_release_notes: true
             draft: false
             prerelease: false
             token: ${{ env.GITHUB_TOKEN }}
