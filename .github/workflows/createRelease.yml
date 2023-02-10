@@ -8,6 +8,9 @@
   env:
     IMAGE_TAG: $(git rev-parse --short "$GITHUB_SHA")
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+    UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+    UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
 
 
   jobs:
