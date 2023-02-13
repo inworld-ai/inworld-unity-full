@@ -12,29 +12,29 @@
 
   jobs:   
     build:
-    name: Build
-    runs-on: ubuntu-20.04
-    concurrency:
-      group: build-a-${{ github.ref }}
-      cancel-in-progress: true
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          lfs: true
-      - uses: actions/cache@v2
-        with:
-          path: Library
-          key: Library-build
-          restore-keys: Library-build
-      - uses: game-ci/unity-builder@v2
-        with:
-          unityVersion: 2021.3.6f1
-          buildMethod: ExportPackage.Editor.UnityPackageExporter.Export
-      - uses: actions/upload-artifact@v2
-        with:
-          name: apk-alpha
-          path: Build/ai.inworld.runtime-sdk.unitypackage
+      name: Build
+      runs-on: ubuntu-20.04
+      concurrency:
+        group: build-a-${{ github.ref }}
+        cancel-in-progress: true
+      steps:
+          - name: Checkout code
+            uses: actions/checkout@v2
+            with:
+              lfs: true
+          - uses: actions/cache@v2
+            with:
+              path: Library
+              key: Library-build
+              restore-keys: Library-build
+          - uses: game-ci/unity-builder@v2
+            with:
+              unityVersion: 2021.3.6f1
+              buildMethod: ExportPackage.Editor.UnityPackageExporter.Export
+          - uses: actions/upload-artifact@v2
+            with:
+              name: apk-alpha
+              path: Build/ai.inworld.runtime-sdk.unitypackage
   
     create-release:
       needs: [build]
