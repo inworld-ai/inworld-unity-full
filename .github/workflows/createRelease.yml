@@ -13,7 +13,7 @@
   jobs:   
     build:
       name: Build
-      runs-on: ubuntu-latest
+      runs-on: [ self-hosted, kubernetes, withdocker ]
       concurrency:
         group: build-a-${{ github.ref }}
         cancel-in-progress: true
@@ -38,7 +38,7 @@
     
     create-release:
       needs: [build]
-      runs-on: ubuntu-latest
+      runs-on: [ self-hosted, kubernetes, withdocker ]
       steps:
         - name: Checkout
           uses: actions/checkout@v3
