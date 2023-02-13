@@ -12,7 +12,7 @@
   jobs:   
     build:
       name: Build
-      runs-on: [ self-hosted, kubernetes, withdocker ]
+      runs-on: ubuntu-20.04
       concurrency:
         group: build-a-${{ github.ref }}
         cancel-in-progress: true
@@ -28,7 +28,7 @@
             restore-keys: Library-build
         - uses: game-ci/unity-builder@v2
           with:
-            unityVersion: 2021.3.6f1
+            projectPath: ./
             buildMethod: ExportPackage.Editor.UnityPackageExporter.Export
         - uses: actions/upload-artifact@v2
           with:
