@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0447596b1a67de49ba5720fda0bdabe, type: 3}
+  m_Name: Panjurli
+  m_EditorClassIdentifier: 
+  characterName: Panjurli
+  brain: workspaces/default-btshkcislzv7l8vbd6dyug/characters/panjurli
+  avatar: {fileID: 0}
+  workspace: workspaces/default-btshkcislzv7l8vbd6dyug
+  currentScene: workspaces/default-btshkcislzv7l8vbd6dyug/characters/panjurli
+  ownerShip: 0
+  defaultThumbnail: {fileID: 0}
+  index: 0
+  triggers: []
+  scenes:
+  - workspaces/default-btshkcislzv7l8vbd6dyug/scenes/panjurli
+  modelUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_model/ef0c687b-ba9a-4344-9133-51fc70ab2a45.glb
+  posUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_image/ef0c687b-ba9a-4344-9133-51fc70ab2a45_posture.jpg
+  previewImgUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_image/ef0c687b-ba9a-4344-9133-51fc70ab2a45_portrait.jpg
+  characterID: d72a10e8-e13d-4aee-bbd6-7e75ac137590

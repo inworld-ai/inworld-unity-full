@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0447596b1a67de49ba5720fda0bdabe, type: 3}
+  m_Name: DataCeleste
+  m_EditorClassIdentifier: 
+  characterName: Celeste
+  brain: workspaces/inworld-sandbox/characters/default-celeste
+  avatar: {fileID: -3915082565821610680, guid: 462787370f9ff1845901709916b568ee, type: 3}
+  workspace: 
+  currentScene: 
+  ownerShip: 2
+  defaultThumbnail: {fileID: 2800000, guid: 7104e2c0f856d464295a59b2129f7e42, type: 3}
+  index: 0
+  triggers: []
+  scenes:
+  - workspaces/inworld-sandbox/scenes/celeste-spaceship
+  modelUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_model/97b6cb3d-3272-4d60-be4f-c790dabb2a33.glb
+  posUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_image/97b6cb3d-3272-4d60-be4f-c790dabb2a33_portrait.jpg
+  previewImgUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_image/97b6cb3d-3272-4d60-be4f-c790dabb2a33_portrait.jpg
+  characterID: 

@@ -1,0 +1,230 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80ffd9f2411a1534fbf1231a414c27c2, type: 3}
+  m_Name: InworldFacialAnimations
+  m_EditorClassIdentifier: 
+  emotions:
+  - emotion: Anger
+    icon: {fileID: 21300000, guid: 59824422081cbfc4f81f98468aff4b06, type: 3}
+    morphStates:
+    - morphName: eyesClosed
+      morphWeight: 0.2
+    - morphName: eyeSquintLeft
+      morphWeight: 0.5
+    - morphName: eyeSquintRight
+      morphWeight: 0.5
+    - morphName: mouthShrugUpper
+      morphWeight: 0.4
+    - morphName: browDownLeft
+      morphWeight: 1
+    - morphName: browDownRight
+      morphWeight: 1
+    - morphName: noseSneerLeft
+      morphWeight: 1
+    - morphName: noseSneerRight
+      morphWeight: 1
+  - emotion: Anticipation
+    icon: {fileID: 21300000, guid: fa616e1e217188845b77886279306ab7, type: 3}
+    morphStates:
+    - morphName: mouthSmile
+      morphWeight: 0.3
+    - morphName: eyeSquintLeft
+      morphWeight: 0.6
+    - morphName: eyeSquintRight
+      morphWeight: 0.6
+    - morphName: mouthRollLower
+      morphWeight: 0.5
+    - morphName: mouthRollUpper
+      morphWeight: 0.3
+    - morphName: mouthShrugLower
+      morphWeight: 0.3
+    - morphName: browInnerUp
+      morphWeight: 0.4
+    - morphName: browOuterUpLeft
+      morphWeight: 0.4
+    - morphName: browOuterUpRight
+      morphWeight: 0.4
+  - emotion: Disgust
+    icon: {fileID: 21300000, guid: 182cefe6bae51cb4bb6bc707d64aef59, type: 3}
+    morphStates:
+    - morphName: eyeSquintLeft
+      morphWeight: 1
+    - morphName: eyeSquintRight
+      morphWeight: 1
+    - morphName: mouthUpperUpLeft
+      morphWeight: 0.7
+    - morphName: browInnerUp
+      morphWeight: 1
+    - morphName: noseSneerLeft
+      morphWeight: 1
+    - morphName: noseSneerRight
+      morphWeight: 1
+  - emotion: Fear
+    icon: {fileID: 21300000, guid: e1042320140e3904082e09e7a8735ba7, type: 3}
+    morphStates:
+    - morphName: mouthOpen
+      morphWeight: 0.3
+    - morphName: eyeWideLeft
+      morphWeight: 0.5
+    - morphName: eyeWideRight
+      morphWeight: 0.5
+    - morphName: browInnerUp
+      morphWeight: 0.6
+    - morphName: browOuterUpLeft
+      morphWeight: 0.4
+    - morphName: browOuterUpRight
+      morphWeight: 0.4
+  - emotion: Joy
+    icon: {fileID: 21300000, guid: 8ed0e335117fdf142afc04276285a39d, type: 3}
+    morphStates:
+    - morphName: mouthSmile
+      morphWeight: 0.2
+    - morphName: eyeSquintLeft
+      morphWeight: 0.5
+    - morphName: eyeSquintRight
+      morphWeight: 0.5
+    - morphName: browInnerUp
+      morphWeight: 0.3
+    - morphName: cheekSquintLeft
+      morphWeight: 0.6
+    - morphName: cheekSquintRight
+      morphWeight: 0.6
+  - emotion: Sadness
+    icon: {fileID: 21300000, guid: d1ea56bc9101ef34c8d2334fc1ef36bb, type: 3}
+    morphStates:
+    - morphName: eyesClosed
+      morphWeight: 0.3
+    - morphName: jawForward
+      morphWeight: 0.3
+    - morphName: mouthFrownLeft
+      morphWeight: 0.5
+    - morphName: mouthFrownRight
+      morphWeight: 0.5
+    - morphName: mouthRollLower
+      morphWeight: 0.8
+    - morphName: mouthShrugLower
+      morphWeight: 0.5
+    - morphName: mouthShrugUpper
+      morphWeight: 0.6
+    - morphName: browInnerUp
+      morphWeight: 0.6
+  - emotion: Surprise
+    icon: {fileID: 21300000, guid: 52c0f963e14920941a8d7d5d754a36ab, type: 3}
+    morphStates:
+    - morphName: mouthSmile
+      morphWeight: 0.5
+    - morphName: eyeWideLeft
+      morphWeight: 0.6
+    - morphName: eyeWideRight
+      morphWeight: 0.6
+    - morphName: jawOpen
+      morphWeight: 0.1
+    - morphName: browInnerUp
+      morphWeight: 0.7
+    - morphName: browOuterUpLeft
+      morphWeight: 0.7
+    - morphName: browOuterUpRight
+      morphWeight: 0.7
+  - emotion: Neutral
+    icon: {fileID: 21300000, guid: 763c1d4efb0d6004f8e56e9c73afac82, type: 3}
+    morphStates: []
+  p2vMap:
+  - phoneme: b
+    visemeIndex: 1
+  - phoneme: d
+    visemeIndex: 4
+  - phoneme: "d\u0361\u0292"
+    visemeIndex: 6
+  - phoneme: "\xF0"
+    visemeIndex: 3
+  - phoneme: f
+    visemeIndex: 2
+  - phoneme: "\u0261"
+    visemeIndex: 5
+  - phoneme: h
+    visemeIndex: 5
+  - phoneme: j
+    visemeIndex: 12
+  - phoneme: k
+    visemeIndex: 5
+  - phoneme: l
+    visemeIndex: 8
+  - phoneme: m
+    visemeIndex: 1
+  - phoneme: n
+    visemeIndex: 8
+  - phoneme: "\u014B"
+    visemeIndex: 8
+  - phoneme: p
+    visemeIndex: 1
+  - phoneme: "\u0279"
+    visemeIndex: 9
+  - phoneme: s
+    visemeIndex: 7
+  - phoneme: "\u0283"
+    visemeIndex: 6
+  - phoneme: t
+    visemeIndex: 4
+  - phoneme: "t\u0361\u0283"
+    visemeIndex: 6
+  - phoneme: "\u03B8"
+    visemeIndex: 3
+  - phoneme: v
+    visemeIndex: 2
+  - phoneme: w
+    visemeIndex: 14
+  - phoneme: z
+    visemeIndex: 7
+  - phoneme: "\u0292"
+    visemeIndex: 6
+  - phoneme: "\u0259"
+    visemeIndex: 11
+  - phoneme: "\u025A"
+    visemeIndex: 11
+  - phoneme: "\xE6"
+    visemeIndex: 10
+  - phoneme: "a\u026A"
+    visemeIndex: 10
+  - phoneme: "a\u028A"
+    visemeIndex: 10
+  - phoneme: "\u0251"
+    visemeIndex: 10
+  - phoneme: "e\u026A"
+    visemeIndex: 11
+  - phoneme: "\u025D"
+    visemeIndex: 11
+  - phoneme: "\u025B"
+    visemeIndex: 11
+  - phoneme: i
+    visemeIndex: 12
+  - phoneme: "\u026A"
+    visemeIndex: 12
+  - phoneme: "o\u028A"
+    visemeIndex: 13
+  - phoneme: "\u0254"
+    visemeIndex: 13
+  - phoneme: "\u0254\u026A"
+    visemeIndex: 13
+  - phoneme: u
+    visemeIndex: 14
+  - phoneme: "\u028A"
+    visemeIndex: 14
+  - phoneme: "\u028C"
+    visemeIndex: 11
+  - phoneme: "\u02C8"
+    visemeIndex: 0
+  - phoneme: "\u02CC"
+    visemeIndex: 0
+  - phoneme: '''.'''
+    visemeIndex: 0
+  - phoneme: '''<INTERSPERSE_CHARACTER>'''
+    visemeIndex: -1

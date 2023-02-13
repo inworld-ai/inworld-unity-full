@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0447596b1a67de49ba5720fda0bdabe, type: 3}
+  m_Name: DataHermes
+  m_EditorClassIdentifier: 
+  characterName: Hermes
+  brain: workspaces/inworld-sandbox/characters/hermes01200722
+  avatar: {fileID: -3915082565821610680, guid: 8afb08e7fb5095f468db60ff49631132, type: 3}
+  workspace: 
+  currentScene: 
+  ownerShip: 2
+  defaultThumbnail: {fileID: 2800000, guid: 8b12daabd4837f94e825a5c6ffb640be, type: 3}
+  index: 0
+  triggers: []
+  scenes:
+  - workspaces/inworld-sandbox/scenes/olympus-theatre
+  modelUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_model/ea74fc1c-a9b2-48f3-8ad0-1f0ef39f1316.glb
+  posUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_image/ea74fc1c-a9b2-48f3-8ad0-1f0ef39f1316_portrait.jpg
+  previewImgUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_image/ea74fc1c-a9b2-48f3-8ad0-1f0ef39f1316_portrait.jpg
+  characterID: 

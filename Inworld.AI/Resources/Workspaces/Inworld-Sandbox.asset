@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 679553faa086cdc48a58556300e27230, type: 3}
+  m_Name: Inworld-Sandbox
+  m_EditorClassIdentifier: 
+  title: Default Workspace
+  fullName: workspaces/inworld-sandbox
+  characters:
+  - {fileID: 11400000, guid: 24d471e3970d0a74bb9163027f2b403c, type: 2}
+  - {fileID: 11400000, guid: 105a84d1da525af48afab91cfd6d13db, type: 2}
+  - {fileID: 11400000, guid: f9ff4d00c5c0c2d44a42f5120344d25e, type: 2}
+  scenes:
+  - {fileID: 11400000, guid: 4952df7b265f22a4b95b85966797af56, type: 2}
+  - {fileID: 11400000, guid: e00694929b7c33d4f8ea8c200cffa463, type: 2}
+  integrations:
+  - {fileID: 11400000, guid: e497c72dc573b54468cc81189ea3b92c, type: 2}
+  index: 0

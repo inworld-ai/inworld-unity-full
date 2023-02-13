@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement name="BotPanel" style="flex-direction: row; align-items: stretch; justify-content: space-between; -unity-font: url(&apos;project://database/Assets/Inworld.AI/Fonts/DMSans-Regular.ttf?fileID=12800000&amp;guid=2c9ee65233da755438228fafa684047d&amp;type=3#DMSans-Regular&apos;); -unity-font-definition: none;">
+        <ui:Button text="Refresh" display-tooltip-when-elided="true" name="BtnRefresh" style="width: 90px; margin-left: 20px; height: 45px; font-size: 16px; -unity-font-style: bold; margin-top: 20px; align-items: auto; justify-content: flex-start; flex-wrap: nowrap; flex-direction: column; margin-right: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0;" />
+        <ui:Button text="Log Out" display-tooltip-when-elided="true" name="BtnLogout" style="width: 90px; margin-left: 20px; height: 45px; font-size: 16px; -unity-font-style: bold; margin-top: 20px; align-items: auto; justify-content: flex-start; flex-wrap: nowrap; flex-direction: column; margin-right: 20px;" />
+    </ui:VisualElement>
+</ui:UXML>
