@@ -19,10 +19,10 @@
         cancel-in-progress: true
       steps:
           - name: Checkout code
-            uses: actions/checkout@v2
+            uses: actions/checkout@v3
             with:
               lfs: true
-          - uses: actions/cache@v2
+          - uses: actions/cache@v3
             with:
               path: Library
               key: Library-build
@@ -31,7 +31,7 @@
             with:
               unityVersion: 2021.3.6f1
               buildMethod: ExportPackage.Editor.UnityPackageExporter.Export
-          - uses: actions/upload-artifact@v2
+          - uses: actions/upload-artifact@v3
             with:
               name: apk-alpha
               path: Build/ai.inworld.runtime-sdk.unitypackage
