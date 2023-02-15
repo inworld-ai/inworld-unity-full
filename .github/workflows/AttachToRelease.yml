@@ -1,0 +1,50 @@
+name: Attach Package to Release
+
+on:
+  workflow_dispatch:
+
+env:
+    UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+    UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+    UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+
+jobs:
+  build:
+      name: Build
+      runs-on: ubuntu-20.04
+      concurrency:
+        group: build-a-${{ github.ref }}
+        cancel-in-progress: true
+      steps:
+          - name: Checkout code
+            uses: actions/checkout@v3
+            with:
+              lfs: true
+          - uses: actions/cache@v3
+            with:
+              path: Library
+              key: Library-build
+              restore-keys: Library-build
+          - uses: game-ci/unity-builder@v2
+            with:
+              unityVersion: 2021.3.6f1
+              buildMethod: ExportPackage.Editor.UnityPackageExporter.Export
+          - uses: actions/upload-artifact@v3
+            with:
+              name: Inworld-Unity-SDK
+              path: Build/ai.inworld.runtime-sdk.unitypackage
+              
+  attach-to-release:
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Attach package to release
+      run: echo "${{ github.ref }}" 
+      ##uses: softprops/action-gh-release@v1
+      ##if: startsWith(github.ref, 'refs/tags/')
+      ##with:
+      ##  files: ${{ steps.upload-artifact.outputs.artifact-path }}/apk-alpha
