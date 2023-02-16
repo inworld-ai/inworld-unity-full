@@ -1,4 +1,4 @@
-name: Attach Package to Release
+##name: Attach Package to Release
 
 on:
   release:
@@ -51,7 +51,8 @@ jobs:
         path: Build/ai.inworld.runtime-sdk.unitypackage
               
     - name: Attach package to release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: ${{steps.download.outputs.download-path}}/Inworld-Unity-SDK
+      run: echo "${{ steps.download.outputs.download-path }}" 
+      ##uses: softprops/action-gh-release@v1
+      ##if: startsWith(github.ref, 'refs/tags/')
+      ##with:
+      ##  files: ${{steps.download.outputs.download-path}}/Inworld-Unity-SDK
