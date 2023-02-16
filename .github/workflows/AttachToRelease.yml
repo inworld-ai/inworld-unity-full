@@ -47,4 +47,4 @@ jobs:
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: ${{ steps.upload-artifact.outputs.artifact-path }}/apk-alpha
+        files: ${{ steps.upload-artifact.outputs.artifact-path }}/Inworld-Unity-SDK
