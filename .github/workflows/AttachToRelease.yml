@@ -30,7 +30,8 @@ jobs:
             with:
               unityVersion: 2021.3.6f1
               buildMethod: ExportPackage.Editor.UnityPackageExporter.Export
-          - uses: actions/upload-artifact@v3
+          - name: upload-artifact
+            uses: actions/upload-artifact@v3
             with:
               name: Inworld-Unity-SDK
               path: Build/ai.inworld.runtime-sdk.unitypackage
