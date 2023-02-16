@@ -34,7 +34,7 @@ jobs:
             uses: actions/upload-artifact@v3
             with:
               name: Inworld-Unity-SDK
-              path: Build/ai.inworld.runtime-sdk.unitypackage
+              path: Build/
               
   attach-to-release:
     needs: [build]
@@ -47,10 +47,10 @@ jobs:
       id: download
       with:
         name: Inworld-Unity-SDK
-        path: Build/ai.inworld.runtime-sdk.unitypackage
+        path: Build/
               
     - name: Attach package to release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: ${{steps.download.outputs.download-path}}/Inworld-Unity-SDK.zip
+        files: ${{steps.download.outputs.download-path}}/Inworld-Unity-SDK
