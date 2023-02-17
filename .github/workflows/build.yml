@@ -1,14 +1,12 @@
-  name: Create Release
+  name: Build
 
   on:
     workflow_dispatch:
         
   env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
     UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
     UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
-    IMAGE_TAG: $(git rev-parse --short "$GITHUB_SHA")
 
   jobs:   
     build:
@@ -33,26 +31,6 @@
               buildMethod: ExportPackage.Editor.UnityPackageExporter.Export
           - uses: actions/upload-artifact@v3
             with:
-              name: apk-alpha
+              name: Inworld-Unity-SDK
               path: Build/ai.inworld.runtime-sdk.unitypackage
-  
-    create-release:
-      needs: [build]
-      runs-on: [ self-hosted, kubernetes, withdocker ]
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v3
-          with:
-            fetch-depth: 0
-            lfs: true
-        - uses: softprops/action-gh-release@v1
-          if: startsWith(github.ref_name, 'refs/tags/')
-          with:
-            files:   ${{ steps.upload-artifact.outputs.artifact-path }}/apk-alpha
-            tag_name: ${{ github.ref }}
-            release_name: "Release ${{ github.ref }}"
-            generate_release_notes: true
-            draft: false
-            prerelease: false
-            token: ${{ env.GITHUB_TOKEN }}
     
