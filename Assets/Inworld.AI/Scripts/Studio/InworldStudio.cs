@@ -148,7 +148,7 @@ namespace Inworld.Studio
                     ListBillingAccountsResponse response = await client.MeListBillingAccountsAsync(request, InworldAI.User.Header).ResponseAsync;
                     if (response.BillingAccounts.Count > 0)
                     {
-                        InworldAI.User.Account = response.BillingAccounts[0].Name;
+                        InworldAI.User.Account = $"{response.BillingAccounts[0].Name}:{response.BillingAccounts[0].DisplayName}";
                         if (InworldAI.User.Name == "InworldUser") //YAN: Set Name again if you didn't have it.
                         {
                             string[] splits = response.BillingAccounts[0].DisplayName.Split('@');

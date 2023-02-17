@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 209271200670505247}
   - component: {fileID: 209271200670505240}
   - component: {fileID: 6560745356186654253}
+  - component: {fileID: 6840405142551539477}
   m_Layer: 0
   m_Name: InworldController
   m_TagString: Untagged
@@ -45,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39a9b83c049a50a498f6788ca72e9566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AutoStart: 0
+  m_AutoStart: 1
   m_Data: {fileID: 0}
   m_InworldPlayer: {fileID: 0}
   m_Capture: {fileID: 6560745356186654253}
@@ -63,3 +64,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AudioRate: 16000
   m_BufferSeconds: 1
+--- !u!114 &6840405142551539477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 209271200670505241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d696a9c5a5562f4a9af19423ad21b35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_WSData: {fileID: 0}
+  m_InworldSceneData: {fileID: 0}
+  m_CharData: {fileID: 0}
+  m_KeySecret: {fileID: 0}

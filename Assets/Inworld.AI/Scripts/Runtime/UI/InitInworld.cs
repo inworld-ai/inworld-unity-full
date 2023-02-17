@@ -7,19 +7,26 @@
 using Inworld.Util;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace Inworld.Runtime
 {
     /// <summary>
-    /// If you want to manually load inworld data,
-    /// Attach this component to your scene with related scriptable objects.
+    /// This is the data initializing scripts under InworldController. 
     /// </summary>
     public class InitInworld : MonoBehaviour
     {
+        [SerializeField] bool m_Updatable = true;
         [SerializeField] InworldWorkspaceData m_WSData;
         [SerializeField] InworldSceneData m_InworldSceneData;
         [SerializeField] InworldCharacterData m_CharData;
         [SerializeField] InworldKeySecret m_KeySecret;
         
+        const string k_ErrorTitle = "Data could not be applied to the Unity scene";
+        const string k_ErrorContent = "It is suggested to insert the character into a separate scene to avoid data conflict.\nWould you still like to proceed with applying the data to the current scene?";
         void OnEnable()
         {
             SceneManager.sceneLoaded += OnSceneLoaded;
@@ -30,10 +37,32 @@ namespace Inworld.Runtime
         }
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            InworldAI.Game.currentWorkspace = m_WSData;
-            InworldAI.Game.currentScene = m_InworldSceneData;
-            InworldAI.Game.currentCharacter = m_CharData;
-            InworldAI.Game.currentKey = m_KeySecret;
+            if (m_WSData)
+                InworldAI.Game.currentWorkspace = m_WSData;
+            if (m_InworldSceneData)
+                InworldAI.Game.currentScene = m_InworldSceneData;
+            if (m_CharData)
+                InworldAI.Game.currentCharacter = m_CharData;
+            if (m_KeySecret)
+                InworldAI.Game.currentKey = m_KeySecret;
         }
+        void _SetData(InworldWorkspaceData wsData, InworldSceneData sceneData, InworldCharacterData charData, InworldKeySecret keySecret)
+        {
+            m_Updatable = true;
+            if (InworldController.Instance)
+                InworldController.CurrentScene = sceneData;
+            m_WSData = wsData;
+            m_InworldSceneData = sceneData;
+            m_CharData = charData;
+            m_KeySecret = keySecret;
+        }
+        
+        #if UNITY_EDITOR
+        internal void EditorLoadData()
+        {
+            if (m_Updatable || EditorUtility.DisplayDialog(k_ErrorTitle, k_ErrorContent, "OK", "Cancel"))
+                _SetData(InworldAI.Game.currentWorkspace, InworldAI.Game.currentScene, InworldAI.Game.currentCharacter, InworldAI.Game.currentKey);
+        }
+        #endif
     }
 }

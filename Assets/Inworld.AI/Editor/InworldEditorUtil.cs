@@ -13,7 +13,11 @@ using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using System.Linq;
 using UnityEngine;
-
+#if UNITY_IPHONE
+using System.IO;
+using UnityEditor.Callbacks;
+using UnityEditor.iOS.Xcode;
+#endif
 
 namespace Inworld.Editor
 {
@@ -55,7 +59,7 @@ namespace Inworld.Editor
                 _SetupInworldCharacter(Selection.activeGameObject);
         }
 
-        // YAN: Inworld Log will not display in release,
+        // YAN: Inworld Log will not be displayed in release,
         //      unless “Development Build”, or "Is Verbose Log" is checked.
         public void OnPreprocessBuild(BuildReport report)
         {
@@ -63,6 +67,30 @@ namespace Inworld.Editor
                 return;
             _RemoveDebugMacro();
         }
+        #if UNITY_IPHONE
+        /// <summary>
+        /// Handle libgrpc project settings.
+        /// For the details. Please visit https://github.com/Cysharp/MagicOnion#ios-build-with-grpc
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="path"></param>
+        [PostProcessBuild(1)]
+        public static void OnPostProcessBuild(BuildTarget target, string path)
+        {
+            string projectPath = PBXProject.GetPBXProjectPath(path);
+            PBXProject project = new PBXProject();
+            project.ReadFromString(File.ReadAllText(projectPath));
+            string targetGuid = project.GetUnityFrameworkTargetGuid(); 
+
+            // libz.tbd for grpc ios build
+            project.AddFrameworkToProject(targetGuid, "libz.tbd", false);
+
+            // libgrpc_csharp_ext missing bitcode. as BITCODE exand binary size to 250MB.
+            project.SetBuildProperty(targetGuid, "ENABLE_BITCODE", "NO");
+
+            File.WriteAllText(projectPath, project.WriteToString());
+        }
+        #endif
         #endregion
 
         #region Private Properties & Functions
@@ -207,11 +235,11 @@ namespace Inworld.Editor
         [MenuItem("Inworld/Studio Panel", false, 0)]
         static void TopMenuConnectStudio() => InworldEditor.Instance.ShowPanel();
 
-        [MenuItem("Inworld/Setting Panel", false, 1)]
-        static void TopMenuShowPanel()
-        {
-            Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
-        }
+        [MenuItem("Inworld/Global Settings", false, 1)]
+        static void TopMenuShowPanel() => Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
+        
+        [MenuItem("Inworld/Change User Name", false, 1)]
+        static void TopMenuUserPanel() => Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
         #endregion
 
         /// <summary>
@@ -222,11 +250,9 @@ namespace Inworld.Editor
         [MenuItem("Assets/Inworld Studio Panel", false, 0)]
         static void ConnectStudio() => InworldEditor.Instance.ShowPanel();
 
-        [MenuItem("Assets/Inworld Setting Panel", false, 1)]
-        static void ShowPanel()
-        {
-            Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
-        }
+        [MenuItem("Assets/Inworld Settings", false, 1)]
+        static void ShowPanel() => Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
+
         #endregion
 
         #region Scene Menu
@@ -238,7 +264,6 @@ namespace Inworld.Editor
             Object.Instantiate(InworldAI.ControllerPrefab.gameObject);
             InworldController.Instance.transform.name = "Inworld Controller";
             InworldController.CurrentScene = InworldAI.Game.currentScene;
-            InworldController.AutoStart = true;
         }
         [MenuItem("GameObject/Inworld/Add/Inworld Player", false, 1)]
         static void AddInworldPlayer()

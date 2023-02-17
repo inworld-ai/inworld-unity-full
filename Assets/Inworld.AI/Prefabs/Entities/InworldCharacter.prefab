@@ -641,11 +641,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Data: {fileID: 0}
-  m_AudioInteraction: {fileID: 1128614544702611233}
+  m_Interaction: {fileID: 1128614544702611233}
   m_CurrentAvatar: {fileID: 0}
   m_SightAngle: 180
   m_SightDistance: 10
   m_SightRefreshRate: 0.25
+  OnAudioStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAudioFinished:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!95 &6301156355025034122
 Animator:
   serializedVersion: 4
@@ -801,6 +807,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7498a50ae4284245977419748f2a22b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HistorySize: 16
 --- !u!114 &3818396142677475718
 MonoBehaviour:
   m_ObjectHideFlags: 0

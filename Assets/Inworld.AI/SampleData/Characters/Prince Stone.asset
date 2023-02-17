@@ -21,11 +21,11 @@ MonoBehaviour:
   defaultThumbnail: {fileID: 2800000, guid: 3cae29afb07cf234fbd6320de356f7bb, type: 3}
   index: 0
   triggers:
-  - workspaces/unitytest/triggers/init
-  - workspaces/unitytest/triggers/www
+  - initconvo
+  - magicwords
   scenes:
   - workspaces/unitytest/scenes/transform
   modelUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_model/b8d5bb83-5421-4fb6-8340-1d7f739b1b48.glb
   posUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_image/b8d5bb83-5421-4fb6-8340-1d7f739b1b48_posture.jpg
   previewImgUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_image/b8d5bb83-5421-4fb6-8340-1d7f739b1b48_portrait.jpg
-  characterID: 
+  characterID: 4ef11e0e-26ac-45b0-a792-6e8982f4d384

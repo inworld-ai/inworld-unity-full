@@ -19,33 +19,71 @@ namespace Inworld
      * Controls per-agent interaction history.
      * It will only show last historySize utterances that where marked as played.
      */
-    class Interactions
+    public class Interactions : MonoBehaviour
     {
+        protected InworldCharacter Character { get; set; }
+
         #region Variables & Properties
-        readonly int m_HistorySize;
+        [SerializeField] int m_HistorySize = 16;
         readonly LinkedList<HistoryItem> m_ChatHistory = new LinkedList<HistoryItem>();
-        readonly LimitedSizeDictionary<string, HistoryItem> m_ChatHistoryByUtteranceID;
-        readonly LimitedSizeDictionary<string, bool> m_PlayedUtterances;
-        readonly LimitedSizeDictionary<string, bool> m_CanceledInteractions;
+        LimitedSizeDictionary<string, HistoryItem> m_ChatHistoryByUtteranceID;
+        LimitedSizeDictionary<string, bool> m_PlayedUtterances;
+        LimitedSizeDictionary<string, bool> m_CanceledInteractions;
         PacketId m_CurrentUtteranceID;
-        public InteractionEvent Event { get; }
         List<HistoryItem> History => m_ChatHistory.Where(x => !x.IsAgent || m_PlayedUtterances.ContainsKey(x.UtteranceId)).Take(m_HistorySize).ToList();
+        internal bool isSpeaking;
+        #endregion
+
+
+        #region MonoBehavior
+        void Awake()
+        {
+            Init();
+        }
+        void OnEnable()
+        {
+            InworldController.Instance.OnPacketReceived += OnPacketEvents;
+        }
+        void OnDisable()
+        {
+            if (!InworldController.Instance)
+                return;
+            InworldController.Instance.OnPacketReceived -= OnPacketEvents;
+        }
         #endregion
 
         #region Private Functions
-        internal Interactions(int historySize)
+        protected virtual void Init()
         {
-            m_HistorySize = historySize;
+            Character ??= GetComponent<InworldCharacter>();
             int collectionsSize = m_HistorySize + 64;
-            m_ChatHistoryByUtteranceID = new LimitedSizeDictionary<string, HistoryItem>(collectionsSize);
-            m_PlayedUtterances = new LimitedSizeDictionary<string, bool>(collectionsSize);
-            m_CanceledInteractions = new LimitedSizeDictionary<string, bool>(collectionsSize);
-            Event = new InteractionEvent();
+            m_ChatHistoryByUtteranceID ??= new LimitedSizeDictionary<string, HistoryItem>(collectionsSize);
+            m_PlayedUtterances ??= new LimitedSizeDictionary<string, bool>(collectionsSize);
+            m_CanceledInteractions ??= new LimitedSizeDictionary<string, bool>(collectionsSize);
+            Character.OnCharacterSpeaks ??= new UnityEvent<string, string>();
+            Character.OnFinishedSpeaking ??= new UnityEvent();
+            Character.OnBeginSpeaking ??= new UnityEvent();
+        }
+        protected virtual void OnPacketEvents(InworldPacket packet)
+        {
+            if (!Character)
+                return;
+            if (packet.Routing.Target.Id != Character.ID && packet.Routing.Source.Id != Character.ID)
+                return;
+            switch (packet)
+            {
+                case TextEvent textEvent:
+                    _HandleTextEvent(textEvent);
+                    break;
+                case ControlEvent controlEvent:
+                    _AddInteractionEnd(controlEvent.PacketId.InteractionId);
+                    break;
+            }
         }
         /**
          * Signals that there wont be more interaction utterances.
          */
-        internal void AddInteractionEnd(string interactionId)
+        void _AddInteractionEnd(string interactionId)
         {
             if (m_ChatHistory == null || m_ChatHistory.Count <= 0)
                 return;
@@ -53,13 +91,21 @@ namespace Inworld
             if (lastHistoryItem == null || lastHistoryItem.UtteranceId == null)
                 return;
             lastHistoryItem.Final = true;
-            if (m_PlayedUtterances.ContainsKey(lastHistoryItem.UtteranceId) && (m_CurrentUtteranceID == null || m_CurrentUtteranceID.UtteranceId != lastHistoryItem.UtteranceId))
-            {
-                // Already played utterance.
-                CompleteInteraction(interactionId);
-            }
+            if (!m_PlayedUtterances.ContainsKey(lastHistoryItem.UtteranceId))
+                return;
+            // Already played utterance.
+            CompleteInteraction(interactionId);
         }
-        internal CancelResponsesEvent AddText(TextEvent text)
+        public virtual void AddText(TextEvent textEvent)
+        {
+            CancelResponsesEvent cancel = _AddText(textEvent);
+            StartUtterance(textEvent.PacketId);
+            if (cancel == null)
+                return;
+            if (Character)
+                Character.SendEventToAgent(cancel);
+        }
+        protected CancelResponsesEvent _AddText(TextEvent text)
         {
             if (IsInteractionCanceled(text.PacketId.InteractionId))
             {
@@ -109,17 +155,18 @@ namespace Inworld
 
             return cancel;
         }
-        internal bool IsInteractionCanceled(string interactionId)
+        protected bool IsInteractionCanceled(string interactionId)
         {
             return m_CanceledInteractions.ContainsKey(interactionId);
         }
-        internal void StartUtterance(PacketId packetId)
+
+        protected void StartUtterance(PacketId packetId)
         {
             m_CurrentUtteranceID = packetId;
             m_PlayedUtterances.Add(packetId.UtteranceId, true);
             OnChatHistoryListChanged();
         }
-        internal void CompleteUtterance(PacketId packetId)
+        protected void CompleteUtterance(PacketId packetId)
         {
             HistoryItem utteranceItem = FindChatHistoryItemByUtteranceId(packetId.UtteranceId);
             if (utteranceItem != null && utteranceItem.Final)
@@ -141,27 +188,45 @@ namespace Inworld
             }
             OnChatHistoryListChanged();
         }
-        internal void Clear()
+        public virtual void Clear()
         {
             m_ChatHistoryByUtteranceID.Clear();
             m_PlayedUtterances.Clear();
             m_ChatHistory.Clear();
             OnChatHistoryListChanged();
         }
-        void OnChatHistoryListChanged()
+        protected void OnChatHistoryListChanged()
         {
-            Event.Invoke(InteractionStatus.HistoryChanged, History);
+            if (Character)
+                Character.InteractionEvent.Invoke(InteractionStatus.HistoryChanged, History);
+        }
+        void _HandleTextEvent(TextEvent textEvent)
+        {
+            if (textEvent?.PacketId?.InteractionId == null || textEvent.PacketId?.UtteranceId == null)
+                return;
+            if (Character)
+            {
+                if (textEvent.Routing.Source.IsAgent())
+                {
+                    Character.IsSpeaking = true;
+                    Character.OnCharacterSpeaks?.Invoke(Character.CharacterName, textEvent.Text);
+                }
+                if (textEvent.Routing.Target.IsAgent())
+                    Character.OnCharacterSpeaks?.Invoke("Player", textEvent.Text);
+            }
+            AddText(textEvent);
         }
         HistoryItem FindChatHistoryItemByUtteranceId(string utteranceId)
         {
             return m_ChatHistoryByUtteranceID.ContainsKey(utteranceId) ? m_ChatHistoryByUtteranceID[utteranceId] : null;
         }
-        internal void CompleteInteraction(string interactionId)
+        protected void CompleteInteraction(string interactionId)
         {
-            InworldAI.Log("" + interactionId + " Finish!");
+            Character.IsSpeaking = false;
             List<HistoryItem> itemsByInteraction = History
                                                    .Where(x => x.InteractionId == interactionId).ToList();
-            Event.Invoke(InteractionStatus.InteractionCompleted, itemsByInteraction);
+            if (Character)
+                Character.InteractionEvent.Invoke(InteractionStatus.InteractionCompleted, itemsByInteraction);
         }
         #endregion
     }

@@ -246,12 +246,26 @@ namespace Inworld.Editor
                 controller = PrefabUtility.InstantiatePrefab(InworldAI.ControllerPrefab) as InworldController;
             if (!controller)
                 return;
+            Inworld.Runtime.InitInworld initInworld = controller.GetComponent<Inworld.Runtime.InitInworld>();
+            if (initInworld)
+            {
+                initInworld.EditorLoadData();
+            }
             controller.transform.position = Vector3.zero;
         }
         static void _SaveData()
         {
             if (InworldController.Instance)
+            {
+                foreach (InworldCharacter iwChar in InworldController.Instance.GetComponentsInChildren<InworldCharacter>())
+                {
+                    iwChar.Data.EditorSaveData();
+                }
                 EditorUtility.SetDirty(InworldController.Instance);
+                Runtime.InitInworld initInworld = InworldController.Instance.GetComponent<Inworld.Runtime.InitInworld>();
+                if (initInworld)
+                    EditorUtility.SetDirty(initInworld);
+            }
             EditorUtility.SetDirty(InworldAI.User);
             EditorUtility.SetDirty(InworldAI.Game);
             AssetDatabase.SaveAssets();
@@ -264,8 +278,6 @@ namespace Inworld.Editor
             if (Status != InworldEditorStatus.Default)
                 _SaveCurrentSettings();
             _LoadController();
-            InworldController.CurrentScene = InworldAI.Game.currentScene;
-            InworldController.AutoStart = true;
             _SaveData();
         }
         #endregion
@@ -335,6 +347,7 @@ namespace Inworld.Editor
         public static void SetupInworldCharacter(GameObject avatar, InworldCharacterData selectedCharacter)
         {
             SetupInworldController();
+
             InworldCharacter character = PrefabUtility.InstantiatePrefab(InworldAI.CharacterPrefab, avatar.transform) as InworldCharacter;
             if (character)
             {

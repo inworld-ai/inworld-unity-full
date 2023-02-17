@@ -39,7 +39,7 @@ namespace Inworld.Util
         }
         public static void LogException(string exception)
         {
-            Debug.LogError(exception);
+            throw new Exception(exception);
         }
     }
 }
