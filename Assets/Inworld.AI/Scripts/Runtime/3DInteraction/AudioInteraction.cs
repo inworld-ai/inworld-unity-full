@@ -5,20 +5,23 @@
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
 using Inworld.Packets;
+using Inworld.Util;
 using System;
 using System.Collections.Concurrent;
 using UnityEngine;
+using UnityEngine.Events;
 namespace Inworld.Audio
 {
     /// <summary>
     ///     This component is used to receive/send audio from server.
     /// </summary>
-    public class AudioInteraction : MonoBehaviour
+    public class AudioInteraction : Interactions
     {
         #region Callbacks
-        void OnPacketEvents(InworldPacket packet)
+        protected override void OnPacketEvents(InworldPacket packet)
         {
-            if (packet.Routing.Target.Id != m_Character.ID && packet.Routing.Source.Id != m_Character.ID)
+            base.OnPacketEvents(packet);
+            if (packet.Routing.Target.Id != Character.ID && packet.Routing.Source.Id != Character.ID)
                 return;
             if (packet is not AudioChunk audioChunk)
                 return;
@@ -26,91 +29,68 @@ namespace Inworld.Audio
         }
         #endregion
 
+        #region Private Properties Variables
+        float m_CurrentFixedUpdateTime;
+        AudioChunk m_CurrentAudioChunk;
+        readonly ConcurrentQueue<AudioChunk> m_AudioChunksQueue = new ConcurrentQueue<AudioChunk>();
+        const float k_FixedUpdatePeriod = 0.1f;
+        PacketId m_CurrentlyPlayingUtterance;
+        string m_LastInteraction;
+        public event Action OnAudioStarted;
+        public event Action OnAudioEnd;
+        #endregion
+
+        #region Properties & API
+         /// <summary>
+        ///     Get if the Audio Source is Playing.
+        /// </summary>
+        public bool IsPlaying => Character && Character.PlaybackSource != null && Character.PlaybackSource.isPlaying;
+        /// <summary>
+        ///     Get the Current Audio Chunk.
+        /// </summary>
+        public AudioChunk CurrentChunk => m_CurrentAudioChunk;
+        protected override void Init()
+        {
+            base.Init();
+            Character.PlaybackSource ??= GetComponent<AudioSource>();
+        }
         /// <summary>
         ///     Call this func to clean up cached queue.
         /// </summary>
-        public void Clear()
+        public override void Clear()
         {
-            m_AudioChunksQueue.Clear();
+            base.Clear();
+            OnChatHistoryListChanged();
         }
-        #region Private Properties Variables
-        readonly ConcurrentQueue<AudioChunk> m_AudioChunksQueue = new ConcurrentQueue<AudioChunk>();
-        const float k_FixedUpdatePeriod = 0.1f;
-        float m_CurrentFixedUpdateTime;
-        AudioChunk m_CurrentAudioChunk;
-        InworldCharacter m_Character;
-        float _CurrentAudioLength
+        public override void AddText(TextEvent textEvent)
         {
-            get => Character ? Character.CurrentAudioRemainingTime : 0f;
-            set
+            CancelResponsesEvent cancel = _AddText(textEvent);
+            if (cancel == null)
+                return;
+            // Stoping playback if current interaction is stopped.
+            if (m_CurrentlyPlayingUtterance != null &&
+                IsInteractionCanceled(m_CurrentlyPlayingUtterance.InteractionId))
             {
-                if (!Character)
-                    return;
-                Character.CurrentAudioRemainingTime = value;
+                if (Character && Character.PlaybackSource)
+                    Character.PlaybackSource.Stop();
+                m_CurrentlyPlayingUtterance = null;
             }
+            Character.SendEventToAgent(cancel);
         }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        ///     Get/Set its attached Inworld Character.
-        /// </summary>
-        public InworldCharacter Character
-        {
-            get => m_Character;
-            set
-            {
-                m_Character = value;
-                m_Character.Audio = this;
-            }
-        }
-        /// <summary>
-        ///     Get/Set the Audio Source for play back.
-        /// </summary>
-        public AudioSource PlaybackSource { get; set; }
-
-        public bool IsMute
-        {
-            get
-            {
-                if (!PlaybackSource)
-                    return true;
-                return PlaybackSource.volume == 0;
-            }
-            set
-            {
-                if (PlaybackSource)
-                    PlaybackSource.volume = value ? 0 : 1;
-            }
-        }
-        /// <summary>
-        /// Get if the Audio Source is Playing.
-        /// </summary>
-        public bool IsPlaying => PlaybackSource != null && PlaybackSource.isPlaying;
-        /// <summary>
-        /// Get the Current Audio Chunk.
-        /// </summary>
-        public AudioChunk CurrentChunk => m_CurrentAudioChunk;
-        /// <summary>
-        /// Triggered when audio chunk received from server.
-        /// </summary>
-        public event Action<PacketId> OnAudioStarted;
-        /// <summary>
-        /// Triggered when audio clip ended.
-        /// </summary>
-        public event Action OnAudioFinished;
         #endregion
 
         #region MonoBehavior Functions
         void Awake()
         {
-            Character ??= GetComponent<InworldCharacter>();
-            PlaybackSource ??= GetComponent<AudioSource>();
+            if (!InworldAI.Settings.ReceiveAudio)
+                enabled = false;
+            Init();
         }
         void OnEnable()
         {
             InworldController.Instance.OnPacketReceived += OnPacketEvents;
-            PlaybackSource.Stop();
+            if (Character && Character.PlaybackSource)
+                Character.PlaybackSource.Stop();
         }
         void Update()
         {
@@ -125,6 +105,19 @@ namespace Inworld.Audio
         #endregion
 
         #region Private Functions
+        /**
+         * Signals that there wont be more interaction utterances.
+         */
+        float _CurrentAudioLength
+        {
+            get => Character ? Character.CurrentAudioRemainingTime : 0f;
+            set
+            {
+                if (!Character)
+                    return;
+                Character.CurrentAudioRemainingTime = value;
+            }
+        }
         void _TimerCountDown()
         {
             if (_CurrentAudioLength <= 0)
@@ -133,7 +126,11 @@ namespace Inworld.Audio
             if (_CurrentAudioLength > 0)
                 return;
             _CurrentAudioLength = 0;
-            OnAudioFinished?.Invoke();
+            if (m_CurrentlyPlayingUtterance != null)
+                CompleteUtterance(m_CurrentlyPlayingUtterance);
+            m_CurrentlyPlayingUtterance = null;
+            InworldController.Instance.TTSEnd(Character.ID);
+            OnAudioEnd?.Invoke();
         }
         void _TryGetAudio()
         {
@@ -141,15 +138,31 @@ namespace Inworld.Audio
             if (m_CurrentFixedUpdateTime <= k_FixedUpdatePeriod)
                 return;
             m_CurrentFixedUpdateTime = 0f;
-            if (IsPlaying || !m_AudioChunksQueue.TryDequeue(out m_CurrentAudioChunk) || !m_Character.IsAudioChunkAvailable(m_CurrentAudioChunk.PacketId))
+            if (IsPlaying || !m_AudioChunksQueue.TryDequeue(out m_CurrentAudioChunk) || !IsAudioChunkAvailable(m_CurrentAudioChunk.PacketId))
                 return;
             AudioClip audioClip = WavUtility.ToAudioClip(m_CurrentAudioChunk.Chunk.ToByteArray());
             if (audioClip)
             {
                 _CurrentAudioLength = audioClip.length;
-                PlaybackSource.PlayOneShot(audioClip, 1f);
+                if (Character && Character.PlaybackSource)
+                    Character.PlaybackSource.PlayOneShot(audioClip, 1f);
             }
-            OnAudioStarted?.Invoke(m_CurrentAudioChunk.PacketId);
+            StartUtterance(m_CurrentAudioChunk.PacketId);
+            InworldController.Instance.TTSStart(Character.ID);
+            OnAudioStarted?.Invoke();
+        }
+        bool IsAudioChunkAvailable(PacketId packetID)
+        {
+            string interactionID = packetID?.InteractionId;
+            if (IsInteractionCanceled(interactionID))
+                return false;
+            if (m_LastInteraction != null && m_LastInteraction != interactionID)
+            {
+                CompleteInteraction(m_LastInteraction);
+            }
+            m_LastInteraction = interactionID;
+            m_CurrentlyPlayingUtterance = packetID;
+            return true;
         }
         #endregion
     }

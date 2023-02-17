@@ -70,7 +70,7 @@ namespace Inworld.Model
         #region Monobehavior Functions
         void Awake()
         {
-            Init();
+            enabled = Init();
         }
         void OnEnable()
         {
@@ -184,12 +184,13 @@ namespace Inworld.Model
             InworldAI.Log($"If you want to integrate detailed head/eye movent,\nplease Load {m_HeadEyeAsset} as Text,\nthen use`Realistic Eye Movements` to load it from json");
             //Implement your own logic here.
         }
-        public void Init()
+        public bool Init()
         {
             Animator ??= GetComponent<Animator>();
             Character ??= GetComponent<InworldCharacter>();
             m_Skin ??= Character.GetComponentInChildren<SkinnedMeshRenderer>();
             m_CharacterChatPanel ??= Character.GetComponentInChildren<ChatPanel3D>();
+            return Animator && Character;
         }
         void _ProcessEmotion(string emotion)
         {

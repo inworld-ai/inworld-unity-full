@@ -83,10 +83,7 @@ namespace Inworld.Sample
                 return;
             if (!Input.GetKeyUp(KeyCode.Return) && !Input.GetKeyUp(KeyCode.KeypadEnter))
                 return;
-            if (string.IsNullOrEmpty(m_InputField.text))
-                return;
-            InworldController.Instance.CurrentCharacter.SendText(m_InputField.text);
-            m_InputField.text = null;
+            SendText();
         }
         #endregion
 
@@ -99,7 +96,7 @@ namespace Inworld.Sample
             foreach (InworldCharacter iwChar in InworldController.Instance.Characters)
             {
                 m_Characters[iwChar.ID] = iwChar;
-                iwChar.Event.AddListener(OnInteractionStatus);
+                iwChar.InteractionEvent.AddListener(OnInteractionStatus);
             }
         }
         void OnInteractionStatus(InteractionStatus status, List<HistoryItem> historyItems)

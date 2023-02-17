@@ -277,6 +277,7 @@ GameObject:
   - component: {fileID: 359806124}
   - component: {fileID: 359806123}
   - component: {fileID: 359806125}
+  - component: {fileID: 359806126}
   m_Layer: 0
   m_Name: Inworld Controller
   m_TagString: Untagged
@@ -311,9 +312,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2020718582}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &359806125
 MonoBehaviour:
@@ -329,6 +331,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AudioRate: 16000
   m_BufferSeconds: 1
+--- !u!114 &359806126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359806122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d696a9c5a5562f4a9af19423ad21b35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Updatable: 0
+  m_WSData: {fileID: 11400000, guid: d809abc8a24341d40ae9c288fa6ea5cb, type: 2}
+  m_InworldSceneData: {fileID: 11400000, guid: 4952df7b265f22a4b95b85966797af56, type: 2}
+  m_CharData: {fileID: 11400000, guid: f9ff4d00c5c0c2d44a42f5120344d25e, type: 2}
+  m_KeySecret: {fileID: 11400000, guid: e497c72dc573b54468cc81189ea3b92c, type: 2}
 --- !u!1 &435103427 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9047055559676837508, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
@@ -426,7 +445,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 131.568, y: 0, z: 0}
 --- !u!1001 &934002599
 PrefabInstance:
@@ -441,7 +460,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2287690361876978917, guid: e237fa958bda1d748be4ac40b9f0c7b1, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2287690361876978917, guid: e237fa958bda1d748be4ac40b9f0c7b1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -498,7 +517,6 @@ GameObject:
   - component: {fileID: 1131924864}
   - component: {fileID: 1131924863}
   - component: {fileID: 1131924869}
-  - component: {fileID: 1131924868}
   m_Layer: 5
   m_Name: DemoCanvas
   m_TagString: Untagged
@@ -581,29 +599,13 @@ RectTransform:
   m_Children:
   - {fileID: 1928130907}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: -1.2, y: 5.2000003}
   m_SizeDelta: {x: 1600, y: 900}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1131924868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1131924862}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d696a9c5a5562f4a9af19423ad21b35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_WSData: {fileID: 11400000, guid: d809abc8a24341d40ae9c288fa6ea5cb, type: 2}
-  m_InworldSceneData: {fileID: 11400000, guid: 4952df7b265f22a4b95b85966797af56, type: 2}
-  m_CharData: {fileID: 11400000, guid: f9ff4d00c5c0c2d44a42f5120344d25e, type: 2}
-  m_KeySecret: {fileID: 11400000, guid: e497c72dc573b54468cc81189ea3b92c, type: 2}
 --- !u!114 &1131924869
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -800,7 +802,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1624441890
 GameObject:
@@ -1166,7 +1168,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 359806124}
     m_Modifications:
     - target: {fileID: 1128614544702611233, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_PlaybackSource
@@ -1186,7 +1188,7 @@ PrefabInstance:
       objectReference: {fileID: 1295994360}
     - target: {fileID: 5640325391487457652, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5640325391487457652, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_LocalPosition.x

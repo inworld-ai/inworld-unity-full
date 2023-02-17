@@ -17,6 +17,7 @@ namespace Inworld.Util
     public class InworldAI : ScriptableObject
     {
         #region Inspector Variables
+        [Header(k_GlobalInstruction)]
         [Space(10)]
         [SerializeField] InworldGameSettings m_GameSettings;
         [SerializeField] InworldSettings m_DefaultSettings;
@@ -34,6 +35,7 @@ namespace Inworld.Util
         #region Private Variables
         public const string k_CompanyName = "Inworld.AI";
         const string k_GlobalDataPath = "GlobalSettings/InworldAI";
+        const string k_GlobalInstruction = "Double-click the following settings to change:";
         static InworldAI __inst;
         #endregion
 
@@ -63,7 +65,11 @@ namespace Inworld.Util
         ///     InworldGameSettings is the scriptableObject instance that always
         ///     update the current workspace/scene/character data, etc.
         /// </summary>
-        public static InworldGameSettings Game => Instance.m_GameSettings;
+        public static InworldGameSettings Game
+        {
+            get => Instance.m_GameSettings; 
+            set => Instance.m_GameSettings = value;
+        }
         /// <summary>
         ///     Get InworldUISettings scriptableObject.
         /// </summary>

@@ -116,7 +116,6 @@ namespace Inworld.Runtime
         {
             if (!m_Controller)
                 m_Controller = Instantiate(InworldAI.ControllerPrefab);
-            InworldController.AutoStart = true;
             InworldController.Player = m_InworldPlayer;
             InworldCharacter result = Instantiate(InworldAI.CharacterPrefab, m_Controller.transform);
             result.LoadCharacter(data);

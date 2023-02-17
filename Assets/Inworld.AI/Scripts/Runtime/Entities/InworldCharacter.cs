@@ -4,19 +4,12 @@
 * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
-using Inworld.Audio;
-using Inworld.Grpc;
-using Inworld.Model;
+using Inworld.Packets;
 using Inworld.Util;
 using System.Collections;
 using UnityEngine;
-using CancelResponsesEvent = Inworld.Packets.CancelResponsesEvent;
-using ControlEvent = Inworld.Packets.ControlEvent;
-using CustomEvent = Inworld.Packets.CustomEvent;
-using InworldPacket = Inworld.Packets.InworldPacket;
-using PacketId = Inworld.Packets.PacketId;
-using Routing = Inworld.Packets.Routing;
-using TextEvent = Inworld.Packets.TextEvent;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 namespace Inworld
 {
     public class InworldCharacter : MonoBehaviour
@@ -24,8 +17,9 @@ namespace Inworld
         #region Inspector Variables
         [Header("Data:")]
         [SerializeField] InworldCharacterData m_Data;
+        [FormerlySerializedAs("m_AudioInteraction")]
         [Header("Audio")]
-        [SerializeField] AudioInteraction m_AudioInteraction;
+        [SerializeField] Interactions m_Interaction;
         [Header("Animation")]
         [SerializeField] GameObject m_CurrentAvatar;
         [Header("Sight")]
@@ -34,16 +28,55 @@ namespace Inworld
         [Range(1, 100)]
         [SerializeField] float m_SightDistance = 10f;
         [SerializeField] float m_SightRefreshRate = 0.25f;
-        #endregion
-
-        #region Private Variables
-        PacketId m_CurrentlyPlayingUtterance;
-        string m_LastInteraction;
-
-        readonly Interactions m_Interactions = new Interactions(6);
+        [Header("Log")]
+        [SerializeField] bool m_logUtterances;
+        public UnityEvent OnBeginSpeaking;
+        public UnityEvent OnFinishedSpeaking;
+        public UnityEvent<string, string> OnCharacterSpeaks;
         #endregion
 
         #region Properties
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsSpeaking
+        {
+            get => m_Interaction && m_Interaction.isSpeaking;
+            internal set
+            {
+                if (!m_Interaction)
+                    return;
+                if (value && !m_Interaction.isSpeaking)
+                {
+                    m_Interaction.isSpeaking = true;
+                    OnBeginSpeaking.Invoke();
+                }
+                else if (!value && m_Interaction.isSpeaking)
+                {
+                    m_Interaction.isSpeaking = false;
+                    OnFinishedSpeaking.Invoke();
+                }
+            }
+        }
+        /// <summary>
+        ///     Returns Unity Event of Interaction.
+        /// </summary>
+        public InteractionEvent InteractionEvent { get; } = new InteractionEvent();
+        public bool IsMute
+        {
+            get
+            {
+                if (PlaybackSource)
+                    return true;
+                return PlaybackSource.volume == 0;
+            }
+            set
+            {
+                if (PlaybackSource)
+                    PlaybackSource.volume = value ? 0 : 1;
+            }
+        }
+        public AudioSource PlaybackSource { get; set; }
         /// <summary>
         ///     This Character's Data.
         /// </summary>
@@ -91,21 +124,14 @@ namespace Inworld
         ///     This data would be modified by `AudioInteraction`.
         /// </summary>
         public float CurrentAudioRemainingTime { get; set; }
-
-        /// <summary>
-        ///     Returns Unity Event of Interaction.
-        /// </summary>
-        public InteractionEvent Event => m_Interactions.Event;
-
         /// <summary>
         ///     Get/Set the Inworld Character's Audio Interaction.
         /// </summary>
-        public AudioInteraction Audio
+        public Interactions Interaction
         {
-            get => m_AudioInteraction;
-            set => m_AudioInteraction = value;
+            get => m_Interaction;
+            set => m_Interaction = value;
         }
-
         /// <summary>
         ///     Get/Set the model it bound.
         /// </summary>
@@ -119,7 +145,6 @@ namespace Inworld
         ///     Get the Character's current emotion.
         /// </summary>
         public string Emotion { get; internal set; } = "Neutral";
-
         /// <summary>
         ///     Get the Character's current gesture.
         /// </summary>
@@ -129,14 +154,31 @@ namespace Inworld
         #region Monobehavior Functions
         void Awake()
         {
+            if (!m_Interaction || !m_Interaction.enabled)
+            {
+                m_Interaction = gameObject.AddComponent<Interactions>();
+                m_Interaction.enabled = true;
+            }
             InworldController.Instance.RegisterCharacter(this);
         }
         void Start()
         {
-            m_AudioInteraction.OnAudioStarted += OnAudioPlayingStart;
-            m_AudioInteraction.OnAudioFinished += OnAudioFinished;
-            InworldController.Instance.OnPacketReceived += OnPacketEvents;
             InworldController.Instance.OnCharacterChanged += OnCharacterChanged;
+            OnBeginSpeaking?.AddListener(() =>
+            {
+                if (m_logUtterances)
+                    InworldAI.Log($"{CharacterName} Started talking");
+            });
+            OnFinishedSpeaking?.AddListener(() =>
+            {
+                if (m_logUtterances)
+                    InworldAI.Log($"{CharacterName} Finshed talking");
+            });
+            OnCharacterSpeaks?.AddListener((character, text) =>
+            {
+                if (m_logUtterances && !string.IsNullOrEmpty(text))
+                    InworldAI.Log($"{character}: {text}");
+            });
             StartCoroutine(CheckPriority());
         }
         void OnDrawGizmosSelected()
@@ -157,23 +199,13 @@ namespace Inworld
         }
         void OnDisable()
         {
-            m_AudioInteraction.OnAudioStarted -= OnAudioPlayingStart;
-            m_AudioInteraction.OnAudioFinished -= OnAudioFinished;
             if (!InworldController.Instance)
                 return;
             InworldController.Instance.OnCharacterChanged -= OnCharacterChanged;
-            InworldController.Instance.OnPacketReceived -= OnPacketEvents;
         }
         #endregion
 
         #region Callbacks
-        void OnAudioFinished()
-        {
-            if (m_CurrentlyPlayingUtterance != null)
-                m_Interactions?.CompleteUtterance(m_CurrentlyPlayingUtterance);
-            m_CurrentlyPlayingUtterance = null;
-            InworldController.Instance.TTSEnd(ID);
-        }
         void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
         {
             if (oldChar == this)
@@ -185,26 +217,6 @@ namespace Inworld
                 StartCoroutine(_StartAudioCapture());
             }
 
-        }
-        void OnPacketEvents(InworldPacket packet)
-        {
-            if (packet.Routing.Target.Id == ID || packet.Routing.Source.Id == ID)
-            {
-                switch (packet)
-                {
-                    case TextEvent textEvent:
-                        _HandleTextEvent(textEvent);
-                        break;
-                    case ControlEvent controlEvent:
-                        m_Interactions.AddInteractionEnd(controlEvent.PacketId.InteractionId);
-                        break;
-                }
-            }
-        }
-        void OnAudioPlayingStart(PacketId packetId)
-        {
-            m_Interactions.StartUtterance(packetId);
-            InworldController.Instance.TTSStart(ID);
         }
         void OnAvatarLoaded(InworldCharacterData obj)
         {
@@ -264,41 +276,6 @@ namespace Inworld
                 yield return new WaitForSeconds(m_SightRefreshRate);
             }
         }
-        void _HandleTextEvent(TextEvent textEvent)
-        {
-            if (textEvent?.PacketId?.InteractionId == null || textEvent.PacketId?.UtteranceId == null)
-                return;
-            _AddTextToInteraction(textEvent);
-        }
-        void _AddTextToInteraction(TextEvent text)
-        {
-            CancelResponsesEvent cancel = m_Interactions.AddText(text);
-            if (cancel != null)
-            {
-                // Stoping playback if current interaction is stopped.
-                if (m_CurrentlyPlayingUtterance != null &&
-                    m_Interactions.IsInteractionCanceled(m_CurrentlyPlayingUtterance.InteractionId))
-                {
-                    m_AudioInteraction.PlaybackSource.Stop();
-                    m_CurrentlyPlayingUtterance = null;
-                }
-                SendEventToAgent(cancel);
-            }
-        }
-        internal bool IsAudioChunkAvailable(PacketId packetID)
-        {
-            string interactionID = packetID?.InteractionId;
-            if (m_Interactions.IsInteractionCanceled(interactionID))
-                return false;
-            if (m_LastInteraction != null && m_LastInteraction != interactionID)
-            {
-                m_Interactions.CompleteInteraction(m_LastInteraction);
-            }
-
-            m_LastInteraction = interactionID;
-            m_CurrentlyPlayingUtterance = packetID;
-            return true;
-        }
         #endregion
 
         #region APIs
@@ -345,9 +322,9 @@ namespace Inworld
         /// </summary>
         public void ResetCharacter()
         {
-            m_Interactions.Clear();
             // Clearing a queue.
-            m_AudioInteraction.Clear();
+            if (m_Interaction)
+                m_Interaction.Clear();
         }
         /// <summary>
         ///     Send Text to this Character via InworldPacket.
@@ -389,7 +366,8 @@ namespace Inworld
             if (packet is TextEvent text)
             {
                 // Adding text to history if interactions.
-                _AddTextToInteraction(text);
+                if (m_Interaction)
+                    m_Interaction.AddText(text);
             }
             InworldController.Instance.SendEvent(packet);
         }

@@ -6,6 +6,8 @@
 *************************************************************************************************/
 using Google.Protobuf;
 using UnityEngine;
+using UnityEngine.Events;
+
 namespace Inworld
 {
     /// <summary>
@@ -14,6 +16,8 @@ namespace Inworld
     /// </summary>
     public class AudioCapture : MonoBehaviour
     {
+        public UnityEvent OnRecordingStart;
+        public UnityEvent OnRecordingEnd;
         [SerializeField] int m_AudioRate = 16000;
         [SerializeField] int m_BufferSeconds = 1;
         // Size of audioclip used to collect information, need to be big enough to keep up with collect. 
@@ -32,11 +36,13 @@ namespace Inworld
         {
             m_Recording = Microphone.Start(null, true, m_BufferSeconds, m_AudioRate);
             m_LastPosition = Microphone.GetPosition(null);
+            OnRecordingStart.Invoke();
         }
         public void StopRecording()
         {
             Microphone.End(null);
             IsCapturing = false;
+            OnRecordingEnd.Invoke();
         }
         void Awake()
         {

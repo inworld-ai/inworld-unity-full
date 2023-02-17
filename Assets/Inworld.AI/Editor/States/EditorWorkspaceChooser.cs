@@ -70,7 +70,7 @@ namespace Inworld.Editor.States
         {
             base._SetupContentPanel(contentPanel);
             InworldWorkspaceData wsData = InworldAI.Game.currentWorkspace;
-            // Actual TO DO:
+            // Actual perform:
             InworldEditor.Instance.GetUserToken(InworldAI.User.IDToken);
             if (wsData)
             {

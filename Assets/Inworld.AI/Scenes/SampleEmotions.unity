@@ -1923,6 +1923,7 @@ GameObject:
   - component: {fileID: 359806124}
   - component: {fileID: 359806123}
   - component: {fileID: 359806125}
+  - component: {fileID: 359806126}
   m_Layer: 0
   m_Name: Inworld Controller
   m_TagString: Untagged
@@ -1957,9 +1958,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5640325390817324673}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &359806125
 MonoBehaviour:
@@ -1975,6 +1977,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AudioRate: 16000
   m_BufferSeconds: 1
+--- !u!114 &359806126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359806122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d696a9c5a5562f4a9af19423ad21b35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Updatable: 0
+  m_WSData: {fileID: 11400000, guid: d809abc8a24341d40ae9c288fa6ea5cb, type: 2}
+  m_InworldSceneData: {fileID: 11400000, guid: 4952df7b265f22a4b95b85966797af56, type: 2}
+  m_CharData: {fileID: 11400000, guid: f9ff4d00c5c0c2d44a42f5120344d25e, type: 2}
+  m_KeySecret: {fileID: 11400000, guid: e497c72dc573b54468cc81189ea3b92c, type: 2}
 --- !u!1 &375024084
 GameObject:
   m_ObjectHideFlags: 0
@@ -3008,7 +3027,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 131.568, y: 0, z: 0}
 --- !u!1 &456826837
 GameObject:
@@ -6723,7 +6742,6 @@ GameObject:
   - component: {fileID: 1131924864}
   - component: {fileID: 1131924863}
   - component: {fileID: 1131924867}
-  - component: {fileID: 1131924868}
   m_Layer: 5
   m_Name: EmoCanvas
   m_TagString: Untagged
@@ -6806,7 +6824,7 @@ RectTransform:
   m_Children:
   - {fileID: 1928130907}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -6827,22 +6845,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Title: {fileID: 1934973846}
   m_Content: {fileID: 1624441892}
---- !u!114 &1131924868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1131924862}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d696a9c5a5562f4a9af19423ad21b35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_WSData: {fileID: 11400000, guid: d809abc8a24341d40ae9c288fa6ea5cb, type: 2}
-  m_InworldSceneData: {fileID: 11400000, guid: 4952df7b265f22a4b95b85966797af56, type: 2}
-  m_CharData: {fileID: 11400000, guid: f9ff4d00c5c0c2d44a42f5120344d25e, type: 2}
-  m_KeySecret: {fileID: 11400000, guid: e497c72dc573b54468cc81189ea3b92c, type: 2}
 --- !u!1 &1175203957
 GameObject:
   m_ObjectHideFlags: 0
@@ -7498,7 +7500,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1366004750
 GameObject:
@@ -11246,6 +11248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7498a50ae4284245977419748f2a22b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HistorySize: 16
 --- !u!224 &1577043625039255144
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11548,11 +11551,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Data: {fileID: 11400000, guid: f9ff4d00c5c0c2d44a42f5120344d25e, type: 2}
-  m_AudioInteraction: {fileID: 1128614543491541204}
+  m_Interaction: {fileID: 1128614543491541204}
   m_CurrentAvatar: {fileID: 1295994360}
   m_SightAngle: 180
   m_SightDistance: 10
   m_SightRefreshRate: 0.25
+  OnAudioStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAudioFinished:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!222 &4719297120864292418
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11785,8 +11794,8 @@ Transform:
   m_Children:
   - {fileID: 1577043625039255144}
   - {fileID: 1295994361}
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_Father: {fileID: 359806124}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5780226316110012443
 MonoBehaviour:

@@ -16,10 +16,14 @@ namespace Inworld.Util
     public class InworldSettings : ScriptableObject
     {
         #region Inspector Variables
-        [Space(10)][Header("Local File Path")]
+        [Header("Game Settings:")]
+        [Tooltip("These settings are not editable during runtime.")]
+        [SerializeField] bool m_CanReceiveAudio = true;
+        [SerializeField] bool m_Interruptible = false;
+        [Space(10)][Header("Local File Path:")]
         [SerializeField] string m_ThumbnailFolder;
         [SerializeField] string m_AvatarFolder;
-        [Space(10)][Header("Resource File Path")]
+        [Space(10)][Header("Resource File Path:")]
         [SerializeField] string m_CharacterDataFolder;
         [SerializeField] string m_SceneDataFolder;
         [SerializeField] string m_WorkspaceDataFolder;
@@ -35,6 +39,14 @@ namespace Inworld.Util
         #endregion
 
         #region Properties
+        /// <summary>
+        ///     Get if server will send audio voices to client.
+        /// </summary>
+        public bool ReceiveAudio => m_CanReceiveAudio;
+        /// <summary>
+        ///     Get if player can interrupt character speaking.
+        /// </summary>
+        public bool Interruptible => m_Interruptible;
         /// <summary>
         ///     Returns the Thumbnails Path.
         /// </summary>
@@ -93,13 +105,13 @@ namespace Inworld.Util
         public CapabilitiesRequest Capabilities => new CapabilitiesRequest
         {
             Animations = true,
-            Audio = true,
+            Audio = m_CanReceiveAudio,
             Emotions = true,
             Gestures = true,
             Interruptions = true,
             Text = true,
             Triggers = true,
-            TurnBasedStt = true,
+            TurnBasedStt = !m_Interruptible,
             PhonemeInfo = true
         };
         #endregion

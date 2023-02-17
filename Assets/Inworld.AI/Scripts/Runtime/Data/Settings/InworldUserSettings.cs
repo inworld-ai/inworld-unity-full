@@ -9,7 +9,6 @@ using Inworld.Grpc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 namespace Inworld.Util
 {
@@ -76,8 +75,8 @@ namespace Inworld.Util
             set => m_UserName = value;
         }
         /// <summary>
-        /// Get/Set the user account.
-        /// Account would not be saved locally for security issues.
+        ///     Get/Set the user account.
+        ///     Account would not be saved locally for security issues.
         /// </summary>
         public string Account
         {
@@ -91,8 +90,8 @@ namespace Inworld.Util
             internal set => m_InworldAccount = value;
         }
         /// <summary>
-        /// Check your accounts validity.
-        /// Every time you close Unity the account would be removed. And we'll fetch again.
+        ///     Check your accounts validity.
+        ///     Every time you close Unity the account would be removed. And we'll fetch again.
         /// </summary>
         public bool IsAccountValid
         {
@@ -103,7 +102,7 @@ namespace Inworld.Util
                 string[] splits = m_InworldAccount.Split('/');
                 string inworldAccount = splits.Length > 1 ? splits[1] : splits[0];
                 splits = inworldAccount.Split('-');
-                int[] LengthList = new[] {8, 4, 4, 4, 12};
+                int[] LengthList = {8, 4, 4, 4, 12};
                 if (splits.Length != LengthList.Length)
                     return false;
                 if (splits.Where((t, i) => t.Length != LengthList[i]).Any())
@@ -148,8 +147,8 @@ namespace Inworld.Util
             Name = Name
         };
         /// <summary>
-        /// Get the Client Request, used to send to server,
-        /// For making which platform for the backend logs.
+        ///     Get the Client Request, used to send to server,
+        ///     For making which platform for the backend logs.
         /// </summary>
         public ClientRequest Client => new ClientRequest
         {

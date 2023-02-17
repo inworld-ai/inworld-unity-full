@@ -8,6 +8,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace Inworld.Util
 {
     /// <summary>
@@ -82,7 +87,7 @@ namespace Inworld.Util
         /// <summary>
         ///     Get the Character's Local Thumbnail File Name
         ///     If it's in Editor Mode:
-        ///     The data would be `Resources/{InworldAI.User.Name}/{InworldAI.Settings.ThumbnailPath}/{FileName}.png
+        ///     The data would be `Assets/Inworld.AI/{InworldAI.User.Name}/{InworldAI.Settings.ThumbnailPath}/{FileName}.png
         ///     If it's in runtime Mode.
         ///     The data would be in {Application.persistentDataPath}/{InworldAI.Settings.ThumbnailPath}/{FileName}.png.
         /// </summary>
@@ -112,7 +117,7 @@ namespace Inworld.Util
         /// <summary>
         ///     Get the Character's Local Avatar File Name.
         ///     If it's in Editor Mode:
-        ///     The data would be `Resources/{InworldAI.User.Name}/{InworldAI.Settings.AvatarPath}/{FileName}.glb
+        ///     The data would be `Assets/Inworld.AI/{InworldAI.User.Name}/{InworldAI.Settings.AvatarPath}/{FileName}.glb
         ///     If it's in runtime Mode.
         ///     The data would be in {Application.persistentDataPath}/{InworldAI.Settings.AvatarPath}/{FileName}.glb.
         /// </summary>
@@ -125,8 +130,6 @@ namespace Inworld.Util
                     string folder = $"{Application.persistentDataPath}/{InworldAI.Settings.AvatarPath}";
                     if (!File.Exists(folder))
                         Directory.CreateDirectory(folder);
-                    // string fileName = modelUri.Remove(0, modelUri.LastIndexOf('/'));
-                    // return fileName;
                     return $"{folder}/{FileName}.glb";
                 }
                 else
@@ -157,6 +160,7 @@ namespace Inworld.Util
                     return null;
                 Texture2D loadFromDisk = new Texture2D(0, 0);
                 loadFromDisk.LoadImage(File.ReadAllBytes(LocalThumbnailFileName));
+                loadFromDisk.Apply();
                 return loadFromDisk;
             }
         }
@@ -205,5 +209,19 @@ namespace Inworld.Util
             return InworldAI.AvatarLoader.LoadData(LocalAvatarFileName);
         }
         #endregion
+        
+        #if UNITY_EDITOR
+        public void EditorSaveData()
+        {
+            if (defaultThumbnail)
+                return;
+            Texture2D txt2D = AssetDatabase.LoadAssetAtPath(LocalThumbnailFileName, typeof(Texture2D)) as Texture2D;
+            if (!txt2D)
+                return;
+            defaultThumbnail = txt2D;
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
+        }
+        #endif
     }
 }

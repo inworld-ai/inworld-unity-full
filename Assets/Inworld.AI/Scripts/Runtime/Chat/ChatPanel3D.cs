@@ -18,7 +18,7 @@ namespace Inworld.Sample.UI
         readonly Dictionary<string, ChatBubble> m_Bubbles = new Dictionary<string, ChatBubble>(12);
         void Update()
         {
-            m_IconColor.a *= 0.995f;
+            m_IconColor.a *= 0.99f;
             if (m_EmoIcon)
                 m_EmoIcon.color = m_IconColor;
         }
@@ -28,7 +28,7 @@ namespace Inworld.Sample.UI
                 m_IconColor = m_EmoIcon.color;
             m_IconColor.a = 1;
             _ClearHistoryLog();
-            m_Owner.Event.AddListener(OnInteractionStatus);
+            m_Owner.InteractionEvent.AddListener(OnInteractionStatus);
         }
         internal void ProcessEmotion(FacialAnimation face)
         {
