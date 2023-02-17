@@ -2,6 +2,8 @@
 
   on:
     workflow_dispatch:
+    pull_request_review:
+      types: [submitted]
         
   env:
     UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
