@@ -1,7 +1,7 @@
   name: Build
 
   on:
-    workflow_dispatch
+    workflow_dispatch:
         
   env:
     UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
