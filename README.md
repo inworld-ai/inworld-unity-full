@@ -1,12 +1,15 @@
 # Inworld AI Unity SDK
 
-The **Inworld AI Unity SDK** is a powerful cross-platform virtual character integration plugin for Unity. 
+The **Inworld AI Unity SDK** is a powerful cross-platform virtual character integration plugin for Unity.
 
-You can easily drag and drop virtual characters into your Unity scene to communicate with.
+You can easily drag and drop virtual characters into your Unity scene to communicate with. Create more realistic and believable worlds with characters powered by artificial intelligence*. Inworld provides a platform for adding advanced NPC behavior & unscripted dialogue to games and real-time media. Use text-to-character prompts to create character personalities and integrate into experiences using Inworld SDKs.
 
-This plugin can easily be integrated with other features such as [Realistic Eye Movements](https://assetstore.unity.com/packages/tools/animation/realistic-eye-movements-29168), or [Oculus Lipsync](https://developer.oculus.com/downloads/package/oculus-lipsync-unity/), to make a more vivid experience.
+*Inworld powers character behavior & dialogue. Avatars and character models are provided by the developer.
 
-Before getting you started, this tutorial series will begin with an overview of compatibility, assets, and API references.
+This plugin can easily be integrated with other features such as [Realistic Eye Movements](https://assetstore.unity.com/packages/tools/animation/realistic-eye-movements-29168), or [Oculus Lipsync](https://developer.oculus.com/downloads/package/oculus-lipsync-unity/), to make a more vivid experience as seen [here](https://youtu.be/rac60WK0NUQ)
+
+Please create an account [here] (https://studio.inworld.ai/signup) if you haven't already before getting started.
+This tutorial series will begin with an overview of compatibility, assets, and API references.
 
 ## Tutorial
 
