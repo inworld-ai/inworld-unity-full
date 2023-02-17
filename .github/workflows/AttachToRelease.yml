@@ -49,15 +49,14 @@ jobs:
         name: Inworld-Unity-SDK
         path: Build/
         
-    - name: Print artifact directory
-      run: |
-            ls ${{steps.download.outputs.download-path}}
+    ##- name: Print artifact directory
+    ##  run: |
+    ##        ls ${{steps.download.outputs.download-path}}
 
-    - name: Print entire directory structure
-      run: |
-        pwd
-        ls -R
-
+    ##- name: Print entire directory structure
+    ##  run: |
+    ##    pwd
+    ##    ls -R
               
     - name: Attach package to release
       uses: softprops/action-gh-release@v1
