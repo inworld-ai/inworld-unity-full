@@ -9,7 +9,7 @@ You can easily drag and drop virtual characters into your Unity scene to communi
 This plugin can easily be integrated with other features such as [Realistic Eye Movements](https://assetstore.unity.com/packages/tools/animation/realistic-eye-movements-29168), or [Oculus Lipsync](https://developer.oculus.com/downloads/package/oculus-lipsync-unity/), to make a more vivid experience as seen [here](https://youtu.be/rac60WK0NUQ)
 
 Please create an account [here](https://studio.inworld.ai/signup) if you haven't already before getting started.
-This tutorial series will begin with an overview of compatibility, assets, and API references.
+This tutorial series will begin with an overview of compatibility, assets, and API references so you can configure your characters 
 
 ## Tutorial
 
