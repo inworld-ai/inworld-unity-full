@@ -17,6 +17,7 @@ namespace Inworld.Sample
         [SerializeField] GameObject m_Avatar;
         [SerializeField] InworldCharacterData m_CharData;
         [SerializeField] InworldLipAnimation m_LipAnimation;
+        [SerializeField] string m_CheckTrigger;
         InworldCharacter m_CurrentCharacter;
 
         // Start is called before the first frame update
@@ -55,6 +56,17 @@ namespace Inworld.Sample
         {
             yield return new WaitForSeconds(60f);
             m_Content.text = "The answer for the spell is <color=green>WWW</color>\nTry say that!";
+        }
+
+        public void OnGoalComplete(string trigger)
+        {
+            if (trigger != m_CheckTrigger)
+                return;
+            if (!m_CurrentCharacter)
+                return;
+            m_Stone.SetActive(false);
+            m_Avatar.SetActive(true);
+            m_LipAnimation.Init();
         }
     }
 }
