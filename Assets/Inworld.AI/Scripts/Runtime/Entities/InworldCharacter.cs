@@ -33,6 +33,7 @@ namespace Inworld
         public UnityEvent OnBeginSpeaking;
         public UnityEvent OnFinishedSpeaking;
         public UnityEvent<string, string> OnCharacterSpeaks;
+        public UnityEvent<string> OnGoalCompleted;
         #endregion
 
         #region Properties
