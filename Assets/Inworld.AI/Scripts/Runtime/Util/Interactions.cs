@@ -9,6 +9,7 @@ using Inworld.Packets;
 using Inworld.Util;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Events;
 namespace Inworld
@@ -30,6 +31,7 @@ namespace Inworld
         LimitedSizeDictionary<string, bool> m_PlayedUtterances;
         LimitedSizeDictionary<string, bool> m_CanceledInteractions;
         PacketId m_CurrentUtteranceID;
+        const string k_Pattern = @"^inworld\.goal_complete\.(.+)$";
         List<HistoryItem> History => m_ChatHistory.Where(x => !x.IsAgent || m_PlayedUtterances.ContainsKey(x.UtteranceId)).Take(m_HistorySize).ToList();
         internal bool isSpeaking;
         #endregion
@@ -63,6 +65,7 @@ namespace Inworld
             Character.OnCharacterSpeaks ??= new UnityEvent<string, string>();
             Character.OnFinishedSpeaking ??= new UnityEvent();
             Character.OnBeginSpeaking ??= new UnityEvent();
+            Character.OnGoalCompleted ??= new UnityEvent<string>();
         }
         protected virtual void OnPacketEvents(InworldPacket packet)
         {
@@ -78,6 +81,21 @@ namespace Inworld
                 case ControlEvent controlEvent:
                     _AddInteractionEnd(controlEvent.PacketId.InteractionId);
                     break;
+                case CustomEvent customEvent:
+                    _HandleCustomEvent(customEvent);
+                    break;
+            }
+        }
+        void _HandleCustomEvent(CustomEvent customEvent)
+        {
+            Match match = new Regex(k_Pattern).Match(customEvent.Name);
+            if (match.Success && match.Groups.Count > 1)
+            {
+                Character.OnGoalCompleted.Invoke(match.Groups[1].Value);
+            }
+            else
+            {
+                Character.OnGoalCompleted.Invoke(customEvent.Name);
             }
         }
         /**
