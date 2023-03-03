@@ -1,0 +1,23 @@
+{
+  "name": "ai.inworld.unity-sdk",
+  "version": "2.1.5",
+  "displayName": "Inworld SDK",
+  "description": "Allows to connect your game to Inworld.ai services.",
+  "unity": "2021.3",
+  "documentationUrl": "https://inworld.ai/",
+  "changelogUrl": "https://github.com/inworld-ai/inworld-unity-sdk/releases",
+  "licensesUrl": "https://github.com/inworld-ai/inworld-unity-sdk/blob/main/LICENSE.md",
+  "keywords": [
+    "Inworld",
+    "AI",
+    "NPC"
+  ],
+  "author": {
+    "name": "Inworld.ai",
+    "url": "http://inworld.ai"
+  },
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.0.2",
+    "com.unity.textmeshpro": "3.0.6"
+  }
+}
