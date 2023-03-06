@@ -37,8 +37,7 @@
               UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
             with:
               unityVersion: 2021.3.19f1
-              build-method: 'BuildCommand.PerformBuild'
-              projectPath: Assets/PlatformBuildTester~
+              projectPath: Assets/PlatformBuildTester~/BuildTester
               customParameters: -CleanBuildCache
               targetPlatform: ${{ matrix.targetPlatform }}
           - uses: actions/upload-artifact@v3
