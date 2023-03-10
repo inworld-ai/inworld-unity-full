@@ -30,7 +30,7 @@ namespace Inworld.Editor.States
             if (InworldEditor.CurrentCountDown > 0)
                 InworldEditor.Title = $"Disconnected. {InworldEditor.CurrentCountDown} Seconds to Auto-Reconnect";
             else
-                InworldEditor.Status = InworldEditor.CurrentProgress > 95 ? InworldEditorStatus.CharacterChooser : InworldEditorStatus.WorkspaceChooser;
+                InworldEditor.Status = InworldEditor.CurrentProgress > 95 ? InworldEditorStatus.SceneCharacterChooser : InworldEditorStatus.WorkspaceChooser;
         }
         #endregion
     }

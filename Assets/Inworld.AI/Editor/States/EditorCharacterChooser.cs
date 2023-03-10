@@ -14,18 +14,21 @@ using UnityEngine.UIElements;
 namespace Inworld.Editor.States
 {
     /// <summary>
-    ///     This State triggers when Workspace/Key/Scene/ has all been selected.
+    ///     This State triggers when a Workspace has been selected.
     ///     Start Fetching Thumbnails, avatars, and generate Character Buttons.
     /// </summary>
     public class EditorCharacterChooser : EditorState
     {
         #region Private Variables
+        DropdownField m_KeyChooser;
+        DropdownField m_SceneChooser;
         VisualElement m_CharacterChooser;
         Button m_HyperLink;
         Button m_Tutorial;
         VisualElement m_Instruction;
         bool m_IsReconnected;
         bool m_IsWorkspaceInitialized;
+        bool m_DataInitialized;
         #endregion
 
         #region State Functions
@@ -47,11 +50,17 @@ namespace Inworld.Editor.States
         public override void PostUpdate()
         {
             InworldWorkspaceData wsData = InworldAI.Game.currentWorkspace;
+            if (!wsData)
+                return;
+            if (!InworldEditor.Progress.ContainsKey(wsData))
+                return;
+
             if (InworldEditor.Progress.ContainsKey(wsData))
             {
                 if (!m_IsWorkspaceInitialized)
                 {
                     float wsProgress = InworldEditor.Progress[wsData].Progress;
+                    Debug.Log(("Progress: " + wsProgress + "%"));
                     if (wsProgress > 95f)
                     {
                         EditorUtility.ClearProgressBar();
@@ -66,18 +75,15 @@ namespace Inworld.Editor.States
                         EditorUtility.DisplayProgressBar("InworldAI", $"Loading Workspace {wsProgress}% Completed", wsProgress * 0.01f);
                 }
             }
-            if (!InworldEditor.IsDataValid)
-            {
-                if (m_Instruction != null)
-                    m_Instruction.visible = false;
-                _ClearCharacterChoosers();
-                return;
-            }
+        
             if (m_IsReconnected)
                 return;
             float downloadingProgress = InworldAI.File.Progress;
             if (downloadingProgress > 99f)
             {
+                InworldEditor.Instance.ListScenes(wsData);
+                InworldEditor.Instance.ListAPIKey(wsData);
+                InworldEditor.Instance.ListCharacters(wsData);
                 m_IsReconnected = true;
                 m_Instruction.visible = true;
                 AssetDatabase.Refresh();
@@ -86,18 +92,22 @@ namespace Inworld.Editor.States
             }
             else
             {
+                m_IsReconnected = false;
                 EditorUtility.DisplayProgressBar("InworldAI", $"Loading Characters {downloadingProgress}% Completed", downloadingProgress * 0.01f);
             }
         }
         public override void OnConnected()
         {
+            m_IsWorkspaceInitialized = false;
+            if (!InworldAI.Game.currentWorkspace)
+                return;
+            
             InworldWorkspaceData wsData = InworldAI.Game.currentWorkspace;
             InworldEditor.Progress[wsData] = new WorkspaceFetchingProgress();
             InworldEditor.Instance.ListScenes(wsData);
             InworldEditor.Instance.ListAPIKey(wsData);
             InworldEditor.Instance.ListCharacters(wsData);
             m_IsReconnected = true;
-            m_IsWorkspaceInitialized = false;
         }
         #endregion
 
@@ -118,20 +128,26 @@ namespace Inworld.Editor.States
                 OnWorkspaceChanged, InworldAI.Game.currentWorkspace.title
             );
 
-            SetupDropDown
-            (
-                "KeyChooser",
-                InworldAI.Game.currentWorkspace.integrations.Select(key => key.ShortName).ToList(),
-                OnKeyChanged, InworldAI.Game.currentKey.ShortName
-            );
+            string targetKey = InworldAI.Game.currentKey ? InworldAI.Game.currentKey.ShortName : null;
+            string targetScene = InworldAI.Game.currentScene ? InworldAI.Game.currentScene.ShortName : null;
 
-            SetupDropDown
-            (
-                "SceneChooser",
-                InworldAI.Game.currentWorkspace.scenes.Select(scene => scene.ShortName).ToList(),
-                OnSceneChanged, InworldAI.Game.currentScene.ShortName
-            );
-
+            if (string.IsNullOrEmpty(targetKey))
+                m_KeyChooser = SetupDropDown("KeyChooser", null, OnKeyChanged, null, false);
+            else
+                m_KeyChooser = SetupDropDown
+                (
+                    "KeyChooser", InworldAI.Game.currentWorkspace.integrations.Select(key => key.ShortName).ToList(),
+                    OnKeyChanged, targetKey
+                );
+            if (string.IsNullOrEmpty(targetScene))
+                m_SceneChooser = SetupDropDown("SceneChooser", null, OnSceneChanged, null, false);
+            else
+                m_SceneChooser = SetupDropDown
+                (
+                    "SceneChooser", InworldAI.Game.currentWorkspace.scenes.Select(scene => scene.ShortName).ToList(),
+                    OnSceneChanged, targetKey
+                );
+            
             m_CharacterChooser = InworldEditor.Root.Q<VisualElement>("CharacterChooser");
             m_HyperLink = SetupButton("HyperLink", () => Help.BrowseURL($"{InworldAI.Game.currentServer.web}/{InworldAI.Game.currentWorkspace.fullName}"), false);
             m_Tutorial = SetupButton("Tutorial", () => Help.BrowseURL($"{InworldAI.Game.currentServer.tutorialPage}/{InworldAI.Game.currentWorkspace.fullName}"), false);
@@ -215,11 +231,8 @@ namespace Inworld.Editor.States
             // 1. Clear Data.
             _ClearCharacterChoosers();
             InworldEditor.SetupInworldController();
-            foreach (string brain in InworldAI.Game.currentScene.characters)
+            foreach (InworldCharacterData charData in InworldAI.Game.currentWorkspace.characters)
             {
-                if (!InworldAI.User.Characters.ContainsKey(brain))
-                    continue;
-                InworldCharacterData charData = InworldAI.User.Characters[brain];
                 // 3. Create Buttons.
                 Button btnCharacter = CreateCharacterButton(charData);
                 btnCharacter.clickable.clicked += () =>
@@ -231,34 +244,44 @@ namespace Inworld.Editor.States
                 };
                 m_CharacterChooser.Add(btnCharacter);
             }
+            Debug.Log(("Should have setup the chars"));
+
         }
         void _RefreshData()
         {
-            InworldSceneData iwSceneData = InworldAI.Game.currentWorkspace.scenes.FirstOrDefault
-                (sceneData => sceneData.fullName == InworldAI.Game.currentScene.fullName);
-            if (iwSceneData)
+            if (InworldAI.Game.currentScene != null)
             {
-                InworldAI.Game.currentScene.CopyFrom(iwSceneData);
+                InworldSceneData iwSceneData = InworldAI.Game.currentWorkspace.scenes.FirstOrDefault
+                    (sceneData => sceneData.fullName == InworldAI.Game.currentScene.fullName);
+                if (iwSceneData)
+                {
+                    InworldAI.Game.currentScene.CopyFrom(iwSceneData);
+                }
             }
-            InworldKeySecret iwKeySecret = InworldAI.Game.currentWorkspace.integrations.FirstOrDefault
-                (keySecret => keySecret.key == InworldAI.Game.currentKey.key);
-            if (iwKeySecret)
+
+            if (InworldAI.Game.currentKey != null)
             {
-                InworldAI.Game.currentKey.secret = iwKeySecret.secret;
+                InworldKeySecret iwKeySecret = InworldAI.Game.currentWorkspace.integrations.FirstOrDefault
+                    (keySecret => keySecret.key == InworldAI.Game.currentKey.key);
+                if (iwKeySecret)
+                {
+                    InworldAI.Game.currentKey.secret = iwKeySecret.secret;
+                }
             }
         }
         void _LoadingCharacters()
         {
-            bool isValid = InworldEditor.IsDataValid;
+            Debug.Log("loading characters");
+            bool isValid = true;//InworldEditor.IsDataValid;
             m_IsReconnected = false;
             if (isValid)
             {
                 InworldEditor._SaveCurrentSettings();
                 InworldAI.File.Init();
-                foreach (string brain in InworldAI.Game.currentScene.characters.Where
-                    (brain => InworldAI.User.Characters.ContainsKey(brain) && InworldAI.User.Characters[brain].Progress < 0.95f))
+                foreach (InworldCharacterData charData in InworldAI.Game.currentWorkspace.characters.Where
+                    (charData => charData.Progress < 0.95f))
                 {
-                    InworldAI.File.DownloadCharacterData(InworldAI.User.Characters[brain]);
+                    InworldAI.File.DownloadCharacterData(charData);
                 }
             }
             else

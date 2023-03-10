@@ -183,7 +183,7 @@ namespace Inworld.Editor.States
         void _CheckProceed()
         {
             if (InworldAI.Game.currentWorkspace && InworldAI.Game.currentScene && InworldAI.Game.currentKey)
-                InworldEditor.Status = InworldEditorStatus.CharacterChooser;
+                InworldEditor.Status = InworldEditorStatus.SceneCharacterChooser;
         }
         void _LoadingScenes()
         {

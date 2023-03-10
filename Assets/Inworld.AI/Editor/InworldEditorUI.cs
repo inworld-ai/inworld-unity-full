@@ -81,8 +81,8 @@ namespace Inworld.Editor
             m_States[InworldEditorStatus.Default] = new EditorDefault();
             m_States[InworldEditorStatus.Init] = new EditorInit();
             m_States[InworldEditorStatus.WorkspaceChooser] = new EditorWorkspaceChooser();
-            m_States[InworldEditorStatus.SceneChooser] = new EditorSceneChooser();
-            m_States[InworldEditorStatus.CharacterChooser] = new EditorCharacterChooser();
+            m_States[InworldEditorStatus.SceneChooser] = new EditorCharacterChooser();
+            m_States[InworldEditorStatus.SceneCharacterChooser] = new EditorCharacterSceneChooser();
             m_States[InworldEditorStatus.Error] = new EditorError();
             Status = InworldAI.User.EditorStatus;
         }
