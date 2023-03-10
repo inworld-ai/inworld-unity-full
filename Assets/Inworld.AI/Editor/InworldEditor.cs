@@ -66,6 +66,9 @@ namespace Inworld.Editor
         static internal void _SaveCurrentSettings()
         {
             _SaveWSData(InworldAI.Game.currentWorkspace);
+            if(InworldAI.Game.currentKey != null)
+                _SaveKey(InworldAI.Game.currentKey);
+            
             if (InworldAI.Game.currentScene != null)
             {
                 foreach (string brain in InworldAI.Game.currentScene.characters.Where(brain =>
@@ -74,7 +77,6 @@ namespace Inworld.Editor
                     _SaveCharData(InworldAI.User.Characters[brain]);
                 }
 
-                _SaveKey(InworldAI.Game.currentKey);
                 _SaveIwSceneData(InworldAI.Game.currentScene);
             }
         }
