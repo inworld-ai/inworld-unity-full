@@ -158,7 +158,11 @@ namespace Inworld.Editor.States
         {
             DropdownField dropdown = InworldEditor.Root.Q<DropdownField>(tag);
             if (dropdown == null)
+            {
+                Debug.Log("RETURN NULL COULDN'T FIND A DROPDOWN FOR " + tag);
                 return null;
+            }
+
             dropdown.visible = isVisible;
             dropdown.value = targetValue;
             if (input != null)

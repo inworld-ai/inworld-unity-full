@@ -41,12 +41,50 @@ namespace Inworld.Editor.States
         }
         public override void OnExit()
         {
+            m_KeyChooser = null;
+            m_SceneChooser = null;
             m_CharacterChooser = null;
             m_Instruction = null;
             m_HyperLink = null;
             m_Tutorial = null;
             base.OnExit();
         }
+
+        void UpdateSceneKeyChoosers(InworldWorkspaceData wsData)
+        {
+            if (m_DataInitialized)
+                return;
+            float fetchingProgress = InworldEditor.Progress[wsData].Progress;
+            if (fetchingProgress > 99f)
+            {
+                m_DataInitialized = true;
+                EditorUtility.ClearProgressBar();
+                AssetDatabase.Refresh();
+                if (wsData.IsValid)
+                {
+                    if (m_KeyChooser != null)
+                    {
+                        m_KeyChooser.choices = wsData.integrations.Select(key => key.ShortName).ToList();
+                        m_KeyChooser.visible = true;
+                    }
+                    if (m_SceneChooser != null)
+                    {
+                        m_SceneChooser.choices = wsData.scenes.Select(key => key.ShortName).ToList();
+                        m_SceneChooser.visible = true;
+                    }
+                }
+                else
+                {
+                    m_HyperLink.visible = true;
+                    m_Tutorial.visible = true;
+                }
+            }
+            else
+            {
+                EditorUtility.DisplayProgressBar("InworldAI", $"Downloading SceneData {fetchingProgress}% Completed", fetchingProgress * 0.01f);
+            }
+        }
+        
         public override void PostUpdate()
         {
             InworldWorkspaceData wsData = InworldAI.Game.currentWorkspace;
@@ -54,6 +92,8 @@ namespace Inworld.Editor.States
                 return;
             if (!InworldEditor.Progress.ContainsKey(wsData))
                 return;
+            
+            UpdateSceneKeyChoosers(wsData);
 
             if (InworldEditor.Progress.ContainsKey(wsData))
             {
@@ -96,9 +136,22 @@ namespace Inworld.Editor.States
                 EditorUtility.DisplayProgressBar("InworldAI", $"Loading Characters {downloadingProgress}% Completed", downloadingProgress * 0.01f);
             }
         }
+        
+        void _CheckProceed()
+        {
+            if (InworldAI.Game.currentWorkspace && InworldAI.Game.currentScene && InworldAI.Game.currentKey)
+                InworldEditor.Status = InworldEditorStatus.SceneCharacterChooser;
+            else
+            {
+                _LoadingCharacters();
+
+            }
+        }
+        
         public override void OnConnected()
         {
             m_IsWorkspaceInitialized = false;
+            m_DataInitialized = false;
             if (!InworldAI.Game.currentWorkspace)
                 return;
             
@@ -131,7 +184,7 @@ namespace Inworld.Editor.States
             string targetKey = InworldAI.Game.currentKey ? InworldAI.Game.currentKey.ShortName : null;
             string targetScene = InworldAI.Game.currentScene ? InworldAI.Game.currentScene.ShortName : null;
 
-            if (string.IsNullOrEmpty(targetKey))
+            if (InworldAI.Game.currentKey == null)
                 m_KeyChooser = SetupDropDown("KeyChooser", null, OnKeyChanged, null, false);
             else
                 m_KeyChooser = SetupDropDown
@@ -139,7 +192,8 @@ namespace Inworld.Editor.States
                     "KeyChooser", InworldAI.Game.currentWorkspace.integrations.Select(key => key.ShortName).ToList(),
                     OnKeyChanged, targetKey
                 );
-            if (string.IsNullOrEmpty(targetScene))
+            
+            if (InworldAI.Game.currentScene == null)
                 m_SceneChooser = SetupDropDown("SceneChooser", null, OnSceneChanged, null, false);
             else
                 m_SceneChooser = SetupDropDown
@@ -213,7 +267,7 @@ namespace Inworld.Editor.States
             ))
             {
                 InworldAI.Game.currentScene = InworldAI.Game.currentWorkspace.scenes.FirstOrDefault(scene => scene.ShortName == newValue);
-                _LoadingCharacters();
+                _CheckProceed();
             }
         }
         #endregion
