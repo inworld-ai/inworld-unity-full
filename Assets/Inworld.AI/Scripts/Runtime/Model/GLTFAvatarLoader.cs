@@ -35,7 +35,7 @@ namespace Inworld.Model.Sample
             if (model)
                 _ConfigureModel(model);
             _InstallAnimator();
-            _InstallScriptableRenderPipelineMaterials();
+            InstallScriptableRenderPipelineMaterials();
             _InstallLipsync();
             if (m_HeadAnimLoader)
                 _SetupHeadMovement();
@@ -72,19 +72,17 @@ namespace Inworld.Model.Sample
             m_CharacterToProcess.CurrentAvatar = model;
         }
 
-        void _InstallScriptableRenderPipelineMaterials()
+        public void InstallScriptableRenderPipelineMaterials()
         {
             if (m_CharacterToProcess.CurrentAvatar != null && IsUsingScriptableRenderPipeline())
             {
                 SkinnedMeshRenderer renderer = m_CharacterToProcess.CurrentAvatar.GetComponentInChildren<SkinnedMeshRenderer>();
-                //Debug.Log("found skinned mesh renderer on" + renderer.name);
                 Texture2D baseColorMap = renderer.sharedMaterial.GetTexture("_MainTex") as Texture2D;
                 Texture2D normalMap = renderer.sharedMaterial.GetTexture("_BumpMap") as Texture2D;
                 Material newMat = new Material(m_SRPMaterial);
                 newMat.SetTexture("_BASE_COLOR_MAP", baseColorMap);
                 newMat.SetTexture("_NORMAL_MAP", normalMap);
                 renderer.material = newMat;
-                Debug.Log("set texture on " + renderer.name + " to " + newMat.GetTexture("_BASE_COLOR_MAP").name + " and " + newMat.GetTexture("_NORMAL_MAP").name + "");
             }
         }
         
