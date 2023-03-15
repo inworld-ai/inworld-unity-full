@@ -3,6 +3,8 @@
 
   on:
     workflow_dispatch:
+    pull_request:
+      branches: [main]
         
   env:
     UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
