@@ -20,6 +20,12 @@ namespace Inworld.Model
         {
             AvatarLoaded?.Invoke(character);
         }
+
+        public void InstallScriptableRenderPipelineMaterials()
+        {
+            return;
+        }
+
         public IEnumerator Import(string url)
         {
             return null;
