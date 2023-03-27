@@ -52,6 +52,7 @@ namespace Inworld.Editor
                 return;
             if (_WillSetupInworldCharacter)
                 _SetupInworldCharacter(Selection.activeGameObject);
+            
         }
         static void OnHierarchyChanged()
         {
@@ -252,7 +253,7 @@ namespace Inworld.Editor
 
         [MenuItem("Assets/Inworld Settings", false, 1)]
         static void ShowPanel() => Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
-
+        
         #endregion
 
         #region Scene Menu
@@ -360,6 +361,16 @@ namespace Inworld.Editor
         }
     }
     [CustomEditor(typeof(InworldGameSettings))] public class InworldGameSettingInspector : InworldInspector {}
-    [CustomEditor(typeof(GLTFAvatarLoader))] public class InworldAvatarLoaderInspector : InworldInspector {}
+
+    [CustomEditor(typeof(GLTFAvatarLoader))]
+    public class InworldAvatarLoaderInspector : InworldInspector
+    {
+        [MenuItem("GameObject/Inworld/Update Materials for Scriptable Render Pipelines", false, 1)]
+        static void UpdateMaterials()
+        {
+            Debug.Log("Updating menu materials before if check on " + Selection.activeGameObject.name);
+            InworldAI.AvatarLoader.InstallScriptableRenderPipelineMaterials();
+        }
+    }
 }
 #endif
