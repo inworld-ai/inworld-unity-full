@@ -51,7 +51,6 @@ namespace Inworld
                     State = ControllerStates.InitFailed;
                     break;
                 case RuntimeStatus.LoadSceneFailed:
-                    Debug.Log($"YAN Last State: {m_Client.LastState}");
                     Debug.LogError(msg);
                     State = ControllerStates.Error;
                     break;
