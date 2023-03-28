@@ -111,6 +111,7 @@ namespace Inworld.Util
             Interruptions = true,
             Text = true,
             Triggers = true,
+            Continuation = true,
             TurnBasedStt = !m_Interruptible,
             PhonemeInfo = true
         };
