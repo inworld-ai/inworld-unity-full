@@ -37,10 +37,7 @@ namespace Inworld.Sample
             // Exit Sample  
             if (Input.GetKey(KeyCode.Escape))
             {
-                Application.Quit();
-				#if UNITY_EDITOR
-                EditorApplication.isPlaying = false;
-				#endif
+                InworldController.Instance.StartTerminate();
             }
             // Hide and lock cursor when right mouse button pressed
             if (Input.GetMouseButtonDown(0))
