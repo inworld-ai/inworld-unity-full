@@ -13,6 +13,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 using AudioChunk = Inworld.Packets.AudioChunk;
 using ControlEvent = Inworld.Packets.ControlEvent;
@@ -20,6 +23,7 @@ using GrpcPacket = Inworld.Grpc.InworldPacket;
 using InworldPacket = Inworld.Packets.InworldPacket;
 using Random = UnityEngine.Random;
 using Routing = Inworld.Packets.Routing;
+using TextEvent = Inworld.Packets.TextEvent;
 
 
 namespace Inworld
@@ -47,6 +51,7 @@ namespace Inworld
                     State = ControllerStates.InitFailed;
                     break;
                 case RuntimeStatus.LoadSceneFailed:
+                    Debug.Log($"YAN Last State: {m_Client.LastState}");
                     Debug.LogError(msg);
                     State = ControllerStates.Error;
                     break;
@@ -56,6 +61,7 @@ namespace Inworld
 
         #region Inspector Variables
         [SerializeField] bool m_AutoStart;
+        [SerializeField] bool m_SaveData;
         [SerializeField] InworldSceneData m_Data;
         [SerializeField] GameObject m_InworldPlayer;
         [SerializeField] AudioCapture m_Capture;
@@ -76,6 +82,7 @@ namespace Inworld
         float m_CurrentCountDown;
         string m_WaitingRecordingID;
         string m_TTSInteractionID;
+        bool m_StartToQuit;
         #endregion
 
         #region Properties
@@ -191,11 +198,21 @@ namespace Inworld
         }
         void Start()
         {
+            if (m_SaveData && PlayerPrefs.HasKey(CurrentScene.fullName))
+                m_Client.LastState = PlayerPrefs.GetString(CurrentScene.fullName);
             if (m_AutoStart)
                 Init();
         }
         void Update()
         {
+            if (m_StartToQuit && State == ControllerStates.Idle)
+            {
+                Application.Quit();
+#if UNITY_EDITOR
+                EditorApplication.isPlaying = false;
+#endif
+            }
+                
             if (State == ControllerStates.LostConnect)
             {
                 m_CurrentCountDown += Time.deltaTime;
@@ -211,9 +228,6 @@ namespace Inworld
                 m_WaitingRecordingID = null;
                 _StartAudioCapture(m_CurrentRecordingID);
             }
-
-            if (Input.GetKeyUp(KeyCode.Escape))
-                Application.Quit();
         }
         void OnDisable()
         {
@@ -295,7 +309,6 @@ namespace Inworld
             {
                 OnPacketReceived?.Invoke(packet);
             }
-
             if (m_Client.GetAudioChunk(out AudioChunk audioChunkEvent))
             {
                 OnPacketReceived?.Invoke(audioChunkEvent);
@@ -418,6 +431,10 @@ namespace Inworld
                         {
                             _BindCharacterFromServer(character, response.Agents[0]);
                         }
+                        if (m_SaveData)
+                        {
+                            _LoadPreviousData(response);
+                        }
                         _StartSession();
                         break;
                     }
@@ -461,6 +478,10 @@ namespace Inworld
                         if (response != null)
                         {
                             _ListCharactersFromServer(response.Agents.ToList());
+                            if (m_SaveData)
+                            {
+                                _LoadPreviousData(response);
+                            }
                             _StartSession();
                         }
                         break;
@@ -476,6 +497,24 @@ namespace Inworld
             {
                 State = ControllerStates.Error;
                 Debug.LogError(e);
+            }
+        }
+        void _LoadPreviousData(LoadSceneResponse response)
+        {
+            if (response.PreviousState == null)
+                return;
+            foreach (PreviousState.Types.StateHolder stateHolder in response.PreviousState.StateHolders)
+            {
+                if (stateHolder.Packets.Count != 0)
+                    InworldAI.Log(" ======= Previous Dialog: ======= ");
+                foreach (GrpcPacket packet in stateHolder.Packets)
+                {
+                    TextEvent packets = m_Client.ResolvePreviousPackets(packet);
+                    if (packets != null)
+                    {
+                        InworldAI.Log($">>>> {packet.Text.Text}");
+                    }
+                }
             }
         }
         /// <summary>
@@ -501,6 +540,8 @@ namespace Inworld
 
             StopCoroutine(nameof(InteractionCoroutine));
             CurrentCharacter = null;
+            if (m_SaveData)
+                PlayerPrefs.SetString(CurrentScene.fullName, m_Client.LastState);
             State = ControllerStates.Idle;
         }
 
@@ -561,5 +602,13 @@ namespace Inworld
             return null;
         }
         #endregion
+
+        public void StartTerminate()
+        {
+            m_StartToQuit = true;
+#pragma warning disable CS4014
+            Disconnect();
+#pragma warning restore CS4014
+        }
     }
 }

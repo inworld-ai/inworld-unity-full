@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AutoStart: 1
+  m_SaveData: 0
   m_Data: {fileID: 0}
   m_InworldPlayer: {fileID: 0}
   m_Capture: {fileID: 6560745356186654253}
@@ -62,6 +63,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eedce951bbc942d448b133a3376faec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnRecordingStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRecordingEnd:
+    m_PersistentCalls:
+      m_Calls: []
   m_AudioRate: 16000
   m_BufferSeconds: 1
 --- !u!114 &6840405142551539477
@@ -76,6 +83,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d696a9c5a5562f4a9af19423ad21b35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Updatable: 1
   m_WSData: {fileID: 0}
   m_InworldSceneData: {fileID: 0}
   m_CharData: {fileID: 0}
