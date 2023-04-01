@@ -189,7 +189,7 @@ namespace Inworld.Model
             }
             else if (newCharacter == Character)
             {
-                Animator.enabled = false;
+                Animator.enabled = true;
                 HandleMainStatus(AnimMainStatus.Hello);
             }
         }
