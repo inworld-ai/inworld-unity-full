@@ -66,13 +66,6 @@ namespace Inworld.Util
         Error // Some error occured.
     }
 
-    public enum InworldSceneStatus
-    {
-        Unknown,
-        CharacterInit,
-        LoadSceneFailed
-    }
-
     public enum AnimMainStatus
     {
         Neutral = 0,
