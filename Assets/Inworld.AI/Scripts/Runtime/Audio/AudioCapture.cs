@@ -6,6 +6,7 @@
 *************************************************************************************************/
 using Google.Protobuf;
 using Inworld.Util;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
@@ -38,7 +39,6 @@ namespace Inworld
 
         public void StartRecording(bool autoPush = true)
         {
-            m_Recording = Microphone.Start(null, true, m_BufferSeconds, m_AudioRate);
             m_LastPosition = Microphone.GetPosition(null);
             m_AudioToPush.Clear();
             IsCapturing = true;
@@ -58,6 +58,10 @@ namespace Inworld
             m_BufferSize = m_BufferSeconds * m_AudioRate;
             m_ByteBuffer = new byte[m_BufferSize * 1 * k_SizeofInt16];
             m_FloatBuffer = new float[m_BufferSize * 1];
+        }
+        void Start()
+        {
+            m_Recording = Microphone.Start(null, true, m_BufferSeconds, m_AudioRate);
         }
         void Update()
         {
