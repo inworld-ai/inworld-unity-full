@@ -89,6 +89,7 @@ header:
     - '**/*.yaml'
     - '**/*.yml'
     - '**/*.config'   
+    - '**/*.editorconfig'     
     
   comment: on-failure
 
