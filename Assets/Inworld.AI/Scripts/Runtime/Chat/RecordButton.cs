@@ -26,12 +26,12 @@ namespace Inworld.Sample.UI
         }
         public void OnPointerDown(PointerEventData eventData)
         {
-            InworldController.IsCapturing = true;
+            InworldController.Instance.StartRecording(false);
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            InworldController.IsCapturing = false;
+            InworldController.Instance.PushAudio();
         }
     }
 }

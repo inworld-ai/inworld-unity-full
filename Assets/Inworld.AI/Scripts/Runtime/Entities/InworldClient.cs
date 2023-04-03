@@ -68,7 +68,7 @@ namespace Inworld
 
         #region Properties
         internal ConcurrentQueue<Exception> Errors { get; } = new ConcurrentQueue<Exception>();
-        internal bool IsInteracting { get; private set; }
+        internal bool SessionStarted { get; private set; }
         internal bool HasInit => !m_InworldAuth.IsExpired;
         internal string SessionID => m_InworldAuth?.SessionID ?? "";
         internal string LastState { get; set; }
@@ -146,7 +146,7 @@ namespace Inworld
         internal void StartAudio(Routing routing)
         {
             InworldAI.Log("Start Audio Event");
-            if (IsInteracting)
+            if (SessionStarted)
                 m_CurrentConnection?.outgoingEventsQueue.Enqueue
                 (
                     new GrpcPacket
@@ -164,7 +164,7 @@ namespace Inworld
         // Marks session end.
         internal void EndAudio(Routing routing)
         {
-            if (IsInteracting)
+            if (SessionStarted)
                 m_CurrentConnection?.outgoingEventsQueue.Enqueue
                 (
                     new GrpcPacket
@@ -182,7 +182,7 @@ namespace Inworld
         // Sends audio chunk to server.
         internal void SendAudio(AudioChunk audioEvent)
         {
-            if (IsInteracting)
+            if (SessionStarted)
                 m_CurrentConnection?.outgoingEventsQueue.Enqueue(audioEvent.ToGrpc());
         }
         internal bool GetAudioChunk(out AudioChunk chunk)
@@ -205,7 +205,7 @@ namespace Inworld
         }
         internal void SendEvent(InworldPacket e)
         {
-            if (IsInteracting)
+            if (SessionStarted)
                 m_CurrentConnection?.outgoingEventsQueue.Enqueue(e.ToGrpc());
         }
         internal bool GetIncomingEvent(out InworldPacket incomingEvent)
@@ -227,7 +227,7 @@ namespace Inworld
             Connection connection = new Connection();
             m_CurrentConnection = connection;
 
-            IsInteracting = true;
+            SessionStarted = true;
             try
             {
                 using (m_StreamingCall = m_WorldEngineClient.Session(m_Header))
@@ -237,7 +237,7 @@ namespace Inworld
                     (
                         async () =>
                         {
-                            while (IsInteracting)
+                            while (SessionStarted)
                             {
                                 bool next;
                                 try
@@ -273,14 +273,14 @@ namespace Inworld
                     (
                         async () =>
                         {
-                            while (IsInteracting)
+                            while (SessionStarted)
                             {
                                 Task.Delay(100).Wait();
                                 // Sending all outgoing events.
                                 GrpcPacket e;
                                 while (connection.outgoingEventsQueue.TryDequeue(out e))
                                 {
-                                    if (IsInteracting)
+                                    if (SessionStarted)
                                     {
                                         await m_StreamingCall.RequestStream.WriteAsync(e);
                                     }
@@ -293,12 +293,61 @@ namespace Inworld
             }
             catch (Exception e)
             {
-                IsInteracting = false;
+                SessionStarted = false;
                 Errors.Enqueue(e);
             }
             finally
             {
-                IsInteracting = false;
+                SessionStarted = false;
+            }
+        }
+        internal TextEvent ResolvePreviousPackets(GrpcPacket response) => response.Text != null ? new TextEvent(response) : null;
+
+        void _ResolveGRPCPackets(GrpcPacket response)
+        {
+            m_CurrentConnection ??= new Connection();
+            if (response.DataChunk != null)
+            {
+                switch (response.DataChunk.Type)
+                {
+                    case DataChunk.Types.DataType.Audio:
+                        m_CurrentConnection.incomingAudioQueue.Enqueue(new AudioChunk(response));
+                        break;
+                    case DataChunk.Types.DataType.Animation:
+                        m_CurrentConnection.incomingAnimationQueue.Enqueue(new AnimationChunk(response));
+                        break;
+                    case DataChunk.Types.DataType.State:
+                        StateChunk stateChunk = new StateChunk(response);
+                        LastState = stateChunk.Chunk.ToBase64();
+                        break;
+                    default:
+                        InworldAI.LogError($"Unsupported incoming event: {response}");
+                        break;
+                }
+            }
+            else if (response.Text != null)
+            {
+                m_CurrentConnection.incomingInteractionsQueue.Enqueue(new TextEvent(response));
+            }
+            else if (response.Gesture != null)
+            {
+                m_CurrentConnection.incomingInteractionsQueue.Enqueue(new GestureEvent(response));
+            }
+            else if (response.Control != null)
+            {
+                m_CurrentConnection.incomingInteractionsQueue.Enqueue(new Packets.ControlEvent(response));
+            }
+            else if (response.Emotion != null)
+            {
+                m_CurrentConnection.incomingInteractionsQueue.Enqueue(new EmotionEvent(response));
+            }
+            else if (response.Custom != null)
+            {
+                m_CurrentConnection.incomingInteractionsQueue.Enqueue(new CustomEvent(response));
+            }
+            else
+            {
+                InworldAI.LogError($"Unsupported incoming event: {response}");
             }
         }
         internal TextEvent ResolvePreviousPackets(GrpcPacket response) => response.Text != null ? new TextEvent(response) : null;
@@ -352,10 +401,10 @@ namespace Inworld
         }
         internal async Task EndSession()
         {
-            if (IsInteracting)
+            if (SessionStarted)
             {
                 m_CurrentConnection = null;
-                IsInteracting = false;
+                SessionStarted = false;
                 await m_StreamingCall.RequestStream.CompleteAsync();
                 m_StreamingCall.Dispose();
             }

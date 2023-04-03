@@ -20,6 +20,7 @@ namespace Inworld.Util
         [Tooltip("These settings are not editable during runtime.")]
         [SerializeField] bool m_CanReceiveAudio = true;
         [SerializeField] bool m_Interruptible = false;
+        [SerializeField] bool m_SaveConversation = false;
         [Space(10)][Header("Local File Path:")]
         [SerializeField] string m_ThumbnailFolder;
         [SerializeField] string m_AvatarFolder;
@@ -47,6 +48,10 @@ namespace Inworld.Util
         ///     Get if player can interrupt character speaking.
         /// </summary>
         public bool Interruptible => m_Interruptible;
+        /// <summary>
+        ///     The game will save and load conversation if checked.
+        /// </summary>
+        public bool SaveConversation => m_SaveConversation;
         /// <summary>
         ///     Returns the Thumbnails Path.
         /// </summary>
@@ -111,7 +116,7 @@ namespace Inworld.Util
             Interruptions = true,
             Text = true,
             Triggers = true,
-            Continuation = true,
+            Continuation = m_SaveConversation,
             TurnBasedStt = !m_Interruptible,
             PhonemeInfo = true
         };
