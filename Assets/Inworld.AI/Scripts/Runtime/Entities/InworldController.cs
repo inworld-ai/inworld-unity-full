@@ -60,7 +60,6 @@ namespace Inworld
 
         #region Inspector Variables
         [SerializeField] bool m_AutoStart;
-        [SerializeField] bool m_SaveData;
         [SerializeField] InworldSceneData m_Data;
         [SerializeField] GameObject m_InworldPlayer;
         [SerializeField] AudioCapture m_Capture;
@@ -201,7 +200,7 @@ namespace Inworld
         }
         void Start()
         {
-            if (m_SaveData && PlayerPrefs.HasKey(CurrentScene.fullName))
+            if (InworldAI.Settings.SaveConversation && PlayerPrefs.HasKey(CurrentScene.fullName))
                 m_Client.LastState = PlayerPrefs.GetString(CurrentScene.fullName);
             if (m_AutoStart)
                 Init();
@@ -465,7 +464,7 @@ namespace Inworld
                         {
                             _BindCharacterFromServer(character, response.Agents[0]);
                         }
-                        if (m_SaveData)
+                        if (InworldAI.Settings.SaveConversation)
                         {
                             _LoadPreviousData(response);
                         }
@@ -512,7 +511,7 @@ namespace Inworld
                         if (response != null)
                         {
                             _ListCharactersFromServer(response.Agents.ToList());
-                            if (m_SaveData)
+                            if (InworldAI.Settings.SaveConversation)
                             {
                                 _LoadPreviousData(response);
                             }
@@ -574,7 +573,7 @@ namespace Inworld
 
             StopCoroutine(nameof(InteractionCoroutine));
             CurrentCharacter = null;
-            if (m_SaveData)
+            if (InworldAI.Settings.SaveConversation)
                 PlayerPrefs.SetString(CurrentScene.fullName, m_Client.LastState);
             State = ControllerStates.Idle;
         }
