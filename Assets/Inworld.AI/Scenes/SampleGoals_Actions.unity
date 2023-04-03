@@ -780,6 +780,7 @@ MonoBehaviour:
   m_Avatar: {fileID: 999676069}
   m_CharData: {fileID: 11400000, guid: a1e2f696e9d0c8748a95e29797fcc202, type: 2}
   m_LipAnimation: {fileID: 642398581}
+  m_CheckTrigger: turnback
 --- !u!1001 &1318710383
 PrefabInstance:
   m_ObjectHideFlags: 0

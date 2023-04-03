@@ -47,9 +47,16 @@ namespace Inworld.Sample
         {
             if (string.IsNullOrEmpty(m_InputField.text))
                 return;
+            if (!InworldController.Instance.CurrentCharacter)
+            {
+                InworldAI.LogError("No Character is interacting.");
+                return;
+            }
             InworldController.Instance.CurrentCharacter.SendText(m_InputField.text);
             m_InputField.text = null;
         }
+        public void RegisterCharacter(InworldCharacter character) => character.InteractionEvent.AddListener(OnInteractionStatus);
+
         public void BackToLobby()
         {
             if (!m_RTCanvas)
@@ -93,7 +100,7 @@ namespace Inworld.Sample
             if (states != ControllerStates.Connected)
                 return;
             _ClearHistoryLog();
-            foreach (InworldCharacter iwChar in InworldController.Instance.Characters)
+            foreach (InworldCharacter iwChar in InworldController.Characters)
             {
                 m_Characters[iwChar.ID] = iwChar;
                 iwChar.InteractionEvent.AddListener(OnInteractionStatus);

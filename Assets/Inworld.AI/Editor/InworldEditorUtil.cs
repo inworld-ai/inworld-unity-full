@@ -12,7 +12,9 @@ using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using System.Linq;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 #if UNITY_IPHONE
 using System.IO;
 using UnityEditor.Callbacks;
@@ -278,6 +280,8 @@ namespace Inworld.Editor
             }
             mainCamera = PrefabUtility.InstantiatePrefab(InworldAI.PlayerControllerPrefab) as GameObject;
             InworldController.Player = mainCamera;
+            EditorUtility.SetDirty(InworldController.Instance);
+            AssetDatabase.SaveAssets();
         }
         [MenuItem("GameObject/Inworld/Add/Inworld Character", true, 3)]
         static bool CheckInworldController()
