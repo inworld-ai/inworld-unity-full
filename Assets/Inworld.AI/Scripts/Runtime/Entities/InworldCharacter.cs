@@ -5,6 +5,7 @@
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
 using Inworld.Packets;
+using Inworld.Sample;
 using Inworld.Util;
 using System.Collections;
 using UnityEngine;
@@ -160,10 +161,12 @@ namespace Inworld
                 m_Interaction = gameObject.AddComponent<Interactions>();
                 m_Interaction.enabled = true;
             }
-            InworldController.Instance.RegisterCharacter(this);
+            if (!InworldController.Characters.Contains(this))
+                InworldController.Characters.Add(this);
         }
-        void Start()
+        void OnEnable()
         {
+            InworldController.Instance.OnStateChanged += OnStatusChanged;
             InworldController.Instance.OnCharacterChanged += OnCharacterChanged;
             OnBeginSpeaking?.AddListener(() =>
             {
@@ -202,11 +205,18 @@ namespace Inworld
         {
             if (!InworldController.Instance)
                 return;
+            InworldController.Instance.OnStateChanged -= OnStatusChanged;
             InworldController.Instance.OnCharacterChanged -= OnCharacterChanged;
         }
         #endregion
 
         #region Callbacks
+        void OnStatusChanged(ControllerStates incomingStatus)
+        {
+            if (incomingStatus != ControllerStates.Connected)
+                return;
+            _RegisterLiveSession(InworldController.Instance.GetLiveSessionID(BrainName));
+        }
         void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
         {
             if (oldChar == this)
@@ -240,38 +250,41 @@ namespace Inworld
             InworldAI.Log($"End Communicating with {CharacterName}: {ID}");
             InworldController.Instance.EndAudioCapture(ID);
         }
-        internal void RegisterLiveSession(string agentID)
+        void _RegisterLiveSession(string agentID)
         {
-            if (!Data)
+            if (!Data || string.IsNullOrEmpty(agentID))
             {
-                InworldAI.LogError("Error: No Data!");
+                InworldAI.LogError($"Error: Cannot Register {CharacterName}!");
                 return;
             }
+            InworldAI.Log($"Register {CharacterName}: {agentID}");
             Data.characterID = agentID;
         }
         IEnumerator CheckPriority()
         {
             // YAN: Update refreshed too fast. Use Coroutine for better performance.
-            while (InworldController.Instance && InworldController.Player)
+            while (true)
             {
-                Transform trCharacter = transform;
-                Transform trPlayer = InworldController.Player.transform;
-                Priority = Vector3.Distance(trCharacter.position, trPlayer.position);
-                if (Priority > m_SightDistance)
-                    Priority = -1f;
-                else
+                if (InworldController.Instance && InworldController.Player)
                 {
-                    Vector3 vecDirection = (trPlayer.position - trCharacter.position).normalized;
-                    float fAngle = Vector3.Angle(vecDirection, trCharacter.forward);
-                    if (fAngle > m_SightAngle * 0.5f)
-                    {
+                    Transform trCharacter = transform;
+                    Transform trPlayer = InworldController.Player.transform;
+                    Priority = Vector3.Distance(trCharacter.position, trPlayer.position);
+                    if (Priority > m_SightDistance)
                         Priority = -1f;
-                    }
                     else
                     {
-                        Vector3 vecPlayerDirection = -vecDirection;
-                        Priority = Vector3.Angle(vecPlayerDirection, trPlayer.forward);
-                        ;
+                        Vector3 vecDirection = (trPlayer.position - trCharacter.position).normalized;
+                        float fAngle = Vector3.Angle(vecDirection, trCharacter.forward);
+                        if (fAngle > m_SightAngle * 0.5f)
+                        {
+                            Priority = -1f;
+                        }
+                        else
+                        {
+                            Vector3 vecPlayerDirection = -vecDirection;
+                            Priority = Vector3.Angle(vecPlayerDirection, trPlayer.forward);
+                        }
                     }
                 }
                 yield return new WaitForSeconds(m_SightRefreshRate);
