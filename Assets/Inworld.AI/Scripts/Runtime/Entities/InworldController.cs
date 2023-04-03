@@ -60,7 +60,6 @@ namespace Inworld
 
         #region Inspector Variables
         [SerializeField] bool m_AutoStart;
-        [SerializeField] bool m_SaveData;
         [SerializeField] InworldSceneData m_Data;
         [SerializeField] GameObject m_InworldPlayer;
         [SerializeField] AudioCapture m_Capture;

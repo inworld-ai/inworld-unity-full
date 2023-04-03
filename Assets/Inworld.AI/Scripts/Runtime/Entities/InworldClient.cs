@@ -350,55 +350,7 @@ namespace Inworld
                 InworldAI.LogError($"Unsupported incoming event: {response}");
             }
         }
-        internal TextEvent ResolvePreviousPackets(GrpcPacket response) => response.Text != null ? new TextEvent(response) : null;
 
-        void _ResolveGRPCPackets(GrpcPacket response)
-        {
-            m_CurrentConnection ??= new Connection();
-            if (response.DataChunk != null)
-            {
-                switch (response.DataChunk.Type)
-                {
-                    case DataChunk.Types.DataType.Audio:
-                        m_CurrentConnection.incomingAudioQueue.Enqueue(new AudioChunk(response));
-                        break;
-                    case DataChunk.Types.DataType.Animation:
-                        m_CurrentConnection.incomingAnimationQueue.Enqueue(new AnimationChunk(response));
-                        break;
-                    case DataChunk.Types.DataType.State:
-                        StateChunk stateChunk = new StateChunk(response);
-                        LastState = stateChunk.Chunk.ToBase64();
-                        break;
-                    default:
-                        InworldAI.LogError($"Unsupported incoming event: {response}");
-                        break;
-                }
-            }
-            else if (response.Text != null)
-            {
-                m_CurrentConnection.incomingInteractionsQueue.Enqueue(new TextEvent(response));
-            }
-            else if (response.Gesture != null)
-            {
-                m_CurrentConnection.incomingInteractionsQueue.Enqueue(new GestureEvent(response));
-            }
-            else if (response.Control != null)
-            {
-                m_CurrentConnection.incomingInteractionsQueue.Enqueue(new Packets.ControlEvent(response));
-            }
-            else if (response.Emotion != null)
-            {
-                m_CurrentConnection.incomingInteractionsQueue.Enqueue(new EmotionEvent(response));
-            }
-            else if (response.Custom != null)
-            {
-                m_CurrentConnection.incomingInteractionsQueue.Enqueue(new CustomEvent(response));
-            }
-            else
-            {
-                InworldAI.LogError($"Unsupported incoming event: {response}");
-            }
-        }
         internal async Task EndSession()
         {
             if (SessionStarted)
