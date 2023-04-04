@@ -186,7 +186,6 @@ namespace Inworld
                 EditorApplication.isPlaying = false;
 #endif
             }
-                
             if (State == ControllerStates.LostConnect)
             {
                 m_CurrentCountDown += Time.deltaTime;
