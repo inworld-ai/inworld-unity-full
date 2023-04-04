@@ -312,8 +312,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2020718582}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -349,7 +348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d696a9c5a5562f4a9af19423ad21b35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Updatable: 0
+  m_Updatable: 1
   m_WSData: {fileID: 11400000, guid: d809abc8a24341d40ae9c288fa6ea5cb, type: 2}
   m_InworldSceneData: {fileID: 11400000, guid: 4952df7b265f22a4b95b85966797af56, type: 2}
   m_CharData: {fileID: 11400000, guid: f9ff4d00c5c0c2d44a42f5120344d25e, type: 2}
@@ -517,7 +516,7 @@ GameObject:
   - component: {fileID: 1131924865}
   - component: {fileID: 1131924864}
   - component: {fileID: 1131924863}
-  - component: {fileID: 1131924869}
+  - component: {fileID: 1131924867}
   m_Layer: 5
   m_Name: DemoCanvas
   m_TagString: Untagged
@@ -607,7 +606,7 @@ RectTransform:
   m_AnchoredPosition: {x: -1.2, y: 5.2000003}
   m_SizeDelta: {x: 1600, y: 900}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1131924869
+--- !u!114 &1131924867
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -616,11 +615,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1131924862}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19f9a7cb35e3a2d4ca6aa8a1f186a82b, type: 3}
+  m_Script: {fileID: 11500000, guid: 16115a1277f94a41aaecb0f4a357ce71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Title: {fileID: 1934973846}
   m_Content: {fileID: 1624441892}
+  m_Model: {fileID: 7021564582021472327, guid: e8f6d714e1e401e41ab3b8e397762883, type: 3}
+  m_Distance: -5
+  m_RuntimeInstructions: 'Use <color=green>WASD</color> to move around. Use <color=green>Q</color>
+    and <color=green>E</color> to move up and down. Press <color=green>"~"</color>
+    to open text panel. '
 --- !u!1 &1351384361
 GameObject:
   m_ObjectHideFlags: 0
@@ -773,13 +777,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Use <color=green>WASD</color> to move around.
-
-    Use <color=green>Q</color>
-    and <color=green>E</color> to move up and down.
-
-    Press <color=green>"~"</color>
-    to open text panel. '
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3ea4ccbf5fad0a1429aba4e2d30550a9, type: 2}
   m_sharedMaterial: {fileID: -2341376867643795472, guid: 3ea4ccbf5fad0a1429aba4e2d30550a9, type: 2}
@@ -1074,65 +1072,3 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1934973844}
   m_CullTransparentMesh: 1
---- !u!4 &2020718582 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8023772815654919743, guid: e8f6d714e1e401e41ab3b8e397762883, type: 3}
-  m_PrefabInstance: {fileID: 2385883960061489342}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &2385883960061489342
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 359806124}
-    m_Modifications:
-    - target: {fileID: 6670329999913351631, guid: e8f6d714e1e401e41ab3b8e397762883, type: 3}
-      propertyPath: m_Name
-      value: Celeste
-      objectReference: {fileID: 0}
-    - target: {fileID: 8023772815654919743, guid: e8f6d714e1e401e41ab3b8e397762883, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8023772815654919743, guid: e8f6d714e1e401e41ab3b8e397762883, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8023772815654919743, guid: e8f6d714e1e401e41ab3b8e397762883, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8023772815654919743, guid: e8f6d714e1e401e41ab3b8e397762883, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8023772815654919743, guid: e8f6d714e1e401e41ab3b8e397762883, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8023772815654919743, guid: e8f6d714e1e401e41ab3b8e397762883, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8023772815654919743, guid: e8f6d714e1e401e41ab3b8e397762883, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8023772815654919743, guid: e8f6d714e1e401e41ab3b8e397762883, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8023772815654919743, guid: e8f6d714e1e401e41ab3b8e397762883, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8023772815654919743, guid: e8f6d714e1e401e41ab3b8e397762883, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8023772815654919743, guid: e8f6d714e1e401e41ab3b8e397762883, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e8f6d714e1e401e41ab3b8e397762883, type: 3}
