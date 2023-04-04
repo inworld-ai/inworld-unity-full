@@ -211,6 +211,7 @@ namespace Inworld
         #endregion
 
         #region Callbacks
+
         void OnStatusChanged(ControllerStates incomingStatus) => RegisterLiveSession();
 
         void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
@@ -246,11 +247,13 @@ namespace Inworld
             InworldAI.Log($"End Communicating with {CharacterName}: {ID}");
             InworldController.Instance.EndAudioCapture(ID);
         }
+
         public void RegisterLiveSession()
         {
             if (InworldController.State != ControllerStates.Connected)
                 return;
             string agentID = InworldController.Instance.GetLiveSessionID(BrainName);
+
             if (!Data || string.IsNullOrEmpty(agentID))
             {
                 InworldAI.LogError($"Error: Cannot Register {CharacterName}!");
