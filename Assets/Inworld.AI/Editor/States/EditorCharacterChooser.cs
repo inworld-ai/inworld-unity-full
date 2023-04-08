@@ -23,6 +23,7 @@ namespace Inworld.Editor.States
         VisualElement m_CharacterChooser;
         Button m_HyperLink;
         Button m_Tutorial;
+        Button m_AllCharacters;
         VisualElement m_Instruction;
         bool m_IsReconnected;
         bool m_IsWorkspaceInitialized;
@@ -131,7 +132,8 @@ namespace Inworld.Editor.States
                 InworldAI.Game.currentWorkspace.scenes.Select(scene => scene.ShortName).ToList(),
                 OnSceneChanged, InworldAI.Game.currentScene.ShortName
             );
-
+            
+            m_AllCharacters = SetupButton("AllCharacters", () => InworldEditor.Status = InworldEditorStatus.AllCharacterChooser);
             m_CharacterChooser = InworldEditor.Root.Q<VisualElement>("CharacterChooser");
             m_HyperLink = SetupButton("HyperLink", () => Help.BrowseURL($"{InworldAI.Game.currentServer.web}/{InworldAI.Game.currentWorkspace.fullName}"), false);
             m_Tutorial = SetupButton("Tutorial", () => Help.BrowseURL($"{InworldAI.Game.currentServer.tutorialPage}/{InworldAI.Game.currentWorkspace.fullName}"), false);

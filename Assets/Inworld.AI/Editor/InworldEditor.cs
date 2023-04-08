@@ -66,12 +66,27 @@ namespace Inworld.Editor
         static internal void _SaveCurrentSettings()
         {
             _SaveWSData(InworldAI.Game.currentWorkspace);
-            foreach (string brain in InworldAI.Game.currentScene.characters.Where(brain => InworldAI.User.Characters.ContainsKey(brain)))
+            
+            if (InworldAI.Game.currentScene)//!InworldAI.User.UseCharacterSpecificScenes)
             {
-                _SaveCharData(InworldAI.User.Characters[brain]);
+                foreach (string brain in InworldAI.Game.currentScene.characters.Where(brain => InworldAI.User.Characters.ContainsKey(brain)))
+                {
+                    _SaveCharData(InworldAI.User.Characters[brain]);
+                }
+                _SaveIwSceneData(InworldAI.Game.currentScene);
+            }
+            else
+            {
+                foreach (InworldSceneData scene in InworldAI.Game.currentWorkspace.scenes)
+                {
+                    foreach (string brain in scene.characters.Where(brain => InworldAI.User.Characters.ContainsKey(brain)))
+                    {
+                        _SaveCharData(InworldAI.User.Characters[brain]);
+                    }
+                    _SaveIwSceneData(scene);
+                }
             }
             _SaveKey(InworldAI.Game.currentKey);
-            _SaveIwSceneData(InworldAI.Game.currentScene);
         }
         static void _SaveWSData(InworldWorkspaceData wsToSave)
         {
@@ -274,9 +289,13 @@ namespace Inworld.Editor
         static internal void SetupInworldController()
         {
             if (!IsDataValid)
+            {
                 return;
+            }
+            
             if (Status != InworldEditorStatus.Default)
                 _SaveCurrentSettings();
+            
             _LoadController();
             _SaveData();
         }
@@ -309,6 +328,8 @@ namespace Inworld.Editor
                     return false;
                 if (!InworldAI.Game.currentKey)
                     return false;
+                if (InworldAI.User.UseCharacterSpecificScenes)
+                    return true;
                 if (!InworldAI.Game.currentScene)
                     return false;
                 if (!InworldAI.Game.currentWorkspace.scenes.FirstOrDefault(sceneData => sceneData.fullName == InworldAI.Game.currentScene.fullName))
@@ -347,7 +368,6 @@ namespace Inworld.Editor
         public static void SetupInworldCharacter(GameObject avatar, InworldCharacterData selectedCharacter)
         {
             SetupInworldController();
-
             InworldCharacter character = PrefabUtility.InstantiatePrefab(InworldAI.CharacterPrefab, avatar.transform) as InworldCharacter;
             if (character)
             {

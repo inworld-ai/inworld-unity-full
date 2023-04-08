@@ -61,6 +61,12 @@ namespace Inworld.Util
                 return m_Header;
             }
         }
+
+        /// <summary>
+        ///     Returns if the user's Current Token is expired.
+        /// </summary>
+        public bool UseCharacterSpecificScenes = false;
+        
         /// <summary>
         ///     Returns if the user's Current Token is expired.
         /// </summary>
@@ -187,6 +193,7 @@ namespace Inworld.Util
         {
             IDToken = "";
             RefreshToken = "";
+            UseCharacterSpecificScenes = false;
             m_ExpirationTime = 0;
         }
         /// <summary>

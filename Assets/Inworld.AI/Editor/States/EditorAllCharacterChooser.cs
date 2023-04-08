@@ -23,6 +23,7 @@ namespace Inworld.Editor.States
         DropdownField m_KeyChooser;
         DropdownField m_SceneChooser;
         VisualElement m_CharacterChooser;
+        Button m_AllCharacters;
         Button m_HyperLink;
         Button m_Tutorial;
         VisualElement m_Instruction;
@@ -103,7 +104,7 @@ namespace Inworld.Editor.States
                 if (!m_IsWorkspaceInitialized)
                 {
                     float wsProgress = InworldEditor.Progress[wsData].Progress;
-                    Debug.Log(("Progress: " + wsProgress + "%"));
+                    Debug.Log(("Getting All Characters Progress: " + wsProgress + "%"));
                     if (wsProgress > 95f)
                     {
                         EditorUtility.ClearProgressBar();
@@ -143,17 +144,7 @@ namespace Inworld.Editor.States
         
         void _CheckProceed()
         {
-            if (InworldAI.Game.currentScene != null)
-            {
-                if (InworldAI.Game.currentScene.name == InworldAI.Game.currentCharacter.name)
-                {
-                    //if the scene selected is the same as the character selected prevent the user from switching to scene based character chooser
-                    return;
-                }
-            }
-
-
-            if (InworldAI.Game.currentWorkspace && InworldAI.Game.currentKey)
+            if (InworldAI.Game.currentWorkspace && InworldAI.Game.currentKey && InworldAI.Game.currentScene && InworldAI.Game.currentCharacter.name != InworldAI.Game.currentScene.fullName)
                 InworldEditor.Status = InworldEditorStatus.CharacterChooser;
             else
             {
@@ -168,7 +159,7 @@ namespace Inworld.Editor.States
             m_DataInitialized = false;
             if (!InworldAI.Game.currentWorkspace)
                 return;
-            
+
             InworldAI.User.UseCharacterSpecificScenes = true;
             InworldWorkspaceData wsData = InworldAI.Game.currentWorkspace;
             InworldEditor.Progress[wsData] = new WorkspaceFetchingProgress();
@@ -187,6 +178,7 @@ namespace Inworld.Editor.States
             // Actual what's doing:
             _LoadingCharacters();
         }
+        
         protected override void _SetupContents()
         {
             SetupDropDown
@@ -198,16 +190,23 @@ namespace Inworld.Editor.States
 
             string targetKey = InworldAI.Game.currentKey ? InworldAI.Game.currentKey.ShortName : null;
             string targetScene = InworldAI.Game.currentScene ? InworldAI.Game.currentScene.ShortName : null;
+            m_AllCharacters = SetupButton("AllCharacters", () => InworldEditor.Status = InworldEditorStatus.AllCharacterChooser);
 
             if (InworldAI.Game.currentKey == null)
+            {
                 m_KeyChooser = SetupDropDown("KeyChooser", null, OnKeyChanged, null, false);
+                m_AllCharacters.visible = false;
+            }
             else
+            {
+                m_AllCharacters.visible = true;
                 m_KeyChooser = SetupDropDown
                 (
                     "KeyChooser", InworldAI.Game.currentWorkspace.integrations.Select(key => key.ShortName).ToList(),
                     OnKeyChanged, targetKey
                 );
-            
+            }
+
             if (InworldAI.Game.currentScene == null)
                 m_SceneChooser = SetupDropDown("SceneChooser", null, OnSceneChanged, null, false);
             else
@@ -216,13 +215,15 @@ namespace Inworld.Editor.States
                     "SceneChooser", InworldAI.Game.currentWorkspace.scenes.Select(scene => scene.ShortName).ToList(),
                     OnSceneChanged, targetKey
                 );
-            
+
+            m_SceneChooser.visible = true;
             m_CharacterChooser = InworldEditor.Root.Q<VisualElement>("CharacterChooser");
             m_HyperLink = SetupButton("HyperLink", () => Help.BrowseURL($"{InworldAI.Game.currentServer.web}/{InworldAI.Game.currentWorkspace.fullName}"), false);
             m_Tutorial = SetupButton("Tutorial", () => Help.BrowseURL($"{InworldAI.Game.currentServer.tutorialPage}/{InworldAI.Game.currentWorkspace.fullName}"), false);
             m_Instruction = InworldEditor.Root.Q<VisualElement>("Instruction");
             m_Instruction.visible = false;
         }
+        
         protected override void _SetupBotPanel(VisualTreeAsset botPanel = null)
         {
             base._SetupBotPanel(botPanel);
@@ -282,7 +283,7 @@ namespace Inworld.Editor.States
                 DialogOptOutDecisionType.ForThisMachine, k_SwitchSceneKey
             ))
             {
-                InworldAI.Game.currentScene = InworldAI.Game.currentWorkspace.scenes.FirstOrDefault(scene => scene.ShortName == newValue);
+                InworldAI.User.UseCharacterSpecificScenes = true;
                 _CheckProceed();
             }
         }
@@ -309,8 +310,7 @@ namespace Inworld.Editor.States
                 {
                     Object character = AssetDatabase.LoadAssetAtPath<Object>(charData.LocalAvatarFileName);
                     Selection.activeObject = character;
-                    InworldAI.Game.currentScene = InworldAI.Game.currentWorkspace.scenes.FirstOrDefault
-                        (sceneData => sceneData.fullName == InworldAI.Game.currentScene.fullName);
+                    InworldController.CurrentScene = InworldAI.Game.currentScene = InworldAI.Game.currentWorkspace.scenes.Find(scene => scene.fullName == charData.brain);
                     InworldAI.Game.currentCharacter = charData;
                     EditorUtility.FocusProjectWindow();
                 };
@@ -343,12 +343,12 @@ namespace Inworld.Editor.States
         }
         void _LoadingCharacters()
         {
-            Debug.Log("loading characters");
-            bool isValid = true;//InworldEditor.IsDataValid;
+            bool isValid = InworldEditor.IsDataValid;
             m_IsReconnected = false;
             if (isValid)
             {
                 m_HyperLink.visible = false;
+                InworldEditor._SaveCurrentSettings();
                 InworldAI.File.Init();
                 foreach (InworldCharacterData charData in InworldAI.Game.currentWorkspace.characters.Where
                     (charData => charData.Progress < 0.95f))

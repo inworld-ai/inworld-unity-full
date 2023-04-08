@@ -52,6 +52,7 @@ namespace Inworld.Util
         WorkspaceChooser,
         SceneChooser,
         CharacterChooser,
+        AllCharacterChooser,
         Error
     }
     public enum ControllerStates

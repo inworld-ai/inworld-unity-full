@@ -113,11 +113,38 @@ namespace Inworld.Editor
                 wsData.scenes.Add(InworldAI.User.InworldScenes[scene.Name]);
             }
         }
+
+        public void CreateScenePerCharacter(InworldWorkspaceData wsData, List<Character> characters)
+        {
+            foreach (Character character in characters)
+            {
+                Scene scene = new Scene();
+                scene.Name = character.Name;
+                InworldAI.User.InworldScenes[character.Name] = _CreateInworldScene(scene);
+                InworldAI.User.InworldScenes[character.Name].characters.Add(character.Name);
+                Progress[wsData].currentScene++;
+                wsData.scenes.Add(InworldAI.User.InworldScenes[scene.Name]);
+                Debug.Log($"Created scene {scene.Name}");
+                
+                character.Scenes.Add(scene);
+                InworldAI.User.Characters[character.Name] = _CreateACharacter(character);
+                Progress[wsData].currentCharacters++;
+                wsData.characters.Add(InworldAI.User.Characters[character.Name]);
+            }
+        }
+
         public void CreateCharacters(InworldWorkspaceData wsData, List<Character> characters)
         {
             wsData.characters ??= new List<InworldCharacterData>();
             wsData.characters.Clear();
             Progress[wsData].totalCharacters = characters.Count;
+            
+            if (InworldAI.User.UseCharacterSpecificScenes)
+            {
+                CreateScenePerCharacter(wsData, characters);
+                return;
+            }
+            
             foreach (Character character in characters)
             {
                 // NOTE(Yan): character.Name is actually CharacterData.brain, not characterName.

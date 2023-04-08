@@ -24,6 +24,7 @@ namespace Inworld.Editor.States
         Button m_Tutorial;
         DropdownField m_KeyChooser;
         DropdownField m_SceneChooser;
+        Button m_AllCharacters;
         bool m_DataInitialized;
         #endregion
 
@@ -38,6 +39,7 @@ namespace Inworld.Editor.States
         }
         public override void OnExit()
         {
+            m_AllCharacters = null;
             m_KeyChooser = null;
             m_SceneChooser = null;
             m_HyperLink = null;
@@ -71,6 +73,9 @@ namespace Inworld.Editor.States
                         m_SceneChooser.choices = wsData.scenes.Select(key => key.ShortName).ToList();
                         m_SceneChooser.visible = true;
                     }
+                    string targetKey = InworldAI.Game.currentKey ? InworldAI.Game.currentKey.ShortName : null;
+                    m_AllCharacters.visible = !string.IsNullOrEmpty(targetKey);
+
                 }
                 else
                 {
@@ -108,15 +113,22 @@ namespace Inworld.Editor.States
 
             string targetKey = InworldAI.Game.currentKey ? InworldAI.Game.currentKey.ShortName : null;
             string targetScene = InworldAI.Game.currentScene ? InworldAI.Game.currentScene.ShortName : null;
+            m_AllCharacters = SetupButton("AllCharacters", () => InworldEditor.Status = InworldEditorStatus.AllCharacterChooser);
 
             if (string.IsNullOrEmpty(targetKey))
+            {
                 m_KeyChooser = SetupDropDown("KeyChooser", null, OnKeyChanged, null, false);
+                m_AllCharacters.visible = false;
+            }
             else
+            {
+                m_AllCharacters.visible = true;
                 m_KeyChooser = SetupDropDown
                 (
                     "KeyChooser", InworldAI.Game.currentWorkspace.integrations.Select(key => key.ShortName).ToList(),
                     OnKeyChanged, targetKey
                 );
+            }
             if (string.IsNullOrEmpty(targetScene))
                 m_SceneChooser = SetupDropDown("SceneChooser", null, OnSceneChanged, null, false);
             else
@@ -125,7 +137,7 @@ namespace Inworld.Editor.States
                     "SceneChooser", InworldAI.Game.currentWorkspace.scenes.Select(scene => scene.ShortName).ToList(),
                     OnSceneChanged, targetKey
                 );
-
+            
             m_HyperLink = SetupButton("HyperLink", () => Help.BrowseURL($"{InworldAI.Game.currentServer.web}/{InworldAI.Game.currentWorkspace.fullName}"), false);
             m_Tutorial = SetupButton("Tutorial", () => Help.BrowseURL($"{InworldAI.Game.currentServer.tutorialPage}/{InworldAI.Game.currentWorkspace.fullName}"), false);
         }
@@ -166,6 +178,8 @@ namespace Inworld.Editor.States
         {
             if (InworldAI.Game.currentKey && InworldAI.Game.currentKey.ShortName == newValue)
                 return;
+
+            m_AllCharacters.visible = true;
             InworldAI.Game.currentKey = InworldAI.Game.currentWorkspace.integrations.FirstOrDefault(key => key.ShortName == newValue);
             _CheckProceed();
         }
@@ -174,6 +188,7 @@ namespace Inworld.Editor.States
             if (InworldAI.Game.currentScene && InworldAI.Game.currentScene.ShortName == newValue)
                 return;
             // 2. Show Dialog
+            InworldAI.User.UseCharacterSpecificScenes = false;
             InworldAI.Game.currentScene = InworldAI.Game.currentWorkspace.scenes.FirstOrDefault(scene => scene.ShortName == newValue);
             _CheckProceed();
         }
