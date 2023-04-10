@@ -274,7 +274,7 @@ namespace Inworld.Editor.States
         }
         void OnSceneChanged(string newValue)
         {
-            if (InworldAI.Game.currentScene && InworldAI.Game.currentScene.ShortName == newValue)
+            if (InworldAI.Game.currentScene && InworldAI.Game.currentScene.fullName == newValue)
                 return;
             // 2. Show Dialog
             if (EditorUtility.DisplayDialog
@@ -283,7 +283,7 @@ namespace Inworld.Editor.States
                 DialogOptOutDecisionType.ForThisMachine, k_SwitchSceneKey
             ))
             {
-                InworldAI.User.UseCharacterSpecificScenes = true;
+                InworldAI.Game.currentScene = InworldAI.Game.currentWorkspace.scenes.FirstOrDefault(scene => scene.ShortName == newValue);
                 _CheckProceed();
             }
         }

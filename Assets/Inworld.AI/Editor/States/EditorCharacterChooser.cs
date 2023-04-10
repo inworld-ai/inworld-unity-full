@@ -34,6 +34,7 @@ namespace Inworld.Editor.States
         {
             InworldEditor.ErrorMessage = "";
             InworldEditor.Title = $"Welcome {InworldAI.User.Name}!\n";
+            InworldAI.User.UseCharacterSpecificScenes = false;
             _SetupContentPanel(InworldAI.UI.CharacterChooser);
             _SetupBotPanel(InworldAI.UI.ConnectedBotPanel);
         }
@@ -98,6 +99,7 @@ namespace Inworld.Editor.States
             InworldEditor.Instance.ListAPIKey(wsData);
             InworldEditor.Instance.ListCharacters(wsData);
             m_IsReconnected = true;
+            InworldAI.User.UseCharacterSpecificScenes = false;
             m_IsWorkspaceInitialized = false;
         }
         #endregion
