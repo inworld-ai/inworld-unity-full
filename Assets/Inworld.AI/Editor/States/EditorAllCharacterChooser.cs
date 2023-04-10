@@ -144,7 +144,7 @@ namespace Inworld.Editor.States
         
         void _CheckProceed()
         {
-            if (InworldAI.Game.currentWorkspace && InworldAI.Game.currentKey && InworldAI.Game.currentScene && InworldAI.Game.currentCharacter.name != InworldAI.Game.currentScene.fullName)
+            if (InworldAI.Game.currentWorkspace && InworldAI.Game.currentKey && InworldAI.Game.currentScene && InworldAI.Game.currentCharacter.brain != InworldAI.Game.currentScene.fullName)
                 InworldEditor.Status = InworldEditorStatus.CharacterChooser;
             else
             {
