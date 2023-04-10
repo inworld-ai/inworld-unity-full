@@ -36,10 +36,12 @@ namespace Inworld.Util
         [Space(10)][Header("Debug:")]
         [SerializeField] bool m_EnableVerboseLog;
         [SerializeField] bool m_EnableSharedCharacters = true;
+        [SerializeField] bool m_AutoSelectCharacter = true;
         [SerializeField] bool m_AutoGenerateCharacter = true;
         #endregion
 
         #region Properties
+        public bool AutoSelectCharacter => m_AutoSelectCharacter;
         /// <summary>
         ///     Get if server will send audio voices to client.
         /// </summary>
