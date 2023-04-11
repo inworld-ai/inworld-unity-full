@@ -125,12 +125,15 @@ namespace Inworld.Editor
                 Progress[wsData].currentScene++;
                 wsData.scenes.Add(InworldAI.User.InworldScenes[scene.Name]);
                 Debug.Log($"Created scene {scene.Name}");
+                InworldEditor._SaveIwSceneData(InworldAI.User.InworldScenes[scene.Name]);
                 
                 character.Scenes.Add(scene);
                 InworldAI.User.Characters[character.Name] = _CreateACharacter(character);
                 Progress[wsData].currentCharacters++;
                 wsData.characters.Add(InworldAI.User.Characters[character.Name]);
+                InworldEditor._SaveCharData(InworldAI.User.Characters[character.Name]);
             }
+            InworldEditor._SaveWSData(wsData);
         }
 
         public void CreateCharacters(InworldWorkspaceData wsData, List<Character> characters)

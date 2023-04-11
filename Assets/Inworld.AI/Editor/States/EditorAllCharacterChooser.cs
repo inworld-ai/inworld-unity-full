@@ -301,7 +301,6 @@ namespace Inworld.Editor.States
         {
             // 1. Clear Data.
             _ClearCharacterChoosers();
-            InworldEditor.SetupInworldController();
             foreach (InworldCharacterData charData in InworldAI.Game.currentWorkspace.characters)
             {
                 // 3. Create Buttons.
@@ -316,6 +315,7 @@ namespace Inworld.Editor.States
                 };
                 m_CharacterChooser.Add(btnCharacter);
             }
+            InworldEditor.SetupInworldController();
             Debug.Log(("Should have setup the chars"));
 
         }
