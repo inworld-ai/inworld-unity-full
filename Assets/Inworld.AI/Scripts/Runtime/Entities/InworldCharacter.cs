@@ -160,6 +160,7 @@ namespace Inworld
         {
             if (!m_Interaction || !m_Interaction.enabled)
             {
+                InworldAI.LogWarning($"not set audio interaction component in {transform}");
                 m_Interaction = gameObject.AddComponent<Interactions>();
                 m_Interaction.enabled = true;
             }
