@@ -31,7 +31,7 @@ namespace Inworld
         LimitedSizeDictionary<string, bool> m_PlayedUtterances;
         LimitedSizeDictionary<string, bool> m_CanceledInteractions;
         PacketId m_CurrentUtteranceID;
-        const string k_Pattern = @"^inworld\.goal_complete\.(.+)$";
+        const string k_Pattern = @"^inworld\.goal\.complete\.(.+)$";
         List<HistoryItem> History => m_ChatHistory.Where(x => !x.IsAgent || m_PlayedUtterances.ContainsKey(x.UtteranceId)).Take(m_HistorySize).ToList();
         internal bool isSpeaking;
         #endregion
