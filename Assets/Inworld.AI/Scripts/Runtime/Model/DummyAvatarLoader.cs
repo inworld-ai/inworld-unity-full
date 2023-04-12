@@ -21,7 +21,7 @@ namespace Inworld.Model
             AvatarLoaded?.Invoke(character);
         }
 
-        public void InstallScriptableRenderPipelineMaterials()
+        public void InstallScriptableRenderPipelineMaterials(GameObject _model)
         {
             return;
         }

@@ -372,8 +372,8 @@ namespace Inworld.Editor
         [MenuItem("GameObject/Inworld/Update Materials for Scriptable Render Pipelines", false, 1)]
         static void UpdateMaterials()
         {
-            Debug.Log("Updating menu materials before if check on " + Selection.activeGameObject.name);
-            InworldAI.AvatarLoader.InstallScriptableRenderPipelineMaterials();
+            InworldAI.Log("Updating to HDRP on " + Selection.activeGameObject.name);
+            InworldAI.AvatarLoader.InstallScriptableRenderPipelineMaterials(Selection.activeGameObject);
         }
     }
 }
