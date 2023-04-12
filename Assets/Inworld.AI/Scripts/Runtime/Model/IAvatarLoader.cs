@@ -19,7 +19,7 @@ namespace Inworld.Model
     public interface IAvatarLoader
     {
         public void ConfigureModel(InworldCharacter character, GameObject model);
-        public void InstallScriptableRenderPipelineMaterials();
+        public void InstallScriptableRenderPipelineMaterials(GameObject _model);
         public IEnumerator Import(string url);
         public GameObject LoadData(byte[] content);
         public GameObject LoadData(string fileName);
