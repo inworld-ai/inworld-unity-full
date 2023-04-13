@@ -27,6 +27,8 @@ namespace Inworld.Editor.States
         protected const string k_SwitchSceneMSG = "If you change Inworld Scene, all old Inworld Scene characters in the Unity scene would not be active.\nDo you want to proceed?";
         protected const string k_SwitchWSMSG = "If you change workspaces, all old workspace characters in the Unity scene would not be active.\nDo you want to proceed?";
         protected const string k_LoadingPlayerControllerMSG = "Adding player controller would delete current main camera.\nContinue?";
+        protected const string m_IndividualCharacterSceneString = "Individual Character Scenes";
+
         protected delegate void OnDataChanged(string newValue);
         #endregion
 

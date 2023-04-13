@@ -6,6 +6,7 @@
 *************************************************************************************************/
 using Inworld.Studio;
 using Inworld.Util;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -73,7 +74,7 @@ namespace Inworld.Editor.States
                     }
                     if (m_SceneChooser != null)
                     {
-                        m_SceneChooser.choices = wsData.scenes.Select(key => key.ShortName).ToList();
+                        m_SceneChooser.choices = wsData.scenes.Select(scene => scene.ShortName).ToList();
                         m_SceneChooser.visible = true;
                     }
                 }
@@ -207,15 +208,17 @@ namespace Inworld.Editor.States
                 );
             }
 
-            if (InworldAI.Game.currentScene == null)
-                m_SceneChooser = SetupDropDown("SceneChooser", null, OnSceneChanged, null, false);
-            else
-                m_SceneChooser = SetupDropDown
-                (
-                    "SceneChooser", InworldAI.Game.currentWorkspace.scenes.Select(scene => scene.ShortName).ToList(),
-                    OnSceneChanged, targetKey
-                );
-
+            // if (InworldAI.Game.currentScene == null)
+            //     m_SceneChooser = SetupDropDown("SceneChooser", null, OnSceneChanged, null, false);
+            // else
+            List<string> scenes = InworldAI.Game.currentWorkspace.scenes.Select(scene => scene.ShortName).ToList();
+            scenes.Add(m_IndividualCharacterSceneString);
+            m_SceneChooser = SetupDropDown
+            (
+                "SceneChooser", InworldAI.Game.currentWorkspace.scenes.Select(scene => scene.ShortName).ToList(),
+                OnSceneChanged, m_IndividualCharacterSceneString
+            );
+            
             m_SceneChooser.visible = true;
             m_CharacterChooser = InworldEditor.Root.Q<VisualElement>("CharacterChooser");
             m_HyperLink = SetupButton("HyperLink", () => Help.BrowseURL($"{InworldAI.Game.currentServer.web}/{InworldAI.Game.currentWorkspace.fullName}"), false);

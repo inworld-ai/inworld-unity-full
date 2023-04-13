@@ -6,6 +6,7 @@
 *************************************************************************************************/
 using Inworld.Studio;
 using Inworld.Util;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -128,10 +129,12 @@ namespace Inworld.Editor.States
                 OnKeyChanged, InworldAI.Game.currentKey.ShortName
             );
 
+            List<string> scenes = InworldAI.Game.currentWorkspace.scenes.Select(scene => scene.ShortName).ToList();
+            scenes.Add(m_IndividualCharacterSceneString);
             SetupDropDown
             (
                 "SceneChooser",
-                InworldAI.Game.currentWorkspace.scenes.Select(scene => scene.ShortName).ToList(),
+                scenes,
                 OnSceneChanged, InworldAI.Game.currentScene.ShortName
             );
             
@@ -193,6 +196,12 @@ namespace Inworld.Editor.States
         {
             if (InworldAI.Game.currentScene && InworldAI.Game.currentScene.ShortName == newValue)
                 return;
+            
+            if (newValue == m_IndividualCharacterSceneString)
+            {
+                InworldEditor.Status = InworldEditorStatus.AllCharacterChooser;
+                return;
+            }
             // 2. Show Dialog
             if (EditorUtility.DisplayDialog
             (
