@@ -185,13 +185,11 @@ namespace Inworld.Editor.States
         {
             if (InworldAI.Game.currentScene && InworldAI.Game.currentScene.ShortName == newValue)
                 return;
-            
-            if (newValue == m_IndividualCharacterSceneString)
-            {
-                InworldEditor.Status = InworldEditorStatus.AllCharacterChooser;
+
+            InworldAI.User.UseCharacterSpecificScenes = (newValue == m_IndividualCharacterSceneString);
+            if (InworldAI.User.UseCharacterSpecificScenes)
                 return;
-            }
-            
+
             // 2. Show Dialog
             InworldAI.User.UseCharacterSpecificScenes = false;
             InworldAI.Game.currentScene = InworldAI.Game.currentWorkspace.scenes.FirstOrDefault(scene => scene.ShortName == newValue);
@@ -203,7 +201,9 @@ namespace Inworld.Editor.States
         void _CheckProceed()
         {
             if (InworldAI.Game.currentWorkspace && InworldAI.Game.currentScene && InworldAI.Game.currentKey)
-                InworldEditor.Status = InworldEditorStatus.CharacterChooser;
+            {
+                InworldEditor.Status = InworldAI.User.UseCharacterSpecificScenes? InworldEditorStatus.AllCharacterChooser : InworldEditorStatus.CharacterChooser;
+            }
         }
         void _LoadingScenes()
         {
