@@ -24,7 +24,6 @@ namespace Inworld.Editor.States
         DropdownField m_KeyChooser;
         DropdownField m_SceneChooser;
         VisualElement m_CharacterChooser;
-        Button m_AllCharacters;
         Button m_HyperLink;
         Button m_Tutorial;
         VisualElement m_Instruction;
@@ -56,37 +55,16 @@ namespace Inworld.Editor.States
 
         void UpdateSceneKeyChoosers(InworldWorkspaceData wsData)
         {
-            if (m_DataInitialized)
-                return;
-            float fetchingProgress = InworldEditor.Progress[wsData].Progress;
-            if (fetchingProgress > 99f)
+            m_HyperLink.visible = false;
+            if (m_KeyChooser != null)
             {
-                m_DataInitialized = true;
-                EditorUtility.ClearProgressBar();
-                AssetDatabase.Refresh();
-                if (wsData.IsValid)
-                {
-                    m_HyperLink.visible = false;
-                    if (m_KeyChooser != null)
-                    {
-                        m_KeyChooser.choices = wsData.integrations.Select(key => key.ShortName).ToList();
-                        m_KeyChooser.visible = true;
-                    }
-                    if (m_SceneChooser != null)
-                    {
-                        m_SceneChooser.choices = wsData.scenes.Select(scene => scene.ShortName).ToList();
-                        m_SceneChooser.visible = true;
-                    }
-                }
-                else
-                {
-                    m_HyperLink.visible = true;
-                    m_Tutorial.visible = true;
-                }
+                m_KeyChooser.choices = wsData.integrations.Select(key => key.ShortName).ToList();
+                m_KeyChooser.visible = true;
             }
-            else
+            if (m_SceneChooser != null)
             {
-                EditorUtility.DisplayProgressBar("InworldAI", $"Downloading SceneData {fetchingProgress}% Completed", fetchingProgress * 0.01f);
+                m_SceneChooser.choices = wsData.scenes.Select(scene => scene.ShortName).ToList();
+                m_SceneChooser.visible = true;
             }
         }
         
@@ -94,10 +72,10 @@ namespace Inworld.Editor.States
         {
             InworldWorkspaceData wsData = InworldAI.Game.currentWorkspace;
             if (!wsData)
+            {
                 return;
-            if (!InworldEditor.Progress.ContainsKey(wsData))
-                return;
-            
+            }
+
             UpdateSceneKeyChoosers(wsData);
 
             if (InworldEditor.Progress.ContainsKey(wsData))
@@ -191,16 +169,13 @@ namespace Inworld.Editor.States
 
             string targetKey = InworldAI.Game.currentKey ? InworldAI.Game.currentKey.ShortName : null;
             string targetScene = InworldAI.Game.currentScene ? InworldAI.Game.currentScene.ShortName : null;
-            m_AllCharacters = SetupButton("AllCharacters", () => InworldEditor.Status = InworldEditorStatus.AllCharacterChooser);
 
             if (InworldAI.Game.currentKey == null)
             {
                 m_KeyChooser = SetupDropDown("KeyChooser", null, OnKeyChanged, null, false);
-                m_AllCharacters.visible = false;
             }
             else
             {
-                m_AllCharacters.visible = true;
                 m_KeyChooser = SetupDropDown
                 (
                     "KeyChooser", InworldAI.Game.currentWorkspace.integrations.Select(key => key.ShortName).ToList(),
@@ -304,6 +279,7 @@ namespace Inworld.Editor.States
         {
             // 1. Clear Data.
             _ClearCharacterChoosers();
+            InworldEditor.SetupInworldController();
             foreach (InworldCharacterData charData in InworldAI.Game.currentWorkspace.characters)
             {
                 // 3. Create Buttons.
@@ -318,7 +294,6 @@ namespace Inworld.Editor.States
                 };
                 m_CharacterChooser.Add(btnCharacter);
             }
-            InworldEditor.SetupInworldController();
             Debug.Log(("Should have setup the chars"));
 
         }
