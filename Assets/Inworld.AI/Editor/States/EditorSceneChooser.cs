@@ -183,13 +183,17 @@ namespace Inworld.Editor.States
         }
         void OnSceneChanged(string newValue)
         {
+            InworldAI.User.UseCharacterSpecificScenes = (newValue == m_IndividualCharacterSceneString);
+            
+            if (InworldAI.User.UseCharacterSpecificScenes)
+            {
+                _CheckProceed();
+                return;
+            }
+            
             if (InworldAI.Game.currentScene && InworldAI.Game.currentScene.ShortName == newValue)
                 return;
-
-            InworldAI.User.UseCharacterSpecificScenes = (newValue == m_IndividualCharacterSceneString);
-            if (InworldAI.User.UseCharacterSpecificScenes)
-                return;
-
+            
             // 2. Show Dialog
             InworldAI.User.UseCharacterSpecificScenes = false;
             InworldAI.Game.currentScene = InworldAI.Game.currentWorkspace.scenes.FirstOrDefault(scene => scene.ShortName == newValue);
@@ -200,7 +204,7 @@ namespace Inworld.Editor.States
         #region Private Functions
         void _CheckProceed()
         {
-            if (InworldAI.Game.currentWorkspace && InworldAI.Game.currentScene && InworldAI.Game.currentKey)
+            if (InworldAI.Game.currentWorkspace && (InworldAI.Game.currentScene ||  InworldAI.User.UseCharacterSpecificScenes) && InworldAI.Game.currentKey)
             {
                 InworldEditor.Status = InworldAI.User.UseCharacterSpecificScenes? InworldEditorStatus.AllCharacterChooser : InworldEditorStatus.CharacterChooser;
             }
