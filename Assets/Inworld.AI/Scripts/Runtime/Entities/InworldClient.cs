@@ -96,7 +96,7 @@ namespace Inworld
         #region Private Functions
         internal void GetAppAuth()
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR && VSP
             if (!string.IsNullOrEmpty(InworldAI.User.Account))
                 VSAttribution.VSAttribution.SendAttributionEvent("Login Runtime", InworldAI.k_CompanyName, InworldAI.User.Account);
 #endif
