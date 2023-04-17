@@ -155,7 +155,7 @@ namespace Inworld.Editor
         {
             if (string.IsNullOrEmpty(InworldAI.User.Account) || !InworldAI.User.IsAccountValid)
                 LoginStudio();
-#if UNITY_EDITOR
+#if UNITY_EDITOR && VSP
             if (!string.IsNullOrEmpty(InworldAI.User.Account))
                 VSAttribution.VSAttribution.SendAttributionEvent("Login Studio", InworldAI.k_CompanyName, InworldAI.User.Account);
 #endif
