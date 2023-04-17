@@ -51,7 +51,6 @@ namespace Inworld
         string m_CurrentRecordingID;
         float m_BackOffTime = 0.2f;
         float m_CurrentCountDown;
-        string m_WaitingRecordingID;
         string m_TTSInteractionID;
         bool m_StartToQuit;
         Dictionary<string, string> m_CharacterRegistration = new Dictionary<string, string>();
@@ -124,6 +123,7 @@ namespace Inworld
                     return;
                 m_LastCharacter = m_CurrentCharacter;
                 m_CurrentCharacter = value;
+                StartCoroutine(SwitchAudioCapture());
                 OnCharacterChanged?.Invoke(m_LastCharacter, m_CurrentCharacter);
             }
         }
@@ -194,12 +194,6 @@ namespace Inworld
                     m_CurrentCountDown = 0;
                     _StartSession();
                 }
-            }
-            if (string.IsNullOrEmpty(m_CurrentRecordingID) && !string.IsNullOrEmpty(m_WaitingRecordingID))
-            {
-                m_CurrentRecordingID = m_WaitingRecordingID;
-                m_WaitingRecordingID = null;
-                _StartAudioCapture(m_CurrentRecordingID);
             }
         }
         void OnDisable()
@@ -318,7 +312,8 @@ namespace Inworld
             while (State == ControllerStates.Connected)
             {
                 _GetIncomingEvents();
-                _SelectCharacter();
+                if (InworldAI.Settings.AutoSelectCharacter)
+                    _SelectCharacter();
                 // Client stopped.
                 if (!m_Client.SessionStarted && !m_Client.Errors.IsEmpty)
                 {
@@ -348,6 +343,34 @@ namespace Inworld
             State = ControllerStates.Connected;
             InworldAI.Log("InworldController Connected");
             StartCoroutine(InteractionCoroutine());
+        }
+        IEnumerator SwitchAudioCapture()
+        {
+            if (m_LastCharacter)
+            {
+                InworldAI.Log($"End Audio Capture {m_LastCharacter.CharacterName}: {m_LastCharacter.ID}");
+                EndAudioCapture(m_LastCharacter.ID);
+            }
+            yield return new WaitForFixedUpdate();
+            if (m_CurrentCharacter)
+            {
+                InworldAI.Log($"Start Audio Capture {m_CurrentCharacter.CharacterName}: {m_CurrentCharacter.ID}");
+                _StartAudioCapture(m_CurrentCharacter.ID);
+            }
+        }
+        IEnumerator SwitchAudioCapture(string incomingID)
+        {
+            if (m_CurrentCharacter && m_CurrentCharacter.ID != incomingID)
+            {
+                InworldAI.Log($"End Audio Capture {m_CurrentCharacter.CharacterName}: {m_CurrentCharacter.ID}");
+                EndAudioCapture(m_CurrentCharacter.ID);
+            }
+            yield return new WaitForFixedUpdate();
+            if (m_CurrentCharacter)
+            {
+                InworldAI.Log($"Start Audio Capture {incomingID}");
+                _StartAudioCapture(incomingID);
+            }
         }
         internal void SendAudio(ByteString incomingChunk)
         {
@@ -520,10 +543,8 @@ namespace Inworld
         ///     string of Character ID, would be generated only after InworldScene is loaded and session is
         ///     started
         /// </param>
-        public void StartAudioCapture(string characterID)
-        {
-            m_WaitingRecordingID = characterID;
-        }
+        public void StartAudioCapture(string characterID) => StartCoroutine(SwitchAudioCapture(characterID));
+
 
         /// <summary>
         ///     Stop Communicating with target Character via Audio
@@ -542,8 +563,6 @@ namespace Inworld
                 m_CurrentRecordingID = null;
                 InworldAI.Log("Capture ended.");
             }
-            else if (m_WaitingRecordingID == characterID)
-                m_WaitingRecordingID = null;
         }
 
         public InworldCharacter GetFirstChild(bool isActive)

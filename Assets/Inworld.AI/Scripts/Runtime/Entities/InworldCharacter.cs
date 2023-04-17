@@ -5,7 +5,6 @@
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
 using Inworld.Packets;
-using Inworld.Sample;
 using Inworld.Util;
 using System.Collections;
 using UnityEngine;
@@ -26,7 +25,7 @@ namespace Inworld
         [Header("Sight")]
         [Range(1, 180)]
         [SerializeField] float m_SightAngle = 90f;
-        [Range(1, 100)]
+        [Range(1, 30)]
         [SerializeField] float m_SightDistance = 10f;
         [SerializeField] float m_SightRefreshRate = 0.25f;
         [Header("Log")]
@@ -78,6 +77,9 @@ namespace Inworld
                     PlaybackSource.volume = value ? 0 : 1;
             }
         }
+        /// <summary>
+        ///     This Character's play back audio source.
+        /// </summary>
         public AudioSource PlaybackSource { get; set; }
         /// <summary>
         ///     This Character's Data.
@@ -167,7 +169,6 @@ namespace Inworld
         void OnEnable()
         {
             InworldController.Instance.OnStateChanged += OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged += OnCharacterChanged;
             OnBeginSpeaking?.AddListener(() =>
             {
                 if (m_logUtterances)
@@ -183,7 +184,8 @@ namespace Inworld
                 if (m_logUtterances && !string.IsNullOrEmpty(text))
                     InworldAI.Log($"{character}: {text}");
             });
-            StartCoroutine(CheckPriority());
+            if (InworldAI.Settings.AutoSelectCharacter)
+                StartCoroutine(CheckPriority());
         }
         void OnDrawGizmosSelected()
         {
@@ -206,26 +208,13 @@ namespace Inworld
             if (!InworldController.Instance)
                 return;
             InworldController.Instance.OnStateChanged -= OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged -= OnCharacterChanged;
         }
         #endregion
 
         #region Callbacks
 
         void OnStatusChanged(ControllerStates incomingStatus) => RegisterLiveSession();
-
-        void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
-        {
-            if (oldChar == this)
-            {
-                _EndAudioCapture();
-            }
-            else if (newChar == this)
-            {
-                StartCoroutine(_StartAudioCapture());
-            }
-
-        }
+        
         void OnAvatarLoaded(InworldCharacterData obj)
         {
             if (obj.brain != Data.brain)
@@ -236,32 +225,6 @@ namespace Inworld
         #endregion
 
         #region Private Functions
-        IEnumerator _StartAudioCapture()
-        {
-            yield return new WaitForSeconds(0.25f);
-            InworldAI.Log($"Start Communicating with {CharacterName}: {ID}");
-            InworldController.Instance.StartAudioCapture(ID);
-        }
-        void _EndAudioCapture()
-        {
-            InworldAI.Log($"End Communicating with {CharacterName}: {ID}");
-            InworldController.Instance.EndAudioCapture(ID);
-        }
-
-        public void RegisterLiveSession()
-        {
-            if (InworldController.State != ControllerStates.Connected)
-                return;
-            string agentID = InworldController.Instance.GetLiveSessionID(BrainName);
-
-            if (!Data || string.IsNullOrEmpty(agentID))
-            {
-                InworldAI.LogError($"Error: Cannot Register {CharacterName}!");
-                return;
-            }
-            InworldAI.Log($"Register {CharacterName}: {agentID}");
-            Data.characterID = agentID;
-        }
         IEnumerator CheckPriority()
         {
             // YAN: Update refreshed too fast. Use Coroutine for better performance.
@@ -334,6 +297,26 @@ namespace Inworld
             }
         }
         /// <summary>
+        ///     Register Inworld LiveSession.     
+        ///     Please call it after InworldController has been connected.
+        ///     Get the Live Session ID from Server.
+        ///     All the audio/text input would be sent to server by the handle of ID.
+        /// </summary>
+        public void RegisterLiveSession()
+        {
+            if (InworldController.State != ControllerStates.Connected)
+                return;
+            string agentID = InworldController.Instance.GetLiveSessionID(BrainName);
+
+            if (!Data || string.IsNullOrEmpty(agentID))
+            {
+                InworldAI.LogError($"Error: Cannot Register {CharacterName}!");
+                return;
+            }
+            InworldAI.Log($"Register {CharacterName}: {agentID}");
+            Data.characterID = agentID;
+        }
+        /// <summary>
         ///     Reset Character's history items and cleanup Audio Caches
         /// </summary>
         public void ResetCharacter()
@@ -341,6 +324,30 @@ namespace Inworld
             // Clearing a queue.
             if (m_Interaction)
                 m_Interaction.Clear();
+        }
+        /// <summary>
+        ///     Start Audio Capture to this character manually.
+        /// </summary>
+        public void StartAudioCapture()
+        {
+            if (string.IsNullOrEmpty(ID))
+            {
+                InworldAI.LogError($"Failed to start audio capture: {CharacterName} not registerd in live session");
+                return;
+            }
+            InworldController.Instance.StartAudioCapture(ID);
+        }
+        /// <summary>
+        ///     Stop Audio Capture to this character manually.
+        /// </summary>
+        public void EndAudioCapture()
+        {
+            if (string.IsNullOrEmpty(ID))
+            {
+                InworldAI.LogError($"Failed to end audio capture: {CharacterName} not registerd in live session");
+                return;
+            }
+            InworldController.Instance.EndAudioCapture(ID);
         }
         /// <summary>
         ///     Send Text to this Character via InworldPacket.
@@ -371,7 +378,7 @@ namespace Inworld
             SendEventToAgent(trigger.Length == 2 ? new CustomEvent(trigger[1]) : new CustomEvent(triggerName));
         }
         /// <summary>
-        ///     Set general events to this Character.
+        ///     Send general events to this Character.
         /// </summary>
         /// <param name="packet">The InworldPacket to send.</param>
         public void SendEventToAgent(InworldPacket packet)
