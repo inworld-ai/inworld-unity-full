@@ -10,9 +10,7 @@ namespace Inworld.Sample
     public class InworldPlayer2D : MonoBehaviour
     {
         #region Inspector Variables
-        [SerializeField] InworldCharacter m_Character;
-        [SerializeField] GameObject m_GlobalChatCanvas;
-        [SerializeField] RecordButton m_RecordButton;
+        [SerializeField] protected GameObject m_GlobalChatCanvas;
         [SerializeField] RectTransform m_ContentRT;
         [SerializeField] ChatBubble m_BubbleLeft;
         [SerializeField] ChatBubble m_BubbleRight;
@@ -22,7 +20,6 @@ namespace Inworld.Sample
         #region Private Variables
         readonly Dictionary<string, ChatBubble> m_Bubbles = new Dictionary<string, ChatBubble>();
         readonly Dictionary<string, InworldCharacter> m_Characters = new Dictionary<string, InworldCharacter>();
-        Vector2 m_ScreenSize;
         #endregion
 
         #region Public Function
@@ -52,16 +49,12 @@ namespace Inworld.Sample
         }
         void Update()
         {
-            if (!m_GlobalChatCanvas.activeSelf)
-                return;
-            if (!Input.GetKeyUp(KeyCode.Return) && !Input.GetKeyUp(KeyCode.KeypadEnter))
-                return;
-            SendText();
+            UpdateSendText();
         }
         #endregion
 
         #region Callbacks
-        void OnControllerStatusChanged(ControllerStates states)
+        protected void OnControllerStatusChanged(ControllerStates states)
         {
             if (states != ControllerStates.Connected)
                 return;
@@ -82,6 +75,14 @@ namespace Inworld.Sample
         #endregion
 
         #region Private Functions
+        protected void UpdateSendText()
+        {
+            if (!m_GlobalChatCanvas.activeSelf)
+                return;
+            if (!Input.GetKeyUp(KeyCode.Return) && !Input.GetKeyUp(KeyCode.KeypadEnter))
+                return;
+            SendText();
+        }
         void _RefreshBubbles(List<HistoryItem> historyItems)
         {
             foreach (HistoryItem item in historyItems)
