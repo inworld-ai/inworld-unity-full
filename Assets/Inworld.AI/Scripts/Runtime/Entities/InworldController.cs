@@ -245,7 +245,7 @@ namespace Inworld
         {
             float fPriority = float.MaxValue;
             InworldCharacter targetCharacter = null;
-            foreach (InworldCharacter iwChar in Characters.Where(iwChar => iwChar.Priority > 0 && iwChar.Priority < fPriority))
+            foreach (InworldCharacter iwChar in Characters.Where(iwChar => iwChar.Priority >= 0 && iwChar.Priority < fPriority))
             {
                 fPriority = iwChar.Priority;
                 targetCharacter = iwChar;
