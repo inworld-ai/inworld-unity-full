@@ -1,17 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
+/*************************************************************************************************
+* Copyright 2022 Theai, Inc. (DBA Inworld)
+*
+* Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+* that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+*************************************************************************************************/
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 namespace Inworld.Sample
 {
     public class TokenCanvas : MonoBehaviour
     {
         [SerializeField] TMP_InputField m_TokenInput;
-
-        // Start is called before the first frame update
-        void Start() {}
 
         // Update is called once per frame
         void Update()
