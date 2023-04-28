@@ -402,11 +402,11 @@ namespace Inworld
         ///     Make sure there's a valid ServerConfig (Has URI of both RuntimeServer and StudioServer)
         ///     and a valid pair of valid API Key/Secret
         /// </summary>
-        public void Init()
+        public void Init(string sessionToken = "")
         {
             State = ControllerStates.Initializing;
             m_Client.RuntimeEvent += OnRuntimeEvents;
-            m_Client.GetAppAuth();
+            m_Client.GetAppAuth(sessionToken);
         }
         /// <summary>
         /// Start Recording

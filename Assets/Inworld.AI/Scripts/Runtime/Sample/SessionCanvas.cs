@@ -27,7 +27,8 @@ namespace Inworld.Sample
         bool m_IsConnecting;
         bool m_HasInit;
         readonly Queue<float> m_LagQueue = new Queue<float>(12);
-        
+
+        public bool EnableCtrl => m_PlayPause && m_SwitchMic && m_Mute;
         void Awake()
         {
             if (string.IsNullOrEmpty(ipv4))
@@ -105,6 +106,8 @@ namespace Inworld.Sample
         }
         void _SwitchToggles(bool isOn, bool playBtnOnly = false)
         {
+            if (!EnableCtrl)
+                return;
             m_PlayPause.interactable = isOn;
             m_Mute.interactable = isOn && !playBtnOnly;
             m_SwitchMic.interactable = isOn && !playBtnOnly;

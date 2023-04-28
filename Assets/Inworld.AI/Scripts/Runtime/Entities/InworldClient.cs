@@ -11,6 +11,7 @@ using Inworld.Grpc;
 using Inworld.Packets;
 using Inworld.Runtime;
 using Inworld.Util;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
 using System.Text;
@@ -87,6 +88,7 @@ namespace Inworld
             };
             RuntimeEvent?.Invoke(RuntimeStatus.InitSuccess, "");
         }
+
         void OnAuthFailed(string msg)
         {
             RuntimeEvent?.Invoke(RuntimeStatus.InitFailed, msg);
@@ -94,14 +96,35 @@ namespace Inworld
         #endregion
 
         #region Private Functions
-        internal void GetAppAuth()
+        void _ReceiveCustomToken(string sessionToken)
+        {
+            JObject data = JObject.Parse(sessionToken);
+            if (data.ContainsKey("sessionId") && data.ContainsKey("token"))
+            {
+                InworldAI.Log("Init Success with Custom Token!");
+                m_Header = new Metadata
+                {
+                    {"authorization", $"Bearer {data["token"]}"},
+                    {"session-id", data["sessionId"]?.ToString()}
+                };
+                RuntimeEvent?.Invoke(RuntimeStatus.InitSuccess, "");
+            }
+            else
+                RuntimeEvent?.Invoke(RuntimeStatus.InitFailed, "Token Invalid");
+        }
+        internal void GetAppAuth(string sessionToken)
         {
 #if UNITY_EDITOR && VSP
             if (!string.IsNullOrEmpty(InworldAI.User.Account))
                 VSAttribution.VSAttribution.SendAttributionEvent("Login Runtime", InworldAI.k_CompanyName, InworldAI.User.Account);
 #endif
             m_InworldAuth = new InworldAuth(OnAuthCompleted, OnAuthFailed);
-            m_InworldAuth.GenerateAccessToken(InworldAI.Game.StudioServer, InworldAI.Game.APIKey, InworldAI.Game.APISecret);
+            if (string.IsNullOrEmpty(sessionToken))
+                m_InworldAuth.GenerateAccessToken(InworldAI.Game.StudioServer, InworldAI.Game.APIKey, InworldAI.Game.APISecret);
+            else
+            {
+                _ReceiveCustomToken(sessionToken);
+            }
         }
         internal async Task<LoadSceneResponse> LoadScene(string sceneName)
         {
