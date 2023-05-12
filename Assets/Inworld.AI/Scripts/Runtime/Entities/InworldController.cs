@@ -341,7 +341,7 @@ namespace Inworld
             m_Client.StartSession();
 #pragma warning restore 4014
             State = ControllerStates.Connected;
-            InworldAI.Log("InworldController Connected");
+            InworldAI.Log($"InworldController Connected {m_Client.SessionID}");
             StartCoroutine(InteractionCoroutine());
         }
         IEnumerator SwitchAudioCapture()

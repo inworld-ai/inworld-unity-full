@@ -7,6 +7,7 @@
 using Inworld.Packets;
 using Inworld.Util;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -372,10 +373,14 @@ namespace Inworld
         ///     The trigger to send. Both formats are acceptable.
         ///     You could send either whole string from CharacterData.trigger, or the trigger's shortName.
         /// </param>
-        public void SendTrigger(string triggerName)
+        /// <param name="param">A Dictionary with its param name, and its value.</param>
+        public void SendTrigger(string triggerName, Dictionary<string, string> param = null)
         {
             string[] trigger = triggerName.Split("triggers/");
-            SendEventToAgent(trigger.Length == 2 ? new CustomEvent(trigger[1]) : new CustomEvent(triggerName));
+            CustomEvent evt = trigger.Length == 2 ? new CustomEvent(trigger[1]) : new CustomEvent(triggerName);
+            if (param != null)
+                evt.Parameters = param;
+            SendEventToAgent(evt);
         }
         /// <summary>
         ///     Send general events to this Character.
