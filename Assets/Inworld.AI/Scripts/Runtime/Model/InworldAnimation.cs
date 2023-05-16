@@ -19,6 +19,5 @@ namespace Inworld.Model
         public bool Init();
         public void HandleMainStatus(AnimMainStatus status);
         public void HandleEmotion(EmotionEvent.Types.SpaffCode spaffCode);
-        public void HandleGesture(GestureEvent.Types.Type gesture);
     }
 }

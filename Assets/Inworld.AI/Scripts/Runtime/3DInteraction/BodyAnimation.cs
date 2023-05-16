@@ -83,44 +83,6 @@ namespace Inworld.Model
                     break;
             }
         }
-        /// <summary>
-        ///     Play target gesture's animations.
-        ///     Please adjust this function to select/play your customized animations.
-        /// </summary>
-        /// <param name="gesture">An enum of target gesture</param>
-        public void HandleGesture(GestureEvent.Types.Type gesture)
-        {
-            Character.Gesture = gesture.ToString();
-            Animator.SetFloat(s_Random, Random.Range(0, 1) > 0.5f ? 1 : 0);
-            Animator.SetFloat(s_RemainSec, Character.CurrentAudioRemainingTime);
-            switch (gesture)
-            {
-                case GestureEvent.Types.Type.Agreement:
-                    Animator.SetInteger(s_Gesture, (int)Gesture.Acknowledge);
-                    break;
-                case GestureEvent.Types.Type.Greeting:
-                    Animator.SetInteger(s_Gesture, (int)Gesture.Greetings);
-                    break;
-                case GestureEvent.Types.Type.Farewell:
-                    Animator.SetInteger(s_Motion, (int)AnimMainStatus.Goodbye);
-                    break;
-                case GestureEvent.Types.Type.Disagreement:
-                    Animator.SetInteger(s_Gesture, (int)Gesture.Disagree);
-                    break;
-                case GestureEvent.Types.Type.Gratitude:
-                    Animator.SetInteger(s_Gesture, (int)Gesture.Thank);
-                    break;
-                case GestureEvent.Types.Type.Celebration:
-                    Animator.SetInteger(s_Gesture, (int)Gesture.Celebrate);
-                    break;
-                case GestureEvent.Types.Type.Boredom:
-                    Animator.SetInteger(s_Gesture, (int)Gesture.Bore);
-                    break;
-                case GestureEvent.Types.Type.Uncertainty:
-                    Animator.SetInteger(s_Gesture, (int)Gesture.Confuse);
-                    break;
-            }
-        }
         public bool Init()
         {
             Animator ??= GetComponent<Animator>();
@@ -203,9 +165,6 @@ namespace Inworld.Model
             {
                 case Packets.EmotionEvent emotionEvent:
                     HandleEmotion(emotionEvent.SpaffCode);
-                    break;
-                case Packets.GestureEvent gestureEvent:
-                    HandleGesture(gestureEvent.Simple);
                     break;
             }
         }

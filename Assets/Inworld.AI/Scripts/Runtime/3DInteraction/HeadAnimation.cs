@@ -11,7 +11,6 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 using EmotionEvent = Inworld.Grpc.EmotionEvent;
-using GestureEvent = Inworld.Grpc.GestureEvent;
 namespace Inworld.Model
 {
     /// <summary>
@@ -130,9 +129,6 @@ namespace Inworld.Model
                 case Packets.EmotionEvent emotionEvent:
                     HandleEmotion(emotionEvent.SpaffCode);
                     break;
-                case Packets.GestureEvent gestureEvent:
-                    HandleGesture(gestureEvent.Simple);
-                    break;
             }
         }
         public void HandleEmotion(EmotionEvent.Types.SpaffCode spaffCode)
@@ -174,10 +170,6 @@ namespace Inworld.Model
                     _ProcessEmotion("Neutral");
                     break;
             }
-        }
-        public void HandleGesture(GestureEvent.Types.Type gesture)
-        {
-            //Implement your own logic here.
         }
         public void SetupHeadMovement(GameObject avatar)
         {

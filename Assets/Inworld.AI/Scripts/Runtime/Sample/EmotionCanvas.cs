@@ -7,8 +7,6 @@
 using Inworld.Grpc;
 using Inworld.Util;
 using UnityEngine;
-using GestureEvent = Inworld.Packets.GestureEvent;
-using GestureType = Inworld.Grpc.GestureEvent.Types.Type;
 using InworldPacket = Inworld.Packets.InworldPacket;
 
 namespace Inworld.Sample
@@ -21,9 +19,7 @@ namespace Inworld.Sample
         Animator m_Animator;
 
         string m_CharName;
-        GestureType m_CurrentGesture;
         EmotionEvent.Types.SpaffCode m_CurrentSpaff;
-        GestureType m_LastGesture;
         EmotionEvent.Types.SpaffCode m_LastSpaff;
         public EmotionEvent.Types.SpaffCode Emotion
         {
@@ -34,28 +30,12 @@ namespace Inworld.Sample
                 m_CurrentSpaff = value;
             }
         }
-
-        public GestureType Gesture
-        {
-            get => m_CurrentGesture;
-            private set
-            {
-                m_LastGesture = m_CurrentGesture;
-                m_CurrentGesture = value;
-            }
-        }
-
         string _ServerState
         {
             get
             {
                 string emotion = m_LastSpaff == m_CurrentSpaff ? m_CurrentSpaff.ToString() : $"Last: {m_LastSpaff} Current: {m_CurrentSpaff}";
-                string gesture = m_LastGesture == m_CurrentGesture && m_CurrentGesture == GestureType.Greeting //YAN: Enum can't be null. By default is greeting.
-                    ? ""
-                    : m_LastGesture == m_CurrentGesture
-                        ? $"Gesture: <color=green>{m_CurrentGesture.ToString()}</color>"
-                        : $"Gesture\nLast: {m_LastGesture} Current: {m_CurrentGesture}";
-                return $"Server Status:\nEmotion: <color=green>{emotion}</color>\n{gesture}";
+                return $"Server Status:\nEmotion: <color=green>{emotion}</color>\n";
             }
         }
 
@@ -114,20 +94,12 @@ namespace Inworld.Sample
                 case Packets.EmotionEvent emotionEvent:
                     HandleEmotion(emotionEvent.SpaffCode);
                     break;
-                case GestureEvent gestureEvent:
-                    HandleGesture(gestureEvent.Simple);
-                    break;
             }
         }
         void HandleEmotion(EmotionEvent.Types.SpaffCode incomingSpaff)
         {
             Emotion = incomingSpaff;
             m_Title.text = $"Get Emotion {incomingSpaff}";
-        }
-        void HandleGesture(GestureType incomingGesture)
-        {
-            Gesture = incomingGesture;
-            m_Title.text = $"Get Gesture {incomingGesture}";
         }
         public void SendEmotion(int emotion)
         {

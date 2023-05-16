@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
 namespace Inworld.Util
 {
     /// <summary>
@@ -22,6 +23,8 @@ namespace Inworld.Util
         #region Inspector Variables
         [SerializeField] string m_UserName;
         [SerializeField] string m_OrganizationID;
+        [Space(10)]
+        [SerializeField] List<InworldPlayerProfile> m_AdditionalPlayerData;
         #endregion
 
         #region Private Variables
@@ -152,7 +155,23 @@ namespace Inworld.Util
         /// </summary>
         public ClientRequest Client => new ClientRequest
         {
-            Id = "unity"
+            Id = "unity",
+            Version = Application.version
+        };
+        /// <summary>
+        ///     Send the key-value pair of your customized global user settings to Inworld Server.
+        ///     These data could be set at Inworld User Settings.
+        /// </summary>
+        public UserSettings Settings => new UserSettings
+        {
+            ViewTranscriptConsent = true,
+            PlayerProfile = new UserSettings.Types.PlayerProfile
+            {
+                Fields =
+                {
+                    m_AdditionalPlayerData.Select(profile => profile.ToGrpc)
+                }
+            }
         };
         #endregion
 
