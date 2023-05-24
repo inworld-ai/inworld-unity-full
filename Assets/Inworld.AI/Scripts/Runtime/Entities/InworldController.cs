@@ -117,13 +117,14 @@ namespace Inworld
         public InworldCharacter CurrentCharacter
         {
             get => m_CurrentCharacter;
-            private set
+            set
             {
                 if (m_CurrentCharacter == value)
                     return;
                 m_LastCharacter = m_CurrentCharacter;
                 m_CurrentCharacter = value;
-                StartCoroutine(SwitchAudioCapture());
+                if (enabled)
+                    StartCoroutine(SwitchAudioCapture());
                 OnCharacterChanged?.Invoke(m_LastCharacter, m_CurrentCharacter);
             }
         }

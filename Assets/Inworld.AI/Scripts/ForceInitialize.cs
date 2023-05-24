@@ -30,7 +30,6 @@ public class ForceInitialize : MonoBehaviour
         FileDescriptor.ForceReflectionInitialization<Gender>();
         FileDescriptor.ForceReflectionInitialization<TTSType>();
         FileDescriptor.ForceReflectionInitialization<VoicePreset>();
-        FileDescriptor.ForceReflectionInitialization<FieldType>();
         FileDescriptor.ForceReflectionInitialization<FieldOptions.Types.CType>();
         FileDescriptor.ForceReflectionInitialization<FieldOptions.Types.JSType>();
         FileDescriptor.ForceReflectionInitialization<Character.Types.CharacterDescription.Types.Pronoun>();

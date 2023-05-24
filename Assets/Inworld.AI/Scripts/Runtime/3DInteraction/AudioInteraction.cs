@@ -181,7 +181,14 @@ namespace Inworld.Audio
             if (m_CurrentFixedUpdateTime <= k_FixedUpdatePeriod)
                 return;
             m_CurrentFixedUpdateTime = 0f;
-            if (IsPlaying || !m_AudioChunksQueue.TryDequeue(out m_CurrentAudioChunk) || !IsAudioChunkAvailable(m_CurrentAudioChunk.PacketId))
+            if (IsPlaying)
+                return;
+            if (!m_AudioChunksQueue.TryDequeue(out m_CurrentAudioChunk))
+            {
+                Character.IsSpeaking = false;
+                return;
+            }
+            if (!IsAudioChunkAvailable(m_CurrentAudioChunk.PacketId))
                 return;
             if (InworldController.Instance.CurrentCharacter != Character)
                 return;

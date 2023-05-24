@@ -6,13 +6,12 @@
 *************************************************************************************************/
 using Inworld.Collections;
 using Inworld.Packets;
-using Inworld.Util;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.Events;
-namespace Inworld
+namespace Inworld.Util
 {
     public class InteractionEvent : UnityEvent<InteractionStatus, List<HistoryItem>> {}
 
@@ -240,7 +239,6 @@ namespace Inworld
         }
         protected void CompleteInteraction(string interactionId)
         {
-            Character.IsSpeaking = false;
             List<HistoryItem> itemsByInteraction = History
                                                    .Where(x => x.InteractionId == interactionId).ToList();
             if (Character)

@@ -114,7 +114,6 @@ namespace Inworld.Util
             Animations = true,
             Audio = m_CanReceiveAudio,
             Emotions = true,
-            Gestures = true,
             Interruptions = true,
             Text = true,
             Triggers = true,
