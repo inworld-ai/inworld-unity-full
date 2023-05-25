@@ -6,8 +6,10 @@
 *************************************************************************************************/
 using Inworld.Grpc;
 using Inworld.Util;
+using System;
 using UnityEngine;
 using InworldPacket = Inworld.Packets.InworldPacket;
+using Random = UnityEngine.Random;
 namespace Inworld.Model
 {
     /// <summary>
@@ -42,43 +44,74 @@ namespace Inworld.Model
                     Animator.SetInteger(s_Gesture, (int)Gesture.Neutral);
                     break;
                 case EmotionEvent.Types.SpaffCode.Affection:
-                case EmotionEvent.Types.SpaffCode.Interest:
                     Animator.SetInteger(s_Emotion, (int)Emotion.Happy);
+                    Animator.SetInteger(s_Gesture, (int)Gesture.Celebrate);
+                    break;
+                case EmotionEvent.Types.SpaffCode.Interest:
+                    Animator.SetInteger(s_Emotion, (int)Emotion.Neutral);
+                    Animator.SetInteger(s_Gesture, (int)Gesture.Interested);
                     break;
                 case EmotionEvent.Types.SpaffCode.Humor:
+                    Animator.SetInteger(s_Emotion, (int)Emotion.Happy);
+                    Animator.SetInteger(s_Gesture, (int)Gesture.Celebrate);
+                    break;
                 case EmotionEvent.Types.SpaffCode.Joy:
                     Animator.SetInteger(s_Emotion, (int)Emotion.Happy);
+                    Animator.SetInteger(s_Gesture, (int)Gesture.Happy);
                     break;
                 case EmotionEvent.Types.SpaffCode.Contempt:
-                case EmotionEvent.Types.SpaffCode.Belligerence:
-                case EmotionEvent.Types.SpaffCode.Domineering:
-                case EmotionEvent.Types.SpaffCode.Criticism:
-                case EmotionEvent.Types.SpaffCode.Anger:
-                case EmotionEvent.Types.SpaffCode.Defensiveness:
                     Animator.SetInteger(s_Emotion, (int)Emotion.Angry);
+                    Animator.SetInteger(s_Gesture, (int)Gesture.Dismissing);
+                    break;
+                case EmotionEvent.Types.SpaffCode.Belligerence:
+                    Animator.SetInteger(s_Emotion, (int)Emotion.Angry);
+                    Animator.SetInteger(s_Gesture, (int)Gesture.FollowMe);
+                    break;
+                case EmotionEvent.Types.SpaffCode.Domineering:
+                    Animator.SetInteger(s_Emotion, (int)Emotion.Angry);
+                    Animator.SetInteger(s_Gesture, (int)Gesture.Happy);
+                    break;
+                case EmotionEvent.Types.SpaffCode.Criticism:
+                    Animator.SetInteger(s_Gesture, (int)Gesture.Think);
+                    break;
+                case EmotionEvent.Types.SpaffCode.Anger:
+                    Animator.SetInteger(s_Emotion, (int)Emotion.Angry);
+                    Animator.SetInteger(s_Gesture, (int)Gesture.Angry);
+                    break;
+                case EmotionEvent.Types.SpaffCode.Defensiveness:
+                    Animator.SetInteger(s_Emotion, (int)Emotion.Neutral);
+                    Animator.SetInteger(s_Gesture, (int)Gesture.TellToListen);
                     break;
                 case EmotionEvent.Types.SpaffCode.Tension:
                     Animator.SetInteger(s_Emotion, (int)Emotion.Fear);
+                    Animator.SetInteger(s_Gesture, (int)Gesture.Fear);
                     break;
                 case EmotionEvent.Types.SpaffCode.Stonewalling:
-                    Animator.SetInteger(s_Emotion, (int)Emotion.Fear);
+                    Animator.SetInteger(s_Emotion, (int)Emotion.Sad);
+                    Animator.SetInteger(s_Gesture, (int)Gesture.TellToListen);
                     break;
                 case EmotionEvent.Types.SpaffCode.TenseHumor:
                     Animator.SetInteger(s_Emotion, (int)Emotion.Fear);
+                    Animator.SetInteger(s_Gesture, (int)Gesture.Exclamation);
                     break;
                 case EmotionEvent.Types.SpaffCode.Whining:
                     Animator.SetInteger(s_Emotion, (int)Emotion.Sad);
+                    Animator.SetInteger(s_Gesture, (int)Gesture.Disagree);
                     break;
                 case EmotionEvent.Types.SpaffCode.Sadness:
                     Animator.SetInteger(s_Emotion, (int)Emotion.Sad);
+                    Animator.SetInteger(s_Emotion, (int)Gesture.Sad);
                     break;
                 case EmotionEvent.Types.SpaffCode.Validation:
-                    Animator.SetInteger(s_Gesture, (int)Gesture.Confuse);
+                    Animator.SetInteger(s_Emotion, (int)Emotion.Neutral);
+                    Animator.SetInteger(s_Gesture, (int)Gesture.Agree);
                     break;
                 case EmotionEvent.Types.SpaffCode.Disgust:
+                    Animator.SetInteger(s_Emotion, (int)Emotion.Neutral);
                     Animator.SetInteger(s_Gesture, (int)Gesture.Disgusted);
                     break;
                 case EmotionEvent.Types.SpaffCode.Surprise:
+                    Animator.SetInteger(s_Emotion, (int)Emotion.Neutral);
                     Animator.SetInteger(s_Gesture, (int)Gesture.Surprise);
                     break;
             }
