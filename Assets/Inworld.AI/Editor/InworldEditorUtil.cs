@@ -139,7 +139,7 @@ namespace Inworld.Editor
             if (InworldAI.Game.currentScene)
             {
                 GUILayout.Label($"Current InworldScene: <size=15><color=red><b>{InworldAI.Game.currentScene.ShortName}</b></color></size>", gizmosStyle);
-                GUILayout.Label($"If you drag any InworldCharacters that are not in\n<b>{InworldAI.Game.currentScene.ShortName}</b>, they will be deleted!", gizmosStyle);
+                GUILayout.Label($"Any Inworld Characters not in<b>{InworldAI.Game.currentScene.ShortName}</b>\n will be removed from the Unity scene", gizmosStyle);
             }
             else
             {
