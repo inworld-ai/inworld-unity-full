@@ -111,7 +111,6 @@ namespace Inworld.Util
         /// </summary>
         public CapabilitiesRequest Capabilities => new CapabilitiesRequest
         {
-            Animations = true,
             Audio = m_CanReceiveAudio,
             Emotions = true,
             Interruptions = true,
