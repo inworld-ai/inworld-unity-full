@@ -60,7 +60,7 @@ namespace Inworld.Util
 
         void _HandleCustomEvent(CustomEvent customEvent)
         {
-            if (customEvent.Name == triggerResponse)
+            if (customEvent.TriggerName == triggerResponse)
                 OnTriggerReceived.Invoke();
         }
 

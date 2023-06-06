@@ -278,8 +278,6 @@ namespace Inworld
             }
             return strResult;
         }
-
-
         void _ListCharactersFromServer(List<LoadSceneResponse.Types.Agent> characters)
         {
             foreach (LoadSceneResponse.Types.Agent characterInfo in characters)
@@ -300,10 +298,6 @@ namespace Inworld
             if (m_Client.GetAudioChunk(out AudioChunk audioChunkEvent))
             {
                 OnPacketReceived?.Invoke(audioChunkEvent);
-            }
-            if (m_Client.GetAnimationChunk(out AnimationChunk animChunkEvent))
-            {
-                OnPacketReceived?.Invoke(animChunkEvent);
             }
         }
 

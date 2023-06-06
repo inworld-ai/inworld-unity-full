@@ -15,7 +15,9 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using UnityEngine;
 using AudioChunk = Inworld.Packets.AudioChunk;
+using ActionEvent = Inworld.Packets.ActionEvent;
 using ControlEvent = Inworld.Grpc.ControlEvent;
 using CustomEvent = Inworld.Packets.CustomEvent;
 using EmotionEvent = Inworld.Packets.EmotionEvent;
@@ -32,8 +34,6 @@ namespace Inworld
     /// </summary>
     class Connection
     {
-        // Animation Chunks.
-        internal readonly ConcurrentQueue<AnimationChunk> incomingAnimationQueue = new ConcurrentQueue<AnimationChunk>();
         // Audio chunks ready to play.
         internal readonly ConcurrentQueue<AudioChunk> incomingAudioQueue = new ConcurrentQueue<AudioChunk>();
         // Events that need to be processed by NPC.
@@ -214,15 +214,6 @@ namespace Inworld
             chunk = null;
             return false;
         }
-        internal bool GetAnimationChunk(out AnimationChunk chunk)
-        {
-            if (m_CurrentConnection != null)
-            {
-                return m_CurrentConnection.incomingAnimationQueue.TryDequeue(out chunk);
-            }
-            chunk = null;
-            return false;
-        }
         internal void SendEvent(InworldPacket e)
         {
             if (SessionStarted)
@@ -333,9 +324,6 @@ namespace Inworld
                     case DataChunk.Types.DataType.Audio:
                         m_CurrentConnection.incomingAudioQueue.Enqueue(new AudioChunk(response));
                         break;
-                    case DataChunk.Types.DataType.Animation:
-                        m_CurrentConnection.incomingAnimationQueue.Enqueue(new AnimationChunk(response));
-                        break;
                     case DataChunk.Types.DataType.State:
                         StateChunk stateChunk = new StateChunk(response);
                         LastState = stateChunk.Chunk.ToBase64();
@@ -356,6 +344,10 @@ namespace Inworld
             else if (response.Emotion != null)
             {
                 m_CurrentConnection.incomingInteractionsQueue.Enqueue(new EmotionEvent(response));
+            }
+            else if (response.Action != null)
+            {
+                m_CurrentConnection.incomingInteractionsQueue.Enqueue(new ActionEvent(response));
             }
             else if (response.Custom != null)
             {

@@ -1821,6 +1821,10 @@ PrefabInstance:
       propertyPath: m_PlaybackSource
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3818396142677475718, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
+      propertyPath: m_FaceAnimData
+      value: 
+      objectReference: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
     - target: {fileID: 4248716694280939042, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -1877,6 +1881,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5780226317054875630, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
+      propertyPath: m_FaceData
+      value: 
+      objectReference: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
     - target: {fileID: 6301156355025034122, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_Avatar
       value: 

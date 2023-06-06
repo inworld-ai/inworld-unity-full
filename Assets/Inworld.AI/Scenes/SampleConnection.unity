@@ -251,6 +251,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eedce951bbc942d448b133a3376faec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnRecordingStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRecordingEnd:
+    m_PersistentCalls:
+      m_Calls: []
   m_AudioRate: 16000
   m_BufferSeconds: 1
 --- !u!114 &359806126
@@ -2498,6 +2504,10 @@ PrefabInstance:
       propertyPath: m_PlaybackSource
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3818396142677475718, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
+      propertyPath: m_FaceAnimData
+      value: 
+      objectReference: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
     - target: {fileID: 4248716694280939042, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -2554,6 +2564,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5780226317054875630, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
+      propertyPath: m_FaceData
+      value: 
+      objectReference: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
     - target: {fileID: 6301156355025034122, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_Avatar
       value: 
@@ -3432,14 +3446,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b46a8612debd4af69b9f7d688f59ac9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CameraController: {fileID: 0}
   m_GlobalChatCanvas: {fileID: 519391663}
-  m_TriggerCanvas: {fileID: 0}
-  m_RecordButton: {fileID: 1386811812}
   m_ContentRT: {fileID: 1668428372}
   m_BubbleLeft: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
   m_BubbleRight: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
   m_InputField: {fileID: 3065141206814883160}
+  m_CameraController: {fileID: 0}
+  m_TriggerCanvas: {fileID: 0}
+  m_RecordButton: {fileID: 1386811812}
   m_RTCanvas: {fileID: 0}
   m_InitPosition: {x: 0, y: 0, z: 0}
   m_InitRotation: {x: 0, y: 0, z: 0}
