@@ -1975,6 +1975,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eedce951bbc942d448b133a3376faec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnRecordingStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRecordingEnd:
+    m_PersistentCalls:
+      m_Calls: []
   m_AudioRate: 16000
   m_BufferSeconds: 1
 --- !u!114 &359806126
@@ -11556,10 +11562,17 @@ MonoBehaviour:
   m_SightAngle: 180
   m_SightDistance: 10
   m_SightRefreshRate: 0.25
-  OnAudioStarted:
+  m_logUtterances: 0
+  OnBeginSpeaking:
     m_PersistentCalls:
       m_Calls: []
-  OnAudioFinished:
+  OnFinishedSpeaking:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCharacterSpeaks:
+    m_PersistentCalls:
+      m_Calls: []
+  OnGoalCompleted:
     m_PersistentCalls:
       m_Calls: []
 --- !u!222 &4719297120864292418
@@ -11810,7 +11823,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HeadEyeAsset: Animations/REMRPM
-  m_FaceData: {fileID: 11400000, guid: 300d661927d94334a8fe159953aabfcf, type: 2}
+  m_FaceData: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
   m_MorphTime: 0.5
 --- !u!114 &5850455540637172237
 MonoBehaviour:
@@ -11824,14 +11837,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b46a8612debd4af69b9f7d688f59ac9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CameraController: {fileID: 467126464424144639}
   m_GlobalChatCanvas: {fileID: 1784742905}
-  m_TriggerCanvas: {fileID: 0}
-  m_RecordButton: {fileID: 0}
   m_ContentRT: {fileID: 0}
   m_BubbleLeft: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
   m_BubbleRight: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
   m_InputField: {fileID: 0}
+  m_CameraController: {fileID: 467126464424144639}
+  m_TriggerCanvas: {fileID: 0}
+  m_RecordButton: {fileID: 0}
   m_RTCanvas: {fileID: 0}
   m_InitPosition: {x: 0, y: 0, z: 0}
   m_InitRotation: {x: 0, y: 0, z: 0}
@@ -11987,8 +12000,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63e95357b25840de8fa9d691b441b3c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FaceAnimData: {fileID: 11400000, guid: 300d661927d94334a8fe159953aabfcf, type: 2}
+  m_FaceAnimData: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
   m_LipExpression: 0.7
+  m_VisemeSil: viseme_sil
+  m_CustomModel: 0
 --- !u!114 &9089111332921730522
 MonoBehaviour:
   m_ObjectHideFlags: 0

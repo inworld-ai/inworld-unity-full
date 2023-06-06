@@ -416,6 +416,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eedce951bbc942d448b133a3376faec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnRecordingStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRecordingEnd:
+    m_PersistentCalls:
+      m_Calls: []
   m_AudioRate: 16000
   m_BufferSeconds: 1
 --- !u!114 &359806126
@@ -720,7 +726,7 @@ PrefabInstance:
     - target: {fileID: 3818396142677475718, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_FaceAnimData
       value: 
-      objectReference: {fileID: 11400000, guid: 300d661927d94334a8fe159953aabfcf, type: 2}
+      objectReference: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
     - target: {fileID: 4248716694280939042, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -1464,7 +1470,7 @@ PrefabInstance:
     - target: {fileID: 3818396142677475718, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_FaceAnimData
       value: 
-      objectReference: {fileID: 11400000, guid: 300d661927d94334a8fe159953aabfcf, type: 2}
+      objectReference: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
     - target: {fileID: 4248716694280939042, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0

@@ -32,6 +32,7 @@ namespace Inworld.Util
         PacketId m_CurrentUtteranceID;
         const string k_Pattern = @"^inworld\.goal\.complete\.(.+)$";
         List<HistoryItem> History => m_ChatHistory.Where(x => !x.IsAgent || m_PlayedUtterances.ContainsKey(x.UtteranceId)).Take(m_HistorySize).ToList();
+
         internal bool isSpeaking;
         #endregion
 
@@ -77,6 +78,9 @@ namespace Inworld.Util
                 case TextEvent textEvent:
                     _HandleTextEvent(textEvent);
                     break;
+                case ActionEvent actionEvent:
+                    _HandleActionEvent(actionEvent);
+                    break;
                 case ControlEvent controlEvent:
                     _AddInteractionEnd(controlEvent.PacketId.InteractionId);
                     break;
@@ -87,14 +91,14 @@ namespace Inworld.Util
         }
         void _HandleCustomEvent(CustomEvent customEvent)
         {
-            Match match = new Regex(k_Pattern).Match(customEvent.Name);
+            Match match = new Regex(k_Pattern).Match(customEvent.TriggerName);
             if (match.Success && match.Groups.Count > 1)
             {
                 Character.OnGoalCompleted.Invoke(match.Groups[1].Value);
             }
             else
             {
-                Character.OnGoalCompleted.Invoke(customEvent.Name);
+                Character.OnGoalCompleted.Invoke(customEvent.TriggerName);
             }
         }
         /**
@@ -113,7 +117,7 @@ namespace Inworld.Util
             // Already played utterance.
             CompleteInteraction(interactionId);
         }
-        public virtual void AddText(TextEvent textEvent)
+        public virtual void AddText(InworldPacket textEvent)
         {
             CancelResponsesEvent cancel = _AddText(textEvent);
             StartUtterance(textEvent.PacketId);
@@ -122,7 +126,7 @@ namespace Inworld.Util
             if (Character)
                 Character.SendEventToAgent(cancel);
         }
-        protected CancelResponsesEvent _AddText(TextEvent text)
+        protected CancelResponsesEvent _AddText(InworldPacket text)
         {
             if (IsInteractionCanceled(text.PacketId.InteractionId))
             {
@@ -161,7 +165,7 @@ namespace Inworld.Util
             }
             HistoryItem existedUtterance = FindChatHistoryItemByUtteranceId(text.PacketId?.UtteranceId);
             if (existedUtterance == null)
-            {
+            {      
                 InsertChatHistoryItem(new HistoryItem(text));
             }
             else
@@ -195,8 +199,10 @@ namespace Inworld.Util
         }
         void InsertChatHistoryItem(HistoryItem item)
         {
+            if (item.Event is ActionEvent)
+                m_PlayedUtterances.Add(item.UtteranceId, true);
             m_ChatHistoryByUtteranceID.Add(item.UtteranceId, item);
-            m_ChatHistory.AddFirst(item);
+            m_ChatHistory.AddFirst(item); 
             // Cleaning history
             int limit = m_HistorySize + 16;
             if (m_ChatHistory.Count > limit)
@@ -216,6 +222,12 @@ namespace Inworld.Util
         {
             if (Character)
                 Character.InteractionEvent.Invoke(InteractionStatus.HistoryChanged, History);
+        }
+        void _HandleActionEvent(ActionEvent actionEvent)
+        {
+            if (actionEvent?.PacketId?.InteractionId == null || actionEvent.PacketId?.UtteranceId == null)
+                return;
+            AddText(actionEvent);
         }
         void _HandleTextEvent(TextEvent textEvent)
         {

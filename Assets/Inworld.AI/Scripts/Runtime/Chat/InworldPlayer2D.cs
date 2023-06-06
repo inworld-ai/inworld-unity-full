@@ -4,6 +4,7 @@
 * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
+using Inworld.Packets;
 using Inworld.Sample.UI;
 using Inworld.Util;
 using System.Collections.Generic;
@@ -109,7 +110,10 @@ namespace Inworld.Sample
                         }
                     }
                 }
-                m_Bubbles[item.UtteranceId].Text = item.Event.Text;
+                if (item.Event is TextEvent textEvent)
+                    m_Bubbles[item.UtteranceId].Text = textEvent.Text;
+                if (item.Event is ActionEvent actionEvent)
+                    m_Bubbles[item.UtteranceId].Text = $"<i>{actionEvent.Content}</i>";
                 _SetContentHeight();
             }
         }

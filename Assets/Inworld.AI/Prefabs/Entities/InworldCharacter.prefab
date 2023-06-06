@@ -646,10 +646,17 @@ MonoBehaviour:
   m_SightAngle: 180
   m_SightDistance: 10
   m_SightRefreshRate: 0.25
-  OnAudioStarted:
+  m_logUtterances: 0
+  OnBeginSpeaking:
     m_PersistentCalls:
       m_Calls: []
-  OnAudioFinished:
+  OnFinishedSpeaking:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCharacterSpeaks:
+    m_PersistentCalls:
+      m_Calls: []
+  OnGoalCompleted:
     m_PersistentCalls:
       m_Calls: []
 --- !u!95 &6301156355025034122
@@ -793,7 +800,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HeadEyeAsset: Animations/REMRPM
-  m_FaceData: {fileID: 11400000, guid: 300d661927d94334a8fe159953aabfcf, type: 2}
+  m_FaceData: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
   m_MorphTime: 0.5
 --- !u!114 &1128614544702611233
 MonoBehaviour:
@@ -820,5 +827,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63e95357b25840de8fa9d691b441b3c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FaceAnimData: {fileID: 11400000, guid: 300d661927d94334a8fe159953aabfcf, type: 2}
+  m_FaceAnimData: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
   m_LipExpression: 0.7
+  m_VisemeSil: viseme_sil
+  m_CustomModel: 0

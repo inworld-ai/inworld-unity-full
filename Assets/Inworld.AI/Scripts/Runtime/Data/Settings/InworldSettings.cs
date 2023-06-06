@@ -112,6 +112,7 @@ namespace Inworld.Util
         public CapabilitiesRequest Capabilities => new CapabilitiesRequest
         {
             Audio = m_CanReceiveAudio,
+            NarratedActions = true,
             Emotions = true,
             Interruptions = true,
             Text = true,

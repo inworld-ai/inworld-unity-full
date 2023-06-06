@@ -101,6 +101,10 @@ PrefabInstance:
       propertyPath: m_PlaybackSource
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3818396142677475718, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
+      propertyPath: m_FaceAnimData
+      value: 
+      objectReference: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
     - target: {fileID: 4248716694280939042, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -157,6 +161,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5780226317054875630, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
+      propertyPath: m_FaceData
+      value: 
+      objectReference: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
     - target: {fileID: 6301156355025034122, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_Avatar
       value: 
@@ -167,7 +175,7 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 60e9fcbe60a6d424691cb4279d56ecc2, type: 2}
     - target: {fileID: 9047055559676837508, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_Name
-      value: Celeste
+      value: Celeste Variant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
