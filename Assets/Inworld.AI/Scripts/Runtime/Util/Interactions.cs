@@ -165,7 +165,7 @@ namespace Inworld.Util
             }
             HistoryItem existedUtterance = FindChatHistoryItemByUtteranceId(text.PacketId?.UtteranceId);
             if (existedUtterance == null)
-            {      
+            {
                 InsertChatHistoryItem(new HistoryItem(text));
             }
             else
@@ -202,7 +202,7 @@ namespace Inworld.Util
             if (item.Event is ActionEvent)
                 m_PlayedUtterances.Add(item.UtteranceId, true);
             m_ChatHistoryByUtteranceID.Add(item.UtteranceId, item);
-            m_ChatHistory.AddFirst(item); 
+            m_ChatHistory.AddFirst(item);
             // Cleaning history
             int limit = m_HistorySize + 16;
             if (m_ChatHistory.Count > limit)
