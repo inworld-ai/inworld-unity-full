@@ -18,10 +18,14 @@ using System.Threading.Tasks;
 using UnityEngine;
 using AudioChunk = Inworld.Packets.AudioChunk;
 using ActionEvent = Inworld.Packets.ActionEvent;
-using ControlEvent = Inworld.Grpc.ControlEvent;
 using CustomEvent = Inworld.Packets.CustomEvent;
 using EmotionEvent = Inworld.Packets.EmotionEvent;
+#if INWORLD_NDK
+using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
+#else
 using GrpcPacket = Inworld.Grpc.InworldPacket;
+using ControlEvent = Inworld.Grpc.ControlEvent;
+#endif
 using InworldPacket = Inworld.Packets.InworldPacket;
 using Routing = Inworld.Packets.Routing;
 using TextEvent = Inworld.Packets.TextEvent;
@@ -32,7 +36,7 @@ namespace Inworld
     /// <summary>
     ///     This class used to save the communication data in runtime.
     /// </summary>
-    class Connection
+    public class Connection
     {
         // Audio chunks ready to play.
         internal readonly ConcurrentQueue<AudioChunk> incomingAudioQueue = new ConcurrentQueue<AudioChunk>();
@@ -44,33 +48,30 @@ namespace Inworld
     /// <summary>
     ///     This is the logic class for Server communication.
     /// </summary>
-    class InworldClient
+    public class InworldClient
     {
         internal InworldClient()
         {
-            m_Channel = new Channel(InworldAI.Game.RuntimeServer, new SslCredentials());
-            m_WorldEngineClient = new WorldEngine.WorldEngineClient(m_Channel);
+            #if INWORLD_NDK
+            core = new InworldNDKClient();
+#else
+            core = new GRPCClient();
+#endif
+            core.Initialize(this);  
         }
-
-        #region Private Variables
-        readonly WorldEngine.WorldEngineClient m_WorldEngineClient;
-        readonly Channel m_Channel;
-        AsyncDuplexStreamingCall<GrpcPacket, GrpcPacket> m_StreamingCall;
-        Connection m_CurrentConnection;
-        InworldAuth m_InworldAuth;
-        string m_SessionKey = "";
-        Metadata m_Header;
-        internal event Action<RuntimeStatus, string> RuntimeEvent;
-        #endregion
+        
+        public Connection m_CurrentConnection;
+        public event Action<RuntimeStatus, string> RuntimeEvent;
+        internal IInworldClient core;
 
         #region Properties
         internal ConcurrentQueue<Exception> Errors { get; } = new ConcurrentQueue<Exception>();
-        internal bool SessionStarted { get; private set; }
-        internal bool HasInit => !m_InworldAuth.IsExpired;
-        internal string SessionID => m_InworldAuth?.SessionID ?? "";
+        internal bool SessionStarted { get; set; }
+        internal bool HasInit => core.IsAuthenticated;
+        internal string SessionID => core.SessionID;
         internal string LastState { get; set; }
-        bool IsSessionInitialized => m_SessionKey.Length != 0;
-        Timestamp Now => Timestamp.FromDateTime(DateTime.UtcNow);
+        bool IsSessionInitialized => core.IsSessionInitialized;
+        public Timestamp Now => Timestamp.FromDateTime(DateTime.UtcNow);
         #endregion
 
         #region Private Functions
