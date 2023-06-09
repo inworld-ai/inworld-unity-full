@@ -196,6 +196,7 @@ namespace Inworld
                     _StartSession();
                 }
             }
+            m_Client.Update();
         }
         void OnDisable()
         {

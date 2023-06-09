@@ -70,9 +70,40 @@ public class GRPCClient : IInworldClient
             if (!string.IsNullOrEmpty(InworldAI.User.Account))
                 VSAttribution.VSAttribution.SendAttributionEvent("Login Runtime", InworldAI.k_CompanyName, InworldAI.User.Account);
 #endif
-        m_InworldAuth = new InworldAuth(m_Client.OnAuthCompleted, m_Client.OnAuthFailed);
+        m_InworldAuth = new InworldAuth();
         if (string.IsNullOrEmpty(sessionToken))
-            m_InworldAuth.GenerateAccessToken(InworldAI.Game.StudioServer, InworldAI.Game.APIKey, InworldAI.Game.APISecret);
+        {
+            GenerateTokenRequest gtRequest = new GenerateTokenRequest
+            {
+                Key = InworldAI.Game.APIKey,
+                Resources =
+                {
+                    InworldAI.Game.currentWorkspace.fullName
+                }
+                    
+            };
+            Metadata metadata = new Metadata
+            {
+                {
+                    "authorization", m_InworldAuth.GetHeader(InworldAI.Game.RuntimeServer, InworldAI.Game.APIKey, InworldAI.Game.APISecret)
+                }
+            };
+            try
+            {
+                m_InworldAuth.Token = m_WorldEngineClient.GenerateToken(gtRequest, metadata, DateTime.UtcNow.AddHours(1));
+                InworldAI.Log("Init Success!");
+                m_Header = new Metadata
+                {
+                    {"authorization", $"Bearer {m_InworldAuth.Token.Token}"},
+                    {"session-id", m_InworldAuth.Token.SessionId}
+                };
+                m_Client.InvokeRuntimeEvent(RuntimeStatus.InitSuccess, "");
+            }
+            catch (RpcException e)
+            {
+                m_Client.InvokeRuntimeEvent(RuntimeStatus.InitFailed, e.ToString());
+            }
+        }
         else
         {
             _ReceiveCustomToken(sessionToken);
@@ -127,45 +158,46 @@ public class GRPCClient : IInworldClient
     public void ResolvePackets(GrpcPacket packet)
     {
         m_Client.m_CurrentConnection ??= new Connection();
-        if (packet.DataChunk != null)
-        {
-            switch (packet.DataChunk.Type)
+            if (packet.DataChunk != null)
             {
-                case DataChunk.Types.DataType.Audio:
-                    m_Client.m_CurrentConnection.incomingAudioQueue.Enqueue(new AudioChunk(packet));
-                    break;
-                case DataChunk.Types.DataType.Animation:
-                    m_Client.m_CurrentConnection.incomingAnimationQueue.Enqueue(new AnimationChunk(packet));
-                    break;
-                case DataChunk.Types.DataType.State:
-                    StateChunk stateChunk = new StateChunk(packet);
-                    m_Client.LastState = stateChunk.Chunk.ToBase64();
-                    break;
-                default:
-                    InworldAI.LogError($"Unsupported incoming event: {packet}");
-                    break;
+                switch (packet.DataChunk.Type)
+                {
+                    case DataChunk.Types.DataType.Audio:
+                        m_Client.m_CurrentConnection.incomingAudioQueue.Enqueue(new AudioChunk(packet));
+                        break;
+                    case DataChunk.Types.DataType.State:
+                        StateChunk stateChunk = new StateChunk(packet);
+                        m_Client.LastState = stateChunk.Chunk.ToBase64();
+                        break;
+                    default:
+                        InworldAI.LogError($"Unsupported incoming event: {packet}");
+                        break;
+                }
             }
-        }
-        else if (packet.Text != null)
-        {
-            m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue(new TextEvent(packet));
-        }
-        else if (packet.Control != null)
-        {
-            m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue(new Inworld.Packets.ControlEvent(packet));
-        }
-        else if (packet.Emotion != null)
-        {
-            m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue(new EmotionEvent(packet));
-        }
-        else if (packet.Custom != null)
-        {
-            m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue(new CustomEvent(packet));
-        }
-        else
-        {
-            InworldAI.LogError($"Unsupported incoming event: {packet}");
-        }
+            else if (packet.Text != null)
+            {
+                m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue(new TextEvent(packet));
+            }
+            else if (packet.Control != null)
+            {
+                m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue(new Inworld.Packets.ControlEvent(packet));
+            }
+            else if (packet.Emotion != null)
+            {
+                m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue(new EmotionEvent(packet));
+            }
+            else if (packet.Action != null)
+            {
+                m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue(new Inworld.Packets.ActionEvent(packet));
+            }
+            else if (packet.Custom != null)
+            {
+               m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue(new CustomEvent(packet));
+            }
+            else
+            {
+                InworldAI.LogError($"Unsupported incoming event: {packet}");
+            }
     }
 
     public void SendAudio(AudioChunk audioChunk)
@@ -240,7 +272,7 @@ public class GRPCClient : IInworldClient
                             }
                             if (next)
                             {
-                                m_Client.ResolvePackets(m_StreamingCall.ResponseStream.Current);
+                                ResolvePackets(m_StreamingCall.ResponseStream.Current);
                             }
                             else
                             {
@@ -303,10 +335,9 @@ public class GRPCClient : IInworldClient
             Name = sceneName,
             Capabilities = InworldAI.Settings.Capabilities,
             User = InworldAI.User.Request,
-            Client = InworldAI.User.Client
+            Client = InworldAI.User.Client,
+            UserSettings = InworldAI.User.Settings
         };
-
-        Debug.Log("last state is " + m_Client.LastState);
         if (!string.IsNullOrEmpty(m_Client.LastState))
         {
             lsRequest.SessionContinuation = new SessionContinuation
