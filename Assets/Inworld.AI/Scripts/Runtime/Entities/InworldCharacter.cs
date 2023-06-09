@@ -11,6 +11,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
+#if INWORLD_NDK
+using GrpcSourceType = Inworld.ProtoBuf.TextEvent.Types.SourceType;
+#else
+using GrpcSourceType = Inworld.Grpc.TextEvent.Types.SourceType;
+#endif
+
 namespace Inworld
 {
     public class InworldCharacter : MonoBehaviour
@@ -361,7 +367,7 @@ namespace Inworld
                 new TextEvent
                 {
                     Text = text,
-                    SourceType = Grpc.TextEvent.Types.SourceType.TypedIn,
+                    SourceType = GrpcSourceType.TypedIn,
                     Final = true
                 }
             );

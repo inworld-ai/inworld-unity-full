@@ -1,4 +1,5 @@
-﻿using Inworld.NdkData;
+﻿
+using Inworld.NdkData;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using System;
@@ -101,11 +102,6 @@ public void ResolvePackets(GrpcPacket packet)
                 protobufObject = factory.Create(packet, "AudioChunk");
                 // Perform operations on protobufObject here...
                 m_Client.m_CurrentConnection.incomingAudioQueue.Enqueue((AudioChunk)protobufObject);
-                break;
-            case DataChunk.Types.DataType.Animation:
-                protobufObject = factory.Create(packet, "AnimationChunk");
-                // Perform operations on protobufObject here...
-                m_Client.m_CurrentConnection.incomingAnimationQueue.Enqueue((AnimationChunk)protobufObject);
                 break;
             case DataChunk.Types.DataType.State:
                 protobufObject = factory.Create(packet, "StateChunk");

@@ -4,7 +4,23 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using Google.Protobuf.Collections;
+#if INWORLD_NDK
+using Inworld.ProtoBuf;
+using GrpcCancelEvent = Inworld.ProtoBuf.CancelResponsesEvent;
+using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
+using GrpcPacketID = Inworld.ProtoBuf.PacketId;
+using GrpcRouting = Inworld.ProtoBuf.Routing;
+using GrpcActor = Inworld.ProtoBuf.Actor;
+using ActorTypes = Inworld.ProtoBuf.Actor.Types;  
+#else
 using Inworld.Grpc;
+using GrpcCancelEvent = Inworld.Grpc.CancelResponsesEvent;
+using GrpcPacket = Inworld.Grpc.InworldPacket;
+using GrpcPacketID = Inworld.Grpc.PacketId;
+using GrpcRouting = Inworld.Grpc.Routing;
+using GrpcActor = Inworld.Grpc.Actor;
+using ActorTypes = Inworld.Grpc.Actor.Types;
+#endif
 
 namespace Inworld.Packets
 {
@@ -39,7 +55,7 @@ namespace Inworld.Packets
             UtteranceIds = utteranceIds.AsReadOnly();
         }
 
-        public CancelResponsesEvent(Grpc.InworldPacket packet) : this()
+        public CancelResponsesEvent(GrpcPacket packet) : this()
         {
             Timestamp = packet.Timestamp.ToDateTime();
             Routing = new Routing(packet.Routing);
@@ -48,14 +64,14 @@ namespace Inworld.Packets
             UtteranceIds = packet.CancelResponses.UtteranceId.ToList().AsReadOnly();
         }
 
-        public Grpc.InworldPacket ToGrpc()
+        public GrpcPacket ToGrpc()
         {
-            var result = new Grpc.InworldPacket
+            var result = new GrpcPacket
             {
                 Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(this.Timestamp),
                 Routing = this.Routing.ToGrpc(),
                 PacketId = PacketId.ToGrpc(),
-                CancelResponses = new Grpc.CancelResponsesEvent() {InteractionId = InteractionId}
+                CancelResponses = new GrpcCancelEvent() {InteractionId = InteractionId}
             };
             result.CancelResponses.UtteranceId.AddRange(UtteranceIds);
             return result;

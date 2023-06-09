@@ -52,12 +52,12 @@ namespace Inworld
     {
         internal InworldClient()
         {
-            #if INWORLD_NDK
+#if INWORLD_NDK
             core = new InworldNDKClient();
 #else
             core = new GRPCClient();
 #endif
-            core.Initialize(this);  
+            core.Initialize(this);
         }
         
         public Connection m_CurrentConnection;

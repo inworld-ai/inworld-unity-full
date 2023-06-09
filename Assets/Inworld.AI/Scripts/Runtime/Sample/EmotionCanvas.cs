@@ -4,7 +4,11 @@
 * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
-using Inworld.Grpc;
+#if INWORLD_NDK
+using EmotionEvent = Inworld.ProtoBuf.EmotionEvent;
+#else
+using EmotionEvent = Inworld.Grpc.EmotionEvent;
+#endif
 using Inworld.Util;
 using UnityEngine;
 using InworldPacket = Inworld.Packets.InworldPacket;

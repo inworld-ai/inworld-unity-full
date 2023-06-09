@@ -1,7 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Inworld.Grpc;
+#if INWORLD_NDK
+using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
+using GrpcPacketID = Inworld.ProtoBuf.PacketId;
+using GrpcRouting = Inworld.ProtoBuf.Routing;
+using GrpcActor = Inworld.ProtoBuf.Actor;
+using GrpcTextEvent = Inworld.ProtoBuf.TextEvent;
+using GrpcSourceType = Inworld.ProtoBuf.TextEvent.Types.SourceType;
+using ActorTypes = Inworld.ProtoBuf.Actor.Types;  
+#else
+using GrpcPacket = Inworld.Grpc.InworldPacket;
+using GrpcPacketID = Inworld.Grpc.PacketId;
+using GrpcRouting = Inworld.Grpc.Routing;
+using GrpcActor = Inworld.Grpc.Actor;
+using GrpcTextEvent = Inworld.Grpc.TextEvent;
+using GrpcSourceType = Inworld.Grpc.TextEvent.Types.SourceType;
+using ActorTypes = Inworld.Grpc.Actor.Types;
+#endif
 
 namespace Inworld.Packets
 {
@@ -13,7 +29,7 @@ namespace Inworld.Packets
         public PacketId PacketId { get; set; }
         public Routing Routing { get; set; }
         public string Text { get; set; }
-        public Grpc.TextEvent.Types.SourceType SourceType { get; set; }
+        public GrpcSourceType SourceType { get; set; }
         public bool Final { get; set; }
 
         public TextEvent()
@@ -23,7 +39,7 @@ namespace Inworld.Packets
             Routing = new Routing();
         }
 
-        public TextEvent(Grpc.InworldPacket grpcEvent)
+        public TextEvent(GrpcPacket grpcEvent)
         {
             Timestamp = grpcEvent.Timestamp.ToDateTime();
             Routing = new Routing(grpcEvent.Routing);
@@ -34,13 +50,13 @@ namespace Inworld.Packets
             Final = grpcEvent.Text.Final;
         }
 
-        public Grpc.InworldPacket ToGrpc() =>
-            new Grpc.InworldPacket
+        public GrpcPacket ToGrpc() =>
+            new GrpcPacket
             {
                 Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(Timestamp),
                 Routing = Routing?.ToGrpc(),
                 PacketId = PacketId.ToGrpc(),
-                Text = new Grpc.TextEvent {Text = Text, SourceType = SourceType, Final = Final}
+                Text = new GrpcTextEvent {Text = Text, SourceType = SourceType, Final = Final}
             };
 
         protected bool Equals(TextEvent other) =>

@@ -19,7 +19,13 @@ using UnityEditor;
 using UnityEngine;
 using AudioChunk = Inworld.Packets.AudioChunk;
 using ControlEvent = Inworld.Packets.ControlEvent;
+#if INWORLD_NDK
+using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
+using GrpcControlEvent = Inworld.ProtoBuf.ControlEvent;
+#else
 using GrpcPacket = Inworld.Grpc.InworldPacket;
+using GrpcControlEvent = Inworld.Grpc.ControlEvent;
+#endif
 using InworldPacket = Inworld.Packets.InworldPacket;
 using Random = UnityEngine.Random;
 using Routing = Inworld.Packets.Routing;
@@ -377,7 +383,7 @@ namespace Inworld
         }
         internal void TTSStart(string ID)
         {
-            ControlEvent controlEvent = new ControlEvent(Grpc.ControlEvent.Types.Action.TtsPlaybackStart, Routing.FromAgentToPlayer(ID));
+            ControlEvent controlEvent = new ControlEvent(GrpcControlEvent.Types.Action.TtsPlaybackStart, Routing.FromAgentToPlayer(ID));
             if (m_TTSInteractionID != null)
                 controlEvent.PacketId.InteractionId = m_TTSInteractionID;
             else
@@ -386,7 +392,7 @@ namespace Inworld
         }
         internal void TTSEnd(string ID)
         {
-            ControlEvent controlEvent = new ControlEvent(Grpc.ControlEvent.Types.Action.TtsPlaybackEnd, Routing.FromAgentToPlayer(ID));
+            ControlEvent controlEvent = new ControlEvent(GrpcControlEvent.Types.Action.TtsPlaybackEnd, Routing.FromAgentToPlayer(ID));
             controlEvent.PacketId.InteractionId = m_TTSInteractionID;
             SendEvent(controlEvent);
         }
@@ -484,7 +490,9 @@ namespace Inworld
         void _LoadPreviousData(LoadSceneResponse response)
         {
             if (response.PreviousState == null)
-                return;
+                return; 
+            //Will need to account for NDK previous state being sent from DLL
+#if !INWORLD_NDK
             foreach (PreviousState.Types.StateHolder stateHolder in response.PreviousState.StateHolders)
             {
                 if (stateHolder.Packets.Count != 0)
@@ -498,6 +506,7 @@ namespace Inworld
                     }
                 }
             }
+#endif
         }
         /// <summary>
         ///     Reconnect

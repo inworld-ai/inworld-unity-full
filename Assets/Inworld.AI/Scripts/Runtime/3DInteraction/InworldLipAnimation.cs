@@ -5,11 +5,16 @@
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
 using Inworld.Audio;
+#if INWORLD_NDK
+using Inworld.ProtoBuf;
+#else
 using Inworld.Grpc;
+#endif
 using System.Collections.Concurrent;
 using Inworld.Util;
 using System.Linq;
 using UnityEngine;
+
 namespace Inworld.Model
 {
     public class InworldLipAnimation : MonoBehaviour

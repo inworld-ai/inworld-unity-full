@@ -1,7 +1,21 @@
 ﻿using System;
 using System.Diagnostics;
 using Google.Protobuf;
+#if INWORLD_NDK
+using Inworld.ProtoBuf;
+using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
+using GrpcPacketID = Inworld.ProtoBuf.PacketId;
+using GrpcRouting = Inworld.ProtoBuf.Routing;
+using GrpcActor = Inworld.ProtoBuf.Actor;
+using ActorTypes = Inworld.ProtoBuf.Actor.Types;  
+#else
 using Inworld.Grpc;
+using GrpcPacket = Inworld.Grpc.InworldPacket;
+using GrpcPacketID = Inworld.Grpc.PacketId;
+using GrpcRouting = Inworld.Grpc.Routing;
+using GrpcActor = Inworld.Grpc.Actor;
+using ActorTypes = Inworld.Grpc.Actor.Types;
+#endif
 
 namespace Inworld.Packets
 {
@@ -22,7 +36,7 @@ namespace Inworld.Packets
             Chunk = chunk;
         }
 
-        public StateChunk(Grpc.InworldPacket grpcEvent)
+        public StateChunk(GrpcPacket grpcEvent)
         {
             Timestamp = grpcEvent.Timestamp.ToDateTime();
             if (grpcEvent.Routing != null)
@@ -31,7 +45,7 @@ namespace Inworld.Packets
             Chunk = grpcEvent.DataChunk.Chunk;
         }
 
-        public Grpc.InworldPacket ToGrpc() => new Grpc.InworldPacket
+        public GrpcPacket ToGrpc() => new GrpcPacket
         {
             Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(Timestamp),
             Routing = Routing?.ToGrpc(),

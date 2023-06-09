@@ -2,7 +2,21 @@ using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Diagnostics;
-using Inworld.Grpc;
+#if INWORLD_NDK
+using GrpcCustomEvent = Inworld.ProtoBuf.CustomEvent;
+using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
+using GrpcPacketID = Inworld.ProtoBuf.PacketId;
+using GrpcRouting = Inworld.ProtoBuf.Routing;
+using GrpcActor = Inworld.ProtoBuf.Actor;
+using ActorTypes = Inworld.ProtoBuf.Actor.Types;  
+#else
+using GrpcCustomEvent = Inworld.Grpc.CustomEvent;
+using GrpcPacket = Inworld.Grpc.InworldPacket;
+using GrpcPacketID = Inworld.Grpc.PacketId;
+using GrpcRouting = Inworld.Grpc.Routing;
+using GrpcActor = Inworld.Grpc.Actor;
+using ActorTypes = Inworld.Grpc.Actor.Types;
+#endif
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,14 +46,14 @@ namespace Inworld.Packets
 
         public CustomEvent(string triggerName): this(triggerName, new Routing()) { }
 
-        public CustomEvent(Grpc.InworldPacket packet)
+        public CustomEvent(GrpcPacket packet)
         {
             Timestamp = packet.Timestamp.ToDateTime();
             Routing = new Routing(packet.Routing);
             PacketId = new PacketId(packet.PacketId);
             TriggerName = packet.Custom.Name;
             Parameters = new Dictionary<string, string>();
-            foreach (Grpc.CustomEvent.Types.Parameter param in packet.Custom.Parameters)
+            foreach (GrpcCustomEvent.Types.Parameter param in packet.Custom.Parameters)
             {
                 Parameters[param.Name] = param.Value;
             }
@@ -47,15 +61,15 @@ namespace Inworld.Packets
 
         public void AddParameter(string key, string value) => Parameters[key] = value;
 
-        public Grpc.CustomEvent ParamToGrpc()
+        public GrpcCustomEvent ParamToGrpc()
         {
-            Grpc.CustomEvent customEvent = new Grpc.CustomEvent
+            GrpcCustomEvent customEvent = new GrpcCustomEvent
             {
                 Name = this.TriggerName
             };
             foreach (KeyValuePair<string, string> kvp in Parameters)
             {
-                customEvent.Parameters.Add(new Grpc.CustomEvent.Types.Parameter()
+                customEvent.Parameters.Add(new GrpcCustomEvent.Types.Parameter()
                 {
                     Name = kvp.Key,
                     Value = kvp.Value
@@ -64,7 +78,7 @@ namespace Inworld.Packets
             return customEvent;
         }
         
-        public Grpc.InworldPacket ToGrpc() => new Grpc.InworldPacket
+        public GrpcPacket ToGrpc() => new GrpcPacket
         {
             Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(this.Timestamp),
             Routing = Routing.ToGrpc(),

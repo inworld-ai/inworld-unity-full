@@ -1,4 +1,19 @@
 using System;
+#if INWORLD_NDK
+using GrpcControlEvent = Inworld.ProtoBuf.ControlEvent;
+using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
+using GrpcPacketID = Inworld.ProtoBuf.PacketId;
+using GrpcRouting = Inworld.ProtoBuf.Routing;
+using GrpcActor = Inworld.ProtoBuf.Actor;
+using ActorTypes = Inworld.ProtoBuf.Actor.Types;  
+#else
+using GrpcControlEvent = Inworld.Grpc.ControlEvent;
+using GrpcPacket = Inworld.Grpc.InworldPacket;
+using GrpcPacketID = Inworld.Grpc.PacketId;
+using GrpcRouting = Inworld.Grpc.Routing;
+using GrpcActor = Inworld.Grpc.Actor;
+using ActorTypes = Inworld.Grpc.Actor.Types;
+#endif
 
 namespace Inworld.Packets
 {
@@ -8,7 +23,7 @@ namespace Inworld.Packets
         public PacketId PacketId { get; set; }
         public Routing Routing { get; set; }
         
-        public Grpc.ControlEvent.Types.Action Action;
+        public GrpcControlEvent.Types.Action Action;
 
         ControlEvent()
         {
@@ -16,13 +31,13 @@ namespace Inworld.Packets
             PacketId = new PacketId();
         }
 
-        public ControlEvent( Grpc.ControlEvent.Types.Action action, Routing routing): this()
+        public ControlEvent( GrpcControlEvent.Types.Action action, Routing routing): this()
         {
             Action = action;
             Routing = routing;
         }
         
-        public ControlEvent(Grpc.InworldPacket packet)
+        public ControlEvent(GrpcPacket packet)
         {
             Timestamp = packet.Timestamp.ToDateTime();
             Routing = new Routing(packet.Routing);
@@ -30,14 +45,14 @@ namespace Inworld.Packets
             Action = packet.Control.Action;
         }
         
-        public Grpc.InworldPacket ToGrpc()
+        public GrpcPacket ToGrpc()
         {
-            return new Grpc.InworldPacket
+            return new GrpcPacket
             {
                 Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(this.Timestamp),
                 Routing = Routing.ToGrpc(),
                 PacketId = PacketId.ToGrpc(),
-                Control = new Grpc.ControlEvent() {Action = this.Action}
+                Control = new GrpcControlEvent() {Action = this.Action}
             };
         }
 

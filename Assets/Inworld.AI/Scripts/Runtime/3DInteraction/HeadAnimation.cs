@@ -11,7 +11,11 @@ using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+#if INWORLD_NDK
+using EmotionEvent = Inworld.ProtoBuf.EmotionEvent;
+#else
 using EmotionEvent = Inworld.Grpc.EmotionEvent;
+#endif
 namespace Inworld.Model
 {
     /// <summary>

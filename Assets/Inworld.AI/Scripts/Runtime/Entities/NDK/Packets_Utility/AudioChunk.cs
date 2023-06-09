@@ -2,7 +2,23 @@ using Google.Protobuf;
 using Google.Protobuf.Collections;
 using System;
 using System.Diagnostics;
+#if INWORLD_NDK
+using Inworld.ProtoBuf;
+using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
+using GrpcPacketID = Inworld.ProtoBuf.PacketId;
+using GrpcRouting = Inworld.ProtoBuf.Routing;
+using GrpcActor = Inworld.ProtoBuf.Actor;
+using ActorTypes = Inworld.ProtoBuf.Actor.Types;
+using AdditionalPhonemeInfo = Inworld.ProtoBuf.AdditionalPhonemeInfo;
+#else
 using Inworld.Grpc;
+using GrpcPacket = Inworld.Grpc.InworldPacket;
+using GrpcPacketID = Inworld.Grpc.PacketId;
+using GrpcRouting = Inworld.Grpc.Routing;
+using GrpcActor = Inworld.Grpc.Actor;
+using ActorTypes = Inworld.Grpc.Actor.Types;
+using AdditionalPhonemeInfo = Inworld.Grpc.AdditionalPhonemeInfo;
+#endif
 
 namespace Inworld.Packets
 {
@@ -25,7 +41,7 @@ namespace Inworld.Packets
             Chunk = chunk;
         }
 
-        public AudioChunk(Grpc.InworldPacket grpcEvent)
+        public AudioChunk(GrpcPacket grpcEvent)
         {
             Timestamp = grpcEvent.Timestamp.ToDateTime();
             if (grpcEvent.Routing != null)
@@ -35,7 +51,7 @@ namespace Inworld.Packets
             PhonemeInfo = grpcEvent.DataChunk.AdditionalPhonemeInfo;
         }
 
-        public Grpc.InworldPacket ToGrpc() => new Grpc.InworldPacket
+        public GrpcPacket ToGrpc() => new GrpcPacket
         {
             Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(Timestamp),
             Routing = Routing?.ToGrpc(),

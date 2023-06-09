@@ -1,5 +1,18 @@
 using System;
 using System.Collections.Generic;
+#if INWORLD_NDK
+using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
+using GrpcPacketID = Inworld.ProtoBuf.PacketId;
+using GrpcRouting = Inworld.ProtoBuf.Routing;
+using GrpcActor = Inworld.ProtoBuf.Actor;
+using ActorTypes = Inworld.ProtoBuf.Actor.Types;  
+#else
+using GrpcPacket = Inworld.Grpc.InworldPacket;
+using GrpcPacketID = Inworld.Grpc.PacketId;
+using GrpcRouting = Inworld.Grpc.Routing;
+using GrpcActor = Inworld.Grpc.Actor;
+using ActorTypes = Inworld.Grpc.Actor.Types;
+#endif
 
 namespace Inworld.Packets
 {
@@ -8,7 +21,7 @@ namespace Inworld.Packets
         DateTime Timestamp { get; set; }
         Routing Routing { get; set; }
         PacketId PacketId { get; set; }
-        Grpc.InworldPacket ToGrpc();
+        GrpcPacket ToGrpc();
         
     }
 
@@ -21,7 +34,7 @@ namespace Inworld.Packets
 
         public PacketId() { }
 
-        public PacketId(Grpc.PacketId packetId)
+        public PacketId(GrpcPacketID packetId)
         {
             PacketId_ = packetId.PacketId_;
             UtteranceId = packetId.UtteranceId;
@@ -29,9 +42,9 @@ namespace Inworld.Packets
             CorrelatedId = packetId.CorrelationId;
         }
 
-        public Grpc.PacketId ToGrpc()
+        public GrpcPacketID ToGrpc()
         {
-            return new Grpc.PacketId
+            return new GrpcPacketID
             {
                 PacketId_ = PacketId_, UtteranceId = this.UtteranceId, InteractionId = this.InteractionId, CorrelationId = CorrelatedId
             };
@@ -70,25 +83,25 @@ namespace Inworld.Packets
     
     public class Actor
     {
-        public Grpc.Actor.Types.Type Type;
+        public ActorTypes.Type Type;
         // agentId for AGENT type.
         public string Id;
 
         static public Actor Player() => 
-            new Actor() { Type = Grpc.Actor.Types.Type.Player };
+            new Actor() { Type = ActorTypes.Type.Player };
 
         static public Actor Agent(string agentId) =>
-            new Actor() { Type = Grpc.Actor.Types.Type.Agent, Id = agentId };
+            new Actor() { Type = ActorTypes.Type.Agent, Id = agentId };
 
-        public Actor(Grpc.Actor.Types.Type type, string id) 
+        public Actor(ActorTypes.Type type, string id) 
         {
             Type = type;
             Id = id;
         }
 
-        public Actor() : this(Grpc.Actor.Types.Type.Unknown, null) { }
+        public Actor() : this(ActorTypes.Type.Unknown, null) { }
 
-        public Actor(Grpc.Actor grpc)
+        public Actor(GrpcActor grpc)
         {
             Type = grpc.Type;
             if (!string.IsNullOrEmpty(grpc.Name))
@@ -97,9 +110,9 @@ namespace Inworld.Packets
                 Id = null;
         }
 
-        public Grpc.Actor ToGrpc()
+        public GrpcActor ToGrpc()
         {
-            var result = new Grpc.Actor { Type = Type };
+            var result = new GrpcActor { Type = Type };
             if (Id != null)
                 result.Name = Id;
             return result;
@@ -107,9 +120,9 @@ namespace Inworld.Packets
 
         public override string ToString() => $"(Type={Type}, Id={Id})";
 
-        public bool IsAgent() => Type == Grpc.Actor.Types.Type.Agent;
+        public bool IsAgent() => Type == ActorTypes.Type.Agent;
 
-        public bool IsPlayer() => Type == Grpc.Actor.Types.Type.Player;
+        public bool IsPlayer() => Type == ActorTypes.Type.Player;
 
         protected bool Equals(Actor other)
         {
@@ -152,7 +165,7 @@ namespace Inworld.Packets
             this.Target = Target;
         }
 
-        public Routing(Grpc.Routing grpc)
+        public Routing(GrpcRouting grpc)
         {
             if (grpc != null)
             {
@@ -166,7 +179,7 @@ namespace Inworld.Packets
             }
         }
 
-        public Grpc.Routing ToGrpc() => new Grpc.Routing
+        public GrpcRouting ToGrpc() => new GrpcRouting
         {
             Source = Source?.ToGrpc(),
             Target = Target?.ToGrpc()

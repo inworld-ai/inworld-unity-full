@@ -1,4 +1,20 @@
-﻿using Inworld.Grpc;
+﻿#if INWORLD_NDK
+using Inworld.ProtoBuf;
+using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
+using GrpcPacketID = Inworld.ProtoBuf.PacketId;
+using GrpcRouting = Inworld.ProtoBuf.Routing;
+using GrpcActor = Inworld.ProtoBuf.Actor;
+using GrpcActionEvent = Inworld.ProtoBuf.ActionEvent;
+using ActorTypes = Inworld.ProtoBuf.Actor.Types;  
+#else
+using Inworld.Grpc;
+using GrpcPacket = Inworld.Grpc.InworldPacket;
+using GrpcPacketID = Inworld.Grpc.PacketId;
+using GrpcRouting = Inworld.Grpc.Routing;
+using GrpcActor = Inworld.Grpc.Actor;
+using GrpcActionEvent = Inworld.Grpc.ActionEvent;
+using ActorTypes = Inworld.Grpc.Actor.Types;
+#endif
 using System;
 using System.Diagnostics;
 namespace Inworld.Packets
@@ -26,7 +42,7 @@ namespace Inworld.Packets
 
         public ActionEvent(string content): this(content, new Routing()) { }
 
-        public ActionEvent(Grpc.InworldPacket packet)
+        public ActionEvent(GrpcPacket packet)
         {
             Timestamp = packet.Timestamp.ToDateTime();
             Routing = new Routing(packet.Routing);
@@ -34,12 +50,12 @@ namespace Inworld.Packets
             Content = packet.Action.NarratedAction.Content;
         }
         
-        public Grpc.InworldPacket ToGrpc() => new Grpc.InworldPacket
+        public GrpcPacket ToGrpc() => new GrpcPacket
         {
             Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(Timestamp),
             Routing = Routing?.ToGrpc(),
             PacketId = PacketId.ToGrpc(),
-            Action = new Grpc.ActionEvent
+            Action = new GrpcActionEvent
             {
                 NarratedAction = new NarratedAction
                 {
