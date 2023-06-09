@@ -57,8 +57,12 @@ namespace Inworld.Util
             {
                 m_Header ??= new Metadata
                 {
-                    {"X-Authorization-Bearer-Type", "inworld"},
-                    {"Authorization", $"Bearer {m_InworldToken}"}
+                    {
+                        "X-Authorization-Bearer-Type", "inworld"
+                    },
+                    {
+                        "Authorization", $"Bearer {m_InworldToken}"
+                    }
                 };
                 return m_Header;
             }
@@ -104,7 +108,10 @@ namespace Inworld.Util
                 string[] splits = m_InworldAccount.Split('/');
                 string inworldAccount = splits.Length > 1 ? splits[1] : splits[0];
                 splits = inworldAccount.Split('-');
-                int[] LengthList = {8, 4, 4, 4, 12};
+                int[] LengthList =
+                {
+                    8, 4, 4, 4, 12
+                };
                 if (splits.Length != LengthList.Length)
                     return false;
                 if (splits.Where((t, i) => t.Length != LengthList[i]).Any())
@@ -230,8 +237,12 @@ namespace Inworld.Util
             m_InworldToken = inworldToken;
             m_Header = new Metadata
             {
-                {"X-Authorization-Bearer-Type", "inworld"},
-                {"Authorization", $"Bearer {m_InworldToken}"}
+                {
+                    "X-Authorization-Bearer-Type", "inworld"
+                },
+                {
+                    "Authorization", $"Bearer {m_InworldToken}"
+                }
             };
             m_ExpirationTime = expireTime.Ticks;
             InworldAI.Log($"Token Refreshed. Next Expiration: {expireTime}");

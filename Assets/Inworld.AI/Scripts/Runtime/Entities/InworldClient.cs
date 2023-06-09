@@ -73,24 +73,6 @@ namespace Inworld
         Timestamp Now => Timestamp.FromDateTime(DateTime.UtcNow);
         #endregion
 
-        #region Call backs
-        void OnAuthCompleted()
-        {
-            InworldAI.Log("Init Success!");
-            m_Header = new Metadata
-            {
-                {"authorization", $"Bearer {m_InworldAuth.Token}"},
-                {"session-id", m_InworldAuth.SessionID}
-            };
-            RuntimeEvent?.Invoke(RuntimeStatus.InitSuccess, "");
-        }
-
-        void OnAuthFailed(string msg)
-        {
-            RuntimeEvent?.Invoke(RuntimeStatus.InitFailed, msg);
-        }
-        #endregion
-
         #region Private Functions
         void _ReceiveCustomToken(string sessionToken)
         {
@@ -114,9 +96,40 @@ namespace Inworld
             if (!string.IsNullOrEmpty(InworldAI.User.Account))
                 VSAttribution.VSAttribution.SendAttributionEvent("Login Runtime", InworldAI.k_CompanyName, InworldAI.User.Account);
 #endif
-            m_InworldAuth = new InworldAuth(OnAuthCompleted, OnAuthFailed);
+            m_InworldAuth = new InworldAuth();
             if (string.IsNullOrEmpty(sessionToken))
-                m_InworldAuth.GenerateAccessToken(InworldAI.Game.StudioServer, InworldAI.Game.APIKey, InworldAI.Game.APISecret);
+            {
+                GenerateTokenRequest gtRequest = new GenerateTokenRequest
+                {
+                    Key = InworldAI.Game.APIKey,
+                    Resources =
+                    {
+                        InworldAI.Game.currentWorkspace.fullName
+                    }
+                    
+                };
+                Metadata metadata = new Metadata
+                {
+                    {
+                        "authorization", m_InworldAuth.GetHeader(InworldAI.Game.RuntimeServer, InworldAI.Game.APIKey, InworldAI.Game.APISecret)
+                    }
+                };
+                try
+                {
+                    m_InworldAuth.Token = m_WorldEngineClient.GenerateToken(gtRequest, metadata, DateTime.UtcNow.AddHours(1));
+                    InworldAI.Log("Init Success!");
+                    m_Header = new Metadata
+                    {
+                        {"authorization", $"Bearer {m_InworldAuth.Token.Token}"},
+                        {"session-id", m_InworldAuth.Token.SessionId}
+                    };
+                    RuntimeEvent?.Invoke(RuntimeStatus.InitSuccess, "");
+                }
+                catch (RpcException e)
+                {
+                    RuntimeEvent?.Invoke(RuntimeStatus.InitFailed, e.ToString());
+                }
+            }
             else
             {
                 _ReceiveCustomToken(sessionToken);
