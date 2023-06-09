@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement name="InitBotPanel" style="flex-direction: row; margin-top: 40px; margin-bottom: 20px; justify-content: space-around; -unity-font: url(&apos;project://database/Assets/Inworld.AI/Fonts/DMSans-Regular.ttf?fileID=12800000&amp;guid=2c9ee65233da755438228fafa684047d&amp;type=3#DMSans-Regular&apos;); -unity-font-definition: none;">
+        <ui:Button text="Log in" display-tooltip-when-elided="true" name="BtnInitLogin" style="width: 80px; height: 30px; font-size: 14px; -unity-font-style: bold;" />
+        <ui:Button text="Back to default" display-tooltip-when-elided="true" name="BtnInitBack" style="width: 140px; height: 30px; font-size: 14px; -unity-font-style: bold;" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16352e76bedf480f81e14bcc7ff6dd2d, type: 3}
+  m_Name: InworldUISettings
+  m_EditorClassIdentifier: 
+  m_Header: {fileID: 9197481963319205126, guid: ad045932ef3822649bc911f7fa233bb9, type: 3}
+  m_WorkspaceChooser: {fileID: 9197481963319205126, guid: 63b1e8fe693443f4db716d791320123a, type: 3}
+  m_SceneChooser: {fileID: 9197481963319205126, guid: 4bde9dd153ee7bd41b126bb912abb755, type: 3}
+  m_CharacterChooser: {fileID: 9197481963319205126, guid: b343c4f2f49c5c54089ff5bf97b7c45e, type: 3}
+  m_ApplicationPlaying: {fileID: 9197481963319205126, guid: 9bbae0278cb54bc4bab4cfc18d121868, type: 3}
+  m_DefaultContentPanel: {fileID: 9197481963319205126, guid: 70e00bfe734977948aac3f9ec7fa4d7b, type: 3}
+  m_DefaultBotPanel: {fileID: 9197481963319205126, guid: eb50c97182dac5244823915600da6569, type: 3}
+  m_InputField: {fileID: 9197481963319205126, guid: 8bf6680ee2097c540b646cd4d2248a01, type: 3}
+  m_InitBotPanel: {fileID: 9197481963319205126, guid: 72d74aa8eb2144b4eb0cce6d9a745a4b, type: 3}
+  m_WSChooserBot: {fileID: 9197481963319205126, guid: 6c32c1783deeb12498028d8ea7980683, type: 3}
+  m_ConnectedBot: {fileID: 9197481963319205126, guid: ffc6bd443b09ca34db4c80ab6933fa1d, type: 3}
+  m_ErrorBot: {fileID: 9197481963319205126, guid: 13fec85bf39fed04fbbe15c384075fc7, type: 3}
+  m_MinSize: {x: 400, y: 800}

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0447596b1a67de49ba5720fda0bdabe, type: 3}
+  m_Name: Prince Stone
+  m_EditorClassIdentifier: 
+  characterName: Prince Stone
+  brain: workspaces/unitytest/characters/prince_stone
+  avatar: {fileID: -3915082565821610680, guid: cc5f47fc3ba6fb5438fa60804eab28b4, type: 3}
+  workspace: workspaces/unitytest
+  currentScene: workspaces/unitytest/characters/prince_stone
+  ownerShip: 2
+  defaultThumbnail: {fileID: 2800000, guid: 3cae29afb07cf234fbd6320de356f7bb, type: 3}
+  index: 0
+  triggers:
+  - initconvo
+  - magicwords
+  scenes:
+  - workspaces/unitytest/scenes/transform
+  modelUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_model/b8d5bb83-5421-4fb6-8340-1d7f739b1b48.glb
+  posUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_image/b8d5bb83-5421-4fb6-8340-1d7f739b1b48_posture.jpg
+  previewImgUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_image/b8d5bb83-5421-4fb6-8340-1d7f739b1b48_portrait.jpg
+  characterID: 4ef11e0e-26ac-45b0-a792-6e8982f4d384
