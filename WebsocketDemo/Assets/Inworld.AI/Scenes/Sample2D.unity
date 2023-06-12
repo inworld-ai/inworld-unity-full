@@ -123,6 +123,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &289637973 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4796474153962170140, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
+  m_PrefabInstance: {fileID: 7328141237567351055}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f9cad20127be08429e8cdae6687b742, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1461818783
 GameObject:
   m_ObjectHideFlags: 0
@@ -217,17 +228,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!114 &1550582854 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2395919966041133306, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
-  m_PrefabInstance: {fileID: 7781568798596137107}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78696971f17345f8b3a604c50919e8f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1943232311 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4881369806813467986, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
@@ -479,7 +479,15 @@ PrefabInstance:
     - target: {fileID: 7641490535946658150, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1550582854}
+      objectReference: {fileID: 289637973}
+    - target: {fileID: 7641490535946658150, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ConnectInworld
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641490535946658150, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PlayerController, Inworld.AI
+      objectReference: {fileID: 0}
     - target: {fileID: 8834293374469211135, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

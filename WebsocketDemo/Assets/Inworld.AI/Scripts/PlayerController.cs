@@ -49,11 +49,16 @@ public class PlayerController : MonoBehaviour
             m_Characters[charData.brainName] = Instantiate(m_CharSelector, m_CharButtonAnchor);
         m_Characters[charData.brainName].SetData(charData);
         _SetContentHeight(m_CharButtonAnchor, m_CharSelector);
-        
     }
 
     protected void OnStatusChanged(InworldConnectionStatus newStatus)
     {
+        switch (newStatus)
+        {
+            case InworldConnectionStatus.Initialized:
+                InworldController.Instance.LoadScene();
+                break;
+        }
         m_ConnectButton.interactable = newStatus == InworldConnectionStatus.Idle || newStatus == InworldConnectionStatus.Connected;
         m_ConnectButtonText.text = newStatus == InworldConnectionStatus.Connected ? "DISCONNECT" : "CONNECT";
         if (newStatus != InworldConnectionStatus.Connected)
@@ -62,6 +67,15 @@ public class PlayerController : MonoBehaviour
             m_StatusText.text = newStatus.ToString();
         if (newStatus == InworldConnectionStatus.Error)
             m_StatusText.text = InworldController.Client.Error;
+    }
+
+    // YAN: Direct 2D Sample.
+    public void ConnectInworld()
+    {
+        if (InworldController.Status == InworldConnectionStatus.Idle)
+            InworldController.Instance.Reconnect();
+        else if (InworldController.Status == InworldConnectionStatus.Connected)
+            InworldController.Instance.Disconnect();
     }
 
     protected virtual void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
@@ -103,11 +117,7 @@ public class PlayerController : MonoBehaviour
     }
     protected virtual void HandleTrigger(CustomPacket customPacket)
     {
-        InworldAI.Log($"Received Trigger {customPacket.custom.name}");
-        foreach (TriggerParamer param in customPacket.custom.parameters)
-        {
-            InworldAI.Log($"With Param {param.name}: {param.value}");
-        }
+        InworldAI.Log($"Received Trigger {customPacket.Trigger}");
     }
     protected virtual void HandleEmotion(EmotionPacket packet) => m_CurrentEmotion = packet.emotion.ToString();
 

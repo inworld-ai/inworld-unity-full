@@ -23,6 +23,7 @@ namespace Inworld.UI
                 iwChar.transform.name = m_Data.givenName;
             }
             iwChar.Data = m_Data;
+            iwChar.RegisterLiveSession();
             InworldController.Instance.CurrentCharacter = iwChar;
         }
         InworldCharacter GetCharacter()

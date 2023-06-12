@@ -10,6 +10,7 @@ namespace Inworld
     public class InworldCharacter : MonoBehaviour
     {
         [SerializeField] InworldCharacterData m_Data;
+        [SerializeField] bool m_VerboseLog;
         
         public UnityEvent onBeginSpeaking;
         public UnityEvent onEndSpeaking;
@@ -41,8 +42,8 @@ namespace Inworld
         }
         public string Name => Data?.givenName ?? "";
         public string BrainName => Data?.brainName ?? "";
-        public string ID => Data?.agentId ?? InworldController.Instance.GetLiveSessionID(BrainName);
-        public void RegisterLiveSession() => m_Interaction.LiveSessionID = InworldController.Instance.GetLiveSessionID(BrainName);
+        public string ID => Data?.agentId ?? InworldController.Instance.GetLiveSessionID(this);
+        public void RegisterLiveSession() => m_Interaction.LiveSessionID = InworldController.Instance.GetLiveSessionID(this);
 
         void Awake()
         {
@@ -120,12 +121,12 @@ namespace Inworld
             {
                 case "AGENT":
                     IsSpeaking = true;
-                    if (InworldAI.IsDebugMode)
-                        InworldAI.Log($"{packet.routing.source.name}: {packet.text.text}");
+                    if (m_VerboseLog)
+                        InworldAI.Log($"{Name}: {packet.text.text}");
                     onCharacterSpeaks.Invoke(packet.routing.source.name, packet.text.text);
                     break;
                 case "PLAYER":
-                    if (InworldAI.IsDebugMode)
+                    if (m_VerboseLog)
                         InworldAI.Log($"{InworldAI.User.Name}: {packet.text.text}");
                     onCharacterSpeaks.Invoke(InworldAI.User.Name, packet.text.text);
                     break;
@@ -133,27 +134,26 @@ namespace Inworld
         }
         protected virtual void HandleEmotion(EmotionPacket packet)
         {
-            if (InworldAI.IsDebugMode)
-                InworldAI.Log($"{packet.routing.source.name}: {packet}");
+            if (m_VerboseLog)
+                InworldAI.Log($"{Name}: {packet.emotion.behavior} {packet.emotion.strength}");
             onEmotionChanged.Invoke(packet.emotion.strength, packet.emotion.behavior);
         }
         
         protected virtual void HandleTrigger(CustomPacket customPacket)
         {
-            if (InworldAI.IsDebugMode)
+            if (m_VerboseLog)
             {
-                InworldAI.Log($"Received Trigger {customPacket.custom.name}");
+                InworldAI.Log($"{Name}: Received Trigger {customPacket.custom.name}");
                 foreach (TriggerParamer param in customPacket.custom.parameters)
                 {
-                    InworldAI.Log($"With Param {param.name}: {param.value}");
+                    InworldAI.Log($"With {param.name}: {param.value}");
                 }
             }
             onGoalCompleted.Invoke(customPacket.custom.name);
         }
         protected virtual void HandleLipSync(AudioPacket audioPacket)
         {
-            if (InworldAI.IsDebugMode)
-                InworldAI.Log($"Won't process lip sync in pure text 2D conversation");
+            // Won't process lip sync in pure text 2D conversation
         }
         public void CancelResponse() => m_Interaction.CancelResponse();
     }

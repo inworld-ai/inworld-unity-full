@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+using UnityEngine.TextCore.Text;
 
 namespace Inworld.Packet
 {
@@ -37,8 +39,18 @@ namespace Inworld.Packet
     [Serializable]
     public class CustomPacket : InworldPacket
     {
+        const string k_Pattern = @"^inworld\.goal\.complete\.(.+)$";
         public CustomEvent custom;
-        
+        public string TriggerName
+        {
+            get
+            {
+                Match match = new Regex(k_Pattern).Match(custom.name);
+                return match.Success && match.Groups.Count > 1 ? match.Groups[1].Value : custom.name;
+            }
+        }
+        public string Trigger => custom.parameters.Aggregate(TriggerName, (current, param) => current + $" {param.name}: {param.value}");
+
         public CustomPacket()
         {
             custom = new CustomEvent();

@@ -4,8 +4,8 @@ using UnityEngine;
 public class InworldAI : ScriptableObject
 {
     [SerializeField] InworldUserSetting m_UserSetting;
-    [SerializeField] bool m_DebugMode;
     [SerializeField] Texture2D m_DefaultThumbnail;
+    [Space(10)][SerializeField] bool m_DebugMode;
     const string k_GlobalDataPath = "InworldAI";
     static InworldAI __inst;
     

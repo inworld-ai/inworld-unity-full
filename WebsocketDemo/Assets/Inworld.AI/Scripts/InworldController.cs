@@ -64,23 +64,22 @@ namespace Inworld
             if (m_AutoStart)
                 Init();
         }
-        public void SwitchConnect()
-        {
-            if (m_Client.Status == InworldConnectionStatus.Idle)
-                Reconnect();
-            else if (m_Client.Status == InworldConnectionStatus.Connected)
-                Disconnect();
-        }
         public void Reconnect() => m_Client.Reconnect();
         public void Init() => m_Client.GetAccessToken();
-        public void LoadScene(string sceneFullName) => m_Client.LoadScene(sceneFullName);
+        public void LoadScene(string sceneFullName = "") => m_Client.LoadScene(string.IsNullOrEmpty(sceneFullName) ? m_SceneFullName : sceneFullName);
         public void Disconnect()
         {
             m_Client.Disconnect();
             CurrentCharacter = null;
         }
         public void CharacterInteract(InworldPacket packet) => OnCharacterInteraction?.Invoke(packet);
-        public string GetLiveSessionID(string brainName) => m_LiveSession.ContainsKey(brainName) ? m_LiveSession[brainName] : "";
+        public string GetLiveSessionID(InworldCharacter character)
+        {
+            if (!character || string.IsNullOrEmpty(character.BrainName) || !m_LiveSession.ContainsKey(character.BrainName))
+                return null;
+            m_Characters[character.BrainName] = character;
+            return m_LiveSession[character.BrainName];
+        }
         public bool IsRegistered(string characterID) => !string.IsNullOrEmpty(characterID) && m_LiveSession.ContainsKey(characterID);
         public InworldCharacter GetCharacter(string agentID)
         {
@@ -92,7 +91,7 @@ namespace Inworld
             string key = m_LiveSession.First(kvp => kvp.Value == agentID).Key;
             if (m_Characters.ContainsKey(key))
                 return m_Characters[key];
-            InworldAI.LogError($"{key} Not Registered!");
+            InworldAI.LogError($"{key} Not Registered! CharCount: {m_Characters.Count}");
             return null;
         }
 
