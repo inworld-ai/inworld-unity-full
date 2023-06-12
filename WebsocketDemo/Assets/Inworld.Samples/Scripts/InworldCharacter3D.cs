@@ -60,6 +60,15 @@ namespace Inworld.Sample
             }
             base.OnStartStopInteraction(isStarting);
         }
+        protected override void OnCharRegistered(InworldCharacterData charData)
+        {
+            if (charData.brainName == Data.brainName)
+            {
+                RegisterLiveSession();
+                Debug.Log($"{charData.agentId} This: {ID}");
+            }
+            InworldController.Instance.CurrentCharacter = this;
+        }
         protected override void OnCharChanged(InworldCharacter oldChar, InworldCharacter newChar)
         {
             if (oldChar != null && oldChar.BrainName == Data.brainName)

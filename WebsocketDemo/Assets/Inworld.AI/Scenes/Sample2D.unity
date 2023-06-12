@@ -123,17 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &289637973 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4796474153962170140, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
-  m_PrefabInstance: {fileID: 7328141237567351055}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f9cad20127be08429e8cdae6687b742, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1461818783
 GameObject:
   m_ObjectHideFlags: 0
@@ -475,18 +464,6 @@ PrefabInstance:
     - target: {fileID: 6770559808437396392, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7641490535946658150, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 289637973}
-    - target: {fileID: 7641490535946658150, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ConnectInworld
-      objectReference: {fileID: 0}
-    - target: {fileID: 7641490535946658150, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: PlayerController, Inworld.AI
       objectReference: {fileID: 0}
     - target: {fileID: 8834293374469211135, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
       propertyPath: m_AnchorMax.y

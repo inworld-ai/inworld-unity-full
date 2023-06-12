@@ -150,7 +150,6 @@ namespace Inworld
         }
         IEnumerator _LoadScene(string sceneFullName)
         {
-            Debug.Log($"YAN Load SCENE {sceneFullName}");
             LoadSceneRequest req = new LoadSceneRequest
             {
                 client = new Client

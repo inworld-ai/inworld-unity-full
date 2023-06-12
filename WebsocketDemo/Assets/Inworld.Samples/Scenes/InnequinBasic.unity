@@ -123,11 +123,33 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &69770027 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4881369806813467986, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
+  m_PrefabInstance: {fileID: 1523982173}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5db5b813fe746f9a9ce5602a5521235, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1353793856 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5395921512146893128, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
   m_PrefabInstance: {fileID: 2124948029594241961}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1353793857 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4906696099078140793, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+  m_PrefabInstance: {fileID: 2124948029594241961}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 445d631026be4dff9ea5c295e0e0cb9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1436277645
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,6 +226,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2395919966041133306, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
+      propertyPath: m_Client
+      value: 
+      objectReference: {fileID: 69770027}
     - target: {fileID: 2395919966041133306, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
       propertyPath: m_AutoStart
       value: 1
@@ -419,6 +445,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8575260058064852037, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8575260058064852037, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1353793857}
+    - target: {fileID: 8575260058064852037, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ConnectInworld
+      objectReference: {fileID: 0}
+    - target: {fileID: 8575260058064852037, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PlayerController, Inworld.AI
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -628,6 +670,10 @@ PrefabInstance:
     - target: {fileID: 2030273176201225856, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
       propertyPath: m_Data.brainName
       value: workspaces/unitytest/characters/prince_stone
+      objectReference: {fileID: 0}
+    - target: {fileID: 2030273176201225856, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_Data.givenName
+      value: Prince Stone
       objectReference: {fileID: 0}
     - target: {fileID: 3449554643801487130, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
       propertyPath: m_RootOrder

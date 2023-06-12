@@ -44,7 +44,6 @@ public class PlayerController : MonoBehaviour
     }
     protected virtual void OnCharacterRegistered(InworldCharacterData charData)
     {
-        Debug.Log("YAN PLAYER CTRL Regis");
         if (!m_Characters.ContainsKey(charData.brainName))
             m_Characters[charData.brainName] = Instantiate(m_CharSelector, m_CharButtonAnchor);
         m_Characters[charData.brainName].SetData(charData);
@@ -53,16 +52,9 @@ public class PlayerController : MonoBehaviour
 
     protected void OnStatusChanged(InworldConnectionStatus newStatus)
     {
-        switch (newStatus)
-        {
-            case InworldConnectionStatus.Initialized:
-                InworldController.Instance.LoadScene();
-                break;
-        }
         m_ConnectButton.interactable = newStatus == InworldConnectionStatus.Idle || newStatus == InworldConnectionStatus.Connected;
         m_ConnectButtonText.text = newStatus == InworldConnectionStatus.Connected ? "DISCONNECT" : "CONNECT";
-        if (newStatus != InworldConnectionStatus.Connected)
-            m_SendButton.interactable = false;
+        m_SendButton.interactable = newStatus == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter;
         if (m_StatusText)
             m_StatusText.text = newStatus.ToString();
         if (newStatus == InworldConnectionStatus.Error)
@@ -131,12 +123,12 @@ public class PlayerController : MonoBehaviour
                 if (!m_Bubbles.ContainsKey(packet.packetId.utteranceId))
                 {
                     m_Bubbles[packet.packetId.utteranceId] = Instantiate(m_BubbleLeft, m_ContentRT);
-                    InworldCharacter character = InworldController.Instance.GetCharacter(packet.routing.source.name);
-                    if (character)
+                    InworldCharacterData charData = InworldController.Instance.GetCharacter(packet.routing.source.name);
+                    if (charData != null)
                     {
-                        string charName = character.Name ?? "Character";
+                        string charName = charData.givenName ?? "Character";
                         string title = $"{charName}: {m_CurrentEmotion}";
-                        Texture2D thumbnail = character.Data.thumbnail ? character.Data.thumbnail : InworldAI.DefaultThumbnail;
+                        Texture2D thumbnail = charData.thumbnail ? charData.thumbnail : InworldAI.DefaultThumbnail;
                         m_Bubbles[packet.packetId.utteranceId].SetBubble(title, thumbnail);
                     }
                 }

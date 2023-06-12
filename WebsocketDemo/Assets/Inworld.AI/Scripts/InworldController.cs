@@ -11,16 +11,14 @@ namespace Inworld
     [RequireComponent(typeof(InworldClient))]
     public class InworldController : SingletonBehavior<InworldController>
     {
-        [SerializeField] InworldServerConfig m_ServerConfig;
-        [SerializeField] string m_SceneFullName;
-        [SerializeField] string m_PlayerName;
-        [SerializeField] Texture2D m_DefaultThumbnail;
-        [SerializeField] bool m_AutoStart;
         [SerializeField] InworldClient m_Client;
+        [SerializeField] string m_SceneFullName;
+        [Space(10)][SerializeField] bool m_AutoStart;
+
         // YAN: Now LiveSessionID is handled by InworldController Only. To prevent unable to chat.
         //      Both Keys are BrainNames
         readonly Dictionary<string, string> m_LiveSession = new Dictionary<string, string>();
-        readonly Dictionary<string, InworldCharacter> m_Characters = new Dictionary<string, InworldCharacter>();
+        readonly Dictionary<string, InworldCharacterData> m_Characters = new Dictionary<string, InworldCharacterData>();
 
         InworldCharacter m_CurrentCharacter;
         InworldCharacter m_LastCharacter;
@@ -77,11 +75,13 @@ namespace Inworld
         {
             if (!character || string.IsNullOrEmpty(character.BrainName) || !m_LiveSession.ContainsKey(character.BrainName))
                 return null;
-            m_Characters[character.BrainName] = character;
+            if (!m_Characters.ContainsKey(character.BrainName))
+                m_Characters[character.BrainName] = character.Data;
+            Debug.Log("HEYHEY" + m_LiveSession[character.BrainName]);
             return m_LiveSession[character.BrainName];
         }
         public bool IsRegistered(string characterID) => !string.IsNullOrEmpty(characterID) && m_LiveSession.ContainsKey(characterID);
-        public InworldCharacter GetCharacter(string agentID)
+        public InworldCharacterData GetCharacter(string agentID)
         {
             if (!m_LiveSession.ContainsValue(agentID))
             {
@@ -91,13 +91,14 @@ namespace Inworld
             string key = m_LiveSession.First(kvp => kvp.Value == agentID).Key;
             if (m_Characters.ContainsKey(key))
                 return m_Characters[key];
-            InworldAI.LogError($"{key} Not Registered! CharCount: {m_Characters.Count}");
+            InworldAI.LogError($"{key} Not Registered!");
             return null;
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
         public void SendText(string txtToSend)
         {
+            Debug.Log($"Send {txtToSend} to {m_CurrentCharacter.ID}");
             // 1. Interrupt current speaking.
             m_CurrentCharacter.CancelResponse();
             // 2. Send Text.
@@ -113,7 +114,8 @@ namespace Inworld
         public void StartAudio(string charID = "")
         {
             string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter.ID : charID;
-            InworldAI.Log($"Start Audio Event {charIDToSend}");
+            if (InworldAI.IsDebugMode)
+                InworldAI.Log($"Start Audio Event {charIDToSend}");
             if (!IsRegistered(charIDToSend))
                 return;
             m_Client.StartAudio(charIDToSend);
@@ -121,7 +123,8 @@ namespace Inworld
         public void StopAudio(string charID = "")
         {
             string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter.ID : charID;
-            InworldAI.Log($"Start Audio Event {charIDToSend}");
+            if (InworldAI.IsDebugMode)
+                InworldAI.Log($"Stop Audio Event {charIDToSend}");
             if (!IsRegistered(charIDToSend))
                 return;
             m_Client.StopAudio(charIDToSend);
@@ -143,21 +146,15 @@ namespace Inworld
             switch (incomingStatus)
             {
                 case InworldConnectionStatus.Initialized:
-                    if (m_AutoStart)
-                        LoadScene(m_SceneFullName);
+                    LoadScene(m_SceneFullName);
                     break;
                 case InworldConnectionStatus.LoadingSceneCompleted:
                     StartCoroutine(_RegisterLiveSession());
-                    break;
-                case InworldConnectionStatus.Connected:
-                    // if (m_AutoStart && m_CurrentCharacter == null && m_Characters.Count > 0)
-                    //     CurrentCharacter = m_Characters[0];
                     break;
             }
         }
         IEnumerator _RegisterLiveSession()
         {
-            Debug.Log("YAN REGISTER!!!");
             LoadSceneResponse response = m_Client.GetLiveSessionInfo();
             if (response == null)
                 yield break;
@@ -165,6 +162,7 @@ namespace Inworld
             foreach (InworldCharacterData agent in response.agents.Where(agent => !string.IsNullOrEmpty(agent.agentId) && !string.IsNullOrEmpty(agent.brainName)))
             {
                 m_LiveSession[agent.brainName] = agent.agentId;
+                m_Characters[agent.brainName] = agent;
                 string url = agent.characterAssets.URL;
                 if (!string.IsNullOrEmpty(url))
                 {

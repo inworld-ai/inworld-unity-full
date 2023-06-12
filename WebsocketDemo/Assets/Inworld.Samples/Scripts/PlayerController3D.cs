@@ -19,11 +19,11 @@ namespace Inworld.Sample
             if (Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(KeyCode.KeypadEnter))
                 SendText();
         }
-        protected override void OnCharacterRegistered(InworldCharacterData charData) {}
+        protected override void OnCharacterRegistered(InworldCharacterData charData){}
 
         protected override void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
         {
-            m_SendButton.interactable = newChar != null;
+            m_SendButton.interactable = InworldController.Status == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter;
             if (newChar != null && m_StatusText)
                 m_StatusText.text = $"Current: {newChar.Name}";
         }
@@ -47,10 +47,10 @@ namespace Inworld.Sample
             switch (packet.routing.source.type)
             {
                 case "AGENT":
-                    InworldCharacter character = InworldController.Instance.GetCharacter(packet.routing.source.name);
-                    if (character)
+                    InworldCharacterData charData = InworldController.Instance.GetCharacter(packet.routing.source.name);
+                    if (charData != null)
                     {
-                        string charName = character.Name ?? "Character";
+                        string charName = charData.givenName ?? "Character";
                         string title = $"{charName}({m_CurrentEmotion}):";
                         m_Subtitle.text = $"{title} {packet.text.text}";
                     }

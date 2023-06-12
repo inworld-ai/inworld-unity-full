@@ -43,7 +43,10 @@ namespace Inworld
         public string Name => Data?.givenName ?? "";
         public string BrainName => Data?.brainName ?? "";
         public string ID => Data?.agentId ?? InworldController.Instance.GetLiveSessionID(this);
-        public void RegisterLiveSession() => m_Interaction.LiveSessionID = InworldController.Instance.GetLiveSessionID(this);
+        public void RegisterLiveSession()
+        {
+            m_Interaction.LiveSessionID = Data.agentId = InworldController.Instance.GetLiveSessionID(this);
+        }
 
         void Awake()
         {
@@ -77,7 +80,7 @@ namespace Inworld
         protected virtual void OnCharRegistered(InworldCharacterData charData)
         {
             if (charData.brainName == Data.brainName)
-                m_Interaction.LiveSessionID = charData.agentId;
+                RegisterLiveSession();
         }
         protected virtual void OnCharChanged(InworldCharacter oldChar, InworldCharacter newChar) {}
 
