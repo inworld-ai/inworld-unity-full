@@ -69,15 +69,6 @@ namespace Inworld
         {
             m_Recording = Microphone.Start(null, true, m_BufferSeconds, m_AudioRate);
         }
-        void OnEnable()
-        {
-            InworldController.Instance.OnCharacterChanged += OnCharChanged;
-        }
-        void OnDisable()
-        {
-            if (InworldController.Instance)
-                InworldController.Instance.OnCharacterChanged -= OnCharChanged;
-        }
 
         void Update()
         {
@@ -110,23 +101,7 @@ namespace Inworld
             Buffer.BlockCopy(m_ByteBuffer, 0, output, 0, nWavCount);
             InworldController.Instance.SendAudio(Convert.ToBase64String(output));
         }
-        IEnumerator _SwapAudioCapture(InworldCharacterData oldChar, InworldCharacterData newchar)
-        {
-            if (oldChar != null && !string.IsNullOrEmpty(oldChar.agentId))
-                InworldController.Instance.StopAudio(oldChar.agentId);
-            yield return new WaitForFixedUpdate();
-            if (newchar != null && !string.IsNullOrEmpty(newchar.agentId))
-            {
-                InworldController.Instance.StartAudio(newchar.agentId);
-                if (!InworldController.Audio.IsCapturing)
-                    InworldController.Audio.StartRecording();
-            }
-        }
-        
-        void OnCharChanged(InworldCharacterData oldChar, InworldCharacterData newChar)
-        {
-            StartCoroutine(_SwapAudioCapture(oldChar, newChar));
-        }
+
         void OnDestroy()
         {
             StopRecording();

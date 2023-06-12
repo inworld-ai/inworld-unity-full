@@ -39,12 +39,12 @@ namespace Inworld.Interactions
             && (packet.routing.source.name != LiveSessionID || packet.routing.target.name != LiveSessionID);
         void OnEnable()
         {
-            InworldController.Instance.OnPacketReceived += ReceivePacket;
+            InworldController.Client.OnPacketReceived += ReceivePacket;
         }
         void OnDisable()
         {
             if (InworldController.Instance)
-                InworldController.Instance.OnPacketReceived -= ReceivePacket;
+                InworldController.Client.OnPacketReceived -= ReceivePacket;
         }
         void Update()
         {
@@ -101,11 +101,8 @@ namespace Inworld.Interactions
                     Add(incomingPacket);
                     break;
                 case "PLAYER":
-                    if (incomingPacket is CancelResponsePacket cancelPacket)
-                        _CancelPackets(cancelPacket);
-                    else
-                        // Send Directly.
-                        OnInteractionChanged?.Invoke(new List<InworldPacket>{incomingPacket});
+                    // Send Directly.
+                    OnInteractionChanged?.Invoke(new List<InworldPacket>{incomingPacket});
                     break;
             }
         }
@@ -128,27 +125,24 @@ namespace Inworld.Interactions
             if (packet is CustomPacket)
                 OnInteractionChanged?.Invoke(utterance.Packets); 
         }
-        void _CancelPackets(CancelResponsePacket cancelPacket)
+        public void CancelResponse()
         {
+            if (string.IsNullOrEmpty(LiveSessionID))
+                return;
             Interaction item = HistoryItem.LastOrDefault(i => i.Status == PacketStatus.RECEIVED);
             if (item == null)
                 return;
             item.Status = PacketStatus.CANCELLED;
             string interactionToCancel = item.InteractionID;
             List<string> utterancesToCancel = item.Utterances
-                                          .Where(utterance => utterance.Status == PacketStatus.RECEIVED)
-                                          .Select(utterance =>
-                                          {
-                                              utterance.Status = PacketStatus.CANCELLED;
-                                              return utterance.UtteranceID;
-                                          })
-                                          .ToList();
-            cancelPacket.cancelResponses = new CancelResponseEvent
-            {
-                interactionId = interactionToCancel,
-                utteranceId = utterancesToCancel
-            };
-            InworldController.Instance.SendCancelEvent(cancelPacket);
+                                                  .Where(utterance => utterance.Status == PacketStatus.RECEIVED)
+                                                  .Select(utterance =>
+                                                  {
+                                                      utterance.Status = PacketStatus.CANCELLED;
+                                                      return utterance.UtteranceID;
+                                                  })
+                                                  .ToList();
+            InworldController.Instance.SendCancelEvent(LiveSessionID, interactionToCancel, utterancesToCancel);
         }
     }
 }

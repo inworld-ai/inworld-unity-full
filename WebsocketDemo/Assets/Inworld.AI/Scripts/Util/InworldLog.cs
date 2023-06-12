@@ -1,5 +1,8 @@
-﻿using TMPro;
+﻿using System;
+using System.Diagnostics;
+using TMPro;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 namespace Inworld
 {
     public class InworldLog : MonoBehaviour
@@ -33,6 +36,27 @@ namespace Inworld
                     m_LogArea.text += $"{log}\n";
                     break;
             }
+        }
+        [Conditional("INWORLD_DEBUG")]
+        public static void Log(string msg)
+        {
+            Debug.Log(msg);
+        }
+
+        [Conditional("INWORLD_DEBUG")]
+        public static void LogWarning(string msg)
+        {
+            Debug.LogWarning(msg);
+        }
+
+        [Conditional("INWORLD_DEBUG")]
+        public static void LogError(string msg)
+        {
+            Debug.LogError(msg);
+        }
+        public static void LogException(string exception)
+        {
+            throw new Exception(exception);
         }
     }
 }

@@ -9,7 +9,6 @@ namespace Inworld
     [RequireComponent(typeof(InworldInteraction))]
     public class InworldCharacter : MonoBehaviour
     {
-        [SerializeField] bool m_DebugMode;
         [SerializeField] InworldCharacterData m_Data;
         
         public UnityEvent onBeginSpeaking;
@@ -40,8 +39,10 @@ namespace Inworld
                     m_Interaction.LiveSessionID = m_Data.agentId;
             }
         }
-
-        public void RegisterLiveSession() => m_Interaction.LiveSessionID = InworldController.Instance.GetLiveSessionID(Data.brainName);
+        public string Name => Data?.givenName ?? "";
+        public string BrainName => Data?.brainName ?? "";
+        public string ID => Data?.agentId ?? InworldController.Instance.GetLiveSessionID(BrainName);
+        public void RegisterLiveSession() => m_Interaction.LiveSessionID = InworldController.Instance.GetLiveSessionID(BrainName);
 
         void Awake()
         {
@@ -77,7 +78,7 @@ namespace Inworld
             if (charData.brainName == Data.brainName)
                 m_Interaction.LiveSessionID = charData.agentId;
         }
-        protected virtual void OnCharChanged(InworldCharacterData oldChar, InworldCharacterData newChar) {}
+        protected virtual void OnCharChanged(InworldCharacter oldChar, InworldCharacter newChar) {}
 
         protected virtual void OnInteractionChanged(List<InworldPacket> packets)
         {
@@ -119,40 +120,41 @@ namespace Inworld
             {
                 case "AGENT":
                     IsSpeaking = true;
-                    if (m_DebugMode)
-                        Debug.Log($"{packet.routing.source.name}: {packet.text.text}");
+                    if (InworldAI.IsDebugMode)
+                        InworldAI.Log($"{packet.routing.source.name}: {packet.text.text}");
                     onCharacterSpeaks.Invoke(packet.routing.source.name, packet.text.text);
                     break;
                 case "PLAYER":
-                    if (m_DebugMode)
-                        Debug.Log($"{InworldController.Player}: {packet.text.text}");
-                    onCharacterSpeaks.Invoke(InworldController.Player, packet.text.text);
+                    if (InworldAI.IsDebugMode)
+                        InworldAI.Log($"{InworldAI.User.Name}: {packet.text.text}");
+                    onCharacterSpeaks.Invoke(InworldAI.User.Name, packet.text.text);
                     break;
             }
         }
         protected virtual void HandleEmotion(EmotionPacket packet)
         {
-            if (m_DebugMode)
-                Debug.Log($"{packet.routing.source.name}: {packet}");
+            if (InworldAI.IsDebugMode)
+                InworldAI.Log($"{packet.routing.source.name}: {packet}");
             onEmotionChanged.Invoke(packet.emotion.strength, packet.emotion.behavior);
         }
         
         protected virtual void HandleTrigger(CustomPacket customPacket)
         {
-            if (m_DebugMode)
+            if (InworldAI.IsDebugMode)
             {
-                Debug.Log($"Received Trigger {customPacket.custom.name}");
+                InworldAI.Log($"Received Trigger {customPacket.custom.name}");
                 foreach (TriggerParamer param in customPacket.custom.parameters)
                 {
-                    Debug.Log($"With Param {param.name}: {param.value}");
+                    InworldAI.Log($"With Param {param.name}: {param.value}");
                 }
             }
             onGoalCompleted.Invoke(customPacket.custom.name);
         }
         protected virtual void HandleLipSync(AudioPacket audioPacket)
         {
-            if (m_DebugMode)
-                Debug.Log($"Won't process lip sync in pure text 2D conversation");
+            if (InworldAI.IsDebugMode)
+                InworldAI.Log($"Won't process lip sync in pure text 2D conversation");
         }
+        public void CancelResponse() => m_Interaction.CancelResponse();
     }
 }

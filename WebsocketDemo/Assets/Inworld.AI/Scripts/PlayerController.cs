@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Inworld;
 using Inworld.UI;
 using Inworld.Packet;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,26 +28,28 @@ public class PlayerController : MonoBehaviour
     }
     void OnEnable()
     {
-        InworldController.Instance.OnStatusChanged += OnStatusChanged;
+        InworldController.Client.OnStatusChanged += OnStatusChanged;
         InworldController.Instance.OnCharacterRegistered += OnCharacterRegistered;
         InworldController.Instance.OnCharacterChanged += OnCharacterChanged;
-        InworldController.Instance.OnCharacterInteraction += OnProcessPacket;
+        InworldController.Instance.OnCharacterInteraction += OnInteraction;
     }
     void OnDisable()
     {
         if (!InworldController.Instance)
             return;
-        InworldController.Instance.OnStatusChanged -= OnStatusChanged;
+        InworldController.Client.OnStatusChanged -= OnStatusChanged;
         InworldController.Instance.OnCharacterRegistered -= OnCharacterRegistered;
         InworldController.Instance.OnCharacterChanged -= OnCharacterChanged;
-        InworldController.Instance.OnCharacterInteraction -= OnProcessPacket;
+        InworldController.Instance.OnCharacterInteraction -= OnInteraction;
     }
     protected virtual void OnCharacterRegistered(InworldCharacterData charData)
     {
+        Debug.Log("YAN PLAYER CTRL Regis");
         if (!m_Characters.ContainsKey(charData.brainName))
             m_Characters[charData.brainName] = Instantiate(m_CharSelector, m_CharButtonAnchor);
         m_Characters[charData.brainName].SetData(charData);
         _SetContentHeight(m_CharButtonAnchor, m_CharSelector);
+        
     }
 
     protected void OnStatusChanged(InworldConnectionStatus newStatus)
@@ -58,16 +61,27 @@ public class PlayerController : MonoBehaviour
         if (m_StatusText)
             m_StatusText.text = newStatus.ToString();
         if (newStatus == InworldConnectionStatus.Error)
-            m_StatusText.text = InworldController.Error;
+            m_StatusText.text = InworldController.Client.Error;
     }
 
-    protected virtual void OnCharacterChanged(InworldCharacterData oldChar, InworldCharacterData newChar)
+    protected virtual void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
     {
         m_SendButton.interactable = newChar != null;
         if (newChar != null && m_StatusText)
-            m_StatusText.text = $"Current: {newChar.givenName}";
+            m_StatusText.text = $"Current: {newChar.Name}";
+        StartCoroutine(_SwapAudioCapture(oldChar, newChar));
     }
-    protected void OnProcessPacket(InworldPacket incomingPacket)
+    IEnumerator _SwapAudioCapture(InworldCharacter oldChar, InworldCharacter newchar)
+    {
+        if (oldChar != null && !string.IsNullOrEmpty(oldChar.ID))
+            InworldController.Instance.StopAudio(oldChar.ID);
+        yield return new WaitForFixedUpdate();
+        if (newchar != null && !string.IsNullOrEmpty(newchar.ID))
+        {
+            InworldController.Instance.StartAudio(newchar.ID);
+        }
+    }
+    protected void OnInteraction(InworldPacket incomingPacket)
     {
         switch (incomingPacket)
         {
@@ -83,16 +97,16 @@ public class PlayerController : MonoBehaviour
                 HandleTrigger(customPacket);
                 break;
             default:
-                Debug.Log($"Received {incomingPacket}");
+                InworldAI.Log($"Received {incomingPacket}");
                 break;
         }
     }
     protected virtual void HandleTrigger(CustomPacket customPacket)
     {
-        Debug.Log($"Received Trigger {customPacket.custom.name}");
+        InworldAI.Log($"Received Trigger {customPacket.custom.name}");
         foreach (TriggerParamer param in customPacket.custom.parameters)
         {
-            Debug.Log($"With Param {param.name}: {param.value}");
+            InworldAI.Log($"With Param {param.name}: {param.value}");
         }
     }
     protected virtual void HandleEmotion(EmotionPacket packet) => m_CurrentEmotion = packet.emotion.ToString();
@@ -107,18 +121,21 @@ public class PlayerController : MonoBehaviour
                 if (!m_Bubbles.ContainsKey(packet.packetId.utteranceId))
                 {
                     m_Bubbles[packet.packetId.utteranceId] = Instantiate(m_BubbleLeft, m_ContentRT);
-                    InworldCharacterData character = InworldController.Instance.GetCharacter(packet.routing.source.name);
-                    string charName = character?.givenName ?? "Character";
-                    string title = $"{charName}: {m_CurrentEmotion}";
-                    Texture2D thumbnail = character?.thumbnail ? character.thumbnail : InworldController.DefaultThumbnail;
-                    m_Bubbles[packet.packetId.utteranceId].SetBubble(title, thumbnail);
+                    InworldCharacter character = InworldController.Instance.GetCharacter(packet.routing.source.name);
+                    if (character)
+                    {
+                        string charName = character.Name ?? "Character";
+                        string title = $"{charName}: {m_CurrentEmotion}";
+                        Texture2D thumbnail = character.Data.thumbnail ? character.Data.thumbnail : InworldAI.DefaultThumbnail;
+                        m_Bubbles[packet.packetId.utteranceId].SetBubble(title, thumbnail);
+                    }
                 }
                 break;
             case "PLAYER":
                 if (!m_Bubbles.ContainsKey(packet.packetId.utteranceId))
                 {
                     m_Bubbles[packet.packetId.utteranceId] = Instantiate(m_BubbleRight, m_ContentRT);
-                    m_Bubbles[packet.packetId.utteranceId].SetBubble(InworldController.Player, InworldController.DefaultThumbnail);
+                    m_Bubbles[packet.packetId.utteranceId].SetBubble(InworldAI.User.Name, InworldAI.DefaultThumbnail);
                 }
                 break;
         }
@@ -140,16 +157,7 @@ public class PlayerController : MonoBehaviour
     {
         if (string.IsNullOrEmpty(m_InputField.text) || !m_SendButton.interactable)
             return;
-        if (!isTrigger)
-            InworldController.Instance.SendText(m_InputField.text);
-        else
-        {
-            Dictionary<string, string> parameters = new Dictionary<string, string>
-            {
-                { "item", m_InputField.text }
-            };
-            InworldController.Instance.SendTrigger("saylike", InworldController.Instance.CurrentCharacter.agentId, parameters);
-        }
+        InworldController.Instance.SendText(m_InputField.text);
         m_InputField.text = "";
     }
 }

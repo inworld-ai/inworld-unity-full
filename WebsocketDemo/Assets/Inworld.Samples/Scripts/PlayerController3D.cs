@@ -21,11 +21,11 @@ namespace Inworld.Sample
         }
         protected override void OnCharacterRegistered(InworldCharacterData charData) {}
 
-        protected override void OnCharacterChanged(InworldCharacterData oldChar, InworldCharacterData newChar)
+        protected override void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
         {
             m_SendButton.interactable = newChar != null;
             if (newChar != null && m_StatusText)
-                m_StatusText.text = $"Current: {newChar.givenName}";
+                m_StatusText.text = $"Current: {newChar.Name}";
         }
 
         protected override void HandleTrigger(CustomPacket customPacket)
@@ -47,13 +47,16 @@ namespace Inworld.Sample
             switch (packet.routing.source.type)
             {
                 case "AGENT":
-                    InworldCharacterData character = InworldController.Instance.GetCharacter(packet.routing.source.name);
-                    string charName = character?.givenName ?? "Character";
-                    string title = $"{charName}({m_CurrentEmotion}):";
-                    m_Subtitle.text = $"{title} {packet.text.text}";
+                    InworldCharacter character = InworldController.Instance.GetCharacter(packet.routing.source.name);
+                    if (character)
+                    {
+                        string charName = character.Name ?? "Character";
+                        string title = $"{charName}({m_CurrentEmotion}):";
+                        m_Subtitle.text = $"{title} {packet.text.text}";
+                    }
                     break;
                 case "PLAYER":
-                    m_Subtitle.text = $"{InworldController.Player}: {packet.text.text}";
+                    m_Subtitle.text = $"{InworldAI.User.Name}: {packet.text.text}";
                     break;
             }
         }

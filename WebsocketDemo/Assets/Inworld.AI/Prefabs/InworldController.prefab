@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3753617577465698405}
   - component: {fileID: 2395919966041133306}
   - component: {fileID: 3127888445581560149}
+  - component: {fileID: 4881369806813467986}
   m_Layer: 0
   m_Name: InworldController
   m_TagString: Untagged
@@ -31,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2395919966041133306
 MonoBehaviour:
@@ -45,12 +46,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78696971f17345f8b3a604c50919e8f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TokenServerURL: 127.0.0.1:4000
-  m_StudioURL: studio.inworld.ai
-  m_SceneFullName: workspaces/inworld-sandbox/scenes/celeste-spaceship
+  m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_SceneFullName: workspaces/unitytest/scenes/transform
   m_PlayerName: JIn
   m_DefaultThumbnail: {fileID: 2800000, guid: 6a2f2ccb15134e0469834663aafbd9ad, type: 3}
-  m_AudioCapture: {fileID: 3127888445581560149}
   m_AutoStart: 0
 --- !u!114 &3127888445581560149
 MonoBehaviour:
@@ -72,3 +71,16 @@ MonoBehaviour:
       m_Calls: []
   m_AudioRate: 16000
   m_BufferSeconds: 1
+--- !u!114 &4881369806813467986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5556377780116934527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5db5b813fe746f9a9ce5602a5521235, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}

@@ -60,15 +60,15 @@ namespace Inworld.Sample
             }
             base.OnStartStopInteraction(isStarting);
         }
-        protected override void OnCharChanged(InworldCharacterData oldChar, InworldCharacterData newChar)
+        protected override void OnCharChanged(InworldCharacter oldChar, InworldCharacter newChar)
         {
-            if (oldChar != null && oldChar.brainName == Data.brainName)
+            if (oldChar != null && oldChar.BrainName == Data.brainName)
             {
                 m_trLookAt = null;
                 HandleMainStatus(AnimMainStatus.Goodbye);
                 m_BodyAnimator.enabled = false;
             }
-            if (newChar != null && newChar.brainName == Data.brainName)
+            if (newChar != null && newChar.BrainName == Data.brainName)
             {
                 m_trLookAt = m_PlayerCamera ? m_PlayerCamera : Camera.main.transform;
                 m_BodyAnimator.enabled = true;
