@@ -3,20 +3,8 @@ using Google.Protobuf.Collections;
 using System;
 using System.Diagnostics;
 #if INWORLD_NDK
-using Inworld.ProtoBuf;
-using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
-using GrpcPacketID = Inworld.ProtoBuf.PacketId;
-using GrpcRouting = Inworld.ProtoBuf.Routing;
-using GrpcActor = Inworld.ProtoBuf.Actor;
-using ActorTypes = Inworld.ProtoBuf.Actor.Types;
 using AdditionalPhonemeInfo = Inworld.ProtoBuf.AdditionalPhonemeInfo;
 #else
-using Inworld.Grpc;
-using GrpcPacket = Inworld.Grpc.InworldPacket;
-using GrpcPacketID = Inworld.Grpc.PacketId;
-using GrpcRouting = Inworld.Grpc.Routing;
-using GrpcActor = Inworld.Grpc.Actor;
-using ActorTypes = Inworld.Grpc.Actor.Types;
 using AdditionalPhonemeInfo = Inworld.Grpc.AdditionalPhonemeInfo;
 #endif
 
@@ -25,6 +13,7 @@ namespace Inworld.Packets
     [DebuggerDisplay("Timestamp={Timestamp}, EventId={PacketId}, Routing={Routing}")]
     public class AudioChunk : InworldPacket
     {
+        public byte[] PacketBytes { get; set; }
         public DateTime Timestamp { get; set; }
         public PacketId PacketId { get; set; }
         public Routing Routing { get; set; }
@@ -41,26 +30,29 @@ namespace Inworld.Packets
             Chunk = chunk;
         }
 
-        public AudioChunk(GrpcPacket grpcEvent)
+        public AudioChunk(byte[] packetBytes)
         {
-            Timestamp = grpcEvent.Timestamp.ToDateTime();
-            if (grpcEvent.Routing != null)
-                Routing = new Routing(grpcEvent.Routing);
-            PacketId = new PacketId(grpcEvent.PacketId);
-            Chunk = grpcEvent.DataChunk.Chunk;
-            PhonemeInfo = grpcEvent.DataChunk.AdditionalPhonemeInfo;
+            PacketBytes = packetBytes;
+            var packet = InworldPacketGenerator.Instance.ToProtobufPacket(this);
+            Timestamp = packet.Timestamp.ToDateTime();
+            PacketId = InworldPacketGenerator.Instance.FromProtoPacketId(packet.PacketId);
+            if(packet.Routing != null)
+                Routing = InworldPacketGenerator.Instance.FromProtoRouting(packet.Routing);
+            Chunk = packet.DataChunk.Chunk;
+            PhonemeInfo = packet.DataChunk.AdditionalPhonemeInfo;
         }
+        
 
-        public GrpcPacket ToGrpc() => new GrpcPacket
-        {
-            Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(Timestamp),
-            Routing = Routing?.ToGrpc(),
-            PacketId = PacketId.ToGrpc(),
-            DataChunk = new DataChunk()
-            {
-                Chunk = Chunk,
-                Type = DataChunk.Types.DataType.Audio
-            }
-        };
+        // public GrpcPacket PacketBytes() => new GrpcPacket
+        // {
+        //     Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(Timestamp),
+        //     Routing = Routing?.ToGrpc(),
+        //     PacketId = PacketId.ToByteArray(),
+        //     DataChunk = new DataChunk()
+        //     {
+        //         Chunk = Chunk,
+        //         Type = DataChunk.Types.DataType.Audio
+        //     }
+        // };
     }
 }

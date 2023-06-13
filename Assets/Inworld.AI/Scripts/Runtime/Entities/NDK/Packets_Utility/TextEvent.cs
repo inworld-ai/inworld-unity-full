@@ -2,21 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 #if INWORLD_NDK
-using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
-using GrpcPacketID = Inworld.ProtoBuf.PacketId;
-using GrpcRouting = Inworld.ProtoBuf.Routing;
-using GrpcActor = Inworld.ProtoBuf.Actor;
-using GrpcTextEvent = Inworld.ProtoBuf.TextEvent;
 using GrpcSourceType = Inworld.ProtoBuf.TextEvent.Types.SourceType;
-using ActorTypes = Inworld.ProtoBuf.Actor.Types;  
 #else
-using GrpcPacket = Inworld.Grpc.InworldPacket;
-using GrpcPacketID = Inworld.Grpc.PacketId;
-using GrpcRouting = Inworld.Grpc.Routing;
-using GrpcActor = Inworld.Grpc.Actor;
-using GrpcTextEvent = Inworld.Grpc.TextEvent;
 using GrpcSourceType = Inworld.Grpc.TextEvent.Types.SourceType;
-using ActorTypes = Inworld.Grpc.Actor.Types;
 #endif
 
 namespace Inworld.Packets
@@ -25,6 +13,7 @@ namespace Inworld.Packets
         "Timestamp={Timestamp}, EventId={PacketId}, Routing={Routing}, Text={Text}, SourceType = {SourceType}, Final={Final}, Id={Id}")]
     public class TextEvent : InworldPacket
     {
+        public byte[] PacketBytes { get; set; }
         public DateTime Timestamp { get; set; }
         public PacketId PacketId { get; set; }
         public Routing Routing { get; set; }
@@ -39,25 +28,17 @@ namespace Inworld.Packets
             Routing = new Routing();
         }
 
-        public TextEvent(GrpcPacket grpcEvent)
+        public TextEvent(byte[] packetBytes)
         {
-            Timestamp = grpcEvent.Timestamp.ToDateTime();
-            Routing = new Routing(grpcEvent.Routing);
-
-            PacketId = new PacketId(grpcEvent.PacketId);
-            Text = grpcEvent.Text.Text;
-            SourceType = grpcEvent.Text.SourceType;
-            Final = grpcEvent.Text.Final;
+            PacketBytes = packetBytes;
+            var packet = InworldPacketGenerator.Instance.ToProtobufPacket(this);
+            Timestamp = packet.Timestamp.ToDateTime();
+            PacketId = InworldPacketGenerator.Instance.FromProtoPacketId(packet.PacketId);
+            Routing = InworldPacketGenerator.Instance.FromProtoRouting(packet.Routing);
+            Text = packet.Text.Text;
+            SourceType = packet.Text.SourceType;
+            Final = packet.Text.Final;
         }
-
-        public GrpcPacket ToGrpc() =>
-            new GrpcPacket
-            {
-                Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(Timestamp),
-                Routing = Routing?.ToGrpc(),
-                PacketId = PacketId.ToGrpc(),
-                Text = new GrpcTextEvent {Text = Text, SourceType = SourceType, Final = Final}
-            };
 
         protected bool Equals(TextEvent other) =>
             Timestamp.Equals(other.Timestamp) && 

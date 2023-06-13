@@ -4,18 +4,8 @@ using System;
 using System.Diagnostics;
 #if INWORLD_NDK
 using GrpcCustomEvent = Inworld.ProtoBuf.CustomEvent;
-using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
-using GrpcPacketID = Inworld.ProtoBuf.PacketId;
-using GrpcRouting = Inworld.ProtoBuf.Routing;
-using GrpcActor = Inworld.ProtoBuf.Actor;
-using ActorTypes = Inworld.ProtoBuf.Actor.Types;  
 #else
 using GrpcCustomEvent = Inworld.Grpc.CustomEvent;
-using GrpcPacket = Inworld.Grpc.InworldPacket;
-using GrpcPacketID = Inworld.Grpc.PacketId;
-using GrpcRouting = Inworld.Grpc.Routing;
-using GrpcActor = Inworld.Grpc.Actor;
-using ActorTypes = Inworld.Grpc.Actor.Types;
 #endif
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +18,7 @@ namespace Inworld.Packets
     {
         public DateTime Timestamp { get; set; }
         public PacketId PacketId { get; set; }
+        public byte[] PacketBytes { get; set; }
         public Routing Routing { get; set; }
         public string TriggerName { get; set; }
         public Dictionary<string, string> Parameters { get; set; }
@@ -46,11 +37,13 @@ namespace Inworld.Packets
 
         public CustomEvent(string triggerName): this(triggerName, new Routing()) { }
 
-        public CustomEvent(GrpcPacket packet)
+        public CustomEvent(byte[] packetBytes)
         {
+            PacketBytes = packetBytes;
+            var packet = InworldPacketGenerator.Instance.ToProtobufPacket(this);
             Timestamp = packet.Timestamp.ToDateTime();
-            Routing = new Routing(packet.Routing);
-            PacketId = new PacketId(packet.PacketId);
+            PacketId = InworldPacketGenerator.Instance.FromProtoPacketId(packet.PacketId);
+            Routing = InworldPacketGenerator.Instance.FromProtoRouting(packet.Routing);
             TriggerName = packet.Custom.Name;
             Parameters = new Dictionary<string, string>();
             foreach (GrpcCustomEvent.Types.Parameter param in packet.Custom.Parameters)
@@ -77,15 +70,13 @@ namespace Inworld.Packets
             }
             return customEvent;
         }
-        
-        public GrpcPacket ToGrpc() => new GrpcPacket
-        {
-            Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(this.Timestamp),
-            Routing = Routing.ToGrpc(),
-            PacketId = PacketId.ToGrpc(),
-            Custom = ParamToGrpc()
-        };
-
+        // public GrpcPacket ToGrpc() => new GrpcPacket
+        // {
+        //     Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(this.Timestamp),
+        //     Routing = Routing.ToGrpc(),
+        //     PacketId = PacketId.ToGrpc(),
+        //     Custom = ParamToGrpc()
+        // };
 
         protected bool Equals(CustomEvent other)
         {

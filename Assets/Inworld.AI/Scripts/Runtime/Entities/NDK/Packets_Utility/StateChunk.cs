@@ -1,21 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using Google.Protobuf;
-#if INWORLD_NDK
-using Inworld.ProtoBuf;
-using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
-using GrpcPacketID = Inworld.ProtoBuf.PacketId;
-using GrpcRouting = Inworld.ProtoBuf.Routing;
-using GrpcActor = Inworld.ProtoBuf.Actor;
-using ActorTypes = Inworld.ProtoBuf.Actor.Types;  
-#else
-using Inworld.Grpc;
-using GrpcPacket = Inworld.Grpc.InworldPacket;
-using GrpcPacketID = Inworld.Grpc.PacketId;
-using GrpcRouting = Inworld.Grpc.Routing;
-using GrpcActor = Inworld.Grpc.Actor;
-using ActorTypes = Inworld.Grpc.Actor.Types;
-#endif
 
 namespace Inworld.Packets
 {
@@ -24,9 +9,11 @@ namespace Inworld.Packets
     {
         public DateTime Timestamp { get; set; }
         public PacketId PacketId { get; set; }
+        public byte[] PacketBytes { get; set; }
         public Routing Routing { get; set; }
     
         public readonly ByteString Chunk;
+        byte[] m_PacketBytes;
 
         public StateChunk(ByteString chunk, Routing routing)
         {
@@ -36,25 +23,16 @@ namespace Inworld.Packets
             Chunk = chunk;
         }
 
-        public StateChunk(GrpcPacket grpcEvent)
+        public StateChunk(byte[] packetBytes)
         {
-            Timestamp = grpcEvent.Timestamp.ToDateTime();
-            if (grpcEvent.Routing != null)
-                Routing = new Routing(grpcEvent.Routing);
-            PacketId = new PacketId(grpcEvent.PacketId);
-            Chunk = grpcEvent.DataChunk.Chunk;
+            PacketBytes = packetBytes;
+            var packet = InworldPacketGenerator.Instance.ToProtobufPacket(this);
+            Timestamp = packet.Timestamp.ToDateTime();
+            PacketId = InworldPacketGenerator.Instance.FromProtoPacketId(packet.PacketId);
+            if(packet.Routing != null)
+                Routing = InworldPacketGenerator.Instance.FromProtoRouting(packet.Routing);
+            Chunk = packet.DataChunk.Chunk;
         }
-
-        public GrpcPacket ToGrpc() => new GrpcPacket
-        {
-            Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(Timestamp),
-            Routing = Routing?.ToGrpc(),
-            PacketId = PacketId.ToGrpc(),
-            DataChunk = new DataChunk()
-            {
-                Chunk = Chunk , Type = DataChunk.Types.DataType.State
-            }
-        };
     }
     
 }

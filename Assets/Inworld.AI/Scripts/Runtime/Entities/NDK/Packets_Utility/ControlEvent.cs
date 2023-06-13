@@ -1,18 +1,8 @@
 using System;
 #if INWORLD_NDK
 using GrpcControlEvent = Inworld.ProtoBuf.ControlEvent;
-using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
-using GrpcPacketID = Inworld.ProtoBuf.PacketId;
-using GrpcRouting = Inworld.ProtoBuf.Routing;
-using GrpcActor = Inworld.ProtoBuf.Actor;
-using ActorTypes = Inworld.ProtoBuf.Actor.Types;  
 #else
 using GrpcControlEvent = Inworld.Grpc.ControlEvent;
-using GrpcPacket = Inworld.Grpc.InworldPacket;
-using GrpcPacketID = Inworld.Grpc.PacketId;
-using GrpcRouting = Inworld.Grpc.Routing;
-using GrpcActor = Inworld.Grpc.Actor;
-using ActorTypes = Inworld.Grpc.Actor.Types;
 #endif
 
 namespace Inworld.Packets
@@ -21,6 +11,7 @@ namespace Inworld.Packets
     {
         public DateTime Timestamp { get; set; }
         public PacketId PacketId { get; set; }
+        public byte[] PacketBytes { get; set; }
         public Routing Routing { get; set; }
         
         public GrpcControlEvent.Types.Action Action;
@@ -37,24 +28,33 @@ namespace Inworld.Packets
             Routing = routing;
         }
         
-        public ControlEvent(GrpcPacket packet)
+        public ControlEvent(byte[] packetBytes)
         {
+            PacketBytes = packetBytes;
+            var packet = InworldPacketGenerator.Instance.ToProtobufPacket(this);
             Timestamp = packet.Timestamp.ToDateTime();
-            Routing = new Routing(packet.Routing);
-            PacketId = new PacketId(packet.PacketId);
+            PacketId = InworldPacketGenerator.Instance.FromProtoPacketId(packet.PacketId);
+            Routing = InworldPacketGenerator.Instance.FromProtoRouting(packet.Routing);
             Action = packet.Control.Action;
         }
-        
-        public GrpcPacket ToGrpc()
-        {
-            return new GrpcPacket
-            {
-                Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(this.Timestamp),
-                Routing = Routing.ToGrpc(),
-                PacketId = PacketId.ToGrpc(),
-                Control = new GrpcControlEvent() {Action = this.Action}
-            };
-        }
+        // public GrpcPacket ToGrpc()
+        // {
+        //     return new GrpcPacket
+        //     {
+        //         Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(this.Timestamp),
+        //         Routing = Routing.ToGrpc(),
+        //         PacketId = PacketId.ToGrpc(),
+        //         Control = new GrpcControlEvent() {Action = this.Action}
+        //     };
+        // }
+
+        // public ControlEvent(PacketId id, DateTime timestamp, GrpcControlEvent.Types.Action action, Routing routing): this()
+        // {
+        //     PacketId = id;
+        //     Timestamp = timestamp;
+        //     Action = action;
+        //     Routing = routing;
+        // }
 
         protected bool Equals(ControlEvent other)
         {

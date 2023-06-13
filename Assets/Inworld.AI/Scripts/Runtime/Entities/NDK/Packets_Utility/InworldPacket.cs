@@ -1,28 +1,36 @@
+using Google.Protobuf;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-#if INWORLD_NDK
-using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
-using GrpcPacketID = Inworld.ProtoBuf.PacketId;
-using GrpcRouting = Inworld.ProtoBuf.Routing;
-using GrpcActor = Inworld.ProtoBuf.Actor;
-using ActorTypes = Inworld.ProtoBuf.Actor.Types;  
-#else
-using GrpcPacket = Inworld.Grpc.InworldPacket;
-using GrpcPacketID = Inworld.Grpc.PacketId;
-using GrpcRouting = Inworld.Grpc.Routing;
-using GrpcActor = Inworld.Grpc.Actor;
-using ActorTypes = Inworld.Grpc.Actor.Types;
-#endif
+// #if INWORLD_NDK
+// using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
+// using GrpcPacketID = Inworld.ProtoBuf.PacketId;
+// using GrpcRouting = Inworld.ProtoBuf.Routing;
+// using GrpcActor = Inworld.ProtoBuf.Actor;
+// using ActorTypes = Inworld.ProtoBuf.Actor.Types;  
+// #else
+// using GrpcPacket = Inworld.Grpc.InworldPacket;
+// using GrpcPacketID = Inworld.Grpc.PacketId;
+// using GrpcRouting = Inworld.Grpc.Routing;
+// using GrpcActor = Inworld.Grpc.Actor;
+// using ActorTypes = Inworld.Grpc.Actor.Types;
+// #endif
 
 namespace Inworld.Packets
 {
+    public enum ActorType
+    {
+        UNKNOWN,
+        PLAYER,
+        AGENT
+    }
+    
     public interface InworldPacket
     {
         DateTime Timestamp { get; set; }
         Routing Routing { get; set; }
         PacketId PacketId { get; set; }
-        GrpcPacket ToGrpc();
-        
+        byte[] PacketBytes { get; set; }
     }
 
     public class PacketId
@@ -34,20 +42,17 @@ namespace Inworld.Packets
 
         public PacketId() { }
 
-        public PacketId(GrpcPacketID packetId)
+        public PacketId(string _packetId, string _utteranceId, string _interactionId, string _correlatedId)
         {
-            PacketId_ = packetId.PacketId_;
-            UtteranceId = packetId.UtteranceId;
-            InteractionId = packetId.InteractionId;
-            CorrelatedId = packetId.CorrelationId;
+            PacketId_ = _packetId;
+            UtteranceId = _utteranceId;
+            InteractionId = _interactionId;
+            CorrelatedId = _correlatedId;
         }
 
-        public GrpcPacketID ToGrpc()
+        public byte[] ToByteArray()
         {
-            return new GrpcPacketID
-            {
-                PacketId_ = PacketId_, UtteranceId = this.UtteranceId, InteractionId = this.InteractionId, CorrelationId = CorrelatedId
-            };
+            return InworldPacketGenerator.Instance.ToProtoPacketId(PacketId_, UtteranceId, InteractionId, CorrelatedId).ToByteArray();
         }
 
         public override string ToString()
@@ -83,46 +88,37 @@ namespace Inworld.Packets
     
     public class Actor
     {
-        public ActorTypes.Type Type;
+        public ActorType Type;
         // agentId for AGENT type.
         public string Id;
 
         static public Actor Player() => 
-            new Actor() { Type = ActorTypes.Type.Player };
+            new Actor() { Type = ActorType.PLAYER };
 
         static public Actor Agent(string agentId) =>
-            new Actor() { Type = ActorTypes.Type.Agent, Id = agentId };
+            new Actor() { Type = ActorType.AGENT, Id = agentId };
 
-        public Actor(ActorTypes.Type type, string id) 
+        public Actor(ActorType type, string id) 
         {
             Type = type;
             Id = id;
         }
 
-        public Actor() : this(ActorTypes.Type.Unknown, null) { }
+        public Actor() : this(ActorType.UNKNOWN, null) { }
 
-        public Actor(GrpcActor grpc)
-        {
-            Type = grpc.Type;
-            if (!string.IsNullOrEmpty(grpc.Name))
-                Id = grpc.Name;
-            else
-                Id = null;
-        }
-
-        public GrpcActor ToGrpc()
-        {
-            var result = new GrpcActor { Type = Type };
-            if (Id != null)
-                result.Name = Id;
-            return result;
-        }
+        // public GrpcActor ToGrpc()
+        // {
+        //     var result = new GrpcActor { Type = Type };
+        //     if (Id != null)
+        //         result.Name = Id;
+        //     return result;
+        // }
 
         public override string ToString() => $"(Type={Type}, Id={Id})";
 
-        public bool IsAgent() => Type == ActorTypes.Type.Agent;
+        public bool IsAgent() => Type == ActorType.AGENT;
 
-        public bool IsPlayer() => Type == ActorTypes.Type.Player;
+        public bool IsPlayer() => Type == ActorType.PLAYER;
 
         protected bool Equals(Actor other)
         {
@@ -165,25 +161,11 @@ namespace Inworld.Packets
             this.Target = Target;
         }
 
-        public Routing(GrpcRouting grpc)
-        {
-            if (grpc != null)
-            {
-                Source = new Actor(grpc.Source);
-                Target = new Actor(grpc.Target);
-            }
-            else
-            {
-                Source = new Actor();
-                Target = new Actor();
-            }
-        }
-
-        public GrpcRouting ToGrpc() => new GrpcRouting
-        {
-            Source = Source?.ToGrpc(),
-            Target = Target?.ToGrpc()
-        };
+        // public GrpcRouting ToGrpc() => new GrpcRouting
+        // {
+        //     Source = Source?.ToGrpc(),
+        //     Target = Target?.ToGrpc()
+        // };
 
         public override string ToString() => $"(Source={Source}, Target={Target})";
 

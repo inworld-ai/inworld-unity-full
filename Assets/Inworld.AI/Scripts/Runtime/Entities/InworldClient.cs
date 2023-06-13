@@ -150,7 +150,7 @@ namespace Inworld
             var task = core.StartSession();
             await task;
         }
-        internal TextEvent ResolvePreviousPackets(GrpcPacket response) => response.Text != null ? new TextEvent(response) : null;
+        internal TextEvent ResolvePreviousPackets(GrpcPacket response) => response.Text != null ? InworldPacketGenerator.Instance.FromProtobufPacket<TextEvent>(response) : null;
 
         public void Update()
         {

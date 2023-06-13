@@ -1,20 +1,9 @@
 ﻿#if INWORLD_NDK
-using Inworld.ProtoBuf;
-using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
-using GrpcPacketID = Inworld.ProtoBuf.PacketId;
-using GrpcRouting = Inworld.ProtoBuf.Routing;
-using GrpcActor = Inworld.ProtoBuf.Actor;
 using GrpcActionEvent = Inworld.ProtoBuf.ActionEvent;
-using ActorTypes = Inworld.ProtoBuf.Actor.Types;  
 #else
-using Inworld.Grpc;
-using GrpcPacket = Inworld.Grpc.InworldPacket;
-using GrpcPacketID = Inworld.Grpc.PacketId;
-using GrpcRouting = Inworld.Grpc.Routing;
-using GrpcActor = Inworld.Grpc.Actor;
 using GrpcActionEvent = Inworld.Grpc.ActionEvent;
-using ActorTypes = Inworld.Grpc.Actor.Types;
 #endif
+using Google.Protobuf;
 using System;
 using System.Diagnostics;
 namespace Inworld.Packets
@@ -22,6 +11,7 @@ namespace Inworld.Packets
     [DebuggerDisplay("Timestamp={Timestamp}, EventId={PacketId}, Routing={Routing}")]
     public class ActionEvent: InworldPacket
     {
+        public byte[] PacketBytes { get; set; }
         public DateTime Timestamp { get; set; }
         public Routing Routing { get; set; }
         public PacketId PacketId { get; set; }
@@ -42,29 +32,34 @@ namespace Inworld.Packets
 
         public ActionEvent(string content): this(content, new Routing()) { }
 
-        public ActionEvent(GrpcPacket packet)
+        public ActionEvent(byte[] packetBytes)
         {
+            PacketBytes = packetBytes;
+            var packet = InworldPacketGenerator.Instance.ToProtobufPacket(this);
             Timestamp = packet.Timestamp.ToDateTime();
-            Routing = new Routing(packet.Routing);
-            PacketId = new PacketId(packet.PacketId);
+            PacketId = InworldPacketGenerator.Instance.FromProtoPacketId(packet.PacketId);
+            Routing = InworldPacketGenerator.Instance.FromProtoRouting(packet.Routing);
             Content = packet.Action.NarratedAction.Content;
         }
-        
-        public GrpcPacket ToGrpc() => new GrpcPacket
-        {
-            Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(Timestamp),
-            Routing = Routing?.ToGrpc(),
-            PacketId = PacketId.ToGrpc(),
-            Action = new GrpcActionEvent
-            {
-                NarratedAction = new NarratedAction
-                {
-                    Content = this.Content
-                },
-                Playback = Playback.Utterance
-            }
-        };
-        
+
+        // public byte[] PacketBytes()
+        // {
+        //     return new GrpcPacket
+        //     {
+        //         Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(Timestamp),
+        //         Routing = Routing?.ToGrpc(),
+        //         PacketId = PacketId.ToByteArray(),
+        //         Action = new GrpcActionEvent
+        //         {
+        //             NarratedAction = new NarratedAction
+        //             {
+        //                 Content = this.Content
+        //             },
+        //             Playback = Playback.Utterance
+        //         }
+        //     }.ToByteArray();
+        // }
+
         protected bool Equals(ActionEvent other)
         {
             return Content == other.Content && Timestamp.Equals(other.Timestamp) && Equals(PacketId, other.PacketId) && Equals(Routing, other.Routing);

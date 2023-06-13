@@ -2,20 +2,10 @@ using System;
 #if INWORLD_NDK
 using GrpcSpaffCode= Inworld.ProtoBuf.EmotionEvent.Types.SpaffCode;
 using GrpcStrength = Inworld.ProtoBuf.EmotionEvent.Types.Strength;
-using GrpcPacket = Inworld.ProtoBuf.InworldPacket;
-using GrpcPacketID = Inworld.ProtoBuf.PacketId;
-using GrpcRouting = Inworld.ProtoBuf.Routing;
-using GrpcActor = Inworld.ProtoBuf.Actor;
-using ActorTypes = Inworld.ProtoBuf.Actor.Types;  
 using GrpcEmotionEvent = Inworld.ProtoBuf.EmotionEvent;
 #else
 using GrpcSpaffCode = Inworld.Grpc.EmotionEvent.Types.SpaffCode;
 using GrpcStrength = Inworld.Grpc.EmotionEvent.Types.Strength;
-using GrpcPacket = Inworld.Grpc.InworldPacket;
-using GrpcPacketID = Inworld.Grpc.PacketId;
-using GrpcRouting = Inworld.Grpc.Routing;
-using GrpcActor = Inworld.Grpc.Actor;
-using ActorTypes = Inworld.Grpc.Actor.Types;
 using GrpcEmotionEvent = Inworld.Grpc.EmotionEvent;
 #endif
 
@@ -25,49 +15,37 @@ namespace Inworld.Packets
     {
         public DateTime Timestamp { get; set; }
         public PacketId PacketId { get; set; }
+        public byte[] PacketBytes { get; set; }
         public Routing Routing { get; set; }
 
         public GrpcSpaffCode SpaffCode { get; set; }
         
         public GrpcStrength Strength { get; set; }
 
-        public EmotionEvent()
+        public EmotionEvent(byte[] packetBytes)
         {
-            Timestamp = DateTime.UtcNow;
-            PacketId = new PacketId();
-            //Necessary due to issues with static read only access
-#if INWORLD_NDK
-            SpaffCode = Inworld.ProtoBuf.EmotionEvent.Types.SpaffCode.Neutral;
-            Strength =  Inworld.ProtoBuf.EmotionEvent.Types.Strength.Normal;
-#else
-            SpaffCode = Inworld.Grpc.EmotionEvent.Types.SpaffCode.Neutral;
-            Strength =  Inworld.Grpc.EmotionEvent.Types.Strength.Normal;
-#endif
-        }
-        
-        public EmotionEvent(GrpcPacket packet)
-        {
+            PacketBytes = packetBytes;
+            var packet = InworldPacketGenerator.Instance.ToProtobufPacket(this);
             Timestamp = packet.Timestamp.ToDateTime();
-            Routing = new Routing(packet.Routing);
-            PacketId = new PacketId(packet.PacketId);
+            PacketId = InworldPacketGenerator.Instance.FromProtoPacketId(packet.PacketId);
+            Routing = InworldPacketGenerator.Instance.FromProtoRouting(packet.Routing);
             SpaffCode = packet.Emotion.Behavior;
             Strength = packet.Emotion.Strength;
         }
-        
-        public GrpcPacket ToGrpc()
-        {
-            return new GrpcPacket
-            {
-                Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(this.Timestamp),
-                Routing = Routing.ToGrpc(),
-                PacketId = PacketId.ToGrpc(),
-                Emotion = new GrpcEmotionEvent
-                {
-                    Behavior = this.SpaffCode,
-                    Strength = this.Strength
-                }
-            };
-        }
+        // public GrpcPacket ToGrpc()
+        // {
+        //     return new GrpcPacket
+        //     {
+        //         Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(this.Timestamp),
+        //         Routing = Routing.ToGrpc(),
+        //         PacketId = PacketId.ToGrpc(),
+        //         Emotion = new GrpcEmotionEvent
+        //         {
+        //             Behavior = this.SpaffCode,
+        //             Strength = this.Strength
+        //         }
+        //     };
+        // }
 
         protected bool Equals(EmotionEvent other)
         {

@@ -99,12 +99,12 @@ public void ResolvePackets(GrpcPacket packet)
         switch (packet.DataChunk.Type)
         {
             case DataChunk.Types.DataType.Audio:
-                protobufObject = factory.Create(packet, "AudioChunk");
+                protobufObject = factory.FromProtobufPacket<AudioChunk>(packet);
                 // Perform operations on protobufObject here...
                 m_Client.m_CurrentConnection.incomingAudioQueue.Enqueue((AudioChunk)protobufObject);
                 break;
             case DataChunk.Types.DataType.State:
-                protobufObject = factory.Create(packet, "StateChunk");
+                protobufObject = factory.FromProtobufPacket<StateChunk>(packet);
                 // Perform operations on protobufObject here...
                 m_Client.LastState = ((StateChunk)protobufObject).Chunk.ToBase64();
                 break;
@@ -116,7 +116,7 @@ public void ResolvePackets(GrpcPacket packet)
     else if (packet.Text != null)
     {
         Debug.Log("received a text packet from the NDK " + packet.Text);
-        protobufObject = factory.Create(packet, "TextEvent");
+        protobufObject = factory.FromProtobufPacket<TextEvent>(packet);
         // Perform operations on protobufObject here...
         m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue((TextEvent)protobufObject);
     }
@@ -138,7 +138,7 @@ public void ResolvePackets(GrpcPacket packet)
 
         if (phonemesValid)
         {
-            protobufObject = factory.Create(packet, "AudioChunk");
+            protobufObject = factory.FromProtobufPacket<AudioChunk>(packet);
         }
         else
         {
@@ -149,19 +149,19 @@ public void ResolvePackets(GrpcPacket packet)
     }
     else if (packet.Control != null)
     {
-        protobufObject = factory.Create(packet, "ControlEvent");
+        protobufObject = factory.FromProtobufPacket<Inworld.Packets.ControlEvent>(packet);
         // Perform operations on protobufObject here...
         m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue((Inworld.Packets.ControlEvent)protobufObject);
     }
     else if (packet.Emotion != null)
     {
-        protobufObject = factory.Create(packet, "EmotionEvent");
+        protobufObject = factory.FromProtobufPacket<EmotionEvent>(packet);
         // Perform operations on protobufObject here...
         m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue((EmotionEvent)protobufObject);
     }
     else if (packet.Custom != null)
     {
-        protobufObject = factory.Create(packet, "CustomEvent");
+        protobufObject = factory.FromProtobufPacket<CustomEvent>(packet);
         // Perform operations on protobufObject here...
         m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue((CustomEvent)protobufObject);
     }
@@ -358,10 +358,10 @@ public void ResolvePackets(GrpcPacket packet)
         }
         else if (packet.Routing.Source.IsPlayer() && packet is Inworld.Packets.AudioChunk)
         {
-            SendAudio(new Inworld.Packets.AudioChunk(packet.ToGrpc()));
+            SendAudio((AudioChunk)packet);
         }
         else
-            SendRawEvent(packet.ToGrpc());//InworldNDKWrapper.ClientWrapper_SendPacket(m_Wrapper.instance, packetPtr);
+            SendRawEvent(InworldPacketGenerator.Instance.ToProtobufPacket(packet));//InworldNDKWrapper.ClientWrapper_SendPacket(m_Wrapper.instance, packetPtr);
         //}
         //finally
         //{
@@ -397,8 +397,8 @@ public void ResolvePackets(GrpcPacket packet)
     public void SendAudio(Inworld.Packets.AudioChunk audioChunk)
     {
         //Debug.Log("SENDING AUDIO CHUNK");
-        SendRawEvent(audioChunk.ToGrpc()); 
-        //InworldNDKWrapper.ClientWrapper_SendSoundMessage(m_Wrapper.instance, audioChunk.Routing.Target.Id, audioChunk.Chunk.ToString());     
+        //SendRawEvent(InworldPacketGenerator.Instance.ToProtobufPacket(audioChunk)); 
+        InworldNDKWrapper.ClientWrapper_SendSoundMessage(m_Wrapper.instance, audioChunk.Routing.Target.Id, audioChunk.Chunk.ToString());     
     }
 
     public void EndAudio(Inworld.Packets.Routing routing)
