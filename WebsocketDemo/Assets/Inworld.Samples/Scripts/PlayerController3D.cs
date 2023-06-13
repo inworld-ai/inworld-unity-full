@@ -30,13 +30,7 @@ namespace Inworld.Sample
 
         protected override void HandleTrigger(CustomPacket customPacket)
         {
-            string triggerContent = $"Received {customPacket.custom.name}";
-
-            if (customPacket.custom.parameters.Count != 0)
-                triggerContent += "> ";
-            triggerContent = customPacket.custom.parameters.Aggregate(triggerContent, (current, param) => 
-                                                                          current + $"{param.name}:{param.value} ");
-            m_Subtitle.text = triggerContent;
+            m_Subtitle.text = $"(Received {customPacket.Trigger})";
         }
         protected override void HandleEmotion(EmotionPacket packet) => m_CurrentEmotion = packet.emotion.ToString();
 

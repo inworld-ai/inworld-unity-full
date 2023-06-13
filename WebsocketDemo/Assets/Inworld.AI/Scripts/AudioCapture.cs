@@ -72,7 +72,6 @@ namespace Inworld
 
         void Update()
         {
-            
             if (!IsCapturing)
                 return;
             if (!Microphone.IsRecording(null))

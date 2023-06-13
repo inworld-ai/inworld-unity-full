@@ -54,7 +54,20 @@ public class PlayerController : MonoBehaviour
     {
         m_ConnectButton.interactable = newStatus == InworldConnectionStatus.Idle || newStatus == InworldConnectionStatus.Connected;
         m_ConnectButtonText.text = newStatus == InworldConnectionStatus.Connected ? "DISCONNECT" : "CONNECT";
-        m_SendButton.interactable = newStatus == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter;
+
+        if (newStatus == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter)
+        {
+            m_SendButton.interactable = true;
+            if (!InworldController.IsRecording)
+                InworldController.Instance.StartAudio(InworldController.Instance.CurrentCharacter.ID);
+        }
+        else
+        {
+            m_SendButton.interactable = false;
+            if (InworldController.IsRecording)
+                InworldController.Instance.StopAudio(InworldController.Instance.CurrentCharacter.ID);
+        }
+        
         if (m_StatusText)
             m_StatusText.text = newStatus.ToString();
         if (newStatus == InworldConnectionStatus.Error)

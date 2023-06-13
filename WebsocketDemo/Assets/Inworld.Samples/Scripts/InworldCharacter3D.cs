@@ -63,11 +63,7 @@ namespace Inworld.Sample
         protected override void OnCharRegistered(InworldCharacterData charData)
         {
             if (charData.brainName == Data.brainName)
-            {
                 RegisterLiveSession();
-                Debug.Log($"{charData.agentId} This: {ID}");
-            }
-            InworldController.Instance.CurrentCharacter = this;
         }
         protected override void OnCharChanged(InworldCharacter oldChar, InworldCharacter newChar)
         {
@@ -110,6 +106,11 @@ namespace Inworld.Sample
                 return;
             }
             _StartLookAt(m_trLookAt.position);
+        }
+        protected override void OnStatusChanged(InworldConnectionStatus newStatus)
+        {
+            if (newStatus == InworldConnectionStatus.Connected)
+                InworldController.Instance.CurrentCharacter = this;
         }
         protected override void HandleLipSync(AudioPacket audioPacket)
         {

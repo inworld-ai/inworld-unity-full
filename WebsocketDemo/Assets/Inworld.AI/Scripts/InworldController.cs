@@ -25,6 +25,8 @@ namespace Inworld
 
         public static InworldClient Client => Instance.m_Client;
         public static InworldConnectionStatus Status => Instance.m_Client.Status;
+
+        public static bool IsRecording => Instance.m_Client.IsRecording;
         public InworldCharacter CurrentCharacter
         {
             get => m_CurrentCharacter;
@@ -77,10 +79,9 @@ namespace Inworld
                 return null;
             if (!m_Characters.ContainsKey(character.BrainName))
                 m_Characters[character.BrainName] = character.Data;
-            Debug.Log("HEYHEY" + m_LiveSession[character.BrainName]);
             return m_LiveSession[character.BrainName];
         }
-        public bool IsRegistered(string characterID) => !string.IsNullOrEmpty(characterID) && m_LiveSession.ContainsKey(characterID);
+        public bool IsRegistered(string characterID) => !string.IsNullOrEmpty(characterID) && m_LiveSession.ContainsValue(characterID);
         public InworldCharacterData GetCharacter(string agentID)
         {
             if (!m_LiveSession.ContainsValue(agentID))
@@ -98,7 +99,6 @@ namespace Inworld
         // ReSharper disable Unity.PerformanceAnalysis
         public void SendText(string txtToSend)
         {
-            Debug.Log($"Send {txtToSend} to {m_CurrentCharacter.ID}");
             // 1. Interrupt current speaking.
             m_CurrentCharacter.CancelResponse();
             // 2. Send Text.

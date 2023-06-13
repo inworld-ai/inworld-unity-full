@@ -57,6 +57,7 @@ namespace Inworld
         {
             InworldController.Instance.OnCharacterRegistered += OnCharRegistered;
             InworldController.Instance.OnCharacterChanged += OnCharChanged;
+            InworldController.Client.OnStatusChanged += OnStatusChanged;
             m_Interaction.OnStartStopInteraction += OnStartStopInteraction;
             m_Interaction.OnInteractionChanged += OnInteractionChanged;
         }
@@ -69,6 +70,7 @@ namespace Inworld
                 return;
             InworldController.Instance.OnCharacterRegistered -= OnCharRegistered;
             InworldController.Instance.OnCharacterChanged -= OnCharChanged;
+            InworldController.Client.OnStatusChanged -= OnStatusChanged;
         }
         protected virtual void OnStartStopInteraction(bool isStarting)
         {
@@ -83,7 +85,10 @@ namespace Inworld
                 RegisterLiveSession();
         }
         protected virtual void OnCharChanged(InworldCharacter oldChar, InworldCharacter newChar) {}
-
+        protected virtual void OnStatusChanged(InworldConnectionStatus newStatus)
+        {
+            
+        }
         protected virtual void OnInteractionChanged(List<InworldPacket> packets)
         {
             foreach (InworldPacket packet in packets)
