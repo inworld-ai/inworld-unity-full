@@ -38,6 +38,7 @@ public class InworldNDKClient : IInworldClient
     private TaskCompletionSource<bool> agentInfosFilled;
 
     #region Wrapper variables
+    SessionInfo m_SessionInfo = new SessionInfo();
     ClientOptions m_Options = new ClientOptions();
     AgentInfoArray agentInfoArray = new AgentInfoArray();
     #endregion
@@ -67,9 +68,16 @@ VSAttribution.VSAttribution.SendAttributionEvent("Login Runtime", InworldAI.k_Co
         Debug.Log("GetAppAuth with wrapper options");
         callback = new LoadSceneCallbackType(LoadSceneCallback);
         byte[] serializedData = m_Options.ToByteArray();
+        
+        m_SessionInfo.Token = sessionToken;
+        m_SessionInfo.SessionId = sessionToken;
+        m_SessionInfo.ExpirationTime = 10000;
+        m_SessionInfo.IsValid = true;
+        
+        byte[] serializedSessionInfo = m_SessionInfo.ToByteArray();
 
         InworldNDKWrapper.ClientWrapper_StartClientWithCallback(m_Wrapper.instance, serializedData,
-            serializedData.Length, callback);
+            serializedData.Length, serializedSessionInfo, serializedSessionInfo.Length, callback);
     }
 
     //Callback will be invoked through the wrapper NDK side 
@@ -91,7 +99,7 @@ public void ResolvePackets(GrpcPacket packet)
     Debug.Log("RESOLVING A NDK PACKET IN UNITY");
     m_Client.m_CurrentConnection ??= new Inworld.Connection();
     InworldPacketGenerator factory = InworldPacketGenerator.Instance;
-    object protobufObject;
+    //object protobufObject;
 
     if (packet.DataChunk != null)
     {
@@ -99,12 +107,12 @@ public void ResolvePackets(GrpcPacket packet)
         switch (packet.DataChunk.Type)
         {
             case DataChunk.Types.DataType.Audio:
-                protobufObject = factory.FromProtobufPacket<AudioChunk>(packet);
+                var audioObj = factory.FromProtobufPacket<AudioChunk>(packet);
                 // Perform operations on protobufObject here...
-                m_Client.m_CurrentConnection.incomingAudioQueue.Enqueue((AudioChunk)protobufObject);
+                m_Client.m_CurrentConnection.incomingAudioQueue.Enqueue((AudioChunk)audioObj);
                 break;
             case DataChunk.Types.DataType.State:
-                protobufObject = factory.FromProtobufPacket<StateChunk>(packet);
+                var protobufObject = factory.FromProtobufPacket<StateChunk>(packet);
                 // Perform operations on protobufObject here...
                 m_Client.LastState = ((StateChunk)protobufObject).Chunk.ToBase64();
                 break;
@@ -116,52 +124,52 @@ public void ResolvePackets(GrpcPacket packet)
     else if (packet.Text != null)
     {
         Debug.Log("received a text packet from the NDK " + packet.Text);
-        protobufObject = factory.FromProtobufPacket<TextEvent>(packet);
+        var protobufObject = factory.FromProtobufPacket<TextEvent>(packet);
         // Perform operations on protobufObject here...
         m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue((TextEvent)protobufObject);
     }
-    else if (packet.AudioChunk != null)
-    {
-        Debug.Log("received a AUDIO packet from the NDK " + packet.AudioChunk);
-        // Rest of the debug logs and processing
-
-        bool phonemesValid = false;
-        if (packet.DataChunk == null)
-        {
-            Debug.Log("packet.DataChunk is null");
-        }
-        else
-        {
-            Debug.Log("packet.DataChunk.Chunk null status is " + packet.DataChunk.Chunk == null);
-            phonemesValid = packet.DataChunk.AdditionalPhonemeInfo != null;
-        }
-
-        if (phonemesValid)
-        {
-            protobufObject = factory.FromProtobufPacket<AudioChunk>(packet);
-        }
-        else
-        {
-            protobufObject = new AudioChunk(packet.AudioChunk.Chunk, Inworld.Packets.Routing.FromAgentToPlayer(packet.Routing.Source.Name));
-        }
-        // Perform operations on protobufObject here...
-        m_Client.m_CurrentConnection.incomingAudioQueue.Enqueue((AudioChunk)protobufObject);
-    }
+    // else if (packet.AudioChunk != null)
+    // {
+    //     Debug.Log("received a AUDIO packet from the NDK " + packet.AudioChunk);
+    //     // Rest of the debug logs and processing
+    //
+    //     bool phonemesValid = false;
+    //     if (packet.DataChunk == null)
+    //     {
+    //         Debug.Log("packet.DataChunk is null");
+    //     }
+    //     else
+    //     {
+    //         Debug.Log("packet.DataChunk.Chunk null status is " + packet.DataChunk.Chunk == null);
+    //         phonemesValid = packet.DataChunk.AdditionalPhonemeInfo != null;
+    //     }
+    //
+    //     if (phonemesValid)
+    //     {
+    //         protobufObject = factory.FromProtobufPacket<AudioChunk>(packet);
+    //     }
+    //     else
+    //     {
+    //         protobufObject = new AudioChunk(packet.AudioChunk.Chunk, Inworld.Packets.Routing.FromAgentToPlayer(packet.Routing.Source.Name));
+    //     }
+    //     // Perform operations on protobufObject here...
+    //     m_Client.m_CurrentConnection.incomingAudioQueue.Enqueue((AudioChunk)protobufObject);
+    // }
     else if (packet.Control != null)
     {
-        protobufObject = factory.FromProtobufPacket<Inworld.Packets.ControlEvent>(packet);
+        var protobufObject = factory.FromProtobufPacket<Inworld.Packets.ControlEvent>(packet);
         // Perform operations on protobufObject here...
         m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue((Inworld.Packets.ControlEvent)protobufObject);
     }
     else if (packet.Emotion != null)
     {
-        protobufObject = factory.FromProtobufPacket<EmotionEvent>(packet);
+        var protobufObject = factory.FromProtobufPacket<EmotionEvent>(packet);
         // Perform operations on protobufObject here...
         m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue((EmotionEvent)protobufObject);
     }
     else if (packet.Custom != null)
     {
-        protobufObject = factory.FromProtobufPacket<CustomEvent>(packet);
+        var protobufObject = factory.FromProtobufPacket<CustomEvent>(packet);
         // Perform operations on protobufObject here...
         m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue((CustomEvent)protobufObject);
     }

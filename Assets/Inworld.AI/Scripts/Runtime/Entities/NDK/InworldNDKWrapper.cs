@@ -78,7 +78,7 @@ public class InworldNDKWrapper : IDisposable
     public static extern void ClientWrapper_InitClient(IntPtr wrapper, string userId, string clientId, string clientVer, ConnectionStateCallbackType connectionStateCallback, PacketCallbackType packetCallback);
 
     [DllImport("InworldNDK", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ClientWrapper_StartClientWithCallback")]
-    public static extern void ClientWrapper_StartClientWithCallback(IntPtr wrapper, byte[] serializedOptions, int serializedOptionsSize, LoadSceneCallbackType loadSceneCallback);
+    public static extern void ClientWrapper_StartClientWithCallback(IntPtr wrapper, byte[] serializedOptions, int serializedOptionsSize, byte[] serializedSessionInfo, int sessionInfoSize, LoadSceneCallbackType loadSceneCallback);
 
     [DllImport("InworldNDK", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ClientWrapper_StartClient")]
     public static extern void ClientWrapper_StartClient(IntPtr wrapper, byte[] serializedOptions, int serializedOptionsSize);

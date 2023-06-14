@@ -18,9 +18,11 @@ namespace Inworld.Packets
         public PacketId PacketId { get; set; }
         public Routing Routing { get; set; }
         
-        public readonly ByteString Chunk;
+        public ByteString Chunk;
 
-        public readonly RepeatedField<AdditionalPhonemeInfo> PhonemeInfo;
+        public RepeatedField<AdditionalPhonemeInfo> PhonemeInfo;
+
+        public readonly long duration;
 
         public AudioChunk(ByteString chunk, Routing routing)
         {
