@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Inworld.Util
+namespace Inworld.Assets
 {
     [Serializable]
     public class MorphState

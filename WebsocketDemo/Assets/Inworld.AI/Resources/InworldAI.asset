@@ -13,5 +13,17 @@ MonoBehaviour:
   m_Name: InworldAI
   m_EditorClassIdentifier: 
   m_UserSetting: {fileID: 11400000, guid: 807ae59688a93054c95af3e6a6f724b1, type: 2}
-  m_DebugMode: 1
   m_DefaultThumbnail: {fileID: 2800000, guid: 6a2f2ccb15134e0469834663aafbd9ad, type: 3}
+  m_Capabilities:
+    audio: 1
+    emotions: 1
+    gestures: 1
+    interruptions: 1
+    narratedActions: 1
+    silence: 1
+    text: 1
+    triggers: 1
+    continuation: 1
+    turnBasedStt: 0
+    phonemeInfo: 1
+  m_DebugMode: 1

@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Inworld.Packet;
 
+
 namespace Inworld
 {
     [RequireComponent(typeof(InworldClient))]
@@ -22,10 +23,19 @@ namespace Inworld
 
         InworldCharacter m_CurrentCharacter;
         InworldCharacter m_LastCharacter;
+        const string k_Pattern = @"(workspaces/.+?)/(scenes|characters)/";
+
 
         public static InworldClient Client => Instance.m_Client;
         public static InworldConnectionStatus Status => Instance.m_Client.Status;
-
+        public string CurrentWorkspace
+        {
+            get
+            {
+                string[] data = m_SceneFullName.Split(new[] { "/scenes/", "/characters/" }, StringSplitOptions.None);
+                return data.Length > 1 ? data[0] : m_SceneFullName;
+            }
+        }
         public static bool IsRecording => Instance.m_Client.IsRecording;
         public InworldCharacter CurrentCharacter
         {

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Inworld.Interactions;
 using Inworld.Packet;
+using Inworld.Assets;
 using System.Collections.Generic;
 using System.Linq;
 using Random = UnityEngine.Random;
@@ -14,6 +15,7 @@ namespace Inworld.Sample
         [SerializeField] Animator m_BodyAnimator;
         [SerializeField] Animator m_EmoteAnimator;
         [SerializeField] SkinnedMeshRenderer m_FaceMesh;
+        [SerializeField] FacialAnimationData m_FaceAnimData;
         [SerializeField] FaceTransformData m_FaceTransformData;
         [SerializeField] EmotionMap m_EmotionMap;
         [SerializeField] Texture m_DefaultMouth;
@@ -24,7 +26,7 @@ namespace Inworld.Sample
         static readonly int s_RemainSec = Animator.StringToHash("RemainSec");
         static readonly int s_Random = Animator.StringToHash("Random");
         static readonly int s_Motion = Animator.StringToHash("MainStatus");
-        const int k_VisemeSil = 11;
+        const int k_VisemeSil = 0;
         const int k_VisemeCount = 15;
         Transform m_trLookAt;
         Transform m_Transform;
@@ -170,7 +172,7 @@ namespace Inworld.Sample
                 _ResetMouth();
                 return;
             }
-            PhonemeToViseme p2v = m_EmotionMap.p2vMap.FirstOrDefault(v => v.phoneme == data.phoneme);
+            Assets.PhonemeToViseme p2v = m_FaceAnimData.p2vMap.FirstOrDefault(v => v.phoneme == data.phoneme);
             if (p2v == null)
             {
                 Debug.LogError($"Not Found! {data.phoneme}");

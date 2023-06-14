@@ -1,6 +1,5 @@
 ﻿using Inworld.Packet;
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using UnityEngine;
 namespace Inworld
@@ -14,6 +13,7 @@ namespace Inworld
         const string k_NotImplented = "No InworldClient found. Need at least one connection protocol";
         protected Token m_Token;
         protected AudioCapture m_AudioCapture;
+        protected string m_SessionKey;
         InworldConnectionStatus m_Status;
         string m_Error;
 
@@ -63,7 +63,7 @@ namespace Inworld
         public virtual void StartAudio(string charID) => Error = k_NotImplented;
         public virtual void StopAudio(string charID) => Error = k_NotImplented;
         public virtual void SendAudio(string charID, string base64) => Error = k_NotImplented;
-        protected void Init()
+        protected virtual void Init()
         {
             m_AudioCapture = GetComponent<AudioCapture>();
         }

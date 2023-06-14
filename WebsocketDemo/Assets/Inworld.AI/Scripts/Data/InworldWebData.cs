@@ -32,6 +32,7 @@ namespace Inworld
         public Client client;
         public User user;
         public Capabilities capabilities;
+        public UserSetting userSetting;
     }
     [Serializable]
     public class LoadSceneResponse
@@ -53,16 +54,33 @@ namespace Inworld
         public string name;
     }
     [Serializable]
+    public class UserSetting
+    {
+        public bool viewTranscriptConsent;
+        public PlayerProfile playerProfile;
+    }
+    [Serializable]
+    public class PlayerProfile
+    {
+        public List<Fields> fields;
+    }
+    [SerializeField]
+    public class Fields
+    {
+        public string fieldId;
+        public string fieldValue;
+    }
+    [Serializable]
     public class Client
     {
         public string id;
+        public string version;
     }
     [Serializable]
     public class Capabilities
     {
         public bool audio;
         public bool emotions;
-        public bool gestures;
         public bool interruptions;
         public bool narratedActions;
         public bool silence;

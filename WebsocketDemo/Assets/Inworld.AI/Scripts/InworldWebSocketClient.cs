@@ -152,28 +152,10 @@ namespace Inworld
         {
             LoadSceneRequest req = new LoadSceneRequest
             {
-                client = new Client
-                {
-                    id = "unity"
-                },
-                user = new User
-                {
-                    name = InworldAI.User.Name
-                },
-                capabilities = new Capabilities
-                {
-                    audio = true,
-                    emotions = true,
-                    gestures = true,
-                    interruptions = true,
-                    narratedActions = true,
-                    silence = true,
-                    text = true,
-                    triggers = true,
-                    continuation = false,
-                    turnBasedStt = false,
-                    phonemeInfo = true
-                }
+                client = InworldAI.UnitySDK,
+                user = InworldAI.User.Request,
+                userSetting = InworldAI.User.Setting,
+                capabilities = InworldAI.Capabilities
             };
             string json = JsonUtility.ToJson(req);
             UnityWebRequest uwr = new UnityWebRequest(m_ServerConfig.LoadSceneURL(sceneFullName), "POST");
