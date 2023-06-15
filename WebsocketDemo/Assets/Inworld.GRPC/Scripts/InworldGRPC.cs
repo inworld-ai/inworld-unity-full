@@ -1,5 +1,6 @@
 ﻿using Inworld.Packet;
 using System.Linq;
+using System;
 
 
 namespace Inworld.Grpc
@@ -48,6 +49,54 @@ namespace Inworld.Grpc
                     }
                 }
             };
+            public static InworldPacket GRPCPacket(Packet.InworldPacket rhs) => new InworldPacket
+            {
+                Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.ParseExact(rhs.timestamp, "yyyy-MM-dd'T'HH:mm:ss.fff'Z'", System.Globalization.CultureInfo.InvariantCulture)),
+                Routing = new Routing
+                {
+                    Source = new Actor
+                    {
+                        Name = rhs.routing.source.name,
+                        Type = Actor.Types.Type.Player
+                    },
+                    Target = new Actor
+                    {
+                        Name = rhs.routing.target.name,
+                        Type = Actor.Types.Type.Agent
+                    }
+                },
+                PacketId = new PacketId
+                {
+                    PacketId_ = rhs.packetId.packetId,
+                    InteractionId = rhs.packetId.interactionId,
+                    UtteranceId = rhs.packetId.utteranceId,
+                    CorrelationId = rhs.packetId.correlationId
+                }
+            };
+            
+            public static InworldPacket TextEvent(TextPacket packet)
+            {
+                InworldPacket toSend = GRPCPacket(packet);
+                toSend.Text = new TextEvent
+                {
+                    Text = packet.text.text,
+                    SourceType = Grpc.TextEvent.Types.SourceType.TypedIn,
+                    Final = packet.text.final
+                };
+                return toSend;
+            }
+            public static InworldPacket CancelResponseEvent(MutationPacket cancelPacket)
+            {
+                InworldPacket toSend = GRPCPacket(cancelPacket);
+                toSend.Mutation = new MutationEvent
+                {
+                    CancelResponses = new CancelResponses
+                    {
+                        InteractionId = cancelPacket.mutation.cancelResponses.interactionId
+                    }
+                };
+                return toSend;
+            }
         }
         public static class From
         {

@@ -58,7 +58,7 @@ namespace Inworld
         public virtual void Disconnect() => Error = k_NotImplented;
         public virtual void LoadScene(string sceneFullName) => Error = k_NotImplented;
         public virtual void SendText(string characterID, string textToSend) => Error = k_NotImplented;
-        public virtual void SendCancelEvent(string characterID, string interactionID, List<string> utteranceID) => Error = k_NotImplented;
+        public virtual void SendCancelEvent(string characterID, string interactionID) => Error = k_NotImplented;
         public virtual void SendTrigger(string charID, string triggerName, Dictionary<string, string> parameters) => Error = k_NotImplented;
         public virtual void StartAudio(string charID) => Error = k_NotImplented;
         public virtual void StopAudio(string charID) => Error = k_NotImplented;

@@ -15,7 +15,7 @@ namespace Inworld.Packet
         public DataChunk dataChunk;
         public GestureEvent gesture;
         public CustomEvent custom;
-        public CancelResponseEvent cancelResponses;
+        public MutationEvent mutation;
         public EmotionEvent emotion;
         public ActionEvent action;
 
@@ -33,8 +33,8 @@ namespace Inworld.Packet
                     return new GesturePacket(this, gesture);
                 if (custom != null && !string.IsNullOrEmpty(custom.name))
                     return new CustomPacket(this, custom);
-                if (cancelResponses != null && !string.IsNullOrEmpty(cancelResponses.interactionId))
-                    return new CancelResponsePacket(this, cancelResponses);
+                if (mutation != null && !string.IsNullOrEmpty(mutation.cancelResponses?.interactionId))
+                    return new MutationPacket(this, mutation);
                 if (emotion != null && !string.IsNullOrEmpty(emotion.behavior))
                     return new EmotionPacket(this, emotion);
                 if (action != null && !string.IsNullOrEmpty(action.content))
@@ -56,7 +56,7 @@ namespace Inworld.Packet
                     return PacketType.GESTURE;
                 if (custom != null && !string.IsNullOrEmpty(custom.name))
                     return PacketType.CUSTOM;
-                if (cancelResponses != null && !string.IsNullOrEmpty(cancelResponses.interactionId))
+                if (mutation != null && !string.IsNullOrEmpty(mutation.cancelResponses?.interactionId))
                     return PacketType.CANCEL_RESPONSE;
                 if (emotion != null && !string.IsNullOrEmpty(emotion.behavior))
                     return PacketType.EMOTION;

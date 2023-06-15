@@ -1,9 +1,11 @@
 using Google.Protobuf;
 using Grpc.Core;
+using Inworld.Packet;
 using Inworld.Runtime;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -35,9 +37,49 @@ namespace Inworld.Grpc
         }
 
         public override void GetAccessToken() => _GenerateAccessTokenAsync();
+        // ReSharper disable Unity.PerformanceAnalysis
         public override void LoadScene(string sceneFullName) => _LoadSceneAsync(sceneFullName);
         public override Inworld.LoadSceneResponse GetLiveSessionInfo() => InworldGRPC.From.GRPCLoadSceneResponse(m_LoadSceneResponse);
+#pragma warning disable CS4014
+        // ReSharper disable Unity.PerformanceAnalysis
         public override void StartSession() => _StartSession();
+#pragma warning restore CS4014
+        public override void SendText(string characterID, string textToSend)
+        {
+            if (string.IsNullOrEmpty(characterID) || string.IsNullOrEmpty(textToSend))
+                return;
+            Packet.TextPacket packet = new Packet.TextPacket
+            {
+                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                type = "TEXT",
+                packetId = new Packet.PacketId(),
+                routing = new Packet.Routing(characterID),
+                text = new Packet.TextEvent(textToSend)
+            };
+            Dispatch(packet);
+            _SendPacket(InworldGRPC.To.TextEvent(packet));
+        }
+        
+        public override void SendCancelEvent(string characterID, string interactionID)
+        {
+            if (string.IsNullOrEmpty(characterID))
+                return;
+            MutationPacket mutationPacket = new MutationPacket
+            {
+                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                type = "CANCEL_RESPONSE",
+                packetId = new Packet.PacketId(),
+                routing = new Packet.Routing(characterID)
+            };
+            mutationPacket.mutation = new Packet.MutationEvent
+            {
+                cancelResponses = new CancelResponse
+                {
+                    interactionId = interactionID
+                }
+            };
+            _SendPacket(InworldGRPC.To.CancelResponseEvent(mutationPacket));
+        }
         internal async Task _StartSession()
         {
             if (!IsTokenValid)
@@ -194,6 +236,12 @@ namespace Inworld.Grpc
             {
                 Error = e.ToString();
             }
+        }
+        
+        void _SendPacket(InworldPacket packet)
+        {
+            if (Status == InworldConnectionStatus.Connected)
+                m_OutgoingEventsQueue.Enqueue(packet);
         }
         void _ResolveGRPCPackets(InworldPacket response)
         {

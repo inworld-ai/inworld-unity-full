@@ -37,21 +37,23 @@ namespace Inworld
             Dispatch(packet);
             m_Socket.SendAsync(jsonToSend);
         }
-        public override void SendCancelEvent(string characterID, string interactionID, List<string> utteranceID)
+        public override void SendCancelEvent(string characterID, string interactionID)
         {
             if (string.IsNullOrEmpty(characterID))
                 return;
-            CancelResponsePacket cancelPacket = new CancelResponsePacket
+            MutationPacket cancelPacket = new MutationPacket
             {
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
                 type = "CANCEL_RESPONSE",
                 packetId = new PacketId(),
                 routing = new Routing(characterID)
             };
-            cancelPacket.cancelResponses = new CancelResponseEvent
+            cancelPacket.mutation = new MutationEvent
             {
-                interactionId = interactionID,
-                utteranceId = utteranceID
+                cancelResponses = new CancelResponse
+                {
+                    interactionId = interactionID
+                }
             };
             m_Socket.SendAsync(JsonUtility.ToJson(cancelPacket));
         }

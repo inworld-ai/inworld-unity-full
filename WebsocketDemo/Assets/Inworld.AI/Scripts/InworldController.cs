@@ -115,7 +115,7 @@ namespace Inworld
             m_Client.SendText( m_CurrentCharacter.ID, txtToSend);
         }
         public void SendText(string charID, string txtToSend) => m_Client.SendText(charID, txtToSend);
-        public void SendCancelEvent(string charID, string interactionID, List<string> utteranceID) => m_Client.SendCancelEvent(charID, interactionID, utteranceID);
+        public void SendCancelEvent(string charID, string interactionID) => m_Client.SendCancelEvent(charID, interactionID);
         public void SendTrigger(string triggerName, string charID = "", Dictionary<string, string> parameters = null)
         {
             string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter.ID : charID;

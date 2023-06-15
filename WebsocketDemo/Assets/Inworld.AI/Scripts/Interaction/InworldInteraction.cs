@@ -134,15 +134,7 @@ namespace Inworld.Interactions
                 return;
             item.Status = PacketStatus.CANCELLED;
             string interactionToCancel = item.InteractionID;
-            List<string> utterancesToCancel = item.Utterances
-                                                  .Where(utterance => utterance.Status == PacketStatus.RECEIVED)
-                                                  .Select(utterance =>
-                                                  {
-                                                      utterance.Status = PacketStatus.CANCELLED;
-                                                      return utterance.UtteranceID;
-                                                  })
-                                                  .ToList();
-            InworldController.Instance.SendCancelEvent(LiveSessionID, interactionToCancel, utterancesToCancel);
+            InworldController.Instance.SendCancelEvent(LiveSessionID, interactionToCancel);
         }
     }
 }
