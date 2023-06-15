@@ -65,7 +65,7 @@ VSAttribution.VSAttribution.SendAttributionEvent("Login Runtime", InworldAI.k_Co
         m_Options.PlayerName = InworldAI.User.Name;//"Player"; //
         m_Options.ApiKey = InworldAI.Game.APIKey;//"xgV17Aur4k33Qoox8OxepATdBeS0Bamu";//
         m_Options.ApiSecret = InworldAI.Game.APISecret;// "zSpQ2d0wObaPWCiRS2oioh8nDPVf1zkg2OISrdx8Zs47bm8rpdki3s6nejza0aki";//
-        Debug.Log("GetAppAuth with wrapper options");
+        InworldAI.Log("GetAppAuth with wrapper options");
         callback = new LoadSceneCallbackType(LoadSceneCallback);
         byte[] serializedData = m_Options.ToByteArray();
         
@@ -96,20 +96,18 @@ VSAttribution.VSAttribution.SendAttributionEvent("Login Runtime", InworldAI.k_Co
 
 public void ResolvePackets(GrpcPacket packet)
 {
-    Debug.Log("RESOLVING A NDK PACKET IN UNITY");
     m_Client.m_CurrentConnection ??= new Inworld.Connection();
     InworldPacketGenerator factory = InworldPacketGenerator.Instance;
     //object protobufObject;
 
     if (packet.DataChunk != null)
     {
-        Debug.Log("packet chunk isn't null type is " + packet.DataChunk.Type);
         switch (packet.DataChunk.Type)
         {
             case DataChunk.Types.DataType.Audio:
                 var audioObj = factory.FromProtobufPacket<AudioChunk>(packet);
                 // Perform operations on protobufObject here...
-                m_Client.m_CurrentConnection.incomingAudioQueue.Enqueue((AudioChunk)audioObj);
+                m_Client.m_CurrentConnection.incomingAudioQueue.Enqueue(audioObj);
                 break;
             case DataChunk.Types.DataType.State:
                 var protobufObject = factory.FromProtobufPacket<StateChunk>(packet);
@@ -123,38 +121,10 @@ public void ResolvePackets(GrpcPacket packet)
     }
     else if (packet.Text != null)
     {
-        Debug.Log("received a text packet from the NDK " + packet.Text);
         var protobufObject = factory.FromProtobufPacket<TextEvent>(packet);
         // Perform operations on protobufObject here...
         m_Client.m_CurrentConnection.incomingInteractionsQueue.Enqueue((TextEvent)protobufObject);
     }
-    // else if (packet.AudioChunk != null)
-    // {
-    //     Debug.Log("received a AUDIO packet from the NDK " + packet.AudioChunk);
-    //     // Rest of the debug logs and processing
-    //
-    //     bool phonemesValid = false;
-    //     if (packet.DataChunk == null)
-    //     {
-    //         Debug.Log("packet.DataChunk is null");
-    //     }
-    //     else
-    //     {
-    //         Debug.Log("packet.DataChunk.Chunk null status is " + packet.DataChunk.Chunk == null);
-    //         phonemesValid = packet.DataChunk.AdditionalPhonemeInfo != null;
-    //     }
-    //
-    //     if (phonemesValid)
-    //     {
-    //         protobufObject = factory.FromProtobufPacket<AudioChunk>(packet);
-    //     }
-    //     else
-    //     {
-    //         protobufObject = new AudioChunk(packet.AudioChunk.Chunk, Inworld.Packets.Routing.FromAgentToPlayer(packet.Routing.Source.Name));
-    //     }
-    //     // Perform operations on protobufObject here...
-    //     m_Client.m_CurrentConnection.incomingAudioQueue.Enqueue((AudioChunk)protobufObject);
-    // }
     else if (packet.Control != null)
     {
         var protobufObject = factory.FromProtobufPacket<Inworld.Packets.ControlEvent>(packet);
@@ -175,13 +145,13 @@ public void ResolvePackets(GrpcPacket packet)
     }
     else
     {
-        InworldAI.LogError($"Unsupported incoming other kind of event: {packet}");
+        InworldAI.Log($"Unsupported incoming other kind of event: {packet}" + "type is " + packet.GetType());
     }
 }
 
     void ConnectionStateCallback(ConnectionState state)
     {
-        Debug.Log("CONNECTION STATE IS " + state);
+        InworldAI.Log("CONNECTION STATE IS " + state);
         switch (state)
         {
             case ConnectionState.Connected:
@@ -202,13 +172,7 @@ public void ResolvePackets(GrpcPacket packet)
         byte[] serializedData = new byte[serializedAgentInfoArraySize];
         Marshal.Copy(serializedAgentInfoArray, serializedData, 0, serializedAgentInfoArraySize);
         agentInfoArray = AgentInfoArray.Parser.ParseFrom(serializedData);
-
-        Debug.Log("LOADSCENE CALLBACK INVOKED FROM DLL ARRAY COUNT IS " + agentInfoArray.AgentInfoList.Count);
-
-        foreach (AgentInfo agentInfo in agentInfoArray.AgentInfoList)
-        {
-            Debug.Log("first agent info name is " + agentInfo.GivenName + " brain is " + agentInfo.BrainName + " " + agentInfo.AgentId);
-        }
+        
         // Now you can use agentInfoArray in your C# code
 
         // Free the allocated buffer
@@ -222,12 +186,12 @@ public void ResolvePackets(GrpcPacket packet)
     #region Call backs
     public void OnAuthComplete()
     {
-        Debug.Log("Init Success!");
+        InworldAI.Log("Init Success!");
        
     }
     public void OnAuthFailed(string msg)
     {
-        Debug.Log("Auth failed with meassage: ! " + msg);
+        InworldAI.Log("Auth failed with meassage: ! " + msg);
 
     }
     #endregion
@@ -279,7 +243,7 @@ public void ResolvePackets(GrpcPacket packet)
     //            string buttonText = $"{agentInfo.GivenName}";
     //            if (GUI.Button(new Rect(10, currentYPosition, buttonWidth, buttonHeight), buttonText))
     //            {
-    //                Debug.Log("Button clicked: " + buttonText);
+    //                InworldAI.Log("Button clicked: " + buttonText);
     //                // Add any additional code you want to execute when the button is clicked
     //                currentAgent = agentInfo;
     //            }
@@ -302,7 +266,7 @@ public void ResolvePackets(GrpcPacket packet)
 
     //            if (GUI.Button(new Rect(centerX, centerY, buttonWidth, buttonHeight), "Send Message"))
     //            {
-    //                Debug.Log("Sending message to agent: " + currentAgent.GivenName);
+    //                InworldAI.Log("Sending message to agent: " + currentAgent.GivenName);
     //                InworldNDKWrapper.ClientWrapper_SendTextMessage(m_Wrapper.instance, currentAgent.AgentId, inputMessage);
     //            }
     //        }
@@ -361,7 +325,6 @@ public void ResolvePackets(GrpcPacket packet)
         if (packet.Routing.Target.IsAgent() && packet is Inworld.Packets.TextEvent)
         {
             Inworld.Packets.TextEvent textEvent = (packet as Inworld.Packets.TextEvent);
-            Debug.Log("SENDING AN EVENT " + packet.GetType().Name + " text is " + textEvent.Text);
             InworldNDKWrapper.ClientWrapper_SendTextMessage(m_Wrapper.instance, textEvent.Routing.Target.Id, textEvent.Text);
         }
         else if (packet.Routing.Source.IsPlayer() && packet is Inworld.Packets.AudioChunk)
@@ -369,19 +332,11 @@ public void ResolvePackets(GrpcPacket packet)
             SendAudio((AudioChunk)packet);
         }
         else
-            SendRawEvent(InworldPacketGenerator.Instance.ToProtobufPacket(packet));//InworldNDKWrapper.ClientWrapper_SendPacket(m_Wrapper.instance, packetPtr);
-        //}
-        //finally
-        //{
-        //    Marshal.FreeHGlobal(packetPtr);  // Make sure to free the allocated memory
-        //}
+            SendRawEvent(InworldPacketGenerator.Instance.ToProtobufPacket(packet));
     }
 
     void SendRawEvent(GrpcPacket packet)
     {
-        //if(packet.Text != null) 
-        //    Debug.Log("Sending raw event " + packet.Text);
-
         byte[] packetBytes = packet.ToByteArray();
         IntPtr packetPtr = Marshal.AllocHGlobal(packetBytes.Length);
         try
@@ -397,16 +352,14 @@ public void ResolvePackets(GrpcPacket packet)
 
     public void StartAudio(Inworld.Packets.Routing routing)
     {
-        Debug.Log("STARTING AUDIO");
         if (routing.Source.IsPlayer())
             InworldNDKWrapper.ClientWrapper_StartAudioSession(m_Wrapper.instance, routing.Target.Id);
     }
 
     public void SendAudio(Inworld.Packets.AudioChunk audioChunk)
     {
-        //Debug.Log("SENDING AUDIO CHUNK");
-        //SendRawEvent(InworldPacketGenerator.Instance.ToProtobufPacket(audioChunk)); 
-        InworldNDKWrapper.ClientWrapper_SendSoundMessage(m_Wrapper.instance, audioChunk.Routing.Target.Id, audioChunk.Chunk.ToString());     
+        byte[] data = audioChunk.Chunk.ToByteArray();
+        InworldNDKWrapper.ClientWrapper_SendSoundMessage(m_Wrapper.instance, audioChunk.Routing.Target.Id, data, data.Length);
     }
 
     public void EndAudio(Inworld.Packets.Routing routing)

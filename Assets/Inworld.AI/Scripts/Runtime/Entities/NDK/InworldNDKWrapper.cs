@@ -57,7 +57,7 @@ public class InworldNDKWrapper : IDisposable
     public static extern void ClientWrapper_SendTextMessage(IntPtr wrapper, string agentId, string text);
 
     [DllImport("InworldNDK", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ClientWrapper_SendSoundMessage")]
-    public static extern void ClientWrapper_SendSoundMessage(IntPtr wrapper, string agentId, string data);
+    public static extern void ClientWrapper_SendSoundMessage(IntPtr wrapper, string agentId, byte[] data, int dataSize);
 
     [DllImport("InworldNDK", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ClientWrapper_SendSoundMessageWithAEC")]
     public static extern void ClientWrapper_SendSoundMessageWithAEC(IntPtr wrapper, string agentId, IntPtr inputData, int inputDataSize, IntPtr outputData, int outputDataSize);
