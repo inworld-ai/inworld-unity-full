@@ -39,14 +39,8 @@ namespace Inworld
     {
         public List<InworldCharacterData> agents = new List<InworldCharacterData>();
         public string key;
-        public object previousState;
+        public object previousState; // TODO(Yan): Solve packets from saved data.
     }
-    // [Serializable]
-    // public class GenerateTokenRequest
-    // {
-    //     public string key;
-    //     public List<string> resources;
-    // }
     
     [Serializable]
     public class User
@@ -62,7 +56,7 @@ namespace Inworld
     [Serializable]
     public class PlayerProfile
     {
-        public List<Fields> fields;
+        public IEnumerable<Fields> fields;
     }
     [SerializeField]
     public class Fields

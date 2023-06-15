@@ -15,7 +15,7 @@ namespace Inworld
         protected AudioCapture m_AudioCapture;
         protected string m_SessionKey;
         InworldConnectionStatus m_Status;
-        string m_Error;
+        protected string m_Error;
 
         public bool IsRecording => m_AudioCapture.IsCapturing;
         public virtual bool IsTokenValid => m_Token != null && m_Token.IsValid;

@@ -17,13 +17,12 @@ MonoBehaviour:
   m_Capabilities:
     audio: 1
     emotions: 1
-    gestures: 1
     interruptions: 1
     narratedActions: 1
     silence: 1
     text: 1
     triggers: 1
-    continuation: 1
+    continuation: 0
     turnBasedStt: 0
     phonemeInfo: 1
   m_DebugMode: 1

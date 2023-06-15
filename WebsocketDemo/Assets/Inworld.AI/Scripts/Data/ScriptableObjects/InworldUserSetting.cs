@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 namespace Inworld
 {
@@ -12,7 +13,7 @@ namespace Inworld
     public class InworldUserSetting : ScriptableObject
     {
         [SerializeField] string m_PlayerName;
-        [SerializeField] List<Fields> m_PlayerData;
+        [SerializeField] List<InworldPlayerProfile> m_PlayerData;
 
         public string Name
         {
@@ -28,7 +29,11 @@ namespace Inworld
             viewTranscriptConsent = true,
             playerProfile = new PlayerProfile
             {
-                fields = m_PlayerData
+                fields = m_PlayerData.Select(data => new Fields
+                {
+                    fieldId = data.property,
+                    fieldValue = data.value
+                })
             }
         };
     }

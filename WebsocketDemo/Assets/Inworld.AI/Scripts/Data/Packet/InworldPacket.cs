@@ -45,7 +45,8 @@ namespace Inworld.Packet
         public string packetId;    // Unique.
         public string utteranceId; // Each sentence is an utterance. But can be interpreted as multiple behavior (Text, EmotionChange, Audio, etc)
         public string interactionId; // Lot of sentences included in one interaction.
-
+        public string correlationId; // Used in future.
+        
         public PacketId()
         {
             packetId = Guid.NewGuid().ToString();
