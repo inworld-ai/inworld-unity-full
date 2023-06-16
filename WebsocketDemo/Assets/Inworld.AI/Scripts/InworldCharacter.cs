@@ -101,6 +101,7 @@ namespace Inworld
         {
             onPacketReceived.Invoke(incomingPacket);
             InworldController.Instance.CharacterInteract(incomingPacket);
+            
             switch (incomingPacket)
             {
                 case AudioPacket audioPacket: // Already Played.
@@ -116,7 +117,7 @@ namespace Inworld
                     HandleTrigger(customPacket);
                     break;
                 default:
-                    Debug.Log($"Received {incomingPacket}");
+                    Debug.LogError($"Received Unknown {incomingPacket}");
                     break;
             }
         }
@@ -125,7 +126,7 @@ namespace Inworld
         {
             if (packet.text == null || string.IsNullOrEmpty(packet.text.text))
                 return;
-            switch (packet.routing.source.type)
+            switch (packet.routing.source.type.ToUpper())
             {
                 case "AGENT":
                     IsSpeaking = true;

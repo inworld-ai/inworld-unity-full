@@ -93,24 +93,40 @@ namespace Inworld.Interactions
         }
         void ReceivePacket(InworldPacket incomingPacket)
         {
-            if (!IsRelated(incomingPacket))
-                return;
-            switch (incomingPacket?.routing?.source.type)
+            try
             {
-                case "AGENT":
-                    Add(incomingPacket);
-                    break;
-                case "PLAYER":
-                    // Send Directly.
-                    OnInteractionChanged?.Invoke(new List<InworldPacket>{incomingPacket});
-                    break;
+                if (!IsRelated(incomingPacket))
+                {
+                    return;
+                }
+
+                switch (incomingPacket?.routing?.source.type.ToUpper())
+                {
+                    case "AGENT":
+                        Add(incomingPacket);
+                        break;
+                    case "PLAYER":
+                        // Send Directly.
+                        OnInteractionChanged?.Invoke
+                        (
+                            new List<InworldPacket>
+                            {
+                                incomingPacket
+                            }
+                        );
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
             }
         }
         void Add(InworldPacket packet)
         {
             if (packet.packetId == null || string.IsNullOrEmpty(packet.packetId.interactionId))
                 return;
-
+            
             Interaction interaction = this[packet.packetId.interactionId] ?? new Interaction(packet.packetId.interactionId);
             Utterance utterance = interaction[packet.packetId.utteranceId] ?? new Utterance(packet.packetId.utteranceId);
             interaction.Status = PacketStatus.RECEIVED; // Refresh Interaction Status.

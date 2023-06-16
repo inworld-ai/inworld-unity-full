@@ -14,17 +14,20 @@ namespace Inworld.Grpc
 {
     public class InworldGRPCClient : InworldClient
     {
-        [SerializeField] string m_SessionToken;
         [SerializeField] string m_APIKey;
         [SerializeField] string m_APISecret;
+        [SerializeField] string m_CustomToken;
         
         InworldAuth m_Auth;
         WorldEngine.WorldEngineClient m_WorldEngineClient;
         AsyncDuplexStreamingCall<InworldPacket, InworldPacket> m_StreamingCall;
+        ConcurrentQueue<InworldPacket> m_IncomingAudioQueue = new ConcurrentQueue<InworldPacket>();
+        ConcurrentQueue<InworldPacket> m_IncomingEventsQueue = new ConcurrentQueue<InworldPacket>();
         ConcurrentQueue<InworldPacket> m_OutgoingEventsQueue = new ConcurrentQueue<InworldPacket>();
         LoadSceneResponse m_LoadSceneResponse; // Yan: Grpc.LoadSceneResponse
         Channel m_Channel;
         Metadata m_Header;
+        float m_CoolDown;
 
         string LastState { get; set; }
         
@@ -35,7 +38,40 @@ namespace Inworld.Grpc
             m_Channel = new Channel(m_ServerConfig.RuntimeServer, new SslCredentials());
             m_WorldEngineClient = new WorldEngine.WorldEngineClient(m_Channel);
         }
-
+        void Update()
+        {
+            if (Status == InworldConnectionStatus.Connected)
+            {
+                m_CoolDown += Time.deltaTime;
+                if (m_CoolDown > 0.1f)
+                {
+                    m_CoolDown = 0;
+                    m_IncomingEventsQueue.TryDequeue(out InworldPacket incomingPacket);
+                    if (incomingPacket != null)
+                        _ResolveGRPCPackets(incomingPacket);
+                }
+            }
+                
+        }
+        void OnDisable()
+        {
+            _EndSession();
+        }
+        void OnDestroy()
+        {
+            _EndSession();
+        }
+        async Task _EndSession()
+        {
+            _ResetCommunicationData();
+            if (Status == InworldConnectionStatus.Connected)
+            {
+                Status = InworldConnectionStatus.Idle;
+                await m_StreamingCall.RequestStream.CompleteAsync();
+                m_StreamingCall.Dispose();
+            }
+        }
+        
         public override void GetAccessToken() => _GenerateAccessTokenAsync();
         // ReSharper disable Unity.PerformanceAnalysis
         public override void LoadScene(string sceneFullName) => _LoadSceneAsync(sceneFullName);
@@ -48,7 +84,7 @@ namespace Inworld.Grpc
         {
             if (string.IsNullOrEmpty(characterID) || string.IsNullOrEmpty(textToSend))
                 return;
-            Packet.TextPacket packet = new Packet.TextPacket
+            TextPacket packet = new TextPacket
             {
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
                 type = "TEXT",
@@ -57,34 +93,52 @@ namespace Inworld.Grpc
                 text = new Packet.TextEvent(textToSend)
             };
             Dispatch(packet);
-            _SendPacket(InworldGRPC.To.TextEvent(packet));
+            _SendPacket(InworldGRPC.To.TextEvent(characterID, textToSend));
         }
         
         public override void SendCancelEvent(string characterID, string interactionID)
         {
             if (string.IsNullOrEmpty(characterID))
                 return;
-            MutationPacket mutationPacket = new MutationPacket
-            {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
-                type = "CANCEL_RESPONSE",
-                packetId = new Packet.PacketId(),
-                routing = new Packet.Routing(characterID)
-            };
-            mutationPacket.mutation = new Packet.MutationEvent
-            {
-                cancelResponses = new CancelResponse
-                {
-                    interactionId = interactionID
-                }
-            };
-            _SendPacket(InworldGRPC.To.CancelResponseEvent(mutationPacket));
+            _SendPacket(InworldGRPC.To.CancelResponseEvent(characterID, interactionID));
         }
+        
+        public override void SendTrigger(string charID, string triggerName, Dictionary<string, string> parameters)
+        {
+            if (string.IsNullOrEmpty(charID))
+                return;
+            InworldAI.Log($"Send Trigger {triggerName}");
+            _SendPacket(InworldGRPC.To.CustomEvent(charID, triggerName, parameters));
+        }
+        public override void StartAudio(string charID)
+        {
+            if (string.IsNullOrEmpty(charID))
+                return;
+
+            _SendPacket(InworldGRPC.To.AudioSessionStart(charID));
+            if (!m_AudioCapture.IsCapturing)
+                m_AudioCapture.StartRecording();
+        }
+        public override void StopAudio(string charID)
+        {
+            if (string.IsNullOrEmpty(charID))
+                return;
+            _SendPacket(InworldGRPC.To.AudioSessionEnd(charID));
+            if (m_AudioCapture.IsCapturing)
+                m_AudioCapture.StopRecording();
+        }
+        public override void SendAudio(string charID, string base64)
+        {
+            if (string.IsNullOrEmpty(charID) || string.IsNullOrEmpty(base64))
+                return;
+            _SendPacket(InworldGRPC.To.AudioChunk(charID, base64));
+        }
+        
         internal async Task _StartSession()
         {
             if (!IsTokenValid)
                 throw new ArgumentException("No sessionKey to start Inworld session, use CreateWorld first.");
-            m_OutgoingEventsQueue.Clear();
+            _ResetCommunicationData();
             Status = InworldConnectionStatus.Connected;
             try
             {
@@ -117,7 +171,7 @@ namespace Inworld.Grpc
                                 }
                                 if (next)
                                 {
-                                    _ResolveGRPCPackets(m_StreamingCall.ResponseStream.Current);
+                                    m_IncomingEventsQueue.Enqueue(m_StreamingCall.ResponseStream.Current);
                                 }
                                 else
                                 {
@@ -162,7 +216,7 @@ namespace Inworld.Grpc
         }
         async void _GenerateAccessTokenAsync()
         {
-            if (!string.IsNullOrEmpty(m_SessionToken))
+            if (!string.IsNullOrEmpty(m_CustomToken))
             {
                 _ReceiveCustomToken();
                 return;
@@ -191,7 +245,6 @@ namespace Inworld.Grpc
                     {"session-id", m_Auth.Token.SessionId}
                 };
                 m_Token = InworldGRPC.From.GRPCToken(m_Auth.Token);
-                Debug.Log(m_Token.expirationTime);
                 Status = InworldConnectionStatus.Initialized;
             }
             catch (RpcException e)
@@ -218,10 +271,10 @@ namespace Inworld.Grpc
             }
             try
             {
-                Debug.Log(m_Header);
                 m_LoadSceneResponse = await m_WorldEngineClient.LoadSceneAsync(lsRequest, m_Header);
                 // Yan: They somehow use {WorkSpace}:{sessionKey} as "sessionKey" now. Need to remove the first part.
                 m_SessionKey = m_LoadSceneResponse.Key.Split(':')[1];
+                Debug.Log($"Session ID: {m_Token.sessionId}");
                 if (m_LoadSceneResponse.PreviousState != null)
                 {
                     foreach (PreviousState.Types.StateHolder stateHolder in m_LoadSceneResponse.PreviousState.StateHolders)
@@ -253,8 +306,8 @@ namespace Inworld.Grpc
                         Dispatch(InworldGRPC.From.GRPCAudioChunk(response));
                         break;
                     case DataChunk.Types.DataType.State:
-                        InworldAI.LogError($"Unsupported State event: {response}");
-                        Dispatch(InworldGRPC.From.GRPCPacket(response));
+                    case DataChunk.Types.DataType.Silence:
+                        // TODO(YAN): Support State and Silence.
                         break;
                     default:
                         InworldAI.LogError($"Unsupported incoming event: {response}");
@@ -284,12 +337,13 @@ namespace Inworld.Grpc
             }
             else
             {
+                Debug.LogError($"YAN UnSupported {response}");
                 Dispatch(InworldGRPC.From.GRPCPacket(response));
             }
         }
         void _ReceiveCustomToken()
         {
-            JObject data = JObject.Parse(m_SessionToken);
+            JObject data = JObject.Parse(m_CustomToken);
             if (data.ContainsKey("sessionId") && data.ContainsKey("token"))
             {
                 InworldAI.Log("Init Success with Custom Token!");
@@ -302,6 +356,12 @@ namespace Inworld.Grpc
             }
             else
                 Error = "Token Invalid";
+        }
+        void _ResetCommunicationData()
+        {
+            m_IncomingAudioQueue.Clear();
+            m_IncomingEventsQueue.Clear();
+            m_OutgoingEventsQueue.Clear();
         }
     }
 }

@@ -123,7 +123,7 @@ namespace Inworld.Sample
         {
             m_BodyAnimator.SetFloat(s_Random, Random.Range(0, 1) > 0.5f ? 1 : 0);
             m_BodyAnimator.SetFloat(s_RemainSec, m_Interaction.AudioLength);
-            _ProcessEmotion(packet.emotion.behavior);
+            _ProcessEmotion(packet.emotion.behavior.ToUpper());
             base.HandleEmotion(packet);
         }
         void _ProcessEmotion(string emotionBehavior)

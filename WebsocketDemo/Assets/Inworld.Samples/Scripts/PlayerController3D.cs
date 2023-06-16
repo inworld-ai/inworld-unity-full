@@ -38,7 +38,7 @@ namespace Inworld.Sample
         {
             if (packet.text == null || string.IsNullOrEmpty(packet.text.text))
                 return;
-            switch (packet.routing.source.type)
+            switch (packet.routing.source.type.ToUpper())
             {
                 case "AGENT":
                     InworldCharacterData charData = InworldController.Instance.GetCharacter(packet.routing.source.name);

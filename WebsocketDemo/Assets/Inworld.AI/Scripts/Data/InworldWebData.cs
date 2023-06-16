@@ -11,7 +11,7 @@ namespace Inworld
         public string type;
         public string expirationTime;
         public string sessionId;
-
+        
         public bool IsValid
         {
             get

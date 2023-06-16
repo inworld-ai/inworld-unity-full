@@ -1,6 +1,8 @@
-﻿using Inworld.Packet;
+﻿using Google.Protobuf;
+using Inworld.Packet;
 using System.Linq;
 using System;
+using System.Collections.Generic;
 
 
 namespace Inworld.Grpc
@@ -49,9 +51,32 @@ namespace Inworld.Grpc
                     }
                 }
             };
+            public static InworldPacket GRPCPacket(string charID) => new InworldPacket
+            {
+                Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow),
+                Routing = new Routing
+                {
+                    Source = new Actor
+                    {
+                        Name = InworldAI.User.Name,
+                        Type = Actor.Types.Type.Player
+                    },
+                    Target = new Actor
+                    {
+                        Name = charID,
+                        Type = Actor.Types.Type.Agent
+                    }
+                },
+                PacketId = new PacketId
+                {
+                    PacketId_ = Guid.NewGuid().ToString(),
+                    InteractionId = Guid.NewGuid().ToString(),
+                    UtteranceId = Guid.NewGuid().ToString(),
+                }
+            };
             public static InworldPacket GRPCPacket(Packet.InworldPacket rhs) => new InworldPacket
             {
-                Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.ParseExact(rhs.timestamp, "yyyy-MM-dd'T'HH:mm:ss.fff'Z'", System.Globalization.CultureInfo.InvariantCulture)),
+                Timestamp = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow),
                 Routing = new Routing
                 {
                     Source = new Actor
@@ -74,26 +99,71 @@ namespace Inworld.Grpc
                 }
             };
             
-            public static InworldPacket TextEvent(TextPacket packet)
+            public static InworldPacket TextEvent(string charID, string txtToSend)
             {
-                InworldPacket toSend = GRPCPacket(packet);
+                InworldPacket toSend = GRPCPacket(charID);
                 toSend.Text = new TextEvent
                 {
-                    Text = packet.text.text,
+                    Text = txtToSend,
                     SourceType = Grpc.TextEvent.Types.SourceType.TypedIn,
-                    Final = packet.text.final
+                    Final = true
                 };
                 return toSend;
             }
-            public static InworldPacket CancelResponseEvent(MutationPacket cancelPacket)
+            public static InworldPacket CancelResponseEvent(string charID, string interactionID)
             {
-                InworldPacket toSend = GRPCPacket(cancelPacket);
+                InworldPacket toSend = GRPCPacket(charID);
                 toSend.Mutation = new MutationEvent
                 {
                     CancelResponses = new CancelResponses
                     {
-                        InteractionId = cancelPacket.mutation.cancelResponses.interactionId
+                        InteractionId = interactionID
                     }
+                };
+                return toSend;
+            }
+            public static InworldPacket CustomEvent(string charID, string triggerName, Dictionary<string, string> parameters)
+            {
+                InworldPacket toSend = GRPCPacket(charID);
+                toSend.Custom = new CustomEvent
+                {
+                    Name = triggerName,
+                };
+                foreach (KeyValuePair<string, string> kvp in parameters)
+                {
+                    toSend.Custom.Parameters.Add(new CustomEvent.Types.Parameter
+                    {
+                        Name = kvp.Key,
+                        Value = kvp.Value
+                    });
+                }
+                return toSend;
+            }
+            public static InworldPacket AudioSessionStart(string charID)
+            {
+                InworldPacket toSend = GRPCPacket(charID);
+                toSend.Control = new ControlEvent
+                {
+                    Action = ControlEvent.Types.Action.AudioSessionStart
+                };
+                return toSend;
+            }
+            public static InworldPacket AudioSessionEnd(string charID)
+            {
+                InworldPacket toSend = GRPCPacket(charID);
+                toSend.Control = new ControlEvent
+                {
+                    Action = ControlEvent.Types.Action.AudioSessionEnd
+                };
+                return toSend;
+            }
+            public static InworldPacket AudioChunk(string charID, string base64)
+            {
+                InworldPacket toSend = GRPCPacket(charID);
+                toSend.DataChunk = new DataChunk
+                {
+                    Type = DataChunk.Types.DataType.Audio,
+                    Chunk = ByteString.FromBase64(base64)
                 };
                 return toSend;
             }

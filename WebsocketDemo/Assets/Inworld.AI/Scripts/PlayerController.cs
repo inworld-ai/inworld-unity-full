@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Inworld;
 using Inworld.UI;
 using Inworld.Packet;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -129,8 +130,8 @@ public class PlayerController : MonoBehaviour
     protected virtual void HandleText(TextPacket packet)
     {
         if (packet.text == null || string.IsNullOrEmpty(packet.text.text))
-            return;
-        switch (packet.routing.source.type)
+                return;
+        switch (packet.routing.source.type.ToUpper())
         {
             case "AGENT":
                 if (!m_Bubbles.ContainsKey(packet.packetId.utteranceId))

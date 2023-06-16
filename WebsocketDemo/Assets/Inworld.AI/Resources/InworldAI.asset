@@ -22,7 +22,7 @@ MonoBehaviour:
     silence: 1
     text: 1
     triggers: 1
-    continuation: 0
-    turnBasedStt: 0
+    continuation: 1
+    turnBasedStt: 1
     phonemeInfo: 1
   m_DebugMode: 1

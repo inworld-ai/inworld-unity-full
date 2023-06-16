@@ -222,10 +222,13 @@ namespace Inworld
 
             if (packetReceived.Type == PacketType.UNKNOWN)
             {
-                if (e.Data.Contains("error") && e.Data.Contains("inactivity")) // && m_AutoStart)
-                    Status = InworldConnectionStatus.LostConnect;
-                else
-                    Error = e.Data;
+                if (e.Data.Contains("error"))
+                {
+                    if (e.Data.Contains("inactivity")) // && m_AutoStart)
+                        Status = InworldConnectionStatus.LostConnect;
+                    else
+                        Error = e.Data;
+                }
             }
             Dispatch(packetReceived.Packet);
         }
