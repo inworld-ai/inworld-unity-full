@@ -48,7 +48,8 @@ public class ChatBubble : InworldUIElement
     public void SetBubble(string charName, Texture2D thumbnail, string text = null)
     {
         m_CharacterName.text = charName;
-        m_Icon.texture = thumbnail;
+        if (m_Icon)
+            m_Icon.texture = thumbnail;
         if (!string.IsNullOrEmpty(text))
             m_TextField.text = text;
     }

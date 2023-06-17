@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
         _SetContentHeight(m_CharButtonAnchor, m_CharSelector);
     }
 
-    protected void OnStatusChanged(InworldConnectionStatus newStatus)
+    protected virtual void OnStatusChanged(InworldConnectionStatus newStatus)
     {
         m_ConnectButton.interactable = newStatus == InworldConnectionStatus.Idle || newStatus == InworldConnectionStatus.Connected;
         m_ConnectButtonText.text = newStatus == InworldConnectionStatus.Connected ? "DISCONNECT" : "CONNECT";

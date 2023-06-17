@@ -235,6 +235,7 @@ namespace Inworld.Grpc
                     "authorization", m_Auth.GetHeader(m_ServerConfig.RuntimeServer, m_APIKey, m_APISecret)
                 }
             };
+            
             try
             {
                 m_Auth.Token = await m_WorldEngineClient.GenerateTokenAsync(gtRequest, metadata, DateTime.UtcNow.AddHours(1));

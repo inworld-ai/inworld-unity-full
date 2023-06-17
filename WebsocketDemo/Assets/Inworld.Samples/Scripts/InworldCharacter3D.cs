@@ -172,12 +172,13 @@ namespace Inworld.Sample
                 _ResetMouth();
                 return;
             }
-            Assets.PhonemeToViseme p2v = m_FaceAnimData.p2vMap.FirstOrDefault(v => v.phoneme == data.phoneme);
+            PhonemeToViseme p2v = m_FaceAnimData.p2vMap.FirstOrDefault(v => v.phoneme == data.phoneme);
             if (p2v == null)
             {
                 Debug.LogError($"Not Found! {data.phoneme}");
                 return;
             }
+            Debug.Log($"Phoneme: {p2v.phoneme} Viseme: {p2v.visemeIndex}");
             if (p2v.visemeIndex >= 0 && p2v.visemeIndex < m_LipsyncTextures.Count)
                 m_matMouth.mainTexture = m_LipsyncTextures[p2v.visemeIndex];
         }

@@ -83,6 +83,10 @@ namespace Inworld
         {
             if (charData.brainName == Data.brainName)
                 RegisterLiveSession();
+            else
+            {
+                Debug.LogError($"My Brain: {BrainName} Received: {charData.brainName}");
+            }
         }
         protected virtual void OnCharChanged(InworldCharacter oldChar, InworldCharacter newChar) {}
         protected virtual void OnStatusChanged(InworldConnectionStatus newStatus)

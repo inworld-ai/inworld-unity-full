@@ -77,6 +77,5 @@ namespace Inworld
         {
             Init();
         }
-
     }
 }

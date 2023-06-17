@@ -100,7 +100,7 @@ namespace Inworld.Interactions
                     return;
                 }
 
-                switch (incomingPacket?.routing?.source.type.ToUpper())
+                switch (incomingPacket?.routing?.source?.type.ToUpper())
                 {
                     case "AGENT":
                         Add(incomingPacket);

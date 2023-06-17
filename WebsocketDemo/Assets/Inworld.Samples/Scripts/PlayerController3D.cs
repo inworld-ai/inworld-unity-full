@@ -1,5 +1,4 @@
 ﻿using Inworld.Packet;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -33,26 +32,5 @@ namespace Inworld.Sample
             m_Subtitle.text = $"(Received {customPacket.Trigger})";
         }
         protected override void HandleEmotion(EmotionPacket packet) => m_CurrentEmotion = packet.emotion.ToString();
-
-        protected override void HandleText(TextPacket packet)
-        {
-            if (packet.text == null || string.IsNullOrEmpty(packet.text.text))
-                return;
-            switch (packet.routing.source.type.ToUpper())
-            {
-                case "AGENT":
-                    InworldCharacterData charData = InworldController.Instance.GetCharacter(packet.routing.source.name);
-                    if (charData != null)
-                    {
-                        string charName = charData.givenName ?? "Character";
-                        string title = $"{charName}({m_CurrentEmotion}):";
-                        m_Subtitle.text = $"{title} {packet.text.text}";
-                    }
-                    break;
-                case "PLAYER":
-                    m_Subtitle.text = $"{InworldAI.User.Name}: {packet.text.text}";
-                    break;
-            }
-        }
     }
 }

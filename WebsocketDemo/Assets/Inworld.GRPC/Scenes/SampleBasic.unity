@@ -236,9 +236,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
-  m_SessionToken: 
-  m_APIKey: RzAZnJ3vqhd4GDXywEps9GQQsG06Hqwa
-  m_APISecret: x7aABJynjRPhqqC9M6P5bNprsohf8aQRfe1nRY0AygTCT48m208zvItLqe3S61Xx
+  m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
+  m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
+  m_CustomToken: 
 --- !u!114 &359806126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 359806125}
-  m_SceneFullName: workspaces/yj01/scenes/yj01
+  m_SceneFullName: workspaces/unitytest/scenes/transform
   m_AutoStart: 1
 --- !u!114 &359806127
 MonoBehaviour:
@@ -284,7 +284,6 @@ GameObject:
   m_Component:
   - component: {fileID: 444891041}
   - component: {fileID: 444891040}
-  - component: {fileID: 444891042}
   m_Layer: 0
   m_Name: Spot Light
   m_TagString: Untagged
@@ -369,18 +368,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 131.568, y: 0, z: 0}
---- !u!114 &444891042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 444891039}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97eed64a69e71de45866201f8fa68f82, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &519391660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -772,6 +759,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 9199261849990390558, guid: 462787370f9ff1845901709916b568ee, type: 3}
+--- !u!137 &947015528 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -3612840882688719046, guid: 462787370f9ff1845901709916b568ee, type: 3}
+  m_PrefabInstance: {fileID: 947015527}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &947015529 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2800602913417539097, guid: 462787370f9ff1845901709916b568ee, type: 3}
@@ -789,7 +781,6 @@ GameObject:
   - component: {fileID: 1131924865}
   - component: {fileID: 1131924864}
   - component: {fileID: 1131924863}
-  - component: {fileID: 1131924867}
   m_Layer: 5
   m_Name: DemoCanvas
   m_TagString: Untagged
@@ -880,18 +871,6 @@ RectTransform:
   m_AnchoredPosition: {x: -1.2, y: 5.2000003}
   m_SizeDelta: {x: 1600, y: 900}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1131924867
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1131924862}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1c1ea1e16d4f544a8733c564fd6ea8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1351384361
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,18 +965,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1386811812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1386811814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 994308f88a3ade94ab5cccb14cdd01c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1386811813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1054,7 +1021,6 @@ GameObject:
   - component: {fileID: 1386811819}
   - component: {fileID: 1386811818}
   - component: {fileID: 1386811813}
-  - component: {fileID: 1386811812}
   m_Layer: 5
   m_Name: BtnRecord
   m_TagString: Untagged
@@ -1807,6 +1773,7 @@ GameObject:
   - component: {fileID: 467126463158232239}
   - component: {fileID: 467126463158232236}
   - component: {fileID: 467126463158232240}
+  - component: {fileID: 467126463158232241}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: MainCamera
@@ -1921,6 +1888,29 @@ MonoBehaviour:
     m_RotationOrder: 4
   rotationLerpTime: 0.01
   invertY: 0
+--- !u!114 &467126463158232241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467126463158232237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fd6acdecc1c0114eb2a4d8357b2c289, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CharButtonAnchor: {fileID: 0}
+  m_ContentRT: {fileID: 1668428372}
+  m_CharSelector: {fileID: 0}
+  m_BubbleLeft: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
+  m_BubbleRight: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
+  m_StatusText: {fileID: 1934973846}
+  m_ConnectButtonText: {fileID: 0}
+  m_InputField: {fileID: 3065141206814883160}
+  m_SendButton: {fileID: 7118020155351980246}
+  m_ConnectButton: {fileID: 1386811813}
+  m_ChatCanvas: {fileID: 519391663}
 --- !u!82 &500944304512089310
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2385,6 +2375,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c22aafc375d6d24c99c2207aa2039a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ContentRT: {fileID: 4248716694990841504}
+  m_BubbleLeft: {fileID: -5829000521551651004, guid: 6e31716df34c4f04a8a382ad03c5790d, type: 3}
+  m_BubbleRight: {fileID: 7032387963612836835, guid: ce19183024b657340b5e830b1549618e, type: 3}
+  m_EmoIcon: {fileID: 5295392914518966894}
+  m_FaceData: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
 --- !u!114 &3737309538741492351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3724,6 +3719,8 @@ GameObject:
   - component: {fileID: 5640325391146654198}
   - component: {fileID: 6301156353467882248}
   - component: {fileID: 500944304512089310}
+  - component: {fileID: 9047055560386739719}
+  - component: {fileID: 9047055560386739720}
   m_Layer: 0
   m_Name: Celeste
   m_TagString: Untagged
@@ -3731,3 +3728,64 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &9047055560386739719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9047055560386739718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec0023079ae244cf88d8e53bebcd9542, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MaxItemCount: 100
+  m_TextDuration: 0.5
+--- !u!114 &9047055560386739720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9047055560386739718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39f0a4db40e914b489ec8b9169ecb4e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Data:
+    agentId: 
+    brainName: workspaces/unitytest/characters/prince_stone
+    givenName: Prince Stone
+    characterAssets:
+      rpmModelUri: 
+      rpmImageUriPortrait: 
+      rpmImageUriPosture: 
+      avatarImg: 
+      avatarImgOriginal: 
+    thumbnail: {fileID: 0}
+  m_VerboseLog: 0
+  onBeginSpeaking:
+    m_PersistentCalls:
+      m_Calls: []
+  onEndSpeaking:
+    m_PersistentCalls:
+      m_Calls: []
+  onPacketReceived:
+    m_PersistentCalls:
+      m_Calls: []
+  onCharacterSpeaks:
+    m_PersistentCalls:
+      m_Calls: []
+  onEmotionChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onGoalCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  m_PlayerCamera: {fileID: 467126463158232238}
+  m_BodyAnimator: {fileID: 6301156353467882248}
+  m_FaceMesh: {fileID: 947015528}
+  m_FaceAnimData: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
+  m_BlinkRate: 0
