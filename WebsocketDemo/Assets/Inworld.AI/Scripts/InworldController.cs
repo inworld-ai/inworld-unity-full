@@ -13,7 +13,7 @@ namespace Inworld
     public class InworldController : SingletonBehavior<InworldController>
     {
         [SerializeField] InworldClient m_Client;
-        [SerializeField] string m_SceneFullName;
+        [SerializeField] public string m_SceneFullName;
         [Space(10)][SerializeField] bool m_AutoStart;
 
         // YAN: Now LiveSessionID is handled by InworldController Only. To prevent unable to chat.
@@ -124,10 +124,10 @@ namespace Inworld
         public void StartAudio(string charID = "")
         {
             string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter.ID : charID;
-            if (InworldAI.IsDebugMode)
-                InworldAI.Log($"Start Audio Event {charIDToSend}");
             if (!IsRegistered(charIDToSend))
                 return;
+            if (InworldAI.IsDebugMode)
+                InworldAI.Log($"Start Audio Event {charIDToSend}");
             m_Client.StartAudio(charIDToSend);
         }
         public void StopAudio(string charID = "")
@@ -171,17 +171,23 @@ namespace Inworld
             m_LiveSession.Clear();
             foreach (InworldCharacterData agent in response.agents.Where(agent => !string.IsNullOrEmpty(agent.agentId) && !string.IsNullOrEmpty(agent.brainName)))
             {
+                if(agent.brainName.Contains("DUMMY"))
+                    continue;
+                
                 m_LiveSession[agent.brainName] = agent.agentId;
                 m_Characters[agent.brainName] = agent;
-                string url = agent.characterAssets.URL;
-                if (!string.IsNullOrEmpty(url))
+                if (agent.characterAssets != null)
                 {
-                    UnityWebRequest uwr = new UnityWebRequest(url);
-                    uwr.downloadHandler = new DownloadHandlerTexture();
-                    yield return uwr.SendWebRequest();
-                    if (uwr.isDone && uwr.result == UnityWebRequest.Result.Success)
+                    string url = agent.characterAssets.URL;
+                    if (!string.IsNullOrEmpty(url))
                     {
-                        agent.thumbnail = (uwr.downloadHandler as DownloadHandlerTexture)?.texture;
+                        UnityWebRequest uwr = new UnityWebRequest(url);
+                        uwr.downloadHandler = new DownloadHandlerTexture();
+                        yield return uwr.SendWebRequest();
+                        if (uwr.isDone && uwr.result == UnityWebRequest.Result.Success)
+                        {
+                            agent.thumbnail = (uwr.downloadHandler as DownloadHandlerTexture)?.texture;
+                        }
                     }
                 }
                 OnCharacterRegistered?.Invoke(agent);

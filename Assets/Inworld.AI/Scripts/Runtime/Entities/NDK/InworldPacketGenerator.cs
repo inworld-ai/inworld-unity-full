@@ -36,6 +36,8 @@ using ProtoTextEvent = Inworld.ProtoBuf.TextEvent;
 using ProtoDataChunk = Inworld.ProtoBuf.DataChunk;
 using ProtoActionEvent = Inworld.ProtoBuf.ActionEvent;
 using ProtoCustomEvent = Inworld.ProtoBuf.CustomEvent;
+using ProtoPlayback = Inworld.ProtoBuf.Playback;
+using ProtoNarrativeAction = Inworld.ProtoBuf.NarratedAction;
 #else
 using ProtoPacket = Inworld.Grpc.InworldPacket;
 using ProtoPacketID = Inworld.Grpc.PacketId;
@@ -48,27 +50,29 @@ using ProtoTextEvent = Inworld.Grpc.TextEvent;
 using ProtoDataChunk = Inworld.Grpc.DataChunk;
 using ProtoActionEvent = Inworld.Grpc.ActionEvent;
 using ProtoCustomEvent = Inworld.Grpc.CustomEvent;
+using ProtoPlayback = Inworld.Grpc.Playback;
+using ProtoNarrativeAction = Inworld.Grpc.NarratedAction;
 #endif
 
 
 public class InworldPacketGenerator 
 {
-    private static InworldPacketGenerator _instance;
+    //private static InworldPacketGenerator _instance;
 
-    public static InworldPacketGenerator Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = new InworldPacketGenerator();
-            }
+    // public static InworldPacketGenerator Instance
+    // {
+    //     get
+    //     {
+    //         if (_instance == null)
+    //         {
+    //             _instance = new InworldPacketGenerator();
+    //         }
+    //
+    //         return _instance;
+    //     }
+    // }
 
-            return _instance;
-        }
-    }
-
-    public ProtoPacket ToProtobufPacket(InworldPacket packet)
+    public static ProtoPacket ToProtobufPacket(InworldPacket packet)
     {
         ProtoPacket protoPacket = new ProtoPacket();
         if (packet.PacketBytes == null)
@@ -108,8 +112,8 @@ public class InworldPacketGenerator
                     ProtoActionEvent pae = new ProtoActionEvent();
                     NarratedAction narratedAction = new NarratedAction();
                     narratedAction.Content = actionEvent.Content;
-                    pae.Playback = Playback.Utterance;
-                    pae.NarratedAction = narratedAction;
+                    pae.Playback = GetPlayback(Playback.Utterance);
+                    pae.NarratedAction = GetNarratedAction(narratedAction);
                     protoPacket.Action = pae;
                     packet.PacketBytes = protoPacket.ToByteArray();
                     // Handle ActionEvent case
@@ -140,8 +144,31 @@ public class InworldPacketGenerator
         }
         return ProtoPacket.Parser.ParseFrom(packet.PacketBytes);
     }
+    
+    public static ProtoPlayback GetPlayback(Playback playback)
+    {
+        switch (playback)
+        {
+            case Playback.Interaction:
+                return ProtoPlayback.Interaction;
+            case Playback.Unspecified:
+                default:
+                return ProtoPlayback.Unspecified;
+            case Playback.Utterance:
+                return ProtoPlayback.Utterance;
+            case Playback.InteractionEnd:
+                return ProtoPlayback.InteractionEnd;
+        }
+    }
 
-    public T FromProtobufPacket<T>(ProtoPacket packet) where T : InworldPacket
+    public static ProtoNarrativeAction GetNarratedAction(NarratedAction narratedAction)
+    {
+        ProtoNarrativeAction pna = new ProtoNarrativeAction();
+        pna.Content = narratedAction.Content;
+        return pna;
+    }
+
+    public static T FromProtobufPacket<T>(ProtoPacket packet) where T : InworldPacket
     {
         if (typeof(T) == typeof(TextEvent))
         {
@@ -177,7 +204,7 @@ public class InworldPacketGenerator
         throw new ("Unsupported packet type " + typeof(T));
     }
 
-    public ProtoRouting ToProtoRouting(Routing routing)
+    public static ProtoRouting ToProtoRouting(Routing routing)
     {
         ProtoRouting rp = new ProtoRouting();
         rp.Source = ToProtoActor(routing.Source);
@@ -185,12 +212,12 @@ public class InworldPacketGenerator
         return rp;
     }
     
-    public Routing FromProtoRouting(ProtoRouting routing)
+    public static Routing FromProtoRouting(ProtoRouting routing)
     {
         return new Routing(FromProtoActor(routing.Source), FromProtoActor(routing.Target));
     }
     
-    public ProtoActor ToProtoActor(Actor actor)
+    public static ProtoActor ToProtoActor(Actor actor)
     {
         ProtoActor a = new ProtoActor();
         a.Name = actor.Id;
@@ -198,23 +225,23 @@ public class InworldPacketGenerator
         return a;
     }
     
-    public Actor FromProtoActor(ProtoActor actor)
+    public static Actor FromProtoActor(ProtoActor actor)
     {
         return new Actor(FromProtoActorType(actor.Type), actor.Name);
     }
     
-    public ProtoActor.Types.Type ToProtoActorType(ActorType type)
+    public static ProtoActor.Types.Type ToProtoActorType(ActorType type)
     {
         return (ProtoActor.Types.Type)type;
     }
     
-    public ActorType FromProtoActorType(ProtoActor.Types.Type type)
+    public static ActorType FromProtoActorType(ProtoActor.Types.Type type)
     {
         return (ActorType)type;
 
     }
 
-    public ProtoPacketID ToProtoPacketId(string packetId, string utteranceId, string interactionId, string correlatedId)
+    public static ProtoPacketID ToProtoPacketId(string packetId, string utteranceId, string interactionId, string correlatedId)
     {
         return new ProtoPacketID
         {
@@ -222,7 +249,7 @@ public class InworldPacketGenerator
         };
     }
     
-    public ProtoPacketID ToProtoPacketId(PacketId packetId)
+    public static ProtoPacketID ToProtoPacketId(PacketId packetId)
     {
         return new ProtoPacketID
         {
@@ -230,7 +257,7 @@ public class InworldPacketGenerator
         };
     }
     
-    public PacketId FromProtoPacketId(ProtoPacketID packetId)
+    public static PacketId FromProtoPacketId(ProtoPacketID packetId)
     {
         return new PacketId
         {
