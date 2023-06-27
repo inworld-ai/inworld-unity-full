@@ -21,7 +21,7 @@ namespace Inworld
     {
         public UnityEvent OnRecordingStart;
         public UnityEvent OnRecordingEnd;
-        public bool IsCapturing { get; set; }
+        public bool IsCapturing;
         [SerializeField] int m_AudioRate = 16000;
         [SerializeField] int m_BufferSeconds = 1;
         
