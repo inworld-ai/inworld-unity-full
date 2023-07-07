@@ -401,7 +401,18 @@ namespace Inworld
         {
             State = ControllerStates.Initializing;
             m_Client.RuntimeEvent += OnRuntimeEvents;
-            m_Client.GetAppAuth(sessionToken);
+            m_Client.GetAppAuth(InworldAI.Game.APIKey, InworldAI.Game.APISecret, sessionToken);
+        }
+        /// <summary>
+        ///     Initialize the SDK.
+        ///     Make sure there's a valid ServerConfig (Has URI of both RuntimeServer and StudioServer)
+        ///     and a valid pair of valid API Key/Secret
+        /// </summary>
+        public void InitWithCustomKey(string key, string secret)
+        {
+            State = ControllerStates.Initializing;
+            m_Client.RuntimeEvent += OnRuntimeEvents;
+            m_Client.GetAppAuth(key, secret);
         }
         /// <summary>
         /// Start Recording
