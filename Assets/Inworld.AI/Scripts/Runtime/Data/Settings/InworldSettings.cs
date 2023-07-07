@@ -114,6 +114,7 @@ namespace Inworld.Util
             Audio = m_CanReceiveAudio,
             NarratedActions = true,
             Emotions = true,
+            Relations = true,
             Interruptions = true,
             Text = true,
             Triggers = true,
