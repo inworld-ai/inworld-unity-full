@@ -7,6 +7,7 @@
 using Google.Protobuf;
 using Inworld.Grpc;
 using Inworld.Packets;
+using Inworld.Sample;
 using Inworld.Util;
 using System;
 using System.Collections;
@@ -48,6 +49,7 @@ namespace Inworld
         InworldClient m_Client;
         InworldCharacter m_CurrentCharacter;
         InworldCharacter m_LastCharacter;
+        InworldError m_ErrorMsg;
         string m_CurrentRecordingID;
         float m_BackOffTime = 0.2f;
         float m_CurrentCountDown;
@@ -143,6 +145,17 @@ namespace Inworld
             get => Instance.m_State;
             private set => Instance._SetState(value);
         }
+        public static string Error
+        {
+            get => Instance.m_ErrorMsg.Message;
+            set
+            {
+                Instance.m_ErrorMsg = InworldError.FromString(value);
+                InworldAI.LogError(Instance.m_ErrorMsg.Message);
+                State = ControllerStates.Error;
+            }
+        }
+        public static InworldError ErrorMsg => Instance.m_ErrorMsg;
         /// <summary>
         ///     Check if all the data is correct.
         /// </summary>
@@ -170,6 +183,10 @@ namespace Inworld
         {
             m_Client = new InworldClient();
             InworldAI.User.LoadData();
+            if (!m_AutoStart) // YAN: Status Canvas is unnecessary and wouldn't show up if Auto Start is not enabled.
+                return;
+            if (!MainCanvas.Instance && InworldAI.Settings.MainCanvas)
+                Instantiate(InworldAI.Settings.MainCanvas);
         }
         void Start()
         {
@@ -223,12 +240,10 @@ namespace Inworld
                     await LoadScene();
                     break;
                 case RuntimeStatus.InitFailed:
-                    Debug.LogError(msg);
-                    State = ControllerStates.InitFailed;
+                    Error = msg;
                     break;
                 case RuntimeStatus.LoadSceneFailed:
-                    Debug.LogError(msg);
-                    State = ControllerStates.Error;
+                    Error = msg;
                     break;
             }
         }
@@ -251,7 +266,8 @@ namespace Inworld
                 fPriority = iwChar.Priority;
                 targetCharacter = iwChar;
             }
-            CurrentCharacter = targetCharacter;
+            if (targetCharacter)
+                CurrentCharacter = targetCharacter;
        }
         void _StartAudioCapture(string characterID)
         {
@@ -286,8 +302,7 @@ namespace Inworld
             }
             if (characters.Count != 0)
                 return;
-            InworldAI.LogError("Cannot Find Characters. Need Init first.");
-            State = ControllerStates.Error;
+            Error = "Cannot Find Characters. Need Init first.";
         }
         void _GetIncomingEvents()
         {
@@ -316,14 +331,19 @@ namespace Inworld
                     {
                         if (exception.Message.Contains("inactivity"))
                         {
+                            Debug.LogError(exception.Message);
                             //YAN: Filter it.
                             m_BackOffTime = Random.Range(m_BackOffTime, m_BackOffTime * 2);
                             CurrentCharacter = null;
                             State = ControllerStates.LostConnect;
                             break;
                         }
-                        InworldAI.LogException($"{m_Client.SessionID}: {exception.Message}");
-                        State = ControllerStates.Error;
+                        if (exception.Message.Contains("ResourceExhausted"))
+                        {
+                            State = ControllerStates.Exhausted;
+                            break;
+                        }
+                        Error = $"{m_Client.SessionID}: {exception.Message}";
                     }
                 }
                 yield return new WaitForSeconds(0.1f);
@@ -337,6 +357,8 @@ namespace Inworld
 #pragma warning restore 4014
             State = ControllerStates.Connected;
             InworldAI.Log($"InworldController Connected {m_Client.SessionID}");
+            if (m_Characters.Count > 0)
+                CurrentCharacter ??= m_Characters[0];
             StartCoroutine(InteractionCoroutine());
         }
         IEnumerator SwitchAudioCapture()
@@ -486,8 +508,7 @@ namespace Inworld
             }
             catch (Exception e)
             {
-                State = ControllerStates.Error;
-                Debug.LogError(e);
+                Error = e.Message;
             }
         }
 
