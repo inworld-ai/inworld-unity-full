@@ -5,6 +5,7 @@
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
 using Inworld.Grpc;
+using Inworld.Sample;
 using UnityEngine;
 namespace Inworld.Util
 {
@@ -32,6 +33,7 @@ namespace Inworld.Util
         [Space(10)][Header("Default Resources:")]
         [SerializeField] Texture2D m_DefaultThumbnail;
         [SerializeField] GameObject m_DefaultAvatar;
+        [SerializeField] MainCanvas m_MainCanvas;
         [SerializeField] InworldWorkspaceData m_DefaultWorkspace;
         [Space(10)][Header("Debug:")]
         [SerializeField] bool m_EnableVerboseLog;
@@ -106,6 +108,10 @@ namespace Inworld.Util
         ///     Returns if Sharing Characters are enabled to be loaded.
         /// </summary>
         public bool EnableSharedCharacters => m_EnableSharedCharacters;
+        /// <summary>
+        ///     Returns the main canvas.
+        /// </summary>
+        public MainCanvas MainCanvas => m_MainCanvas;
         /// <summary>
         ///     Returns the capabilities settings for communicating with Inworld Server.
         /// </summary>
