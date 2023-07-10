@@ -329,21 +329,20 @@ namespace Inworld
                 {
                     while (m_Client.Errors.TryDequeue(out Exception exception))
                     {
-                        if (exception.Message.Contains("inactivity"))
+                        InworldError msg = InworldError.FromString(exception.Message);
+                        if (msg.statusCode == "Aborted")
                         {
-                            Debug.LogError(exception.Message);
-                            //YAN: Filter it.
                             m_BackOffTime = Random.Range(m_BackOffTime, m_BackOffTime * 2);
                             CurrentCharacter = null;
                             State = ControllerStates.LostConnect;
                             break;
                         }
-                        if (exception.Message.Contains("ResourceExhausted"))
+                        if (msg.statusCode == "ResourceExhausted")
                         {
                             State = ControllerStates.Exhausted;
                             break;
                         }
-                        Error = $"{m_Client.SessionID}: {exception.Message}";
+                        Error = exception.Message;
                     }
                 }
                 yield return new WaitForSeconds(0.1f);
