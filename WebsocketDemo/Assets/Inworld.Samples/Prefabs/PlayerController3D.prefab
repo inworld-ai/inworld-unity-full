@@ -559,8 +559,8 @@ MonoBehaviour:
   m_CharButtonAnchor: {fileID: 0}
   m_ContentRT: {fileID: 0}
   m_CharSelector: {fileID: 0}
-  m_BubbleLeft: {fileID: 0}
-  m_BubbleRight: {fileID: 0}
+  m_BubbleLeft: {fileID: 3364394929633695711, guid: 73cb42cf5d9d9ec469e029de505b3cfa, type: 3}
+  m_BubbleRight: {fileID: 818457071051776631, guid: 5ae164fa1945f1141bd9e82da3f300a4, type: 3}
   m_StatusText: {fileID: 4519851314593998514}
   m_ConnectButtonText: {fileID: 3343167104494902020}
   m_InputField: {fileID: 7719007615795707832}
@@ -1258,10 +1258,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4906696099078140793}
         m_TargetAssemblyTypeName: PlayerController, Inworld.AI
-        m_MethodName: SendText
-        m_Mode: 6
+        m_MethodName: ConnectInworld
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

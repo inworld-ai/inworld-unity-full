@@ -19,7 +19,17 @@ namespace Inworld.Sample
         }
         protected override void OnStatusChanged(InworldConnectionStatus newStatus)
         {
-            if (newStatus == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter)
+            UpdateInteractions();
+            
+            if (m_StatusText)
+                m_StatusText.text = newStatus.ToString();
+            if (newStatus == InworldConnectionStatus.Error)
+                m_StatusText.text = InworldController.Client.Error;
+        }
+
+        void UpdateInteractions()
+        {
+            if (InworldController.Status == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter)
             {
                 m_SendButton.interactable = true;
                 if (!InworldController.IsRecording)
@@ -31,10 +41,6 @@ namespace Inworld.Sample
                 if (InworldController.IsRecording)
                     InworldController.Instance.StopAudio(InworldController.Instance.CurrentCharacter.ID);
             }
-            if (m_StatusText)
-                m_StatusText.text = newStatus.ToString();
-            if (newStatus == InworldConnectionStatus.Error)
-                m_StatusText.text = InworldController.Client.Error;
         }
         protected override void OnCharacterRegistered(InworldCharacterData charData){}
 
@@ -42,7 +48,10 @@ namespace Inworld.Sample
         {
             m_SendButton.interactable = InworldController.Status == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter;
             if (newChar != null)
+            {
                 InworldAI.Log($"Current: {newChar.Name}");
+                UpdateInteractions();
+            }
         }
 
         protected override void HandleTrigger(CustomPacket customPacket)

@@ -21,7 +21,7 @@ namespace Inworld
     {
         public UnityEvent OnRecordingStart;
         public UnityEvent OnRecordingEnd;
-        public bool IsCapturing { get; set; }
+        public bool IsCapturing;
         [SerializeField] int m_AudioRate = 16000;
         [SerializeField] int m_BufferSeconds = 1;
         
@@ -39,6 +39,9 @@ namespace Inworld
         #if !UNITY_WEBGL
         public void StartRecording()
         {
+            if(!Microphone.IsRecording(null))
+                m_Recording = Microphone.Start(null, true, m_BufferSeconds, m_AudioRate);
+
             m_LastPosition = Microphone.GetPosition(null);
             m_AudioToPush.Clear();
             IsCapturing = true;
