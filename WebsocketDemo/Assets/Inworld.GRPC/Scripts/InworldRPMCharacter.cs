@@ -35,28 +35,18 @@ namespace Inworld.Sample
         }
         protected virtual void OnEnable()
         {
-            InworldController.Instance.OnCharacterRegistered += OnCharRegistered;
-            InworldController.Instance.OnCharacterChanged += OnCharChanged;
-            InworldController.Client.OnStatusChanged += OnStatusChanged;
-            m_Interaction.OnStartStopInteraction += OnStartStopInteraction;
-            m_Interaction.OnInteractionChanged += OnInteractionChanged;
+            base.OnEnable();
         }
 
         protected virtual void OnDisable()
         {
-            m_Interaction.OnStartStopInteraction -= OnStartStopInteraction;
-            m_Interaction.OnInteractionChanged -= OnInteractionChanged;
-            if (!InworldController.Instance)
-                return;
-            InworldController.Instance.OnCharacterRegistered -= OnCharRegistered;
-            InworldController.Instance.OnCharacterChanged -= OnCharChanged;
-            InworldController.Client.OnStatusChanged -= OnStatusChanged;
+            base.OnDisable();
         }
         // Start is called before the first frame update
         void Start()
         {
         
-        }
+        } 
 
         // Update is called once per frame
         void Update()
@@ -66,7 +56,14 @@ namespace Inworld.Sample
         protected override void OnStatusChanged(InworldConnectionStatus newStatus)
         {
             if (newStatus == InworldConnectionStatus.Connected)
-                InworldController.Instance.CurrentCharacter = this;
+            {
+                if(InworldController.Instance.CurrentCharacter == null)
+                    InworldController.Instance.CurrentCharacter = this;
+                else if(InworldController.Instance.CurrentCharacter.Priority < this.Priority)
+                {
+                    InworldController.Instance.CurrentCharacter = this;
+                }
+            }
         }
     }
     

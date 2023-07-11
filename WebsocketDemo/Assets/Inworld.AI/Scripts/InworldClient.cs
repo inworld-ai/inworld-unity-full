@@ -7,7 +7,7 @@ namespace Inworld
     [RequireComponent(typeof(AudioCapture))]
     public class InworldClient : MonoBehaviour
     {
-        [SerializeField] protected InworldServerConfig m_ServerConfig;
+        public InworldServerConfig m_ServerConfig;
         public event Action<InworldConnectionStatus> OnStatusChanged;
         public event Action<InworldPacket> OnPacketReceived;
         const string k_NotImplented = "No InworldClient found. Need at least one connection protocol";
@@ -17,7 +17,17 @@ namespace Inworld
         InworldConnectionStatus m_Status;
         protected string m_Error;
 
-        public bool IsRecording => m_AudioCapture.IsCapturing;
+        public bool IsRecording
+        {
+            get { return m_AudioCapture.IsCapturing; }  
+            set
+            {
+                if (value)
+                    m_AudioCapture.StartRecording();
+                else
+                    m_AudioCapture.StopRecording();
+            }
+        }
         public virtual bool IsTokenValid => m_Token != null && m_Token.IsValid;
         public virtual void GetAccessToken()
         {

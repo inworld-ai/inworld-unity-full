@@ -36,7 +36,7 @@ namespace Inworld.Interactions
                                           .FirstOrDefault(utterance => utterance.Status == PacketStatus.RECEIVED);
 
         public bool IsRelated(InworldPacket packet) => !string.IsNullOrEmpty(LiveSessionID) 
-            && (packet.routing.source.name != LiveSessionID || packet.routing.target.name != LiveSessionID);
+            && (packet.routing.source.name == LiveSessionID || packet.routing.target.name == LiveSessionID);
         void OnEnable()
         {
             InworldController.Client.OnPacketReceived += ReceivePacket;
@@ -95,26 +95,24 @@ namespace Inworld.Interactions
         {
             try
             {
-                if (!IsRelated(incomingPacket))
+                if (IsRelated(incomingPacket))
                 {
-                    return;
-                }
-
-                switch (incomingPacket?.routing?.source?.type.ToUpper())
-                {
-                    case "AGENT":
-                        Add(incomingPacket);
-                        break;
-                    case "PLAYER":
-                        // Send Directly.
-                        OnInteractionChanged?.Invoke
-                        (
-                            new List<InworldPacket>
-                            {
-                                incomingPacket
-                            }
-                        );
-                        break;
+                    switch (incomingPacket?.routing?.source?.type.ToUpper())
+                    {
+                        case "AGENT":
+                            Add(incomingPacket);
+                            break;
+                        case "PLAYER":
+                            // Send Directly.
+                            OnInteractionChanged?.Invoke
+                            (
+                                new List<InworldPacket>
+                                {
+                                    incomingPacket
+                                }
+                            );
+                            break;
+                    }
                 }
             }
             catch (Exception e)
@@ -138,7 +136,8 @@ namespace Inworld.Interactions
             if (!HistoryItem.Contains(interaction))
                 HistoryItem.Add(interaction);
             
-            if (packet is CustomPacket)
+            //possibly unneccessary or should be refactored to only exclude the packets in question.
+            if (packet is CustomPacket || packet is EmotionPacket)
                 OnInteractionChanged?.Invoke(utterance.Packets); 
         }
         public void CancelResponse()

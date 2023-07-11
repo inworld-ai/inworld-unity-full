@@ -122,7 +122,7 @@ namespace Inworld.Sample
         protected override void HandleEmotion(EmotionPacket packet)
         {
             m_BodyAnimator.SetFloat(s_Random, Random.Range(0, 1) > 0.5f ? 1 : 0);
-            m_BodyAnimator.SetFloat(s_RemainSec, m_Interaction.AudioLength);
+            m_BodyAnimator.SetFloat(s_RemainSec, Interaction.AudioLength);
             _ProcessEmotion(packet.emotion.behavior.ToUpper());
             base.HandleEmotion(packet);
         }
@@ -160,7 +160,7 @@ namespace Inworld.Sample
         }
         void _ProcessLipSync()
         {
-            if (!m_Interaction.IsSpeaking)
+            if (!Interaction.IsSpeaking)
             {
                 _ResetMouth();
                 return;

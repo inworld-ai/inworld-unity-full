@@ -13,16 +13,19 @@ namespace Inworld
     public class InworldController : SingletonBehavior<InworldController>
     {
         [SerializeField] InworldClient m_Client;
-        [SerializeField] string m_SceneFullName;
+        [SerializeField] public string m_SceneFullName;
         [Space(10)][SerializeField] bool m_AutoStart;
+        [Space(10)][SerializeField] bool m_AutoSelectCharacter;
+
 
         // YAN: Now LiveSessionID is handled by InworldController Only. To prevent unable to chat.
         //      Both Keys are BrainNames
         readonly Dictionary<string, string> m_LiveSession = new Dictionary<string, string>();
-        readonly Dictionary<string, InworldCharacterData> m_Characters = new Dictionary<string, InworldCharacterData>();
+        readonly Dictionary<string, InworldCharacterData> m_CharacterDatas = new Dictionary<string, InworldCharacterData>();
+        List<InworldCharacter> m_Characters = new List<InworldCharacter>();
 
-        InworldCharacter m_CurrentCharacter;
-        InworldCharacter m_LastCharacter;
+        public InworldCharacter m_CurrentCharacter;
+        public InworldCharacter m_LastCharacter;
         const string k_Pattern = @"(workspaces/.+?)/(scenes|characters)/";
 
 
@@ -48,6 +51,13 @@ namespace Inworld
                     return;
                 m_LastCharacter = m_CurrentCharacter;
                 m_CurrentCharacter = value;
+                
+                if(m_LastCharacter != null)
+                    StopAudio(m_LastCharacter.ID);
+                    
+                if(m_CurrentCharacter != null)
+                    StartAudio(m_CurrentCharacter.ID);
+                
                 OnCharacterChanged?.Invoke(m_LastCharacter, m_CurrentCharacter);
             }
         }
@@ -82,13 +92,19 @@ namespace Inworld
             m_Client.Disconnect();
             CurrentCharacter = null;
         }
+        
+        //Event is global for all characters listeners should filter based on characterID
         public void CharacterInteract(InworldPacket packet) => OnCharacterInteraction?.Invoke(packet);
         public string GetLiveSessionID(InworldCharacter character)
         {
             if (!character || string.IsNullOrEmpty(character.BrainName) || !m_LiveSession.ContainsKey(character.BrainName))
                 return null;
-            if (!m_Characters.ContainsKey(character.BrainName))
-                m_Characters[character.BrainName] = character.Data;
+            if (!m_CharacterDatas.ContainsKey(character.BrainName))
+                m_CharacterDatas[character.BrainName] = character.Data;
+            
+            if(!m_Characters.Contains(character))
+                m_Characters.Add(character);
+                
             return m_LiveSession[character.BrainName];
         }
         public bool IsRegistered(string characterID) => !string.IsNullOrEmpty(characterID) && m_LiveSession.ContainsValue(characterID);
@@ -100,10 +116,28 @@ namespace Inworld
                 return null;
             }
             string key = m_LiveSession.First(kvp => kvp.Value == agentID).Key;
-            if (m_Characters.ContainsKey(key))
-                return m_Characters[key];
+            if (m_CharacterDatas.ContainsKey(key))
+                return m_CharacterDatas[key];
             InworldAI.LogError($"{key} Not Registered!");
             return null;
+        }
+
+        void SelectCharacter()
+        {
+            float fPriority = float.MaxValue;
+            InworldCharacter targetCharacter = null;
+            foreach (InworldCharacter iwChar in m_Characters.Where(iwChar => iwChar.Priority >= 0 && iwChar.Priority < fPriority))
+            {
+                fPriority = iwChar.Priority;
+                targetCharacter = iwChar;
+            }
+            CurrentCharacter = targetCharacter;
+        }
+
+        void FixedUpdate()
+        {
+            if(m_AutoSelectCharacter)
+                SelectCharacter();
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
@@ -124,10 +158,10 @@ namespace Inworld
         public void StartAudio(string charID = "")
         {
             string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter.ID : charID;
-            if (InworldAI.IsDebugMode)
-                InworldAI.Log($"Start Audio Event {charIDToSend}");
             if (!IsRegistered(charIDToSend))
                 return;
+            if (InworldAI.IsDebugMode)
+                InworldAI.Log($"Start Audio Event {charIDToSend}");
             m_Client.StartAudio(charIDToSend);
         }
         public void StopAudio(string charID = "")
@@ -141,6 +175,9 @@ namespace Inworld
         }
         public void SendAudio(string base64, string charID = "")
         {
+            if(CurrentCharacter == null)
+                return;
+            
             string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter.ID : charID;
             if (!IsRegistered(charIDToSend))
                 return;
@@ -171,17 +208,23 @@ namespace Inworld
             m_LiveSession.Clear();
             foreach (InworldCharacterData agent in response.agents.Where(agent => !string.IsNullOrEmpty(agent.agentId) && !string.IsNullOrEmpty(agent.brainName)))
             {
+                if(agent.brainName.Contains("DUMMY"))
+                    continue;
+                
                 m_LiveSession[agent.brainName] = agent.agentId;
-                m_Characters[agent.brainName] = agent;
-                string url = agent.characterAssets.URL;
-                if (!string.IsNullOrEmpty(url))
+                m_CharacterDatas[agent.brainName] = agent;
+                if (agent.characterAssets != null)
                 {
-                    UnityWebRequest uwr = new UnityWebRequest(url);
-                    uwr.downloadHandler = new DownloadHandlerTexture();
-                    yield return uwr.SendWebRequest();
-                    if (uwr.isDone && uwr.result == UnityWebRequest.Result.Success)
+                    string url = agent.characterAssets.URL;
+                    if (!string.IsNullOrEmpty(url))
                     {
-                        agent.thumbnail = (uwr.downloadHandler as DownloadHandlerTexture)?.texture;
+                        UnityWebRequest uwr = new UnityWebRequest(url);
+                        uwr.downloadHandler = new DownloadHandlerTexture();
+                        yield return uwr.SendWebRequest();
+                        if (uwr.isDone && uwr.result == UnityWebRequest.Result.Success)
+                        {
+                            agent.thumbnail = (uwr.downloadHandler as DownloadHandlerTexture)?.texture;
+                        }
                     }
                 }
                 OnCharacterRegistered?.Invoke(agent);

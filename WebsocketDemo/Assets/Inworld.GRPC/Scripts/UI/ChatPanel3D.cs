@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class ChatPanel3D : MonoBehaviour
 {
+    public InworldCharacter Character;
     [SerializeField] RectTransform m_ContentRT;
     [SerializeField] ChatBubble m_BubbleLeft;
     [SerializeField] ChatBubble m_BubbleRight;
@@ -16,6 +17,7 @@ public class ChatPanel3D : MonoBehaviour
     [SerializeField] FacialAnimationData m_FaceData;
     void OnEnable()
     {
+        Character = GetComponentInParent<InworldCharacter>();
         InworldController.Instance.OnCharacterInteraction += OnInteraction;
     }
 
@@ -27,21 +29,24 @@ public class ChatPanel3D : MonoBehaviour
     }
     protected void OnInteraction(InworldPacket incomingPacket)
     {
-        switch (incomingPacket)
+        if (incomingPacket.routing.source.name == Character.Data.agentId || incomingPacket.routing.target.name == Character.Data.agentId)
         {
-            case AudioPacket audioPacket: // Already Played.
-                break;
-            case TextPacket textPacket:
-                HandleText(textPacket);
-                break;
-            case EmotionPacket emotionPacket:
-                HandleEmotion(emotionPacket);
-                break;
-            case CustomPacket customPacket:
-                break;
-            default:
-                InworldAI.Log($"Received {incomingPacket}");
-                break;
+            switch (incomingPacket)
+            {
+                case AudioPacket audioPacket: // Already Played.
+                    break;
+                case TextPacket textPacket:
+                    HandleText(textPacket);
+                    break;
+                case EmotionPacket emotionPacket:
+                    HandleEmotion(emotionPacket);
+                    break;
+                case CustomPacket customPacket:
+                    break;
+                default:
+                    InworldAI.Log($"Received {incomingPacket}");
+                    break;
+            }
         }
     }
     void HandleTrigger(CustomPacket customPacket)
