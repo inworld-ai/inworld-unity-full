@@ -8,21 +8,6 @@ namespace Inworld.Interactions
     public class InworldAudioInteraction : InworldInteraction
     {
         AudioSource m_PlaybackSource;
-        
-        public bool IsMute
-        {
-            get
-            {
-                if (m_PlaybackSource)
-                    return true;
-                return m_PlaybackSource.volume == 0;
-            }
-            set
-            {
-                if (m_PlaybackSource)
-                    m_PlaybackSource.volume = value ? 0 : 1;
-            }
-        }
 
         void Awake()
         {

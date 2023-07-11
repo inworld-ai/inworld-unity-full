@@ -136,7 +136,6 @@ namespace Inworld
             UnityWebRequest uwr = UnityWebRequest.Get(m_ServerConfig.TokenServer);
             Status = InworldConnectionStatus.Initializing;
             yield return uwr.SendWebRequest();
-
             if (uwr.result != UnityWebRequest.Result.Success)
             {
                 Error = uwr.error;

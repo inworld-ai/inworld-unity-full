@@ -46,18 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b448a90df2457c86dae6deb8240a34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Data:
-    agentId: 
-    brainName: 
-    givenName: 
-    characterAssets:
-      rpmModelUri: 
-      rpmImageUriPortrait: 
-      rpmImageUriPosture: 
-      avatarImg: 
-      avatarImgOriginal: 
-    thumbnail: {fileID: 0}
-  m_VerboseLog: 0
+  m_BrainName: 
+  m_DebugMode: 0
   onBeginSpeaking:
     m_PersistentCalls:
       m_Calls: []
@@ -76,7 +66,6 @@ MonoBehaviour:
   onGoalCompleted:
     m_PersistentCalls:
       m_Calls: []
-  Interaction: {fileID: 1003957531181623513}
 --- !u!82 &3715402865357785192
 AudioSource:
   m_ObjectHideFlags: 0

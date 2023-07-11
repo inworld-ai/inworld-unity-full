@@ -1,10 +1,8 @@
 ﻿using Inworld.Interactions;
 using Inworld.Packet;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 namespace Inworld
 {
@@ -14,19 +12,6 @@ namespace Inworld
         [SerializeField] InworldCharacterData m_Data;
         [SerializeField] bool m_VerboseLog;
         
-        [Header("Sight")]
-        [Range(1, 180)]
-        [SerializeField] float m_SightAngle = 90f;
-        [Range(1, 30)]
-        [SerializeField] float m_SightDistance = 10f;
-        [SerializeField] float m_SightRefreshRate = 0.25f;
-        /// <summary>
-        ///     Returns the priority of the character.
-        ///     the higher the Priority is, the character is more likely responding to player.
-        /// </summary>
-        public float Priority;
-
-        
         public UnityEvent onBeginSpeaking;
         public UnityEvent onEndSpeaking;
         public UnityEvent<InworldPacket> onPacketReceived;
@@ -34,15 +19,15 @@ namespace Inworld
         public UnityEvent<string, string> onEmotionChanged;
         public UnityEvent<string> onGoalCompleted;
         
-        [FormerlySerializedAs("m_Interaction")] public InworldInteraction Interaction;
+        protected InworldInteraction m_Interaction;
         public bool IsSpeaking
         {
-            get => Interaction && Interaction.IsSpeaking;
+            get => m_Interaction && m_Interaction.IsSpeaking;
             internal set
             {
-                if (!Interaction)
+                if (!m_Interaction)
                     return;
-                Interaction.IsSpeaking = value;
+                m_Interaction.IsSpeaking = value;
             }
         }
         public InworldCharacterData Data
@@ -52,7 +37,7 @@ namespace Inworld
             {
                 m_Data = value;
                 if (!string.IsNullOrEmpty(m_Data.agentId))
-                    Interaction.LiveSessionID = m_Data.agentId;
+                    m_Interaction.LiveSessionID = m_Data.agentId;
             }
         }
         public string Name => Data?.givenName ?? "";
@@ -60,12 +45,12 @@ namespace Inworld
         public string ID => Data?.agentId ?? InworldController.Instance.GetLiveSessionID(this);
         public void RegisterLiveSession()
         {
-            Interaction.LiveSessionID = Data.agentId = InworldController.Instance.GetLiveSessionID(this);
+            m_Interaction.LiveSessionID = Data.agentId = InworldController.Instance.GetLiveSessionID(this);
         }
 
         void Awake()
         {
-            Interaction ??= GetComponent<InworldInteraction>();
+            m_Interaction ??= GetComponent<InworldInteraction>();
         }
 
         protected virtual void OnEnable()
@@ -73,52 +58,19 @@ namespace Inworld
             InworldController.Instance.OnCharacterRegistered += OnCharRegistered;
             InworldController.Instance.OnCharacterChanged += OnCharChanged;
             InworldController.Client.OnStatusChanged += OnStatusChanged;
-            Interaction.OnStartStopInteraction += OnStartStopInteraction;
-            Interaction.OnInteractionChanged += OnInteractionChanged;
-            StartCoroutine(CheckPriority());
+            m_Interaction.OnStartStopInteraction += OnStartStopInteraction;
+            m_Interaction.OnInteractionChanged += OnInteractionChanged;
         }
 
         protected virtual void OnDisable()
         {
-            Interaction.OnStartStopInteraction -= OnStartStopInteraction;
-            Interaction.OnInteractionChanged -= OnInteractionChanged;
+            m_Interaction.OnStartStopInteraction -= OnStartStopInteraction;
+            m_Interaction.OnInteractionChanged -= OnInteractionChanged;
             if (!InworldController.Instance)
                 return;
             InworldController.Instance.OnCharacterRegistered -= OnCharRegistered;
             InworldController.Instance.OnCharacterChanged -= OnCharChanged;
             InworldController.Client.OnStatusChanged -= OnStatusChanged;
-            StopCoroutine(CheckPriority());
-        }
-        
-        IEnumerator CheckPriority()
-        {
-            // YAN: Update refreshed too fast. Use Coroutine for better performance.
-            while (true)
-            {
-                if (InworldController.Instance)
-                {
-                    Transform trCharacter = transform;
-                    Transform trPlayer = Camera.main.transform;
-                    Priority = Vector3.Distance(trCharacter.position, trPlayer.position);
-                    if (Priority > m_SightDistance)
-                        Priority = -1f;
-                    else
-                    {
-                        Vector3 vecDirection = (trPlayer.position - trCharacter.position).normalized;
-                        float fAngle = Vector3.Angle(vecDirection, trCharacter.forward);
-                        if (fAngle > m_SightAngle * 0.5f)
-                        {
-                            Priority = -1f;
-                        }
-                        else
-                        {
-                            Vector3 vecPlayerDirection = -vecDirection;
-                            Priority = Vector3.Angle(vecPlayerDirection, trPlayer.forward);
-                        }
-                    }
-                }
-                yield return new WaitForSeconds(m_SightRefreshRate);
-            }
         }
         protected virtual void OnStartStopInteraction(bool isStarting)
         {
@@ -131,6 +83,10 @@ namespace Inworld
         {
             if (charData.brainName == Data.brainName)
                 RegisterLiveSession();
+            else
+            {
+                Debug.LogError($"My Brain: {BrainName} Received: {charData.brainName}");
+            }
         }
         protected virtual void OnCharChanged(InworldCharacter oldChar, InworldCharacter newChar) {}
         protected virtual void OnStatusChanged(InworldConnectionStatus newStatus)
@@ -212,6 +168,6 @@ namespace Inworld
         {
             // Won't process lip sync in pure text 2D conversation
         }
-        public void CancelResponse() => Interaction.CancelResponse();
+        public void CancelResponse() => m_Interaction.CancelResponse();
     }
 }
