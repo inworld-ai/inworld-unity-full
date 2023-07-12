@@ -40,7 +40,9 @@ namespace Inworld.Interactions
             m_PlaybackSource.PlayOneShot(nextAudio.Clip, 1f);
             if (nextAudio.Clip)
                 AudioLength = nextAudio.Clip.length;
+
             UpdateInteraction(nextAudio);
+
             Dispatch(this[nextAudio.packetId.interactionId][nextAudio.packetId.utteranceId].Packets);
         }
     }

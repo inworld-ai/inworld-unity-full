@@ -178,7 +178,6 @@ namespace Inworld.Sample
                 Debug.LogError($"Not Found! {data.phoneme}");
                 return;
             }
-            Debug.Log($"Phoneme: {p2v.phoneme} Viseme: {p2v.visemeIndex}");
             if (p2v.visemeIndex >= 0 && p2v.visemeIndex < m_LipsyncTextures.Count)
                 m_matMouth.mainTexture = m_LipsyncTextures[p2v.visemeIndex];
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Inworld.Packet;
+using System.Collections.Concurrent;
 
 namespace Inworld.Interactions
 {
@@ -11,6 +12,8 @@ namespace Inworld.Interactions
         [SerializeField] protected int m_MaxItemCount = 100;
         [SerializeField] float m_TextDuration = 0.5f;
         public float AudioLength { get; set; }
+        
+        public Utterance CurrentUtterance { get; set; }
         
         float m_CurrentTime;
         bool m_IsSpeaking;
@@ -36,7 +39,8 @@ namespace Inworld.Interactions
                                           .FirstOrDefault(utterance => utterance.Status == PacketStatus.RECEIVED);
 
         public bool IsRelated(InworldPacket packet) => !string.IsNullOrEmpty(LiveSessionID) 
-            && (packet.routing.source.name != LiveSessionID || packet.routing.target.name != LiveSessionID);
+            && (packet.routing.source.name == LiveSessionID || packet.routing.target.name == LiveSessionID);
+        
         void OnEnable()
         {
             InworldController.Client.OnPacketReceived += ReceivePacket;
@@ -63,10 +67,10 @@ namespace Inworld.Interactions
         protected void UpdateInteraction(InworldPacket packet)
         {
             Interaction interaction = this[packet.packetId.interactionId];
-            Utterance utterance = interaction?[packet.packetId.utteranceId];
-            if (utterance == null)
+            CurrentUtterance = interaction?[packet.packetId.utteranceId];
+            if (CurrentUtterance == null)
                 return;
-            utterance.Status = PacketStatus.PLAYED;
+            CurrentUtterance.Status = PacketStatus.PLAYED;
             if (interaction.Utterances.All(u => u.Status != PacketStatus.RECEIVED))
                 interaction.Status = PacketStatus.PLAYED;
         }
@@ -89,7 +93,10 @@ namespace Inworld.Interactions
                 i.Status != PacketStatus.RECEIVED || 
                 i.Utterances.Any(u => u.Status != PacketStatus.RECEIVED));
             if (toDelete != null)
-                HistoryItem.Remove(toDelete);
+            {
+                HistoryItem.Add(toDelete);
+            }
+                
         }
         void ReceivePacket(InworldPacket incomingPacket)
         {
@@ -126,20 +133,24 @@ namespace Inworld.Interactions
         {
             if (packet.packetId == null || string.IsNullOrEmpty(packet.packetId.interactionId))
                 return;
-            
             Interaction interaction = this[packet.packetId.interactionId] ?? new Interaction(packet.packetId.interactionId);
             Utterance utterance = interaction[packet.packetId.utteranceId] ?? new Utterance(packet.packetId.utteranceId);
             interaction.Status = PacketStatus.RECEIVED; // Refresh Interaction Status.
             utterance.Packets.Add(packet);
             
             if (!interaction.Utterances.Contains(utterance))
+            {
                 interaction.Utterances.Add(utterance);
-            
+            }
+
             if (!HistoryItem.Contains(interaction))
                 HistoryItem.Add(interaction);
-            
-            if (packet is CustomPacket)
-                OnInteractionChanged?.Invoke(utterance.Packets); 
+
+            if (CurrentUtterance != null && packet.packetId.utteranceId == CurrentUtterance.UtteranceID || packet is CustomPacket)
+            {
+                // YAN: Send Overdue packets and trigger
+                OnInteractionChanged?.Invoke(utterance.Packets);
+            } 
         }
         public void CancelResponse()
         {

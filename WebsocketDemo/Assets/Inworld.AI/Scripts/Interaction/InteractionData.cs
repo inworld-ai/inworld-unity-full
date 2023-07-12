@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Inworld.Packet;
+using System.Collections.Concurrent;
 
 namespace Inworld.Interactions
 {
