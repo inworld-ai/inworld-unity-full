@@ -44,11 +44,11 @@ namespace Inworld
 		    method.Invoke(null, new object[]{Path.Combine(Application.dataPath, "TutorialInfo/Layout.wlt"), false});
 	    }
 	    
-	    [MenuItem("Inworld/Show Tutorial")]
+	    [MenuItem("Inworld/About")]
 	    static Readme SelectReadme() 
 	    {
 		    var ids = AssetDatabase.FindAssets("Readme t:Readme");
-		    if (ids.Length == 1)
+		    if (ids.Length >= 1)
 		    {
 			    var readmeObject = AssetDatabase.LoadMainAssetAtPath(AssetDatabase.GUIDToAssetPath(ids[0]));
 			    

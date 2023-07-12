@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcf7219bab7fe46a1ad266029b2fee19, type: 3}
   m_Name: README
   m_EditorClassIdentifier: 
+  titleFont: {fileID: 12800000, guid: ac1308377b6e09a4d8349fc0033248ed, type: 3}
+  contentFont: {fileID: 12800000, guid: 2c9ee65233da755438228fafa684047d, type: 3}
   icon: {fileID: 2800000, guid: eba83e009e6da2a4ab4d9e016b19216b, type: 3}
   title: Inworld.AI
   sections:
@@ -25,6 +27,14 @@ MonoBehaviour:
     text: Unity 2020.2
     linkText: 
     url: 
+  - heading: 'Dependencies:'
+    text: 1. TextMesh Pro
+    linkText: 
+    url: 
+  - heading: 
+    text: 
+    linkText: 2. UnityWebSocket
+    url: https://github.com/psygames/UnityWebSocket
   - heading: 'Preparation:'
     text: 'To integrate your own characters into your Unity project, you will need
       to ensure that you can access:  At least one Workspace. At least one API Key
