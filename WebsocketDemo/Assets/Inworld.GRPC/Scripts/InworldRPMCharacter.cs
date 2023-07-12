@@ -18,7 +18,8 @@ namespace Inworld.Sample
         static readonly int s_RemainSec = Animator.StringToHash("RemainSec");
         static readonly int s_Random = Animator.StringToHash("Random");
         static readonly int s_Motion = Animator.StringToHash("MainStatus");
-        
+        const int k_VisemeSil = 0;
+        const int k_VisemeCount = 15;
         public void HandleMainStatus(AnimMainStatus status) => m_BodyAnimator.SetInteger(s_Motion, (int)status);
         
         protected override void OnStartStopInteraction(bool isStarting)
@@ -69,6 +70,15 @@ namespace Inworld.Sample
             {
                 InworldController.Instance.CurrentCharacter = this;
                 InworldController.Instance.StartAudio();
+            }
+        }
+        protected override void OnCharRegistered(InworldCharacterData charData)
+        {
+            if (charData.brainName == Data.brainName)
+                RegisterLiveSession();
+            else
+            {
+                Debug.LogError($"My Brain: {BrainName} Received: {charData.brainName}");
             }
         }
     }

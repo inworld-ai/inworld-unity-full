@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 namespace Inworld.Sample
 {
-    [RequireComponent(typeof(InworldAudioInteraction))]
+    [RequireComponent(typeof(InworldInteraction))]
     public class InworldCharacter3D : InworldCharacter
     {
         [SerializeField] Transform m_PlayerCamera;

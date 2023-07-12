@@ -233,7 +233,7 @@ MonoBehaviour:
   - phoneme: x
     visemeIndex: -1
   - phoneme: '-'
-    visemeIndex: 0
+    visemeIndex: -1
   - phoneme: ','
     visemeIndex: 0
   - phoneme: ;
