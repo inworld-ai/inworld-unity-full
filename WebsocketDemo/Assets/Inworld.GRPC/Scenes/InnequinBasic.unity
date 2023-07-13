@@ -744,5 +744,42 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3694925250822063550, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4657359396677168381}
   m_SourcePrefab: {fileID: 100100000, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+--- !u!1 &4657359396677168378 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3694925250822063550, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+  m_PrefabInstance: {fileID: 4657359396677168377}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &4657359396677168379 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1978371569747459371, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+  m_PrefabInstance: {fileID: 4657359396677168377}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &4657359396677168380 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 446267790183913776, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+  m_PrefabInstance: {fileID: 4657359396677168377}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4657359396677168381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4657359396677168378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87294da2ba36448dbd537c4808c2263f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EmoteAnimator: {fileID: 4657359396677168380}
+  m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
+  m_FaceMesh: {fileID: 4657359396677168379}
+  m_FaceTransformData: {fileID: 11400000, guid: cdb6717a81f76c54cbb32bcf5b87d6e5, type: 2}
+  m_FaceAnimData: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
+  m_DefaultMouth: {fileID: 2800000, guid: 521bfee8a24170b46ad2720f99ec56ca, type: 3}
+  m_BlinkRate: -0.999
