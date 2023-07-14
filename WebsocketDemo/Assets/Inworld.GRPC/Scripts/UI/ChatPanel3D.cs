@@ -1,6 +1,7 @@
 using Inworld;
 using Inworld.Assets;
 using Inworld.Packet;
+using Inworld.Sample;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,10 +11,11 @@ public class ChatPanel3D : MonoBehaviour
     [SerializeField] RectTransform m_ContentRT;
     [SerializeField] ChatBubble m_BubbleLeft;
     [SerializeField] ChatBubble m_BubbleRight;
+    [SerializeField] FacialEmotion m_Emotion;
     [SerializeField] Image m_EmoIcon;
     readonly protected Dictionary<string, ChatBubble> m_Bubbles = new Dictionary<string, ChatBubble>();
     protected string m_CurrentEmotion;
-    [SerializeField] FacialAnimationData m_FaceData;
+    [SerializeField] LipsyncMap m_FaceData;
     void OnEnable()
     {
         InworldController.Instance.OnCharacterInteraction += OnInteraction;
@@ -90,7 +92,7 @@ public class ChatPanel3D : MonoBehaviour
     }
     void _ProcessEmotion(string emotion)
     {
-        FacialAnimation targetEmo = m_FaceData.emotions.FirstOrDefault(emo => emo.emotion == emotion);
+        FacialAnimation targetEmo = m_Emotion.emotions.FirstOrDefault(emo => emo.emotion == emotion);
         
         if (targetEmo != null)
         {

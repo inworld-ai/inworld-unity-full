@@ -14,7 +14,7 @@ namespace Inworld.Sample
         [SerializeField] EmotionMap m_EmotionMap;
         [SerializeField] SkinnedMeshRenderer m_FaceMesh;
         [SerializeField] FaceTransformData m_FaceTransformData;
-        [SerializeField] FacialAnimationData m_FaceAnimData;
+        [SerializeField] LipsyncMap m_FaceAnimData;
         [SerializeField] Texture m_DefaultMouth;
         [Range(-1, 1)][SerializeField] float m_BlinkRate;
         List<Texture> m_LipsyncTextures = new List<Texture>();
@@ -55,7 +55,7 @@ namespace Inworld.Sample
         {
             _InitMaterials();
         }
-        void Update()
+        void FixedUpdate()
         {
             _BlinkEyes();
             _ProcessLipSync();

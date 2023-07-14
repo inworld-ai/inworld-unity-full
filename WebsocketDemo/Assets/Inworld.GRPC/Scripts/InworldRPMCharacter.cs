@@ -10,7 +10,7 @@ namespace Inworld.Sample
         [SerializeField] Transform m_PlayerCamera;
         [SerializeField] Animator m_BodyAnimator;
         [SerializeField] SkinnedMeshRenderer m_FaceMesh;
-        [SerializeField] FacialAnimationData m_FaceAnimData;
+        [SerializeField] LipsyncMap m_FaceAnimData;
         [Range(-1, 1)][SerializeField] float m_BlinkRate;
         
         static readonly int s_Emotion = Animator.StringToHash("Emotion");

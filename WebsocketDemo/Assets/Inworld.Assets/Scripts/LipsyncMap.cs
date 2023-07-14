@@ -29,9 +29,9 @@ namespace Inworld.Assets
         public string phoneme;
         public int visemeIndex;
     }
-    public class FacialAnimationData : ScriptableObject
+    public class LipsyncMap : ScriptableObject
     {
-        public List<FacialAnimation> emotions;
         public List<PhonemeToViseme> p2vMap;
     }
+
 }
