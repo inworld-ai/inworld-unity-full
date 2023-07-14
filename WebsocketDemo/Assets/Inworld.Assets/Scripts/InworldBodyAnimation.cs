@@ -42,11 +42,13 @@ namespace Inworld.Sample
 
             InworldController.Instance.OnCharacterChanged += OnCharChanged;
             m_Interaction.OnStartStopInteraction += OnStartStopInteraction;
+            m_Interaction.OnInteractionChanged += OnInteractionChanged;
         }
 
         protected virtual void OnDisable()
         {
             m_Interaction.OnStartStopInteraction -= OnStartStopInteraction;
+            m_Interaction.OnInteractionChanged -= OnInteractionChanged;
             if (!InworldController.Instance)
                 return;
             InworldController.Instance.OnCharacterChanged -= OnCharChanged;
@@ -66,6 +68,22 @@ namespace Inworld.Sample
         void Update()
         {
         
+        }
+        protected virtual void OnInteractionChanged(List<InworldPacket> packets)
+        {
+            foreach (InworldPacket packet in packets)
+            {
+                ProcessPacket(packet);
+            }
+        }
+        protected virtual void ProcessPacket(InworldPacket incomingPacket)
+        {
+            switch (incomingPacket)
+            {
+                case EmotionPacket emotionPacket:
+                    HandleEmotion(emotionPacket);
+                    break;
+            }
         }
         protected void OnStartStopInteraction(bool isStarting)
         {
