@@ -123,11 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!4 &1353793856 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5395921512146893128, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
-  m_PrefabInstance: {fileID: 2124948029594241961}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1353793857 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4906696099078140793, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
@@ -669,30 +664,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2030273176201225856, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
-      propertyPath: m_trPlayer
-      value: 
-      objectReference: {fileID: 1353793856}
-    - target: {fileID: 2030273176201225856, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
-      propertyPath: m_BlinkRate
-      value: -0.999
-      objectReference: {fileID: 0}
-    - target: {fileID: 2030273176201225856, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
-      propertyPath: m_DefaultMouth
-      value: 
-      objectReference: {fileID: 2800000, guid: 521bfee8a24170b46ad2720f99ec56ca, type: 3}
-    - target: {fileID: 2030273176201225856, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
-      propertyPath: m_FaceAnimData
-      value: 
-      objectReference: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
-    - target: {fileID: 2030273176201225856, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
-      propertyPath: m_Data.brainName
-      value: workspaces/unitytest/characters/prince_stone
-      objectReference: {fileID: 0}
-    - target: {fileID: 2030273176201225856, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
-      propertyPath: m_Data.givenName
-      value: Prince Stone
-      objectReference: {fileID: 0}
     - target: {fileID: 3449554643801487130, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -744,65 +715,5 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3694925250822063550, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4657359396677168381}
-    - targetCorrespondingSourceObject: {fileID: 3694925250822063550, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4657359396677168391}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
---- !u!1 &4657359396677168378 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3694925250822063550, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
-  m_PrefabInstance: {fileID: 4657359396677168377}
-  m_PrefabAsset: {fileID: 0}
---- !u!137 &4657359396677168379 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 1978371569747459371, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
-  m_PrefabInstance: {fileID: 4657359396677168377}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &4657359396677168380 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 446267790183913776, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
-  m_PrefabInstance: {fileID: 4657359396677168377}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &4657359396677168381
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4657359396677168378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87294da2ba36448dbd537c4808c2263f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EmoteAnimator: {fileID: 4657359396677168380}
-  m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
-  m_FaceMesh: {fileID: 4657359396677168379}
-  m_FaceTransformData: {fileID: 11400000, guid: cdb6717a81f76c54cbb32bcf5b87d6e5, type: 2}
-  m_FaceAnimData: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
-  m_DefaultMouth: {fileID: 2800000, guid: 521bfee8a24170b46ad2720f99ec56ca, type: 3}
-  m_BlinkRate: -0.999
---- !u!95 &4657359396677168389 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 6488192458725203369, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
-  m_PrefabInstance: {fileID: 4657359396677168377}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &4657359396677168391
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4657359396677168378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b28951a4e1a362741ac8288d7560535e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_PlayerCamera: {fileID: 0}
-  m_BodyAnimator: {fileID: 4657359396677168389}
-  m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
