@@ -710,6 +710,14 @@ PrefabInstance:
       propertyPath: m_AABB.m_Extent.z
       value: 0.29110056
       objectReference: {fileID: 0}
+    - target: {fileID: -3612840882688719046, guid: 462787370f9ff1845901709916b568ee, type: 3}
+      propertyPath: m_BlendShapeWeights.Array.size
+      value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: -3612840882688719046, guid: 462787370f9ff1845901709916b568ee, type: 3}
+      propertyPath: m_BlendShapeWeights.Array.data[2]
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2800602913417539097, guid: 462787370f9ff1845901709916b568ee, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -3821,8 +3829,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LipsyncMap: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
   m_FacialEmotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
-  m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
   m_LipExpression: 0.7
   m_MorphTime: 0.5
+  m_BlinkRate: 0.999
   m_VisemeSil: viseme_sil
+  m_BlinkBlendShape: eyesClosed
   m_CustomModel: 0

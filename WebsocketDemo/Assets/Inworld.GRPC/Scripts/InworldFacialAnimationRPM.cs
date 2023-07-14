@@ -17,7 +17,6 @@ namespace Inworld.Sample
 
         [Range(0, 1)][SerializeField] float m_LipExpression = 0.7f;
         [Range(0, 1)][SerializeField] float m_MorphTime = 0.5f;
-        [Range(0, 1)][SerializeField] float m_BlinkRate = 0.999f;
         [Header("For custom models:")]
         [Tooltip("Find the first viseme in the blendshape of your model. NOTE: Your viseme variables should be continuous and starting from Sil to U")]
         [SerializeField] string m_VisemeSil = "viseme_sil";
@@ -102,11 +101,9 @@ namespace Inworld.Sample
         {
             if (!m_Skin)
                 return;
-            
             float blendshapeValue = Mathf.Sin(Time.time * 2f) * 100 - 99f;
             blendshapeValue = Mathf.Clamp(blendshapeValue, 0, 1);
             m_Skin.SetBlendShapeWeight(m_BlinkIndex, blendshapeValue);
-
         }
         void _MorphLipsync()
         {
