@@ -71,7 +71,7 @@ namespace Inworld.Grpc
                 m_StreamingCall.Dispose();
             }
         }
-        
+
         public override void GetAccessToken() => _GenerateAccessTokenAsync();
         // ReSharper disable Unity.PerformanceAnalysis
         public override void LoadScene(string sceneFullName) => _LoadSceneAsync(sceneFullName);

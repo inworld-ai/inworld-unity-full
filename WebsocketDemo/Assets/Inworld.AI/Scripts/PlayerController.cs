@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
         if (oldChar != null && !string.IsNullOrEmpty(oldChar.ID))
             InworldController.Instance.StopAudio(oldChar.ID);
         yield return new WaitForFixedUpdate();
-        if (newchar != null && !string.IsNullOrEmpty(newchar.ID))
+        if (newchar != null && !string.IsNullOrEmpty(newchar.ID) && newchar.ID != InworldController.Instance.CurrentCharacter.ID)
         {
             InworldController.Instance.StartAudio(newchar.ID);
         }

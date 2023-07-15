@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Inworld.Assets;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -14,7 +15,6 @@ namespace Inworld.Sample
         public FacialEmotion emoteAnimation;
         public FacialEmotion facialEmotion;
     }
-    [CreateAssetMenu(fileName = "Emotion Map", menuName = "Inworld/Emotion Map", order = 0)]
     public class EmotionMap : ScriptableObject
     {
         public List<EmotionMapData> data;

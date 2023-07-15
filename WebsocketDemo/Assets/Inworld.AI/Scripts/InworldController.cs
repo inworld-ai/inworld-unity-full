@@ -28,6 +28,9 @@ namespace Inworld
 
         public static InworldClient Client => Instance.m_Client;
         public static InworldConnectionStatus Status => Instance.m_Client.Status;
+
+        public void InitWithCustomToken(string token) => m_Client.InitWithCustomToken(token);
+
         public string CurrentWorkspace
         {
             get
@@ -36,6 +39,7 @@ namespace Inworld
                 return data.Length > 1 ? data[0] : m_SceneFullName;
             }
         }
+        public string CurrentScene => m_SceneFullName;
         public static bool IsRecording => Instance.m_Client.IsRecording;
         public InworldCharacter CurrentCharacter
         {
@@ -173,7 +177,7 @@ namespace Inworld
             {
                 m_LiveSession[agent.brainName] = agent.agentId;
                 m_Characters[agent.brainName] = agent;
-                string url = agent.characterAssets.URL;
+                string url = agent.characterAssets?.URL;
                 if (!string.IsNullOrEmpty(url))
                 {
                     UnityWebRequest uwr = new UnityWebRequest(url);

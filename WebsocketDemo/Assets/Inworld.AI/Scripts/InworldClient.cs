@@ -17,7 +17,17 @@ namespace Inworld
         InworldConnectionStatus m_Status;
         protected string m_Error;
 
-        public bool IsRecording => m_AudioCapture.IsCapturing;
+        public bool IsRecording
+        {
+            get => m_AudioCapture.IsCapturing;
+            set => m_AudioCapture.IsCapturing = value;
+        }
+        public InworldServerConfig Server => m_ServerConfig;
+        public Token Token
+        {
+            get => m_Token;
+            set => m_Token = value;
+        }
         public virtual bool IsTokenValid => m_Token != null && m_Token.IsValid;
         public virtual void GetAccessToken()
         {
@@ -53,6 +63,17 @@ namespace Inworld
         {
             Error = k_NotImplented;
             return null;
+        }
+        public virtual bool InitWithCustomToken(string token)
+        {
+            m_Token = JsonUtility.FromJson<Token>(token);
+            if (!IsTokenValid)
+            {
+                Error = "Get Token Failed";
+                return false;
+            }
+            Status = InworldConnectionStatus.Initialized;
+            return true;
         }
         public virtual void StartSession() => Error = k_NotImplented;
         public virtual void Disconnect() => Error = k_NotImplented;

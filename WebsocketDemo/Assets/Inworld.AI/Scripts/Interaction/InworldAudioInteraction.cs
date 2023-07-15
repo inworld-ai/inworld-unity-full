@@ -22,7 +22,20 @@ namespace Inworld.Interactions
             if (m_PlaybackSource && !m_PlaybackSource.isPlaying)
                 PlayNextUtterance();
         }
-
+        public bool IsMute
+        {
+            get
+            {
+                if (m_PlaybackSource)
+                    return true;
+                return m_PlaybackSource.volume == 0;
+            }
+            set
+            {
+                if (m_PlaybackSource)
+                    m_PlaybackSource.volume = value ? 0 : 1;
+            }
+        }
         public AudioPacket NextAudio => HistoryItem.Where(item => item.Status == PacketStatus.RECEIVED)
                                                    .SelectMany(item => item.Utterances)
                                                    .Where(utterance => utterance.Status == PacketStatus.RECEIVED)

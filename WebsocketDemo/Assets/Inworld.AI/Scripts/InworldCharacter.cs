@@ -162,7 +162,7 @@ namespace Inworld
                     InworldAI.Log($"With {param.name}: {param.value}");
                 }
             }
-            onGoalCompleted.Invoke(customPacket.custom.name);
+            onGoalCompleted.Invoke(customPacket.TriggerName);
         }
         protected virtual void HandleLipSync(AudioPacket audioPacket)
         {
