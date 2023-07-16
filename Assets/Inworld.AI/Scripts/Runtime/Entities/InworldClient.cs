@@ -15,7 +15,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
-using UnityEngine;
+
 using AudioChunk = Inworld.Packets.AudioChunk;
 using ActionEvent = Inworld.Packets.ActionEvent;
 using ControlEvent = Inworld.Grpc.ControlEvent;
@@ -67,7 +67,7 @@ namespace Inworld
         internal ConcurrentQueue<Exception> Errors { get; } = new ConcurrentQueue<Exception>();
         internal bool SessionStarted { get; private set; }
         internal bool HasInit => !m_InworldAuth.IsExpired;
-        internal string SessionID => m_InworldAuth?.SessionID ?? "";
+        internal string SessionID => m_InworldAuth?.Token.SessionId ?? "";
         internal string LastState { get; set; }
         bool IsSessionInitialized => m_SessionKey.Length != 0;
         Timestamp Now => Timestamp.FromDateTime(DateTime.UtcNow);
@@ -90,7 +90,7 @@ namespace Inworld
             else
                 RuntimeEvent?.Invoke(RuntimeStatus.InitFailed, "Token Invalid");
         }
-        internal void GetAppAuth(string sessionToken)
+        internal void GetAppAuth(string key, string secret, string sessionToken = "")
         {
 #if UNITY_EDITOR && VSP
             if (!string.IsNullOrEmpty(InworldAI.User.Account))
@@ -101,7 +101,7 @@ namespace Inworld
             {
                 GenerateTokenRequest gtRequest = new GenerateTokenRequest
                 {
-                    Key = InworldAI.Game.APIKey,
+                    Key = key,
                     Resources =
                     {
                         InworldAI.Game.currentWorkspace.fullName
@@ -111,7 +111,7 @@ namespace Inworld
                 Metadata metadata = new Metadata
                 {
                     {
-                        "authorization", m_InworldAuth.GetHeader(InworldAI.Game.RuntimeServer, InworldAI.Game.APIKey, InworldAI.Game.APISecret)
+                        "authorization", m_InworldAuth.GetHeader(InworldAI.Game.RuntimeServer, key, secret)
                     }
                 };
                 try

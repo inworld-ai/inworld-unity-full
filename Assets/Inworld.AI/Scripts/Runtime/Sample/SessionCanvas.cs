@@ -97,10 +97,6 @@ namespace Inworld.Sample
                     m_Indicator.color = m_ColorGraph.Evaluate(1f);
                     m_IsConnecting = false;
                     break;
-                case ControllerStates.InitFailed:
-                    m_Indicator.color = m_ColorGraph.Evaluate(1f);
-                    m_IsConnecting = false;
-                    break;
             }
 
         }
