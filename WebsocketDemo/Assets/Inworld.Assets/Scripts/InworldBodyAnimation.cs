@@ -1,6 +1,5 @@
 using Inworld.Interactions;
 using Inworld.Packet;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,10 +29,7 @@ namespace Inworld.Sample
         {
             enabled = _Init();
         }
-        void Start()
-        {
-        
-        }
+
         protected virtual void OnEnable()
         {
             m_Transform = transform;
@@ -64,11 +60,7 @@ namespace Inworld.Sample
             }
             _StartLookAt(m_trLookAt.position);
         }
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
+
         protected virtual void OnInteractionChanged(List<InworldPacket> packets)
         {
             foreach (InworldPacket packet in packets)

@@ -19,12 +19,12 @@ namespace Inworld
         // YAN: Now LiveSessionID is handled by InworldController Only. To prevent unable to chat.
         //      Both Keys are BrainNames
         readonly Dictionary<string, string> m_LiveSession = new Dictionary<string, string>();
+        // YAN: Although InworldCharacterData also has agentID, it won't be always updated. Please check m_LiveSession
+        //      And Call RegisterLiveSession if outdated.
         readonly Dictionary<string, InworldCharacterData> m_Characters = new Dictionary<string, InworldCharacterData>();
 
         InworldCharacter m_CurrentCharacter;
         InworldCharacter m_LastCharacter;
-        const string k_Pattern = @"(workspaces/.+?)/(scenes|characters)/";
-
 
         public static InworldClient Client => Instance.m_Client;
         public static InworldConnectionStatus Status => Instance.m_Client.Status;
