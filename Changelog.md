@@ -1,3 +1,8 @@
+# 3.0.0
+Updated new architecture.
+Support all platforms via websocket.
+Added WebSocket and NDK implementations.
+
 # 2.1.3
 Updated Inworld Lipsync.
 Implemented manually connect/disconnect server scene.
