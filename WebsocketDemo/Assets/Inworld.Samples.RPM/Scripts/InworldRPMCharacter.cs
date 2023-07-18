@@ -9,7 +9,7 @@ namespace Inworld.Sample
     {
         protected override void OnStatusChanged(InworldConnectionStatus newStatus)
         {
-            if (newStatus == InworldConnectionStatus.Connected)
+            if (newStatus == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter == null)
             {
                 InworldController.Instance.CurrentCharacter = this;
                 InworldController.Instance.StartAudio();
