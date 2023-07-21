@@ -8,9 +8,8 @@ namespace Inworld
     public class LatencyUtility : MonoBehaviour
     {
         [SerializeField] bool debugLatency;
-        float lastPlayerResponseTime = 0f;
-        float lastCharacterResponseTime = 0f;
-        float characterResponseDelay = 0f;
+        float m_LastCharacterResponseTime = 0f;
+        float m_CharacterResponseDelay = 0f;
         
         void OnEnable()
         {
@@ -34,25 +33,12 @@ namespace Inworld
                     
                     if (debugLatency)
                     {                    
-                        characterResponseDelay = lastCharacterResponseTime > lastPlayerResponseTime ? Time.time - lastCharacterResponseTime : Time.time - lastPlayerResponseTime;
-                        InworldAI.Log("Character Response Delay: " + characterResponseDelay + " lastCharacterResponseTime: " + lastCharacterResponseTime + " lastPlayerResponseTime: " + lastPlayerResponseTime);
+                        m_CharacterResponseDelay = m_LastCharacterResponseTime > InworldController.lastPlayerResponseTime ? Time.time - m_LastCharacterResponseTime : Time.time - InworldController.lastPlayerResponseTime;
+                        InworldAI.Log("Character Response Delay: " + m_CharacterResponseDelay + " lastCharacterResponseTime: " + m_LastCharacterResponseTime + " lastPlayerResponseTime: " + InworldController.lastPlayerResponseTime);
                     }
-                    lastCharacterResponseTime = Time.time;
-                    break;
-                case "PLAYER":
-                    if(!(packet is TextPacket))
-                    {
-                        return;
-                    }
-                    lastPlayerResponseTime = Time.time;
+                    m_LastCharacterResponseTime = Time.time;
                     break;
             }
         }
-        
-        // Start is called before the first frame update
-        void Start() {}
-
-        // Update is called once per frame
-        void Update() {}
     }
 }
