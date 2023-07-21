@@ -83,21 +83,14 @@ namespace Inworld.NDK
 
             // Deserialize the byte array to an InworldPacket instance using protobuf
             InworldPacket response = InworldPacket.Parser.ParseFrom(data);
-            m_IncomingEventsQueue.Enqueue(response);
+            if (response != null)
+                ResolvePackets(response);
         }
         
         void Update()
         {
             if (Status == InworldConnectionStatus.Connected)
             {
-                m_CoolDown += Time.deltaTime;
-                if (m_CoolDown > 0.1f)
-                {
-                    m_CoolDown = 0;
-                    m_IncomingEventsQueue.TryDequeue(out InworldPacket incomingPacket);
-                    if (incomingPacket != null)
-                        ResolvePackets(incomingPacket);
-                }
                 if (Time.time - m_LastPacketSendTime > 0.1f)
                 {
                     m_LastPacketSendTime = Time.time;
