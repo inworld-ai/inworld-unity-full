@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Inworld.Packet;
+using UnityEngine.Serialization;
 
 namespace Inworld
 {
     public class LatencyUtility : MonoBehaviour
     {
-        [SerializeField] bool debugLatency;
+        [SerializeField] bool m_debugLatency;
         float m_LastCharacterResponseTime = 0f;
         float m_CharacterResponseDelay = 0f;
         
@@ -31,10 +32,10 @@ namespace Inworld
                         return;
                     }
                     
-                    if (debugLatency)
+                    if (m_debugLatency)
                     {                    
-                        m_CharacterResponseDelay = m_LastCharacterResponseTime > InworldController.lastPlayerResponseTime ? Time.time - m_LastCharacterResponseTime : Time.time - InworldController.lastPlayerResponseTime;
-                        InworldAI.Log("Character Response Delay: " + m_CharacterResponseDelay + " lastCharacterResponseTime: " + m_LastCharacterResponseTime + " lastPlayerResponseTime: " + InworldController.lastPlayerResponseTime);
+                        m_CharacterResponseDelay = m_LastCharacterResponseTime > InworldController.Instance.LastPlayerResponseTime ? Time.time - m_LastCharacterResponseTime : Time.time - InworldController.Instance.LastPlayerResponseTime;
+                        InworldAI.Log("Character Response Delay: " + m_CharacterResponseDelay + " lastCharacterResponseTime: " + m_LastCharacterResponseTime + " lastPlayerResponseTime: " + InworldController.Instance.LastPlayerResponseTime);
                     }
                     m_LastCharacterResponseTime = Time.time;
                     break;
