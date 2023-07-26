@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Inworld.Sample
+namespace Inworld.Assets
 {
     [Serializable]
     public class EmotionMapData

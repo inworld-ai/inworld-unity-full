@@ -655,6 +655,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1720011606412808402, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_Facial
+      value: 
+      objectReference: {fileID: 2100000, guid: d3f813bf6ca82f640936c4c08e041cbb, type: 2}
     - target: {fileID: 2030273176201225856, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
       propertyPath: m_trPlayer
       value: 

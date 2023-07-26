@@ -3,7 +3,7 @@ using Inworld.Packet;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Inworld.Sample
+namespace Inworld.Assets
 {
     public class InworldBodyAnimation : MonoBehaviour
     {

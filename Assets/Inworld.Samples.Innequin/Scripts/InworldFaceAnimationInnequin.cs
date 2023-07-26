@@ -16,6 +16,7 @@ namespace Inworld.Sample
         [SerializeField] FaceTransformData m_FaceTransformData;
         [SerializeField] LipsyncMap m_FaceAnimData;
         [SerializeField] Texture m_DefaultMouth;
+        [SerializeField] Material m_Facial;
         [Range(-1, 1)][SerializeField] float m_BlinkRate;
         List<Texture> m_LipsyncTextures = new List<Texture>();
         List<PhonemeInfo> m_CurrentPhoneme = new List<PhonemeInfo>();
@@ -82,26 +83,9 @@ namespace Inworld.Sample
         }
         Material _CreateFacialMaterial(string matName)
         {
-            int minRenderQueue = -1;
-            int maxRenderQueue = 5000;
-            int defaultRenderQueue = -1;
-            Material matResult = new Material(Shader.Find("Standard"));
-            matResult.name = matName;
-            matResult.SetOverrideTag("RenderType", "Transparent");
-            matResult.SetFloat(s_SrcBlend, (float)UnityEngine.Rendering.BlendMode.One);
-            matResult.SetFloat(s_DstBlend, (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-            matResult.SetFloat(s_ZWrite, 0.0f);
-            matResult.DisableKeyword("_ALPHATEST_ON");
-            matResult.DisableKeyword("_ALPHABLEND_ON");
-            matResult.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-            minRenderQueue = (int)UnityEngine.Rendering.RenderQueue.GeometryLast + 1;
-            maxRenderQueue = (int)UnityEngine.Rendering.RenderQueue.Overlay - 1;
-            defaultRenderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
-            if (matResult.renderQueue < minRenderQueue || matResult.renderQueue > maxRenderQueue)
-            {
-                matResult.renderQueue = defaultRenderQueue;
-            }
-            return matResult;
+            Material instance = Instantiate(m_Facial);
+            instance.name = matName;
+            return instance;
         }
         void _MorphFaceEmotion(FacialEmotion emotion)
         {
