@@ -209,7 +209,6 @@ namespace Inworld
             if (!InworldController.Instance)
                 return;
             InworldController.Instance.OnStateChanged -= OnStatusChanged;
-            InworldController.Instance.EndAudioCapture();
         }
         #endregion
 
