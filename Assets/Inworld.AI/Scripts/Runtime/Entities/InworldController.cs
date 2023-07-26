@@ -271,6 +271,8 @@ namespace Inworld
        }
         void _StartAudioCapture(string characterID)
         {
+            if (m_CurrentRecordingID == characterID)
+                return;
             m_CurrentRecordingID = characterID;
             m_Client.StartAudio(Routing.FromPlayerToAgent(characterID));
             m_Capture.StartRecording(); 
