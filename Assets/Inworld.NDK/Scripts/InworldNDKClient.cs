@@ -203,7 +203,20 @@ namespace Inworld.NDK
             var audioChunk = InworldPacketConverter.To.AudioChunk(charID, base64);
             byte[] data = audioChunk.DataChunk.Chunk.ToByteArray();
             
-            InworldNDKBridge.ClientWrapper_SendSoundMessage(m_Wrapper.instance, charID, data, data.Length);
+            if (useAec)
+            {
+                // Convert the byte array into a short array
+                short[] micDataShort = new short[data.Length / sizeof(short)];
+                Buffer.BlockCopy(data, 0, micDataShort, 0, data.Length);
+                IntPtr micDataPointer = Marshal.AllocHGlobal(micDataShort.Length * sizeof(short));
+                Marshal.Copy(micDataShort, 0, micDataPointer, micDataShort.Length);
+                
+                IntPtr outputDataPointer = Marshal.AllocHGlobal(m_OutputData.Length * sizeof(float));
+                Marshal.Copy(m_OutputData, 0, outputDataPointer, m_OutputData.Length);
+                InworldNDKBridge.ClientWrapper_SendSoundMessageWithAEC(m_Wrapper.instance, charID, micDataPointer, micDataShort.Length, outputDataPointer, m_OutputData.Length);
+            }
+            else
+                InworldNDKBridge.ClientWrapper_SendSoundMessage(m_Wrapper.instance, charID, data, data.Length);
         }
 
         Task _StartSession()
@@ -366,6 +379,21 @@ namespace Inworld.NDK
         {
             m_IncomingEventsQueue.Clear();
             m_OutgoingEventsQueue.Clear();
+        }
+        
+        private float[] m_OutputData = new float[1024]; // Buffer size may need adjustment
+        private short[] m_OutputDataConverted;
+        void OnAudioFilterRead(float[] data, int channels)
+        {
+            // Copy the audio data to output buffer
+            System.Array.Copy(data, m_OutputData, data.Length);
+
+            // Convert the floating point data to 16-bit signed integer format
+            m_OutputDataConverted = new short[m_OutputData.Length];
+            for (int i = 0; i < m_OutputData.Length; i++)
+            {
+                m_OutputDataConverted[i] = (short)(m_OutputData[i] * short.MaxValue);
+            }
         }
     }
 }
