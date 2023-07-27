@@ -46,6 +46,7 @@ namespace Inworld
         }
         public string CurrentScene => m_SceneFullName;
         public static bool IsRecording => Instance.m_Client.IsRecording;
+        public static bool IsPlayerSpeaking => Instance.m_Client.IsSpeaking;
         public InworldCharacter CurrentCharacter
         {
             get => m_CurrentCharacter;

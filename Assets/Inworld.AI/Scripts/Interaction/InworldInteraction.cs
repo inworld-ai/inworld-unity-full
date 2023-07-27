@@ -9,10 +9,15 @@ namespace Inworld.Interactions
 {
     public class InworldInteraction : MonoBehaviour
     {
+        [SerializeField] bool m_Interruptable = true;
         [SerializeField] protected int m_MaxItemCount = 100;
         [SerializeField] float m_TextDuration = 0.5f;
         public float AudioLength { get; set; }
-        
+        public bool Interruptable
+        {
+            get => m_Interruptable;
+            set => m_Interruptable = value;
+        }
         public Utterance CurrentUtterance { get; set; }
         
         float m_CurrentTime;
@@ -152,9 +157,9 @@ namespace Inworld.Interactions
                 OnInteractionChanged?.Invoke(utterance.Packets);
             } 
         }
-        public void CancelResponse()
+        public virtual void CancelResponse()
         {
-            if (string.IsNullOrEmpty(LiveSessionID))
+            if (string.IsNullOrEmpty(LiveSessionID) || !Interruptable)
                 return;
             Interaction item = HistoryItem.LastOrDefault(i => i.Status == PacketStatus.RECEIVED);
             if (item == null)

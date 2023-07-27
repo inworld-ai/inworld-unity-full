@@ -22,6 +22,8 @@ namespace Inworld
         public UnityEvent OnRecordingStart;
         public UnityEvent OnRecordingEnd;
         public bool IsCapturing { get; set; }
+        public bool IsSpeaking;
+        [SerializeField] float  m_UserSpeechThreshold = 0.01f;
         [SerializeField] int m_AudioRate = 16000;
         [SerializeField] int m_BufferSeconds = 1;
         
@@ -99,6 +101,20 @@ namespace Inworld
             byte[] output = new byte[nWavCount];
             Buffer.BlockCopy(m_ByteBuffer, 0, output, 0, nWavCount);
             InworldController.Instance.SendAudio(Convert.ToBase64String(output));
+            // Check if player is speaking based on audio amplitude
+            float amplitude = CalculateAmplitude(m_FloatBuffer);
+            IsSpeaking = amplitude > m_UserSpeechThreshold;
+        }
+
+        // Helper method to calculate the amplitude of audio data
+        float CalculateAmplitude(float[] audioData)
+        {
+            float sum = 0f;
+            for (int i = 0; i < audioData.Length; i++)
+            {
+                sum += Mathf.Abs(audioData[i]);
+            }
+            return sum / audioData.Length;
         }
 
         void OnDestroy()

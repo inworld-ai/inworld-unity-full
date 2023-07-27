@@ -142,6 +142,7 @@ namespace Inworld
                     if (m_VerboseLog)
                         InworldAI.Log($"{InworldAI.User.Name}: {packet.text.text}");
                     onCharacterSpeaks.Invoke(InworldAI.User.Name, packet.text.text);
+                    CancelResponse();
                     break;
             }
         }
