@@ -118,7 +118,7 @@ namespace Inworld.Studio
                 Scenes.ScenesClient client = new Scenes.ScenesClient(channel);
                 ListScenesRequest request = new ListScenesRequest
                 {
-                    Parent = workspace.fullName
+                    Parent = workspace.fullName // YAN: By default max scene count is 50. If you've exceeded, please set the PageSize in this request.
                 };
                 try
                 {

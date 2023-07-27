@@ -110,7 +110,7 @@ namespace Inworld.Editor
                 GameObject avatar = Selection.activeGameObject;
                 if (!avatar)
                     return false;
-                return !avatar.GetComponent<InworldCharacter>();
+                return true;//!avatar.GetComponent<InworldCharacter>();
             }
         }
         static void _AddDebugMacro()

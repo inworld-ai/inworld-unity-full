@@ -15,7 +15,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
-
+using UnityEngine;
 using AudioChunk = Inworld.Packets.AudioChunk;
 using ActionEvent = Inworld.Packets.ActionEvent;
 using ControlEvent = Inworld.Grpc.ControlEvent;
@@ -92,7 +92,7 @@ namespace Inworld
         }
         internal void GetAppAuth(string key, string secret, string sessionToken = "")
         {
-#if UNITY_EDITOR && VSP
+#if UNITY_EDITOR
             if (!string.IsNullOrEmpty(InworldAI.User.Account))
                 VSAttribution.VSAttribution.SendAttributionEvent("Login Runtime", InworldAI.k_CompanyName, InworldAI.User.Account);
 #endif
@@ -135,6 +135,7 @@ namespace Inworld
                 _ReceiveCustomToken(sessionToken);
             }
         }
+
         internal async Task<LoadSceneResponse> LoadScene(string sceneName)
         {
 
@@ -365,6 +366,10 @@ namespace Inworld
             else if (response.Custom != null)
             {
                 m_CurrentConnection.incomingInteractionsQueue.Enqueue(new CustomEvent(response));
+            }
+            else if (response.DebugInfo != null && response.DebugInfo.InfoCase == DebugInfoEvent.InfoOneofCase.Relation)
+            {
+                m_CurrentConnection.incomingInteractionsQueue.Enqueue(new RelationEvent(response));
             }
             else
             {

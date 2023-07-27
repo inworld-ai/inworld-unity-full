@@ -5,7 +5,7 @@
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
 using Inworld.Grpc;
-using Inworld.Sample;
+using System;
 using UnityEngine;
 namespace Inworld.Util
 {
@@ -33,7 +33,6 @@ namespace Inworld.Util
         [Space(10)][Header("Default Resources:")]
         [SerializeField] Texture2D m_DefaultThumbnail;
         [SerializeField] GameObject m_DefaultAvatar;
-        [SerializeField] MainCanvas m_MainCanvas;
         [SerializeField] InworldWorkspaceData m_DefaultWorkspace;
         [Space(10)][Header("Debug:")]
         [SerializeField] bool m_EnableVerboseLog;
@@ -109,10 +108,6 @@ namespace Inworld.Util
         /// </summary>
         public bool EnableSharedCharacters => m_EnableSharedCharacters;
         /// <summary>
-        ///     Returns the main canvas.
-        /// </summary>
-        public MainCanvas MainCanvas => m_MainCanvas;
-        /// <summary>
         ///     Returns the capabilities settings for communicating with Inworld Server.
         /// </summary>
         public CapabilitiesRequest Capabilities => new CapabilitiesRequest
@@ -123,7 +118,10 @@ namespace Inworld.Util
             Relations = true,
             Interruptions = true,
             Text = true,
-            Triggers = true,
+            DebugInfo = true,
+#pragma warning disable CS0612
+            Triggers = true, // YAN: Although it's called obsolete, we cannot remove this settings now. Need feedback from backend.
+#pragma warning restore CS0612
             Continuation = m_SaveConversation,
             TurnBasedStt = !m_Interruptible,
             PhonemeInfo = true

@@ -153,6 +153,7 @@ namespace Inworld.Util
         /// </summary>
         public UserRequest Request => new UserRequest
         {
+            Id = SystemInfo.deviceUniqueIdentifier,
             Name = Name
         };
         /// <summary>

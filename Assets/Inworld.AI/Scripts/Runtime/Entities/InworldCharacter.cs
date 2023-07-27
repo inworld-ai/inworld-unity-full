@@ -31,15 +31,17 @@ namespace Inworld
         [SerializeField] float m_SightRefreshRate = 0.25f;
         [Header("Log")]
         [SerializeField] bool m_logUtterances;
+        public RelationState m_CurrentRelation;
         public UnityEvent OnBeginSpeaking;
         public UnityEvent OnFinishedSpeaking;
         public UnityEvent<string, string> OnCharacterSpeaks;
         public UnityEvent<string> OnGoalCompleted;
+        public UnityEvent OnRelationUpdated;
         #endregion
 
         #region Properties
         /// <summary>
-        /// 
+        ///     Get/Set the character's speaking state.
         /// </summary>
         public bool IsSpeaking
         {
@@ -58,6 +60,17 @@ namespace Inworld
                     m_Interaction.isSpeaking = false;
                     OnFinishedSpeaking.Invoke();
                 }
+            }
+        }
+        public RelationState Relation
+        {
+            get => m_CurrentRelation;
+            set
+            {
+                if (value.Equals(m_CurrentRelation))
+                    return;
+                m_CurrentRelation = value;
+                OnRelationUpdated?.Invoke();
             }
         }
         /// <summary>
@@ -159,6 +172,7 @@ namespace Inworld
         #region Monobehavior Functions
         void Awake()
         {
+            m_CurrentRelation = new RelationState();
             if (!m_Interaction || !m_Interaction.enabled)
             {
                 m_Interaction = gameObject.AddComponent<Interactions>();

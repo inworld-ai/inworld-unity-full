@@ -7,7 +7,6 @@
 using Google.Protobuf;
 using Inworld.Grpc;
 using Inworld.Packets;
-using Inworld.Sample;
 using Inworld.Util;
 using System;
 using System.Collections;
@@ -49,7 +48,6 @@ namespace Inworld
         InworldClient m_Client;
         InworldCharacter m_CurrentCharacter;
         InworldCharacter m_LastCharacter;
-        InworldError m_ErrorMsg;
         string m_CurrentRecordingID;
         float m_BackOffTime = 0.2f;
         float m_CurrentCountDown;
@@ -145,17 +143,6 @@ namespace Inworld
             get => Instance.m_State;
             private set => Instance._SetState(value);
         }
-        public static string Error
-        {
-            get => Instance.m_ErrorMsg.Message;
-            set
-            {
-                Instance.m_ErrorMsg = InworldError.FromString(value);
-                InworldAI.LogError(Instance.m_ErrorMsg.Message);
-                State = ControllerStates.Error;
-            }
-        }
-        public static InworldError ErrorMsg => Instance.m_ErrorMsg;
         /// <summary>
         ///     Check if all the data is correct.
         /// </summary>
@@ -183,10 +170,6 @@ namespace Inworld
         {
             m_Client = new InworldClient();
             InworldAI.User.LoadData();
-            if (!m_AutoStart) // YAN: Status Canvas is unnecessary and wouldn't show up if Auto Start is not enabled.
-                return;
-            if (!MainCanvas.Instance && InworldAI.Settings.MainCanvas)
-                Instantiate(InworldAI.Settings.MainCanvas);
         }
         void Start()
         {
@@ -240,10 +223,12 @@ namespace Inworld
                     await LoadScene();
                     break;
                 case RuntimeStatus.InitFailed:
-                    Error = msg;
+                    Debug.LogError(msg);
+                    State = ControllerStates.InitFailed;
                     break;
                 case RuntimeStatus.LoadSceneFailed:
-                    Error = msg;
+                    Debug.LogError(msg);
+                    State = ControllerStates.Error;
                     break;
             }
         }
@@ -266,8 +251,7 @@ namespace Inworld
                 fPriority = iwChar.Priority;
                 targetCharacter = iwChar;
             }
-            if (targetCharacter)
-                CurrentCharacter = targetCharacter;
+            CurrentCharacter = targetCharacter;
        }
         void _StartAudioCapture(string characterID)
         {
@@ -304,7 +288,8 @@ namespace Inworld
             }
             if (characters.Count != 0)
                 return;
-            Error = "Cannot Find Characters. Need Init first.";
+            InworldAI.LogError("Cannot Find Characters. Need Init first.");
+            State = ControllerStates.Error;
         }
         void _GetIncomingEvents()
         {
@@ -331,20 +316,16 @@ namespace Inworld
                 {
                     while (m_Client.Errors.TryDequeue(out Exception exception))
                     {
-                        InworldError msg = InworldError.FromString(exception.Message);
-                        if (msg.statusCode == "Aborted")
+                        if (exception.Message.Contains("inactivity"))
                         {
+                            //YAN: Filter it.
                             m_BackOffTime = Random.Range(m_BackOffTime, m_BackOffTime * 2);
                             CurrentCharacter = null;
                             State = ControllerStates.LostConnect;
                             break;
                         }
-                        if (msg.statusCode == "ResourceExhausted")
-                        {
-                            State = ControllerStates.Exhausted;
-                            break;
-                        }
-                        Error = exception.Message;
+                        InworldAI.LogException($"{m_Client.SessionID}: {exception.Message}");
+                        State = ControllerStates.Error;
                     }
                 }
                 yield return new WaitForSeconds(0.1f);
@@ -358,8 +339,6 @@ namespace Inworld
 #pragma warning restore 4014
             State = ControllerStates.Connected;
             InworldAI.Log($"InworldController Connected {m_Client.SessionID}");
-            if (m_Characters.Count > 0)
-                CurrentCharacter ??= m_Characters[0];
             StartCoroutine(InteractionCoroutine());
         }
         IEnumerator SwitchAudioCapture()
@@ -408,6 +387,8 @@ namespace Inworld
         }
         internal void TTSEnd(string ID)
         {
+            if (string.IsNullOrEmpty(m_TTSInteractionID))
+                return;
             ControlEvent controlEvent = new ControlEvent(Grpc.ControlEvent.Types.Action.TtsPlaybackEnd, Routing.FromAgentToPlayer(ID));
             controlEvent.PacketId.InteractionId = m_TTSInteractionID;
             SendEvent(controlEvent);
@@ -431,6 +412,17 @@ namespace Inworld
         ///     Make sure there's a valid ServerConfig (Has URI of both RuntimeServer and StudioServer)
         ///     and a valid pair of valid API Key/Secret
         /// </summary>
+        public void InitWithCustomKey(string base64)
+        {
+            byte[] bytes = Convert.FromBase64String(base64);
+            string decoded = System.Text.Encoding.UTF8.GetString(bytes);
+            string[] result = decoded.Split(':');
+            if (result.Length <= 1)
+                return;
+            State = ControllerStates.Initializing;
+            m_Client.RuntimeEvent += OnRuntimeEvents;
+            m_Client.GetAppAuth(result[0], result[1]);
+        }
         public void InitWithCustomKey(string key, string secret)
         {
             State = ControllerStates.Initializing;
@@ -469,9 +461,7 @@ namespace Inworld
                 return;
             capture.PushAudio();
         }
-        /// <summary>
-        /// 
-        /// </summary>
+
         public async Task LoadScene(string sceneOrCharFullName = "")
         {
             string fullNameToLoad = _GetFullNameToLoad(sceneOrCharFullName);
@@ -509,7 +499,8 @@ namespace Inworld
             }
             catch (Exception e)
             {
-                Error = e.Message;
+                State = ControllerStates.Error;
+                Debug.LogError(e);
             }
         }
 

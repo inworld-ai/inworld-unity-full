@@ -57,7 +57,7 @@ namespace Inworld.Editor
         }
         void Awake()
         {
-            InworldAI.File.OnAvatarFailed += LoadDefaultAvatar;
+            InworldAI.File.OnAvatarFailed += LoadInnequinAvatar;
             InworldAI.File.OnThumbnailFailed += LoadDefaultThumbnail;
             InworldAI.User.LoadData();
             Init();

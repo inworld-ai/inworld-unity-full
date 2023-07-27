@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b7969df95f846edb56fde2abbb9ff51, type: 3}
+  m_Name: EmotionMap
+  m_EditorClassIdentifier: 
+  data:
+  - name: NEUTRAL
+    bodyEmotion: 0
+    bodyGesture: 0
+    emoteAnimation: 0
+    facialEmotion: 0
+  - name: AFFECTION
+    bodyEmotion: 3
+    bodyGesture: 5
+    emoteAnimation: 1
+    facialEmotion: 1
+  - name: INTEREST
+    bodyEmotion: 0
+    bodyGesture: 15
+    emoteAnimation: 0
+    facialEmotion: 6
+  - name: HUMOR
+    bodyEmotion: 3
+    bodyGesture: 5
+    emoteAnimation: 3
+    facialEmotion: 3
+  - name: JOY
+    bodyEmotion: 3
+    bodyGesture: 14
+    emoteAnimation: 3
+    facialEmotion: 6
+  - name: CONTEMPT
+    bodyEmotion: 1
+    bodyGesture: 9
+    emoteAnimation: 2
+    facialEmotion: 2
+  - name: BELLIGERENCE
+    bodyEmotion: 1
+    bodyGesture: 12
+    emoteAnimation: 2
+    facialEmotion: 2
+  - name: DOMINEERING
+    bodyEmotion: 1
+    bodyGesture: 14
+    emoteAnimation: 2
+    facialEmotion: 0
+  - name: CRITICISM
+    bodyEmotion: 0
+    bodyGesture: 22
+    emoteAnimation: 0
+    facialEmotion: 0
+  - name: ANGER
+    bodyEmotion: 1
+    bodyGesture: 3
+    emoteAnimation: 2
+    facialEmotion: 2
+  - name: DEFENSIVENESS
+    bodyEmotion: 2
+    bodyGesture: 20
+    emoteAnimation: 4
+    facialEmotion: 4
+  - name: TENSION
+    bodyEmotion: 2
+    bodyGesture: 11
+    emoteAnimation: 4
+    facialEmotion: 4
+  - name: STONEWALLING
+    bodyEmotion: 4
+    bodyGesture: 8
+    emoteAnimation: 2
+    facialEmotion: 5
+  - name: TENSEHUMOR
+    bodyEmotion: 2
+    bodyGesture: 10
+    emoteAnimation: 4
+    facialEmotion: 6
+  - name: WHINING
+    bodyEmotion: 4
+    bodyGesture: 7
+    emoteAnimation: 5
+    facialEmotion: 2
+  - name: SADNESS
+    bodyEmotion: 4
+    bodyGesture: 18
+    emoteAnimation: 5
+    facialEmotion: 5
+  - name: VALIDATION
+    bodyEmotion: 0
+    bodyGesture: 2
+    emoteAnimation: 0
+    facialEmotion: 0
+  - name: DISGUST
+    bodyEmotion: 0
+    bodyGesture: 8
+    emoteAnimation: 5
+    facialEmotion: 0
+  - name: SURPRISE
+    bodyEmotion: 0
+    bodyGesture: 19
+    emoteAnimation: 2
+    facialEmotion: 0

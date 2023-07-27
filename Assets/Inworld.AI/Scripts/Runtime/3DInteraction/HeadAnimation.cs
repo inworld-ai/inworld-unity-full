@@ -41,7 +41,7 @@ namespace Inworld.Model
 
         #region Inspector Variables
         [SerializeField] string m_HeadEyeAsset = "Animations/REMRPM";
-        [SerializeField] FacialAnimationData m_FaceData;
+        [SerializeField] InworldFacialEmotion m_FaceData;
         [SerializeField] float m_MorphTime = 0.5f;
         #endregion
 

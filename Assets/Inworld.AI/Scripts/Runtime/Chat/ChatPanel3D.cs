@@ -8,6 +8,7 @@ using Inworld.Packets;
 using Inworld.Util;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 namespace Inworld.Sample.UI
@@ -17,6 +18,18 @@ namespace Inworld.Sample.UI
     /// </summary>
     public class ChatPanel3D : MonoBehaviour
     {
+        #region Inspector Variables
+        [SerializeField] RectTransform m_PanelAnchor;
+        [SerializeField] InworldCharacter m_Owner;
+        [SerializeField] TMP_Text m_Relation;
+        [Header("UI Expressions")]
+        [SerializeField] ChatBubble m_LeftBubble;
+        [SerializeField] ChatBubble m_RightBubble;
+        [SerializeField] GameObject m_Dots;
+        [SerializeField] Image m_EmoIcon;
+        Color m_IconColor = Color.white;
+        #endregion
+        
         readonly Dictionary<string, ChatBubble> m_Bubbles = new Dictionary<string, ChatBubble>(12);
         void Update()
         {
@@ -31,6 +44,46 @@ namespace Inworld.Sample.UI
             m_IconColor.a = 1;
             _ClearHistoryLog();
             m_Owner.InteractionEvent.AddListener(OnInteractionStatus);
+            m_Owner.OnRelationUpdated.AddListener(OnRelationUpdate);
+        }
+        void OnRelationUpdate()
+        {
+            if (!m_Relation)
+                return;
+            string result = "";
+            RelationState currentRelation = m_Owner.Relation;
+            if (currentRelation.Attraction != 0)
+                result += $"Attraction: {GetRelationIcon(currentRelation.Attraction)}\n";
+            if (currentRelation.Familiar != 0)
+                result += $"Familiar: {GetRelationIcon(currentRelation.Familiar)}\n";
+            if (currentRelation.Flirtatious != 0)
+                result += $"Flirtatious: {GetRelationIcon(currentRelation.Flirtatious)}\n";
+            if (currentRelation.Respect != 0)
+                result += $"Respect: {GetRelationIcon(currentRelation.Respect)}\n";
+            if (currentRelation.Trust != 0)
+                result += $"Trust: {GetRelationIcon(currentRelation.Trust)}\n";
+            m_Relation.text = result;
+        }
+        string GetRelationIcon(int nRelationValue)
+        {
+            string result = "";
+            if (nRelationValue > 0)
+            {
+                int nIcon = nRelationValue / 10;
+                for (int i = 0; i < nIcon; i++)
+                {
+                    result += "<color=green>+</color>";
+                }
+            }
+            else if (nRelationValue < 0)
+            {
+                int nIcon = Mathf.Abs(nRelationValue / 10);
+                for (int i = 0; i < nIcon; i++)
+                {
+                    result += "<color=red>-</color>";
+                }
+            }
+            return result;
         }
         internal void ProcessEmotion(FacialAnimation face)
         {
@@ -78,16 +131,5 @@ namespace Inworld.Sample.UI
                 Destroy(kvp.Value.gameObject, 0.25f);
             }
         }
-
-        #region Inspector Variables
-        [SerializeField] RectTransform m_PanelAnchor;
-        [SerializeField] InworldCharacter m_Owner;
-        [Header("UI Expressions")]
-        [SerializeField] ChatBubble m_LeftBubble;
-        [SerializeField] ChatBubble m_RightBubble;
-        [SerializeField] GameObject m_Dots;
-        [SerializeField] Image m_EmoIcon;
-        Color m_IconColor = Color.white;
-        #endregion
     }
 }
