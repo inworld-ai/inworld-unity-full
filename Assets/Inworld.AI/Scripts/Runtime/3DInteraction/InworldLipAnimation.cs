@@ -15,7 +15,7 @@ namespace Inworld.Model
     public class InworldLipAnimation : MonoBehaviour
     {
         const int k_VisemeLength = 15;
-        [SerializeField] FacialAnimationData m_FaceAnimData;
+        [SerializeField] LipsyncMap m_FaceAnimData;
         [Range(0, 1)][SerializeField] float m_LipExpression = 0.7f;
         [Header("For custom models:")]
         [Tooltip("Find the first viseme in the blendshape of your model. NOTE: Your viseme variables should be continuous and starting from Sil to U")]

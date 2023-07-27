@@ -125,12 +125,13 @@ namespace Inworld.Util
         {
             get
             {
+
                 if (Application.isPlaying)
                 {
                     string folder = $"{Application.persistentDataPath}/{InworldAI.Settings.AvatarPath}";
                     if (!File.Exists(folder))
                         Directory.CreateDirectory(folder);
-                    return $"{folder}/{FileName}.glb";
+                    return string.IsNullOrEmpty(modelUri) ? $"{folder}/{FileName}.prefab" : $"{folder}/{FileName}.glb";
                 }
                 else
                 {
@@ -140,7 +141,7 @@ namespace Inworld.Util
                     string folder = $"{userFolder}/{InworldAI.Settings.AvatarPath}";
                     if (!File.Exists(folder))
                         Directory.CreateDirectory(folder);
-                    return $"{folder}/{FileName}.glb";
+                    return string.IsNullOrEmpty(modelUri) ? $"{folder}/{FileName}.prefab" : $"{folder}/{FileName}.glb";
                 }
             }
         }

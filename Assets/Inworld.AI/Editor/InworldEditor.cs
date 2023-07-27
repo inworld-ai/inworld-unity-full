@@ -224,6 +224,19 @@ namespace Inworld.Editor
                 AssetDatabase.CreateFolder($"{k_ResourcePath}/{InworldAI.User.Name}", dataPath);
             return fileLocation;
         }
+        void LoadInnequinAvatar(InworldCharacterData characterData)
+        {
+            GameObject prefab = InworldAI.InnequinPrefab.gameObject;
+            if (prefab == null || PrefabUtility.GetPrefabAssetType(prefab) != PrefabAssetType.Regular)
+            {
+                Debug.Log("Please select a valid prefab to copy.");
+                return;
+            }
+            string prefabPath = AssetDatabase.GetAssetPath(prefab);
+            AssetDatabase.CopyAsset(prefabPath, characterData.LocalAvatarFileName);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
         void LoadDefaultAvatar(InworldCharacterData charData)
         {
             const string defaultName = "Inworld.AI/Resources/Default";
@@ -347,20 +360,36 @@ namespace Inworld.Editor
         public static void SetupInworldCharacter(GameObject avatar, InworldCharacterData selectedCharacter)
         {
             SetupInworldController();
-
-            InworldCharacter character = PrefabUtility.InstantiatePrefab(InworldAI.CharacterPrefab, avatar.transform) as InworldCharacter;
-            if (character)
+            InworldCharacter character = null;
+            if (string.IsNullOrEmpty(selectedCharacter.modelUri))
             {
-                character.transform.SetParent(InworldController.Instance.transform);
-                character.LoadCharacter(selectedCharacter, avatar);
-                character.transform.name = selectedCharacter.characterName;
+                // Load Innequin
+                character = avatar.GetComponent<InworldCharacter>();
+                if (character)
+                {
+                    character.transform.SetParent(InworldController.Instance.transform);
+                    character.LoadCharacter(selectedCharacter, null, false);
+                    character.transform.name = selectedCharacter.characterName;
+                }
             }
-            InworldCharacter[] charList = InworldController.Instance.transform.GetComponentsInChildren<InworldCharacter>();
-            foreach (InworldCharacter iwChar in charList)
+            else
             {
-                if (!InworldController.CurrentScene.characters.Contains(iwChar.BrainName))
-                    DestroyImmediate(iwChar.gameObject);
+                // Load RPM
+                character = PrefabUtility.InstantiatePrefab(InworldAI.CharacterPrefab, avatar.transform) as InworldCharacter;
+                if (character)
+                {
+                    character.transform.SetParent(InworldController.Instance.transform);
+                    character.LoadCharacter(selectedCharacter, avatar);
+                    character.transform.name = selectedCharacter.characterName;
+                }
+                InworldCharacter[] charList = InworldController.Instance.transform.GetComponentsInChildren<InworldCharacter>();
+                foreach (InworldCharacter iwChar in charList)
+                {
+                    if (!InworldController.CurrentScene.characters.Contains(iwChar.BrainName))
+                        DestroyImmediate(iwChar.gameObject);
+                }
             }
+            EditorUtility.SetDirty(character);
             _SaveData();
             EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
         }

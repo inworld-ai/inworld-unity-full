@@ -726,7 +726,7 @@ PrefabInstance:
     - target: {fileID: 3818396142677475718, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_FaceAnimData
       value: 
-      objectReference: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
+      objectReference: {fileID: 11400000, guid: b61df023e951cfe4b8bff36df3d9c143, type: 2}
     - target: {fileID: 4248716694280939042, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -1470,7 +1470,7 @@ PrefabInstance:
     - target: {fileID: 3818396142677475718, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_FaceAnimData
       value: 
-      objectReference: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
+      objectReference: {fileID: 11400000, guid: b61df023e951cfe4b8bff36df3d9c143, type: 2}
     - target: {fileID: 4248716694280939042, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0

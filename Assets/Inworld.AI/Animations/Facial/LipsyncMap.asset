@@ -1,0 +1,123 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 372eb6f6ea4b496da682a65a9edd4815, type: 3}
+  m_Name: LipsyncMap
+  m_EditorClassIdentifier: 
+  p2vMap:
+  - phoneme: <INTERSPERSE_CHARACTER>
+    visemeIndex: -1
+  - phoneme: ' '
+    visemeIndex: -1
+  - phoneme: a
+    visemeIndex: 10
+  - phoneme: "\xE6"
+    visemeIndex: 10
+  - phoneme: "\u0251"
+    visemeIndex: 10
+  - phoneme: b
+    visemeIndex: 1
+  - phoneme: d
+    visemeIndex: 4
+  - phoneme: "\xF0"
+    visemeIndex: 3
+  - phoneme: e
+    visemeIndex: 11
+  - phoneme: "\u0259"
+    visemeIndex: 10
+  - phoneme: "\u025B"
+    visemeIndex: 11
+  - phoneme: "\u025A"
+    visemeIndex: 10
+  - phoneme: "\u025D"
+    visemeIndex: 11
+  - phoneme: f
+    visemeIndex: 2
+  - phoneme: "\u0261"
+    visemeIndex: 5
+  - phoneme: h
+    visemeIndex: -1
+  - phoneme: i
+    visemeIndex: 12
+  - phoneme: "\u026A"
+    visemeIndex: 12
+  - phoneme: j
+    visemeIndex: 12
+  - phoneme: k
+    visemeIndex: 5
+  - phoneme: l
+    visemeIndex: 8
+  - phoneme: m
+    visemeIndex: 1
+  - phoneme: n
+    visemeIndex: 8
+  - phoneme: "\u014B"
+    visemeIndex: 8
+  - phoneme: o
+    visemeIndex: 13
+  - phoneme: "\u0254"
+    visemeIndex: 13
+  - phoneme: "\u0254\u026A"
+    visemeIndex: 13
+  - phoneme: p
+    visemeIndex: 1
+  - phoneme: "\u0279"
+    visemeIndex: 9
+  - phoneme: s
+    visemeIndex: 7
+  - phoneme: "\u0283"
+    visemeIndex: 6
+  - phoneme: t
+    visemeIndex: 4
+  - phoneme: "t\u0283"
+    visemeIndex: 6
+  - phoneme: u
+    visemeIndex: 14
+  - phoneme: "\u028A"
+    visemeIndex: 14
+  - phoneme: v
+    visemeIndex: 2
+  - phoneme: "\u028C"
+    visemeIndex: 10
+  - phoneme: w
+    visemeIndex: 14
+  - phoneme: z
+    visemeIndex: 7
+  - phoneme: "\u0292"
+    visemeIndex: 6
+  - phoneme: "\u03B8"
+    visemeIndex: 3
+  - phoneme: "\u0250"
+    visemeIndex: 11
+  - phoneme: "\u1D7B"
+    visemeIndex: 12
+  - phoneme: "\u027E"
+    visemeIndex: 4
+  - phoneme: "\u025C"
+    visemeIndex: 11
+  - phoneme: "\u0294"
+    visemeIndex: 4
+  - phoneme: x
+    visemeIndex: -1
+  - phoneme: '-'
+    visemeIndex: -1
+  - phoneme: ','
+    visemeIndex: 0
+  - phoneme: ;
+    visemeIndex: 0
+  - phoneme: ':'
+    visemeIndex: 0
+  - phoneme: .
+    visemeIndex: 0
+  - phoneme: '?'
+    visemeIndex: 0
+  - phoneme: '!'
+    visemeIndex: 0

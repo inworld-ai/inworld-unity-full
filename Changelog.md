@@ -1,3 +1,16 @@
+# 2.2.0 
+New features:
+1. Added Innequin model as default avatar.
+2. Added UI for error process.
+3. Added Relation system.
+4. Added Narrative Action.
+5. Added Microphone Test sample scene.
+Updates:
+1. Updated Phonemes.
+2. Updated API for public workspace.
+3. Updated getting access tokens in multiple ways (API key/secret, Access token, base64)
+4. Loading User ID (Unity unique identifier) when loading scene.
+
 # 2.1.3
 Updated Inworld Lipsync.
 Implemented manually connect/disconnect server scene.

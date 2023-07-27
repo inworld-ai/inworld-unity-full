@@ -1,0 +1,183 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddf14972c0ac4f0ab67479a841f17ec0, type: 3}
+  m_Name: InnequinFacialAnimation
+  m_EditorClassIdentifier: 
+  data:
+  - name: Affection
+    animIndex: 1
+    imgHeight: -250
+    eyeBlow: {fileID: 2800000, guid: 192a597074ec1ba479227af9e48e945e, type: 3}
+    eye: {fileID: 2800000, guid: 61ceccbd4f1af624984f4782d704b054, type: 3}
+    eyeClosed: {fileID: 2800000, guid: 711634f4bb8949843a337bfe03e18914, type: 3}
+    nose: {fileID: 2800000, guid: 1f2eaf6c1efdb6848ad7c852aa1a31fc, type: 3}
+    mouthDefault: {fileID: 2800000, guid: 4e99d69f2a90eb948b08f04fef78243c, type: 3}
+    mouth:
+    - {fileID: 2800000, guid: 3035b635dbdbc6643909cf7d07a5aa26, type: 3}
+    - {fileID: 2800000, guid: b6dd3a36980afd94f9893ddc96d662f2, type: 3}
+    - {fileID: 2800000, guid: bb2f791b166ae9d47b95977602181a1f, type: 3}
+    - {fileID: 2800000, guid: 3685a93ed598cf54cae665ea080d8a19, type: 3}
+    - {fileID: 2800000, guid: a5ec16463498c8c43a90f68fb4b99687, type: 3}
+    - {fileID: 2800000, guid: e7b92d6f16e87d24f8275281a780a859, type: 3}
+    - {fileID: 2800000, guid: 87338c04e962a9c4f8ee4939c8032c2c, type: 3}
+    - {fileID: 2800000, guid: 49b317e819f04c3459ec1c985b68f78e, type: 3}
+    - {fileID: 2800000, guid: 9e3f7d745c58c594fa9e8c3a3fe9169a, type: 3}
+    - {fileID: 2800000, guid: b32692913be3abe4fa024a33e0f5930c, type: 3}
+    - {fileID: 2800000, guid: 70a35a7e1710b9848ac0a68a5b688473, type: 3}
+    - {fileID: 2800000, guid: de0830652c85f6e4aa0c9f912cd9fa1b, type: 3}
+    - {fileID: 2800000, guid: 2f4aec52886a63d44811c4423cf73d6e, type: 3}
+    - {fileID: 2800000, guid: 3d0cb00b8d634fb42aea6c4ed4449e71, type: 3}
+    - {fileID: 2800000, guid: 9e97a976d083e924ca2ba92811b78888, type: 3}
+  - name: Angry
+    animIndex: 2
+    imgHeight: -300
+    eyeBlow: {fileID: 2800000, guid: e1920c7104fb7184782d0d82532855ac, type: 3}
+    eye: {fileID: 2800000, guid: 68a24edb759f0c4409ebb49c8cf8bf83, type: 3}
+    eyeClosed: {fileID: 2800000, guid: b06437f70547f964998a12bbf2a23309, type: 3}
+    nose: {fileID: 2800000, guid: 0d178f55c306afe43834874f7ff9ea19, type: 3}
+    mouthDefault: {fileID: 2800000, guid: 4c7740be8c8c8844a8809f7beb78f79b, type: 3}
+    mouth:
+    - {fileID: 2800000, guid: 6043961016be14941afaf641d98b4c42, type: 3}
+    - {fileID: 2800000, guid: 6bfad8f2e60bf824eb3d6055107f543b, type: 3}
+    - {fileID: 2800000, guid: e18b0fe14692efd4e99069245f91a5f4, type: 3}
+    - {fileID: 2800000, guid: c1007727278d29a429be042ab6eed340, type: 3}
+    - {fileID: 2800000, guid: 797e7224d7f8816438ba7e84cbae58ef, type: 3}
+    - {fileID: 2800000, guid: a088849988246c844a3fdc414280ba75, type: 3}
+    - {fileID: 2800000, guid: cbc8ccf3bece7a340ac3cf16321f0be0, type: 3}
+    - {fileID: 2800000, guid: a1167f7c88e734d418db3611d9ec1f64, type: 3}
+    - {fileID: 2800000, guid: 155ad17f9ce2d654a80d07af7d4e0fa2, type: 3}
+    - {fileID: 2800000, guid: 77ec883044bd8ce4f9b5d780afee7e34, type: 3}
+    - {fileID: 2800000, guid: 62fecdad5c7f45146a1ff95f80b0023e, type: 3}
+    - {fileID: 2800000, guid: 67f982b30f5a6914dbe55961197a3d94, type: 3}
+    - {fileID: 2800000, guid: 5af50c34a4064de4d9ea9fc25866b048, type: 3}
+    - {fileID: 2800000, guid: fc959884423ebb94dbcae9bdcc104aca, type: 3}
+    - {fileID: 2800000, guid: e429e6f8896852948ab9b6c6f7f6710c, type: 3}
+  - name: Fear
+    animIndex: 4
+    imgHeight: -450
+    eyeBlow: {fileID: 2800000, guid: 08cee3f048306f545b74d44815367402, type: 3}
+    eye: {fileID: 2800000, guid: 745f55771cf299548b162be5285f47f9, type: 3}
+    eyeClosed: {fileID: 2800000, guid: 03eb627305fcbc048be4225ecc92dc2d, type: 3}
+    nose: {fileID: 2800000, guid: 501a8e21875d93d44bf397b91f0a8dad, type: 3}
+    mouthDefault: {fileID: 2800000, guid: 9d602bf34282f0041b018543ddec027d, type: 3}
+    mouth:
+    - {fileID: 2800000, guid: 869796c58510fd14dae44d69cdaefa04, type: 3}
+    - {fileID: 2800000, guid: f83adbc4c98c5c24393c9cbf21e13bda, type: 3}
+    - {fileID: 2800000, guid: 98da82833faccdb429d51ddde7430c18, type: 3}
+    - {fileID: 2800000, guid: 31743495200af9146bd88f5edc020618, type: 3}
+    - {fileID: 2800000, guid: 9650201c3f1e3cf4887e46fa92be9304, type: 3}
+    - {fileID: 2800000, guid: aacd0dc6732875b4da795e179c7064c8, type: 3}
+    - {fileID: 2800000, guid: e29db1a08adc7884d9048045a02a7ead, type: 3}
+    - {fileID: 2800000, guid: bf7880f43e01a964ba3fc3ce4a5057b4, type: 3}
+    - {fileID: 2800000, guid: 2e30cf5ce44beb94eaf0b7c54f798136, type: 3}
+    - {fileID: 2800000, guid: fbb11b6ac3b30b846aa8ea634ef8ad46, type: 3}
+    - {fileID: 2800000, guid: 2e2fb67baa39c254b9a4219ffb1213d0, type: 3}
+    - {fileID: 2800000, guid: 4010279d5b2ed1d4ba1da44d1d0ed24f, type: 3}
+    - {fileID: 2800000, guid: 2d0e164e571f7ae42bb34871eaeabb6f, type: 3}
+    - {fileID: 2800000, guid: 8df63230aa2444d4d873120c79d588dc, type: 3}
+    - {fileID: 2800000, guid: a6efa609c8c34ee47b8122198ec16156, type: 3}
+  - name: Sad
+    animIndex: 5
+    imgHeight: -200
+    eyeBlow: {fileID: 2800000, guid: 5ff81c053521df44aaea1145976bf612, type: 3}
+    eye: {fileID: 2800000, guid: 616b423db9fd41140a736ae521012754, type: 3}
+    eyeClosed: {fileID: 2800000, guid: e6826ff917e294149a643e005e2f2924, type: 3}
+    nose: {fileID: 2800000, guid: cd7986dd8b701b24391addb4571c6e33, type: 3}
+    mouthDefault: {fileID: 2800000, guid: b9b17f4560bae8147a01270278ee0475, type: 3}
+    mouth:
+    - {fileID: 2800000, guid: e794fda70e2b5eb4385a9bd6df59ccd6, type: 3}
+    - {fileID: 2800000, guid: 2e783c9d3fdfb6547956bac446a586a0, type: 3}
+    - {fileID: 2800000, guid: 5452c14b1f27de94a96d39489e42d9b9, type: 3}
+    - {fileID: 2800000, guid: 243238fdbed37dc4c806f0dae3f973de, type: 3}
+    - {fileID: 2800000, guid: 202dee8c765af9e42a8fcfe374378a14, type: 3}
+    - {fileID: 2800000, guid: c112896481e3af641a5ea32f670f3aad, type: 3}
+    - {fileID: 2800000, guid: 201f11aad5701964c965d788500f8b1f, type: 3}
+    - {fileID: 2800000, guid: 5e2ca5f4863651b469daf694f830cd1b, type: 3}
+    - {fileID: 2800000, guid: d9e2cbc073404cc418189434be76e172, type: 3}
+    - {fileID: 2800000, guid: 25ec62f718469894ba37cf90170f4165, type: 3}
+    - {fileID: 2800000, guid: 3f5b8787df72f574c902e5b0d6310f99, type: 3}
+    - {fileID: 2800000, guid: 02542f73b5b30684190a461d1f8f0ebe, type: 3}
+    - {fileID: 2800000, guid: 0a3819d34d980a04fb7de7ee71f0c505, type: 3}
+    - {fileID: 2800000, guid: 1e0deba255845b744be7e91602123c73, type: 3}
+    - {fileID: 2800000, guid: 20a53210cbd00b340b36dfcf2ac5e992, type: 3}
+  - name: Humor
+    animIndex: 3
+    imgHeight: -350
+    eyeBlow: {fileID: 2800000, guid: ab36ae8a12b5ed64f8d9ba43616906f7, type: 3}
+    eye: {fileID: 2800000, guid: c2d8438ebbe81db468ed41425d295a7e, type: 3}
+    eyeClosed: {fileID: 2800000, guid: c2d8438ebbe81db468ed41425d295a7e, type: 3}
+    nose: {fileID: 2800000, guid: 6e7eca9553191a64ca186de3535f7665, type: 3}
+    mouthDefault: {fileID: 2800000, guid: 39ee191622f8ada45913ac4f3213d42e, type: 3}
+    mouth:
+    - {fileID: 2800000, guid: 56fd9c5586fb11844a0e316b8fd1e421, type: 3}
+    - {fileID: 2800000, guid: c9f1176a2df354b4da9534b8e4993173, type: 3}
+    - {fileID: 2800000, guid: 8d8081ff2b55e8943b692f30b750195e, type: 3}
+    - {fileID: 2800000, guid: 7395f48ce83f19e47bed7d5b4708a5ff, type: 3}
+    - {fileID: 2800000, guid: 87fffef2068639c49bb226735b88f104, type: 3}
+    - {fileID: 2800000, guid: 6dd35eace13bc61448ad2299c4d0b7cc, type: 3}
+    - {fileID: 2800000, guid: e3c2d25b34a87fb4a8d3521ab8374261, type: 3}
+    - {fileID: 2800000, guid: 71b530de4dee2354788b9d71d89565a5, type: 3}
+    - {fileID: 2800000, guid: 9c24997717232d24ba6497b0a042548d, type: 3}
+    - {fileID: 2800000, guid: da55bc05e5edbe84ebece6288f0ebd28, type: 3}
+    - {fileID: 2800000, guid: e7627af7d6ed94e4b8824534134d08df, type: 3}
+    - {fileID: 2800000, guid: 5890576ad0612ee4c8f2cd725c60370c, type: 3}
+    - {fileID: 2800000, guid: 574f0845177ef6f4ea215ea8d65375ee, type: 3}
+    - {fileID: 2800000, guid: a10f43feeed389647a50d8b95e1b6dfd, type: 3}
+    - {fileID: 2800000, guid: fef23d18f2c3e1640af6cadaf48d3360, type: 3}
+  - name: Neutral
+    animIndex: 0
+    imgHeight: -350
+    eyeBlow: {fileID: 2800000, guid: be54645a6bb5ab24d8f4d50552bac9f0, type: 3}
+    eye: {fileID: 2800000, guid: 4f1cd312398525142b6dea1140985e87, type: 3}
+    eyeClosed: {fileID: 2800000, guid: 11ff18908e4afdf459057ab21d2238b2, type: 3}
+    nose: {fileID: 2800000, guid: 65914b18afc90e84cae69c7434d02a8c, type: 3}
+    mouthDefault: {fileID: 2800000, guid: 521bfee8a24170b46ad2720f99ec56ca, type: 3}
+    mouth:
+    - {fileID: 2800000, guid: 01fd2758ea4d0c64196d41b79fc93d83, type: 3}
+    - {fileID: 2800000, guid: efb5eb11ed2e8be4aa6a5c51acbd45f7, type: 3}
+    - {fileID: 2800000, guid: 4737bcb9acdba6e4da129133d80c23c5, type: 3}
+    - {fileID: 2800000, guid: 86b6c5b479827654fb03354e67c6cc2b, type: 3}
+    - {fileID: 2800000, guid: ee4be57fa60030941bc0b345775d5868, type: 3}
+    - {fileID: 2800000, guid: 8ba8f666e733ca24fb64b19c9b6d8b6c, type: 3}
+    - {fileID: 2800000, guid: ba02b53c0d26b3e47af7ecbba6e1417a, type: 3}
+    - {fileID: 2800000, guid: 98fccdc11de21934eab063bb305bb582, type: 3}
+    - {fileID: 2800000, guid: bfb93cee9f0a2aa46a999b4a4f243587, type: 3}
+    - {fileID: 2800000, guid: 99a467db54ea5504da5d5683566868a2, type: 3}
+    - {fileID: 2800000, guid: d4a6f0c67b54faa4c9f76e0b591efef5, type: 3}
+    - {fileID: 2800000, guid: 37656590864240a42a81af82dc7c0e21, type: 3}
+    - {fileID: 2800000, guid: 83a2f342fb0e2b341afc0d6db89df157, type: 3}
+    - {fileID: 2800000, guid: 78d4f74b1f58fc147b67bdc1ffa4eb11, type: 3}
+    - {fileID: 2800000, guid: 25f21bc4f15210449a72759cf73cb9ad, type: 3}
+  - name: Joy
+    animIndex: 3
+    imgHeight: -350
+    eyeBlow: {fileID: 2800000, guid: bea351140b888e44c97d366a65fc4fc1, type: 3}
+    eye: {fileID: 2800000, guid: e4d0ccab2e2776f43995c104d9182685, type: 3}
+    eyeClosed: {fileID: 2800000, guid: 2566315aaff34f34daebb5a7b8b429f4, type: 3}
+    nose: {fileID: 2800000, guid: d5025a33c7f3db54cb7e2901701ec468, type: 3}
+    mouthDefault: {fileID: 2800000, guid: ea215f0ee931e9d46b42ca8ea9a030ab, type: 3}
+    mouth:
+    - {fileID: 2800000, guid: cedfed88eaab79c4788e51e4764b6902, type: 3}
+    - {fileID: 2800000, guid: 56f047f936f2d8a43b1b0079c5d937c7, type: 3}
+    - {fileID: 2800000, guid: f3938c607ab02d846ab31e77bfb6fae1, type: 3}
+    - {fileID: 2800000, guid: e6ff9037e89b05549a5a2ee4d7a6b072, type: 3}
+    - {fileID: 2800000, guid: 3dbcaa42828521c4fa31257ef5648d29, type: 3}
+    - {fileID: 2800000, guid: 468b5c14ae43a024dbf0df79840aa789, type: 3}
+    - {fileID: 2800000, guid: a0c4f3d2e2906764f90404d2e1aea01d, type: 3}
+    - {fileID: 2800000, guid: 1b238bb6eff75dd4ab17eccd055d5e22, type: 3}
+    - {fileID: 2800000, guid: 1f03199734b96f744bf81d9b055f005f, type: 3}
+    - {fileID: 2800000, guid: 0faa8eb2d2429c0419420c897e97c35e, type: 3}
+    - {fileID: 2800000, guid: b1d0decef8fe84d48ba2a51b8d126afa, type: 3}
+    - {fileID: 2800000, guid: 11c18e2258738c04ab3789d59b69745c, type: 3}
+    - {fileID: 2800000, guid: c0d46005fee7bc74c818a434c2fbd68f, type: 3}
+    - {fileID: 2800000, guid: f857e3e29e41eba498fd4628df429bab, type: 3}
+    - {fileID: 2800000, guid: 603e59faeebfe9e478e66d9f155c2ec3, type: 3}

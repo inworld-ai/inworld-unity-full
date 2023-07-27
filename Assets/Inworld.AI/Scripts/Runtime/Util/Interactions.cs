@@ -87,7 +87,14 @@ namespace Inworld.Util
                 case CustomEvent customEvent:
                     _HandleCustomEvent(customEvent);
                     break;
+                case RelationEvent relationEvent:
+                    _HandleRelationEvent(relationEvent);
+                    break;
             }
+        }
+        void _HandleRelationEvent(RelationEvent relationEvent)
+        {
+            Character.Relation = relationEvent.Update;
         }
         void _HandleCustomEvent(CustomEvent customEvent)
         {

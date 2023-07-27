@@ -30,6 +30,7 @@ namespace Inworld.Util
         [Space(10)]
         [SerializeField] InworldController m_ControllerPrefab;
         [SerializeField] InworldCharacter m_CharacterPrefab;
+        [SerializeField] InworldCharacter m_InnequinCharacterPrefab;
         #endregion
 
         #region Private Variables
@@ -107,6 +108,12 @@ namespace Inworld.Util
         ///     Usually, InworldCharacter should be added to loaded models by GLTFAvatarLoader.
         /// </summary>
         public static InworldCharacter CharacterPrefab => Instance.m_CharacterPrefab;
+        /// <summary>
+        ///     Get the InworldCharacter Prefab.
+        ///     InworldCharacter contains audio source, but doesn't contain models.
+        ///     Usually, InworldCharacter should be added to loaded models by GLTFAvatarLoader.
+        /// </summary>
+        public static InworldCharacter InnequinPrefab => Instance.m_InnequinCharacterPrefab;
         /// <summary>
         ///     Get the PlayerController Prefab.
         ///     PlayerController is the object that contains main camera, simple camera controller.
