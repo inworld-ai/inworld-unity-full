@@ -77,6 +77,7 @@ namespace Inworld.Packet
             timestamp = rhs.timestamp;
             packetId = rhs.packetId;
             routing = rhs.routing;
+            type = rhs.type;
         }
     }
 }
