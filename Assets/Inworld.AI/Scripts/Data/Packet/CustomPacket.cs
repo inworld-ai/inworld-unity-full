@@ -41,24 +41,24 @@ namespace Inworld.Packet
     public class CustomPacket : InworldPacket
     {
         const string k_Pattern = @"^inworld\.goal\.complete\.(.+)$";
-        [FormerlySerializedAs("custom")] public ClientTrigger m_clientTrigger;
+        [FormerlySerializedAs("custom")] public ClientTrigger clientTrigger;
         public string TriggerName
         {
             get
             {
-                Match match = new Regex(k_Pattern).Match(m_clientTrigger.name);
-                return match.Success && match.Groups.Count > 1 ? match.Groups[1].Value : m_clientTrigger.name;
+                Match match = new Regex(k_Pattern).Match(clientTrigger.name);
+                return match.Success && match.Groups.Count > 1 ? match.Groups[1].Value : clientTrigger.name;
             }
         }
-        public string Trigger => m_clientTrigger.parameters.Aggregate(TriggerName, (current, param) => current + $" {param.name}: {param.value}");
+        public string Trigger => clientTrigger.parameters.Aggregate(TriggerName, (current, param) => current + $" {param.name}: {param.value}");
 
         public CustomPacket()
         {
-            m_clientTrigger = new ClientTrigger();
+            clientTrigger = new ClientTrigger();
         }
         public CustomPacket(InworldPacket rhs, ClientTrigger evt) : base(rhs)
         {
-            m_clientTrigger = evt;
+            clientTrigger = evt;
         }
     }
 }
