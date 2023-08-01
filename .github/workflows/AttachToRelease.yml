@@ -1,9 +1,9 @@
 name: Attach Package on Release
 
 on:
-  workflow-dispatch:
   release:
     types: [published]
+  workflow-dispatch:
 
 env:
     UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
