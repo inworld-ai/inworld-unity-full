@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using UnityEngine.Serialization;
 using UnityEngine.TextCore.Text;
 
 namespace Inworld.Packet
@@ -13,18 +14,18 @@ namespace Inworld.Packet
         public string value;
     }
     [Serializable]
-    public class CustomEvent
+    public class ClientTrigger
     {
         public string name;
         public List<TriggerParamer> parameters;
         
-        public CustomEvent()
+        public ClientTrigger()
         {
             name = "";
             parameters = null;
         }
 
-        public CustomEvent(string eventName, Dictionary<string, string> eventParameters)
+        public ClientTrigger(string eventName, Dictionary<string, string> eventParameters)
         {
             name = eventName;
             if (eventParameters != null)
@@ -40,24 +41,24 @@ namespace Inworld.Packet
     public class CustomPacket : InworldPacket
     {
         const string k_Pattern = @"^inworld\.goal\.complete\.(.+)$";
-        public CustomEvent custom;
+        [FormerlySerializedAs("custom")] public ClientTrigger m_clientTrigger;
         public string TriggerName
         {
             get
             {
-                Match match = new Regex(k_Pattern).Match(custom.name);
-                return match.Success && match.Groups.Count > 1 ? match.Groups[1].Value : custom.name;
+                Match match = new Regex(k_Pattern).Match(m_clientTrigger.name);
+                return match.Success && match.Groups.Count > 1 ? match.Groups[1].Value : m_clientTrigger.name;
             }
         }
-        public string Trigger => custom.parameters.Aggregate(TriggerName, (current, param) => current + $" {param.name}: {param.value}");
+        public string Trigger => m_clientTrigger.parameters.Aggregate(TriggerName, (current, param) => current + $" {param.name}: {param.value}");
 
         public CustomPacket()
         {
-            custom = new CustomEvent();
+            m_clientTrigger = new ClientTrigger();
         }
-        public CustomPacket(InworldPacket rhs, CustomEvent evt) : base(rhs)
+        public CustomPacket(InworldPacket rhs, ClientTrigger evt) : base(rhs)
         {
-            custom = evt;
+            m_clientTrigger = evt;
         }
     }
 }

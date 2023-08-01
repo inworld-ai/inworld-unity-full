@@ -67,7 +67,7 @@ namespace Inworld
                 type = "CUSTOM",
                 packetId = new PacketId(),
                 routing = new Routing(charID),
-                custom = new CustomEvent(triggerName, parameters)
+                m_clientTrigger = new ClientTrigger(triggerName, parameters)
             };
             string jsonToSend = JsonUtility.ToJson(packet);
             InworldAI.Log($"Send Trigger {triggerName}");

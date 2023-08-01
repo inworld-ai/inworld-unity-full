@@ -122,7 +122,7 @@ namespace Inworld.Grpc
                 };
                 return toSend;
             }
-            public static InworldPacket CustomEvent(string charID, string triggerName, Dictionary<string, string> parameters)
+            public static InworldPacket CLientTrigger(string charID, string triggerName, Dictionary<string, string> parameters)
             {
                 InworldPacket toSend = GRPCPacket(charID);
                 toSend.Custom = new CustomEvent
@@ -275,7 +275,7 @@ namespace Inworld.Grpc
 
             public static Packet.InworldPacket GRPCCustomPacket(InworldPacket response) => new CustomPacket
             (
-                GRPCPacket(response), new Packet.CustomEvent
+                GRPCPacket(response), new Packet.ClientTrigger
                 {
                     name = response.Custom.Name,
                     parameters = response.Custom.Parameters.Select

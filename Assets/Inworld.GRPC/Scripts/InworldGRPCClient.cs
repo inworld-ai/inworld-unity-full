@@ -108,7 +108,7 @@ namespace Inworld.Grpc
             if (string.IsNullOrEmpty(charID))
                 return;
             InworldAI.Log($"Send Trigger {triggerName}");
-            _SendPacket(InworldGRPC.To.CustomEvent(charID, triggerName, parameters));
+            _SendPacket(InworldGRPC.To.CLientTrigger(charID, triggerName, parameters));
         }
         public override void StartAudio(string charID)
         {

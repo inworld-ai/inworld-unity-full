@@ -14,7 +14,7 @@ namespace Inworld.Packet
         public ControlEvent control;
         public DataChunk dataChunk;
         public GestureEvent gesture;
-        public CustomEvent custom;
+        public ClientTrigger custom;
         public MutationEvent mutation;
         public EmotionEvent emotion;
         public ActionEvent action;

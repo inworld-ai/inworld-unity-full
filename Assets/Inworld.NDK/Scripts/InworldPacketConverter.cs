@@ -122,7 +122,7 @@ namespace Inworld.NDK
                 };
                 return toSend;
             }
-            public static InworldPacket CustomEvent(string charID, string triggerName, Dictionary<string, string> parameters)
+            public static InworldPacket ClientTrigger(string charID, string triggerName, Dictionary<string, string> parameters)
             {
                 InworldPacket toSend = NDKPacket(charID);
                 toSend.Custom = new CustomEvent
@@ -276,7 +276,7 @@ namespace Inworld.NDK
 
             public static Packet.InworldPacket NDKCustomPacket(InworldPacket response) => new CustomPacket
             (
-                NDKPacket(response), new Packet.CustomEvent
+                NDKPacket(response), new Packet.ClientTrigger
                 {
                     name = response.Custom.Name,
                     parameters = response.Custom.Parameters.Select

@@ -175,7 +175,7 @@ namespace Inworld.NDK
             if (string.IsNullOrEmpty(charID))
                 return;
             InworldAI.Log($"Send Trigger {triggerName}");
-            _SendPacket(InworldPacketConverter.To.CustomEvent(charID, triggerName, parameters));
+            _SendPacket(InworldPacketConverter.To.ClientTrigger(charID, triggerName, parameters));
         }
         public override void StartAudio(string charID)
         {
