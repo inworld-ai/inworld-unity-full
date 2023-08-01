@@ -248,7 +248,7 @@ GameObject:
   - component: {fileID: 6911381471636183286}
   - component: {fileID: 5385648865442779241}
   - component: {fileID: 4653857099923982790}
-  - component: {fileID: 7781568798596137110}
+  - component: {fileID: 6911381471636183287}
   m_Layer: 0
   m_Name: InworldController
   m_TagString: Untagged
@@ -288,8 +288,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78696971f17345f8b3a604c50919e8f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Client: {fileID: 7781568798596137110}
-  m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
+  m_Client: {fileID: 6911381471636183287}
+  m_SceneFullName: workspaces/unitytest/scenes/browserblooper
   m_AutoStart: 1
 --- !u!1 &5395192720753264136
 GameObject:
@@ -339,6 +339,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6911381471636183287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2801687289496358892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5db5b813fe746f9a9ce5602a5521235, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
 --- !u!1001 &7328141237567351055
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -544,23 +557,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
---- !u!114 &7781568798596137110
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2801687289496358892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4911bdd1dc4025648b562f0cfbf6ac94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
-  m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
-  m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
-  m_CustomToken: 
-  useAec: 0
 --- !u!114 &8853715024279358828
 MonoBehaviour:
   m_ObjectHideFlags: 0
