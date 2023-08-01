@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 namespace Inworld
 {
     [RequireComponent(typeof(AudioCapture))]
@@ -13,15 +12,15 @@ namespace Inworld
         public event Action<InworldPacket> OnPacketReceived;
         const string k_NotImplented = "No InworldClient found. Need at least one connection protocol";
         protected Token m_Token;
-        [FormerlySerializedAs("m_AudioCapture")] public AudioCapture AudioCapture;
+        protected AudioCapture m_AudioCapture;
         protected string m_SessionKey;
         InworldConnectionStatus m_Status;
         protected string m_Error;
 
         public bool IsRecording
         {
-            get => AudioCapture.IsCapturing;
-            set => AudioCapture.IsCapturing = value;
+            get => m_AudioCapture.IsCapturing;
+            set => m_AudioCapture.IsCapturing = value;
         }
         public InworldServerConfig Server => m_ServerConfig;
         public Token Token
@@ -29,6 +28,7 @@ namespace Inworld
             get => m_Token;
             set => m_Token = value;
         }
+        public bool IsSpeaking =>  m_AudioCapture.IsSpeaking;
         public virtual bool IsTokenValid => m_Token != null && m_Token.IsValid;
         public virtual void GetAccessToken()
         {
@@ -87,7 +87,7 @@ namespace Inworld
         public virtual void SendAudio(string charID, string base64) => Error = k_NotImplented;
         protected virtual void Init()
         {
-            AudioCapture = GetComponent<AudioCapture>();
+            m_AudioCapture = GetComponent<AudioCapture>();
         }
         public void Dispatch(InworldPacket packet) => OnPacketReceived?.Invoke(packet);
 

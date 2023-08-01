@@ -91,8 +91,8 @@ namespace Inworld
             };
             string jsonToSend = JsonUtility.ToJson(packet);
             m_Socket.SendAsync(jsonToSend);
-            if (!AudioCapture.IsCapturing)
-                AudioCapture.StartRecording();
+            if (!m_AudioCapture.IsCapturing)
+                m_AudioCapture.StartRecording();
         }
         public override void StopAudio(string charID)
         {
@@ -196,8 +196,8 @@ namespace Inworld
         IEnumerator _DisconnectAsync()
         {
 #if !UNITY_WEBGL
-            if (AudioCapture)
-                AudioCapture.StopRecording();
+            if (m_AudioCapture)
+                m_AudioCapture.StopRecording();
 #endif
             yield return new WaitForFixedUpdate();
             m_Socket?.CloseAsync();

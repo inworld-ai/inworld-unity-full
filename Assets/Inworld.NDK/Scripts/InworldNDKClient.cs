@@ -183,8 +183,8 @@ namespace Inworld.NDK
                 return;
 
             InworldNDKBridge.ClientWrapper_StartAudioSession(m_Wrapper.instance, charID);
-            if (!AudioCapture.IsCapturing)
-                AudioCapture.StartRecording();
+            if (!m_AudioCapture.IsCapturing)
+                m_AudioCapture.StartRecording();
         }
         public override void StopAudio(string charID)
         {
@@ -193,8 +193,8 @@ namespace Inworld.NDK
             
             InworldNDKBridge.ClientWrapper_StopAudioSession(m_Wrapper.instance, charID);
             
-            if (AudioCapture.IsCapturing)
-                AudioCapture.StopRecording();
+            if (m_AudioCapture.IsCapturing)
+                m_AudioCapture.StopRecording();
         }
         public override void SendAudio(string charID, string base64)
         {
