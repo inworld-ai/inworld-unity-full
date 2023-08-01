@@ -299,7 +299,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2717743084740492485}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -835,7 +835,7 @@ MonoBehaviour:
   m_BubbleRight: {fileID: 7032387963612836835, guid: ce19183024b657340b5e830b1549618e, type: 3}
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
   m_EmoIcon: {fileID: 7575428023401961657}
-  m_FaceData: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
+  m_Character: {fileID: 2779047371885436891}
 --- !u!1001 &5029529274512285624
 PrefabInstance:
   m_ObjectHideFlags: 0

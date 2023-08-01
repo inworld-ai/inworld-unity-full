@@ -689,10 +689,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2181744917861107564, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2717743084740492485, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_Name
       value: Alice the Guide
