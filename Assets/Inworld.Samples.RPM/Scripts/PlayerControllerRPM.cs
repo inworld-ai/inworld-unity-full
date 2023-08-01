@@ -38,7 +38,10 @@ namespace Inworld.Sample.RPM
             if (newStatus == InworldConnectionStatus.Error)
                 m_StatusText.text = InworldController.Client.Error;
         }
-        protected override void OnCharacterRegistered(InworldCharacterData charData){}
+        protected override void OnCharacterRegistered(InworldCharacterData charData)
+        {
+
+        }
 
         protected override void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
         {

@@ -1,7 +1,6 @@
 ﻿using Inworld.Assets;
 using Inworld.Interactions;
 using Inworld.Packet;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -45,12 +44,13 @@ namespace Inworld.Sample.Innequin
         }
         protected virtual void OnEnable()
         {
-            m_Interaction.OnInteractionChanged += OnInteractionChanged;
+            InworldController.Instance.OnCharacterInteraction += OnInteractionChanged;
         }
 
         protected virtual void OnDisable()
         {
-            m_Interaction.OnInteractionChanged -= OnInteractionChanged;
+            if (InworldController.Instance)
+                InworldController.Instance.OnCharacterInteraction -= OnInteractionChanged;
         }
         void Start()
         {
@@ -145,12 +145,12 @@ namespace Inworld.Sample.Innequin
             if (p2v.visemeIndex >= 0 && p2v.visemeIndex < m_LipsyncTextures.Count)
                 m_matMouth.mainTexture = m_LipsyncTextures[p2v.visemeIndex];
         }
-        protected virtual void OnInteractionChanged(List<InworldPacket> packets)
+        protected virtual void OnInteractionChanged(InworldPacket packet)
         {
-            foreach (InworldPacket packet in packets)
-            {
+            if (m_Character &&
+                !string.IsNullOrEmpty(m_Character.ID) &&
+                packet?.routing?.source?.name == m_Character.ID || packet?.routing?.target?.name == m_Character.ID)
                 ProcessPacket(packet);
-            }
         }
         protected virtual void ProcessPacket(InworldPacket incomingPacket)
         {

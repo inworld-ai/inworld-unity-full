@@ -289,7 +289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 7781568798596137110}
-  m_SceneFullName: workspaces/unitytest/scenes/transform
+  m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
   m_AutoStart: 1
 --- !u!1 &5395192720753264136
 GameObject:
@@ -560,7 +560,7 @@ MonoBehaviour:
   m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
   m_CustomToken: 
-  useAEC: 0
+  useAec: 0
 --- !u!114 &8853715024279358828
 MonoBehaviour:
   m_ObjectHideFlags: 0

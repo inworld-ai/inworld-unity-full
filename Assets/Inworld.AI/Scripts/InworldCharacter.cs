@@ -46,6 +46,8 @@ namespace Inworld
         public void RegisterLiveSession()
         {
             m_Interaction.LiveSessionID = Data.agentId = InworldController.Instance.GetLiveSessionID(this);
+            if (!InworldController.Instance.CurrentCharacter)
+                InworldController.Instance.CurrentCharacter = this;
         }
 
         void Awake()
@@ -83,12 +85,7 @@ namespace Inworld
         }
         protected virtual void OnCharRegistered(InworldCharacterData charData)
         {
-            // if (charData.brainName == Data.brainName)
-            //     RegisterLiveSession();
-            // else
-            // {
-            //     Debug.LogError($"My Brain: {BrainName} Received: {charData.brainName}");
-            // }
+
         }
         protected virtual void OnCharChanged(InworldCharacter oldChar, InworldCharacter newChar) {}
         protected virtual void OnStatusChanged(InworldConnectionStatus newStatus)

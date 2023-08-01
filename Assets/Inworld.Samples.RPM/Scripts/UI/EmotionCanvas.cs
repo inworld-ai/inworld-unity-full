@@ -4,10 +4,10 @@
 * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
-using Inworld;
 using Inworld.Assets;
 using UnityEngine;
 using Inworld.Packet;
+using System;
 using TMPro;
 
 namespace Inworld.Sample.RPM
@@ -16,6 +16,7 @@ namespace Inworld.Sample.RPM
     {
         [SerializeField] EmotionMap m_EmotionMap;
         [SerializeField] TMP_Dropdown m_StatusDropdown;
+        [SerializeField] TMP_Dropdown m_ServerEventDropDown;
         static readonly int s_Emotion = Animator.StringToHash("Emotion");
         static readonly int s_Gesture = Animator.StringToHash("Gesture");
         static readonly int s_Motion = Animator.StringToHash("MainStatus");
@@ -102,7 +103,7 @@ namespace Inworld.Sample.RPM
             switch (packet)
             {
                 case EmotionPacket emotionEvent:
-                    HandleEmotion(emotionEvent.emotion.ToString());
+                    HandleEmotion(emotionEvent.emotion.behavior);
                     break;
             }
         }
@@ -110,6 +111,15 @@ namespace Inworld.Sample.RPM
         {
             Emotion = incomingSpaff;
             m_Title.text = $"Get Emotion {incomingSpaff}";
+            for (int i = 0; i < m_ServerEventDropDown.options.Count; i++)
+            {
+                if (!string.Equals(m_ServerEventDropDown.options[i].text, incomingSpaff, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    continue;
+                }
+                m_ServerEventDropDown.value = i;
+                break;
+            }
         }
         public void SendEmotion(int emotion)
         {
@@ -147,7 +157,6 @@ namespace Inworld.Sample.RPM
                     behavior = m_EmotionMap.data[nSpaffCode].name
                 }
             };
-
             InworldController.Instance.CharacterInteract(evt);
         }
     }
