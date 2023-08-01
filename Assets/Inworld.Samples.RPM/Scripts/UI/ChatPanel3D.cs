@@ -1,12 +1,14 @@
 using Inworld;
 using Inworld.Assets;
 using Inworld.Packet;
-using Inworld.Sample;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-public class ChatPanel3D : MonoBehaviour
+
+namespace Inworld.Sample.RPM
+{
+    public class ChatPanel3D : MonoBehaviour
 {
     [SerializeField] RectTransform m_ContentRT;
     [SerializeField] ChatBubble m_BubbleLeft;
@@ -134,3 +136,5 @@ public class ChatPanel3D : MonoBehaviour
         scrollAnchor.sizeDelta = new Vector2(m_ContentRT.sizeDelta.x, scrollAnchor.childCount * element.Height);
     }
 }
+}
+

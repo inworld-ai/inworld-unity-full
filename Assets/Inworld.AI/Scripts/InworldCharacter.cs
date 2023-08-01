@@ -59,6 +59,8 @@ namespace Inworld
             InworldController.Instance.OnCharacterChanged += OnCharChanged;
             InworldController.Client.OnStatusChanged += OnStatusChanged;
             m_Interaction.OnStartStopInteraction += OnStartStopInteraction;
+            // YAN: This event is for handling global packets. Please only use it in InworldCharacter.
+            //      For customized integration, please use InworldController.Instance.OnCharacterInteraction
             m_Interaction.OnInteractionChanged += OnInteractionChanged;
         }
 

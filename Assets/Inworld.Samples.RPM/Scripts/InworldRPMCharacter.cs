@@ -2,7 +2,7 @@ using Inworld.Assets;
 using Inworld.Interactions;
 using UnityEngine;
 
-namespace Inworld.Sample
+namespace Inworld.Sample.RPM
 {
     [RequireComponent(typeof(InworldAudioInteraction))]
     public class InworldRPMCharacter : InworldCharacter

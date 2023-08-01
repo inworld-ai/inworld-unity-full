@@ -9,7 +9,7 @@ using Inworld;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace Inworld.Sample
+namespace Inworld.Sample.RPM
 {
     public class TransformCanvas : DemoCanvas
     {

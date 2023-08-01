@@ -5,7 +5,7 @@
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
 using UnityEngine;
-namespace Inworld.Animation
+namespace Inworld.Sample
 {
     /// <summary>
     ///     This script attached to Neutral gesture.

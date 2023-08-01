@@ -14,7 +14,7 @@ using System.Net;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Inworld.Sample
+namespace Inworld.Sample.RPM
 {
     public class SessionCanvas : DemoCanvas
     {

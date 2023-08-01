@@ -25,7 +25,8 @@ public class PlayerController : MonoBehaviour
     protected string m_CurrentEmotion;
     void Awake()
     {
-        m_SendButton.interactable = false;
+        if (m_SendButton)
+            m_SendButton.interactable = false;
     }
     void OnEnable()
     {

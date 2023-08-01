@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Inworld.Sample
+namespace Inworld.Sample.RPM
 {
     public class InworldFacialAnimationRPM : MonoBehaviour
     {
@@ -29,7 +29,7 @@ namespace Inworld.Sample
         Vector2 m_LastViseme = Vector2.zero;
 
         float m_CurrentAudioTime;
-        InworldInteraction m_Interaction;
+
         SkinnedMeshRenderer m_Skin;
         int m_VisemeIndex;
         int m_BlinkIndex;
@@ -54,12 +54,13 @@ namespace Inworld.Sample
         
         protected virtual void OnEnable()
         {
-            m_Interaction.OnInteractionChanged += OnInteractionChanged;
+            InworldController.Instance.OnCharacterInteraction += OnInteractionChanged;
         }
 
         protected virtual void OnDisable()
         {
-            m_Interaction.OnInteractionChanged -= OnInteractionChanged;
+            if (InworldController.Instance)
+                InworldController.Instance.OnCharacterInteraction -= OnInteractionChanged;
         }
 
         void FixedUpdate()
@@ -72,7 +73,6 @@ namespace Inworld.Sample
         {
             Character ??= GetComponent<InworldCharacter>();
             m_Skin ??= Character.GetComponentInChildren<SkinnedMeshRenderer>();
-            m_Interaction ??= GetComponent<InworldInteraction>();
             m_VisemeMap ??= new ConcurrentQueue<Vector2>();
             m_VisemeMap.Clear();
             _MappingBlendShape();
@@ -168,12 +168,12 @@ namespace Inworld.Sample
                 m_Skin.SetBlendShapeWeight(m_VisemeIndex + i, 0);
             }
         }
-        void OnInteractionChanged(List<InworldPacket> packets)
+        void OnInteractionChanged(InworldPacket packet)
         {
-            foreach (InworldPacket packet in packets)
-            {
+            if (Character &&
+                !string.IsNullOrEmpty(Character.ID) &&
+                packet?.routing?.source?.name == Character.ID || packet?.routing?.target?.name == Character.ID)
                 ProcessPacket(packet);
-            }
         }
         protected virtual void ProcessPacket(InworldPacket incomingPacket)
         {
@@ -204,7 +204,7 @@ namespace Inworld.Sample
 
         void _ProcessEmotion(string emotion)
         {
-            FacialAnimation targetEmo = m_FacialEmotion.emotions.FirstOrDefault(emo => emo.emotion == emotion);
+            FacialAnimation targetEmo = m_FacialEmotion.emotions.FirstOrDefault(emo => emo.emotion.ToUpper() == emotion);
             if (targetEmo != null && m_CurrentFacial != targetEmo)
             {
                 _ResetLastEmo(m_LastFacial);

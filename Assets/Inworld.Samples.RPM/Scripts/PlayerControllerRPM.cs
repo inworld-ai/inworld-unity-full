@@ -2,7 +2,7 @@ using Inworld.Packet;
 using UnityEngine;
 
 
-namespace Inworld.Sample
+namespace Inworld.Sample.RPM
 {
     public class PlayerControllerRPM : PlayerController
     {
@@ -21,13 +21,15 @@ namespace Inworld.Sample
         {
             if (newStatus == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter)
             {
-                m_SendButton.interactable = true;
+                if (m_SendButton)
+                    m_SendButton.interactable = true;
                 if (!InworldController.IsRecording)
                     InworldController.Instance.StartAudio(InworldController.Instance.CurrentCharacter.ID);
             }
             else
             {
-                m_SendButton.interactable = false;
+                if (m_SendButton)
+                    m_SendButton.interactable = false;
                 if (InworldController.IsRecording)
                     InworldController.Instance.StopAudio(InworldController.Instance.CurrentCharacter.ID);
             }
