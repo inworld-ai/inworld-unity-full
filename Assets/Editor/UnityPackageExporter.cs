@@ -15,9 +15,12 @@ namespace ExportPackage.Editor
     {
         // The name of the unitypackage to output.
         const string k_PackageName = "ai.inworld.runtime-sdk";
+        const string k_samplePackageName = "ai.inworld.runtime-sdk-samples";
+
 
         // The path to the package under the `Assets/` folder.
         static string[] __packagePath = {"Assets/Inworld.AI", "Assets/Inworld.NDK", "Assets/Inworld.Assets"};
+        static string[] __samplesPackagePath = {"Assets/Inworld.Samples.Innequin", "Assets/Inworld.Samples.RPM"};
 
         // Path to export to.
         const string k_ExportPath = "Build";
@@ -27,14 +30,19 @@ namespace ExportPackage.Editor
         /// </summary>
         public static void Export()
         {
-            ExportPackage($"{k_ExportPath}/{k_PackageName}.unitypackage");
+            ExportPackage($"{k_ExportPath}/{k_PackageName}.unitypackage", __packagePath);
+        }
+        
+        public static void ExportSamples()
+        {
+            ExportPackage($"{k_ExportPath}/{k_samplePackageName}.unitypackage", __samplesPackagePath);
         }
         /// <summary>
         ///     Export package to target path.
         /// </summary>
         /// <param name="exportPath">target path to export.</param>
         /// <returns>string of the output full path</returns>
-        public static string ExportPackage(string exportPath)
+        public static string ExportPackage(string exportPath, string[] includePaths)
         {
             // Ensure export path.
             DirectoryInfo dir = new FileInfo(exportPath).Directory;
@@ -46,7 +54,7 @@ namespace ExportPackage.Editor
             // Export
             AssetDatabase.ExportPackage
             (
-                __packagePath,
+                includePaths,
                 exportPath,
                 ExportPackageOptions.Recurse
             );
