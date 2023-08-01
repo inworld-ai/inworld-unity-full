@@ -17,7 +17,7 @@ namespace ExportPackage.Editor
         const string k_PackageName = "ai.inworld.runtime-sdk";
 
         // The path to the package under the `Assets/` folder.
-        const string k_PackagePath = "Inworld.AI";
+        static string[] __packagePath = {"Assets/Inworld.AI", "Assets/Inworld.NDK", "Assets/Inworld.Assets"};
 
         // Path to export to.
         const string k_ExportPath = "Build";
@@ -46,7 +46,7 @@ namespace ExportPackage.Editor
             // Export
             AssetDatabase.ExportPackage
             (
-                $"Assets/{k_PackagePath}",
+                __packagePath,
                 exportPath,
                 ExportPackageOptions.Recurse
             );

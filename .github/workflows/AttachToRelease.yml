@@ -1,6 +1,7 @@
 name: Attach Package on Release
 
 on:
+  workflow-dispatch:
   release:
     types: [published]
 
