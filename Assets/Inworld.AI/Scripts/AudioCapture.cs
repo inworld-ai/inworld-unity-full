@@ -22,8 +22,10 @@ namespace Inworld
         public UnityEvent OnRecordingStart;
         public UnityEvent OnRecordingEnd;
         public bool IsCapturing { get; set; }
+        public bool IsSpeaking{ get { return CalculateAmplitude(m_FloatBuffer) > m_UserSpeechThreshold; } }
         [SerializeField] int m_AudioRate = 16000;
         [SerializeField] int m_BufferSeconds = 1;
+        [SerializeField] float  m_UserSpeechThreshold = 0.01f;
         
         readonly List<string> m_AudioToPush = new List<string>();
         // Size of audioclip used to collect information, need to be big enough to keep up with collect. 
@@ -98,7 +100,8 @@ namespace Inworld
             int nWavCount = nSize * m_Recording.channels * k_SizeofInt16;
             byte[] output = new byte[nWavCount];
             Buffer.BlockCopy(m_ByteBuffer, 0, output, 0, nWavCount);
-            InworldController.Instance.SendAudio(Convert.ToBase64String(output));
+            if(IsSpeaking)
+                InworldController.Instance.SendAudio(Convert.ToBase64String(output));
         }
 
         void OnDestroy()
@@ -111,6 +114,16 @@ namespace Inworld
             {
                 InworldController.Instance.SendAudio(audioData);
             }
+        }
+        // Helper method to calculate the amplitude of audio data
+        float CalculateAmplitude(float[] audioData)
+        {
+            float sum = 0f;
+            for (int i = 0; i < audioData.Length; i++)
+            {
+                sum += Mathf.Abs(audioData[i]);
+            }
+            return sum / audioData.Length;
         }
         #endif
 
