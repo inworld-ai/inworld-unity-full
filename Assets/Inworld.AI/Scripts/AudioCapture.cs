@@ -22,7 +22,7 @@ namespace Inworld
         public UnityEvent OnRecordingStart;
         public UnityEvent OnRecordingEnd;
         public bool IsCapturing { get; set; }
-        public bool IsSpeaking{ get { return CalculateAmplitude(m_FloatBuffer) > m_UserSpeechThreshold; } }
+        public bool IsSpeaking;//{ get { return CalculateAmplitude(m_FloatBuffer) > m_UserSpeechThreshold; } }
         [SerializeField] int m_AudioRate = 16000;
         [SerializeField] int m_BufferSeconds = 1;
         [SerializeField] float  m_UserSpeechThreshold = 0.01f;
@@ -100,8 +100,8 @@ namespace Inworld
             int nWavCount = nSize * m_Recording.channels * k_SizeofInt16;
             byte[] output = new byte[nWavCount];
             Buffer.BlockCopy(m_ByteBuffer, 0, output, 0, nWavCount);
-            if(IsSpeaking)
-                InworldController.Instance.SendAudio(Convert.ToBase64String(output));
+            IsSpeaking = CalculateAmplitude(m_FloatBuffer) > m_UserSpeechThreshold;
+            InworldController.Instance.SendAudio(Convert.ToBase64String(output));
         }
 
         void OnDestroy()

@@ -116,16 +116,16 @@ namespace Inworld.Grpc
                 return;
 
             _SendPacket(InworldGRPC.To.AudioSessionStart(charID));
-            if (!m_AudioCapture.IsCapturing)
-                m_AudioCapture.StartRecording();
+            if (!AudioCapture.IsCapturing)
+                AudioCapture.StartRecording();
         }
         public override void StopAudio(string charID)
         {
             if (string.IsNullOrEmpty(charID))
                 return;
             _SendPacket(InworldGRPC.To.AudioSessionEnd(charID));
-            if (m_AudioCapture.IsCapturing)
-                m_AudioCapture.StopRecording();
+            if (AudioCapture.IsCapturing)
+                AudioCapture.StopRecording();
         }
         public override void SendAudio(string charID, string base64)
         {

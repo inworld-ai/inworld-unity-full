@@ -158,7 +158,8 @@ namespace Inworld
             if (!IsRegistered(charIDToSend))
                 return;
             m_Client.SendAudio(charIDToSend, base64);
-            LastPlayerResponseTime = Time.time;
+            if(m_Client.AudioCapture.IsSpeaking)
+                LastPlayerResponseTime = Time.time;
         }
         void _Setup()
         {

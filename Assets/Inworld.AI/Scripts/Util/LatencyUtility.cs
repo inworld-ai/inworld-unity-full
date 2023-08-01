@@ -1,3 +1,4 @@
+using Inworld.Interactions;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,13 +29,11 @@ namespace Inworld
             {
                 case "AGENT":
                     if(!(packet is AudioPacket))
-                    {
                         return;
-                    }
                     
-                    if (m_debugLatency)
+                    if (m_debugLatency && m_LastCharacterResponseTime > InworldController.Instance.LastPlayerResponseTime)
                     {                    
-                        m_CharacterResponseDelay = m_LastCharacterResponseTime > InworldController.Instance.LastPlayerResponseTime ? Time.time - m_LastCharacterResponseTime : Time.time - InworldController.Instance.LastPlayerResponseTime;
+                        m_CharacterResponseDelay =  Time.time - m_LastCharacterResponseTime;// : Time.time - InworldController.Instance.LastPlayerResponseTime;
                         InworldAI.Log("Character Response Delay: " + m_CharacterResponseDelay + " lastCharacterResponseTime: " + m_LastCharacterResponseTime + " lastPlayerResponseTime: " + InworldController.Instance.LastPlayerResponseTime);
                     }
                     m_LastCharacterResponseTime = Time.time;
