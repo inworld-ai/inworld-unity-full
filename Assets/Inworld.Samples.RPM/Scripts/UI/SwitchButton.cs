@@ -7,7 +7,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Inworld.Runtime
+namespace Inworld.Runtime.RPM
 {
     public class SwitchButton : MonoBehaviour
     {

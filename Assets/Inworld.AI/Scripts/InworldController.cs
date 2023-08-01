@@ -25,7 +25,7 @@ namespace Inworld
 
         InworldCharacter m_CurrentCharacter;
         InworldCharacter m_LastCharacter;
-
+        string m_CurrentAudioID;
         public static InworldClient Client => Instance.m_Client;
         public static InworldConnectionStatus Status => Instance.m_Client.Status;
         float m_LastPlayerResponseTime = 0f;
@@ -136,11 +136,14 @@ namespace Inworld
         }
         public void StartAudio(string charID = "")
         {
+            if (m_CurrentAudioID == charID)
+                return;
             string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter.ID : charID;
             if (InworldAI.IsDebugMode)
                 InworldAI.Log($"Start Audio Event {charIDToSend}");
             if (!IsRegistered(charIDToSend))
                 return;
+            m_CurrentAudioID = charIDToSend;
             m_Client.StartAudio(charIDToSend);
         }
         public void StopAudio(string charID = "")
@@ -151,6 +154,7 @@ namespace Inworld
             if (!IsRegistered(charIDToSend))
                 return;
             m_Client.StopAudio(charIDToSend);
+            m_CurrentAudioID = null;
         }
         public void SendAudio(string base64, string charID = "")
         {
