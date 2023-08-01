@@ -126,7 +126,6 @@ namespace Inworld
         public void SendText(string charID, string txtToSend)
         {
             m_Client.SendText(charID, txtToSend);
-            InworldController.Instance.LastPlayerResponseTime = Time.time;
         }
         public void SendCancelEvent(string charID, string interactionID) => m_Client.SendCancelEvent(charID, interactionID);
         public void SendTrigger(string triggerName, string charID = "", Dictionary<string, string> parameters = null)
@@ -158,8 +157,6 @@ namespace Inworld
             if (!IsRegistered(charIDToSend))
                 return;
             m_Client.SendAudio(charIDToSend, base64);
-            if(m_Client.IsSpeaking)
-                LastPlayerResponseTime = Time.time;
         }
         void _Setup()
         {
