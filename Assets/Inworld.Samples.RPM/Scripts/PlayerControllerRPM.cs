@@ -47,7 +47,8 @@ namespace Inworld.Sample.RPM
         {
             m_SendButton.interactable = InworldController.Status == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter;
             if (newChar != null)
-                InworldAI.Log($"Current: {newChar.Name}");
+                InworldAI.Log($"Now Talking to: {newChar.Name}");
+            base.OnCharacterChanged(oldChar, newChar);
         }
 
         protected override void HandleTrigger(CustomPacket customPacket)

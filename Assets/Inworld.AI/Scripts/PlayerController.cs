@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour
         if (oldChar != null && !string.IsNullOrEmpty(oldChar.ID))
             InworldController.Instance.StopAudio(oldChar.ID);
         yield return new WaitForFixedUpdate();
-        if (newchar != null && !string.IsNullOrEmpty(newchar.ID) && newchar.ID != InworldController.Instance.CurrentCharacter.ID)
+        if (newchar != null && !string.IsNullOrEmpty(newchar.ID))
         {
             InworldController.Instance.StartAudio(newchar.ID);
         }
@@ -130,7 +130,7 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void HandleText(TextPacket packet)
     {
-        if (packet.text == null || string.IsNullOrEmpty(packet.text.text))
+        if (packet.text == null || string.IsNullOrEmpty(packet.text.text) || string.IsNullOrWhiteSpace(packet.text.text))
                 return;
         switch (packet.routing.source.type.ToUpper())
         {

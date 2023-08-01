@@ -46,7 +46,7 @@ namespace Inworld
         public void RegisterLiveSession()
         {
             m_Interaction.LiveSessionID = Data.agentId = InworldController.Instance.GetLiveSessionID(this);
-            if (!InworldController.Instance.CurrentCharacter)
+            if (InworldController.Status == InworldConnectionStatus.Connected && !InworldController.Instance.CurrentCharacter)
                 InworldController.Instance.CurrentCharacter = this;
         }
 
@@ -127,7 +127,7 @@ namespace Inworld
         
         protected virtual void HandleText(TextPacket packet)
         {
-            if (packet.text == null || string.IsNullOrEmpty(packet.text.text))
+            if (packet.text == null || string.IsNullOrEmpty(packet.text.text) || string.IsNullOrWhiteSpace(packet.text.text))
                 return;
             switch (packet.routing.source.type.ToUpper())
             {

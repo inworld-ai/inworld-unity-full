@@ -16,7 +16,7 @@ namespace Inworld.Sample.RPM
     [SerializeField] Image m_EmoIcon;
     readonly protected Dictionary<string, ChatBubble> m_Bubbles = new Dictionary<string, ChatBubble>();
     protected string m_CurrentEmotion;
-    [SerializeField] LipsyncMap m_FaceData;
+    [SerializeField] InworldCharacter m_Character;
     void OnEnable()
     {
         InworldController.Instance.OnCharacterInteraction += OnInteraction;
@@ -101,7 +101,9 @@ namespace Inworld.Sample.RPM
     }
     protected virtual void HandleText(TextPacket packet)
     {
-        if (packet.text == null || string.IsNullOrEmpty(packet.text.text))
+        if (packet.text == null || string.IsNullOrEmpty(packet.text.text) || string.IsNullOrWhiteSpace(packet.text.text))
+            return;
+        if (packet.routing?.source?.name != m_Character.ID && packet.routing?.target?.name != m_Character.ID) // Not Related
             return;
         switch (packet.routing.source.type.ToUpper())
         {
