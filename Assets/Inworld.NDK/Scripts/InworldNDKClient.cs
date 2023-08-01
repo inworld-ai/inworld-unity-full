@@ -1,5 +1,6 @@
 using Google.Protobuf;
 using Grpc.Core;
+using Inworld.Interactions;
 using Inworld.Packet;
 using Newtonsoft.Json.Linq;
 using System;
@@ -20,7 +21,7 @@ namespace Inworld.NDK
         [SerializeField] string m_APISecret;
         [SerializeField] string m_CustomToken;
         
-        [FormerlySerializedAs("useAEC")] public bool useAec = false;
+        [SerializeField] public bool useAec = false;
         InworldNDKBridge m_Wrapper;
         ConnectionStateCallbackType m_ConnectionCallback;
         PacketCallbackType m_PacketCallback;
@@ -211,13 +212,39 @@ namespace Inworld.NDK
                 IntPtr micDataPointer = Marshal.AllocHGlobal(micDataShort.Length * sizeof(short));
                 Marshal.Copy(micDataShort, 0, micDataPointer, micDataShort.Length);
                 
-                IntPtr outputDataPointer = Marshal.AllocHGlobal(m_OutputData.Length * sizeof(float));
-                Marshal.Copy(m_OutputData, 0, outputDataPointer, m_OutputData.Length);
-                InworldNDKBridge.ClientWrapper_SendSoundMessageWithAEC(m_Wrapper.instance, charID, micDataPointer, micDataShort.Length, outputDataPointer, m_OutputData.Length);
+                List<short> m_OutputDataConverted = GetSharedAudioDataAsShorts();
+                IntPtr outputDataPointer = Marshal.AllocHGlobal(m_OutputDataConverted.Count * sizeof(short));
+                Marshal.Copy(m_OutputDataConverted.ToArray(), 0, outputDataPointer, m_OutputDataConverted.Count);
+                Debug.Log("Sending audio with AEC output data size: " + m_OutputDataConverted.Count + " mic data size: " + micDataShort.Length + "");
+                InworldNDKBridge.ClientWrapper_SendSoundMessageWithAEC(m_Wrapper.instance, charID, micDataPointer, micDataShort.Length, outputDataPointer, m_OutputDataConverted.Count);
             }
             else
                 InworldNDKBridge.ClientWrapper_SendSoundMessage(m_Wrapper.instance, charID, data, data.Length);
         }
+        
+        public List<short> GetSharedAudioDataAsShorts()
+        {
+            List<short> shortData = new List<short>();
+
+            lock (InworldAudioInteraction.SharedAudioData)
+            {
+                foreach (var tuple in InworldAudioInteraction.SharedAudioData)
+                {
+                    float[] audioData = tuple.Item1;
+
+                    foreach (float sample in audioData)
+                    {
+                        short shortSample = (short)(sample * 32767);
+                        shortData.Add(shortSample);
+                    }
+                }
+
+                //InworldAudioInteraction.SharedAudioData.Clear();
+            }
+
+            return shortData;
+        }
+
 
         Task _StartSession()
         {
@@ -381,20 +408,7 @@ namespace Inworld.NDK
             m_OutgoingEventsQueue.Clear();
         }
         
-        private float[] m_OutputData = new float[1024]; // Buffer size may need adjustment
-        private short[] m_OutputDataConverted;
-        void OnAudioFilterRead(float[] data, int channels)
-        {
-            // Copy the audio data to output buffer
-            System.Array.Copy(data, m_OutputData, data.Length);
 
-            // Convert the floating point data to 16-bit signed integer format
-            m_OutputDataConverted = new short[m_OutputData.Length];
-            for (int i = 0; i < m_OutputData.Length; i++)
-            {
-                m_OutputDataConverted[i] = (short)(m_OutputData[i] * short.MaxValue);
-            }
-        }
     }
 }
 
