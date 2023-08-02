@@ -6,7 +6,6 @@
 *************************************************************************************************/
 
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
@@ -21,8 +20,14 @@ namespace Inworld
     {
         public UnityEvent OnRecordingStart;
         public UnityEvent OnRecordingEnd;
+        /// <summary>
+        /// Signifies if microphone is capturing audio.
+        /// </summary>
         public bool IsCapturing { get; set; }
-        public bool IsSpeaking;
+        /// <summary>
+        /// Signifies if user is speaking based on audio amplitud and threshold.
+        /// </summary>
+        public bool isSpeaking;
         [SerializeField] float  m_UserSpeechThreshold = 0.01f;
         [SerializeField] int m_AudioRate = 16000;
         [SerializeField] int m_BufferSeconds = 1;
@@ -103,7 +108,7 @@ namespace Inworld
             InworldController.Instance.SendAudio(Convert.ToBase64String(output));
             // Check if player is speaking based on audio amplitude
             float amplitude = CalculateAmplitude(m_FloatBuffer);
-            IsSpeaking = amplitude > m_UserSpeechThreshold;
+            isSpeaking = amplitude > m_UserSpeechThreshold;
         }
 
         // Helper method to calculate the amplitude of audio data

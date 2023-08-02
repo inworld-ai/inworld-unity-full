@@ -1,19 +1,19 @@
 ﻿using System.Linq;
 using UnityEngine;
 using Inworld.Packet;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Inworld.Interactions
 {
     [RequireComponent(typeof(AudioSource))]
     public class InworldAudioInteraction : InworldInteraction
     {
-        public static List<(float[], float)> SharedAudioData = new List<(float[], float)>();
+        public static event Action<float[], float> OnAudioFilterDataReceived;
         AudioSource m_PlaybackSource;
-        public float VolumeInterpolationSpeed = 1f;
+        [SerializeField] public float VolumeInterpolationSpeed = 1f;
         [Range (0, 1)]
-        public float m_VolumeOnPlayerSpeaking = 0.01f;
+        [SerializeField] protected float m_VolumeOnPlayerSpeaking = 1f;
         public static System.Diagnostics.Stopwatch stopwatch;
 
         public bool IsMute
@@ -35,8 +35,7 @@ namespace Inworld.Interactions
         {
             m_PlaybackSource ??= GetComponent<AudioSource>();
             m_PlaybackSource ??= gameObject.AddComponent<AudioSource>();
-            if(stopwatch == null)
-                stopwatch = System.Diagnostics.Stopwatch.StartNew();
+            stopwatch ??= System.Diagnostics.Stopwatch.StartNew();
         }
 
         void Update()
@@ -80,25 +79,19 @@ namespace Inworld.Interactions
             if(Interruptable)
                 m_PlaybackSource.Stop();
         }
+
+        // void Add(float[] data, float time)
+        // {
+        //     InworldController.Instance.OnAudioFilterDataReceived
+        //
+        // }
         
         void OnAudioFilterRead(float[] data, int channels)
         {
             float time = (float)stopwatch.Elapsed.TotalSeconds;
-            lock (SharedAudioData)
-            {
-                // Add the data and timestamp to the shared buffer
-                SharedAudioData.Add((data, time));
-            }
 
-            // Clean up old data
-            while (SharedAudioData.Count > 0 && time - SharedAudioData[0].Item2 > 1.0f)
-            {
-                lock (SharedAudioData)
-                {
-                    SharedAudioData.RemoveAt(0);
-                }
-            }
+            // Add the data and timestamp to the shared buffer via event invocation
+            OnAudioFilterDataReceived?.Invoke(data, time);
         }
-        
     }
 }

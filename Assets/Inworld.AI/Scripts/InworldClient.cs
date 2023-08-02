@@ -28,7 +28,7 @@ namespace Inworld
             get => m_Token;
             set => m_Token = value;
         }
-        public bool IsSpeaking =>  m_AudioCapture.IsSpeaking;
+        public bool IsSpeaking =>  m_AudioCapture.isSpeaking;
         public virtual bool IsTokenValid => m_Token != null && m_Token.IsValid;
         public virtual void GetAccessToken()
         {

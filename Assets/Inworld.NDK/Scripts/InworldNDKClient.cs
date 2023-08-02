@@ -10,8 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Serialization;
-
 
 namespace Inworld.NDK
 {
@@ -20,12 +18,14 @@ namespace Inworld.NDK
         [SerializeField] string m_APIKey;
         [SerializeField] string m_APISecret;
         [SerializeField] string m_CustomToken;
+        [SerializeField] bool useAec = false;
         
-        [SerializeField] public bool useAec = false;
         InworldNDKBridge m_Wrapper;
         ConnectionStateCallbackType m_ConnectionCallback;
         PacketCallbackType m_PacketCallback;
         LoadSceneCallbackType m_Callback;
+        SharedAudioData m_SharedAudioData;
+        
         float m_LastPacketSendTime = 0f;
         TaskCompletionSource<bool> m_AgentInfosFilled;
 
@@ -46,6 +46,7 @@ namespace Inworld.NDK
             m_ConnectionCallback = ConnectionStateCallback;
             m_PacketCallback = PacketCallback;
             m_Wrapper = new InworldNDKBridge(m_ConnectionCallback, m_PacketCallback);
+            m_SharedAudioData = new SharedAudioData();
         }
         
         void ConnectionStateCallback(ConnectionState state)
@@ -212,10 +213,10 @@ namespace Inworld.NDK
                 IntPtr micDataPointer = Marshal.AllocHGlobal(micDataShort.Length * sizeof(short));
                 Marshal.Copy(micDataShort, 0, micDataPointer, micDataShort.Length);
                 
-                List<short> m_OutputDataConverted = GetSharedAudioDataAsShorts();
-                IntPtr outputDataPointer = Marshal.AllocHGlobal(m_OutputDataConverted.Count * sizeof(short));
-                Marshal.Copy(m_OutputDataConverted.ToArray(), 0, outputDataPointer, m_OutputDataConverted.Count);
-                InworldNDKBridge.ClientWrapper_SendSoundMessageWithAEC(m_Wrapper.instance, charID, micDataPointer, micDataShort.Length, outputDataPointer, m_OutputDataConverted.Count);
+                List<short> outputDataConverted = GetSharedAudioDataAsShorts();
+                IntPtr outputDataPointer = Marshal.AllocHGlobal(outputDataConverted.Count * sizeof(short));
+                Marshal.Copy(outputDataConverted.ToArray(), 0, outputDataPointer, outputDataConverted.Count);
+                InworldNDKBridge.ClientWrapper_SendSoundMessageWithAEC(m_Wrapper.instance, charID, micDataPointer, micDataShort.Length, outputDataPointer, outputDataConverted.Count);
             }
             else
                 InworldNDKBridge.ClientWrapper_SendSoundMessage(m_Wrapper.instance, charID, data, data.Length);
@@ -224,10 +225,11 @@ namespace Inworld.NDK
         public List<short> GetSharedAudioDataAsShorts()
         {
             List<short> shortData = new List<short>();
-
-            lock (InworldAudioInteraction.SharedAudioData)
+            //List<(float[], float)> floatData = m_SharedAudioData.GetData();
+            
+            lock (m_SharedAudioData.GetData())
             {
-                foreach (var tuple in InworldAudioInteraction.SharedAudioData)
+                foreach (var tuple in m_SharedAudioData.GetData())
                 {
                     float[] audioData = tuple.Item1;
 

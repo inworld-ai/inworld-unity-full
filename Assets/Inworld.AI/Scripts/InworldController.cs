@@ -28,6 +28,7 @@ namespace Inworld
         string m_CurrentAudioID;
         public static InworldClient Client => Instance.m_Client;
         public static InworldConnectionStatus Status => Instance.m_Client.Status;
+        
         float m_LastPlayerResponseTime = 0f;
         public float LastPlayerResponseTime
         {
