@@ -2,7 +2,6 @@
 using UnityEngine;
 using Inworld.Packet;
 using System;
-using System.Collections.Generic;
 
 namespace Inworld.Interactions
 {
@@ -11,7 +10,7 @@ namespace Inworld.Interactions
     {
         public static event Action<float[], float> OnAudioFilterDataReceived;
         AudioSource m_PlaybackSource;
-        [SerializeField] public float VolumeInterpolationSpeed = 1f;
+        [SerializeField] protected float m_VolumeInterpolationSpeed = 1f;
         [Range (0, 1)]
         [SerializeField] protected float m_VolumeOnPlayerSpeaking = 1f;
         public static System.Diagnostics.Stopwatch stopwatch;
@@ -44,7 +43,7 @@ namespace Inworld.Interactions
                 RemoveHistoryItem();
             
             float targetVolume = InworldController.IsPlayerSpeaking ? m_VolumeOnPlayerSpeaking : 1f;
-            m_PlaybackSource.volume = Mathf.Lerp(m_PlaybackSource.volume, targetVolume, VolumeInterpolationSpeed * Time.deltaTime);
+            m_PlaybackSource.volume = Mathf.Lerp(m_PlaybackSource.volume, targetVolume, m_VolumeInterpolationSpeed * Time.deltaTime);
 
             m_PlaybackSource.volume = InworldController.IsPlayerSpeaking ? m_VolumeOnPlayerSpeaking : 1f;
             
