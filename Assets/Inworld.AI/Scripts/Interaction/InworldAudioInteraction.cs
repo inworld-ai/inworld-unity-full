@@ -79,12 +79,6 @@ namespace Inworld.Interactions
             if(Interruptable)
                 m_PlaybackSource.Stop();
         }
-
-        // void Add(float[] data, float time)
-        // {
-        //     InworldController.Instance.OnAudioFilterDataReceived
-        //
-        // }
         
         void OnAudioFilterRead(float[] data, int channels)
         {
