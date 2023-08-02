@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace Inworld.Sample
+namespace Inworld.Sample.Innequin
 {
     public class PlayerController3D : PlayerController
     {

@@ -46,6 +46,8 @@ namespace Inworld
         public void RegisterLiveSession()
         {
             m_Interaction.LiveSessionID = Data.agentId = InworldController.Instance.GetLiveSessionID(this);
+            if (InworldController.Status == InworldConnectionStatus.Connected && !InworldController.Instance.CurrentCharacter)
+                InworldController.Instance.CurrentCharacter = this;
         }
 
         void Awake()
@@ -59,6 +61,8 @@ namespace Inworld
             InworldController.Instance.OnCharacterChanged += OnCharChanged;
             InworldController.Client.OnStatusChanged += OnStatusChanged;
             m_Interaction.OnStartStopInteraction += OnStartStopInteraction;
+            // YAN: This event is for handling global packets. Please only use it in InworldCharacter.
+            //      For customized integration, please use InworldController.Instance.OnCharacterInteraction
             m_Interaction.OnInteractionChanged += OnInteractionChanged;
         }
 
@@ -81,12 +85,7 @@ namespace Inworld
         }
         protected virtual void OnCharRegistered(InworldCharacterData charData)
         {
-            // if (charData.brainName == Data.brainName)
-            //     RegisterLiveSession();
-            // else
-            // {
-            //     Debug.LogError($"My Brain: {BrainName} Received: {charData.brainName}");
-            // }
+
         }
         protected virtual void OnCharChanged(InworldCharacter oldChar, InworldCharacter newChar) {}
         protected virtual void OnStatusChanged(InworldConnectionStatus newStatus)
@@ -128,7 +127,7 @@ namespace Inworld
         
         protected virtual void HandleText(TextPacket packet)
         {
-            if (packet.text == null || string.IsNullOrEmpty(packet.text.text))
+            if (packet.text == null || string.IsNullOrEmpty(packet.text.text) || string.IsNullOrWhiteSpace(packet.text.text))
                 return;
             switch (packet.routing.source.type.ToUpper())
             {

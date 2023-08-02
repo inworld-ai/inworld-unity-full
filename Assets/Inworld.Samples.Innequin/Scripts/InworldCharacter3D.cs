@@ -2,7 +2,7 @@
 using Inworld.Interactions;
 
 
-namespace Inworld.Sample
+namespace Inworld.Sample.Innequin
 {
     [RequireComponent(typeof(InworldInteraction))]
     public class InworldCharacter3D : InworldCharacter
