@@ -8,7 +8,7 @@ using TMPro;
 using UnityEngine;
 
 
-namespace Inworld.Sample
+namespace Inworld.Sample.RPM
 {
     public class TokenCanvas : MonoBehaviour
     {

@@ -6,7 +6,7 @@
 *************************************************************************************************/
 
 using UnityEngine;
-namespace Inworld.Sample
+namespace Inworld.Sample.RPM
 {
     public class MultiCharCanvas : DemoCanvas
     {

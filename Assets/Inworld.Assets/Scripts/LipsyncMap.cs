@@ -11,19 +11,6 @@ using UnityEngine;
 namespace Inworld.Assets
 {
     [Serializable]
-    public class MorphState
-    {
-        public string morphName;
-        public float morphWeight;
-    }
-    [Serializable]
-    public class FacialAnimation
-    {
-        public string emotion;
-        public Sprite icon;
-        public List<MorphState> morphStates;
-    }
-    [Serializable]
     public class PhonemeToViseme
     {
         public string phoneme;
