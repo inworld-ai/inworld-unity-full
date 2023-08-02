@@ -1,4 +1,4 @@
-﻿namespace Inworld.Sample
+﻿namespace Inworld.Assets
 {
     public enum AnimMainStatus
     {
