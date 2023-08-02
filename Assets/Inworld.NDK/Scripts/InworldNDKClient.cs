@@ -215,7 +215,6 @@ namespace Inworld.NDK
                 List<short> m_OutputDataConverted = GetSharedAudioDataAsShorts();
                 IntPtr outputDataPointer = Marshal.AllocHGlobal(m_OutputDataConverted.Count * sizeof(short));
                 Marshal.Copy(m_OutputDataConverted.ToArray(), 0, outputDataPointer, m_OutputDataConverted.Count);
-                Debug.Log("Sending audio with AEC output data size: " + m_OutputDataConverted.Count + " mic data size: " + micDataShort.Length + "");
                 InworldNDKBridge.ClientWrapper_SendSoundMessageWithAEC(m_Wrapper.instance, charID, micDataPointer, micDataShort.Length, outputDataPointer, m_OutputDataConverted.Count);
             }
             else
