@@ -1,9 +1,8 @@
 using Inworld.Interactions;
 using Inworld.Packet;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Inworld.Sample
+namespace Inworld.Assets
 {
     public class InworldBodyAnimation : MonoBehaviour
     {
@@ -35,19 +34,18 @@ namespace Inworld.Sample
             m_Transform = transform;
             m_vecInitEuler = m_Transform.localEulerAngles;
             m_vecInitPosition = m_Transform.localPosition;
-
-            InworldController.Instance.OnCharacterChanged += OnCharChanged;
             m_Interaction.OnStartStopInteraction += OnStartStopInteraction;
-            m_Interaction.OnInteractionChanged += OnInteractionChanged;
+            InworldController.Instance.OnCharacterChanged += OnCharChanged;
+            InworldController.Instance.OnCharacterInteraction += OnInteractionChanged;
         }
 
         protected virtual void OnDisable()
         {
             m_Interaction.OnStartStopInteraction -= OnStartStopInteraction;
-            m_Interaction.OnInteractionChanged -= OnInteractionChanged;
             if (!InworldController.Instance)
                 return;
             InworldController.Instance.OnCharacterChanged -= OnCharChanged;
+            InworldController.Instance.OnCharacterInteraction -= OnInteractionChanged;
         }
         void OnAnimatorIK(int layerIndex)
         {
@@ -61,12 +59,12 @@ namespace Inworld.Sample
             _StartLookAt(m_trLookAt.position);
         }
 
-        protected virtual void OnInteractionChanged(List<InworldPacket> packets)
+        protected virtual void OnInteractionChanged(InworldPacket packet)
         {
-            foreach (InworldPacket packet in packets)
-            {
+            if (m_Character && 
+                !string.IsNullOrEmpty(m_Character.ID) && 
+                packet?.routing?.source?.name == m_Character.ID || packet?.routing?.target?.name == m_Character.ID)
                 ProcessPacket(packet);
-            }
         }
         protected virtual void ProcessPacket(InworldPacket incomingPacket)
         {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-namespace Inworld.Sample
+namespace Inworld.Sample.Innequin
 {
     [Serializable]
     public class FaceTransform

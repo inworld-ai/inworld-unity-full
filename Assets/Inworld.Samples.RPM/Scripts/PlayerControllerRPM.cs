@@ -2,7 +2,7 @@ using Inworld.Packet;
 using UnityEngine;
 
 
-namespace Inworld.Sample
+namespace Inworld.Sample.RPM
 {
     public class PlayerControllerRPM : PlayerController
     {
@@ -21,13 +21,15 @@ namespace Inworld.Sample
         {
             if (newStatus == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter)
             {
-                m_SendButton.interactable = true;
+                if (m_SendButton)
+                    m_SendButton.interactable = true;
                 if (!InworldController.IsRecording)
                     InworldController.Instance.StartAudio(InworldController.Instance.CurrentCharacter.ID);
             }
             else
             {
-                m_SendButton.interactable = false;
+                if (m_SendButton)
+                    m_SendButton.interactable = false;
                 if (InworldController.IsRecording)
                     InworldController.Instance.StopAudio(InworldController.Instance.CurrentCharacter.ID);
             }
@@ -36,13 +38,17 @@ namespace Inworld.Sample
             if (newStatus == InworldConnectionStatus.Error)
                 m_StatusText.text = InworldController.Client.Error;
         }
-        protected override void OnCharacterRegistered(InworldCharacterData charData){}
+        protected override void OnCharacterRegistered(InworldCharacterData charData)
+        {
+
+        }
 
         protected override void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
         {
             m_SendButton.interactable = InworldController.Status == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter;
             if (newChar != null)
-                InworldAI.Log($"Current: {newChar.Name}");
+                InworldAI.Log($"Now Talking to: {newChar.Name}");
+            base.OnCharacterChanged(oldChar, newChar);
         }
 
         protected override void HandleTrigger(CustomPacket customPacket)
