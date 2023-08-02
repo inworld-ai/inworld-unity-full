@@ -31,7 +31,7 @@ namespace Inworld.NDK
         {
             instance = ClientWrapper_create();
 
-            if (instance == IntPtr.Zero)
+            if (instance == null)
             {
                 InworldAI.LogError("Failed to create a wrapper from the DLL");
             }
