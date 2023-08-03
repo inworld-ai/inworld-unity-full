@@ -27,6 +27,11 @@ namespace Inworld.NDK
             }
         }
 
+        public void Clear()
+        {
+            m_Data.Clear();
+        }
+
         public List<(float[], float)> GetData()
         {
             lock (m_LockObj)
