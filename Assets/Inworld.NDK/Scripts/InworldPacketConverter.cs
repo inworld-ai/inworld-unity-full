@@ -199,6 +199,7 @@ namespace Inworld.NDK
             public static Packet.InworldPacket NDKPacket(InworldPacket grpcPacket) => new Packet.InworldPacket
             {
                 timestamp = grpcPacket.Timestamp.ToDateTime().ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                type = grpcPacket.GetType().ToString(),
                 packetId = new Packet.PacketId
                 {
                     interactionId = grpcPacket.PacketId.InteractionId,

@@ -256,6 +256,8 @@ MonoBehaviour:
   OnRecordingEnd:
     m_PersistentCalls:
       m_Calls: []
+  isSpeaking: 0
+  m_UserSpeechThreshold: 0.01
   m_AudioRate: 16000
   m_BufferSeconds: 1
 --- !u!114 &359806128
@@ -274,7 +276,7 @@ MonoBehaviour:
   m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
   m_CustomToken: 
-  useAec: 0
+  m_UseAec: 0
 --- !u!1 &444891039
 GameObject:
   m_ObjectHideFlags: 0
@@ -446,6 +448,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -747,6 +750,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -2182,6 +2186,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -3739,8 +3744,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec0023079ae244cf88d8e53bebcd9542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Interruptable: 1
   m_MaxItemCount: 100
   m_TextDuration: 0.5
+  m_VolumeInterpolationSpeed: 1
+  m_VolumeOnPlayerSpeaking: 1
 --- !u!114 &9047055560386739720
 MonoBehaviour:
   m_ObjectHideFlags: 0

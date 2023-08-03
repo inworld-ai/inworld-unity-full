@@ -12,6 +12,7 @@ namespace Inworld
         [SerializeField] InworldCharacterData m_Data;
         [SerializeField] bool m_VerboseLog;
         
+        // ReSharper disable all InconsistentNaming
         public UnityEvent onBeginSpeaking;
         public UnityEvent onEndSpeaking;
         public UnityEvent<InworldPacket> onPacketReceived;
@@ -149,6 +150,7 @@ namespace Inworld
                     if (m_VerboseLog)
                         InworldAI.Log($"{InworldAI.User.Name}: {packet.text.text}");
                     onCharacterSpeaks.Invoke(InworldAI.User.Name, packet.text.text);
+                    CancelResponse();
                     break;
             }
         }

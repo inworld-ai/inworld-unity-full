@@ -31,6 +31,7 @@ namespace Inworld
             get => m_Token;
             set => m_Token = value;
         }
+        public bool IsSpeaking =>  m_AudioCapture.IsSpeaking;
         public virtual bool IsTokenValid => m_Token != null && m_Token.IsValid;
         public virtual void GetAccessToken()
         {
@@ -87,6 +88,7 @@ namespace Inworld
         public virtual void StartAudio(string charID) => Error = k_NotImplented;
         public virtual void StopAudio(string charID) => Error = k_NotImplented;
         public virtual void SendAudio(string charID, string base64) => Error = k_NotImplented;
+        public virtual void CacheAudioFilterData(float[] data, float time) {}
         protected virtual void Init()
         {
             m_AudioCapture = GetComponent<AudioCapture>();
