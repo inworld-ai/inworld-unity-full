@@ -215,15 +215,19 @@ namespace Inworld.NDK
             else
                 InworldNDKBridge.ClientWrapper_SendSoundMessage(m_Wrapper.instance, charID, data, data.Length);
         }
+        
+        public override void CacheAudioFilterData(float[] data, float time)
+        {
+            m_SharedAudioData.Add(data, time);
+        }
 
         List<short> GetSharedAudioDataAsShorts()
         {
             List<short> shortData = new List<short>();
-
-            lock (m_SharedAudioData.GetData())
-            {
-                shortData.AddRange(from tuple in m_SharedAudioData.GetData() from sample in tuple.Item1 select (short)(sample * 32767));
-            }
+            List<(float[], float)> audioData = m_SharedAudioData.GetData();
+            
+            shortData.AddRange(from tuple in audioData from sample in tuple.Item1 select (short)(sample * 32767));
+            
             m_SharedAudioData.Clear();
             return shortData;
         }

@@ -8,11 +8,6 @@ namespace Inworld.NDK
         private readonly List<(float[], float)> m_Data = new List<(float[], float)>();
         private readonly object m_LockObj = new object();
 
-        public SharedAudioData()
-        {
-            InworldAudioInteraction.OnAudioFilterDataReceived += Add;
-        }
-        
         public void Add(float[] audioData, float time)
         {
             lock (m_LockObj)
@@ -39,7 +34,7 @@ namespace Inworld.NDK
         {
             lock (m_LockObj)
             {
-                // Optionally, you might want to return a copy of the data
+                // Return a copy of the data
                 // to avoid potential issues with external code modifying it.
                 return new List<(float[], float)>(m_Data);
             }

@@ -1,19 +1,18 @@
 ﻿using System.Linq;
 using UnityEngine;
 using Inworld.Packet;
-using System;
+using System.Diagnostics;
 
 namespace Inworld.Interactions
 {
     [RequireComponent(typeof(AudioSource))]
     public class InworldAudioInteraction : InworldInteraction
     {
-        public static event Action<float[], float> OnAudioFilterDataReceived;
         AudioSource m_PlaybackSource;
         [SerializeField] protected float m_VolumeInterpolationSpeed = 1f;
         [Range (0, 1)]
         [SerializeField] protected float m_VolumeOnPlayerSpeaking = 1f;
-        public static System.Diagnostics.Stopwatch stopwatch;
+        public static Stopwatch stopwatch;
 
         public bool IsMute
         {
@@ -34,7 +33,7 @@ namespace Inworld.Interactions
         {
             m_PlaybackSource ??= GetComponent<AudioSource>();
             m_PlaybackSource ??= gameObject.AddComponent<AudioSource>();
-            stopwatch ??= System.Diagnostics.Stopwatch.StartNew();
+            stopwatch ??= Stopwatch.StartNew();
         }
 
         void Update()
@@ -82,9 +81,8 @@ namespace Inworld.Interactions
         void OnAudioFilterRead(float[] data, int channels)
         {
             float time = (float)stopwatch.Elapsed.TotalSeconds;
-
+            InworldController.Client.CacheAudioFilterData(data, time);
             // Add the data and timestamp to the shared buffer via event invocation
-            OnAudioFilterDataReceived?.Invoke(data, time);
         }
     }
 }
