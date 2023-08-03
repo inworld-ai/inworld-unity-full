@@ -1,9 +1,7 @@
-﻿using Inworld.Interactions;
-using Inworld.Packet;
+﻿using Inworld.Packet;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -133,15 +131,32 @@ namespace Inworld
         }
         IEnumerator _GetAccessToken()
         {
-            UnityWebRequest uwr = UnityWebRequest.Get(m_ServerConfig.TokenServer);
             Status = InworldConnectionStatus.Initializing;
-            yield return uwr.SendWebRequest();
-            if (uwr.result != UnityWebRequest.Result.Success)
+            string responseJson = m_CustomToken;
+            if (string.IsNullOrEmpty(responseJson))
             {
-                Error = uwr.error;
-                yield break;
+                string header = InworldAuth.GetHeader(m_ServerConfig.runtime, m_APIKey, m_APISecret);
+                UnityWebRequest uwr = new UnityWebRequest(m_ServerConfig.TokenServer, "POST");
+                Status = InworldConnectionStatus.Initializing;
+
+                uwr.SetRequestHeader("Authorization", header);
+                uwr.SetRequestHeader("Content-Type", "application/json");
+                AccessTokenRequest req = new AccessTokenRequest
+                {
+                    api_key = m_APIKey
+                };
+                string json = JsonUtility.ToJson(req);
+                byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
+                uwr.uploadHandler = new UploadHandlerRaw(bodyRaw);
+                uwr.downloadHandler = new DownloadHandlerBuffer();
+                yield return uwr.SendWebRequest();
+
+                if (uwr.result != UnityWebRequest.Result.Success)
+                {
+                    Error = $"Error Get Token: {uwr.error}";
+                }
+                responseJson = uwr.downloadHandler.text;
             }
-            string responseJson = uwr.downloadHandler.text;
             m_Token = JsonUtility.FromJson<Token>(responseJson);
             if (!IsTokenValid)
             {

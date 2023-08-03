@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using UnityEngine;
 using Random = UnityEngine.Random;
 namespace Inworld.Runtime
 {
-    public class InworldAuth
+    public class InworldAuthGRPC
     {
         const string k_Method = "ai.inworld.engine.WorldEngine/GenerateToken";
         const string k_RequestHead = "IW1-HMAC-SHA256";

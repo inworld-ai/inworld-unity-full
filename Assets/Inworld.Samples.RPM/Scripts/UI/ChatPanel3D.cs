@@ -101,7 +101,7 @@ namespace Inworld.Sample.RPM
     }
     protected virtual void HandleText(TextPacket packet)
     {
-        if (packet.text == null || string.IsNullOrEmpty(packet.text.text) || string.IsNullOrWhiteSpace(packet.text.text))
+        if (packet.text == null || string.IsNullOrEmpty(packet.text.text))// || string.IsNullOrWhiteSpace(packet.text.text))
             return;
         if (packet.routing?.source?.name != m_Character.ID && packet.routing?.target?.name != m_Character.ID) // Not Related
             return;

@@ -79,9 +79,17 @@ namespace Inworld
         protected virtual void OnStartStopInteraction(bool isStarting)
         {
             if (isStarting)
+            {
+                if (m_VerboseLog)
+                    InworldAI.Log($"{Name} Starts Speaking");
                 onBeginSpeaking.Invoke();
+            }
             else
+            {
+                if (m_VerboseLog)
+                    InworldAI.Log($"{Name} Ends Speaking");
                 onEndSpeaking.Invoke();
+            }
         }
         protected virtual void OnCharRegistered(InworldCharacterData charData)
         {

@@ -14,11 +14,7 @@ namespace Inworld.Grpc
 {
     public class InworldGRPCClient : InworldClient
     {
-        [SerializeField] string m_APIKey;
-        [SerializeField] string m_APISecret;
-        [SerializeField] string m_CustomToken;
-        
-        InworldAuth m_Auth;
+        InworldAuthGRPC m_AuthGRPC;
         WorldEngine.WorldEngineClient m_WorldEngineClient;
         AsyncDuplexStreamingCall<InworldPacket, InworldPacket> m_StreamingCall;
         ConcurrentQueue<InworldPacket> m_IncomingAudioQueue = new ConcurrentQueue<InworldPacket>();
@@ -34,7 +30,7 @@ namespace Inworld.Grpc
         protected override void Init()
         {
             base.Init();
-            m_Auth = new InworldAuth();
+            m_AuthGRPC = new InworldAuthGRPC();
             m_Channel = new Channel(m_ServerConfig.RuntimeServer, new SslCredentials());
             m_WorldEngineClient = new WorldEngine.WorldEngineClient(m_Channel);
         }
@@ -232,20 +228,20 @@ namespace Inworld.Grpc
             Metadata metadata = new Metadata
             {
                 {
-                    "authorization", m_Auth.GetHeader(m_ServerConfig.RuntimeServer, m_APIKey, m_APISecret)
+                    "authorization", m_AuthGRPC.GetHeader(m_ServerConfig.RuntimeServer, m_APIKey, m_APISecret)
                 }
             };
             
             try
             {
-                m_Auth.Token = await m_WorldEngineClient.GenerateTokenAsync(gtRequest, metadata, DateTime.UtcNow.AddHours(1));
+                m_AuthGRPC.Token = await m_WorldEngineClient.GenerateTokenAsync(gtRequest, metadata, DateTime.UtcNow.AddHours(1));
                 InworldAI.Log("Init Success!");
                 m_Header = new Metadata
                 {
-                    {"authorization", $"Bearer {m_Auth.Token.Token}"},
-                    {"session-id", m_Auth.Token.SessionId}
+                    {"authorization", $"Bearer {m_AuthGRPC.Token.Token}"},
+                    {"session-id", m_AuthGRPC.Token.SessionId}
                 };
-                m_Token = InworldGRPC.From.GRPCToken(m_Auth.Token);
+                m_Token = InworldGRPC.From.GRPCToken(m_AuthGRPC.Token);
                 Status = InworldConnectionStatus.Initialized;
             }
             catch (RpcException e)

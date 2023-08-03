@@ -414,6 +414,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4881369806813467986, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
+      propertyPath: m_APIKey
+      value: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
+      objectReference: {fileID: 0}
+    - target: {fileID: 4881369806813467986, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
+      propertyPath: m_APISecret
+      value: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
+      objectReference: {fileID: 0}
     - target: {fileID: 5556377780116934527, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
       propertyPath: m_Name
       value: InworldController

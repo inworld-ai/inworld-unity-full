@@ -16,10 +16,6 @@ namespace Inworld.NDK
 {
     public class InworldNDKClient : InworldClient
     {
-        [SerializeField] string m_APIKey;
-        [SerializeField] string m_APISecret;
-        [SerializeField] string m_CustomToken;
-        
         [FormerlySerializedAs("useAEC")] public bool useAec = false;
         InworldNDKBridge m_Wrapper;
         ConnectionStateCallbackType m_ConnectionCallback;
