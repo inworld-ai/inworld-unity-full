@@ -12,7 +12,7 @@ namespace Inworld
         public string web;
         public string tutorialPage;
         public int port;
-        public string TokenServer => $"https://{web}/{k_TokenURL}"; // $"http://{token}/"; //
+        public string TokenServer => $"https://{web}/{k_TokenURL}"; 
         const string k_SessionURL = "v1/session/default?session_id=";
         const string k_TokenURL = "v1/sessionTokens/token:generate";
         public string RuntimeServer => $"{runtime}:{port}";
