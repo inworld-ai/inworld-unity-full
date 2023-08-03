@@ -29,7 +29,7 @@ namespace Inworld
         public static InworldClient Client => Instance.m_Client;
         public static InworldConnectionStatus Status => Instance.m_Client.Status;
 
-        public float LastPlayerResponseTime { get; private set; }
+        public float LastPlayerResponseTime { get; set; }
         public void InitWithCustomToken(string token) => m_Client.InitWithCustomToken(token);
 
         public string CurrentWorkspace
