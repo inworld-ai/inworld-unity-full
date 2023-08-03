@@ -35,6 +35,48 @@ jobs:
             with:
               name: Inworld-Unity-SDK
               path: Build/
+          - name: Discard changes
+            run: |
+              git restore --staged .
+              git checkout .
+              git clean -fd
+          - uses: game-ci/unity-builder@v2
+            with:
+              unityVersion: 2021.3.6f1
+              buildMethod: ExportPackage.Editor.UnityPackageExporter.ExportNDK
+          - name: upload-artifact
+            uses: actions/upload-artifact@v3
+            with:
+              name: Inworld-Unity-NDK
+              path: Build/              
+          - name: Discard changes
+            run: |
+              git restore --staged .
+              git checkout .
+              git clean -fd
+          - uses: game-ci/unity-builder@v2
+            with:
+              unityVersion: 2021.3.6f1
+              buildMethod: ExportPackage.Editor.UnityPackageExporter.ExportSample
+          - name: upload-artifact
+            uses: actions/upload-artifact@v3
+            with:
+              name: Inworld-Unity-Sample
+              path: Build/
+          - name: Discard changes
+            run: |
+              git restore --staged .
+              git checkout .
+              git clean -fd
+          - uses: game-ci/unity-builder@v2
+            with:
+              unityVersion: 2021.3.6f1
+              buildMethod: ExportPackage.Editor.UnityPackageExporter.ExportRPMSamples
+          - name: upload-artifact
+            uses: actions/upload-artifact@v3
+            with:
+              name: Inworld-Unity-RPM-Samples
+              path: Build/
               
   attach-to-release:
     needs: [build]
@@ -43,24 +85,50 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       
-    - uses: actions/download-artifact@v3
-      id: download
+    - name: Download SDK
+      uses: actions/download-artifact@v3
       with:
         name: Inworld-Unity-SDK
         path: Build/
-        
-    ##- name: Print artifact directory
-    ##  run: |
-    ##        ls ${{steps.download.outputs.download-path}}
 
-    ##- name: Print entire directory structure
-    ##  run: |
-    ##    pwd
-    ##    ls -R
-              
-    - name: Attach package to release
+    - name: Download NDK
+      uses: actions/download-artifact@v3
+      with:
+        name: Inworld-Unity-NDK
+        path: Build/
+
+    - name: Download SDK Sample
+      uses: actions/download-artifact@v3
+      with:
+        name: Inworld-Unity-Sample
+        path: Build/
+
+    - name: Download RPM Samples
+      uses: actions/download-artifact@v3
+      with:
+        name: Inworld-Unity-RPM-Samples
+        path: Build/
+        
+    - name: Attach SDK package to release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
         files: Build/ai.inworld.runtime-sdk.unitypackage
 
+    - name: Attach NDK package to release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: Build/ai.inworld.runtime-sdk-NDK.unitypackage
+
+    - name: Attach SDK Sample package to release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: Build/ai.inworld.runtime-sdk-sample.unitypackage
+
+    - name: Attach RPM Samples package to release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: Build/ai.inworld.runtime-sdk-RPMsamples.unitypackage
