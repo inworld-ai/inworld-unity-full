@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using UnityEngine;
 using Inworld.Packet;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Inworld.Interactions
@@ -9,12 +8,11 @@ namespace Inworld.Interactions
     [RequireComponent(typeof(AudioSource))]
     public class InworldAudioInteraction : InworldInteraction
     {
-        public static List<(float[], float)> SharedAudioData = new List<(float[], float)>();
         AudioSource m_PlaybackSource;
-        public float VolumeInterpolationSpeed = 1f;
+        [SerializeField] protected float m_VolumeInterpolationSpeed = 1f;
         [Range (0, 1)]
-        public float m_VolumeOnPlayerSpeaking = 0.01f;
-        public static System.Diagnostics.Stopwatch stopwatch;
+        [SerializeField] protected float m_VolumeOnPlayerSpeaking = 1f;
+        public static Stopwatch stopwatch;
 
         public bool IsMute
         {
@@ -35,8 +33,7 @@ namespace Inworld.Interactions
         {
             m_PlaybackSource ??= GetComponent<AudioSource>();
             m_PlaybackSource ??= gameObject.AddComponent<AudioSource>();
-            if(stopwatch == null)
-                stopwatch = System.Diagnostics.Stopwatch.StartNew();
+            stopwatch ??= Stopwatch.StartNew();
         }
 
         void Update()
@@ -45,7 +42,7 @@ namespace Inworld.Interactions
                 RemoveHistoryItem();
             
             float targetVolume = InworldController.IsPlayerSpeaking ? m_VolumeOnPlayerSpeaking : 1f;
-            m_PlaybackSource.volume = Mathf.Lerp(m_PlaybackSource.volume, targetVolume, VolumeInterpolationSpeed * Time.deltaTime);
+            m_PlaybackSource.volume = Mathf.Lerp(m_PlaybackSource.volume, targetVolume, m_VolumeInterpolationSpeed * Time.deltaTime);
 
             m_PlaybackSource.volume = InworldController.IsPlayerSpeaking ? m_VolumeOnPlayerSpeaking : 1f;
             
@@ -84,21 +81,8 @@ namespace Inworld.Interactions
         void OnAudioFilterRead(float[] data, int channels)
         {
             float time = (float)stopwatch.Elapsed.TotalSeconds;
-            lock (SharedAudioData)
-            {
-                // Add the data and timestamp to the shared buffer
-                SharedAudioData.Add((data, time));
-            }
-
-            // Clean up old data
-            while (SharedAudioData.Count > 0 && time - SharedAudioData[0].Item2 > 1.0f)
-            {
-                lock (SharedAudioData)
-                {
-                    SharedAudioData.RemoveAt(0);
-                }
-            }
+            InworldController.Client.CacheAudioFilterData(data, time);
+            // Add the data and timestamp to the shared buffer via event invocation
         }
-        
     }
 }

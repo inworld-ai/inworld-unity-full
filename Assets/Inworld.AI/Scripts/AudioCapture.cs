@@ -6,10 +6,10 @@
 *************************************************************************************************/
 
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Inworld
 {
@@ -19,10 +19,17 @@ namespace Inworld
     /// </summary>
     public class AudioCapture : MonoBehaviour
     {
+        // ReSharper disable all InconsistentNaming
         public UnityEvent OnRecordingStart;
         public UnityEvent OnRecordingEnd;
+        /// <summary>
+        /// Signifies if microphone is capturing audio.
+        /// </summary>
         public bool IsCapturing { get; set; }
-        public bool IsSpeaking;
+        /// <summary>
+        /// Signifies if user is speaking based on audio amplitud and threshold.
+        /// </summary>
+        public bool IsSpeaking { get; set; }
         [SerializeField] float  m_UserSpeechThreshold = 0.01f;
         [SerializeField] int m_AudioRate = 16000;
         [SerializeField] int m_BufferSeconds = 1;
@@ -109,11 +116,7 @@ namespace Inworld
         // Helper method to calculate the amplitude of audio data
         float CalculateAmplitude(float[] audioData)
         {
-            float sum = 0f;
-            for (int i = 0; i < audioData.Length; i++)
-            {
-                sum += Mathf.Abs(audioData[i]);
-            }
+            float sum = audioData.Sum(t => Mathf.Abs(t));
             return sum / audioData.Length;
         }
 

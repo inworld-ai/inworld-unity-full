@@ -12,6 +12,7 @@ namespace Inworld
         [SerializeField] InworldCharacterData m_Data;
         [SerializeField] bool m_VerboseLog;
         
+        // ReSharper disable all InconsistentNaming
         public UnityEvent onBeginSpeaking;
         public UnityEvent onEndSpeaking;
         public UnityEvent<InworldPacket> onPacketReceived;

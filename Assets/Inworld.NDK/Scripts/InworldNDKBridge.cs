@@ -8,7 +8,6 @@
  */
 
 using System;
-using UnityEngine;
 using System.Runtime.InteropServices;
 
 
@@ -109,12 +108,12 @@ namespace Inworld.NDK
 
         public void Dispose()
         {
-            Debug.Log("DISPOSING OF THE WRAPPER");
-            if (instance != IntPtr.Zero)
-            {
-                ClientWrapper_destroy(instance);
-                instance = IntPtr.Zero;
-            }
+            if (instance == null)
+                return;
+            
+            InworldAI.Log("DISPOSING OF THE WRAPPER");
+            ClientWrapper_destroy(instance);
+            instance = IntPtr.Zero;
         }
     }
 }
