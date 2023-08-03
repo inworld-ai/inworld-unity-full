@@ -39,6 +39,7 @@ jobs:
             run: |
               git restore --staged .
               git checkout .
+              git clean -fd
           - uses: game-ci/unity-builder@v2
             with:
               unityVersion: 2021.3.6f1
@@ -52,6 +53,7 @@ jobs:
             run: |
               git restore --staged .
               git checkout .
+              git clean -fd
           - uses: game-ci/unity-builder@v2
             with:
               unityVersion: 2021.3.6f1
@@ -65,6 +67,7 @@ jobs:
             run: |
               git restore --staged .
               git checkout .
+              git clean -fd
           - uses: game-ci/unity-builder@v2
             with:
               unityVersion: 2021.3.6f1
