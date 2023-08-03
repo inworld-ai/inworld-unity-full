@@ -223,9 +223,8 @@ namespace Inworld.NDK
             lock (m_SharedAudioData.GetData())
             {
                 shortData.AddRange(from tuple in m_SharedAudioData.GetData() from sample in tuple.Item1 select (short)(sample * 32767));
-                m_SharedAudioData.Clear();
             }
-
+            m_SharedAudioData.Clear();
             return shortData;
         }
 
