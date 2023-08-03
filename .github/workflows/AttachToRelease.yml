@@ -48,8 +48,8 @@ jobs:
             uses: actions/upload-artifact@v3
             with:
               name: Inworld-Unity-NDK
-              path: Build/
-              - name: Discard changes
+              path: Build/              
+          - name: Discard changes
             run: |
               git restore --staged .
               git checkout .
@@ -63,7 +63,7 @@ jobs:
             with:
               name: Inworld-Unity-Sample
               path: Build/
-              - name: Discard changes
+          - name: Discard changes
             run: |
               git restore --staged .
               git checkout .
