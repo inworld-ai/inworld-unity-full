@@ -28,12 +28,8 @@ namespace Inworld
         string m_CurrentAudioID;
         public static InworldClient Client => Instance.m_Client;
         public static InworldConnectionStatus Status => Instance.m_Client.Status;
-        float m_LastPlayerResponseTime = 0f;
-        public float LastPlayerResponseTime
-        {
-            get => m_LastPlayerResponseTime;
-            set => m_LastPlayerResponseTime = value;
-        }
+
+        public float LastPlayerResponseTime { get; set; }
         public void InitWithCustomToken(string token) => m_Client.InitWithCustomToken(token);
 
         public string CurrentWorkspace
@@ -46,6 +42,7 @@ namespace Inworld
         }
         public string CurrentScene => m_SceneFullName;
         public static bool IsRecording => Instance.m_Client.IsRecording;
+        public static bool IsPlayerSpeaking => Instance.m_Client.IsSpeaking;
         public InworldCharacter CurrentCharacter
         {
             get => m_CurrentCharacter;
@@ -96,6 +93,7 @@ namespace Inworld
         {
             if (!character || string.IsNullOrEmpty(character.BrainName) || !m_LiveSession.ContainsKey(character.BrainName))
                 return null;
+            // ReSharper disable once CanSimplifyDictionaryLookupWithTryAdd
             if (!m_Characters.ContainsKey(character.BrainName))
                 m_Characters[character.BrainName] = character.Data;
             return m_LiveSession[character.BrainName];
@@ -109,8 +107,8 @@ namespace Inworld
                 return null;
             }
             string key = m_LiveSession.First(kvp => kvp.Value == agentID).Key;
-            if (m_Characters.ContainsKey(key))
-                return m_Characters[key];
+            if (m_Characters.TryGetValue(key, out InworldCharacterData character))
+                return character;
             InworldAI.LogError($"{key} Not Registered!");
             return null;
         }

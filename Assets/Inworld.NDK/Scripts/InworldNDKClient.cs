@@ -1,5 +1,4 @@
 using Google.Protobuf;
-using Grpc.Core;
 using Inworld.Packet;
 using Newtonsoft.Json.Linq;
 using System;
@@ -9,8 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Serialization;
-
 
 namespace Inworld.NDK
 {
@@ -19,13 +16,15 @@ namespace Inworld.NDK
         [SerializeField] string m_APIKey;
         [SerializeField] string m_APISecret;
         [SerializeField] string m_CustomToken;
-        
-        [FormerlySerializedAs("useAEC")] public bool useAec = false;
+        [SerializeField] bool m_UseAec;
+
         InworldNDKBridge m_Wrapper;
         ConnectionStateCallbackType m_ConnectionCallback;
         PacketCallbackType m_PacketCallback;
         LoadSceneCallbackType m_Callback;
-        float m_LastPacketSendTime = 0f;
+        SharedAudioData m_SharedAudioData;
+
+        float m_LastPacketSendTime;
         TaskCompletionSource<bool> m_AgentInfosFilled;
 
     #region Wrapper variables
@@ -45,8 +44,9 @@ namespace Inworld.NDK
             m_ConnectionCallback = ConnectionStateCallback;
             m_PacketCallback = PacketCallback;
             m_Wrapper = new InworldNDKBridge(m_ConnectionCallback, m_PacketCallback);
+            m_SharedAudioData = new SharedAudioData();
         }
-        
+
         void ConnectionStateCallback(ConnectionState state)
         {
             InworldAI.Log("CONNECTION STATE IS " + state);
@@ -67,26 +67,25 @@ namespace Inworld.NDK
                     Status = InworldConnectionStatus.Idle;
                     break;
                 case ConnectionState.Reconnecting:
-                    case ConnectionState.Connecting:
+                case ConnectionState.Connecting:
                     Status = InworldConnectionStatus.Connecting;
                     break;
             }
         }
 
-        public void PacketCallback(IntPtr packetwrapper, int packetSize)
+        void PacketCallback(IntPtr packetWrapper, int packetSize)
         {
             // Create a byte array to store the data
             byte[] data = new byte[packetSize];
             // Copy the data from the IntPtr to the byte array
-            Marshal.Copy(packetwrapper, data, 0, packetSize);
-            //Marshal.PtrToStructure<GrpcPacket>(packetwrapper);
+            Marshal.Copy(packetWrapper, data, 0, packetSize);
 
             // Deserialize the byte array to an InworldPacket instance using protobuf
             InworldPacket response = InworldPacket.Parser.ParseFrom(data);
             if (response != null)
                 ResolvePackets(response);
         }
-        
+
         void Update()
         {
             if (Status == InworldConnectionStatus.Connected)
@@ -95,8 +94,7 @@ namespace Inworld.NDK
                 {
                     m_LastPacketSendTime = Time.time;
 
-                    InworldPacket e;
-                    while (m_OutgoingEventsQueue.TryDequeue(out e))
+                    while (m_OutgoingEventsQueue.TryDequeue(out InworldPacket e))
                     {
                         SendRawEvent(e);
                     }
@@ -113,23 +111,21 @@ namespace Inworld.NDK
         {
             _EndSession();
         }
-        Task _EndSession()
+        void _EndSession()
         {
             _ResetCommunicationData();
             m_Token = null;
             InworldNDKBridge.ClientWrapper_StopClient(m_Wrapper.instance);
-            return Task.CompletedTask;
         }
 
         public override void Disconnect()
         {
             _EndSession();
         }
-        public override void GetAccessToken() => Authenticate();//_GenerateAccessTokenAsync();
-        // ReSharper disable Unity.PerformanceAnalysis
+        public override void GetAccessToken() => Authenticate(); //_GenerateAccessTokenAsync();
+#pragma warning disable CS4014
         public override void LoadScene(string sceneFullName) => _LoadSceneAsync(sceneFullName);
         public override Inworld.LoadSceneResponse GetLiveSessionInfo() => m_LoadSceneResponse;
-#pragma warning disable CS4014
         // ReSharper disable Unity.PerformanceAnalysis
         public override void StartSession() => _StartSession();
 #pragma warning restore CS4014
@@ -144,7 +140,7 @@ namespace Inworld.NDK
             }
             finally
             {
-                Marshal.FreeHGlobal(packetPtr);  // Make sure to free the allocated memory
+                Marshal.FreeHGlobal(packetPtr); // Make sure to free the allocated memory
             }
         }
         public override void SendText(string characterID, string textToSend)
@@ -162,14 +158,14 @@ namespace Inworld.NDK
             Dispatch(packet);
             _SendPacket(InworldPacketConverter.To.TextEvent(characterID, textToSend));
         }
-        
+
         public override void SendCancelEvent(string characterID, string interactionID)
         {
             if (string.IsNullOrEmpty(characterID))
                 return;
             _SendPacket(InworldPacketConverter.To.CancelResponseEvent(characterID, interactionID));
         }
-        
+
         public override void SendTrigger(string charID, string triggerName, Dictionary<string, string> parameters)
         {
             if (string.IsNullOrEmpty(charID))
@@ -190,9 +186,9 @@ namespace Inworld.NDK
         {
             if (string.IsNullOrEmpty(charID))
                 return;
-            
+
             InworldNDKBridge.ClientWrapper_StopAudioSession(m_Wrapper.instance, charID);
-            
+
             if (m_AudioCapture.IsCapturing)
                 m_AudioCapture.StopRecording();
         }
@@ -200,27 +196,57 @@ namespace Inworld.NDK
         {
             if (string.IsNullOrEmpty(charID) || string.IsNullOrEmpty(base64))
                 return;
-            var audioChunk = InworldPacketConverter.To.AudioChunk(charID, base64);
+            InworldPacket audioChunk = InworldPacketConverter.To.AudioChunk(charID, base64);
             byte[] data = audioChunk.DataChunk.Chunk.ToByteArray();
-            
-            InworldNDKBridge.ClientWrapper_SendSoundMessage(m_Wrapper.instance, charID, data, data.Length);
+
+            if (m_UseAec)
+            {
+                // Convert the byte array into a short array
+                short[] micDataShort = new short[data.Length / sizeof(short)];
+                Buffer.BlockCopy(data, 0, micDataShort, 0, data.Length);
+                IntPtr micDataPointer = Marshal.AllocHGlobal(micDataShort.Length * sizeof(short));
+                Marshal.Copy(micDataShort, 0, micDataPointer, micDataShort.Length);
+
+                List<short> outputDataConverted = GetSharedAudioDataAsShorts();
+                IntPtr outputDataPointer = Marshal.AllocHGlobal(outputDataConverted.Count * sizeof(short));
+                Marshal.Copy(outputDataConverted.ToArray(), 0, outputDataPointer, outputDataConverted.Count);
+                InworldNDKBridge.ClientWrapper_SendSoundMessageWithAEC(m_Wrapper.instance, charID, micDataPointer, micDataShort.Length, outputDataPointer, outputDataConverted.Count);
+            }
+            else
+                InworldNDKBridge.ClientWrapper_SendSoundMessage(m_Wrapper.instance, charID, data, data.Length);
+        }
+        
+        public override void CacheAudioFilterData(float[] data, float time)
+        {
+            m_SharedAudioData.Add(data, time);
         }
 
-        Task _StartSession()
+        List<short> GetSharedAudioDataAsShorts()
+        {
+            List<short> shortData = new List<short>();
+            List<(float[], float)> audioData = m_SharedAudioData.GetData();
+            
+            shortData.AddRange(from tuple in audioData from sample in tuple.Item1 select (short)(sample * 32767));
+            
+            m_SharedAudioData.Clear();
+            return shortData;
+        }
+
+
+        void _StartSession()
         {
             if (!IsTokenValid && !String.IsNullOrEmpty(m_CustomToken))
             {
                 _ReceiveCustomToken();
                 InworldLog.Log("Custom token received");
             }
-            
+
             _ResetCommunicationData();
-            if(Status == InworldConnectionStatus.Initialized)
+            if (Status == InworldConnectionStatus.Initialized)
                 Status = InworldConnectionStatus.Connected;
-            return Task.CompletedTask;
         }
 
-        public void Authenticate(Inworld.Token sessionToken = null)
+        void Authenticate(Inworld.Token sessionToken = null)
         {
             m_Options.AuthUrl = m_ServerConfig.studio;
             m_Options.LoadSceneUrl = m_ServerConfig.RuntimeServer;
@@ -229,7 +255,7 @@ namespace Inworld.NDK
             m_Options.ApiKey = m_APIKey;
             m_Options.ApiSecret = m_APISecret;
             InworldAI.Log("GetAppAuth with wrapper options");
-            m_Callback = new LoadSceneCallbackType(LoadSceneCallback);
+            m_Callback = LoadSceneCallback;
             m_Options.Capabilities = InworldPacketConverter.To.Capabilities;
 
             byte[] serializedData = m_Options.ToByteArray();
@@ -244,35 +270,37 @@ namespace Inworld.NDK
                 m_SessionInfo.Token = "";
                 m_SessionInfo.SessionId = "";
             }
-            
-            m_SessionInfo.ExpirationTime = DateTime.UtcNow.AddHours(1).ToFileTime();;
+
+            m_SessionInfo.ExpirationTime = DateTime.UtcNow.AddHours(1).ToFileTime();
             m_SessionInfo.IsValid = true;
             byte[] serializedSessionInfo = m_SessionInfo.ToByteArray();
 
-            InworldNDKBridge.ClientWrapper_StartClientWithCallback(m_Wrapper.instance, serializedData,
-                                                                    serializedData.Length, serializedSessionInfo, serializedSessionInfo.Length, m_Callback);
+            InworldNDKBridge.ClientWrapper_StartClientWithCallback
+            (
+                m_Wrapper.instance, serializedData,
+                serializedData.Length, serializedSessionInfo, serializedSessionInfo.Length, m_Callback
+            );
         }
-        
-        public void LoadSceneCallback(IntPtr serializedAgentInfoArray, int serializedAgentInfoArraySize)
+
+        void LoadSceneCallback(IntPtr serializedAgentInfoArray, int serializedAgentInfoArraySize)
         {
             byte[] serializedData = new byte[serializedAgentInfoArraySize];
             Marshal.Copy(serializedAgentInfoArray, serializedData, 0, serializedAgentInfoArraySize);
             m_AgentInfoArray = AgentInfoArray.Parser.ParseFrom(serializedData);
-        
+
             // Now you can use agentInfoArray in your C# code
 
-            // Free the allocated buffer
-            //Marshal.FreeHGlobal(serializedAgentInfoArray);
-            if(m_AgentInfosFilled != null)
+            if (m_AgentInfosFilled != null)
                 m_AgentInfosFilled.TrySetResult(true);
 
+            // Free the allocated buffer
             Marshal.FreeCoTaskMem(serializedAgentInfoArray);
             Status = InworldConnectionStatus.Initialized;
         }
-        
-        async Task<Inworld.LoadSceneResponse> _LoadSceneAsync(string sceneName)
+
+        async Task _LoadSceneAsync(string sceneName)
         {
-            if(m_AgentInfoArray.AgentInfoList.Count == 0)
+            if (m_AgentInfoArray.AgentInfoList.Count == 0)
             {
                 m_AgentInfosFilled = new TaskCompletionSource<bool>();
                 await m_AgentInfosFilled.Task;
@@ -280,7 +308,7 @@ namespace Inworld.NDK
 
             m_LoadSceneResponse = new Inworld.LoadSceneResponse();
 
-            foreach(AgentInfo agentInfo in m_AgentInfoArray.AgentInfoList)
+            foreach (AgentInfo agentInfo in m_AgentInfoArray.AgentInfoList)
             {
                 Inworld.InworldCharacterData agent = new Inworld.InworldCharacterData
                 {
@@ -291,11 +319,10 @@ namespace Inworld.NDK
                 m_LoadSceneResponse.agents.Add(agent);
             }
             m_AgentInfoArray.AgentInfoList.Reverse();
-            
+
             Status = InworldConnectionStatus.LoadingSceneCompleted;
-            return m_LoadSceneResponse;
         }
-        
+
         void _SendPacket(InworldPacket packet)
         {
             if (Status == InworldConnectionStatus.Connected)
@@ -352,11 +379,6 @@ namespace Inworld.NDK
             if (data.ContainsKey("sessionId") && data.ContainsKey("token"))
             {
                 InworldAI.Log("Init Success with Custom Token!");
-                new Metadata
-                {
-                    {"authorization", $"Bearer {data["token"]}"},
-                    {"session-id", data["sessionId"]?.ToString()}
-                };
                 Status = InworldConnectionStatus.Initialized;
             }
             else
@@ -369,4 +391,3 @@ namespace Inworld.NDK
         }
     }
 }
-
