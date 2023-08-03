@@ -135,6 +135,16 @@ namespace Inworld
             string responseJson = m_CustomToken;
             if (string.IsNullOrEmpty(responseJson))
             {
+                if (string.IsNullOrEmpty(m_APIKey))
+                {
+                    Error = "Please fill API Key!";
+                    yield break;
+                }
+                if (string.IsNullOrEmpty(m_APISecret))
+                {
+                    Error = "Please fill API Secret!";
+                    yield break;
+                }
                 string header = InworldAuth.GetHeader(m_ServerConfig.runtime, m_APIKey, m_APISecret);
                 UnityWebRequest uwr = new UnityWebRequest(m_ServerConfig.TokenServer, "POST");
                 Status = InworldConnectionStatus.Initializing;
