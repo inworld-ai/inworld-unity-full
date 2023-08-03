@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Inworld.Packet;
-using System.Collections.Concurrent;
 
 namespace Inworld.Interactions
 {
@@ -76,7 +75,7 @@ namespace Inworld.Interactions
             if (CurrentUtterance == null)
                 return;
             CurrentUtterance.Status = PacketStatus.PLAYED;
-            if (interaction.Utterances.All(u => u.Status != PacketStatus.RECEIVED))
+            if (interaction != null && interaction.Utterances.All(u => u.Status != PacketStatus.RECEIVED))
                 interaction.Status = PacketStatus.PLAYED;
         }
 
