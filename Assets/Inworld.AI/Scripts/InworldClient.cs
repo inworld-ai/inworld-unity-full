@@ -8,6 +8,9 @@ namespace Inworld
     public class InworldClient : MonoBehaviour
     {
         [SerializeField] protected InworldServerConfig m_ServerConfig;
+        [SerializeField] protected string m_APIKey;
+        [SerializeField] protected string m_APISecret;
+        [SerializeField] protected string m_CustomToken;
         public event Action<InworldConnectionStatus> OnStatusChanged;
         public event Action<InworldPacket> OnPacketReceived;
         const string k_NotImplented = "No InworldClient found. Need at least one connection protocol";

@@ -271,6 +271,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
+  m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
+  m_CustomToken: 
 --- !u!1 &444891039
 GameObject:
   m_ObjectHideFlags: 0
@@ -687,6 +690,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2181744917861107564, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2717743084740492485, guid: 809fb4511befe9142893b7b016bea809, type: 3}

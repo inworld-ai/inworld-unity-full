@@ -1,58 +1,60 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using System;
 using System.IO;
 using System.Reflection;
+using Object = UnityEngine.Object;
 
 
 namespace Inworld
 {
     [CustomEditor(typeof(Readme))][InitializeOnLoad]
-    public class ReadmeEditor : Editor {
-	    
-	    static string kShowedReadmeSessionStateName = "ReadmeEditor.showedReadme";
-	    
-	    static float kSpace = 16f;
-	    
-	    static ReadmeEditor()
+    public class ReadmeEditor : Editor 
+    {
+        const string k_ShowedReadmeSessionStateName = "ReadmeEditor.showedReadme";
+        const float k_Space = 16f;
+        static ReadmeEditor()
 	    {
 		    EditorApplication.delayCall += SelectReadmeAutomatically;
 	    }
 	    
 	    static void SelectReadmeAutomatically()
-	    {
-		    if (!SessionState.GetBool(kShowedReadmeSessionStateName, false ))
-		    {
-			    var readme = SelectReadme();
-			    SessionState.SetBool(kShowedReadmeSessionStateName, true);
-			    
-			    if (readme && !readme.loadedLayout)
-			    {
-				    LoadLayout();
-				    readme.loadedLayout = true;
-			    }
-		    } 
-	    }
+        {
+            if (SessionState.GetBool(k_ShowedReadmeSessionStateName, false))
+                return;
+            Readme readme = SelectReadme();
+            SessionState.SetBool(k_ShowedReadmeSessionStateName, true);
+
+            if (!readme || readme.loadedLayout)
+                return;
+            LoadLayout();
+            readme.loadedLayout = true;
+        }
 	    
 	    static void LoadLayout()
 	    {
-		    var assembly = typeof(EditorApplication).Assembly; 
-		    var windowLayoutType = assembly.GetType("UnityEditor.WindowLayout", true);
-		    var method = windowLayoutType.GetMethod("LoadWindowLayout", BindingFlags.Public | BindingFlags.Static);
-		    method.Invoke(null, new object[]{Path.Combine(Application.dataPath, "TutorialInfo/Layout.wlt"), false});
-	    }
+		    Assembly assembly = typeof(EditorApplication).Assembly;
+		    Type windowLayoutType = assembly.GetType("UnityEditor.WindowLayout", true);
+            MethodInfo method = windowLayoutType.GetMethod("LoadWindowLayout", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(string), typeof(bool) }, null);
+            if (method != null)
+                method.Invoke
+                (
+                    null, new object[]
+                    {
+                        Path.Combine(Application.dataPath, "Inworld.AI/Default.dwlt"), false
+                    }
+                );
+        }
 	    
 	    [MenuItem("Inworld/About")]
 	    static Readme SelectReadme() 
 	    {
-		    var ids = AssetDatabase.FindAssets("Readme t:Readme");
+		    string[] ids = AssetDatabase.FindAssets("Readme t:Readme");
 		    if (ids.Length >= 1)
 		    {
-			    var readmeObject = AssetDatabase.LoadMainAssetAtPath(AssetDatabase.GUIDToAssetPath(ids[0]));
+			    Object readmeObject = AssetDatabase.LoadMainAssetAtPath(AssetDatabase.GUIDToAssetPath(ids[0]));
 			    
-			    Selection.objects = new UnityEngine.Object[]{readmeObject};
+			    Selection.objects = new[]{readmeObject};
 			    
 			    return (Readme)readmeObject;
 		    }
@@ -65,10 +67,10 @@ namespace Inworld
 	    
 	    protected override void OnHeaderGUI()
 	    {
-		    var readme = (Readme)target;
+		    Readme readme = (Readme)target;
 		    Init(readme);
 		    
-		    var iconWidth = Mathf.Min(EditorGUIUtility.currentViewWidth/3f - 20f, 48f);
+		    float iconWidth = Mathf.Min(EditorGUIUtility.currentViewWidth/3f - 20f, 48f);
 		    
 		    GUILayout.BeginHorizontal("In BigTitle");
 		    {
@@ -80,10 +82,10 @@ namespace Inworld
 	    
 	    public override void OnInspectorGUI()
 	    {
-		    var readme = (Readme)target;
+		    Readme readme = (Readme)target;
 		    Init(readme);
 		    
-		    foreach (var section in readme.sections)
+		    foreach (Readme.Section section in readme.sections)
 		    {
 			    if (!string.IsNullOrEmpty(section.heading))
 			    {
@@ -100,7 +102,7 @@ namespace Inworld
 					    Application.OpenURL(section.url);
 				    }
 			    }
-			    GUILayout.Space(kSpace);
+			    GUILayout.Space(k_Space);
 		    }
 	    }
 	    
@@ -123,34 +125,45 @@ namespace Inworld
 	    {
 		    if (m_Initialized)
 			    return;
-		    m_BodyStyle = new GUIStyle(EditorStyles.label);
-		    m_BodyStyle.wordWrap = true;
-		    m_BodyStyle.fontSize = 14;
-            m_BodyStyle.font = readme.contentFont;
-            m_BodyStyle.richText = true;
-		    
-		    m_TitleStyle = new GUIStyle(m_BodyStyle);
-		    m_TitleStyle.fontSize = 32;
-            m_TitleStyle.font = readme.titleFont;
-            m_TitleStyle.alignment = TextAnchor.LowerCenter;
-            
-		    m_HeadingStyle = new GUIStyle(m_BodyStyle);
-            m_HeadingStyle.fontStyle = FontStyle.Bold;
+		    m_BodyStyle = new GUIStyle(EditorStyles.label)
+            {
+                wordWrap = true,
+                fontSize = 14,
+                font = readme.contentFont,
+                richText = true
+            };
+
+            m_TitleStyle = new GUIStyle(m_BodyStyle)
+            {
+                fontSize = 32,
+                font = readme.titleFont,
+                alignment = TextAnchor.LowerCenter
+            };
+
+            m_HeadingStyle = new GUIStyle(m_BodyStyle)
+            {
+                fontStyle = FontStyle.Bold
+            };
             m_TitleStyle.font = readme.titleFont;
 		    m_HeadingStyle.fontSize = 18 ;
 		    
-		    m_LinkStyle = new GUIStyle(m_BodyStyle);
-		    m_LinkStyle.wordWrap = false;
-		    // Match selection color which works nicely for both light and dark skins
-		    m_LinkStyle.normal.textColor = new Color (0x00/255f, 0x78/255f, 0xDA/255f, 1f);
-		    m_LinkStyle.stretchWidth = false;
-		    
-		    m_Initialized = true;
+		    m_LinkStyle = new GUIStyle(m_BodyStyle)
+            {
+                wordWrap = false,
+                normal =
+                {
+                    // Match selection color which works nicely for both light and dark skins
+                    textColor = new Color (0x00/255f, 0x78/255f, 0xDA/255f, 1f)
+                },
+                stretchWidth = false
+            };
+
+            m_Initialized = true;
 	    }
 	    
 	    bool LinkLabel (GUIContent label, params GUILayoutOption[] options)
 	    {
-		    var position = GUILayoutUtility.GetRect(label, LinkStyle, options);
+		    Rect position = GUILayoutUtility.GetRect(label, LinkStyle, options);
 
 		    Handles.BeginGUI ();
 		    Handles.color = LinkStyle.normal.textColor;

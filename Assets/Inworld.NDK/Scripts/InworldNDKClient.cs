@@ -13,11 +13,7 @@ namespace Inworld.NDK
 {
     public class InworldNDKClient : InworldClient
     {
-        [SerializeField] string m_APIKey;
-        [SerializeField] string m_APISecret;
-        [SerializeField] string m_CustomToken;
         [SerializeField] bool m_UseAec;
-
         InworldNDKBridge m_Wrapper;
         ConnectionStateCallbackType m_ConnectionCallback;
         PacketCallbackType m_PacketCallback;
