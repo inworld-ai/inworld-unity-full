@@ -42,7 +42,6 @@ namespace Inworld.Sample.RPM
                 HandleTrigger(customPacket);
                 break;
             default:
-                InworldAI.Log($"Received {incomingPacket}");
                 break;
         }
     }
