@@ -804,6 +804,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: InworldCharacter3D
       objectReference: {fileID: 0}
+    - target: {fileID: 3694925250822063550, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
