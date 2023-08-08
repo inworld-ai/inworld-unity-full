@@ -14,10 +14,10 @@ namespace ExportPackage.Editor
 	public static class UnityPackageExporter
     {
         // The name of the unitypackage to output.
-        const string k_PackageName = "ai.inworld.runtime-sdk";
-        const string k_NDKPackageName = "ai.inworld.runtime-sdk-NDK";
-        const string k_samplePackageName = "ai.inworld.runtime-sdk-sample";
-        const string k_RPMSamplePackageName = "ai.inworld.runtime-sdk-RPMsamples";
+        const string k_PackageName = "ai.inworld.runtime-sdk-lite";
+        const string k_NDKPackageName = "ai.inworld.runtime-sdk";
+        const string k_samplePackageName = "ai.inworld.runtime-sdk-innequin";
+        const string k_RPMSamplePackageName = "ai.inworld.runtime-sdk-samples";
 
         // The path to the package under the `Assets/` folder.
         static string[] __packagePath = {"Assets/Inworld.AI"};
