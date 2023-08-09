@@ -108,27 +108,35 @@ jobs:
       with:
         name: Inworld-Unity-RPM-Samples
         path: Build/
-        
+    
+    - name: Rename packages with release tag
+      run: |
+        TAG_NAME=${GITHUB_REF/refs\/tags\//}
+        mv Build/ai.inworld.runtime-sdk.unitypackage Build/ai.inworld.runtime-sdk-$TAG_NAME.unitypackage
+        mv Build/ai.inworld.runtime-sdk-lite.unitypackage Build/ai.inworld.runtime-sdk-lite-$TAG_NAME.unitypackage
+        mv Build/ai.inworld.runtime-sdk-samples.unitypackage Build/ai.inworld.runtime-sdk-samples-$TAG_NAME.unitypackage
+        mv Build/ai.inworld.runtime-sdk-innequin.unitypackage Build/ai.inworld.runtime-sdk-innequin-$TAG_NAME.unitypackage
+    
     - name: Attach SDK package to release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: Build/ai.inworld.runtime-sdk.unitypackage
+        files: Build/ai.inworld.runtime-sdk-${{ github.ref/refs/tags/ }}.unitypackage
 
-    - name: Attach NDK package to release
+    - name: Attach lite package to release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: Build/ai.inworld.runtime-sdk-NDK.unitypackage
+        files: Build/ai.inworld.runtime-sdk-lite-${{ github.ref/refs/tags/ }}.unitypackage
 
-    - name: Attach SDK Sample package to release
+    - name: Attach Innequin Sample package to release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: Build/ai.inworld.runtime-sdk-sample.unitypackage
+        files: Build/ai.inworld.runtime-sdk-innequin-${{ github.ref/refs/tags/ }}.unitypackage
 
     - name: Attach RPM Samples package to release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: Build/ai.inworld.runtime-sdk-RPMsamples.unitypackage
+        files: Build/ai.inworld.runtime-sdk-samples-${{ github.ref/refs/tags/ }}.unitypackage
