@@ -39,7 +39,6 @@ namespace Inworld.NDK
                 ClientWrapper_InitClient
                 (
                     instance,
-                    "DefaultUserNDK",
                     "DefaultClientNDK",
                     "1.0.0", connectionStateCallback, packetCallback
                 );
@@ -77,7 +76,7 @@ namespace Inworld.NDK
         public static extern void ClientWrapper_StopAudioSession(IntPtr wrapper, string agentId);
 
         [DllImport("InworldNDK", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ClientWrapper_InitClient")]
-        public static extern void ClientWrapper_InitClient(IntPtr wrapper, string userId, string clientId, string clientVer, ConnectionStateCallbackType connectionStateCallback, PacketCallbackType packetCallback);
+        public static extern void ClientWrapper_InitClient(IntPtr wrapper, string clientId, string clientVer, ConnectionStateCallbackType connectionStateCallback, PacketCallbackType packetCallback);
 
         [DllImport("InworldNDK", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ClientWrapper_StartClientWithCallback")]
         public static extern void ClientWrapper_StartClientWithCallback(IntPtr wrapper, byte[] serializedOptions, int serializedOptionsSize, byte[] serializedSessionInfo, int sessionInfoSize, LoadSceneCallbackType loadSceneCallback);
