@@ -189,7 +189,6 @@ namespace Inworld.NDK
                 m_AudioCapture.StopRecording();
         }
 
-        bool m_lastFrameAECActive;
         public override void SendAudio(string charID, string base64)
         {
             if (string.IsNullOrEmpty(charID) || string.IsNullOrEmpty(base64))
@@ -211,29 +210,24 @@ namespace Inworld.NDK
                 InworldNDKBridge.ClientWrapper_SendSoundMessageWithAEC(m_Wrapper.instance, charID, micDataPointer, micDataShort.Length, outputDataPointer, outputDataConverted.Count);
             }
             else
-            {
-                if(m_lastFrameAECActive)
-                    m_SharedAudioData.Clear();
-                
                 InworldNDKBridge.ClientWrapper_SendSoundMessage(m_Wrapper.instance, charID, data, data.Length);
-            }
-            
-            m_lastFrameAECActive = m_UseAec;
         }
-        
+
         public override void CacheAudioFilterData(float[] data, float time)
         {
-            m_SharedAudioData.Add(data, time);
+            if (m_UseAec)
+                m_SharedAudioData.Add(data, time);
+            else
+                m_SharedAudioData.Clear();
         }
 
         List<short> GetSharedAudioDataAsShorts()
         {
             List<short> shortData = new List<short>();
             List<(float[], float)> audioData = m_SharedAudioData.GetData();
-            
+
             shortData.AddRange(from tuple in audioData from sample in tuple.Item1 select (short)(sample * 32767));
-            m_SharedAudioData.Clear();
-            
+
             return shortData;
         }
 
