@@ -17,11 +17,11 @@ namespace Inworld.NDK
                 Emotions = InworldAI.Capabilities.emotions,
                 Interruptions = InworldAI.Capabilities.interruptions,
                 NarratedActions = InworldAI.Capabilities.narratedActions,
-                SilenceEvents = InworldAI.Capabilities.silence,
+                Silenceevents = InworldAI.Capabilities.silence,
                 Text = InworldAI.Capabilities.text,
                 Triggers = InworldAI.Capabilities.triggers,
                 Continuation = InworldAI.Capabilities.continuation,
-                TurnBasedSTT = InworldAI.Capabilities.turnBasedStt,
+                TurnBasedStt = InworldAI.Capabilities.turnBasedStt,
                 PhonemeInfo = InworldAI.Capabilities.phonemeInfo
             };
 

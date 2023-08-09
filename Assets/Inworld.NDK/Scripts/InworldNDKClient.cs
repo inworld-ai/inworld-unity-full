@@ -244,8 +244,8 @@ namespace Inworld.NDK
 
         void Authenticate(Inworld.Token sessionToken = null)
         {
-            m_Options.AuthUrl = m_ServerConfig.studio;
-            m_Options.LoadSceneUrl = m_ServerConfig.RuntimeServer;
+            //m_Options. = m_ServerConfig.studio;
+            m_Options.ServerUrl = m_ServerConfig.RuntimeServer;
             m_Options.SceneName = InworldController.Instance.CurrentScene;
             m_Options.PlayerName = InworldAI.User.Name;
             m_Options.ApiKey = m_APIKey;

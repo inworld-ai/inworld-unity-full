@@ -43,34 +43,34 @@ namespace Inworld.NDK {
             "DVBsYXllclByb2ZpbGUSJwoGZmllbGRzGAEgAygLMhcuaW53b3JsZC5uZGtE",
             "YXRhLkZpZWxkcyItCgZGaWVsZHMSDwoHZmllbGRJZBgBIAEoCRISCgpmaWVs",
             "ZFZhbHVlGAIgASgJIiwKDUNsaWVudFJlcXVlc3QSCgoCaWQYASABKAkSDwoH",
-            "dmVyc2lvbhgCIAEoCSK6AgoTQ2FwYWJpbGl0aWVzUmVxdWVzdBISCgpBbmlt",
-            "YXRpb25zGAEgASgIEgwKBFRleHQYAiABKAgSDQoFQXVkaW8YAyABKAgSEAoI",
-            "RW1vdGlvbnMYBCABKAgSEAoIR2VzdHVyZXMYBSABKAgSFQoNSW50ZXJydXB0",
-            "aW9ucxgGIAEoCBIQCghUcmlnZ2VycxgHIAEoCBIYChBFbW90aW9uU3RyZWFt",
-            "aW5nGAggASgIEhUKDVNpbGVuY2VFdmVudHMYCSABKAgSEwoLUGhvbmVtZUlu",
-            "Zm8YCiABKAgSGgoSTG9hZFNjZW5lSW5TZXNzaW9uGAsgASgIEhQKDFR1cm5C",
-            "YXNlZFNUVBgMIAEoCBIUCgxDb250aW51YXRpb24YDSABKAgSFwoPTmFycmF0",
-            "ZWRBY3Rpb25zGA4gASgIIpsBChRJbndvcmxkQ2hhcmFjdGVyRGF0YRIPCgdh",
-            "Z2VudElkGAEgASgJEhEKCWJyYWluTmFtZRgCIAEoCRIRCglnaXZlbk5hbWUY",
-            "AyABKAkSOQoPY2hhcmFjdGVyQXNzZXRzGAQgASgLMiAuaW53b3JsZC5uZGtE",
-            "YXRhLkNoYXJhY3RlckFzc2V0cxIRCgl0aHVtYm5haWwYBSABKAwijQEKD0No",
-            "YXJhY3RlckFzc2V0cxITCgtycG1Nb2RlbFVyaRgBIAEoCRIbChNycG1JbWFn",
-            "ZVVyaVBvcnRyYWl0GAIgASgJEhoKEnJwbUltYWdlVXJpUG9zdHVyZRgDIAEo",
-            "CRIRCglhdmF0YXJJbWcYBCABKAkSGQoRYXZhdGFySW1nT3JpZ2luYWwYBSAB",
-            "KAki5gEKDUNsaWVudE9wdGlvbnMSEAoIYXV0aF91cmwYASABKAkSFgoObG9h",
-            "ZF9zY2VuZV91cmwYAiABKAkSEgoKc2NlbmVfbmFtZRgDIAEoCRIPCgdhcGlf",
-            "a2V5GAQgASgJEhIKCmFwaV9zZWNyZXQYBSABKAkSEwoLcGxheWVyX25hbWUY",
-            "BiABKAkSDQoFdG9rZW4YByABKAkSEgoKc2Vzc2lvbl9pZBgIIAEoCRI6Cgxj",
-            "YXBhYmlsaXRpZXMYCSABKAsyJC5pbndvcmxkLm5ka0RhdGEuQ2FwYWJpbGl0",
-            "aWVzUmVxdWVzdCJCCglBZ2VudEluZm8SEQoJQnJhaW5OYW1lGAEgASgJEg8K",
-            "B0FnZW50SWQYAiABKAkSEQoJR2l2ZW5OYW1lGAMgASgJIlgKC1Nlc3Npb25J",
-            "bmZvEhEKCVNlc3Npb25JZBgBIAEoCRINCgVUb2tlbhgCIAEoCRIWCg5FeHBp",
-            "cmF0aW9uVGltZRgDIAEoAxIPCgdJc1ZhbGlkGAQgASgIIkUKDkFnZW50SW5m",
-            "b0FycmF5EjMKD2FnZW50X2luZm9fbGlzdBgBIAMoCzIaLmlud29ybGQubmRr",
-            "RGF0YS5BZ2VudEluZm8qdgoPQ29ubmVjdGlvblN0YXRlEggKBElkbGUQABIO",
-            "CgpDb25uZWN0aW5nEAESDQoJQ29ubmVjdGVkEAISCgoGRmFpbGVkEAMSCgoG",
-            "UGF1c2VkEAQSEAoMRGlzY29ubmVjdGVkEAUSEAoMUmVjb25uZWN0aW5nEAZC",
-            "DqoCC0lud29ybGQuTkRLYgZwcm90bzM="));
+            "dmVyc2lvbhgCIAEoCSLLAgoTQ2FwYWJpbGl0aWVzUmVxdWVzdBINCgVhdWRp",
+            "bxgBIAEoCBIQCghlbW90aW9ucxgCIAEoCBIVCg1pbnRlcnJ1cHRpb25zGAMg",
+            "ASgIEhcKD25hcnJhdGVkQWN0aW9ucxgEIAEoCBIPCgdzaWxlbmNlGAUgASgI",
+            "EgwKBHRleHQYBiABKAgSEAoIdHJpZ2dlcnMYByABKAgSFAoMY29udGludWF0",
+            "aW9uGAggASgIEhQKDHR1cm5CYXNlZFN0dBgJIAEoCBITCgtwaG9uZW1lSW5m",
+            "bxgKIAEoCBISCgphbmltYXRpb25zGAsgASgIEhAKCGdlc3R1cmVzGAwgASgI",
+            "EhgKEGVtb3Rpb25zdHJlYW1pbmcYDSABKAgSFQoNc2lsZW5jZWV2ZW50cxgO",
+            "IAEoCBIaChJsb2Fkc2NlbmVpbnNlc3Npb24YDyABKAgimwEKFElud29ybGRD",
+            "aGFyYWN0ZXJEYXRhEg8KB2FnZW50SWQYASABKAkSEQoJYnJhaW5OYW1lGAIg",
+            "ASgJEhEKCWdpdmVuTmFtZRgDIAEoCRI5Cg9jaGFyYWN0ZXJBc3NldHMYBCAB",
+            "KAsyIC5pbndvcmxkLm5ka0RhdGEuQ2hhcmFjdGVyQXNzZXRzEhEKCXRodW1i",
+            "bmFpbBgFIAEoDCKNAQoPQ2hhcmFjdGVyQXNzZXRzEhMKC3JwbU1vZGVsVXJp",
+            "GAEgASgJEhsKE3JwbUltYWdlVXJpUG9ydHJhaXQYAiABKAkSGgoScnBtSW1h",
+            "Z2VVcmlQb3N0dXJlGAMgASgJEhEKCWF2YXRhckltZxgEIAEoCRIZChFhdmF0",
+            "YXJJbWdPcmlnaW5hbBgFIAEoCSLhAQoNQ2xpZW50T3B0aW9ucxISCgpzZXJ2",
+            "ZXJfdXJsGAIgASgJEhIKCnNjZW5lX25hbWUYAyABKAkSDwoHYXBpX2tleRgE",
+            "IAEoCRISCgphcGlfc2VjcmV0GAUgASgJEhMKC3BsYXllcl9uYW1lGAYgASgJ",
+            "Eg0KBXRva2VuGAcgASgJEhIKCnNlc3Npb25faWQYCCABKAkSDwoHdXNlcl9p",
+            "ZBgJIAEoCRI6CgxjYXBhYmlsaXRpZXMYCiABKAsyJC5pbndvcmxkLm5ka0Rh",
+            "dGEuQ2FwYWJpbGl0aWVzUmVxdWVzdCJCCglBZ2VudEluZm8SEQoJQnJhaW5O",
+            "YW1lGAEgASgJEg8KB0FnZW50SWQYAiABKAkSEQoJR2l2ZW5OYW1lGAMgASgJ",
+            "IlgKC1Nlc3Npb25JbmZvEhEKCVNlc3Npb25JZBgBIAEoCRINCgVUb2tlbhgC",
+            "IAEoCRIWCg5FeHBpcmF0aW9uVGltZRgDIAEoAxIPCgdJc1ZhbGlkGAQgASgI",
+            "IkUKDkFnZW50SW5mb0FycmF5EjMKD2FnZW50X2luZm9fbGlzdBgBIAMoCzIa",
+            "Lmlud29ybGQubmRrRGF0YS5BZ2VudEluZm8qdgoPQ29ubmVjdGlvblN0YXRl",
+            "EggKBElkbGUQABIOCgpDb25uZWN0aW5nEAESDQoJQ29ubmVjdGVkEAISCgoG",
+            "RmFpbGVkEAMSCgoGUGF1c2VkEAQSEAoMRGlzY29ubmVjdGVkEAUSEAoMUmVj",
+            "b25uZWN0aW5nEAZCDqoCC0lud29ybGQuTkRLYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.AnyReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Inworld.NDK.ConnectionState), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -82,10 +82,10 @@ namespace Inworld.NDK {
             new pbr::GeneratedClrTypeInfo(typeof(global::Inworld.NDK.PlayerProfile), global::Inworld.NDK.PlayerProfile.Parser, new[]{ "Fields" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Inworld.NDK.Fields), global::Inworld.NDK.Fields.Parser, new[]{ "FieldId", "FieldValue" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Inworld.NDK.ClientRequest), global::Inworld.NDK.ClientRequest.Parser, new[]{ "Id", "Version" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Inworld.NDK.CapabilitiesRequest), global::Inworld.NDK.CapabilitiesRequest.Parser, new[]{ "Animations", "Text", "Audio", "Emotions", "Gestures", "Interruptions", "Triggers", "EmotionStreaming", "SilenceEvents", "PhonemeInfo", "LoadSceneInSession", "TurnBasedSTT", "Continuation", "NarratedActions" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Inworld.NDK.CapabilitiesRequest), global::Inworld.NDK.CapabilitiesRequest.Parser, new[]{ "Audio", "Emotions", "Interruptions", "NarratedActions", "Silence", "Text", "Triggers", "Continuation", "TurnBasedStt", "PhonemeInfo", "Animations", "Gestures", "Emotionstreaming", "Silenceevents", "Loadsceneinsession" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Inworld.NDK.InworldCharacterData), global::Inworld.NDK.InworldCharacterData.Parser, new[]{ "AgentId", "BrainName", "GivenName", "CharacterAssets", "Thumbnail" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Inworld.NDK.CharacterAssets), global::Inworld.NDK.CharacterAssets.Parser, new[]{ "RpmModelUri", "RpmImageUriPortrait", "RpmImageUriPosture", "AvatarImg", "AvatarImgOriginal" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Inworld.NDK.ClientOptions), global::Inworld.NDK.ClientOptions.Parser, new[]{ "AuthUrl", "LoadSceneUrl", "SceneName", "ApiKey", "ApiSecret", "PlayerName", "Token", "SessionId", "Capabilities" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Inworld.NDK.ClientOptions), global::Inworld.NDK.ClientOptions.Parser, new[]{ "ServerUrl", "SceneName", "ApiKey", "ApiSecret", "PlayerName", "Token", "SessionId", "UserId", "Capabilities" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Inworld.NDK.AgentInfo), global::Inworld.NDK.AgentInfo.Parser, new[]{ "BrainName", "AgentId", "GivenName" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Inworld.NDK.SessionInfo), global::Inworld.NDK.SessionInfo.Parser, new[]{ "SessionId", "Token", "ExpirationTime", "IsValid" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Inworld.NDK.AgentInfoArray), global::Inworld.NDK.AgentInfoArray.Parser, new[]{ "AgentInfoList" }, null, null, null, null)
@@ -1989,20 +1989,21 @@ namespace Inworld.NDK {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CapabilitiesRequest(CapabilitiesRequest other) : this() {
-      animations_ = other.animations_;
-      text_ = other.text_;
       audio_ = other.audio_;
       emotions_ = other.emotions_;
-      gestures_ = other.gestures_;
       interruptions_ = other.interruptions_;
-      triggers_ = other.triggers_;
-      emotionStreaming_ = other.emotionStreaming_;
-      silenceEvents_ = other.silenceEvents_;
-      phonemeInfo_ = other.phonemeInfo_;
-      loadSceneInSession_ = other.loadSceneInSession_;
-      turnBasedSTT_ = other.turnBasedSTT_;
-      continuation_ = other.continuation_;
       narratedActions_ = other.narratedActions_;
+      silence_ = other.silence_;
+      text_ = other.text_;
+      triggers_ = other.triggers_;
+      continuation_ = other.continuation_;
+      turnBasedStt_ = other.turnBasedStt_;
+      phonemeInfo_ = other.phonemeInfo_;
+      animations_ = other.animations_;
+      gestures_ = other.gestures_;
+      emotionstreaming_ = other.emotionstreaming_;
+      silenceevents_ = other.silenceevents_;
+      loadsceneinsession_ = other.loadsceneinsession_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2011,30 +2012,8 @@ namespace Inworld.NDK {
       return new CapabilitiesRequest(this);
     }
 
-    /// <summary>Field number for the "Animations" field.</summary>
-    public const int AnimationsFieldNumber = 1;
-    private bool animations_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Animations {
-      get { return animations_; }
-      set {
-        animations_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "Text" field.</summary>
-    public const int TextFieldNumber = 2;
-    private bool text_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Text {
-      get { return text_; }
-      set {
-        text_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "Audio" field.</summary>
-    public const int AudioFieldNumber = 3;
+    /// <summary>Field number for the "audio" field.</summary>
+    public const int AudioFieldNumber = 1;
     private bool audio_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Audio {
@@ -2044,8 +2023,8 @@ namespace Inworld.NDK {
       }
     }
 
-    /// <summary>Field number for the "Emotions" field.</summary>
-    public const int EmotionsFieldNumber = 4;
+    /// <summary>Field number for the "emotions" field.</summary>
+    public const int EmotionsFieldNumber = 2;
     private bool emotions_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Emotions {
@@ -2055,19 +2034,8 @@ namespace Inworld.NDK {
       }
     }
 
-    /// <summary>Field number for the "Gestures" field.</summary>
-    public const int GesturesFieldNumber = 5;
-    private bool gestures_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Gestures {
-      get { return gestures_; }
-      set {
-        gestures_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "Interruptions" field.</summary>
-    public const int InterruptionsFieldNumber = 6;
+    /// <summary>Field number for the "interruptions" field.</summary>
+    public const int InterruptionsFieldNumber = 3;
     private bool interruptions_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool Interruptions {
@@ -2077,7 +2045,40 @@ namespace Inworld.NDK {
       }
     }
 
-    /// <summary>Field number for the "Triggers" field.</summary>
+    /// <summary>Field number for the "narratedActions" field.</summary>
+    public const int NarratedActionsFieldNumber = 4;
+    private bool narratedActions_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool NarratedActions {
+      get { return narratedActions_; }
+      set {
+        narratedActions_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "silence" field.</summary>
+    public const int SilenceFieldNumber = 5;
+    private bool silence_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Silence {
+      get { return silence_; }
+      set {
+        silence_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "text" field.</summary>
+    public const int TextFieldNumber = 6;
+    private bool text_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Text {
+      get { return text_; }
+      set {
+        text_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "triggers" field.</summary>
     public const int TriggersFieldNumber = 7;
     private bool triggers_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2088,29 +2089,29 @@ namespace Inworld.NDK {
       }
     }
 
-    /// <summary>Field number for the "EmotionStreaming" field.</summary>
-    public const int EmotionStreamingFieldNumber = 8;
-    private bool emotionStreaming_;
+    /// <summary>Field number for the "continuation" field.</summary>
+    public const int ContinuationFieldNumber = 8;
+    private bool continuation_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool EmotionStreaming {
-      get { return emotionStreaming_; }
+    public bool Continuation {
+      get { return continuation_; }
       set {
-        emotionStreaming_ = value;
+        continuation_ = value;
       }
     }
 
-    /// <summary>Field number for the "SilenceEvents" field.</summary>
-    public const int SilenceEventsFieldNumber = 9;
-    private bool silenceEvents_;
+    /// <summary>Field number for the "turnBasedStt" field.</summary>
+    public const int TurnBasedSttFieldNumber = 9;
+    private bool turnBasedStt_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool SilenceEvents {
-      get { return silenceEvents_; }
+    public bool TurnBasedStt {
+      get { return turnBasedStt_; }
       set {
-        silenceEvents_ = value;
+        turnBasedStt_ = value;
       }
     }
 
-    /// <summary>Field number for the "PhonemeInfo" field.</summary>
+    /// <summary>Field number for the "phonemeInfo" field.</summary>
     public const int PhonemeInfoFieldNumber = 10;
     private bool phonemeInfo_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2121,47 +2122,58 @@ namespace Inworld.NDK {
       }
     }
 
-    /// <summary>Field number for the "LoadSceneInSession" field.</summary>
-    public const int LoadSceneInSessionFieldNumber = 11;
-    private bool loadSceneInSession_;
+    /// <summary>Field number for the "animations" field.</summary>
+    public const int AnimationsFieldNumber = 11;
+    private bool animations_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool LoadSceneInSession {
-      get { return loadSceneInSession_; }
+    public bool Animations {
+      get { return animations_; }
       set {
-        loadSceneInSession_ = value;
+        animations_ = value;
       }
     }
 
-    /// <summary>Field number for the "TurnBasedSTT" field.</summary>
-    public const int TurnBasedSTTFieldNumber = 12;
-    private bool turnBasedSTT_;
+    /// <summary>Field number for the "gestures" field.</summary>
+    public const int GesturesFieldNumber = 12;
+    private bool gestures_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool TurnBasedSTT {
-      get { return turnBasedSTT_; }
+    public bool Gestures {
+      get { return gestures_; }
       set {
-        turnBasedSTT_ = value;
+        gestures_ = value;
       }
     }
 
-    /// <summary>Field number for the "Continuation" field.</summary>
-    public const int ContinuationFieldNumber = 13;
-    private bool continuation_;
+    /// <summary>Field number for the "emotionstreaming" field.</summary>
+    public const int EmotionstreamingFieldNumber = 13;
+    private bool emotionstreaming_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Continuation {
-      get { return continuation_; }
+    public bool Emotionstreaming {
+      get { return emotionstreaming_; }
       set {
-        continuation_ = value;
+        emotionstreaming_ = value;
       }
     }
 
-    /// <summary>Field number for the "NarratedActions" field.</summary>
-    public const int NarratedActionsFieldNumber = 14;
-    private bool narratedActions_;
+    /// <summary>Field number for the "silenceevents" field.</summary>
+    public const int SilenceeventsFieldNumber = 14;
+    private bool silenceevents_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool NarratedActions {
-      get { return narratedActions_; }
+    public bool Silenceevents {
+      get { return silenceevents_; }
       set {
-        narratedActions_ = value;
+        silenceevents_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "loadsceneinsession" field.</summary>
+    public const int LoadsceneinsessionFieldNumber = 15;
+    private bool loadsceneinsession_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Loadsceneinsession {
+      get { return loadsceneinsession_; }
+      set {
+        loadsceneinsession_ = value;
       }
     }
 
@@ -2178,40 +2190,42 @@ namespace Inworld.NDK {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Animations != other.Animations) return false;
-      if (Text != other.Text) return false;
       if (Audio != other.Audio) return false;
       if (Emotions != other.Emotions) return false;
-      if (Gestures != other.Gestures) return false;
       if (Interruptions != other.Interruptions) return false;
-      if (Triggers != other.Triggers) return false;
-      if (EmotionStreaming != other.EmotionStreaming) return false;
-      if (SilenceEvents != other.SilenceEvents) return false;
-      if (PhonemeInfo != other.PhonemeInfo) return false;
-      if (LoadSceneInSession != other.LoadSceneInSession) return false;
-      if (TurnBasedSTT != other.TurnBasedSTT) return false;
-      if (Continuation != other.Continuation) return false;
       if (NarratedActions != other.NarratedActions) return false;
+      if (Silence != other.Silence) return false;
+      if (Text != other.Text) return false;
+      if (Triggers != other.Triggers) return false;
+      if (Continuation != other.Continuation) return false;
+      if (TurnBasedStt != other.TurnBasedStt) return false;
+      if (PhonemeInfo != other.PhonemeInfo) return false;
+      if (Animations != other.Animations) return false;
+      if (Gestures != other.Gestures) return false;
+      if (Emotionstreaming != other.Emotionstreaming) return false;
+      if (Silenceevents != other.Silenceevents) return false;
+      if (Loadsceneinsession != other.Loadsceneinsession) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (Animations != false) hash ^= Animations.GetHashCode();
-      if (Text != false) hash ^= Text.GetHashCode();
       if (Audio != false) hash ^= Audio.GetHashCode();
       if (Emotions != false) hash ^= Emotions.GetHashCode();
-      if (Gestures != false) hash ^= Gestures.GetHashCode();
       if (Interruptions != false) hash ^= Interruptions.GetHashCode();
-      if (Triggers != false) hash ^= Triggers.GetHashCode();
-      if (EmotionStreaming != false) hash ^= EmotionStreaming.GetHashCode();
-      if (SilenceEvents != false) hash ^= SilenceEvents.GetHashCode();
-      if (PhonemeInfo != false) hash ^= PhonemeInfo.GetHashCode();
-      if (LoadSceneInSession != false) hash ^= LoadSceneInSession.GetHashCode();
-      if (TurnBasedSTT != false) hash ^= TurnBasedSTT.GetHashCode();
-      if (Continuation != false) hash ^= Continuation.GetHashCode();
       if (NarratedActions != false) hash ^= NarratedActions.GetHashCode();
+      if (Silence != false) hash ^= Silence.GetHashCode();
+      if (Text != false) hash ^= Text.GetHashCode();
+      if (Triggers != false) hash ^= Triggers.GetHashCode();
+      if (Continuation != false) hash ^= Continuation.GetHashCode();
+      if (TurnBasedStt != false) hash ^= TurnBasedStt.GetHashCode();
+      if (PhonemeInfo != false) hash ^= PhonemeInfo.GetHashCode();
+      if (Animations != false) hash ^= Animations.GetHashCode();
+      if (Gestures != false) hash ^= Gestures.GetHashCode();
+      if (Emotionstreaming != false) hash ^= Emotionstreaming.GetHashCode();
+      if (Silenceevents != false) hash ^= Silenceevents.GetHashCode();
+      if (Loadsceneinsession != false) hash ^= Loadsceneinsession.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2228,61 +2242,65 @@ namespace Inworld.NDK {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (Animations != false) {
-        output.WriteRawTag(8);
-        output.WriteBool(Animations);
-      }
-      if (Text != false) {
-        output.WriteRawTag(16);
-        output.WriteBool(Text);
-      }
       if (Audio != false) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(8);
         output.WriteBool(Audio);
       }
       if (Emotions != false) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(16);
         output.WriteBool(Emotions);
       }
-      if (Gestures != false) {
-        output.WriteRawTag(40);
-        output.WriteBool(Gestures);
-      }
       if (Interruptions != false) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(24);
         output.WriteBool(Interruptions);
+      }
+      if (NarratedActions != false) {
+        output.WriteRawTag(32);
+        output.WriteBool(NarratedActions);
+      }
+      if (Silence != false) {
+        output.WriteRawTag(40);
+        output.WriteBool(Silence);
+      }
+      if (Text != false) {
+        output.WriteRawTag(48);
+        output.WriteBool(Text);
       }
       if (Triggers != false) {
         output.WriteRawTag(56);
         output.WriteBool(Triggers);
       }
-      if (EmotionStreaming != false) {
+      if (Continuation != false) {
         output.WriteRawTag(64);
-        output.WriteBool(EmotionStreaming);
+        output.WriteBool(Continuation);
       }
-      if (SilenceEvents != false) {
+      if (TurnBasedStt != false) {
         output.WriteRawTag(72);
-        output.WriteBool(SilenceEvents);
+        output.WriteBool(TurnBasedStt);
       }
       if (PhonemeInfo != false) {
         output.WriteRawTag(80);
         output.WriteBool(PhonemeInfo);
       }
-      if (LoadSceneInSession != false) {
+      if (Animations != false) {
         output.WriteRawTag(88);
-        output.WriteBool(LoadSceneInSession);
+        output.WriteBool(Animations);
       }
-      if (TurnBasedSTT != false) {
+      if (Gestures != false) {
         output.WriteRawTag(96);
-        output.WriteBool(TurnBasedSTT);
+        output.WriteBool(Gestures);
       }
-      if (Continuation != false) {
+      if (Emotionstreaming != false) {
         output.WriteRawTag(104);
-        output.WriteBool(Continuation);
+        output.WriteBool(Emotionstreaming);
       }
-      if (NarratedActions != false) {
+      if (Silenceevents != false) {
         output.WriteRawTag(112);
-        output.WriteBool(NarratedActions);
+        output.WriteBool(Silenceevents);
+      }
+      if (Loadsceneinsession != false) {
+        output.WriteRawTag(120);
+        output.WriteBool(Loadsceneinsession);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -2293,61 +2311,65 @@ namespace Inworld.NDK {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Animations != false) {
-        output.WriteRawTag(8);
-        output.WriteBool(Animations);
-      }
-      if (Text != false) {
-        output.WriteRawTag(16);
-        output.WriteBool(Text);
-      }
       if (Audio != false) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(8);
         output.WriteBool(Audio);
       }
       if (Emotions != false) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(16);
         output.WriteBool(Emotions);
       }
-      if (Gestures != false) {
-        output.WriteRawTag(40);
-        output.WriteBool(Gestures);
-      }
       if (Interruptions != false) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(24);
         output.WriteBool(Interruptions);
+      }
+      if (NarratedActions != false) {
+        output.WriteRawTag(32);
+        output.WriteBool(NarratedActions);
+      }
+      if (Silence != false) {
+        output.WriteRawTag(40);
+        output.WriteBool(Silence);
+      }
+      if (Text != false) {
+        output.WriteRawTag(48);
+        output.WriteBool(Text);
       }
       if (Triggers != false) {
         output.WriteRawTag(56);
         output.WriteBool(Triggers);
       }
-      if (EmotionStreaming != false) {
+      if (Continuation != false) {
         output.WriteRawTag(64);
-        output.WriteBool(EmotionStreaming);
+        output.WriteBool(Continuation);
       }
-      if (SilenceEvents != false) {
+      if (TurnBasedStt != false) {
         output.WriteRawTag(72);
-        output.WriteBool(SilenceEvents);
+        output.WriteBool(TurnBasedStt);
       }
       if (PhonemeInfo != false) {
         output.WriteRawTag(80);
         output.WriteBool(PhonemeInfo);
       }
-      if (LoadSceneInSession != false) {
+      if (Animations != false) {
         output.WriteRawTag(88);
-        output.WriteBool(LoadSceneInSession);
+        output.WriteBool(Animations);
       }
-      if (TurnBasedSTT != false) {
+      if (Gestures != false) {
         output.WriteRawTag(96);
-        output.WriteBool(TurnBasedSTT);
+        output.WriteBool(Gestures);
       }
-      if (Continuation != false) {
+      if (Emotionstreaming != false) {
         output.WriteRawTag(104);
-        output.WriteBool(Continuation);
+        output.WriteBool(Emotionstreaming);
       }
-      if (NarratedActions != false) {
+      if (Silenceevents != false) {
         output.WriteRawTag(112);
-        output.WriteBool(NarratedActions);
+        output.WriteBool(Silenceevents);
+      }
+      if (Loadsceneinsession != false) {
+        output.WriteRawTag(120);
+        output.WriteBool(Loadsceneinsession);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -2358,46 +2380,49 @@ namespace Inworld.NDK {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (Animations != false) {
-        size += 1 + 1;
-      }
-      if (Text != false) {
-        size += 1 + 1;
-      }
       if (Audio != false) {
         size += 1 + 1;
       }
       if (Emotions != false) {
         size += 1 + 1;
       }
-      if (Gestures != false) {
+      if (Interruptions != false) {
         size += 1 + 1;
       }
-      if (Interruptions != false) {
+      if (NarratedActions != false) {
+        size += 1 + 1;
+      }
+      if (Silence != false) {
+        size += 1 + 1;
+      }
+      if (Text != false) {
         size += 1 + 1;
       }
       if (Triggers != false) {
         size += 1 + 1;
       }
-      if (EmotionStreaming != false) {
+      if (Continuation != false) {
         size += 1 + 1;
       }
-      if (SilenceEvents != false) {
+      if (TurnBasedStt != false) {
         size += 1 + 1;
       }
       if (PhonemeInfo != false) {
         size += 1 + 1;
       }
-      if (LoadSceneInSession != false) {
+      if (Animations != false) {
         size += 1 + 1;
       }
-      if (TurnBasedSTT != false) {
+      if (Gestures != false) {
         size += 1 + 1;
       }
-      if (Continuation != false) {
+      if (Emotionstreaming != false) {
         size += 1 + 1;
       }
-      if (NarratedActions != false) {
+      if (Silenceevents != false) {
+        size += 1 + 1;
+      }
+      if (Loadsceneinsession != false) {
         size += 1 + 1;
       }
       if (_unknownFields != null) {
@@ -2411,47 +2436,50 @@ namespace Inworld.NDK {
       if (other == null) {
         return;
       }
-      if (other.Animations != false) {
-        Animations = other.Animations;
-      }
-      if (other.Text != false) {
-        Text = other.Text;
-      }
       if (other.Audio != false) {
         Audio = other.Audio;
       }
       if (other.Emotions != false) {
         Emotions = other.Emotions;
       }
-      if (other.Gestures != false) {
-        Gestures = other.Gestures;
-      }
       if (other.Interruptions != false) {
         Interruptions = other.Interruptions;
+      }
+      if (other.NarratedActions != false) {
+        NarratedActions = other.NarratedActions;
+      }
+      if (other.Silence != false) {
+        Silence = other.Silence;
+      }
+      if (other.Text != false) {
+        Text = other.Text;
       }
       if (other.Triggers != false) {
         Triggers = other.Triggers;
       }
-      if (other.EmotionStreaming != false) {
-        EmotionStreaming = other.EmotionStreaming;
+      if (other.Continuation != false) {
+        Continuation = other.Continuation;
       }
-      if (other.SilenceEvents != false) {
-        SilenceEvents = other.SilenceEvents;
+      if (other.TurnBasedStt != false) {
+        TurnBasedStt = other.TurnBasedStt;
       }
       if (other.PhonemeInfo != false) {
         PhonemeInfo = other.PhonemeInfo;
       }
-      if (other.LoadSceneInSession != false) {
-        LoadSceneInSession = other.LoadSceneInSession;
+      if (other.Animations != false) {
+        Animations = other.Animations;
       }
-      if (other.TurnBasedSTT != false) {
-        TurnBasedSTT = other.TurnBasedSTT;
+      if (other.Gestures != false) {
+        Gestures = other.Gestures;
       }
-      if (other.Continuation != false) {
-        Continuation = other.Continuation;
+      if (other.Emotionstreaming != false) {
+        Emotionstreaming = other.Emotionstreaming;
       }
-      if (other.NarratedActions != false) {
-        NarratedActions = other.NarratedActions;
+      if (other.Silenceevents != false) {
+        Silenceevents = other.Silenceevents;
+      }
+      if (other.Loadsceneinsession != false) {
+        Loadsceneinsession = other.Loadsceneinsession;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -2468,27 +2496,27 @@ namespace Inworld.NDK {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            Animations = input.ReadBool();
-            break;
-          }
-          case 16: {
-            Text = input.ReadBool();
-            break;
-          }
-          case 24: {
             Audio = input.ReadBool();
             break;
           }
-          case 32: {
+          case 16: {
             Emotions = input.ReadBool();
             break;
           }
+          case 24: {
+            Interruptions = input.ReadBool();
+            break;
+          }
+          case 32: {
+            NarratedActions = input.ReadBool();
+            break;
+          }
           case 40: {
-            Gestures = input.ReadBool();
+            Silence = input.ReadBool();
             break;
           }
           case 48: {
-            Interruptions = input.ReadBool();
+            Text = input.ReadBool();
             break;
           }
           case 56: {
@@ -2496,11 +2524,11 @@ namespace Inworld.NDK {
             break;
           }
           case 64: {
-            EmotionStreaming = input.ReadBool();
+            Continuation = input.ReadBool();
             break;
           }
           case 72: {
-            SilenceEvents = input.ReadBool();
+            TurnBasedStt = input.ReadBool();
             break;
           }
           case 80: {
@@ -2508,19 +2536,23 @@ namespace Inworld.NDK {
             break;
           }
           case 88: {
-            LoadSceneInSession = input.ReadBool();
+            Animations = input.ReadBool();
             break;
           }
           case 96: {
-            TurnBasedSTT = input.ReadBool();
+            Gestures = input.ReadBool();
             break;
           }
           case 104: {
-            Continuation = input.ReadBool();
+            Emotionstreaming = input.ReadBool();
             break;
           }
           case 112: {
-            NarratedActions = input.ReadBool();
+            Silenceevents = input.ReadBool();
+            break;
+          }
+          case 120: {
+            Loadsceneinsession = input.ReadBool();
             break;
           }
         }
@@ -2538,27 +2570,27 @@ namespace Inworld.NDK {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            Animations = input.ReadBool();
-            break;
-          }
-          case 16: {
-            Text = input.ReadBool();
-            break;
-          }
-          case 24: {
             Audio = input.ReadBool();
             break;
           }
-          case 32: {
+          case 16: {
             Emotions = input.ReadBool();
             break;
           }
+          case 24: {
+            Interruptions = input.ReadBool();
+            break;
+          }
+          case 32: {
+            NarratedActions = input.ReadBool();
+            break;
+          }
           case 40: {
-            Gestures = input.ReadBool();
+            Silence = input.ReadBool();
             break;
           }
           case 48: {
-            Interruptions = input.ReadBool();
+            Text = input.ReadBool();
             break;
           }
           case 56: {
@@ -2566,11 +2598,11 @@ namespace Inworld.NDK {
             break;
           }
           case 64: {
-            EmotionStreaming = input.ReadBool();
+            Continuation = input.ReadBool();
             break;
           }
           case 72: {
-            SilenceEvents = input.ReadBool();
+            TurnBasedStt = input.ReadBool();
             break;
           }
           case 80: {
@@ -2578,19 +2610,23 @@ namespace Inworld.NDK {
             break;
           }
           case 88: {
-            LoadSceneInSession = input.ReadBool();
+            Animations = input.ReadBool();
             break;
           }
           case 96: {
-            TurnBasedSTT = input.ReadBool();
+            Gestures = input.ReadBool();
             break;
           }
           case 104: {
-            Continuation = input.ReadBool();
+            Emotionstreaming = input.ReadBool();
             break;
           }
           case 112: {
-            NarratedActions = input.ReadBool();
+            Silenceevents = input.ReadBool();
+            break;
+          }
+          case 120: {
+            Loadsceneinsession = input.ReadBool();
             break;
           }
         }
@@ -3270,14 +3306,14 @@ namespace Inworld.NDK {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public ClientOptions(ClientOptions other) : this() {
-      authUrl_ = other.authUrl_;
-      loadSceneUrl_ = other.loadSceneUrl_;
+      serverUrl_ = other.serverUrl_;
       sceneName_ = other.sceneName_;
       apiKey_ = other.apiKey_;
       apiSecret_ = other.apiSecret_;
       playerName_ = other.playerName_;
       token_ = other.token_;
       sessionId_ = other.sessionId_;
+      userId_ = other.userId_;
       capabilities_ = other.capabilities_ != null ? other.capabilities_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -3287,25 +3323,14 @@ namespace Inworld.NDK {
       return new ClientOptions(this);
     }
 
-    /// <summary>Field number for the "auth_url" field.</summary>
-    public const int AuthUrlFieldNumber = 1;
-    private string authUrl_ = "";
+    /// <summary>Field number for the "server_url" field.</summary>
+    public const int ServerUrlFieldNumber = 2;
+    private string serverUrl_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string AuthUrl {
-      get { return authUrl_; }
+    public string ServerUrl {
+      get { return serverUrl_; }
       set {
-        authUrl_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "load_scene_url" field.</summary>
-    public const int LoadSceneUrlFieldNumber = 2;
-    private string loadSceneUrl_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string LoadSceneUrl {
-      get { return loadSceneUrl_; }
-      set {
-        loadSceneUrl_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        serverUrl_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -3375,8 +3400,19 @@ namespace Inworld.NDK {
       }
     }
 
+    /// <summary>Field number for the "user_id" field.</summary>
+    public const int UserIdFieldNumber = 9;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "capabilities" field.</summary>
-    public const int CapabilitiesFieldNumber = 9;
+    public const int CapabilitiesFieldNumber = 10;
     private global::Inworld.NDK.CapabilitiesRequest capabilities_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::Inworld.NDK.CapabilitiesRequest Capabilities {
@@ -3399,14 +3435,14 @@ namespace Inworld.NDK {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (AuthUrl != other.AuthUrl) return false;
-      if (LoadSceneUrl != other.LoadSceneUrl) return false;
+      if (ServerUrl != other.ServerUrl) return false;
       if (SceneName != other.SceneName) return false;
       if (ApiKey != other.ApiKey) return false;
       if (ApiSecret != other.ApiSecret) return false;
       if (PlayerName != other.PlayerName) return false;
       if (Token != other.Token) return false;
       if (SessionId != other.SessionId) return false;
+      if (UserId != other.UserId) return false;
       if (!object.Equals(Capabilities, other.Capabilities)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -3414,14 +3450,14 @@ namespace Inworld.NDK {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (AuthUrl.Length != 0) hash ^= AuthUrl.GetHashCode();
-      if (LoadSceneUrl.Length != 0) hash ^= LoadSceneUrl.GetHashCode();
+      if (ServerUrl.Length != 0) hash ^= ServerUrl.GetHashCode();
       if (SceneName.Length != 0) hash ^= SceneName.GetHashCode();
       if (ApiKey.Length != 0) hash ^= ApiKey.GetHashCode();
       if (ApiSecret.Length != 0) hash ^= ApiSecret.GetHashCode();
       if (PlayerName.Length != 0) hash ^= PlayerName.GetHashCode();
       if (Token.Length != 0) hash ^= Token.GetHashCode();
       if (SessionId.Length != 0) hash ^= SessionId.GetHashCode();
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
       if (capabilities_ != null) hash ^= Capabilities.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -3439,13 +3475,9 @@ namespace Inworld.NDK {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (AuthUrl.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(AuthUrl);
-      }
-      if (LoadSceneUrl.Length != 0) {
+      if (ServerUrl.Length != 0) {
         output.WriteRawTag(18);
-        output.WriteString(LoadSceneUrl);
+        output.WriteString(ServerUrl);
       }
       if (SceneName.Length != 0) {
         output.WriteRawTag(26);
@@ -3471,8 +3503,12 @@ namespace Inworld.NDK {
         output.WriteRawTag(66);
         output.WriteString(SessionId);
       }
-      if (capabilities_ != null) {
+      if (UserId.Length != 0) {
         output.WriteRawTag(74);
+        output.WriteString(UserId);
+      }
+      if (capabilities_ != null) {
+        output.WriteRawTag(82);
         output.WriteMessage(Capabilities);
       }
       if (_unknownFields != null) {
@@ -3484,13 +3520,9 @@ namespace Inworld.NDK {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (AuthUrl.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(AuthUrl);
-      }
-      if (LoadSceneUrl.Length != 0) {
+      if (ServerUrl.Length != 0) {
         output.WriteRawTag(18);
-        output.WriteString(LoadSceneUrl);
+        output.WriteString(ServerUrl);
       }
       if (SceneName.Length != 0) {
         output.WriteRawTag(26);
@@ -3516,8 +3548,12 @@ namespace Inworld.NDK {
         output.WriteRawTag(66);
         output.WriteString(SessionId);
       }
-      if (capabilities_ != null) {
+      if (UserId.Length != 0) {
         output.WriteRawTag(74);
+        output.WriteString(UserId);
+      }
+      if (capabilities_ != null) {
+        output.WriteRawTag(82);
         output.WriteMessage(Capabilities);
       }
       if (_unknownFields != null) {
@@ -3529,11 +3565,8 @@ namespace Inworld.NDK {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (AuthUrl.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(AuthUrl);
-      }
-      if (LoadSceneUrl.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(LoadSceneUrl);
+      if (ServerUrl.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ServerUrl);
       }
       if (SceneName.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(SceneName);
@@ -3553,6 +3586,9 @@ namespace Inworld.NDK {
       if (SessionId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(SessionId);
       }
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
       if (capabilities_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Capabilities);
       }
@@ -3567,11 +3603,8 @@ namespace Inworld.NDK {
       if (other == null) {
         return;
       }
-      if (other.AuthUrl.Length != 0) {
-        AuthUrl = other.AuthUrl;
-      }
-      if (other.LoadSceneUrl.Length != 0) {
-        LoadSceneUrl = other.LoadSceneUrl;
+      if (other.ServerUrl.Length != 0) {
+        ServerUrl = other.ServerUrl;
       }
       if (other.SceneName.Length != 0) {
         SceneName = other.SceneName;
@@ -3590,6 +3623,9 @@ namespace Inworld.NDK {
       }
       if (other.SessionId.Length != 0) {
         SessionId = other.SessionId;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
       }
       if (other.capabilities_ != null) {
         if (capabilities_ == null) {
@@ -3611,12 +3647,8 @@ namespace Inworld.NDK {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 10: {
-            AuthUrl = input.ReadString();
-            break;
-          }
           case 18: {
-            LoadSceneUrl = input.ReadString();
+            ServerUrl = input.ReadString();
             break;
           }
           case 26: {
@@ -3644,6 +3676,10 @@ namespace Inworld.NDK {
             break;
           }
           case 74: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 82: {
             if (capabilities_ == null) {
               Capabilities = new global::Inworld.NDK.CapabilitiesRequest();
             }
@@ -3664,12 +3700,8 @@ namespace Inworld.NDK {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 10: {
-            AuthUrl = input.ReadString();
-            break;
-          }
           case 18: {
-            LoadSceneUrl = input.ReadString();
+            ServerUrl = input.ReadString();
             break;
           }
           case 26: {
@@ -3697,6 +3729,10 @@ namespace Inworld.NDK {
             break;
           }
           case 74: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 82: {
             if (capabilities_ == null) {
               Capabilities = new global::Inworld.NDK.CapabilitiesRequest();
             }
