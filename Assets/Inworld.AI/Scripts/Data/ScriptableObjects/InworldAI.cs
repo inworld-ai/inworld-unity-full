@@ -1,5 +1,5 @@
 using Inworld;
-using System.Diagnostics;
+using UnityEditor;
 using UnityEngine;
 
 public class InworldAI : ScriptableObject
@@ -7,7 +7,9 @@ public class InworldAI : ScriptableObject
     [SerializeField] InworldUserSetting m_UserSetting;
     [SerializeField] Texture2D m_DefaultThumbnail;
     [SerializeField] Capabilities m_Capabilities;
+    [SerializeField] string m_ImportedTime;
     [Space(10)][SerializeField] bool m_DebugMode;
+    
     const string k_GlobalDataPath = "InworldAI";
     static InworldAI __inst;
     
@@ -56,4 +58,15 @@ public class InworldAI : ScriptableObject
             InworldLog.LogError(log);
     }
     public static void LogException(string exception) => InworldLog.LogException(exception);
+    
+    static internal string ImportedTime
+    {
+        get => Instance.m_ImportedTime;
+        set 
+        {
+            Instance.m_ImportedTime = value;
+            EditorUtility.SetDirty(Instance);
+            AssetDatabase.SaveAssets();
+        }
+    }
 }

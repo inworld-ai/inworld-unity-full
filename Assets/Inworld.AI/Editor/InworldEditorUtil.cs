@@ -1,12 +1,22 @@
-﻿using UnityEditor;
+﻿using Inworld.Util;
+using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
+using UnityEngine.Networking;
 
 namespace Inworld.AI.Editor
 {
+    /// <summary>
+    ///     This class would be called when package is imported, or Unity Editor is opened.
+    /// </summary>
+    [InitializeOnLoad]
     public class InworldEditorUtil : IPreprocessBuildWithReport
     {
+        const string k_VersionCheckURL = "https://api.github.com/repos/inworld-ai/inworld-unity-sdk/releases";
+        const string k_ReleaseURL = "https://github.com/inworld-ai/inworld-unity-sdk/releases";
+        
         public int callbackOrder { get; }
         public void OnPreprocessBuild(BuildReport report)
         {
@@ -22,7 +32,37 @@ namespace Inworld.AI.Editor
                 InworldAI.User.Name = !string.IsNullOrEmpty(userName) && userName.Split('@').Length > 1 ? userName.Split('@')[0] : userName;
                 _AddDebugMacro();
             };
+            _CheckUpdates();
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+        }
+        static void _CheckUpdates()
+        {
+            if (string.IsNullOrEmpty(InworldAI.ImportedTime))
+                InworldAI.ImportedTime = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            UnityWebRequest uwr = new UnityWebRequest(k_VersionCheckURL, "GET");
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            uwr.timeout = 60;
+            UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
+            updateRequest.completed += OnUpdateRequestComplete;
+        }
+        static UnityWebRequest _GetResponse(AsyncOperation op)
+        {
+            return op is not UnityWebRequestAsyncOperation webTask ? null : webTask.webRequest;
+        }
+        static void OnUpdateRequestComplete(AsyncOperation obj)
+        {
+            UnityWebRequest uwr = _GetResponse(obj);
+            string jsonStr = "{ \"package\": " + uwr.downloadHandler.text + "}";
+            ReleaseData date = JsonUtility.FromJson<ReleaseData>(jsonStr);
+            if (date.package.Length <= 0)
+                return;
+            string publishedDate = date.package[0].published_at;
+            DateTime currentVersion = DateTime.ParseExact(publishedDate, "yyyy-MM-ddTHH:mm:ssZ", null, System.Globalization.DateTimeStyles.RoundtripKind);
+            DateTime importedTime = DateTime.ParseExact(InworldAI.ImportedTime, "yyyy-MM-ddTHH:mm:ssZ", null, System.Globalization.DateTimeStyles.RoundtripKind);
+            if (importedTime < currentVersion) 
+            {
+                InworldAI.LogWarning($"Your Inworld SDK is outdated. Please fetch the newest from Asset Store or {k_ReleaseURL}");
+            }
         }
         static void _AddDebugMacro()
         {
