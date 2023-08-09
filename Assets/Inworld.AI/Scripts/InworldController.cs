@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 using Inworld.Packet;
+using UnityEditor;
 
 
 namespace Inworld
@@ -26,7 +27,20 @@ namespace Inworld
         InworldCharacter m_CurrentCharacter;
         InworldCharacter m_LastCharacter;
         string m_CurrentAudioID;
-        public static InworldClient Client => Instance.m_Client;
+        public static InworldClient Client
+        {
+            get => Instance ? Instance.m_Client : null;
+            #if  UNITY_EDITOR
+            internal set
+            {
+                if (!Instance)
+                    return;
+                Instance.m_Client = value;
+                EditorUtility.SetDirty(Instance);
+                AssetDatabase.SaveAssets();
+            }
+            #endif
+        }
         public static InworldConnectionStatus Status => Instance.m_Client.Status;
 
         public float LastPlayerResponseTime { get; set; }

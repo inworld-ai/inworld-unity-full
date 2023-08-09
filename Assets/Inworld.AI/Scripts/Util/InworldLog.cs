@@ -52,7 +52,7 @@ namespace Inworld
         [Conditional("INWORLD_DEBUG")]
         public static void LogError(string msg)
         {
-            Debug.LogError(msg);
+            Debug.LogError($"[Inworld {InworldAI.Version}] {msg}");
         }
         public static void LogException(string exception)
         {

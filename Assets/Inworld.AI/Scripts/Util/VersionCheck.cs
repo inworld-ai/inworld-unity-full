@@ -12,5 +12,6 @@ namespace Inworld.Util
     public class PackageData
     {
         public string published_at;
+        public string tag_name;
     }
 }

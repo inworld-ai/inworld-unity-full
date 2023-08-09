@@ -25,7 +25,11 @@ namespace Inworld
             get => m_AudioCapture.IsCapturing;
             set => m_AudioCapture.IsCapturing = value;
         }
-        public InworldServerConfig Server => m_ServerConfig;
+        public InworldServerConfig Server
+        {
+            get => m_ServerConfig;
+            internal set => m_ServerConfig = value;
+        }
         public Token Token
         {
             get => m_Token;
@@ -95,6 +99,23 @@ namespace Inworld
         }
         public void Dispatch(InworldPacket packet) => OnPacketReceived?.Invoke(packet);
 
+        internal string APIKey
+        {
+            get => m_APIKey;
+            set => m_APIKey = value;
+        }
+        internal string APISecret
+        {
+            get => m_APISecret;
+            set => m_APISecret = value;
+        }
+
+        internal string CustomToken
+        {
+            get => m_CustomToken;
+            set => m_CustomToken = value;
+        }
+        
         void Awake()
         {
             Init();
