@@ -6,11 +6,10 @@ namespace Inworld.NDK
     public class SharedAudioData
     {
         private readonly List<(float[], float)> m_Data = new List<(float[], float)>();
-        private readonly object m_LockObj = new object();
 
         public void Add(float[] audioData, float time)
         {
-            lock (m_LockObj)
+            lock (m_Data)
             {
                 m_Data.Add((audioData, time));
 
@@ -24,7 +23,7 @@ namespace Inworld.NDK
 
         public void Clear()
         {
-            lock (m_LockObj)
+            lock (m_Data)
             {
                 m_Data.Clear();
             }
@@ -32,12 +31,9 @@ namespace Inworld.NDK
 
         public List<(float[], float)> GetData()
         {
-            lock (m_LockObj)
-            {
-                // Return a copy of the data
-                // to avoid potential issues with external code modifying it.
-                return new List<(float[], float)>(m_Data);
-            }
+            // Return a copy of the data
+            // to avoid potential issues with external code modifying it.
+            return new List<(float[], float)>(m_Data);
         }
     }
 

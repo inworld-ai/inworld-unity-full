@@ -82,7 +82,6 @@ namespace Inworld.Interactions
         {
             float time = (float)stopwatch.Elapsed.TotalSeconds;
             InworldController.Client.CacheAudioFilterData(data, time);
-            // Add the data and timestamp to the shared buffer via event invocation
         }
     }
 }
