@@ -7,6 +7,7 @@ public class InworldAI : ScriptableObject
     [SerializeField] InworldUserSetting m_UserSetting;
     [SerializeField] Texture2D m_DefaultThumbnail;
     [SerializeField] Capabilities m_Capabilities;
+    [SerializeField] string m_Version;
     [SerializeField] string m_ImportedTime;
     [Space(10)][SerializeField] bool m_DebugMode;
     
@@ -61,10 +62,25 @@ public class InworldAI : ScriptableObject
     
     static internal string ImportedTime
     {
-        get => Instance.m_ImportedTime;
+        get => Instance ? Instance.m_ImportedTime : "";
         set 
         {
+            if (!Instance)
+                return;
             Instance.m_ImportedTime = value;
+            EditorUtility.SetDirty(Instance);
+            AssetDatabase.SaveAssets();
+        }
+    }
+    
+    static internal string Version
+    {
+        get => Instance ? Instance.m_Version : "";
+        set 
+        {
+            if (!Instance)
+                return;
+            Instance.m_Version = value;
             EditorUtility.SetDirty(Instance);
             AssetDatabase.SaveAssets();
         }

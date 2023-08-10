@@ -63,6 +63,10 @@ namespace Inworld.AI.Editor
             {
                 InworldAI.LogWarning($"Your Inworld SDK is outdated. Please fetch the newest from Asset Store or {k_ReleaseURL}");
             }
+            else
+            {
+                InworldAI.Version = date.package[0].tag_name;
+            }
         }
         static void _AddDebugMacro()
         {
@@ -94,5 +98,26 @@ namespace Inworld.AI.Editor
                     break;
             }
         }
+        public static void UpgradeProtocol<T>() where T : InworldClient
+        {
+            if (!InworldController.Instance)
+                return;
+            InworldClient currClient = InworldController.Instance.GetComponent<InworldClient>();
+            if (!currClient)
+                return;
+            InworldServerConfig currServer = currClient.Server;
+            string apiKey = currClient.APIKey;
+            string apiSecret = currClient.APISecret;
+            string customToken = currClient.CustomToken;
+            T newClient = InworldController.Instance.gameObject.AddComponent<T>();
+            newClient.Server = currServer;
+            newClient.APISecret = apiSecret;
+            newClient.APIKey = apiKey;
+            newClient.CustomToken = customToken;
+            InworldController.Client = newClient;
+            UnityEngine.Object.DestroyImmediate(currClient);
+        }
+        [MenuItem("Inworld/Switch Protocol/Web socket")]
+        public static void SwitchToWebSocket() => UpgradeProtocol<InworldWebSocketClient>();
     }
 }
