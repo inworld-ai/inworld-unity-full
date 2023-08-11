@@ -1,4 +1,5 @@
-﻿using Inworld.Util;
+﻿#if !UNITY_WEBGL
+using Inworld.Util;
 using System;
 using UnityEditor;
 using UnityEngine;
@@ -121,3 +122,4 @@ namespace Inworld.AI.Editor
         public static void SwitchToWebSocket() => UpgradeProtocol<InworldWebSocketClient>();
     }
 }
+#endif
