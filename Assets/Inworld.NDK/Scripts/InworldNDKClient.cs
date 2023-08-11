@@ -41,6 +41,7 @@ namespace Inworld.NDK
             m_PacketCallback = PacketCallback;
             m_Wrapper = new InworldNDKBridge(m_ConnectionCallback, m_PacketCallback);
             m_SharedAudioData = new SharedAudioData();
+            
         }
 
         void ConnectionStateCallback(ConnectionState state)
@@ -204,7 +205,7 @@ namespace Inworld.NDK
                 IntPtr micDataPointer = Marshal.AllocHGlobal(micDataShort.Length * sizeof(short));
                 Marshal.Copy(micDataShort, 0, micDataPointer, micDataShort.Length);
 
-                List<short> outputDataConverted = GetSharedAudioDataAsShorts();
+                List<short> outputDataConverted = m_SharedAudioData.GetDataAsShorts();//GetSharedAudioDataAsShorts();
                 IntPtr outputDataPointer = Marshal.AllocHGlobal(outputDataConverted.Count * sizeof(short));
                 Marshal.Copy(outputDataConverted.ToArray(), 0, outputDataPointer, outputDataConverted.Count);
                 InworldNDKBridge.ClientWrapper_SendSoundMessageWithAEC(m_Wrapper.instance, charID, micDataPointer, micDataShort.Length, outputDataPointer, outputDataConverted.Count);
@@ -213,24 +214,18 @@ namespace Inworld.NDK
                 InworldNDKBridge.ClientWrapper_SendSoundMessage(m_Wrapper.instance, charID, data, data.Length);
         }
 
-        public override void CacheAudioFilterData(float[] data, float time)
+        public override void CacheAudioFilterData(string audioData, float time)
         {
             if (m_UseAec)
-                m_SharedAudioData.Add(data, time);
-            else
+                m_SharedAudioData.Add(audioData, time);
+            else if (!m_SharedAudioData.IsEmpty())
                 m_SharedAudioData.Clear();
         }
-
-        List<short> GetSharedAudioDataAsShorts()
+        
+        public override void DestroyClient()
         {
-            List<short> shortData = new List<short>();
-            List<(float[], float)> audioData = m_SharedAudioData.GetData();
-
-            shortData.AddRange(from tuple in audioData from sample in tuple.Item1 select (short)(sample * 32767));
-
-            return shortData;
+            InworldNDKBridge.ClientWrapper_DestroyClient(m_Wrapper.instance);
         }
-
 
         void _StartSession()
         {
@@ -239,6 +234,8 @@ namespace Inworld.NDK
                 _ReceiveCustomToken();
                 InworldLog.Log("Custom token received");
             }
+
+            InworldNDKBridge.ClientWrapper_SetAudioDumpEnabled(m_Wrapper.instance, true, "C:\\Users\\divak\\Desktop\\NDK Repos\\audiodump\\dump.wav");
 
             _ResetCommunicationData();
             if (Status == InworldConnectionStatus.Initialized)
@@ -388,5 +385,6 @@ namespace Inworld.NDK
             m_IncomingEventsQueue.Clear();
             m_OutgoingEventsQueue.Clear();
         }
+        
     }
 }

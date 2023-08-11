@@ -88,7 +88,8 @@ namespace Inworld
         public virtual void StartAudio(string charID) => Error = k_NotImplented;
         public virtual void StopAudio(string charID) => Error = k_NotImplented;
         public virtual void SendAudio(string charID, string base64) => Error = k_NotImplented;
-        public virtual void CacheAudioFilterData(float[] data, float time) {}
+        public virtual void DestroyClient() {}
+        public virtual void CacheAudioFilterData(string audioData, float time) {} //(float[] data, float time) {}
         protected virtual void Init()
         {
             m_AudioCapture = GetComponent<AudioCapture>();
@@ -102,6 +103,10 @@ namespace Inworld
         void OnEnable()
         {
             Init();
+        }
+        void OnApplicationQuit()
+        {
+            DestroyClient();
         }
     }
 }

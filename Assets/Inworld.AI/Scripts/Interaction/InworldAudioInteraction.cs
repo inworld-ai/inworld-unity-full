@@ -64,6 +64,7 @@ namespace Inworld.Interactions
                 IsSpeaking = false;
                 return;
             }
+            InworldController.Client.CacheAudioFilterData(nextAudio.dataChunk.chunk, Time.time);
             m_PlaybackSource.PlayOneShot(nextAudio.Clip, 1f);
             if (nextAudio.Clip)
                 AudioLength = nextAudio.Clip.length;
@@ -78,10 +79,10 @@ namespace Inworld.Interactions
                 m_PlaybackSource.Stop();
         }
         
-        void OnAudioFilterRead(float[] data, int channels)
-        {
-            float time = (float)stopwatch.Elapsed.TotalSeconds;
-            InworldController.Client.CacheAudioFilterData(data, time);
-        }
+        // void OnAudioFilterRead(float[] data, int channels)
+        // {
+        //     float time = (float)stopwatch.Elapsed.TotalSeconds;
+        //     InworldController.Client.CacheAudioFilterData(data, time);
+        // }
     }
 }
