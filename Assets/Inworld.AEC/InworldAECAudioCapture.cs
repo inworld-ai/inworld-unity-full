@@ -1,12 +1,16 @@
 using Inworld;
 using Inworld.AEC;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
+
 public class InworldAECAudioCapture : AudioCapture
 {
     const int k_NumSamples = 160;
+    SharedAudioData m_SharedAudioData;
     IntPtr m_AECHandle;
+    Stopwatch m_Stopwatch;
 
     float[] m_CharacterBuffer;
     short[] m_CurrentPlayingWavData;
@@ -22,12 +26,15 @@ public class InworldAECAudioCapture : AudioCapture
     {
         m_AECHandle = AECInterop.WebRtcAec3_Create(m_AudioRate);
         m_CurrentPlayingWavData = new short[m_AudioRate];
+        m_SharedAudioData = new SharedAudioData();
+        m_Stopwatch = Stopwatch.StartNew();
         base.Init();
     }
 
     public override void SamplePlayingWavData(float[] data, int channels)
     {
-        m_CurrentPlayingWavData = WavUtility.ConvertAudioClipDataToInt16Array(data, data.Length);
+        m_SharedAudioData.Add(data, m_Stopwatch.ElapsedMilliseconds/1000f);
+        m_CurrentPlayingWavData = m_SharedAudioData.GetDataAsShortArray(); //WavUtility.ConvertAudioClipDataToInt16Array(data, data.Length);
     }
     protected override byte[] Output(int nSize)
     {
