@@ -89,8 +89,11 @@ namespace Inworld
             };
             string jsonToSend = JsonUtility.ToJson(packet);
             m_Socket.SendAsync(jsonToSend);
+            #if !UNITY_WEBGL
             if (!m_AudioCapture.IsCapturing)
                 m_AudioCapture.StartRecording();
+            #endif
+
         }
         public override void StopAudio(string charID)
         {

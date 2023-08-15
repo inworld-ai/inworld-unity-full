@@ -67,9 +67,11 @@ public class InworldAI : ScriptableObject
         {
             if (!Instance)
                 return;
+            #if !UNITY_WEBGL
             Instance.m_ImportedTime = value;
             EditorUtility.SetDirty(Instance);
             AssetDatabase.SaveAssets();
+            #endif
         }
     }
     
@@ -80,9 +82,11 @@ public class InworldAI : ScriptableObject
         {
             if (!Instance)
                 return;
+            #if !UNITY_WEBGL
             Instance.m_Version = value;
             EditorUtility.SetDirty(Instance);
             AssetDatabase.SaveAssets();
+            #endif
         }
     }
 }
