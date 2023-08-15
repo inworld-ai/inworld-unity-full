@@ -31,7 +31,7 @@ namespace Inworld
         /// </summary>
         public bool IsSpeaking { get; set; }
         [SerializeField] float  m_UserSpeechThreshold = 0.01f;
-        [SerializeField] int m_AudioRate = 16000;
+        [SerializeField] protected int m_AudioRate = 16000;
         [SerializeField] int m_BufferSeconds = 1;
         
         readonly List<string> m_AudioToPush = new List<string>();
@@ -39,8 +39,9 @@ namespace Inworld
         int m_BufferSize;
         const int k_SizeofInt16 = sizeof(short);
         byte[] m_ByteBuffer;
-        float[] m_FloatBuffer;
-        AudioClip m_Recording;
+        protected float[] m_InputBuffer;
+        protected float[] m_OutputBuffer;
+        protected AudioClip m_Recording;
         float m_CDCounter;
         // Last known position in AudioClip buffer.
         int m_LastPosition;
@@ -69,9 +70,7 @@ namespace Inworld
         }
         void Awake()
         {
-            m_BufferSize = m_BufferSeconds * m_AudioRate;
-            m_ByteBuffer = new byte[m_BufferSize * 1 * k_SizeofInt16];
-            m_FloatBuffer = new float[m_BufferSize * 1];
+            Init();
         }
 
         void Start()
@@ -100,17 +99,30 @@ namespace Inworld
             if (nPosition <= m_LastPosition)
                 return;
             int nSize = nPosition - m_LastPosition;
-            if (!m_Recording.GetData(m_FloatBuffer, m_LastPosition))
+            if (!m_Recording.GetData(m_InputBuffer, m_LastPosition))
                 return;
             m_LastPosition = nPosition % m_BufferSize;
-            WavUtility.ConvertAudioClipDataToInt16ByteArray(m_FloatBuffer, nSize * m_Recording.channels, m_ByteBuffer);
+            byte[] output = Output(nSize * m_Recording.channels);
+            InworldController.Instance.SendAudio(Convert.ToBase64String(output));
+            // Check if player is speaking based on audio amplitude
+            float amplitude = CalculateAmplitude(m_InputBuffer);
+            IsSpeaking = amplitude > m_UserSpeechThreshold;
+        }
+
+        protected virtual void Init()
+        {
+            m_BufferSize = m_BufferSeconds * m_AudioRate;
+            m_ByteBuffer = new byte[m_BufferSize * 1 * k_SizeofInt16];
+            m_InputBuffer = new float[m_BufferSize * 1];
+            m_OutputBuffer = new float[m_BufferSeconds * 1];
+        }
+        protected virtual byte[] Output(int nSize)
+        {
+            WavUtility.ConvertAudioClipDataToInt16ByteArray(m_InputBuffer, nSize * m_Recording.channels, m_ByteBuffer);
             int nWavCount = nSize * m_Recording.channels * k_SizeofInt16;
             byte[] output = new byte[nWavCount];
             Buffer.BlockCopy(m_ByteBuffer, 0, output, 0, nWavCount);
-            InworldController.Instance.SendAudio(Convert.ToBase64String(output));
-            // Check if player is speaking based on audio amplitude
-            float amplitude = CalculateAmplitude(m_FloatBuffer);
-            IsSpeaking = amplitude > m_UserSpeechThreshold;
+            return output;
         }
 
         // Helper method to calculate the amplitude of audio data
@@ -133,5 +145,9 @@ namespace Inworld
         }
         #endif
 
+        public virtual void SamplePlayingWavData(float[] data, int channels)
+        {
+
+        }
     }
 }

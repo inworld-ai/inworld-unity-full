@@ -93,7 +93,6 @@ namespace Inworld
             if (!m_AudioCapture.IsCapturing)
                 m_AudioCapture.StartRecording();
             #endif
-
         }
         public override void StopAudio(string charID)
         {
@@ -168,6 +167,7 @@ namespace Inworld
                 {
                     Error = $"Error Get Token: {uwr.error}";
                 }
+                uwr.uploadHandler.Dispose();
                 responseJson = uwr.downloadHandler.text;
             }
             m_Token = JsonUtility.FromJson<Token>(responseJson);
@@ -204,6 +204,7 @@ namespace Inworld
                 yield break;
             }
             string responseJson = uwr.downloadHandler.text;
+            uwr.uploadHandler.Dispose();
             m_CurrentSceneData = JsonUtility.FromJson<LoadSceneResponse>(responseJson);
             Status = InworldConnectionStatus.LoadingSceneCompleted;
         }

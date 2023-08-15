@@ -64,6 +64,7 @@ namespace Inworld.Interactions
                 IsSpeaking = false;
                 return;
             }
+            m_PlaybackSource.clip = nextAudio.Clip; //YAN: Now Clip will not clean AudioChunk data.
             m_PlaybackSource.PlayOneShot(nextAudio.Clip, 1f);
             if (nextAudio.Clip)
                 AudioLength = nextAudio.Clip.length;

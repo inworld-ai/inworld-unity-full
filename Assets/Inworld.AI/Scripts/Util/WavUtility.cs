@@ -64,7 +64,18 @@ namespace Inworld
                 memoryStream.Write(BitConverter.GetBytes(Convert.ToInt16(input[index] * short.MaxValue)), 0, 2);
             memoryStream.Dispose();
         }
+        public static short[] ConvertAudioClipDataToInt16Array(IReadOnlyList<float> input, int size)
+        {
+            if (input == null || input.Count == 0)
+                return null;
+            short[] output = new short[size];
 
+            for (int index = 0; index < size; ++index)
+            {
+                output[index] = (short)(input[index] * short.MaxValue);
+            }
+            return output;
+        }
         static float[] Convert8BitByteArrayToAudioClipData
         (
             byte[] source,

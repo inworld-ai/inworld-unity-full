@@ -34,7 +34,6 @@ namespace Inworld.Packet
                     return null;
                 byte[] bytes = Convert.FromBase64String(dataChunk.chunk);
                 AudioClip clip = WavUtility.ToAudioClip(bytes);
-                dataChunk.chunk = "";
                 return clip;
             }
         }
