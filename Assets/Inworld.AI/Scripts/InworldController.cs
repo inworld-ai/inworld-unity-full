@@ -161,10 +161,10 @@ namespace Inworld
         public void StopAudio(string charID = "")
         {
             string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter.ID : charID;
-            if (!IsRegistered(charIDToSend))
-                return;
             if (InworldAI.IsDebugMode)
                 InworldAI.Log($"Stop Audio Event {charIDToSend}");
+            if (!IsRegistered(charIDToSend))
+                return;
             m_Client.StopAudio(charIDToSend);
             m_CurrentAudioID = null;
         }

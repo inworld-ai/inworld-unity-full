@@ -55,7 +55,7 @@ namespace Inworld.AI.Editor
             UnityWebRequest uwr = _GetResponse(obj);
             string jsonStr = "{ \"package\": " + uwr.downloadHandler.text + "}";
             ReleaseData date = JsonUtility.FromJson<ReleaseData>(jsonStr);
-            if (date.package.Length <= 0)
+            if (date.package == null || date.package.Length <= 0)
                 return;
             string publishedDate = date.package[0].published_at;
             DateTime currentVersion = DateTime.ParseExact(publishedDate, "yyyy-MM-ddTHH:mm:ssZ", null, System.Globalization.DateTimeStyles.RoundtripKind);
@@ -66,7 +66,7 @@ namespace Inworld.AI.Editor
             }
             else
             {
-                InworldAI.Version = date.package[0].tag_name;
+                InworldAI.Version = date?.package[0]?.tag_name;
             }
         }
         static void _AddDebugMacro()

@@ -66,7 +66,10 @@ namespace Inworld
             //      For customized integration, please use InworldController.Instance.OnCharacterInteraction
             m_Interaction.OnInteractionChanged += OnInteractionChanged;
         }
-
+        void OnAudioFilterRead(float[] data, int channels)
+        {
+            InworldController.Client.SamplePlayingWave(data, channels);
+        }
         protected virtual void OnDisable()
         {
             m_Interaction.OnStartStopInteraction -= OnStartStopInteraction;

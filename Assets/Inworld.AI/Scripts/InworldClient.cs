@@ -20,6 +20,12 @@ namespace Inworld
         InworldConnectionStatus m_Status;
         protected string m_Error;
 
+        public void SamplePlayingWave(float[] data, int channels)
+        {
+            if (!m_AudioCapture || data == null || data.Length == 0)
+                return;
+            m_AudioCapture.SamplePlayingWavData(data, channels);
+        }
         public bool IsRecording
         {
             get => m_AudioCapture.IsCapturing;
