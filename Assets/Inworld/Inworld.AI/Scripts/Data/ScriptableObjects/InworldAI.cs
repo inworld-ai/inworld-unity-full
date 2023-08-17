@@ -60,7 +60,7 @@ public class InworldAI : ScriptableObject
     }
     public static void LogException(string exception) => InworldLog.LogException(exception);
     
-    static internal string ImportedTime
+    public static string ImportedTime //TODO(Yan): Move to InworldEditor.asset
     {
         get => Instance ? Instance.m_ImportedTime : "";
         set 
@@ -75,7 +75,7 @@ public class InworldAI : ScriptableObject
         }
     }
     
-    static internal string Version
+    public static string Version //TODO(Yan): Move to InworldEditor.asset
     {
         get => Instance ? Instance.m_Version : "";
         set 

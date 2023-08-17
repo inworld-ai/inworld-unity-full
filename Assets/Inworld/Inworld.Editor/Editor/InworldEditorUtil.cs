@@ -106,16 +106,10 @@ namespace Inworld.AI.Editor
             InworldClient currClient = InworldController.Instance.GetComponent<InworldClient>();
             if (!currClient)
                 return;
-            InworldServerConfig currServer = currClient.Server;
-            string apiKey = currClient.APIKey;
-            string apiSecret = currClient.APISecret;
-            string customToken = currClient.CustomToken;
+            
             T newClient = InworldController.Instance.gameObject.AddComponent<T>();
-            newClient.Server = currServer;
-            newClient.APISecret = apiSecret;
-            newClient.APIKey = apiKey;
-            newClient.CustomToken = customToken;
-            InworldController.Client = newClient;
+            newClient.CopyFrom(currClient);
+
             UnityEngine.Object.DestroyImmediate(currClient);
         }
         [MenuItem("Inworld/Switch Protocol/Web socket")]
