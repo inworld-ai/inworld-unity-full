@@ -68,7 +68,8 @@ namespace Inworld
         }
         void OnAudioFilterRead(float[] data, int channels)
         {
-            InworldController.Client.SamplePlayingWave(data, channels);
+            if(InworldController.Status == InworldConnectionStatus.Connected)
+                InworldController.Client.SamplePlayingWave(data, channels);
         }
         protected virtual void OnDisable()
         {

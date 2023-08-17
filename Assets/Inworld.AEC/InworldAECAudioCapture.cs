@@ -33,8 +33,8 @@ public class InworldAECAudioCapture : AudioCapture
 
     public override void SamplePlayingWavData(float[] data, int channels)
     {
-        m_SharedAudioData.Add(data, m_Stopwatch.ElapsedMilliseconds/1000f);
-        m_CurrentPlayingWavData = m_SharedAudioData.GetDataAsShortArray(); //WavUtility.ConvertAudioClipDataToInt16Array(data, data.Length);
+        m_SharedAudioData.Add(data, m_Stopwatch.ElapsedMilliseconds * 0.001f);
+        m_CurrentPlayingWavData = m_SharedAudioData.GetDataAsMixedShortArray(); //WavUtility.ConvertAudioClipDataToInt16Array(data, data.Length);
     }
     protected override byte[] Output(int nSize)
     {

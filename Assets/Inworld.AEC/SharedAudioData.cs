@@ -1,103 +1,74 @@
 ﻿using Inworld.Interactions;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Inworld
 {
     public class SharedAudioData
     {
-        private readonly List<(float[], float)> m_Data = new List<(float[], float)>();
+        private readonly Dictionary<int, float> m_MixedData = new Dictionary<int, float>();
         private readonly object m_LockObj = new object();
+        private int m_sampleRate;
+        private float m_LastTimestamp = -1;
+
+        public SharedAudioData(int sampleRate = 16000)
+        {
+            m_sampleRate = sampleRate;
+        }
         
         public void Add(float[] audioData, float time)
         {
             lock (m_LockObj)
             {
-                m_Data.Add((audioData, time));
+                // Find the starting sample position for this audio data based on the timestamp.
+                int startSample = (int)(time * m_sampleRate);
+
+                for (int i = 0; i < audioData.Length; i++)
+                {
+                    int samplePos = startSample + i;
+                    if (m_MixedData.ContainsKey(samplePos))
+                    {
+                        m_MixedData[samplePos] += audioData[i];
+                    }
+                    else
+                    {
+                        m_MixedData[samplePos] = audioData[i];
+                    }
+                }
+
+                m_LastTimestamp = time;
 
                 // Clean up old data
-                while (m_Data.Count > 0 && time - m_Data[0].Item2 > 1.0f)
+                int oldestSampleAllowed = (int)((time - 1.0f) * m_sampleRate);
+                List<int> keysToRemove = m_MixedData.Keys.Where(k => k < oldestSampleAllowed).ToList();
+                foreach (int key in keysToRemove)
                 {
-                    m_Data.RemoveAt(0);
+                    m_MixedData.Remove(key);
                 }
-            }
-        }
-
-        public void Clear()
-        {
-            lock (m_LockObj)
-            {
-                m_Data.Clear();
             }
         }
         
-        public short[] GetDataAsShortArray()
+        public short[] GetDataAsMixedShortArray()
         {
-            int totalSize = 0;
+            if (!m_MixedData.Any())
+                return Array.Empty<short>();
 
-            // Calculate the total size required for the array
-            lock (m_Data)
+            // Convert the mixed data dictionary into a sorted list
+            var sortedData = m_MixedData.OrderBy(pair => pair.Key).ToList();
+
+            // Create a continuous array of shorts for the audio data
+            int totalSamples = (int)((m_LastTimestamp + 1) * m_sampleRate); // +1 to account for potential rounding errors
+            short[] shortData = new short[totalSamples];
+
+            foreach (var pair in sortedData)
             {
-                foreach (var tuple in m_Data)
-                {
-                    totalSize += tuple.Item1.Length;
-                }
+                float sampleValue = Mathf.Clamp(pair.Value, -1.0f, 1.0f);  // prevent clipping
+                shortData[pair.Key] = (short)(sampleValue * 32767);
             }
-
-            short[] shortData = new short[totalSize];
-            int position = 0;
-
-            lock (m_Data)
-            {
-                foreach (var tuple in m_Data)
-                {
-                    float[] audioData = tuple.Item1;
-
-                    for (int i = 0; i < audioData.Length; i++)
-                    {
-                        float sample = audioData[i];
-                        short shortSample = (short)(sample * 32767);
-                        shortData[position] = shortSample;
-                        position++;
-                    }
-                }
-            }
-
+            
             return shortData;
-        }
-
-        
-        public List<short> GetDataAsShorts()
-        {
-            List<short> shortData = new List<short>();
-
-            lock (m_Data)
-            {
-                for (int index = 0; index < m_Data.Count; index++)
-                {
-                    (float[], float) tuple = m_Data[index];
-                    float[] audioData = tuple.Item1;
-
-                    for (int i = 0; i < audioData.Length; i++)
-                    {
-                        float sample = audioData[i];
-                        short shortSample = (short)(sample * 32767);
-                        shortData.Add(shortSample);
-                    }
-                }
-            }
-
-            return shortData;
-        }
-
-        public List<(float[], float)> GetData()
-        {
-            lock (m_LockObj)
-            {
-                // Return a copy of the data
-                // to avoid potential issues with external code modifying it.
-                return new List<(float[], float)>(m_Data);
-            }
         }
     }
-
 }

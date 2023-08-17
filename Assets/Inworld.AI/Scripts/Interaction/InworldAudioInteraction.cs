@@ -78,12 +78,5 @@ namespace Inworld.Interactions
             if(Interruptable)
                 m_PlaybackSource.Stop();
         }
-        
-        void OnAudioFilterRead(float[] data, int channels)
-        {
-            float time = (float)stopwatch.Elapsed.TotalSeconds;
-            InworldController.Client.CacheAudioFilterData(data, time);
-            // Add the data and timestamp to the shared buffer via event invocation
-        }
     }
 }
