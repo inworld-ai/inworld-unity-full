@@ -105,9 +105,6 @@ namespace Inworld.NDK
         [DllImport("InworldNDK", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ClientWrapper_Update")]
         public static extern void ClientWrapper_Update(IntPtr wrapper);
 
-        [DllImport("InworldNDK", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ClientWrapper_SetAudioDumpEnabled")]
-        public static extern void ClientWrapper_SetAudioDumpEnabled(IntPtr wrapper, bool enabled, string FilePath);
-
         public void Dispose()
         {
             if (instance == null)
