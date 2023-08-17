@@ -13,7 +13,6 @@ namespace Inworld.NDK
 {
     public class InworldNDKClient : InworldClient
     {
-        [SerializeField] bool m_UseAec;
         InworldNDKBridge m_Wrapper;
         ConnectionStateCallbackType m_ConnectionCallback;
         PacketCallbackType m_PacketCallback;
@@ -118,7 +117,7 @@ namespace Inworld.NDK
         {
             _EndSession();
         }
-        public override void GetAccessToken() => Authenticate(); //_GenerateAccessTokenAsync();
+        public override void GetAccessToken() => Authenticate();
 #pragma warning disable CS4014
         public override void LoadScene(string sceneFullName) => _LoadSceneAsync(sceneFullName);
         public override Inworld.LoadSceneResponse GetLiveSessionInfo() => m_LoadSceneResponse;
@@ -192,42 +191,11 @@ namespace Inworld.NDK
         {
             if (string.IsNullOrEmpty(charID) || string.IsNullOrEmpty(base64))
                 return;
+            
             InworldPacket audioChunk = InworldPacketConverter.To.AudioChunk(charID, base64);
             byte[] data = audioChunk.DataChunk.Chunk.ToByteArray();
-
-            if (m_UseAec)
-            {
-                // Convert the byte array into a short array
-                short[] micDataShort = new short[data.Length / sizeof(short)];
-                Buffer.BlockCopy(data, 0, micDataShort, 0, data.Length);
-                IntPtr micDataPointer = Marshal.AllocHGlobal(micDataShort.Length * sizeof(short));
-                Marshal.Copy(micDataShort, 0, micDataPointer, micDataShort.Length);
-
-                List<short> outputDataConverted = GetSharedAudioDataAsShorts();
-                IntPtr outputDataPointer = Marshal.AllocHGlobal(outputDataConverted.Count * sizeof(short));
-                Marshal.Copy(outputDataConverted.ToArray(), 0, outputDataPointer, outputDataConverted.Count);
-                InworldNDKBridge.ClientWrapper_SendSoundMessageWithAEC(m_Wrapper.instance, charID, micDataPointer, micDataShort.Length, outputDataPointer, outputDataConverted.Count);
-            }
-            else
-                InworldNDKBridge.ClientWrapper_SendSoundMessage(m_Wrapper.instance, charID, data, data.Length);
+            InworldNDKBridge.ClientWrapper_SendSoundMessage(m_Wrapper.instance, charID, data, data.Length);
         }
-        
-        public override void CacheAudioFilterData(float[] data, float time)
-        {
-            m_SharedAudioData.Add(data, time);
-        }
-
-        List<short> GetSharedAudioDataAsShorts()
-        {
-            List<short> shortData = new List<short>();
-            List<(float[], float)> audioData = m_SharedAudioData.GetData();
-            
-            shortData.AddRange(from tuple in audioData from sample in tuple.Item1 select (short)(sample * 32767));
-            
-            m_SharedAudioData.Clear();
-            return shortData;
-        }
-
 
         void _StartSession()
         {
@@ -275,7 +243,7 @@ namespace Inworld.NDK
             (
                 m_Wrapper.instance, serializedData,
                 serializedData.Length, serializedSessionInfo, serializedSessionInfo.Length, m_Callback
-            );
+            ); 
         }
 
         void LoadSceneCallback(IntPtr serializedAgentInfoArray, int serializedAgentInfoArraySize)
@@ -384,6 +352,11 @@ namespace Inworld.NDK
         {
             m_IncomingEventsQueue.Clear();
             m_OutgoingEventsQueue.Clear();
+        }
+
+        void OnApplicationQuit()
+        {
+            InworldNDKBridge.ClientWrapper_DestroyClient(m_Wrapper.instance);
         }
     }
 }
