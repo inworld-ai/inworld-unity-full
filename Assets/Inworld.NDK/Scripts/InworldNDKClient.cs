@@ -117,7 +117,7 @@ namespace Inworld.NDK
         {
             _EndSession();
         }
-        public override void GetAccessToken() => Authenticate(); //_GenerateAccessTokenAsync();
+        public override void GetAccessToken() => Authenticate();
 #pragma warning disable CS4014
         public override void LoadScene(string sceneFullName) => _LoadSceneAsync(sceneFullName);
         public override Inworld.LoadSceneResponse GetLiveSessionInfo() => m_LoadSceneResponse;
