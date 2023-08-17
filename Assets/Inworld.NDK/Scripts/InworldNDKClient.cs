@@ -13,6 +13,7 @@ namespace Inworld.NDK
 {
     public class InworldNDKClient : InworldClient
     {
+        //[SerializeField] bool m_EnableAudioDump;
         InworldNDKBridge m_Wrapper;
         ConnectionStateCallbackType m_ConnectionCallback;
         PacketCallbackType m_PacketCallback;
@@ -194,25 +195,24 @@ namespace Inworld.NDK
             
             InworldPacket audioChunk = InworldPacketConverter.To.AudioChunk(charID, base64);
             byte[] data = audioChunk.DataChunk.Chunk.ToByteArray();
-            InworldNDKBridge.ClientWrapper_SendSoundMessage(m_Wrapper.instance, charID, data, data.Length);
-        }
-        
-        public override void CacheAudioFilterData(float[] data, float time)
-        {
-            m_SharedAudioData.Add(data, time);
-        }
-
-        List<short> GetSharedAudioDataAsShorts()
-        {
-            List<short> shortData = new List<short>();
-            List<(float[], float)> audioData = m_SharedAudioData.GetData();
             
-            shortData.AddRange(from tuple in audioData from sample in tuple.Item1 select (short)(sample * 32767));
-            
-            m_SharedAudioData.Clear();
-            return shortData;
+            //Uncomment this and enable flag to enable audio dump
+            // if (m_EnableAudioDump)
+            // {
+            //     // Convert the byte array into a short array
+            //     short[] micDataShort = new short[data.Length / sizeof(short)];
+            //     Buffer.BlockCopy(data, 0, micDataShort, 0, data.Length);
+            //     IntPtr micDataPointer = Marshal.AllocHGlobal(micDataShort.Length * sizeof(short));
+            //     Marshal.Copy(micDataShort, 0, micDataPointer, micDataShort.Length);
+            //
+            //     short[] outputDataConverted = m_SharedAudioData.GetDataAsMixedShortArray();//GetSharedAudioDataAsShorts();
+            //     IntPtr outputDataPointer = Marshal.AllocHGlobal(outputDataConverted.Length * sizeof(short));
+            //     Marshal.Copy(outputDataConverted.ToArray(), 0, outputDataPointer, outputDataConverted.Length);
+            //     InworldNDKBridge.ClientWrapper_SendSoundMessageWithAEC(m_Wrapper.instance, charID, micDataPointer, micDataShort.Length, outputDataPointer, outputDataConverted.Length);
+            // }
+            // else
+                InworldNDKBridge.ClientWrapper_SendSoundMessage(m_Wrapper.instance, charID, data, data.Length);
         }
-
 
         void _StartSession()
         {
@@ -260,8 +260,11 @@ namespace Inworld.NDK
             (
                 m_Wrapper.instance, serializedData,
                 serializedData.Length, serializedSessionInfo, serializedSessionInfo.Length, m_Callback
-            );
-            InworldNDKBridge.ClientWrapper_SetAudioDumpEnabled(m_Wrapper.instance, true, "C:\\Users\\divak\\Desktop\\NDK Repos\\audiodump\\dump.wav");
+            ); 
+            
+            //uncomment to enable audio dump
+            // if(m_EnableAudioDump)
+            //     InworldNDKBridge.ClientWrapper_SetAudioDumpEnabled(m_Wrapper.instance, true, "C:\\Users\\divak\\Desktop\\NDK Repos\\audiodump\\dump.wav");
         }
 
         void LoadSceneCallback(IntPtr serializedAgentInfoArray, int serializedAgentInfoArraySize)
