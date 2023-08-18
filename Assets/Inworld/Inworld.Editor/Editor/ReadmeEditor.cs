@@ -42,7 +42,7 @@ namespace Inworld
                 (
                     null, new object[]
                     {
-                        Path.Combine(Application.dataPath, "Inworld.AI/Default.dwlt"), false
+                        Path.Combine(Application.dataPath, "Inworld/Inworld.Editor/Default.dwlt"), false
                     }
                 );
         }

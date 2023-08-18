@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TestTools;
 namespace Inworld
 {
     [RequireComponent(typeof(AudioCapture))]
@@ -120,7 +121,14 @@ namespace Inworld
             get => m_CustomToken;
             set => m_CustomToken = value;
         }
-        
+        public void CopyFrom(InworldClient rhs)
+        {
+            Server = rhs.Server;
+            APISecret = rhs.APISecret;
+            APIKey = rhs.APIKey;
+            CustomToken = rhs.CustomToken;
+            InworldController.Client = this;
+        }
         void Awake()
         {
             Init();
