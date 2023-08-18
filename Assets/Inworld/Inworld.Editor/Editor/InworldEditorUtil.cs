@@ -1,6 +1,7 @@
-﻿#if !UNITY_WEBGL
-using Inworld.Util;
+﻿using Inworld.Util;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.Build;
@@ -13,12 +14,28 @@ namespace Inworld.AI.Editor
     ///     This class would be called when package is imported, or Unity Editor is opened.
     /// </summary>
     [InitializeOnLoad]
-    public class InworldEditorUtil : IPreprocessBuildWithReport
+    public class InworldEditorUtil : IPreprocessBuildWithReport, IActiveBuildTargetChanged
     {
         const string k_VersionCheckURL = "https://api.github.com/repos/inworld-ai/inworld-unity-sdk/releases";
         const string k_ReleaseURL = "https://github.com/inworld-ai/inworld-unity-sdk/releases";
         
         public int callbackOrder { get; }
+        
+        // YAN: We can automatically set hide, but not able to revert because Editor folder is already hidden.
+        public void OnActiveBuildTargetChanged(BuildTarget previousTarget, BuildTarget newTarget)
+        {
+            if (newTarget != BuildTarget.WebGL)
+                return;
+            Debug.LogWarning("Find WebGL");
+            List<string> folderToHide = new List<string>
+            {
+                "Assets/Inworld/Inworld.AEC",
+                "Assets/Inworld/Inworld.Editor",
+                "Assets/Inworld/Inworld.NDK",
+                "Assets/Inworld/Inworld.Samples.RPM",
+            };
+            folderToHide.ForEach(path => Directory.Move(path, $"{path}~"));
+        }
         public void OnPreprocessBuild(BuildReport report)
         {
             if (Debug.isDebugBuild || InworldAI.IsDebugMode)
@@ -116,4 +133,3 @@ namespace Inworld.AI.Editor
         public static void SwitchToWebSocket() => UpgradeProtocol<InworldWebSocketClient>();
     }
 }
-#endif

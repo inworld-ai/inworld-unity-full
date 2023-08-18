@@ -45,17 +45,19 @@ namespace Inworld
         float m_CDCounter;
         // Last known position in AudioClip buffer.
         int m_LastPosition;
-
-        #if !UNITY_WEBGL
+       
         public void StartRecording()
         {
+#if !UNITY_WEBGL
             m_LastPosition = Microphone.GetPosition(null);
             m_AudioToPush.Clear();
             IsCapturing = true;
+#endif
             OnRecordingStart.Invoke();
         }
         public void StopRecording(bool needPush = false)
         {
+#if !UNITY_WEBGL
             Microphone.End(null);
             if (needPush)
             {
@@ -64,6 +66,7 @@ namespace Inworld
                     InworldController.Instance.SendAudio(audioData);
                 }
             }
+#endif
             m_AudioToPush.Clear();
             IsCapturing = false;
             OnRecordingEnd.Invoke();
@@ -72,12 +75,13 @@ namespace Inworld
         {
             Init();
         }
-
+#if !UNITY_WEBGL
         void Start()
         {
-            m_Recording = Microphone.Start(null, true, m_BufferSeconds, m_AudioRate);
-        }
 
+            m_Recording = Microphone.Start(null, true, m_BufferSeconds, m_AudioRate);
+
+        }
         void Update()
         {
             if (!IsCapturing)
@@ -108,6 +112,17 @@ namespace Inworld
             float amplitude = CalculateAmplitude(m_InputBuffer);
             IsSpeaking = amplitude > m_UserSpeechThreshold;
         }
+        // Helper method to calculate the amplitude of audio data
+        float CalculateAmplitude(float[] audioData)
+        {
+            float sum = audioData.Sum(t => Mathf.Abs(t));
+            return sum / audioData.Length;
+        }
+        void OnDestroy()
+        {
+            StopRecording();
+        }
+#endif
 
         protected virtual void Init()
         {
@@ -124,18 +139,6 @@ namespace Inworld
             Buffer.BlockCopy(m_ByteBuffer, 0, output, 0, nWavCount);
             return output;
         }
-
-        // Helper method to calculate the amplitude of audio data
-        float CalculateAmplitude(float[] audioData)
-        {
-            float sum = audioData.Sum(t => Mathf.Abs(t));
-            return sum / audioData.Length;
-        }
-
-        void OnDestroy()
-        {
-            StopRecording();
-        }
         public void PushAudio()
         {
             foreach (string audioData in m_AudioToPush)
@@ -143,11 +146,10 @@ namespace Inworld
                 InworldController.Instance.SendAudio(audioData);
             }
         }
-        #endif
-
         public virtual void SamplePlayingWavData(float[] data, int channels)
         {
 
         }
+
     }
 }
