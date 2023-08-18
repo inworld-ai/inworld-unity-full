@@ -30,16 +30,16 @@ namespace Inworld
         public static InworldClient Client
         {
             get => Instance ? Instance.m_Client : null;
-            #if  UNITY_EDITOR
-            internal set
+            set
             {
                 if (!Instance)
                     return;
                 Instance.m_Client = value;
+                #if UNITY_EDITOR
                 EditorUtility.SetDirty(Instance);
                 AssetDatabase.SaveAssets();
+                #endif
             }
-            #endif
         }
         public static InworldConnectionStatus Status => Instance.m_Client.Status;
 
