@@ -22,11 +22,11 @@ namespace ExportPackage.Editor
 
 
         // The path to the package under the `Assets/` folder.
-        static string[] __packagePath = {"Assets/Inworld.AI"};
-        static string[] __NDKPackagePath = {"Assets/Inworld.AI", "Assets/Inworld.NDK", "Assets/Inworld.Assets"};
-        static string[] __samplePackagePath = {"Assets/Inworld.AI", "Assets/Inworld.Assets", "Assets/Inworld.Samples.Innequin"};
-        static string[] __RPMSamplesPackagePath = {"Assets/Inworld.AI", "Assets/Inworld.NDK", "Assets/Inworld.Assets", "Assets/Inworld.Samples.RPM"};
-        static string[] __completePackagePath = {"Assets/Inworld.AI", "Assets/Inworld.NDK", "Assets/Inworld.Assets", "Assets/Inworld.Samples.Innequin", "Assets/Inworld.Samples.RPM"};
+        static string[] __packagePath = {"Assets/Inworld/Inworld.AI"};
+        static string[] __NDKPackagePath = {"Assets/Inworld/Inworld.AI", "Assets/Inworld/Inworld.NDK", "Assets/Inworld/Inworld.Assets"};
+        static string[] __samplePackagePath = {"Assets/Inworld/Inworld.AI", "Assets/Inworld/Inworld.Assets", "Assets/Inworld/Inworld.Samples.Innequin"};
+        static string[] __RPMSamplesPackagePath = {"Assets/Inworld/Inworld.AI", "Assets/Inworld/Inworld.NDK", "Assets/Inworld/Inworld.Assets", "Assets/Inworld/Inworld.Samples.RPM"};
+        static string[] __completePackagePath = {"Assets/Inworld"};
 
         // Path to export to.
         const string k_ExportPath = "Build";
