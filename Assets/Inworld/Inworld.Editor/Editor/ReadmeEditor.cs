@@ -1,5 +1,4 @@
-﻿#if !UNITY_WEBGL
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using System;
 using System.IO;
@@ -178,5 +177,5 @@ namespace Inworld
 	    }
     }
 }
-#endif
+
 

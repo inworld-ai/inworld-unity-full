@@ -19,6 +19,10 @@ namespace Inworld
     /// </summary>
     public class AudioCapture : MonoBehaviour
     {
+        [SerializeField] float  m_UserSpeechThreshold = 0.01f;
+        [SerializeField] protected int m_AudioRate = 16000;
+        [SerializeField] int m_BufferSeconds = 1;
+        [SerializeField] string m_DeviceName;
         // ReSharper disable all InconsistentNaming
         public UnityEvent OnRecordingStart;
         public UnityEvent OnRecordingEnd;
@@ -30,10 +34,15 @@ namespace Inworld
         /// Signifies if user is speaking based on audio amplitud and threshold.
         /// </summary>
         public bool IsSpeaking { get; set; }
-        [SerializeField] float  m_UserSpeechThreshold = 0.01f;
-        [SerializeField] protected int m_AudioRate = 16000;
-        [SerializeField] int m_BufferSeconds = 1;
-        
+        /// <summary>
+        /// Get/Set Audio Input Device Name for recording.
+        /// </summary>
+        public string DeviceName
+        {
+            get => m_DeviceName;
+            set => m_DeviceName = value;
+        }
+
         readonly List<string> m_AudioToPush = new List<string>();
         // Size of audioclip used to collect information, need to be big enough to keep up with collect. 
         int m_BufferSize;
@@ -46,17 +55,21 @@ namespace Inworld
         // Last known position in AudioClip buffer.
         int m_LastPosition;
 
-        #if !UNITY_WEBGL
         public void StartRecording()
         {
+#if !UNITY_WEBGL
             m_LastPosition = Microphone.GetPosition(null);
             m_AudioToPush.Clear();
             IsCapturing = true;
+            if (!Microphone.IsRecording(m_DeviceName))
+                m_Recording = Microphone.Start(m_DeviceName, true, m_BufferSeconds, m_AudioRate);
+#endif
             OnRecordingStart.Invoke();
         }
         public void StopRecording(bool needPush = false)
         {
-            Microphone.End(null);
+#if !UNITY_WEBGL
+            Microphone.End(m_DeviceName);
             if (needPush)
             {
                 foreach (string audioData in m_AudioToPush)
@@ -64,6 +77,7 @@ namespace Inworld
                     InworldController.Instance.SendAudio(audioData);
                 }
             }
+#endif
             m_AudioToPush.Clear();
             IsCapturing = false;
             OnRecordingEnd.Invoke();
@@ -73,16 +87,12 @@ namespace Inworld
             Init();
         }
 
-        void Start()
-        {
-            m_Recording = Microphone.Start(null, true, m_BufferSeconds, m_AudioRate);
-        }
-
+#if !UNITY_WEBGL
         void Update()
         {
             if (!IsCapturing)
                 return;
-            if (!Microphone.IsRecording(null))
+            if (!Microphone.IsRecording(m_DeviceName))
                 StartRecording();
             if (m_CDCounter <= 0)
             {
@@ -91,9 +101,10 @@ namespace Inworld
             }
             m_CDCounter -= Time.deltaTime;
         }
+#endif
         void _Collect()
         {
-            int nPosition = Microphone.GetPosition(null);
+            int nPosition = Microphone.GetPosition(m_DeviceName);
             if (nPosition < m_LastPosition)
                 nPosition = m_BufferSize;
             if (nPosition <= m_LastPosition)
@@ -143,7 +154,6 @@ namespace Inworld
                 InworldController.Instance.SendAudio(audioData);
             }
         }
-        #endif
 
         public virtual void SamplePlayingWavData(float[] data, int channels)
         {
