@@ -112,8 +112,34 @@ namespace Inworld.AI.Editor
 
             UnityEngine.Object.DestroyImmediate(currClient);
         }
+        
+#region Top Menu
+        [MenuItem("Inworld/Studio Panel", false, 0)]
+        static void TopMenuConnectStudio() => InworldEditor.Instance.ShowPanel();
+
+        [MenuItem("Inworld/Global Settings", false, 1)]
+        static void TopMenuShowPanel() => Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
+        
+        [MenuItem("Inworld/Change User Name", false, 1)]
+        static void TopMenuUserPanel() => Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
+                
         [MenuItem("Inworld/Switch Protocol/Web socket")]
         public static void SwitchToWebSocket() => UpgradeProtocol<InworldWebSocketClient>();
+#endregion
+
+        /// <summary>
+        ///     For right click the project window.
+        /// </summary>
+
+        #region Asset Menu
+        [MenuItem("Assets/Inworld Studio Panel", false, 0)]
+        static void ConnectStudio() => InworldEditor.Instance.ShowPanel();
+
+        [MenuItem("Assets/Inworld Settings", false, 1)]
+        static void ShowPanel() => Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
+        
+        #endregion
+
     }
 }
 #endif
