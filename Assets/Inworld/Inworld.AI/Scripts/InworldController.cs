@@ -185,6 +185,9 @@ namespace Inworld
         {
             switch (incomingStatus)
             {
+                case InworldConnectionStatus.LostConnect:
+                    Reconnect();
+                    break;
                 case InworldConnectionStatus.Initialized:
                     LoadScene(m_SceneFullName);
                     break;
