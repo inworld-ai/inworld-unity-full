@@ -2,6 +2,7 @@
 using UnityEditor;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Object = UnityEngine.Object;
 
@@ -35,13 +36,17 @@ namespace Inworld
 	    {
 		    Assembly assembly = typeof(EditorApplication).Assembly;
 		    Type windowLayoutType = assembly.GetType("UnityEditor.WindowLayout", true);
+            string defaultLayout = Path.Combine(Application.dataPath, "Inworld/Inworld.Editor/Default.dwlt");
+            if (!File.Exists(defaultLayout))
+                return;
             MethodInfo method = windowLayoutType.GetMethod("LoadWindowLayout", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(string), typeof(bool) }, null);
+            
             if (method != null)
                 method.Invoke
                 (
                     null, new object[]
                     {
-                        Path.Combine(Application.dataPath, "Inworld/Inworld.Editor/Default.dwlt"), false
+                        defaultLayout, false
                     }
                 );
         }
@@ -51,19 +56,20 @@ namespace Inworld
 	    {
 		    string[] ids = AssetDatabase.FindAssets("Readme t:Readme");
 		    if (ids.Length >= 1)
-		    {
-			    Object readmeObject = AssetDatabase.LoadMainAssetAtPath(AssetDatabase.GUIDToAssetPath(ids[0]));
+            {
+                string mainReadme = ids.FirstOrDefault(guid => AssetDatabase.GUIDToAssetPath(guid).Contains("Inworld.AI"));
+                if (string.IsNullOrEmpty(mainReadme))
+                    return null;
+                
+			    Object readmeObject = AssetDatabase.LoadMainAssetAtPath(AssetDatabase.GUIDToAssetPath(mainReadme));
 			    
 			    Selection.objects = new[]{readmeObject};
 			    
 			    return (Readme)readmeObject;
 		    }
-		    else
-		    {
-			    Debug.Log("Couldn't find a readme");
-			    return null;
-		    }
-	    }
+            Debug.Log("Couldn't find a readme");
+            return null;
+        }
 	    
 	    protected override void OnHeaderGUI()
 	    {

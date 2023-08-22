@@ -112,15 +112,17 @@ namespace Inworld.AI.Editor
 
             UnityEngine.Object.DestroyImmediate(currClient);
         }
-        
+        /// <summary>
+        ///     For right click the project window.
+        /// </summary>
 #region Top Menu
-        [MenuItem("Inworld/Studio Panel", false, 0)]
+        [MenuItem("Inworld/Inworld Studio Panel", false, 0)]
         static void TopMenuConnectStudio() => InworldStudioPanel.Instance.ShowPanel();
 
-        [MenuItem("Inworld/Global Settings", false, 1)]
+        [MenuItem("Inworld/Inworld Settings", false, 1)]
         static void TopMenuShowPanel() => Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
         
-        [MenuItem("Inworld/Change User Name", false, 1)]
+        [MenuItem("Inworld/User Settings", false, 1)]
         static void TopMenuUserPanel() => Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
                 
         [MenuItem("Inworld/Switch Protocol/Web socket")]
@@ -130,15 +132,16 @@ namespace Inworld.AI.Editor
         /// <summary>
         ///     For right click the project window.
         /// </summary>
-
-        #region Asset Menu
-        [MenuItem("Assets/Inworld Studio Panel", false, 0)]
+#region Asset Menu
+        [MenuItem("Assets/Inworld/Studio Panel", false, 0)]
         static void ConnectStudio() => InworldStudioPanel.Instance.ShowPanel();
 
-        [MenuItem("Assets/Inworld Settings", false, 1)]
+        [MenuItem("Assets/Inworld/Default Settings", false, 1)]
         static void ShowPanel() => Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
         
-        #endregion
+        [MenuItem("Assets/Inworld/User Settings", false, 1)]
+        static void UserPanel() => Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
+#endregion
 
     }
 }
