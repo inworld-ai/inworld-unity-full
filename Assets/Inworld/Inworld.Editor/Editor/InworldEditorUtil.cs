@@ -115,7 +115,7 @@ namespace Inworld.AI.Editor
         
 #region Top Menu
         [MenuItem("Inworld/Studio Panel", false, 0)]
-        static void TopMenuConnectStudio() => InworldEditor.Instance.ShowPanel();
+        static void TopMenuConnectStudio() => InworldStudioPanel.Instance.ShowPanel();
 
         [MenuItem("Inworld/Global Settings", false, 1)]
         static void TopMenuShowPanel() => Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
@@ -133,7 +133,7 @@ namespace Inworld.AI.Editor
 
         #region Asset Menu
         [MenuItem("Assets/Inworld Studio Panel", false, 0)]
-        static void ConnectStudio() => InworldEditor.Instance.ShowPanel();
+        static void ConnectStudio() => InworldStudioPanel.Instance.ShowPanel();
 
         [MenuItem("Assets/Inworld Settings", false, 1)]
         static void ShowPanel() => Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
