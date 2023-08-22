@@ -217,8 +217,16 @@ namespace Inworld.NDK
         {
             if (!IsTokenValid && !String.IsNullOrEmpty(m_CustomToken))
             {
-                _ReceiveCustomToken();
-                InworldLog.Log("Custom token received");
+                if (_ReceiveCustomToken())
+                {
+                    NDK.Token token = NDK.Token.Parser.ParseJson(m_Token.token);
+                    Authenticate(token);
+                    InworldLog.Log("Custom token received");
+                }
+            }
+            else
+            {
+                Authenticate();
             }
 
             _ResetCommunicationData();
@@ -226,7 +234,7 @@ namespace Inworld.NDK
                 Status = InworldConnectionStatus.Connected;
         }
 
-        void Authenticate(Inworld.Token sessionToken = null)
+        void Authenticate(NDK.Token sessionToken = null)
         {
             //m_Options. = m_ServerConfig.studio;
             m_Options.ServerUrl = m_ServerConfig.RuntimeServer;
@@ -242,8 +250,8 @@ namespace Inworld.NDK
 
             if (sessionToken != null)
             {
-                m_SessionInfo.Token = sessionToken.token;
-                m_SessionInfo.SessionId = sessionToken.sessionId;
+                m_SessionInfo.Token = sessionToken.Token_;
+                m_SessionInfo.SessionId = sessionToken.SessionId;
             }
             else
             {
@@ -353,16 +361,20 @@ namespace Inworld.NDK
                 Dispatch(InworldPacketConverter.From.NDKPacket(response));
             }
         }
-        void _ReceiveCustomToken()
+        bool _ReceiveCustomToken()
         {
             JObject data = JObject.Parse(m_CustomToken);
             if (data.ContainsKey("sessionId") && data.ContainsKey("token"))
             {
                 InworldAI.Log("Init Success with Custom Token!");
                 Status = InworldConnectionStatus.Initialized;
+                return true;
             }
             else
+            {
                 Error = "Token Invalid";
+                return false;
+            }
         }
         void _ResetCommunicationData()
         {

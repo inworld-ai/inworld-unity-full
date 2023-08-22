@@ -99,8 +99,8 @@ namespace Inworld
         public void LoadScene(string sceneFullName = "") => m_Client.LoadScene(string.IsNullOrEmpty(sceneFullName) ? m_SceneFullName : sceneFullName);
         public void Disconnect()
         {
-            m_Client.Disconnect();
             CurrentCharacter = null;
+            m_Client.Disconnect();
         }
         public void CharacterInteract(InworldPacket packet) => OnCharacterInteraction?.Invoke(packet);
         public string GetLiveSessionID(InworldCharacter character)

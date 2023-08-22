@@ -49,6 +49,8 @@ namespace Inworld
         #if !UNITY_WEBGL
         public void StartRecording()
         {
+            if (!Microphone.IsRecording(null))
+                m_Recording = Microphone.Start(null, true, m_BufferSeconds, m_AudioRate);
             m_LastPosition = Microphone.GetPosition(null);
             m_AudioToPush.Clear();
             IsCapturing = true;
