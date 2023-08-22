@@ -16,6 +16,7 @@ namespace Inworld.NDK
         InworldNDKBridge m_Wrapper;
         ConnectionStateCallbackType m_ConnectionCallback;
         PacketCallbackType m_PacketCallback;
+        LogCallbackType m_LogCallbackType;
         LoadSceneCallbackType m_Callback;
         SharedAudioData m_SharedAudioData;
 
@@ -38,7 +39,8 @@ namespace Inworld.NDK
             base.Init();
             m_ConnectionCallback = ConnectionStateCallback;
             m_PacketCallback = PacketCallback;
-            m_Wrapper = new InworldNDKBridge(m_ConnectionCallback, m_PacketCallback);
+            m_LogCallbackType = LogCallback;
+            m_Wrapper = new InworldNDKBridge(m_ConnectionCallback, m_PacketCallback, m_LogCallbackType);
             m_SharedAudioData = new SharedAudioData();
         }
 
@@ -80,6 +82,18 @@ namespace Inworld.NDK
             if (response != null)
                 ResolvePackets(response);
         }
+        
+        void LogCallback(string message, int severity)
+        {
+            if(severity == 0)
+                InworldAI.Log(message);
+            else if(severity == 1)
+                InworldAI.LogWarning(message);
+            else if(severity == 2)
+                InworldAI.LogError(message);
+            else
+                InworldAI.LogException(message);
+        }
 
         void Update()
         {
@@ -110,6 +124,7 @@ namespace Inworld.NDK
         {
             _ResetCommunicationData();
             m_Token = null;
+            m_OutgoingEventsQueue.Clear();
             InworldNDKBridge.ClientWrapper_StopClient(m_Wrapper.instance);
         }
 
@@ -142,6 +157,7 @@ namespace Inworld.NDK
         {
             if (string.IsNullOrEmpty(characterID) || string.IsNullOrEmpty(textToSend))
                 return;
+            
             TextPacket packet = new TextPacket
             {
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
