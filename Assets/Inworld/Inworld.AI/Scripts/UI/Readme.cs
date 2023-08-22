@@ -11,7 +11,6 @@ namespace Inworld
         public Texture2D icon;
         public string title;
         public Section[] sections;
-        public bool loadedLayout;
 	
         [Serializable]
         public class Section 

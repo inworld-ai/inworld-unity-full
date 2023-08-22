@@ -66,7 +66,7 @@ namespace Inworld.AI.Editor
             }
             else
             {
-                InworldAI.Version = date?.package[0]?.tag_name;
+                InworldAI.Version = date.package[0]?.tag_name;
             }
         }
         static void _AddDebugMacro()

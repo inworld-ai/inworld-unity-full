@@ -1,18 +1,17 @@
-﻿using UnityEngine;
+﻿using Inworld.AI.Editor;
+using UnityEngine;
 using UnityEditor;
-using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using Object = UnityEngine.Object;
-
 
 namespace Inworld
 {
     [CustomEditor(typeof(Readme))][InitializeOnLoad]
     public class ReadmeEditor : Editor 
     {
-        const string k_ShowedReadmeSessionStateName = "ReadmeEditor.showedReadme";
+        [SerializeField] GUIStyle m_LinkStyle;
+        [SerializeField] GUIStyle m_TitleStyle;
+        [SerializeField] GUIStyle m_HeadingStyle;
+        [SerializeField] GUIStyle m_BodyStyle;
+
         const float k_Space = 16f;
         static ReadmeEditor()
 	    {
@@ -21,55 +20,14 @@ namespace Inworld
 	    
 	    static void SelectReadmeAutomatically()
         {
-            if (SessionState.GetBool(k_ShowedReadmeSessionStateName, false))
+            if (InworldEditor.LoadedReadme)
                 return;
-            Readme readme = SelectReadme();
-            SessionState.SetBool(k_ShowedReadmeSessionStateName, true);
-
-            if (!readme || readme.loadedLayout)
-                return;
-            LoadLayout();
-            readme.loadedLayout = true;
+            SelectReadme();
+            InworldEditor.LoadedReadme = true;
         }
-	    
-	    static void LoadLayout()
-	    {
-		    Assembly assembly = typeof(EditorApplication).Assembly;
-		    Type windowLayoutType = assembly.GetType("UnityEditor.WindowLayout", true);
-            string defaultLayout = Path.Combine(Application.dataPath, "Inworld/Inworld.Editor/Default.dwlt");
-            if (!File.Exists(defaultLayout))
-                return;
-            MethodInfo method = windowLayoutType.GetMethod("LoadWindowLayout", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(string), typeof(bool) }, null);
-            
-            if (method != null)
-                method.Invoke
-                (
-                    null, new object[]
-                    {
-                        defaultLayout, false
-                    }
-                );
-        }
-	    
+    
 	    [MenuItem("Inworld/About")]
-	    static Readme SelectReadme() 
-	    {
-		    string[] ids = AssetDatabase.FindAssets("Readme t:Readme");
-		    if (ids.Length >= 1)
-            {
-                string mainReadme = ids.FirstOrDefault(guid => AssetDatabase.GUIDToAssetPath(guid).Contains("Inworld.AI"));
-                if (string.IsNullOrEmpty(mainReadme))
-                    return null;
-                
-			    Object readmeObject = AssetDatabase.LoadMainAssetAtPath(AssetDatabase.GUIDToAssetPath(mainReadme));
-			    
-			    Selection.objects = new[]{readmeObject};
-			    
-			    return (Readme)readmeObject;
-		    }
-            Debug.Log("Couldn't find a readme");
-            return null;
-        }
+	    static void SelectReadme() => Selection.activeObject = InworldEditor.ReadMe;
 	    
 	    protected override void OnHeaderGUI()
 	    {
@@ -84,13 +42,13 @@ namespace Inworld
 			    GUILayout.Label(readme.title, TitleStyle);
 		    }
 		    GUILayout.EndHorizontal();
+            
 	    }
 	    
 	    public override void OnInspectorGUI()
 	    {
 		    Readme readme = (Readme)target;
 		    Init(readme);
-		    
 		    foreach (Readme.Section section in readme.sections)
 		    {
 			    if (!string.IsNullOrEmpty(section.heading))
@@ -115,17 +73,11 @@ namespace Inworld
 	    
 	    bool m_Initialized;
 	    
-	    GUIStyle LinkStyle { get { return m_LinkStyle; } }
-	    [SerializeField] GUIStyle m_LinkStyle;
-	    
-	    GUIStyle TitleStyle { get { return m_TitleStyle; } }
-	    [SerializeField] GUIStyle m_TitleStyle;
-	    
-	    GUIStyle HeadingStyle { get { return m_HeadingStyle; } }
-	    [SerializeField] GUIStyle m_HeadingStyle;
-	    
-	    GUIStyle BodyStyle { get { return m_BodyStyle; } }
-	    [SerializeField] GUIStyle m_BodyStyle;
+	    GUIStyle LinkStyle => m_LinkStyle;
+        GUIStyle TitleStyle => m_TitleStyle;
+        GUIStyle HeadingStyle => m_HeadingStyle;
+        GUIStyle BodyStyle => m_BodyStyle;
+
 	    
 	    void Init(Readme readme)
 	    {
