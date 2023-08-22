@@ -82,6 +82,7 @@ namespace Inworld.Sample.RPM
                     break;
                 case InworldConnectionStatus.Initialized:
                     m_HasInit = true;
+                    InworldController.Instance.LoadScene();
                     break;
                 case InworldConnectionStatus.Connecting:
                     _SwitchToggles(false);

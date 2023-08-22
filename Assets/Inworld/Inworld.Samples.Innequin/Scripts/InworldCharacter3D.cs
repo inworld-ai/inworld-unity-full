@@ -15,8 +15,10 @@ namespace Inworld.Sample.Innequin
 
         protected override void OnStatusChanged(InworldConnectionStatus newStatus)
         {
-            if (newStatus == InworldConnectionStatus.Connected)
-                InworldController.Instance.CurrentCharacter = this;
+            if (newStatus != InworldConnectionStatus.Connected || InworldController.Instance.CurrentCharacter)
+                return;
+            InworldController.Instance.CurrentCharacter = this;
+            InworldController.Instance.StartAudio();
         }
     }
 }
