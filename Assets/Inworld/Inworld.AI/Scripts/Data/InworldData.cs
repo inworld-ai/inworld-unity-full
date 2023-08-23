@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Inworld
 {
@@ -54,7 +55,6 @@ namespace Inworld
         public string key;
         public object previousState; // TODO(Yan): Solve packets from saved data.
     }
-    
     [Serializable]
     public class User
     {
@@ -69,10 +69,10 @@ namespace Inworld
     [Serializable]
     public class PlayerProfile
     {
-        public IEnumerable<Fields> fields;
+        public IEnumerable<PlayerProfileField> fields;
     }
     [SerializeField]
-    public class Fields
+    public class PlayerProfileField
     {
         public string fieldId;
         public string fieldValue;
@@ -106,8 +106,30 @@ namespace Inworld
         public CharacterAssets characterAssets;
         public Texture2D thumbnail;
     }
-
-
+    [Serializable]
+    public class InworldWorkspaceData
+    {
+        public string title;
+        public string fullName;
+        public List<InworldCharacterData> characters;
+        public List<InworldSceneData> scenes;
+        public List<InworldKeySecret> keySecrets;
+        public InworldKeySecret DefaultKey => keySecrets.Count > 0 ? keySecrets[0] : null;
+    }
+    [Serializable]
+    public class InworldSceneData
+    {
+        public string sceneName;
+        public string fullName;
+        public string description;
+        public List<string> characterFullNames;
+    }
+    [Serializable]
+    public class InworldKeySecret
+    {
+        public string key;
+        public string secret;
+    }
     [Serializable]
     public class CharacterAssets
     {

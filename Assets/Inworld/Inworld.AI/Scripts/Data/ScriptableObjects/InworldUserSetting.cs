@@ -14,7 +14,7 @@ namespace Inworld
     {
         [SerializeField] string m_PlayerName;
         [SerializeField] List<InworldPlayerProfile> m_PlayerData;
-
+        [SerializeField] List<InworldWorkspaceData> m_Workspaces;
         public string Name
         {
             get => string.IsNullOrEmpty(m_PlayerName) ? "player" : m_PlayerName;
@@ -29,7 +29,7 @@ namespace Inworld
             viewTranscriptConsent = true,
             playerProfile = new PlayerProfile
             {
-                fields = m_PlayerData.Select(data => new Fields
+                fields = m_PlayerData.Select(data => new PlayerProfileField
                 {
                     fieldId = data.property,
                     fieldValue = data.value

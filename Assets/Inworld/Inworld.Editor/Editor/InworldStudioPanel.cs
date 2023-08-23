@@ -22,6 +22,11 @@ namespace Inworld.AI.Editor
         void OnGUI()
         {
             _DrawBanner();
+            if (!InworldEditor.Instance)
+                return;
+            InworldEditor.Instance.CurrentState.DrawTitle();
+            InworldEditor.Instance.CurrentState.DrawContent();
+            InworldEditor.Instance.CurrentState.DrawButtons();
         }
         void _DrawBanner()
         {
