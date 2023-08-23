@@ -21,12 +21,18 @@ namespace Inworld.NDK
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void LoadSceneCallbackType(IntPtr serializedAgentInfoArray, int serializedAgentInfoArraySize);
+    
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void LogCallbackType(string message, int severity);
+
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void TokenCallbackType(string message);
 
     public class InworldNDKBridge : IDisposable
     {
         public IntPtr instance;
 
-        public InworldNDKBridge(ConnectionStateCallbackType connectionStateCallback, PacketCallbackType packetCallback)
+        public InworldNDKBridge(ConnectionStateCallbackType connectionStateCallback, PacketCallbackType packetCallback, LogCallbackType logCallback, TokenCallbackType tokenCallback)
         {
             instance = ClientWrapper_create();
 
@@ -40,7 +46,7 @@ namespace Inworld.NDK
                 (
                     instance,
                     "DefaultClientNDK",
-                    "1.0.0", connectionStateCallback, packetCallback
+                    "1.0.0", connectionStateCallback, packetCallback, logCallback, tokenCallback
                 );
             }
         }
@@ -76,7 +82,7 @@ namespace Inworld.NDK
         public static extern void ClientWrapper_StopAudioSession(IntPtr wrapper, string agentId);
 
         [DllImport("InworldNDK", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ClientWrapper_InitClient")]
-        public static extern void ClientWrapper_InitClient(IntPtr wrapper, string clientId, string clientVer, ConnectionStateCallbackType connectionStateCallback, PacketCallbackType packetCallback);
+        public static extern void ClientWrapper_InitClient(IntPtr wrapper, string clientId, string clientVer, ConnectionStateCallbackType connectionStateCallback, PacketCallbackType packetCallback, LogCallbackType logCallback, TokenCallbackType tokenCallback);
 
         [DllImport("InworldNDK", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ClientWrapper_StartClientWithCallback")]
         public static extern void ClientWrapper_StartClientWithCallback(IntPtr wrapper, byte[] serializedOptions, int serializedOptionsSize, byte[] serializedSessionInfo, int sessionInfoSize, LoadSceneCallbackType loadSceneCallback);

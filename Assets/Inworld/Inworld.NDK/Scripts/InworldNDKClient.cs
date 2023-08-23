@@ -16,8 +16,9 @@ namespace Inworld.NDK
         InworldNDKBridge m_Wrapper;
         ConnectionStateCallbackType m_ConnectionCallback;
         PacketCallbackType m_PacketCallback;
+        LogCallbackType m_LogCallbackType;
+        TokenCallbackType m_TokenCallbackType;
         LoadSceneCallbackType m_Callback;
-        SharedAudioData m_SharedAudioData;
 
         float m_LastPacketSendTime;
         TaskCompletionSource<bool> m_AgentInfosFilled;
@@ -38,13 +39,13 @@ namespace Inworld.NDK
             base.Init();
             m_ConnectionCallback = ConnectionStateCallback;
             m_PacketCallback = PacketCallback;
-            m_Wrapper = new InworldNDKBridge(m_ConnectionCallback, m_PacketCallback);
-            m_SharedAudioData = new SharedAudioData();
+            m_LogCallbackType = LogCallback;
+            m_TokenCallbackType = TokenCallback;
+            m_Wrapper = new InworldNDKBridge(m_ConnectionCallback, m_PacketCallback, m_LogCallbackType, m_TokenCallbackType);
         }
 
         void ConnectionStateCallback(ConnectionState state)
         {
-            InworldAI.Log("CONNECTION STATE IS " + state);
             switch (state)
             {
                 case ConnectionState.Connected:
@@ -79,6 +80,31 @@ namespace Inworld.NDK
             InworldPacket response = InworldPacket.Parser.ParseFrom(data);
             if (response != null)
                 ResolvePackets(response);
+            
+            Marshal.FreeCoTaskMem(packetWrapper);
+        }
+        
+        void TokenCallback(string token)
+        {
+            //for memory safety, we copy the token
+            m_CustomToken = String.Copy(token);
+            Marshal.FreeCoTaskMem(Marshal.StringToHGlobalAnsi(token));
+            if(_ReceiveCustomToken())
+                InworldAI.Log("NDK Token received");
+        }
+        
+        void LogCallback(string message, int severity)
+        {
+            if(severity == 0)
+                InworldAI.Log(message);
+            else if(severity == 1)
+                InworldAI.LogWarning(message);
+            else if(severity == 2)
+                InworldAI.LogError(message);
+            else
+                InworldAI.LogException(message);
+            
+            //Marshal.FreeCoTaskMem(Marshal.StringToHGlobalAnsi(message));
         }
 
         void Update()
@@ -109,7 +135,7 @@ namespace Inworld.NDK
         void _EndSession()
         {
             _ResetCommunicationData();
-            m_Token = null;
+            m_OutgoingEventsQueue.Clear();
             InworldNDKBridge.ClientWrapper_StopClient(m_Wrapper.instance);
         }
 
@@ -142,6 +168,7 @@ namespace Inworld.NDK
         {
             if (string.IsNullOrEmpty(characterID) || string.IsNullOrEmpty(textToSend))
                 return;
+            
             TextPacket packet = new TextPacket
             {
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
@@ -199,20 +226,16 @@ namespace Inworld.NDK
 
         void _StartSession()
         {
-            if (!IsTokenValid && !String.IsNullOrEmpty(m_CustomToken))
-            {
-                _ReceiveCustomToken();
-                InworldLog.Log("Custom token received");
-            }
-
             _ResetCommunicationData();
-            if (Status == InworldConnectionStatus.Initialized)
+            if (Status == InworldConnectionStatus.LoadingSceneCompleted)
                 Status = InworldConnectionStatus.Connected;
+
+            if (Status != InworldConnectionStatus.Connected)
+                Authenticate();
         }
 
-        void Authenticate(Inworld.Token sessionToken = null)
+        void Authenticate()
         {
-            //m_Options. = m_ServerConfig.studio;
             m_Options.ServerUrl = m_ServerConfig.RuntimeServer;
             m_Options.SceneName = InworldController.Instance.CurrentScene;
             m_Options.PlayerName = InworldAI.User.Name;
@@ -224,10 +247,11 @@ namespace Inworld.NDK
 
             byte[] serializedData = m_Options.ToByteArray();
 
-            if (sessionToken != null)
+            if (m_Token != null)
             {
-                m_SessionInfo.Token = sessionToken.token;
-                m_SessionInfo.SessionId = sessionToken.sessionId;
+                m_SessionInfo.Token = m_Token.token;
+                m_SessionInfo.SessionId = m_Token.sessionId;
+                InworldAI.Log("Connecting to previous session with token");
             }
             else
             {
@@ -248,6 +272,7 @@ namespace Inworld.NDK
 
         void LoadSceneCallback(IntPtr serializedAgentInfoArray, int serializedAgentInfoArraySize)
         {
+            Status = InworldConnectionStatus.LoadingScene;
             byte[] serializedData = new byte[serializedAgentInfoArraySize];
             Marshal.Copy(serializedAgentInfoArray, serializedData, 0, serializedAgentInfoArraySize);
             m_AgentInfoArray = AgentInfoArray.Parser.ParseFrom(serializedData);
@@ -259,7 +284,6 @@ namespace Inworld.NDK
 
             // Free the allocated buffer
             Marshal.FreeCoTaskMem(serializedAgentInfoArray);
-            Status = InworldConnectionStatus.Initialized;
         }
 
         async Task _LoadSceneAsync(string sceneName)
@@ -337,17 +361,43 @@ namespace Inworld.NDK
                 Dispatch(InworldPacketConverter.From.NDKPacket(response));
             }
         }
-        void _ReceiveCustomToken()
+        bool _ReceiveCustomToken()
         {
-            JObject data = JObject.Parse(m_CustomToken);
-            if (data.ContainsKey("sessionId") && data.ContainsKey("token"))
-            {
-                InworldAI.Log("Init Success with Custom Token!");
-                Status = InworldConnectionStatus.Initialized;
+            string[] parts = m_CustomToken.Split('|');
+
+            if (parts.Length != 4) {
+                Error = "NDK Token format invalid";
+                return false;
             }
-            else
+
+            string sessionId = parts[0];
+            string token = parts[1];
+            //For future use with saved session states
+            //string sessionSavedState = parts[2];
+            long expirationTime = long.Parse(parts[3]);
+
+            if (!string.IsNullOrEmpty(sessionId) && !string.IsNullOrEmpty(token)) {
+                m_Token = new Inworld.Token {
+                    sessionId = parts[0],
+                    token = parts[1],
+                    type = "Bearer",
+                    expirationTime = UnixTimestampToExpirationTime(expirationTime)
+                };
+                Status = InworldConnectionStatus.Initialized;
+                return true;
+            } else {
                 Error = "Token Invalid";
+                return false;
+            }
         }
+        
+        public string UnixTimestampToExpirationTime(long unixTimestamp)
+        {
+            DateTime epochStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            DateTime expirationDateTime = epochStart.AddSeconds(unixTimestamp);
+            return expirationDateTime.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+        }
+        
         void _ResetCommunicationData()
         {
             m_IncomingEventsQueue.Clear();
