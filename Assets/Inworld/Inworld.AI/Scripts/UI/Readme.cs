@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Inworld
 {
-    [CreateAssetMenu(fileName = "README", menuName = "Inworld/Read Me", order = 0)]
     public class Readme : ScriptableObject
     {
         public Font titleFont;

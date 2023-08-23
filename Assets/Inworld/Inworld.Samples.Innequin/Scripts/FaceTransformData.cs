@@ -17,7 +17,6 @@ namespace Inworld.Sample.Innequin
         public Texture mouthDefault;
         public List<Texture> mouth;
     }
-    [CreateAssetMenu(fileName = "Face Transform Data", menuName = "Inworld/FaceTransform", order = 1)]
     public class FaceTransformData : ScriptableObject
     {
         public List<FaceTransform> data;
