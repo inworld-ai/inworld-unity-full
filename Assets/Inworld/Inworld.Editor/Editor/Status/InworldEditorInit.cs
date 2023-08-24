@@ -9,14 +9,13 @@ namespace Inworld.AI.Editor
     public class InworldEditorInit : IEditorState
     {
         const string k_DefaultTitle = "Please paste Auth token here:";
-        const string k_TokenIncorrect = "Token Incorrect. Please paste again.";
-        
-        string m_ErrorMessage = "";
+        const string k_UserDataPath = "Assets/Inworld/Inworld.Editor/Data";
+
         string m_Token = "";
         Vector2 m_ScrollPosition = Vector2.zero;
         public void DrawTitle()
         {
-            
+            GUILayout.Label(k_DefaultTitle, EditorStyles.boldLabel);
         }
         public void DrawContent()
         {
@@ -24,12 +23,10 @@ namespace Inworld.AI.Editor
             {
                 wordWrap = true 
             };
-            GUILayout.Label(k_DefaultTitle, EditorStyles.boldLabel);
             m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition, GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true));
             InworldEditor.TokenForExchange = GUILayout.TextArea(InworldEditor.TokenForExchange, customStyle);
             EditorGUILayout.EndScrollView();
             GUILayout.FlexibleSpace();
-            
         }
         public void DrawButtons()
         {
@@ -37,7 +34,6 @@ namespace Inworld.AI.Editor
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Connect", InworldEditor.Instance.BtnStyle))
             {
-                m_ErrorMessage = "";
                 m_Token = InworldEditor.TokenForExchange.Split(':')[0];
                 _GetBillingAccount();
             }
@@ -61,12 +57,14 @@ namespace Inworld.AI.Editor
             UnityWebRequest uwr = new UnityWebRequest(InworldEditor.BillingAccountURL,"GET");
             uwr.SetRequestHeader("Authorization", $"Bearer {m_Token}");
             uwr.downloadHandler = new DownloadHandlerBuffer();
+            EditorUtility.DisplayProgressBar("Inworld", "Getting Billing Account...", 0.25f);
             UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
             updateRequest.completed += OnBillingAccountCompleted;
         }
 
         void _ListWorkspace()
         {
+            EditorUtility.DisplayProgressBar("Inworld", "Getting Workspace data...", 0.75f);
             UnityWebRequest uwr = new UnityWebRequest(InworldEditor.ListWorkspaceURL,"GET");
             uwr.SetRequestHeader("Authorization", $"Bearer {m_Token}");
             uwr.downloadHandler = new DownloadHandlerBuffer();
@@ -79,6 +77,7 @@ namespace Inworld.AI.Editor
             if (uwr.result != UnityWebRequest.Result.Success)
             {
                 InworldEditor.Instance.Error = uwr.error;
+                EditorUtility.ClearProgressBar();
                 return;
             }
             BillingAccountRespone date = JsonUtility.FromJson<BillingAccountRespone>(uwr.downloadHandler.text);
@@ -88,12 +87,12 @@ namespace Inworld.AI.Editor
                 {
                     // Create a new SO.
                     InworldUserSetting newUser = ScriptableObject.CreateInstance<InworldUserSetting>();
-                    string path = "Assets/Inworld/Inworld.Editor/Data";
-                    if (!Directory.Exists(path))
+                    
+                    if (!Directory.Exists(k_UserDataPath))
                     {
-                        Directory.CreateDirectory(path);
+                        Directory.CreateDirectory(k_UserDataPath);
                     }
-                    string fileName = $"{path}/{date.billingAccounts[0].displayName}.asset";
+                    string fileName = $"{k_UserDataPath}/{date.billingAccounts[0].displayName}.asset";
                     AssetDatabase.CreateAsset(newUser, fileName);
                     AssetDatabase.SaveAssets();
                     AssetDatabase.Refresh();
@@ -103,20 +102,28 @@ namespace Inworld.AI.Editor
                 string displayName = date.billingAccounts[0].displayName.Split('@')[0];
                 InworldAI.User.Name = displayName;
             }
+            EditorUtility.DisplayProgressBar("Inworld", "Getting Billing Account Completed!", 0.5f);
             _ListWorkspace();
         }
         void OnListWorkspaceCompleted(AsyncOperation obj)
         {
             UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
             if (uwr.result != UnityWebRequest.Result.Success)
-                Debug.LogError(uwr.error);
+            {
+                EditorUtility.ClearProgressBar();
+                InworldEditor.Instance.Status = EditorStatus.Error;
+                return;
+            }
+            EditorUtility.DisplayProgressBar("Inworld", "Getting Workspace data Completed", 1f);
             ListWorkspaceResponse response = JsonUtility.FromJson<ListWorkspaceResponse>(uwr.downloadHandler.text);
             InworldAI.User.Workspace.Clear();
             InworldAI.User.Workspace.AddRange(response.workspaces);
+            EditorUtility.ClearProgressBar();
             EditorUtility.SetDirty(InworldAI.User);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             InworldEditor.Instance.Status = EditorStatus.SelectWorkspace;
+            
         }
     }
 

@@ -76,11 +76,21 @@ namespace Inworld.AI.Editor
             get => Instance.m_StudioToken;
             set => Instance.m_StudioToken = value;
         }
+        public GUIStyle TitleStyle => new GUIStyle(GUI.skin.label)
+        {
+            fontSize = 14,
+            fontStyle = FontStyle.Bold,
+            padding = new RectOffset(10, 10, 0, 0)
+        };
         public GUIStyle BtnStyle => new GUIStyle(GUI.skin.button)
         {
             fontSize = 12,
             fixedWidth = 100,
             margin = new RectOffset(10, 10, 10, 10),
+        };
+        public GUIStyle DropDownStyle => new GUIStyle("MiniPullDown")
+        {
+            margin = new RectOffset(10, 10, 0, 0)
         };
         public static string BillingAccountURL => $"https://{Instance.m_ServerConfig.web}/{Instance.m_BillingAccountURL}";
         public static string ListWorkspaceURL => $"https://{Instance.m_ServerConfig.web}/{Instance.m_WorkspaceURL}";

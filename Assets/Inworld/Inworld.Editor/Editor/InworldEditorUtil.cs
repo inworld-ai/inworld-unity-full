@@ -1,5 +1,7 @@
-﻿using Inworld.Util;
+﻿using Google.Protobuf.WellKnownTypes;
+using Inworld.Util;
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.Build;
@@ -102,6 +104,18 @@ namespace Inworld.AI.Editor
                     _AddDebugMacro();
                     break;
             }
+        }
+        public static void DrawDropDown(string currentItem, List<string> values, Action<string> callback)
+        {
+            if (!EditorGUILayout.DropdownButton(new GUIContent(currentItem), FocusType.Passive, InworldEditor.Instance.DropDownStyle))
+                return;
+            GenericMenu menu = new GenericMenu();
+
+            foreach (string value in values)
+            {
+                menu.AddItem(new GUIContent(value), false, () => callback(value));
+            }
+            menu.ShowAsContext();
         }
         public static void UpgradeProtocol<T>() where T : InworldClient
         {
