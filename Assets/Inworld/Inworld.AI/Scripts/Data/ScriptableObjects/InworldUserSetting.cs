@@ -13,8 +13,10 @@ namespace Inworld
     public class InworldUserSetting : ScriptableObject
     {
         [SerializeField] string m_PlayerName;
-        [SerializeField] List<InworldPlayerProfile> m_PlayerData;
-        [SerializeField] List<InworldWorkspaceData> m_Workspaces;
+        
+        [SerializeField] List<InworldPlayerProfile> m_PlayerData = new List<InworldPlayerProfile>();
+        [SerializeField] List<InworldWorkspaceData> m_Workspaces = new List<InworldWorkspaceData>();
+        [HideInInspector][SerializeField] string m_BillingAccount;
         public string Name
         {
             get => string.IsNullOrEmpty(m_PlayerName) ? "player" : m_PlayerName;
@@ -36,5 +38,11 @@ namespace Inworld
                 })
             }
         };
+        public string BillingAccount
+        {
+            get => m_BillingAccount;
+            set => m_BillingAccount = value;
+        }
+        public List<InworldWorkspaceData> Workspace => m_Workspaces;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Inworld.AI.Editor
@@ -17,13 +18,20 @@ namespace Inworld.AI.Editor
         [SerializeField] Readme m_Readme;
         [SerializeField] bool m_DisplayReadmeOnLoad;
         [SerializeField] EditorStatus m_CurrentStatus;
+        EditorStatus m_LastStatus;
+
+        [Header("URLs:")]
+        [SerializeField] InworldServerConfig m_ServerConfig;
+        [SerializeField] string m_BillingAccountURL;
+        [SerializeField] string m_WorkspaceURL;
         
         const string k_GlobalDataPath = "InworldEditor";
         static InworldEditor __inst;
         
         Dictionary<EditorStatus, IEditorState> m_InworldEditorStates = new Dictionary<EditorStatus, IEditorState>();
         string m_StudioToken;
-        GUIStyle m_BtnStyle;
+        string m_ErrorMsg;
+
         public static InworldEditor Instance
         {
             get
@@ -42,11 +50,18 @@ namespace Inworld.AI.Editor
         }
         public static Readme ReadMe => Instance.m_Readme;
 
-        public static EditorStatus Status
+        public EditorStatus Status
         {
-            get => Instance.m_CurrentStatus;
-            set => Instance.m_CurrentStatus = value;
+            get => m_CurrentStatus;
+            set
+            {
+                m_LastStatus = m_CurrentStatus;
+                m_CurrentStatus = value;
+                LastState.OnExit();
+                CurrentState.OnEnter();
+            }
         }
+        public IEditorState LastState => m_InworldEditorStates[m_LastStatus];
         public IEditorState CurrentState => m_InworldEditorStates[m_CurrentStatus];
         void OnEnable()
         {
@@ -61,20 +76,30 @@ namespace Inworld.AI.Editor
             get => Instance.m_StudioToken;
             set => Instance.m_StudioToken = value;
         }
-        public GUIStyle BtnStyle
+        public GUIStyle BtnStyle => new GUIStyle(GUI.skin.button)
         {
-            get
+            fontSize = 12,
+            fixedWidth = 100,
+            margin = new RectOffset(10, 10, 10, 10),
+        };
+        public static string BillingAccountURL => $"https://{Instance.m_ServerConfig.web}/{Instance.m_BillingAccountURL}";
+        public static string ListWorkspaceURL => $"https://{Instance.m_ServerConfig.web}/{Instance.m_WorkspaceURL}";
+        public string Error
+        {
+            get => m_ErrorMsg;
+            set
             {
-                if (m_BtnStyle != null)
-                    return m_BtnStyle;
-                m_BtnStyle = new GUIStyle(GUI.skin.button)
-                {
-                    fontSize = 12,
-                    fixedWidth = 100,
-                    margin = new RectOffset(10, 10, 0, 0)
-                };
-                return m_BtnStyle;
+                Status = EditorStatus.Error;
+                m_ErrorMsg = value;
             }
+        }
+        public void SaveData()
+        {
+            EditorUtility.SetDirty(InworldAI.Instance);
+            EditorUtility.SetDirty(InworldAI.User);
+            EditorUtility.SetDirty(Instance);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
     }
 }

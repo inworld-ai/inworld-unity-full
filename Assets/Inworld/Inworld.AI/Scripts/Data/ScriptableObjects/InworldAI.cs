@@ -25,7 +25,11 @@ public class InworldAI : ScriptableObject
         }
     }
 
-    public static InworldUserSetting User => Instance.m_UserSetting;
+    public static InworldUserSetting User
+    {
+        get => Instance.m_UserSetting;
+        set => Instance.m_UserSetting = value;
+    }
     public static bool IsDebugMode => Instance.m_DebugMode;
     public static Client UnitySDK => new Client
     {

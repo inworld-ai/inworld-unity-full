@@ -5,9 +5,9 @@
         public void DrawTitle();
         public void DrawContent();
         public void DrawButtons();
-        public void PostUpdate()
-        {
-            
-        }
+        public void OnExit();
+        public void OnEnter();
+        public void PostUpdate();
+
     }
 }

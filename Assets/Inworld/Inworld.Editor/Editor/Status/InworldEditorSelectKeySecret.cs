@@ -15,5 +15,17 @@
         {
 
         }
+        public void OnExit()
+        {
+            
+        }
+        public void OnEnter()
+        {
+            
+        }
+        public void PostUpdate()
+        {
+            
+        }
     }
 }

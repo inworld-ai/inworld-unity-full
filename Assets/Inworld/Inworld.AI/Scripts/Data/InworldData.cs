@@ -56,6 +56,17 @@ namespace Inworld
         public object previousState; // TODO(Yan): Solve packets from saved data.
     }
     [Serializable]
+    public class ListWorkspaceResponse
+    {
+        public List<InworldWorkspaceData> workspaces;
+        public string nextPageToken;
+    }
+    [Serializable]
+    public class BillingAccountRespone
+    {
+        public List<BillingAccount> billingAccounts;
+    }
+    [Serializable]
     public class User
     {
         public string name;
@@ -107,10 +118,20 @@ namespace Inworld
         public Texture2D thumbnail;
     }
     [Serializable]
+    public class BillingAccount
+    {
+        public string name;
+        public string displayName;
+    }
+    [Serializable]
     public class InworldWorkspaceData
     {
-        public string title;
-        public string fullName;
+        public string name; // Full Name
+        public string displayName;
+        public List<string> experimentalFeatures;
+        public string billingAccount;
+        public string meta;
+        public string runtimeAccess;
         public List<InworldCharacterData> characters;
         public List<InworldSceneData> scenes;
         public List<InworldKeySecret> keySecrets;

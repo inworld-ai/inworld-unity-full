@@ -1,5 +1,4 @@
-﻿#if !UNITY_WEBGL
-using Inworld.Util;
+﻿using Inworld.Util;
 using System;
 using UnityEditor;
 using UnityEngine;
@@ -35,6 +34,11 @@ namespace Inworld.AI.Editor
             };
             _CheckUpdates();
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+            EditorApplication.quitting += OnEditorQuitting;
+        }
+        static void OnEditorQuitting()
+        {
+            InworldEditor.Instance.SaveData();
         }
         static void _CheckUpdates()
         {
@@ -46,13 +50,13 @@ namespace Inworld.AI.Editor
             UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
             updateRequest.completed += OnUpdateRequestComplete;
         }
-        static UnityWebRequest _GetResponse(AsyncOperation op)
+        public static UnityWebRequest GetResponse(AsyncOperation op)
         {
             return op is not UnityWebRequestAsyncOperation webTask ? null : webTask.webRequest;
         }
         static void OnUpdateRequestComplete(AsyncOperation obj)
         {
-            UnityWebRequest uwr = _GetResponse(obj);
+            UnityWebRequest uwr = GetResponse(obj);
             string jsonStr = "{ \"package\": " + uwr.downloadHandler.text + "}";
             ReleaseData date = JsonUtility.FromJson<ReleaseData>(jsonStr);
             if (date.package == null || date.package.Length <= 0)
@@ -145,4 +149,3 @@ namespace Inworld.AI.Editor
 
     }
 }
-#endif
