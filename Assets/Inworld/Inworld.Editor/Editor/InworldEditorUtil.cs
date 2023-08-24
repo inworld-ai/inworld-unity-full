@@ -46,16 +46,19 @@ namespace Inworld.AI.Editor
         {
             if (string.IsNullOrEmpty(InworldAI.ImportedTime))
                 InworldAI.ImportedTime = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
-            UnityWebRequest uwr = new UnityWebRequest(k_VersionCheckURL, "GET");
+            SendWebGetRequest(k_VersionCheckURL, false, OnUpdateRequestComplete);
+        }
+        public static void SendWebGetRequest(string url, bool withToken, Action<AsyncOperation> callback)
+        {
+            UnityWebRequest uwr = new UnityWebRequest(url, "GET");
             uwr.downloadHandler = new DownloadHandlerBuffer();
             uwr.timeout = 60;
+            if (withToken)
+                uwr.SetRequestHeader("Authorization", InworldEditor.Token);
             UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
-            updateRequest.completed += OnUpdateRequestComplete;
+            updateRequest.completed += callback;
         }
-        public static UnityWebRequest GetResponse(AsyncOperation op)
-        {
-            return op is not UnityWebRequestAsyncOperation webTask ? null : webTask.webRequest;
-        }
+        public static UnityWebRequest GetResponse(AsyncOperation op) => op is UnityWebRequestAsyncOperation webTask ? webTask.webRequest : null;
         static void OnUpdateRequestComplete(AsyncOperation obj)
         {
             UnityWebRequest uwr = GetResponse(obj);

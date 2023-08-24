@@ -11,7 +11,6 @@ namespace Inworld.AI.Editor
         const string k_DefaultTitle = "Please paste Auth token here:";
         const string k_UserDataPath = "Assets/Inworld/Inworld.Editor/Data";
 
-        string m_Token = "";
         Vector2 m_ScrollPosition = Vector2.zero;
         public void DrawTitle()
         {
@@ -34,7 +33,6 @@ namespace Inworld.AI.Editor
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Connect", InworldEditor.Instance.BtnStyle))
             {
-                m_Token = InworldEditor.TokenForExchange.Split(':')[0];
                 _GetBillingAccount();
             }
             GUILayout.EndHorizontal();
@@ -54,29 +52,32 @@ namespace Inworld.AI.Editor
         }
         void _GetBillingAccount()
         {
-            UnityWebRequest uwr = new UnityWebRequest(InworldEditor.BillingAccountURL,"GET");
-            uwr.SetRequestHeader("Authorization", $"Bearer {m_Token}");
-            uwr.downloadHandler = new DownloadHandlerBuffer();
+            InworldEditorUtil.SendWebGetRequest(InworldEditor.BillingAccountURL, true, OnBillingAccountCompleted);
             EditorUtility.DisplayProgressBar("Inworld", "Getting Billing Account...", 0.25f);
-            UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
-            updateRequest.completed += OnBillingAccountCompleted;
+            // UnityWebRequest uwr = new UnityWebRequest(InworldEditor.BillingAccountURL,"GET");
+            // uwr.SetRequestHeader("Authorization", InworldEditor.Token);
+            // uwr.downloadHandler = new DownloadHandlerBuffer();
+            //
+            // UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
+            // updateRequest.completed += OnBillingAccountCompleted;
         }
 
         void _ListWorkspace()
         {
+            InworldEditorUtil.SendWebGetRequest(InworldEditor.ListWorkspaceURL, true, OnListWorkspaceCompleted);
             EditorUtility.DisplayProgressBar("Inworld", "Getting Workspace data...", 0.75f);
-            UnityWebRequest uwr = new UnityWebRequest(InworldEditor.ListWorkspaceURL,"GET");
-            uwr.SetRequestHeader("Authorization", $"Bearer {m_Token}");
-            uwr.downloadHandler = new DownloadHandlerBuffer();
-            UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
-            updateRequest.completed += OnListWorkspaceCompleted;
+            // UnityWebRequest uwr = new UnityWebRequest(InworldEditor.ListWorkspaceURL,"GET");
+            // uwr.SetRequestHeader("Authorization", InworldEditor.Token);
+            // uwr.downloadHandler = new DownloadHandlerBuffer();
+            // UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
+            // updateRequest.completed += OnListWorkspaceCompleted;
         }
         void OnBillingAccountCompleted(AsyncOperation obj)
         {
             UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
             if (uwr.result != UnityWebRequest.Result.Success)
             {
-                InworldEditor.Instance.Error = uwr.error;
+                InworldEditor.Instance.Error = $"Get User Failed: {uwr.error}";
                 EditorUtility.ClearProgressBar();
                 return;
             }
@@ -111,7 +112,7 @@ namespace Inworld.AI.Editor
             if (uwr.result != UnityWebRequest.Result.Success)
             {
                 EditorUtility.ClearProgressBar();
-                InworldEditor.Instance.Status = EditorStatus.Error;
+                InworldEditor.Instance.Error = $"List Workspace Failed: {uwr.error}";
                 return;
             }
             EditorUtility.DisplayProgressBar("Inworld", "Getting Workspace data Completed", 1f);

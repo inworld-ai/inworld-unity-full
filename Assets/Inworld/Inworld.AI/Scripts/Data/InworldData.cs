@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
+// TODO(YAN): This file is huge. Split to data/req/response.
 namespace Inworld
 {
     [Serializable]
@@ -41,10 +41,10 @@ namespace Inworld
         public string api_key;
     }
     [Serializable]
-    public class LoadSceneRequest
+    public class LoadSceneRequest // TODO(Yan): Rename all to requests.
     {
         public Client client;
-        public User user;
+        public UserRequest user;
         public Capabilities capabilities;
         public UserSetting userSetting;
     }
@@ -62,12 +62,24 @@ namespace Inworld
         public string nextPageToken;
     }
     [Serializable]
+    public class ListKeyResponse
+    {
+        public List<InworldKeySecret> apiKeys;
+        public string nextPageToken;
+    }
+    [Serializable]
+    public class ListSceneResponse
+    {
+        public List<InworldSceneData> scenes;
+        public string nextPageToken;
+    }
+    [Serializable]
     public class BillingAccountRespone
     {
         public List<BillingAccount> billingAccounts;
     }
     [Serializable]
-    public class User
+    public class UserRequest
     {
         public string name;
     }
@@ -140,17 +152,20 @@ namespace Inworld
     [Serializable]
     public class InworldSceneData
     {
-        public string sceneName;
-        public string fullName;
+        public string name; // Full name
+        public string displayName;
         public string description;
         public List<string> characterFullNames;
+        // YAN: There are other fields in the response, we don't need them as they won't be updated.
     }
     [Serializable]
     public class InworldKeySecret
     {
         public string key;
         public string secret;
+        public string state;
     }
+
     [Serializable]
     public class CharacterAssets
     {

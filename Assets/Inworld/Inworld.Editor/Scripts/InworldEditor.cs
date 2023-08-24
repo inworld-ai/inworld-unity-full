@@ -24,12 +24,14 @@ namespace Inworld.AI.Editor
         [SerializeField] InworldServerConfig m_ServerConfig;
         [SerializeField] string m_BillingAccountURL;
         [SerializeField] string m_WorkspaceURL;
+        [SerializeField] string m_KeyURL;
+        [SerializeField] string m_ScenesURL;
         
         const string k_GlobalDataPath = "InworldEditor";
         static InworldEditor __inst;
         
         Dictionary<EditorStatus, IEditorState> m_InworldEditorStates = new Dictionary<EditorStatus, IEditorState>();
-        string m_StudioToken;
+        string m_StudioTokenForExchange;
         string m_ErrorMsg;
 
         public static InworldEditor Instance
@@ -73,9 +75,11 @@ namespace Inworld.AI.Editor
         }
         public static string TokenForExchange
         {
-            get => Instance.m_StudioToken;
-            set => Instance.m_StudioToken = value;
+            get => Instance.m_StudioTokenForExchange;
+            set => Instance.m_StudioTokenForExchange = value;
         }
+        public static string Token => $"Bearer {TokenForExchange.Split(':')[0]}";
+
         public GUIStyle TitleStyle => new GUIStyle(GUI.skin.label)
         {
             fontSize = 14,
@@ -92,8 +96,10 @@ namespace Inworld.AI.Editor
         {
             margin = new RectOffset(10, 10, 0, 0)
         };
-        public static string BillingAccountURL => $"https://{Instance.m_ServerConfig.web}/{Instance.m_BillingAccountURL}";
-        public static string ListWorkspaceURL => $"https://{Instance.m_ServerConfig.web}/{Instance.m_WorkspaceURL}";
+        public static string BillingAccountURL => $"https://{Instance.m_ServerConfig.web}/v1alpha/{Instance.m_BillingAccountURL}";
+        public static string ListWorkspaceURL => $"https://{Instance.m_ServerConfig.web}/v1alpha/{Instance.m_WorkspaceURL}";
+        public static string ListScenesURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/v1alpha/{wsFullName}/{Instance.m_ScenesURL}";
+        public static string ListKeyURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/v1alpha/{wsFullName}/{Instance.m_KeyURL}";
         public string Error
         {
             get => m_ErrorMsg;

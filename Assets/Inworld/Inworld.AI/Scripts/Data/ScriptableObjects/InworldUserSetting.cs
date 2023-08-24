@@ -22,7 +22,7 @@ namespace Inworld
             get => string.IsNullOrEmpty(m_PlayerName) ? "player" : m_PlayerName;
             set => m_PlayerName = value;
         }
-        public User Request => new User
+        public UserRequest Request => new UserRequest
         {
             name = Name
         };
@@ -44,5 +44,8 @@ namespace Inworld
             set => m_BillingAccount = value;
         }
         public List<InworldWorkspaceData> Workspace => m_Workspaces;
+        public List<string> WorkspaceList => m_Workspaces.Select(ws => ws.displayName).ToList();
+        public string GetWorkspaceFullName(string displayName) => m_Workspaces.FirstOrDefault(ws => ws.displayName == displayName)?.name;
+        public InworldWorkspaceData GetWorkspaceByDisplayName(string displayName) => m_Workspaces.FirstOrDefault(ws => ws.displayName == displayName);
     }
 }

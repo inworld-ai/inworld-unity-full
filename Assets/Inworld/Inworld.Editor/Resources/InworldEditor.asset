@@ -15,7 +15,9 @@ MonoBehaviour:
   m_Banner: {fileID: 2800000, guid: 27826f5951914a745bd751c0b8d249c8, type: 3}
   m_Readme: {fileID: 11400000, guid: bf7bf48dac1202d4da597adcd1fe7733, type: 2}
   m_DisplayReadmeOnLoad: 1
-  m_CurrentStatus: 0
+  m_CurrentStatus: 1
   m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
-  m_BillingAccountURL: v1alpha/billing-accounts:meListBillingAccounts
-  m_WorkspaceURL: v1alpha/workspaces
+  m_BillingAccountURL: billing-accounts:meListBillingAccounts
+  m_WorkspaceURL: workspaces
+  m_KeyURL: apikeys
+  m_ScenesURL: scenes
