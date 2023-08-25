@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -25,10 +23,10 @@ namespace Inworld.AI.Editor
             m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition, GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true));
             InworldEditor.TokenForExchange = GUILayout.TextArea(InworldEditor.TokenForExchange, customStyle);
             EditorGUILayout.EndScrollView();
-            GUILayout.FlexibleSpace();
         }
         public void DrawButtons()
         {
+            GUILayout.FlexibleSpace();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Connect", InworldEditor.Instance.BtnStyle))
@@ -44,7 +42,7 @@ namespace Inworld.AI.Editor
         }
         public void OnEnter()
         {
-            
+            InworldEditor.TokenForExchange = "";
         }
         public void PostUpdate()
         {
@@ -54,23 +52,12 @@ namespace Inworld.AI.Editor
         {
             InworldEditorUtil.SendWebGetRequest(InworldEditor.BillingAccountURL, true, OnBillingAccountCompleted);
             EditorUtility.DisplayProgressBar("Inworld", "Getting Billing Account...", 0.25f);
-            // UnityWebRequest uwr = new UnityWebRequest(InworldEditor.BillingAccountURL,"GET");
-            // uwr.SetRequestHeader("Authorization", InworldEditor.Token);
-            // uwr.downloadHandler = new DownloadHandlerBuffer();
-            //
-            // UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
-            // updateRequest.completed += OnBillingAccountCompleted;
         }
 
         void _ListWorkspace()
         {
             InworldEditorUtil.SendWebGetRequest(InworldEditor.ListWorkspaceURL, true, OnListWorkspaceCompleted);
             EditorUtility.DisplayProgressBar("Inworld", "Getting Workspace data...", 0.75f);
-            // UnityWebRequest uwr = new UnityWebRequest(InworldEditor.ListWorkspaceURL,"GET");
-            // uwr.SetRequestHeader("Authorization", InworldEditor.Token);
-            // uwr.downloadHandler = new DownloadHandlerBuffer();
-            // UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
-            // updateRequest.completed += OnListWorkspaceCompleted;
         }
         void OnBillingAccountCompleted(AsyncOperation obj)
         {

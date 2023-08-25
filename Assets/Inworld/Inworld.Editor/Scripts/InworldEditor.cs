@@ -105,6 +105,7 @@ namespace Inworld.AI.Editor
             get => m_ErrorMsg;
             set
             {
+                Debug.LogError(value);
                 Status = EditorStatus.Error;
                 m_ErrorMsg = value;
             }

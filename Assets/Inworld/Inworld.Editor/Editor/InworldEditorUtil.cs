@@ -54,7 +54,14 @@ namespace Inworld.AI.Editor
             uwr.downloadHandler = new DownloadHandlerBuffer();
             uwr.timeout = 60;
             if (withToken)
+            {
+                if (string.IsNullOrEmpty(InworldEditor.Token))
+                {
+                    InworldEditor.Instance.Error = $"Login Expired. Please login again";
+                    return;
+                }
                 uwr.SetRequestHeader("Authorization", InworldEditor.Token);
+            }
             UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
             updateRequest.completed += callback;
         }
@@ -145,6 +152,9 @@ namespace Inworld.AI.Editor
         
         [MenuItem("Inworld/User Settings", false, 1)]
         static void TopMenuUserPanel() => Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
+        
+        [MenuItem("Inworld/Editor Settings", false, 1)]
+        static void TopMenuEditorPanel() => Selection.SetActiveObjectWithContext(InworldEditor.Instance, InworldEditor.Instance);
                 
         [MenuItem("Inworld/Switch Protocol/Web socket")]
         public static void SwitchToWebSocket() => UpgradeProtocol<InworldWebSocketClient>();
@@ -162,6 +172,9 @@ namespace Inworld.AI.Editor
         
         [MenuItem("Assets/Inworld/User Settings", false, 1)]
         static void UserPanel() => Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
+        
+        [MenuItem("Assets/Inworld/Editor Settings", false, 1)]
+        static void EditorPanel() => Selection.SetActiveObjectWithContext(InworldEditor.Instance, InworldEditor.Instance);
 #endregion
 
     }

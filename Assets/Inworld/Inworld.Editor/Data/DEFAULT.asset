@@ -31,15 +31,8 @@ MonoBehaviour:
     meta: 
     runtimeAccess: RUNTIME_ACCESS_PUBLIC
     characters: []
-    scenes:
-    - name: workspaces/another-test-workspace/scenes/forest
-      displayName: Forest
-      description: Fairy forest
-      characterFullNames: []
-    keySecrets:
-    - key: OD5DO7ZEe9WoABwyAenZs7KfZURQj8sc
-      secret: Y4ogKhIaOGfAAeOhTq7rg3ds8iEqN8XazqBsIs2XleaP9iT0IInoxn3lwRwQ9HkT
-      state: ACTIVE
+    scenes: []
+    keySecrets: []
   - name: workspaces/default-z1sitgd30fy5mh4vjnlnhg
     displayName: Arcade Gladiators
     experimentalFeatures: []
