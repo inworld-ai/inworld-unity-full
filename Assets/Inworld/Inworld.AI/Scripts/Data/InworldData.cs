@@ -119,7 +119,35 @@ namespace Inworld
         public bool continuation;
         public bool turnBasedStt;
         public bool phonemeInfo;
-    }
+
+        public Capabilities() {}
+        public Capabilities(Capabilities rhs)
+        {
+            audio = rhs.audio;
+            emotions = rhs.emotions;
+            interruptions = rhs.interruptions;
+            narratedActions = rhs.narratedActions;
+            silence = rhs.silence;
+            text = rhs.text;
+            triggers = rhs.triggers;
+            continuation = rhs.continuation;
+            turnBasedStt = rhs.turnBasedStt;
+            phonemeInfo = rhs.phonemeInfo;
+        }
+        public void CopyFrom(Capabilities rhs)
+        {
+            audio = rhs.audio;
+            emotions = rhs.emotions;
+            interruptions = rhs.interruptions;
+            narratedActions = rhs.narratedActions;
+            silence = rhs.silence;
+            text = rhs.text;
+            triggers = rhs.triggers;
+            continuation = rhs.continuation;
+            turnBasedStt = rhs.turnBasedStt;
+            phonemeInfo = rhs.phonemeInfo;
+        }
+}
     [Serializable]
     public class InworldCharacterData
     {

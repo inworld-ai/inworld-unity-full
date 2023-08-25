@@ -14,6 +14,7 @@ namespace Inworld
     public class InworldController : SingletonBehavior<InworldController>
     {
         [SerializeField] InworldClient m_Client;
+        [SerializeField] InworldGameData m_GameData;
         [SerializeField] string m_SceneFullName;
         [Space(10)][SerializeField] bool m_AutoStart;
 
@@ -92,8 +93,27 @@ namespace Inworld
         }
         void Start()
         {
+            if (m_GameData)
+                LoadData(m_GameData);
             if (m_AutoStart)
                 Init();
+        }
+        public InworldGameData GameData
+        {
+            get => m_GameData;
+            set => m_GameData = value;
+        }
+
+        public void LoadData(InworldGameData gameData)
+        {
+            if (!string.IsNullOrEmpty(gameData.apiKey))
+                m_Client.APIKey = gameData.apiKey;
+            if (!string.IsNullOrEmpty(gameData.apiSecret))
+                m_Client.APISecret = gameData.apiSecret;
+            if (!string.IsNullOrEmpty(gameData.sceneFullName))
+                m_SceneFullName = gameData.sceneFullName;
+            if (gameData.capabilities != null)
+                InworldAI.Capabilities = gameData.capabilities;
         }
         public void Reconnect() => m_Client.Reconnect();
         public void Init() => m_Client.GetAccessToken();

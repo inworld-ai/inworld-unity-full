@@ -7,8 +7,7 @@ namespace Inworld.AI.Editor
     public enum EditorStatus
     {
         Init,
-        SelectWorkspace,
-        SelectKeySecret,
+        SelectGameData,
         SelectCharacter,
         Error
     }
@@ -68,8 +67,7 @@ namespace Inworld.AI.Editor
         void OnEnable()
         {
             m_InworldEditorStates[EditorStatus.Init] = new InworldEditorInit();
-            m_InworldEditorStates[EditorStatus.SelectWorkspace] = new InworldEditorSelectWorkspace();
-            m_InworldEditorStates[EditorStatus.SelectKeySecret] = new InworldEditorSelectKeySecret();
+            m_InworldEditorStates[EditorStatus.SelectGameData] = new InworldEditorSelectGameData();
             m_InworldEditorStates[EditorStatus.SelectCharacter] = new InworldEditorSelectCharacter();
             m_InworldEditorStates[EditorStatus.Error] = new InworldEditorError();
         }

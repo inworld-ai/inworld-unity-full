@@ -7,7 +7,6 @@ namespace Inworld.AI.Editor
     public class InworldEditorInit : IEditorState
     {
         const string k_DefaultTitle = "Please paste Auth token here:";
-        const string k_UserDataPath = "Assets/Inworld/Inworld.Editor/Data";
 
         Vector2 m_ScrollPosition = Vector2.zero;
         public void DrawTitle()
@@ -71,23 +70,27 @@ namespace Inworld.AI.Editor
             BillingAccountRespone date = JsonUtility.FromJson<BillingAccountRespone>(uwr.downloadHandler.text);
             if (date.billingAccounts.Count == 1)
             {
+                string displayName = date.billingAccounts[0].displayName.Split('@')[0];
                 if (!InworldAI.User || date.billingAccounts[0].name != InworldAI.User.BillingAccount)
                 {
                     // Create a new SO.
                     InworldUserSetting newUser = ScriptableObject.CreateInstance<InworldUserSetting>();
                     
-                    if (!Directory.Exists(k_UserDataPath))
+                    if (!Directory.Exists(InworldAI.UserDataPath))
                     {
-                        Directory.CreateDirectory(k_UserDataPath);
+                        Directory.CreateDirectory(InworldAI.UserDataPath);
                     }
-                    string fileName = $"{k_UserDataPath}/{date.billingAccounts[0].displayName}.asset";
+                    if (!Directory.Exists($"{InworldAI.UserDataPath}/{displayName}"))
+                    {
+                        Directory.CreateDirectory($"{InworldAI.UserDataPath}/{displayName}");
+                    }
+                    string fileName = $"{InworldAI.UserDataPath}/{displayName}/{displayName}.asset";
                     AssetDatabase.CreateAsset(newUser, fileName);
                     AssetDatabase.SaveAssets();
                     AssetDatabase.Refresh();
                     InworldAI.User = newUser;
                 }
                 InworldAI.User.BillingAccount = date.billingAccounts[0].name;
-                string displayName = date.billingAccounts[0].displayName.Split('@')[0];
                 InworldAI.User.Name = displayName;
             }
             EditorUtility.DisplayProgressBar("Inworld", "Getting Billing Account Completed!", 0.5f);
@@ -110,7 +113,7 @@ namespace Inworld.AI.Editor
             EditorUtility.SetDirty(InworldAI.User);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            InworldEditor.Instance.Status = EditorStatus.SelectWorkspace;
+            InworldEditor.Instance.Status = EditorStatus.SelectGameData;
             
         }
     }

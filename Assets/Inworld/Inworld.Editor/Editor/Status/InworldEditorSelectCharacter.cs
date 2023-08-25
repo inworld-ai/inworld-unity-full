@@ -21,7 +21,7 @@ namespace Inworld.AI.Editor
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Back", InworldEditor.Instance.BtnStyle))
             {
-                InworldEditor.Instance.Status = EditorStatus.SelectWorkspace;
+                InworldEditor.Instance.Status = EditorStatus.SelectGameData;
             }
             GUILayout.EndHorizontal();
         }

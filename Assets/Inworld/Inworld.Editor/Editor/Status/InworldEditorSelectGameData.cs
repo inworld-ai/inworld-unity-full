@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 namespace Inworld.AI.Editor
 {
     // YAN: At this moment, the ws data has already filled.
-    public class InworldEditorSelectWorkspace : IEditorState
+    public class InworldEditorSelectGameData : IEditorState
     {
         const string k_DefaultWorkspace = "--- SELECT WORKSPACE ---";
         const string k_DefaultScene = "--- SELECT SCENE ---";
@@ -51,6 +54,7 @@ namespace Inworld.AI.Editor
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button("Next", InworldEditor.Instance.BtnStyle))
                 {
+                    _SaveCurrentSettings();
                     InworldEditor.Instance.Status = EditorStatus.SelectCharacter;
                 }
             }
@@ -70,6 +74,44 @@ namespace Inworld.AI.Editor
         public void PostUpdate()
         {
             
+        }
+        void _SaveCurrentSettings()
+        {
+            InworldGameData gameData = _CreateGameDataAssets();
+            InworldController controller = Object.FindObjectOfType<InworldController>();
+            if (!controller)
+                controller = PrefabUtility.InstantiatePrefab(InworldAI.ControllerPrefab) as InworldController;
+            if (!controller)
+                return;
+            controller.GameData = gameData;
+            controller.transform.position = Vector3.zero; // YAN: Reset position for RPM Animation.
+            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+        }
+        InworldGameData _CreateGameDataAssets()
+        {
+            // Create a new SO.
+            InworldGameData gameData = ScriptableObject.CreateInstance<InworldGameData>();
+            gameData.workspaceFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspace);
+            InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
+            if (ws != null)
+            {
+                InworldSceneData sceneData = ws.scenes.FirstOrDefault(scene => scene.displayName == m_CurrentScene);
+                if (sceneData != null)
+                    gameData.sceneFullName = sceneData.name;
+                InworldKeySecret keySecret = ws.keySecrets.FirstOrDefault(key => key.key == m_CurrentKey);
+                if (keySecret != null)
+                {
+                    gameData.apiKey = keySecret.key;
+                    gameData.apiSecret = keySecret.secret;
+                }
+            }
+            gameData.capabilities = new Capabilities(InworldAI.Capabilities);
+            string directoryPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(InworldAI.User));
+            string newAssetPath = Path.Combine(directoryPath, $"{m_CurrentScene}_{m_CurrentKey.Substring(0,4)}.asset");
+            AssetDatabase.CreateAsset(gameData, newAssetPath);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            return gameData;
         }
         void _DrawWorkspaceDropDown()
         {
