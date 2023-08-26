@@ -86,6 +86,7 @@ namespace Inworld.AI.Editor
             controller.GameData = gameData;
             controller.transform.position = Vector3.zero; // YAN: Reset position for RPM Animation.
             EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+            EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
         }
         InworldGameData _CreateGameDataAssets()
         {

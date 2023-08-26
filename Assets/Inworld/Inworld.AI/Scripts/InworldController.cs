@@ -101,7 +101,14 @@ namespace Inworld
         public InworldGameData GameData
         {
             get => m_GameData;
-            set => m_GameData = value;
+            set
+            {
+                m_GameData = value;
+                #if UNITY_EDITOR
+                EditorUtility.SetDirty(this);
+                AssetDatabase.SaveAssets();
+                #endif
+            }
         }
 
         public void LoadData(InworldGameData gameData)
@@ -159,7 +166,7 @@ namespace Inworld
         public void SendText(string charID, string txtToSend)
         {
             m_Client.SendText(charID, txtToSend);
-            InworldController.Instance.LastPlayerResponseTime = Time.time;
+            LastPlayerResponseTime = Time.time;
         }
         public void SendCancelEvent(string charID, string interactionID) => m_Client.SendCancelEvent(charID, interactionID);
         public void SendTrigger(string triggerName, string charID = "", Dictionary<string, string> parameters = null)
