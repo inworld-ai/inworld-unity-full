@@ -91,23 +91,25 @@ namespace Inworld.AI.Editor
         {
             // Create a new SO.
             InworldGameData gameData = ScriptableObject.CreateInstance<InworldGameData>();
-            gameData.workspaceFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspace);
             InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
             if (ws != null)
             {
                 InworldSceneData sceneData = ws.scenes.FirstOrDefault(scene => scene.displayName == m_CurrentScene);
-                if (sceneData != null)
-                    gameData.sceneFullName = sceneData.name;
                 InworldKeySecret keySecret = ws.keySecrets.FirstOrDefault(key => key.key == m_CurrentKey);
-                if (keySecret != null)
-                {
-                    gameData.apiKey = keySecret.key;
-                    gameData.apiSecret = keySecret.secret;
-                }
+                gameData.SetData(sceneData, keySecret);
             }
             gameData.capabilities = new Capabilities(InworldAI.Capabilities);
-            string directoryPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(InworldAI.User));
-            string newAssetPath = Path.Combine(directoryPath, $"{m_CurrentScene}_{m_CurrentKey.Substring(0,4)}.asset");
+            string globalUserPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(InworldAI.User));
+            if (string.IsNullOrEmpty(globalUserPath))
+            {
+                InworldEditor.Instance.Error = "Failed to save game data: Current User Setting is null.";
+                return null;
+            }
+            if (!Directory.Exists($"{globalUserPath}/{InworldEditor.GameDataPath}"))
+            {
+                Directory.CreateDirectory($"{globalUserPath}/{InworldEditor.GameDataPath}");
+            }
+            string newAssetPath = Path.Combine($"{globalUserPath}/{InworldEditor.GameDataPath}", $"{m_CurrentScene}_{m_CurrentKey.Substring(0,4)}.asset");
             AssetDatabase.CreateAsset(gameData, newAssetPath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -195,8 +197,6 @@ namespace Inworld.AI.Editor
             ws.keySecrets.Clear();
             ws.keySecrets.AddRange(resp.apiKeys); 
         }
-
-
         void _SelectWorkspace(string workspaceDisplayName)
         {
             m_CurrentWorkspace = workspaceDisplayName;

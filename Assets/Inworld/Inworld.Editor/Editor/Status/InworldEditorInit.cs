@@ -76,15 +76,15 @@ namespace Inworld.AI.Editor
                     // Create a new SO.
                     InworldUserSetting newUser = ScriptableObject.CreateInstance<InworldUserSetting>();
                     
-                    if (!Directory.Exists(InworldAI.UserDataPath))
+                    if (!Directory.Exists(InworldEditor.UserDataPath))
                     {
-                        Directory.CreateDirectory(InworldAI.UserDataPath);
+                        Directory.CreateDirectory(InworldEditor.UserDataPath);
                     }
-                    if (!Directory.Exists($"{InworldAI.UserDataPath}/{displayName}"))
+                    if (!Directory.Exists($"{InworldEditor.UserDataPath}/{displayName}"))
                     {
-                        Directory.CreateDirectory($"{InworldAI.UserDataPath}/{displayName}");
+                        Directory.CreateDirectory($"{InworldEditor.UserDataPath}/{displayName}");
                     }
-                    string fileName = $"{InworldAI.UserDataPath}/{displayName}/{displayName}.asset";
+                    string fileName = $"{InworldEditor.UserDataPath}/{displayName}/{displayName}.asset";
                     AssetDatabase.CreateAsset(newUser, fileName);
                     AssetDatabase.SaveAssets();
                     AssetDatabase.Refresh();

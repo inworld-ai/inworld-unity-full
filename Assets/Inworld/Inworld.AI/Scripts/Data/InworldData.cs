@@ -156,7 +156,16 @@ namespace Inworld
         public string givenName;
         public CharacterAssets characterAssets;
         public Texture2D thumbnail;
+
+        public InworldCharacterData(){}
+        public InworldCharacterData(CharacterReference charRef)
+        {
+            brainName = charRef.character;
+            givenName = charRef.characterOverloads[0].defaultCharacterDescription.givenName;
+            characterAssets = new CharacterAssets(charRef.characterOverloads[0].defaultCharacterAssets);
+        }
     }
+
     [Serializable]
     public class BillingAccount
     {
@@ -172,7 +181,7 @@ namespace Inworld
         public string billingAccount;
         public string meta;
         public string runtimeAccess;
-        public List<InworldCharacterData> characters;
+        // YAN: Now charRef in scenes would be updated. No need to list characters.
         public List<InworldSceneData> scenes;
         public List<InworldKeySecret> keySecrets;
         public InworldKeySecret DefaultKey => keySecrets.Count > 0 ? keySecrets[0] : null;
@@ -183,8 +192,7 @@ namespace Inworld
         public string name; // Full name
         public string displayName;
         public string description;
-        public List<string> characterFullNames;
-        // YAN: There are other fields in the response, we don't need them as they won't be updated.
+        public List<CharacterReference> characterReferences;
     }
     [Serializable]
     public class InworldKeySecret
@@ -193,7 +201,6 @@ namespace Inworld
         public string secret;
         public string state;
     }
-
     [Serializable]
     public class CharacterAssets
     {
@@ -231,5 +238,41 @@ namespace Inworld
                 return null;
             }
         }
+        public CharacterAssets() {}
+
+        public CharacterAssets(CharacterAssets rhs)
+        {
+            rpmModelUri = rhs.rpmModelUri;
+            rpmImageUriPortrait = rhs.rpmImageUriPortrait;
+            rpmImageUriPosture = rhs.rpmImageUriPosture;
+            avatarImg = rhs.avatarImg;
+            avatarImgOriginal = rhs.avatarImgOriginal;
+        }
+        public void CopyFrom(CharacterAssets rhs)
+        {
+            rpmModelUri = rhs.rpmModelUri;
+            rpmImageUriPortrait = rhs.rpmImageUriPortrait;
+            rpmImageUriPosture = rhs.rpmImageUriPosture;
+            avatarImg = rhs.avatarImg;
+            avatarImgOriginal = rhs.avatarImgOriginal;
+        }
+    }
+    [Serializable]
+    public class CharacterDescription
+    {
+        public string givenName;
+        public string description;
+    }
+    [Serializable]
+    public class CharacterOverLoad
+    {
+        public CharacterDescription defaultCharacterDescription;
+        public CharacterAssets defaultCharacterAssets;
+    }
+    [Serializable]
+    public class CharacterReference
+    {
+        public string character; // agentID
+        public List<CharacterOverLoad> characterOverloads;
     }
 }

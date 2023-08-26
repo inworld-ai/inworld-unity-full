@@ -5,7 +5,6 @@ using UnityEngine;
 public class InworldAI : ScriptableObject
 {
     [SerializeField] InworldUserSetting m_UserSetting;
-    [SerializeField] string m_UserDataPath;
     [Header("Default Assets")]
     [SerializeField] Capabilities m_Capabilities;
     [SerializeField] Texture2D m_DefaultThumbnail;
@@ -73,7 +72,7 @@ public class InworldAI : ScriptableObject
     }
     public static void LogException(string exception) => InworldLog.LogException(exception);
     
-    public static string ImportedTime //TODO(Yan): Move to InworldEditor.asset
+    public static string ImportedTime 
     {
         get => Instance ? Instance.m_ImportedTime : "";
         set 
@@ -87,9 +86,8 @@ public class InworldAI : ScriptableObject
             #endif
         }
     }
-    public static string UserDataPath => $"{InworldPath}/{Instance.m_UserDataPath}";
     public static string InworldPath => "Assets/Inworld";
-    public static string Version //TODO(Yan): Move to InworldEditor.asset
+    public static string Version 
     {
         get => Instance ? Instance.m_Version : "";
         set 

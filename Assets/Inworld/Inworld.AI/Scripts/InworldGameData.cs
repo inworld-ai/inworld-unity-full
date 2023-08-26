@@ -1,23 +1,34 @@
 using Inworld;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 
 public class InworldGameData : ScriptableObject
 {
-    [FormerlySerializedAs("m_WorkspaceFullName")]public string workspaceFullName;
-    [FormerlySerializedAs("m_SceneFullName")]public string sceneFullName;
-    [FormerlySerializedAs("m_APIKey")]public string apiKey;
-    [FormerlySerializedAs("m_APISecret")]public string apiSecret;
-    [FormerlySerializedAs("m_Capabilities")]public Capabilities capabilities;
+    public string sceneFullName;
+    public string apiKey;
+    public string apiSecret;
+    public List<InworldCharacterData> characters;
+    public Capabilities capabilities;
 
-    public void SetData(string wsFullName, string sceneFullName, string apiKey, string apiSecret)
+    public void SetData(InworldSceneData sceneData, InworldKeySecret keySecret)
     {
-        workspaceFullName = wsFullName;
-        this.sceneFullName = sceneFullName;
-        this.apiKey = apiKey;
-        this.apiSecret = apiSecret;
+        if (sceneData != null)
+        {
+            sceneFullName = sceneData.name;
+            characters ??= new List<InworldCharacterData>();
+            characters.Clear();
+            foreach (CharacterReference charRef in sceneData.characterReferences)
+            {
+                characters.Add(new InworldCharacterData(charRef));
+            }
+        }
+        if (keySecret != null)
+        {
+            apiKey = keySecret.key;
+            apiSecret = keySecret.secret;
+        }
         capabilities = new Capabilities(InworldAI.Capabilities);
 #if UNITY_EDITOR
         EditorUtility.SetDirty(this);
