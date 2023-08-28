@@ -46,6 +46,8 @@ namespace Inworld.NDK
 
         void ConnectionStateCallback(ConnectionState state)
         {
+            InworldAI.Log("connection state from ndk is " + state.ToString());
+
             switch (state)
             {
                 case ConnectionState.Connected:
@@ -90,7 +92,7 @@ namespace Inworld.NDK
             m_CustomToken = String.Copy(token);
             Marshal.FreeCoTaskMem(Marshal.StringToHGlobalAnsi(token));
             if(_ReceiveCustomToken())
-                InworldAI.Log("NDK Token received");
+                InworldAI.Log("Valid NDK Token received");
         }
         
         void LogCallback(string message, int severity)
@@ -266,7 +268,7 @@ namespace Inworld.NDK
             InworldNDKBridge.ClientWrapper_StartClientWithCallback
             (
                 m_Wrapper.instance, serializedData,
-                serializedData.Length, serializedSessionInfo, serializedSessionInfo.Length, m_Callback
+                serializedData.Length, serializedSessionInfo, serializedSessionInfo.Length, m_Callback, m_TokenCallbackType
             ); 
         }
 

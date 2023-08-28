@@ -46,7 +46,7 @@ namespace Inworld.NDK
                 (
                     instance,
                     "DefaultClientNDK",
-                    "1.0.0", connectionStateCallback, packetCallback, logCallback, tokenCallback
+                    "1.0.0", connectionStateCallback, packetCallback, logCallback
                 );
             }
         }
@@ -82,10 +82,10 @@ namespace Inworld.NDK
         public static extern void ClientWrapper_StopAudioSession(IntPtr wrapper, string agentId);
 
         [DllImport("InworldNDK", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ClientWrapper_InitClient")]
-        public static extern void ClientWrapper_InitClient(IntPtr wrapper, string clientId, string clientVer, ConnectionStateCallbackType connectionStateCallback, PacketCallbackType packetCallback, LogCallbackType logCallback, TokenCallbackType tokenCallback);
+        public static extern void ClientWrapper_InitClient(IntPtr wrapper, string clientId, string clientVer, ConnectionStateCallbackType connectionStateCallback, PacketCallbackType packetCallback, LogCallbackType logCallback);
 
         [DllImport("InworldNDK", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ClientWrapper_StartClientWithCallback")]
-        public static extern void ClientWrapper_StartClientWithCallback(IntPtr wrapper, byte[] serializedOptions, int serializedOptionsSize, byte[] serializedSessionInfo, int sessionInfoSize, LoadSceneCallbackType loadSceneCallback);
+        public static extern void ClientWrapper_StartClientWithCallback(IntPtr wrapper, byte[] serializedOptions, int serializedOptionsSize, byte[] serializedSessionInfo, int sessionInfoSize, LoadSceneCallbackType loadSceneCallback, TokenCallbackType tokenCallback);
 
         [DllImport("InworldNDK", CallingConvention = CallingConvention.Cdecl, EntryPoint = "ClientWrapper_StartClient")]
         public static extern void ClientWrapper_StartClient(IntPtr wrapper, byte[] serializedOptions, int serializedOptionsSize);
