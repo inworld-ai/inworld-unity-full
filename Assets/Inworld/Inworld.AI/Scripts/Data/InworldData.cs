@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 // TODO(YAN): This file is huge. Split to data/req/response.
@@ -193,6 +194,7 @@ namespace Inworld
         public string displayName;
         public string description;
         public List<CharacterReference> characterReferences;
+        public float Progress => characterReferences.Count == 0 ? 1 : characterReferences.Sum(cr => cr.Progress) / characterReferences.Count;
     }
     [Serializable]
     public class InworldKeySecret
@@ -210,6 +212,11 @@ namespace Inworld
         public string avatarImg;
         public string avatarImgOriginal;
 
+        public float thumbnailProgress;
+        public float avatarProgress;
+        float _ThumbnailProgress => string.IsNullOrEmpty(ThumbnailURL) ? 0.2f : thumbnailProgress * 0.2f;
+        float _AvatarProgress => string.IsNullOrEmpty(rpmModelUri) ? 0.8f : avatarProgress * 0.8f;
+        public float Progress => _ThumbnailProgress + _AvatarProgress;
         public bool IsAsset(string url)
         {
             if (rpmImageUriPortrait == url)
@@ -223,7 +230,7 @@ namespace Inworld
             return false;
         }
 
-        public string URL
+        public string ThumbnailURL // YAN: For AvatarURL, just use rpmModelUri.
         {
             get
             {
@@ -274,5 +281,6 @@ namespace Inworld
     {
         public string character; // agentID
         public List<CharacterOverLoad> characterOverloads;
+        public float Progress => characterOverloads.Count == 1 ? characterOverloads[0].defaultCharacterAssets.Progress : 0;
     }
 }

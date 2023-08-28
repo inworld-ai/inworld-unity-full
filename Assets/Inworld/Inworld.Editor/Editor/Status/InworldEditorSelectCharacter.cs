@@ -13,7 +13,7 @@ namespace Inworld.AI.Editor
         }
         public void DrawContent()
         {
-
+            
         }
         public void DrawButtons()
         {
@@ -31,7 +31,7 @@ namespace Inworld.AI.Editor
         }
         public void OnEnter()
         {
-            
+            EditorUtility.ClearProgressBar();
         }
         public void PostUpdate()
         {

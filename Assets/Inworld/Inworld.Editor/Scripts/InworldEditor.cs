@@ -18,6 +18,7 @@ namespace Inworld.AI.Editor
         [SerializeField] Readme m_Readme;
         [SerializeField] bool m_DisplayReadmeOnLoad;
         [SerializeField] InworldCharacter m_Character2DPrefab;
+        // TODO(Yan): Let other package's editor script to Upload those characters.
         [SerializeField] InworldCharacter m_RPMPrefab;
         [SerializeField] InworldCharacter m_InnequinPrefab;
         [Space(10)][Header("Status")]
@@ -34,7 +35,6 @@ namespace Inworld.AI.Editor
         [SerializeField] string m_WorkspaceURL;
         [SerializeField] string m_KeyURL;
         [SerializeField] string m_ScenesURL;
-        [SerializeField] string m_CharacterURL;
         
         const string k_GlobalDataPath = "InworldEditor";
         static InworldEditor __inst;
@@ -112,7 +112,6 @@ namespace Inworld.AI.Editor
         public static string ListWorkspaceURL => $"https://{Instance.m_ServerConfig.web}/v1alpha/{Instance.m_WorkspaceURL}";
         public static string ListScenesURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/v1alpha/{wsFullName}/{Instance.m_ScenesURL}";
         public static string ListKeyURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/v1alpha/{wsFullName}/{Instance.m_KeyURL}";
-        public static string ListCharactersURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/v1alpha/{wsFullName}/{Instance.m_CharacterURL}";
         public string Error
         {
             get => m_ErrorMsg;

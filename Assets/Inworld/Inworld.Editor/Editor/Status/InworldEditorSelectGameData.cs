@@ -19,6 +19,7 @@ namespace Inworld.AI.Editor
         string m_CurrentScene = "--- SELECT SCENE ---";
         string m_CurrentKey = "--- SELECT KEY---";
         bool m_DisplayDataMissing = false;
+        bool m_StartDownload = false;
 
         public void DrawTitle()
         {
@@ -55,11 +56,12 @@ namespace Inworld.AI.Editor
                 if (GUILayout.Button("Next", InworldEditor.Instance.BtnStyle))
                 {
                     _SaveCurrentSettings();
-                    InworldEditor.Instance.Status = EditorStatus.SelectCharacter;
+                    _DownloadRelatedAssets();
                 }
             }
             GUILayout.EndHorizontal();
         }
+
         public void OnExit()
         {
             
@@ -67,13 +69,26 @@ namespace Inworld.AI.Editor
         public void OnEnter()
         {
             m_DisplayDataMissing = false;
+            m_StartDownload = false;
             if (InworldAI.User.Workspace.Count != 1)
                 return;
             _SelectWorkspace(InworldAI.User.Workspace[0].displayName);
         }
+        InworldSceneData _GetCurrentScene()
+        {
+            InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
+            return ws?.scenes.FirstOrDefault(scene => scene.displayName == m_CurrentScene);
+        }
         public void PostUpdate()
         {
-            
+            if (!m_StartDownload)
+                return;
+            InworldSceneData sceneData = _GetCurrentScene();
+            if (sceneData == null)
+                return;
+            EditorUtility.DisplayProgressBar("Inworld", "Downloading Assets", sceneData.Progress);
+            if (sceneData.Progress > 0.95f)
+                InworldEditor.Instance.Status = EditorStatus.SelectCharacter;
         }
         void _SaveCurrentSettings()
         {
@@ -88,6 +103,28 @@ namespace Inworld.AI.Editor
             EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
             EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
         }
+        void _DownloadRelatedAssets()
+        {
+            InworldSceneData sceneData = _GetCurrentScene();
+            if (sceneData == null)
+                return;
+            // Download Thumbnails and put under User name's folder.
+            m_StartDownload = true;
+            foreach (CharacterReference charRef in sceneData.characterReferences)
+            {
+                if (charRef.characterOverloads.Count != 1)
+                    continue;
+                
+                string thumbURL = charRef.characterOverloads[0].defaultCharacterAssets.ThumbnailURL;
+                string modelURL = charRef.characterOverloads[0].defaultCharacterAssets.rpmModelUri;
+                if (!string.IsNullOrEmpty(thumbURL))
+                    InworldEditorUtil.DownloadCharacterAsset(charRef.character, thumbURL, _OnCharThumbnailDownloaded);
+                if (!string.IsNullOrEmpty(modelURL))
+                    InworldEditorUtil.DownloadCharacterAsset(charRef.character, modelURL, _OnCharModelDownloaded);
+            }
+            // Meanwhile, showcasing progress bar.
+        }
+
         InworldGameData _CreateGameDataAssets()
         {
             // Create a new SO.
@@ -203,6 +240,8 @@ namespace Inworld.AI.Editor
             m_CurrentWorkspace = workspaceDisplayName;
             m_CurrentScene = k_DefaultScene;
             m_CurrentKey = k_DefaultKey; // YAN: Reset data.
+            m_DisplayDataMissing = false;
+            m_StartDownload = false;
             _ListScenes();
             _ListKeys();
         }
@@ -213,6 +252,71 @@ namespace Inworld.AI.Editor
         void _SelectKeys(string keyDisplayName)
         {
             m_CurrentKey = keyDisplayName;
+        }
+        // Download Avatars and put under User name's folder.
+        void _OnCharModelDownloaded(string charFullName, AsyncOperation downloadContent)
+        {
+            InworldSceneData sceneData = _GetCurrentScene();
+            if (sceneData == null)
+                return;
+            CharacterReference charRef = sceneData.characterReferences.FirstOrDefault(c => c.character == charFullName);
+            if (charRef == null || charRef.characterOverloads.Count != 1)
+                return;
+            UnityWebRequest uwr = InworldEditorUtil.GetResponse(downloadContent);
+            
+            if (uwr.result != UnityWebRequest.Result.Success)
+            {
+                InworldAI.LogError($"Failed to download model: {charFullName} with {uwr.url}");
+                charRef.characterOverloads[0].defaultCharacterAssets.avatarProgress = 1;
+                return;
+            }
+            // YAN: Currently we only download .glb files.
+            string globalUserPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(InworldAI.User));
+            if (string.IsNullOrEmpty(globalUserPath))
+            {
+                InworldEditor.Instance.Error = "Failed to save game data: Current User Setting is null.";
+                return;
+            }
+            if (!Directory.Exists($"{globalUserPath}/{InworldEditor.AvatarPath}"))
+            {
+                Directory.CreateDirectory($"{globalUserPath}/{InworldEditor.AvatarPath}");
+            }
+            string fileName = $"{charRef.characterOverloads[0].defaultCharacterDescription.givenName}_{sceneData.displayName}.glb";
+            string newAssetPath = Path.Combine($"{globalUserPath}/{InworldEditor.AvatarPath}", fileName);
+            File.WriteAllBytes(newAssetPath, uwr.downloadHandler.data);
+            charRef.characterOverloads[0].defaultCharacterAssets.avatarProgress = 1;
+        }
+        void _OnCharThumbnailDownloaded(string charFullName, AsyncOperation downloadContent)
+        {
+            InworldSceneData sceneData = _GetCurrentScene();
+            if (sceneData == null)
+                return;
+            CharacterReference charRef = sceneData.characterReferences.FirstOrDefault(c => c.character == charFullName);
+            if (charRef == null || charRef.characterOverloads.Count != 1)
+                return;
+            UnityWebRequest uwr = InworldEditorUtil.GetResponse(downloadContent);
+            
+            if (uwr.result != UnityWebRequest.Result.Success)
+            {
+                InworldAI.LogError($"Failed to download Thumbnail: {charFullName} with {uwr.url}");
+                charRef.characterOverloads[0].defaultCharacterAssets.thumbnailProgress = 1;
+                return;
+            }
+            // YAN: Currently we only download .glb files.
+            string globalUserPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(InworldAI.User));
+            if (string.IsNullOrEmpty(globalUserPath))
+            {
+                InworldEditor.Instance.Error = "Failed to save game data: Current User Setting is null.";
+                return;
+            }
+            if (!Directory.Exists($"{globalUserPath}/{InworldEditor.ThumbnailPath}"))
+            {
+                Directory.CreateDirectory($"{globalUserPath}/{InworldEditor.ThumbnailPath}");
+            }
+            string fileName = $"{charRef.characterOverloads[0].defaultCharacterDescription.givenName}_{sceneData.displayName}.png";
+            string newAssetPath = Path.Combine($"{globalUserPath}/{InworldEditor.ThumbnailPath}", fileName);
+            File.WriteAllBytes(newAssetPath, uwr.downloadHandler.data);
+            charRef.characterOverloads[0].defaultCharacterAssets.thumbnailProgress = 1;
         }
     }
 }

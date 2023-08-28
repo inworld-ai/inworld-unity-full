@@ -236,7 +236,7 @@ namespace Inworld
             {
                 m_LiveSession[agent.brainName] = agent.agentId;
                 m_Characters[agent.brainName] = agent;
-                string url = agent.characterAssets?.URL;
+                string url = agent.characterAssets?.ThumbnailURL;
                 if (!string.IsNullOrEmpty(url))
                 {
                     UnityWebRequest uwr = new UnityWebRequest(url);

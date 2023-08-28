@@ -284,15 +284,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 393ccca29f43636448025acee26204bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_UserSpeechThreshold: 0.01
+  m_AudioRate: 16000
+  m_BufferSeconds: 1
+  m_DeviceName: 
   OnRecordingStart:
     m_PersistentCalls:
       m_Calls: []
   OnRecordingEnd:
     m_PersistentCalls:
       m_Calls: []
-  m_UserSpeechThreshold: 0.01
-  m_AudioRate: 16000
-  m_BufferSeconds: 1
 --- !u!114 &5385648865442779241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,6 +307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 2901360918157399489}
+  m_GameData: {fileID: 11400000, guid: fab1490aa0a0b514f9a4908b480b8e3e, type: 2}
   m_SceneFullName: workspaces/unitytest/scenes/innequin_gallery
   m_AutoStart: 0
 --- !u!1 &5395192720753264136

@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace Inworld.AI.Editor
@@ -27,6 +28,11 @@ namespace Inworld.AI.Editor
             InworldEditor.Instance.CurrentState.DrawTitle();
             InworldEditor.Instance.CurrentState.DrawContent();
             InworldEditor.Instance.CurrentState.DrawButtons();
+            
+        }
+        void Update()
+        {
+            InworldEditor.Instance.CurrentState.PostUpdate();
         }
         void _DrawBanner()
         {

@@ -65,6 +65,11 @@ namespace Inworld.AI.Editor
             UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
             updateRequest.completed += callback;
         }
+        public static void DownloadCharacterAsset(string charFullName, string url, Action<string, AsyncOperation> callback)
+        {
+            SendWebGetRequest(url, false, op => callback(charFullName, op));
+        }
+
         public static UnityWebRequest GetResponse(AsyncOperation op) => op is UnityWebRequestAsyncOperation webTask ? webTask.webRequest : null;
         static void OnUpdateRequestComplete(AsyncOperation obj)
         {
