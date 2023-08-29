@@ -282,7 +282,7 @@ namespace Inworld
         public string character; // agentID
         public List<CharacterOverLoad> characterOverloads;
         public float Progress => characterOverloads.Count == 1 ? characterOverloads[0].defaultCharacterAssets.Progress : 0;
-        public string CharacterName
+        public string CharacterFileName
         {
             get
             {

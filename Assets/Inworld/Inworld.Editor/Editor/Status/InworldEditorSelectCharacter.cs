@@ -104,7 +104,7 @@ namespace Inworld.AI.Editor
             {
                 Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}");
             }
-            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{charRef.CharacterName}.prefab";
+            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{charRef.CharacterFileName}.prefab";
             PrefabUtility.SaveAsPrefabAsset(avatar.gameObject, newAssetPath);
             AssetDatabase.SaveAssets();
             Object.DestroyImmediate(avatar.gameObject);
@@ -112,11 +112,12 @@ namespace Inworld.AI.Editor
         }
         GameObject _GetModel(CharacterReference charRef)
         {
-            return AssetDatabase.LoadAssetAtPath<GameObject>($"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterName}.glb");
+            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
+            return !File.Exists(filePath) ? null : AssetDatabase.LoadAssetAtPath<GameObject>(filePath);
         }
         Texture2D _GetTexture2D(CharacterReference charRef)
         {
-            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterName}.png";
+            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterFileName}.png";
             if (!File.Exists(filePath))
                 return InworldAI.DefaultThumbnail;
             byte[] imgBytes = File.ReadAllBytes(filePath);
@@ -126,10 +127,10 @@ namespace Inworld.AI.Editor
         }
         GameObject _GetPrefab(CharacterReference charRef)
         {
-            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{charRef.CharacterName}.prefab";
+            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{charRef.CharacterFileName}.prefab";
             if (File.Exists(filePath))
                 return AssetDatabase.LoadAssetAtPath<GameObject>(filePath);
-            InworldAI.LogError($"Cannot find {charRef.CharacterName}.prefab");
+            InworldAI.LogError($"Cannot find {charRef.CharacterFileName}.prefab");
             return null;
         }
     }

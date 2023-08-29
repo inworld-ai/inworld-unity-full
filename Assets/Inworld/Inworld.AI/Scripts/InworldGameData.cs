@@ -1,5 +1,4 @@
 using Inworld;
-using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -13,7 +12,7 @@ public class InworldGameData : ScriptableObject
     public List<InworldCharacterData> characters;
     public Capabilities capabilities;
 
-    public string SceneName
+    public string SceneFileName
     {
         get
         {

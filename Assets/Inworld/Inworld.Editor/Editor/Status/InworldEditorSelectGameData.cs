@@ -123,9 +123,9 @@ namespace Inworld.AI.Editor
                     continue;
                 
                 string thumbURL = charRef.characterOverloads[0].defaultCharacterAssets.ThumbnailURL;
-                string thumbFileName = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterName}.png";
+                string thumbFileName = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterFileName}.png";
                 string modelURL = charRef.characterOverloads[0].defaultCharacterAssets.rpmModelUri;
-                string modelFileName = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterName}.png";
+                string modelFileName = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
                 if (File.Exists(thumbFileName))
                     charRef.characterOverloads[0].defaultCharacterAssets.thumbnailProgress = 1;
                 else if (!string.IsNullOrEmpty(thumbURL))
@@ -159,7 +159,7 @@ namespace Inworld.AI.Editor
             {
                 Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.GameDataPath}");
             }
-            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.GameDataPath}/{gameData.SceneName}.asset";
+            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.GameDataPath}/{gameData.SceneFileName}.asset";
             AssetDatabase.CreateAsset(gameData, newAssetPath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -284,7 +284,7 @@ namespace Inworld.AI.Editor
             {
                 Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}");
             }
-            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterName}.glb";
+            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
             File.WriteAllBytes(newAssetPath, uwr.downloadHandler.data);
             charRef.characterOverloads[0].defaultCharacterAssets.avatarProgress = 1;
         }
@@ -305,7 +305,7 @@ namespace Inworld.AI.Editor
             {
                 Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}");
             }
-            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterName}.png";
+            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterFileName}.png";
             File.WriteAllBytes(newAssetPath, uwr.downloadHandler.data);
             charRef.characterOverloads[0].defaultCharacterAssets.thumbnailProgress = 1;
         }
