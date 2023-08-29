@@ -47,5 +47,11 @@ namespace Inworld
         public List<string> WorkspaceList => m_Workspaces.Select(ws => ws.displayName).ToList();
         public string GetWorkspaceFullName(string displayName) => m_Workspaces.FirstOrDefault(ws => ws.displayName == displayName)?.name;
         public InworldWorkspaceData GetWorkspaceByDisplayName(string displayName) => m_Workspaces.FirstOrDefault(ws => ws.displayName == displayName);
+        public InworldSceneData GetSceneByFullName(string sceneFullName)
+        {
+            string workspaceName = sceneFullName.Substring(0, sceneFullName.IndexOf("/scenes/", StringComparison.Ordinal));
+            InworldWorkspaceData wsData = m_Workspaces.FirstOrDefault(ws => ws.name == workspaceName);
+            return wsData?.scenes.FirstOrDefault(scene => scene.name == sceneFullName);
+        }
     }
 }

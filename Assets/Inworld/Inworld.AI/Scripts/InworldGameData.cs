@@ -1,4 +1,5 @@
 using Inworld;
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -11,6 +12,15 @@ public class InworldGameData : ScriptableObject
     public string apiSecret;
     public List<InworldCharacterData> characters;
     public Capabilities capabilities;
+
+    public string SceneName
+    {
+        get
+        {
+            string[] data = sceneFullName.Split('/');
+            return data.Length < 4 ? sceneFullName : $"{data[3]}_{data[1]}";
+        }
+    }
 
     public void SetData(InworldSceneData sceneData, InworldKeySecret keySecret)
     {

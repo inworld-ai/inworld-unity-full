@@ -2,6 +2,7 @@
 using Inworld.Util;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.Build;
@@ -69,6 +70,7 @@ namespace Inworld.AI.Editor
         {
             SendWebGetRequest(url, false, op => callback(charFullName, op));
         }
+        public static string UserDataPath => Path.GetDirectoryName(AssetDatabase.GetAssetPath(InworldAI.User));
 
         public static UnityWebRequest GetResponse(AsyncOperation op) => op is UnityWebRequestAsyncOperation webTask ? webTask.webRequest : null;
         static void OnUpdateRequestComplete(AsyncOperation obj)

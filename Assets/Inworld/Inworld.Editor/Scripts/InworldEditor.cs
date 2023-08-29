@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ namespace Inworld.AI.Editor
         // TODO(Yan): Let other package's editor script to Upload those characters.
         [SerializeField] InworldCharacter m_RPMPrefab;
         [SerializeField] InworldCharacter m_InnequinPrefab;
+        [SerializeField] PlayerController m_PlayerController;
         [Space(10)][Header("Status")]
         [SerializeField] EditorStatus m_CurrentStatus;
         EditorStatus m_LastStatus;
@@ -29,6 +31,7 @@ namespace Inworld.AI.Editor
         [SerializeField] string m_GameDataPath;
         [SerializeField] string m_ThumbnailPath;
         [SerializeField] string m_AvatarPath;
+        [SerializeField] string m_PrefabPath;
         [Header("URLs:")]
         [SerializeField] InworldServerConfig m_ServerConfig;
         [SerializeField] string m_BillingAccountURL;
@@ -37,6 +40,9 @@ namespace Inworld.AI.Editor
         [SerializeField] string m_ScenesURL;
         
         const string k_GlobalDataPath = "InworldEditor";
+        const float k_LuminanceRed = 0.2126f;
+        const float k_LuminanceGreen = 0.7152f;
+        const float k_LuminanceBlue = 0.0722f;
         static InworldEditor __inst;
         
         Dictionary<EditorStatus, IEditorState> m_InworldEditorStates = new Dictionary<EditorStatus, IEditorState>();
@@ -78,6 +84,21 @@ namespace Inworld.AI.Editor
         public static string GameDataPath => Instance.m_GameDataPath;
         public static string ThumbnailPath => Instance.m_ThumbnailPath;
         public static string AvatarPath => Instance.m_AvatarPath;
+        public static string PrefabPath => Instance.m_PrefabPath;
+        public static bool Is3D => Instance.m_RPMPrefab != null || Instance.m_InnequinPrefab != null;
+        public static PlayerController PlayerController => Instance.m_PlayerController;
+        public static bool UseInnequin => Instance.m_InnequinPrefab != null;
+        public InworldCharacter DefaultPrefab => Is3D ? UseInnequin ? m_InnequinPrefab : m_RPMPrefab : m_Character2DPrefab;
+        public InworldCharacter RPMPrefab
+        {
+            get => m_RPMPrefab;
+            set => m_RPMPrefab = value;
+        }
+        public InworldCharacter InnequinPrefab
+        {
+            get => m_InnequinPrefab;
+            set => m_InnequinPrefab = value;
+        }
         void OnEnable()
         {
             m_InworldEditorStates[EditorStatus.Init] = new InworldEditorInit();
@@ -92,6 +113,8 @@ namespace Inworld.AI.Editor
         }
         public static string Token => $"Bearer {TokenForExchange.Split(':')[0]}";
 
+        float GetLuminance(Color color) => k_LuminanceRed * color.r + k_LuminanceGreen * color.g + k_LuminanceBlue * color.b;
+
         public GUIStyle TitleStyle => new GUIStyle(GUI.skin.label)
         {
             fontSize = 14,
@@ -104,10 +127,29 @@ namespace Inworld.AI.Editor
             fixedWidth = 100,
             margin = new RectOffset(10, 10, 10, 10),
         };
+        public GUIStyle BtnCharStyle(Texture2D bg)
+        {
+            float avgLuminance = bg.GetPixels().Average(GetLuminance);
+            return new GUIStyle(GUI.skin.button)
+            {
+                fixedHeight = 100,
+                fixedWidth = 100,
+                margin = new RectOffset(10, 10, 10, 10),
+                alignment = TextAnchor.LowerCenter,
+                fontStyle = FontStyle.Bold,
+                normal = new GUIStyleState
+                {
+                    textColor = avgLuminance > 0.5 ? Color.black : Color.white,
+                    background = bg
+                }
+            };
+        }
+
         public GUIStyle DropDownStyle => new GUIStyle("MiniPullDown")
         {
             margin = new RectOffset(10, 10, 0, 0)
         };
+
         public static string BillingAccountURL => $"https://{Instance.m_ServerConfig.web}/v1alpha/{Instance.m_BillingAccountURL}";
         public static string ListWorkspaceURL => $"https://{Instance.m_ServerConfig.web}/v1alpha/{Instance.m_WorkspaceURL}";
         public static string ListScenesURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/v1alpha/{wsFullName}/{Instance.m_ScenesURL}";

@@ -282,5 +282,13 @@ namespace Inworld
         public string character; // agentID
         public List<CharacterOverLoad> characterOverloads;
         public float Progress => characterOverloads.Count == 1 ? characterOverloads[0].defaultCharacterAssets.Progress : 0;
+        public string CharacterName
+        {
+            get
+            {
+                string[] data = character.Split('/');
+                return data.Length < 4 ? character : $"{data[3]}_{data[1]}";
+            }
+        }
     }
 }
