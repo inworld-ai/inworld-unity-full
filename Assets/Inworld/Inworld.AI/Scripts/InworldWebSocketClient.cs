@@ -18,7 +18,6 @@ namespace Inworld
         public override void StartSession() => StartCoroutine(_StartSession());
         public override void Disconnect() => StartCoroutine(_DisconnectAsync());
         public override LoadSceneResponse GetLiveSessionInfo() => m_CurrentSceneData;
-
         public override void SendText(string characterID, string textToSend)
         {
             if (string.IsNullOrEmpty(characterID) || string.IsNullOrEmpty(textToSend))
