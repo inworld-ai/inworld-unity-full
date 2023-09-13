@@ -38,8 +38,7 @@ namespace Inworld.Sample
             trPlayer.eulerAngles = m_InitRotation;
         }
         #endregion
-
-        #region Monobehavior Functions
+#region Monobehavior Functions
         void Start()
         {
             InworldController.Instance.OnStateChanged += OnControllerStatusChanged;
@@ -53,6 +52,16 @@ namespace Inworld.Sample
                     m_CameraController.enabled = !m_GlobalChatCanvas.activeSelf;
                 if (m_TriggerCanvas)
                     m_TriggerCanvas.SetActive(!m_TriggerCanvas.activeSelf);
+                
+                InworldController.Instance.ManualAudioCapture = m_GlobalChatCanvas.activeSelf;
+                if (m_GlobalChatCanvas.activeSelf)
+                {
+                    InworldController.Instance.EndAudioCapture();
+                }
+                else
+                {
+                    InworldController.Instance.StartAudioCapture();
+                }
             }
             UpdateSendText();
         }

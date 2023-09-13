@@ -21,40 +21,61 @@ namespace Inworld
     {
         public UnityEvent OnRecordingStart;
         public UnityEvent OnRecordingEnd;
-        public bool IsCapturing { get; set; }
+
         [SerializeField] protected int m_AudioRate = 16000;
         [SerializeField] protected int m_BufferSeconds = 1;
         
-        readonly List<ByteString> m_AudioToPush = new List<ByteString>();
-        // Size of audioclip used to collect information, need to be big enough to keep up with collect. 
-        int m_BufferSize;
-        const int k_SizeofInt16 = sizeof(short);
-        byte[] m_ByteBuffer;
+        protected const int k_SizeofInt16 = sizeof(short);
+
+        protected bool m_isCapturing;
+        public bool IsCapturing
+        {
+            get
+            {
+                return m_isCapturing;
+            }
+        }
+        protected string k_CurrentDevice;
+        protected byte[] m_ByteBuffer;
         protected float[] m_FloatBuffer;
         protected AudioClip m_Recording;
-        float m_CDCounter;
+        
+        protected readonly List<ByteString> m_AudioToPush = new List<ByteString>();
+        // Size of audioclip used to collect information, need to be big enough to keep up with collect. 
+        protected int m_BufferSize;
+        protected float m_CDCounter;
         // Last known position in AudioClip buffer.
-        int m_LastPosition;
-        bool m_AutoPush;
-        protected string m_CurrentDevice = null;
+        protected int m_LastPosition;
+        protected bool m_AutoPush;
 
-        public void StartRecording(bool autoPush = true)
+
+        public virtual void StartRecording(bool autoPush = true)
         {
-            if (!Microphone.IsRecording(m_CurrentDevice))
-                m_Recording = Microphone.Start(m_CurrentDevice, true, m_BufferSeconds, m_AudioRate);
+            if (m_isCapturing)
+                return;
             m_LastPosition = Microphone.GetPosition(null);
-            m_AudioToPush.Clear();
-            IsCapturing = true;
+            m_isCapturing = true;
             m_AutoPush = autoPush;
             OnRecordingStart.Invoke();
         }
-        public void StopRecording()
+        public virtual void StopRecording(bool pushAudio = false)
         {
-            Microphone.End(null);
-            m_AudioToPush.Clear();
-            IsCapturing = false;
-            m_AutoPush = true;
+            if (!m_isCapturing)
+                return;
+            if (pushAudio)
+                PushAudio();
+            else
+                m_AudioToPush.Clear();
+            m_isCapturing = false;
             OnRecordingEnd.Invoke();
+        }
+        public virtual void PushAudio() 
+        {
+            foreach (ByteString audioData in m_AudioToPush)
+            {
+                InworldController.Instance.SendAudio(audioData);
+            }
+            m_AudioToPush.Clear();
         }
         protected virtual void Awake()
         {
@@ -62,39 +83,32 @@ namespace Inworld
             m_ByteBuffer = new byte[m_BufferSize * 1 * k_SizeofInt16];
             m_FloatBuffer = new float[m_BufferSize * 1];
         }
-        protected virtual void Start()
+        protected virtual void OnEnable()
         {
-            m_Recording = Microphone.Start(m_CurrentDevice, true, m_BufferSeconds, m_AudioRate);
+            m_Recording = Microphone.Start(k_CurrentDevice, true, m_BufferSeconds, m_AudioRate);
         }
-        void Update()
+
+        protected virtual void OnDisable()
         {
-            if (!IsCapturing)
+            Microphone.End(k_CurrentDevice);
+        }
+        protected virtual void OnDestroy()
+        {
+            Microphone.End(k_CurrentDevice);
+        }
+
+        protected virtual void Update()
+        {
+            if (!m_isCapturing)
                 return;
-            if (!Microphone.IsRecording(m_CurrentDevice))
+            if (!Microphone.IsRecording(k_CurrentDevice))
                 StartRecording();
             if (m_CDCounter <= 0)
             {
                 m_CDCounter = 0.1f;
                 Collect();
             }
-            m_CDCounter -= Time.deltaTime;
-        }
-        void OnDestroy()
-        {
-            StopRecording();
-        }
-        protected int GetAudioData()
-        {
-            int nPosition = Microphone.GetPosition(m_CurrentDevice);
-            if (nPosition < m_LastPosition)
-                nPosition = m_BufferSize;
-            if (nPosition <= m_LastPosition)
-                return -1;
-            int nSize = nPosition - m_LastPosition;
-            if (!m_Recording.GetData(m_FloatBuffer, m_LastPosition))
-                return -1;
-            m_LastPosition = nPosition % m_BufferSize;
-            return nSize;
+            m_CDCounter -= Time.unscaledDeltaTime;
         }
         protected virtual void Collect()
         {
@@ -108,12 +122,18 @@ namespace Inworld
             else
                 m_AudioToPush.Add(audioData);
         }
-        public void PushAudio() 
+        protected virtual int GetAudioData()
         {
-            foreach (ByteString audioData in m_AudioToPush)
-            {
-                InworldController.Instance.SendAudio(audioData);
-            }
+            int nPosition = Microphone.GetPosition(k_CurrentDevice);
+            if (nPosition < m_LastPosition)
+                nPosition = m_BufferSize;
+            if (nPosition <= m_LastPosition)
+                return -1;
+            int nSize = nPosition - m_LastPosition;
+            if (!m_Recording.GetData(m_FloatBuffer, m_LastPosition))
+                return -1;
+            m_LastPosition = nPosition % m_BufferSize;
+            return nSize;
         }
     }
 }

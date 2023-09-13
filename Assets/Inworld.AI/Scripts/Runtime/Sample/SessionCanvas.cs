@@ -63,12 +63,30 @@ namespace Inworld.Sample
         }
         public void MicrophoneControl()
         {
-            InworldController.IsCapturing = !m_SwitchMic.isOn;
+            if (m_SwitchMic.isOn)
+            {
+                InworldController.Instance.StartAudioCapture();
+            }
+            else
+            {
+                InworldController.Instance.EndAudioCapture();
+            }
         }
         public void SwitchVolume()
         {
-            InworldController.Instance.CurrentCharacter.IsMute = m_Mute.isOn;
+            if (InworldController.Instance.CurrentCharacter == null)
+                return;
+            
+            InworldController.Instance.CurrentCharacter.IsMute = !m_Mute.isOn;
         }
+        
+        protected override void OnCharacterChanged(InworldCharacter oldCharacter, InworldCharacter newCharacter)
+        {
+            base.OnCharacterChanged(oldCharacter, newCharacter);
+            MicrophoneControl();
+            SwitchVolume();
+        }
+        
         protected override void OnStatusChanged(ControllerStates incomingStatus)
         {
             base.OnStatusChanged(incomingStatus);
@@ -111,6 +129,12 @@ namespace Inworld.Sample
             m_PlayPause.interactable = isOn;
             m_Mute.interactable = isOn && !playBtnOnly;
             m_SwitchMic.interactable = isOn && !playBtnOnly;
+
+            if (isOn && !playBtnOnly)
+            {
+                MicrophoneControl();
+                SwitchVolume();
+            }
         }
         void _UpdatePing(int nPingTime)
         {

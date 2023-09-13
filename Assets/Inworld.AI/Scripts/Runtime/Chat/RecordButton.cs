@@ -14,24 +14,24 @@ namespace Inworld.Sample.UI
     /// </summary>
     public class RecordButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        bool m_IsCapturingBeforeReset = false;
-        void OnEnable()
-        {
-            m_IsCapturingBeforeReset = InworldController.IsCapturing;
-            InworldController.IsCapturing = false;
-        }
         void OnDisable()
         {
-            InworldController.IsCapturing = m_IsCapturingBeforeReset;
+            if (!InworldController.Instance)
+                return;
+            InworldController.Instance.EndAudioCapture();
         }
         public void OnPointerDown(PointerEventData eventData)
         {
-            InworldController.Instance.StartRecording(false);
+            if (!InworldController.Instance)
+                return;
+            InworldController.Instance.StartAudioCapture();
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            InworldController.Instance.PushAudio();
+            if (!InworldController.Instance)
+                return;
+            InworldController.Instance.EndAudioCapture();
         }
     }
 }

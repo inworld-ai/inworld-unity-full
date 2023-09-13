@@ -32,6 +32,7 @@ namespace Inworld
     {
         #region Inspector Variables
         [SerializeField] bool m_AutoStart;
+        [SerializeField] bool m_ManualAudioCapture;
         [SerializeField] InworldSceneData m_Data;
         [SerializeField] GameObject m_InworldPlayer;
         [SerializeField] AudioCapture m_Capture;
@@ -59,8 +60,15 @@ namespace Inworld
 
         #region Properties
         /// <summary>
-        ///     Get/Set Audio Recording.
-        ///     Can only be used when audio capture has been established.
+        ///     Whether audio capture is handled automatically.
+        /// </summary>
+        public bool ManualAudioCapture
+        {
+            get => m_ManualAudioCapture;
+            set => m_ManualAudioCapture = value;
+        }
+        /// <summary>
+        ///     Whether audio is currently being captured.
         /// </summary>
         public static bool IsCapturing
         {
@@ -70,18 +78,6 @@ namespace Inworld
                     return false;
                 AudioCapture capture = Instance.m_Capture;
                 return capture != null && capture.IsCapturing;
-            }
-            set
-            {
-                if (!Instance)
-                    return;
-                AudioCapture capture = Instance.m_Capture;
-                if (!capture)
-                    return;
-                if (value)
-                    capture.StartRecording();
-                else
-                    capture.StopRecording();
             }
         }
         /// <summary>
@@ -123,7 +119,7 @@ namespace Inworld
                     return;
                 m_LastCharacter = m_CurrentCharacter;
                 m_CurrentCharacter = value;
-                if (enabled)
+                if (enabled && !m_ManualAudioCapture)
                     StartCoroutine(SwitchAudioCapture());
                 OnCharacterChanged?.Invoke(m_LastCharacter, m_CurrentCharacter);
             }
@@ -429,39 +425,6 @@ namespace Inworld
             m_Client.RuntimeEvent += OnRuntimeEvents;
             m_Client.GetAppAuth(key, secret);
         }
-        /// <summary>
-        /// Start Recording
-        /// </summary>
-        /// <param name="autoPush">If autopush, whenever you finished talking, the data would be sent to server.
-        /// by default is true</param>
-        public void StartRecording(bool autoPush = true)
-        {
-            AudioCapture capture = m_Capture;
-            if (!capture)
-                return;
-            capture.StartRecording(autoPush);
-        }
-        /// <summary>
-        /// Stop Recording
-        /// </summary>
-        public void StopRecording()
-        {
-            AudioCapture capture = m_Capture;
-            if (!capture)
-                return;
-            capture.StopRecording();
-        }
-        /// <summary>
-        /// Manually Push Audio. Called when autoPush of AudioCapture is false
-        /// </summary>
-        public void PushAudio()
-        {
-            AudioCapture capture = m_Capture;
-            if (!capture)
-                return;
-            capture.PushAudio();
-        }
-
         public async Task LoadScene(string sceneOrCharFullName = "")
         {
             string fullNameToLoad = _GetFullNameToLoad(sceneOrCharFullName);
@@ -564,6 +527,16 @@ namespace Inworld
         /// </param>
         public void StartAudioCapture(string characterID) => StartCoroutine(SwitchAudioCapture(characterID));
 
+        /// <summary>
+        ///     Start Communicating with the current Character via Audio
+        /// </summary>
+        public void StartAudioCapture()
+        {
+            if (CurrentCharacter != null)
+            {
+                StartCoroutine(SwitchAudioCapture(CurrentCharacter.ID));
+            }
+        }
 
         /// <summary>
         ///     Stop Communicating with target Character via Audio
@@ -574,11 +547,14 @@ namespace Inworld
         /// </param>
         public void EndAudioCapture(string characterID = null)
         {
+            if (m_CurrentRecordingID == null)
+                return;
+            
             if (string.IsNullOrEmpty(characterID) || characterID.Equals(m_CurrentRecordingID))
             {
                 m_Client.EndAudio(Routing.FromPlayerToAgent(m_CurrentRecordingID));
                 if (m_Capture)
-                    m_Capture.IsCapturing = false; 
+                    m_Capture.StopRecording(); 
                 m_CurrentRecordingID = null;
                 InworldAI.Log("Capture ended.");
             }
