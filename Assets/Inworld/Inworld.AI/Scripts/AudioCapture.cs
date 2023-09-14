@@ -11,6 +11,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Linq;
 
+
 namespace Inworld
 {
     /// <summary>
@@ -45,9 +46,10 @@ namespace Inworld
 
         readonly List<string> m_AudioToPush = new List<string>();
         // Size of audioclip used to collect information, need to be big enough to keep up with collect. 
-        int m_BufferSize;
-        const int k_SizeofInt16 = sizeof(short);
-        byte[] m_ByteBuffer;
+        protected int m_BufferSize;
+        protected const int k_SizeofInt16 = sizeof(short);
+        protected const int k_SizeofInt32 = sizeof(int);
+        protected byte[] m_ByteBuffer;
         protected float[] m_InputBuffer;
         protected float[] m_OutputBuffer;
         protected AudioClip m_Recording;

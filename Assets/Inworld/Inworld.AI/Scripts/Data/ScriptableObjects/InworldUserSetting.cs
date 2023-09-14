@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
 namespace Inworld
 {
     [Serializable]
@@ -16,6 +17,7 @@ namespace Inworld
         
         [SerializeField] List<InworldPlayerProfile> m_PlayerData = new List<InworldPlayerProfile>();
         [SerializeField] List<InworldWorkspaceData> m_Workspaces = new List<InworldWorkspaceData>();
+        [HideInInspector][SerializeField] string m_UserID;
         [HideInInspector][SerializeField] string m_BillingAccount;
         public string Name
         {
@@ -24,7 +26,8 @@ namespace Inworld
         }
         public UserRequest Request => new UserRequest
         {
-            name = Name
+            name = Name,
+            id = ID
         };
         public UserSetting Setting => new UserSetting
         {
@@ -38,10 +41,16 @@ namespace Inworld
                 })
             }
         };
+        public List<InworldPlayerProfile> PlayerProfiles => m_PlayerData;
         public string BillingAccount
         {
             get => m_BillingAccount;
             set => m_BillingAccount = value;
+        }
+        public string ID
+        {
+            get => m_UserID;
+            set => m_UserID = value;
         }
         public List<InworldWorkspaceData> Workspace => m_Workspaces;
         public List<string> WorkspaceList => m_Workspaces.Select(ws => ws.displayName).ToList();

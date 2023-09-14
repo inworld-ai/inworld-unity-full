@@ -129,7 +129,7 @@ namespace Inworld.AI.Editor
         };
         public GUIStyle BtnCharStyle(Texture2D bg)
         {
-            float avgLuminance = bg.GetPixels().Average(GetLuminance);
+            float avgLuminance = bg == InworldAI.DefaultThumbnail ? 0 : bg.GetPixels().Average(GetLuminance);
             return new GUIStyle(GUI.skin.button)
             {
                 fixedHeight = 100,
