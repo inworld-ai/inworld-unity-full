@@ -1,5 +1,7 @@
 using Inworld;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 public class InworldAI : ScriptableObject
@@ -79,7 +81,7 @@ public class InworldAI : ScriptableObject
         {
             if (!Instance)
                 return;
-            #if !UNITY_WEBGL
+            #if UNITY_EDITOR
             Instance.m_ImportedTime = value;
             EditorUtility.SetDirty(Instance);
             AssetDatabase.SaveAssets();
@@ -94,7 +96,7 @@ public class InworldAI : ScriptableObject
         {
             if (!Instance)
                 return;
-            #if !UNITY_WEBGL
+            #if UNITY_EDITOR
             Instance.m_Version = value;
             EditorUtility.SetDirty(Instance);
             AssetDatabase.SaveAssets();

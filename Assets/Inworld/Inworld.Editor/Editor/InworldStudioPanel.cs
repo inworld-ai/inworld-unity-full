@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 namespace Inworld.AI.Editor
@@ -43,3 +44,4 @@ namespace Inworld.AI.Editor
         }
     }
 }
+#endif

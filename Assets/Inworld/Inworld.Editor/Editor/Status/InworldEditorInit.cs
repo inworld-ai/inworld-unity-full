@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#if UNITY_EDITOR
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -117,5 +118,5 @@ namespace Inworld.AI.Editor
             
         }
     }
-
 }
+#endif

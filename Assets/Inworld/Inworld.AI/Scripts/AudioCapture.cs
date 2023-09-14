@@ -106,6 +106,7 @@ namespace Inworld
 #endif
         void _Collect()
         {
+#if !UNITY_WEBGL
             int nPosition = Microphone.GetPosition(m_DeviceName);
             if (nPosition < m_LastPosition)
                 nPosition = m_BufferSize;
@@ -120,6 +121,7 @@ namespace Inworld
             // Check if player is speaking based on audio amplitude
             float amplitude = CalculateAmplitude(m_InputBuffer);
             IsSpeaking = amplitude > m_UserSpeechThreshold;
+#endif
         }
 
         protected virtual void Init()

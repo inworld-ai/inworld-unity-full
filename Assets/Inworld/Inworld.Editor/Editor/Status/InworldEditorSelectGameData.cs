@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_EDITOR
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+
 namespace Inworld.AI.Editor
 {
     // YAN: At this moment, the ws data has already filled.
@@ -311,3 +313,4 @@ namespace Inworld.AI.Editor
         }
     }
 }
+#endif
