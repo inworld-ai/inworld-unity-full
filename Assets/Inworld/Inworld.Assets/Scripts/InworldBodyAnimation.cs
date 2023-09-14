@@ -122,7 +122,7 @@ namespace Inworld.Assets
         }
         void _StartLookAt(Vector3 lookPos)
         {
-            m_LookAtWeight = Mathf.Clamp(m_LookAtWeight + 0.01f, 0, 1);
+            m_LookAtWeight = Mathf.Clamp(1 - Vector3.Angle(transform.forward, lookPos) * 0.01f, 0, 1);
             m_BodyAnimator.SetLookAtWeight(m_LookAtWeight);
             m_BodyAnimator.SetLookAtPosition(lookPos);
         }

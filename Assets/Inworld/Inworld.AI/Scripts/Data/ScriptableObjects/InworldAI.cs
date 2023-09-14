@@ -7,9 +7,11 @@ using UnityEngine;
 public class InworldAI : ScriptableObject
 {
     [SerializeField] InworldUserSetting m_UserSetting;
+    
     [Header("Default Assets")]
     [SerializeField] Capabilities m_Capabilities;
     [SerializeField] Texture2D m_DefaultThumbnail;
+    [SerializeField] InworldUserSetting m_DefaultUserSetting;
     [SerializeField] InworldController m_ControllerPrefab;
     [Space(10)]
     [SerializeField] string m_Version;
@@ -32,7 +34,7 @@ public class InworldAI : ScriptableObject
 
     public static InworldUserSetting User
     {
-        get => Instance.m_UserSetting;
+        get => Instance.m_UserSetting ? Instance.m_UserSetting : Instance.m_DefaultUserSetting;
         set => Instance.m_UserSetting = value;
     }
     public static bool IsDebugMode => Instance.m_DebugMode;
