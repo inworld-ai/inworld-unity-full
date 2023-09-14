@@ -14,6 +14,7 @@ namespace Inworld
     public class InworldController : SingletonBehavior<InworldController>
     {
         [SerializeField] InworldClient m_Client;
+        [SerializeField] InworldGameData m_GameData;
         [SerializeField] string m_SceneFullName;
         [Space(10)][SerializeField] bool m_AutoStart;
 
@@ -92,8 +93,34 @@ namespace Inworld
         }
         void Start()
         {
+            if (m_GameData)
+                LoadData(m_GameData);
             if (m_AutoStart)
                 Init();
+        }
+        public InworldGameData GameData
+        {
+            get => m_GameData;
+            set
+            {
+                m_GameData = value;
+                #if UNITY_EDITOR
+                EditorUtility.SetDirty(this);
+                AssetDatabase.SaveAssets();
+                #endif
+            }
+        }
+
+        public void LoadData(InworldGameData gameData)
+        {
+            if (!string.IsNullOrEmpty(gameData.apiKey))
+                m_Client.APIKey = gameData.apiKey;
+            if (!string.IsNullOrEmpty(gameData.apiSecret))
+                m_Client.APISecret = gameData.apiSecret;
+            if (!string.IsNullOrEmpty(gameData.sceneFullName))
+                m_SceneFullName = gameData.sceneFullName;
+            if (gameData.capabilities != null)
+                InworldAI.Capabilities = gameData.capabilities;
         }
         public void Reconnect() => m_Client.Reconnect();
         public void Init() => m_Client.GetAccessToken();
@@ -139,7 +166,7 @@ namespace Inworld
         public void SendText(string charID, string txtToSend)
         {
             m_Client.SendText(charID, txtToSend);
-            InworldController.Instance.LastPlayerResponseTime = Time.time;
+            LastPlayerResponseTime = Time.time;
         }
         public void SendCancelEvent(string charID, string interactionID) => m_Client.SendCancelEvent(charID, interactionID);
         public void SendTrigger(string triggerName, string charID = "", Dictionary<string, string> parameters = null)
@@ -209,7 +236,7 @@ namespace Inworld
             {
                 m_LiveSession[agent.brainName] = agent.agentId;
                 m_Characters[agent.brainName] = agent;
-                string url = agent.characterAssets?.URL;
+                string url = agent.characterAssets?.ThumbnailURL;
                 if (!string.IsNullOrEmpty(url))
                 {
                     UnityWebRequest uwr = new UnityWebRequest(url);

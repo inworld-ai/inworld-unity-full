@@ -41,6 +41,7 @@ namespace Inworld
                     m_Interaction.LiveSessionID = m_Data.agentId;
             }
         }
+        
         public string Name => Data?.givenName ?? "";
         public string BrainName => Data?.brainName ?? "";
         public string ID => string.IsNullOrEmpty(Data?.agentId) ? InworldController.Instance.GetLiveSessionID(this) : Data?.agentId;

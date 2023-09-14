@@ -47,8 +47,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 4881369806813467986}
+  m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/transform
-  m_AutoStart: 0
+  m_AutoStart: 1
 --- !u!114 &3127888445581560149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,14 +62,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 393ccca29f43636448025acee26204bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_UserSpeechThreshold: 0.01
+  m_AudioRate: 16000
+  m_BufferSeconds: 1
+  m_DeviceName: 
   OnRecordingStart:
     m_PersistentCalls:
       m_Calls: []
   OnRecordingEnd:
     m_PersistentCalls:
       m_Calls: []
-  m_AudioRate: 16000
-  m_BufferSeconds: 1
 --- !u!114 &4881369806813467986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -82,3 +85,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_APIKey: 
+  m_APISecret: 
+  m_CustomToken: 

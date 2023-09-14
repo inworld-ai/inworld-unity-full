@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 594d526e859d4d9d942dcc56f243774b, type: 3}
+  m_Name: InworldEditor
+  m_EditorClassIdentifier: 
+  m_Banner: {fileID: 2800000, guid: 27826f5951914a745bd751c0b8d249c8, type: 3}
+  m_Readme: {fileID: 11400000, guid: bf7bf48dac1202d4da597adcd1fe7733, type: 2}
+  m_DisplayReadmeOnLoad: 1
+  m_Character2DPrefab: {fileID: 6956750892874934237, guid: 5841ee4822a3dae49bc57f6d3c851e6e, type: 3}
+  m_RPMPrefab: {fileID: 617440776921082803, guid: 4f93a187a84c6b14da4a4bac1375b751, type: 3}
+  m_InnequinPrefab: {fileID: 2030273176201225856, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+  m_PlayerController: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
+  m_CurrentStatus: 0
+  m_UserDataPath: UserData
+  m_GameDataPath: GameData
+  m_ThumbnailPath: Thumbnail
+  m_AvatarPath: Avatar
+  m_PrefabPath: Prefabs
+  m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_BillingAccountURL: billing-accounts:meListBillingAccounts
+  m_WorkspaceURL: workspaces
+  m_KeyURL: apikeys
+  m_ScenesURL: scenes

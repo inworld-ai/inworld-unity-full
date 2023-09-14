@@ -5,8 +5,11 @@ using UnityEngine;
 public class InworldAI : ScriptableObject
 {
     [SerializeField] InworldUserSetting m_UserSetting;
-    [SerializeField] Texture2D m_DefaultThumbnail;
+    [Header("Default Assets")]
     [SerializeField] Capabilities m_Capabilities;
+    [SerializeField] Texture2D m_DefaultThumbnail;
+    [SerializeField] InworldController m_ControllerPrefab;
+    [Space(10)]
     [SerializeField] string m_Version;
     [SerializeField] string m_ImportedTime;
     [Space(10)][SerializeField] bool m_DebugMode;
@@ -25,13 +28,22 @@ public class InworldAI : ScriptableObject
         }
     }
 
-    public static InworldUserSetting User => Instance.m_UserSetting;
+    public static InworldUserSetting User
+    {
+        get => Instance.m_UserSetting;
+        set => Instance.m_UserSetting = value;
+    }
     public static bool IsDebugMode => Instance.m_DebugMode;
     public static Client UnitySDK => new Client
     {
         id = "unity"
     };
-    public static Capabilities Capabilities => Instance.m_Capabilities;
+    public static InworldController ControllerPrefab => Instance.m_ControllerPrefab;
+    public static Capabilities Capabilities
+    {
+        get => Instance.m_Capabilities;
+        set => Instance.m_Capabilities = value;
+    }
     public static Texture2D DefaultThumbnail => Instance.m_DefaultThumbnail;
     public static void Log(string log)
     {
@@ -60,7 +72,7 @@ public class InworldAI : ScriptableObject
     }
     public static void LogException(string exception) => InworldLog.LogException(exception);
     
-    public static string ImportedTime //TODO(Yan): Move to InworldEditor.asset
+    public static string ImportedTime 
     {
         get => Instance ? Instance.m_ImportedTime : "";
         set 
@@ -74,8 +86,8 @@ public class InworldAI : ScriptableObject
             #endif
         }
     }
-    
-    public static string Version //TODO(Yan): Move to InworldEditor.asset
+    public static string InworldPath => "Assets/Inworld";
+    public static string Version 
     {
         get => Instance ? Instance.m_Version : "";
         set 

@@ -132,7 +132,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_RootOrder
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2054,15 +2054,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 393ccca29f43636448025acee26204bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_UserSpeechThreshold: 0.01
+  m_AudioRate: 16000
+  m_BufferSeconds: 1
+  m_DeviceName: 
   OnRecordingStart:
     m_PersistentCalls:
       m_Calls: []
   OnRecordingEnd:
     m_PersistentCalls:
       m_Calls: []
-  m_UserSpeechThreshold: 0.01
-  m_AudioRate: 16000
-  m_BufferSeconds: 1
 --- !u!4 &3753617578495587599
 Transform:
   m_ObjectHideFlags: 0

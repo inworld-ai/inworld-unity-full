@@ -17,7 +17,6 @@ namespace Inworld.Assets
         public Sprite icon;
         public List<MorphState> morphStates;
     }
-    [CreateAssetMenu(fileName = "FILENAME", menuName = "MENUNAME", order = 0)]
     public class InworldFacialEmotion : ScriptableObject
     {
         public List<FacialAnimation> emotions;

@@ -2,7 +2,6 @@
 
 namespace Inworld
 {
-    [CreateAssetMenu(fileName = "ServerConfig", menuName = "Inworld/ServerConfig", order = 0)]
     public class InworldServerConfig : ScriptableObject
     {
         [Header("Server Info:")]

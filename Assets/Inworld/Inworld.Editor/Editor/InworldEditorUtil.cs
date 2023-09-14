@@ -1,6 +1,7 @@
-﻿#if !UNITY_WEBGL
-using Inworld.Util;
+﻿using Inworld.Util;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEditor.Build;
@@ -35,24 +36,45 @@ namespace Inworld.AI.Editor
             };
             _CheckUpdates();
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+            EditorApplication.quitting += OnEditorQuitting;
+        }
+        static void OnEditorQuitting()
+        {
+            InworldEditor.Instance.SaveData();
         }
         static void _CheckUpdates()
         {
             if (string.IsNullOrEmpty(InworldAI.ImportedTime))
                 InworldAI.ImportedTime = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
-            UnityWebRequest uwr = new UnityWebRequest(k_VersionCheckURL, "GET");
+            SendWebGetRequest(k_VersionCheckURL, false, OnUpdateRequestComplete);
+        }
+        public static void SendWebGetRequest(string url, bool withToken, Action<AsyncOperation> callback)
+        {
+            UnityWebRequest uwr = new UnityWebRequest(url, "GET");
             uwr.downloadHandler = new DownloadHandlerBuffer();
             uwr.timeout = 60;
+            if (withToken)
+            {
+                if (string.IsNullOrEmpty(InworldEditor.Token))
+                {
+                    InworldEditor.Instance.Error = $"Login Expired. Please login again";
+                    return;
+                }
+                uwr.SetRequestHeader("Authorization", InworldEditor.Token);
+            }
             UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
-            updateRequest.completed += OnUpdateRequestComplete;
+            updateRequest.completed += callback;
         }
-        static UnityWebRequest _GetResponse(AsyncOperation op)
+        public static void DownloadCharacterAsset(string charFullName, string url, Action<string, AsyncOperation> callback)
         {
-            return op is not UnityWebRequestAsyncOperation webTask ? null : webTask.webRequest;
+            SendWebGetRequest(url, false, op => callback(charFullName, op));
         }
+        public static string UserDataPath => Path.GetDirectoryName(AssetDatabase.GetAssetPath(InworldAI.User));
+
+        public static UnityWebRequest GetResponse(AsyncOperation op) => op is UnityWebRequestAsyncOperation webTask ? webTask.webRequest : null;
         static void OnUpdateRequestComplete(AsyncOperation obj)
         {
-            UnityWebRequest uwr = _GetResponse(obj);
+            UnityWebRequest uwr = GetResponse(obj);
             string jsonStr = "{ \"package\": " + uwr.downloadHandler.text + "}";
             ReleaseData date = JsonUtility.FromJson<ReleaseData>(jsonStr);
             if (date.package == null || date.package.Length <= 0)
@@ -66,7 +88,7 @@ namespace Inworld.AI.Editor
             }
             else
             {
-                InworldAI.Version = date?.package[0]?.tag_name;
+                InworldAI.Version = date.package[0]?.tag_name;
             }
         }
         static void _AddDebugMacro()
@@ -99,6 +121,18 @@ namespace Inworld.AI.Editor
                     break;
             }
         }
+        public static void DrawDropDown(string currentItem, List<string> values, Action<string> callback)
+        {
+            if (!EditorGUILayout.DropdownButton(new GUIContent(currentItem), FocusType.Passive, InworldEditor.Instance.DropDownStyle))
+                return;
+            GenericMenu menu = new GenericMenu();
+
+            foreach (string value in values)
+            {
+                menu.AddItem(new GUIContent(value), false, () => callback(value));
+            }
+            menu.ShowAsContext();
+        }
         public static void UpgradeProtocol<T>() where T : InworldClient
         {
             if (!InworldController.Instance)
@@ -112,8 +146,42 @@ namespace Inworld.AI.Editor
 
             UnityEngine.Object.DestroyImmediate(currClient);
         }
+        /// <summary>
+        ///     For right click the project window.
+        /// </summary>
+#region Top Menu
+        [MenuItem("Inworld/Inworld Studio Panel", false, 0)]
+        static void TopMenuConnectStudio() => InworldStudioPanel.Instance.ShowPanel();
+
+        [MenuItem("Inworld/Inworld Settings", false, 1)]
+        static void TopMenuShowPanel() => Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
+        
+        [MenuItem("Inworld/User Settings", false, 1)]
+        static void TopMenuUserPanel() => Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
+        
+        [MenuItem("Inworld/Editor Settings", false, 1)]
+        static void TopMenuEditorPanel() => Selection.SetActiveObjectWithContext(InworldEditor.Instance, InworldEditor.Instance);
+                
         [MenuItem("Inworld/Switch Protocol/Web socket")]
         public static void SwitchToWebSocket() => UpgradeProtocol<InworldWebSocketClient>();
+#endregion
+
+        /// <summary>
+        ///     For right click the project window.
+        /// </summary>
+#region Asset Menu
+        [MenuItem("Assets/Inworld/Studio Panel", false, 0)]
+        static void ConnectStudio() => InworldStudioPanel.Instance.ShowPanel();
+
+        [MenuItem("Assets/Inworld/Default Settings", false, 1)]
+        static void ShowPanel() => Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
+        
+        [MenuItem("Assets/Inworld/User Settings", false, 1)]
+        static void UserPanel() => Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
+        
+        [MenuItem("Assets/Inworld/Editor Settings", false, 1)]
+        static void EditorPanel() => Selection.SetActiveObjectWithContext(InworldEditor.Instance, InworldEditor.Instance);
+#endregion
+
     }
 }
-#endif
