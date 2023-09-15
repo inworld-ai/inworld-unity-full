@@ -31,6 +31,7 @@ namespace Inworld.Sample.UI
         {
             if (!InworldController.Instance)
                 return;
+            InworldController.Instance.PushAudio();
             InworldController.Instance.EndAudioCapture();
         }
     }

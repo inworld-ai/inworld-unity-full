@@ -452,6 +452,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6560745356186654253, guid: bef69608b56b9a24fa0a2c356fae0b74, type: 3}
+      propertyPath: m_AutoPush
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6840405142551539477, guid: bef69608b56b9a24fa0a2c356fae0b74, type: 3}
       propertyPath: m_WSData
       value: 
@@ -2031,8 +2035,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5850455540921699961, guid: 377a3199ab75de842bf039ecaaf6063f, type: 3}
-        m_TargetAssemblyTypeName: Inworld.Sample.InworldPlayer, Inworld
+      - m_Target: {fileID: 106538718}
+        m_TargetAssemblyTypeName: Inworld.Sample.InworldPlayer2D, InworldAI
         m_MethodName: SendText
         m_Mode: 1
         m_Arguments:

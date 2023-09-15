@@ -220,7 +220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AutoStart: 0
-  m_ManualAudioCapture: 1
+  m_ManualAudioCapture: 0
   m_Data: {fileID: 11400000, guid: 4952df7b265f22a4b95b85966797af56, type: 2}
   m_InworldPlayer: {fileID: 467126463158232237}
   m_Capture: {fileID: 359806125}
@@ -258,6 +258,7 @@ MonoBehaviour:
   OnRecordingEnd:
     m_PersistentCalls:
       m_Calls: []
+  m_AutoPush: 1
   m_AudioRate: 16000
   m_BufferSeconds: 1
 --- !u!114 &359806126
@@ -379,6 +380,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 359806124}
     m_Modifications:
+    - target: {fileID: 4248716694280939042, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4642585711620351756, guid: d22bd8b2bca97c14295d2f6d73499a8a, type: 3}
       propertyPath: m_Data
       value: 

@@ -372,6 +372,7 @@ namespace Inworld
         /// <param name="text">string of the Text.</param>
         public void SendText(string text)
         {
+            Debug.Log("Send text: " + text);
             SendEventToAgent
             (
                 new TextEvent

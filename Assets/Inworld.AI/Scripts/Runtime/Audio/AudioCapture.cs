@@ -17,24 +17,35 @@ namespace Inworld
     /// YAN: This is a global Audio Capture controller.
     ///      For each separate InworldCharacter, we use class AudioInteraction to handle audio clips.
     /// </summary>
-    public class AudioCapture : MonoBehaviour
+    public class AudioCapture : SingletonBehavior<AudioCapture>
     {
         public UnityEvent OnRecordingStart;
         public UnityEvent OnRecordingEnd;
+        
+        /// <summary>
+        ///     Whether audio is currently blocked from being captured.
+        /// </summary>
+        public bool IsBlocked { get; set; }
+        /// <summary>
+        ///     Whether audio is currently being captured.
+        /// </summary>
+        public bool IsCapturing => m_isCapturing;
+        /// <summary>
+        ///     Wether to audio should be pushed to server automatically as it is captured.
+        /// </summary>
+        public bool AutoPush
+        {
+            get => m_AutoPush;
+            set => m_AutoPush = value;
+        }
 
+        [SerializeField] protected bool m_AutoPush = true;
         [SerializeField] protected int m_AudioRate = 16000;
         [SerializeField] protected int m_BufferSeconds = 1;
         
         protected const int k_SizeofInt16 = sizeof(short);
 
         protected bool m_isCapturing;
-        public bool IsCapturing
-        {
-            get
-            {
-                return m_isCapturing;
-            }
-        }
         protected string k_CurrentDevice;
         protected byte[] m_ByteBuffer;
         protected float[] m_FloatBuffer;
@@ -46,19 +57,16 @@ namespace Inworld
         protected float m_CDCounter;
         // Last known position in AudioClip buffer.
         protected int m_LastPosition;
-        protected bool m_AutoPush;
 
-
-        public virtual void StartRecording(bool autoPush = true)
+        internal void StartRecording()
         {
             if (m_isCapturing)
                 return;
             m_LastPosition = Microphone.GetPosition(null);
             m_isCapturing = true;
-            m_AutoPush = autoPush;
             OnRecordingStart.Invoke();
         }
-        public virtual void StopRecording(bool pushAudio = false)
+        internal void StopRecording(bool pushAudio = false)
         {
             if (!m_isCapturing)
                 return;
@@ -69,7 +77,7 @@ namespace Inworld
             m_isCapturing = false;
             OnRecordingEnd.Invoke();
         }
-        public virtual void PushAudio() 
+        internal void PushAudio() 
         {
             foreach (ByteString audioData in m_AudioToPush)
             {
@@ -99,7 +107,7 @@ namespace Inworld
 
         protected virtual void Update()
         {
-            if (!m_isCapturing)
+            if (!m_isCapturing || IsBlocked)
                 return;
             if (!Microphone.IsRecording(k_CurrentDevice))
                 StartRecording();

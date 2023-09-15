@@ -49,11 +49,11 @@ namespace Inworld.Sample
         #endregion
 
         #region Monobehavior Functions
-        void Start()
+        protected virtual void Start()
         {
             InworldController.Instance.OnStateChanged += OnControllerStatusChanged;
         }
-        void Update()
+        protected virtual void Update()
         {
             UpdateSendText();
         }

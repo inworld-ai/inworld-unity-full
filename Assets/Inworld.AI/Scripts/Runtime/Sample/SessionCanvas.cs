@@ -63,14 +63,7 @@ namespace Inworld.Sample
         }
         public void MicrophoneControl()
         {
-            if (m_SwitchMic.isOn)
-            {
-                InworldController.Instance.StartAudioCapture();
-            }
-            else
-            {
-                InworldController.Instance.EndAudioCapture();
-            }
+            AudioCapture.Instance.IsBlocked = !m_SwitchMic.isOn;
         }
         public void SwitchVolume()
         {

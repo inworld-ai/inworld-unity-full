@@ -528,7 +528,7 @@ namespace Inworld
         public void StartAudioCapture(string characterID) => StartCoroutine(SwitchAudioCapture(characterID));
 
         /// <summary>
-        ///     Start Communicating with the current Character via Audio
+        ///     Start communicating with the current character via audio input.
         /// </summary>
         public void StartAudioCapture()
         {
@@ -537,9 +537,18 @@ namespace Inworld
                 StartCoroutine(SwitchAudioCapture(CurrentCharacter.ID));
             }
         }
+        
+        /// <summary>
+        ///     Push captured audio to server.
+        ///     For use when m_ManualAudioCapture = true
+        /// </summary>
+        public void PushAudio()
+        {
+            m_Capture.PushAudio();
+        }
 
         /// <summary>
-        ///     Stop Communicating with target Character via Audio
+        ///     Stop communicating with target character via audio input
         /// </summary>
         /// <param name="characterID">
         ///     string of Character ID, would be generated only after InworldScene is loaded and session is
@@ -554,7 +563,7 @@ namespace Inworld
             {
                 m_Client.EndAudio(Routing.FromPlayerToAgent(m_CurrentRecordingID));
                 if (m_Capture)
-                    m_Capture.StopRecording(); 
+                    m_Capture.StopRecording();
                 m_CurrentRecordingID = null;
                 InworldAI.Log("Capture ended.");
             }
