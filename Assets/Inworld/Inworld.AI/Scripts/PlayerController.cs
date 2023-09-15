@@ -10,6 +10,10 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Audio Capture")]
+    [SerializeField] protected bool m_PushToTalk;
+    [SerializeField] protected KeyCode m_PushToTalkKey = KeyCode.C;
+    [Header("References")]
     [SerializeField] RectTransform m_CharButtonAnchor;
     [SerializeField] RectTransform m_ContentRT;
     [SerializeField] CharacterButton m_CharSelector;
@@ -23,19 +27,39 @@ public class PlayerController : MonoBehaviour
     readonly Dictionary<string, CharacterButton> m_Characters = new Dictionary<string, CharacterButton>();
     readonly protected Dictionary<string, ChatBubble> m_Bubbles = new Dictionary<string, ChatBubble>();
     protected string m_CurrentEmotion;
-    void Awake()
+    protected bool m_PTTKeyPressed;
+    protected bool m_BlockAudioHandling;
+    
+    // YAN: Direct 2D Sample.
+    public void ConnectInworld()
+    {
+        if (InworldController.Status == InworldConnectionStatus.Idle)
+            InworldController.Instance.Reconnect();
+        else if (InworldController.Status == InworldConnectionStatus.Connected)
+            InworldController.Instance.Disconnect();
+    }
+    
+    public void SendText(bool isTrigger = false)
+    {
+        if (string.IsNullOrEmpty(m_InputField.text) || !m_SendButton.interactable)
+            return;
+        InworldController.Instance.SendText(m_InputField.text);
+        m_InputField.text = "";
+    }
+    
+    protected virtual void Awake()
     {
         if (m_SendButton)
             m_SendButton.interactable = false;
     }
-    void OnEnable()
+    protected virtual void OnEnable()
     {
         InworldController.Client.OnStatusChanged += OnStatusChanged;
         InworldController.Instance.OnCharacterRegistered += OnCharacterRegistered;
         InworldController.Instance.OnCharacterChanged += OnCharacterChanged;
         InworldController.Instance.OnCharacterInteraction += OnInteraction;
     }
-    void OnDisable()
+    protected virtual void OnDisable()
     {
         if (!InworldController.Instance)
             return;
@@ -54,43 +78,59 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void OnStatusChanged(InworldConnectionStatus newStatus)
     {
-        m_ConnectButton.interactable = newStatus == InworldConnectionStatus.Idle || newStatus == InworldConnectionStatus.Connected;
-        m_ConnectButtonText.text = newStatus == InworldConnectionStatus.Connected ? "DISCONNECT" : "CONNECT";
+        if(m_ConnectButton)
+            m_ConnectButton.interactable = newStatus == InworldConnectionStatus.Idle || newStatus == InworldConnectionStatus.Connected;
+        if(m_ConnectButtonText)
+            m_ConnectButtonText.text = newStatus == InworldConnectionStatus.Connected ? "DISCONNECT" : "CONNECT";
 
         if (newStatus == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter)
         {
-            m_SendButton.interactable = true;
-            if (!InworldController.IsRecording)
+            if (m_SendButton)
+                m_SendButton.interactable = true;
+            if ((!m_PushToTalk || m_PTTKeyPressed) && !InworldController.IsRecording && !m_BlockAudioHandling)
                 InworldController.Instance.StartAudio(InworldController.Instance.CurrentCharacter.ID);
         }
         else
         {
-            m_SendButton.interactable = false;
-            if (InworldController.IsRecording)
+            if (m_SendButton)
+                m_SendButton.interactable = false;
+            if ((!m_PushToTalk || !m_PTTKeyPressed) && InworldController.IsRecording && !m_BlockAudioHandling)
                 InworldController.Instance.StopAudio(InworldController.Instance.CurrentCharacter.ID);
         }
         
         if (m_StatusText)
             m_StatusText.text = newStatus.ToString();
         if (newStatus == InworldConnectionStatus.Error)
-            m_StatusText.text = InworldController.Client.Error;
-    }
-
-    // YAN: Direct 2D Sample.
-    public void ConnectInworld()
-    {
-        if (InworldController.Status == InworldConnectionStatus.Idle)
-            InworldController.Instance.Reconnect();
-        else if (InworldController.Status == InworldConnectionStatus.Connected)
-            InworldController.Instance.Disconnect();
+        {
+            if(m_StatusText)
+                m_StatusText.text = InworldController.Client.Error;
+        }
     }
 
     protected virtual void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
     {
-        m_SendButton.interactable = newChar != null;
-        if (newChar != null && m_StatusText)
-            m_StatusText.text = $"Current: {newChar.Name}";
-        StartCoroutine(_SwapAudioCapture(oldChar, newChar));
+        m_SendButton.interactable = InworldController.Status == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter;
+        if (newChar != null)
+        {
+            InworldAI.Log($"Now Talking to: {newChar.Name}");
+            if (m_StatusText)
+                m_StatusText.text = $"Current: {newChar.Name}";
+        }
+        if (m_BlockAudioHandling)
+            return;
+        
+        if(!m_PushToTalk)
+            StartCoroutine(_SwapAudioCapture(oldChar, newChar));
+        else
+        {
+            if(m_PTTKeyPressed) 
+                StartCoroutine(_SwapAudioCapture(oldChar, newChar));
+            else
+            {
+                if(oldChar)
+                    InworldController.Instance.StopAudio(oldChar.ID);
+            }
+        }
     }
     IEnumerator _SwapAudioCapture(InworldCharacter oldChar, InworldCharacter newchar)
     {
@@ -98,9 +138,7 @@ public class PlayerController : MonoBehaviour
             InworldController.Instance.StopAudio(oldChar.ID);
         yield return new WaitForFixedUpdate();
         if (newchar != null && !string.IsNullOrEmpty(newchar.ID))
-        {
             InworldController.Instance.StartAudio(newchar.ID);
-        }
     }
     protected void OnInteraction(InworldPacket incomingPacket)
     {
@@ -165,16 +203,32 @@ public class PlayerController : MonoBehaviour
         scrollAnchor.sizeDelta = new Vector2(m_ContentRT.sizeDelta.x, scrollAnchor.childCount * element.Height);
     }
 
-    void Update()
+    protected virtual void Update()
+    {
+        if(m_PushToTalk && !m_BlockAudioHandling)
+            HandlePTT();
+        HandleInput();
+    }
+    
+    protected virtual void HandlePTT()
+    {
+        if (Input.GetKeyDown(m_PushToTalkKey))
+        {
+            m_PTTKeyPressed = true;
+            if (InworldController.Instance.CurrentCharacter)
+                InworldController.Instance.StartAudio(InworldController.Instance.CurrentCharacter.ID);
+        }
+        else if (Input.GetKeyUp(m_PushToTalkKey))
+        {
+            m_PTTKeyPressed = false;
+            if (InworldController.Instance.CurrentCharacter)
+                InworldController.Instance.StopAudio(InworldController.Instance.CurrentCharacter.ID);
+        }
+    }
+
+    protected virtual void HandleInput()
     {
         if (Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(KeyCode.KeypadEnter))
             SendText();
-    }
-    public void SendText(bool isTrigger = false)
-    {
-        if (string.IsNullOrEmpty(m_InputField.text) || !m_SendButton.interactable)
-            return;
-        InworldController.Instance.SendText(m_InputField.text);
-        m_InputField.text = "";
     }
 }

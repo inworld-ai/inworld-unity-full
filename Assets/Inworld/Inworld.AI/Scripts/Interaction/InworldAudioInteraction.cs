@@ -18,14 +18,12 @@ namespace Inworld.Interactions
         {
             get
             {
-                if (m_PlaybackSource)
-                    return true;
-                return m_PlaybackSource.volume == 0;
+                return m_PlaybackSource == null || !m_PlaybackSource.enabled || m_PlaybackSource.mute;
             }
             set
             {
                 if (m_PlaybackSource)
-                    m_PlaybackSource.volume = value ? 0 : 1;
+                    m_PlaybackSource.mute = value;
             }
         }
 

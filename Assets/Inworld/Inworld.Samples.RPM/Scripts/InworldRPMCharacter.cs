@@ -11,7 +11,6 @@ namespace Inworld.Sample.RPM
             if (newStatus != InworldConnectionStatus.Connected || InworldController.Instance.CurrentCharacter)
                 return;
             InworldController.Instance.CurrentCharacter = this;
-            InworldController.Instance.StartAudio();
         }
         protected override void OnCharRegistered(InworldCharacterData charData)
         {

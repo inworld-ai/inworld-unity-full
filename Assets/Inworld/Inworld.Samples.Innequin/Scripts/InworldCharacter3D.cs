@@ -18,7 +18,6 @@ namespace Inworld.Sample.Innequin
             if (newStatus != InworldConnectionStatus.Connected || InworldController.Instance.CurrentCharacter)
                 return;
             InworldController.Instance.CurrentCharacter = this;
-            InworldController.Instance.StartAudio();
         }
     }
 }

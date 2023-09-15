@@ -9,23 +9,22 @@ namespace Inworld.Sample.Innequin
         [SerializeField] GameObject m_ChatCanvas;
         [SerializeField] TMP_Text m_Subtitle;
 
-        void Update()
+        protected override void HandleInput()
         {
             if (Input.GetKeyUp(KeyCode.BackQuote))
+            {
                 m_ChatCanvas.SetActive(!m_ChatCanvas.activeSelf);
-            if (!m_ChatCanvas.activeSelf)
-                return;
-            if (Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(KeyCode.KeypadEnter))
-                SendText();
+                InworldController.Instance.StopAudio();
+                AudioCapture.Instance.AutoPush = !m_ChatCanvas.activeSelf;
+                m_BlockAudioHandling = m_ChatCanvas.activeSelf;
+
+                if (!m_ChatCanvas.activeSelf)
+                    return;
+            }
+            base.HandleInput();
         }
         protected override void OnCharacterRegistered(InworldCharacterData charData){}
-
-        protected override void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
-        {
-            m_SendButton.interactable = InworldController.Status == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter;
-            if (newChar != null && m_StatusText)
-                m_StatusText.text = $"Current: {newChar.Name}";
-        }
+        
         protected override void HandleText(TextPacket packet)
         {
             if (packet.text == null || string.IsNullOrEmpty(packet.text.text))

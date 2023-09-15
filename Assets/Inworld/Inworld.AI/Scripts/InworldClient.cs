@@ -27,11 +27,7 @@ namespace Inworld
                 return;
             m_AudioCapture.SamplePlayingWavData(data, channels);
         }
-        public bool IsRecording
-        {
-            get => m_AudioCapture.IsCapturing;
-            set => m_AudioCapture.IsCapturing = value;
-        }
+        public bool IsRecording => m_AudioCapture.IsCapturing;
         public InworldServerConfig Server
         {
             get => m_ServerConfig;
@@ -42,7 +38,7 @@ namespace Inworld
             get => m_Token;
             set => m_Token = value;
         }
-        public bool IsSpeaking =>  m_AudioCapture.IsSpeaking;
+        public bool IsSpeaking =>  m_AudioCapture.PlayerIsSpeaking;
         public virtual bool IsTokenValid => m_Token != null && m_Token.IsValid;
         public virtual void GetAccessToken()
         {

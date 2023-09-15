@@ -65,9 +65,12 @@ namespace Inworld.Sample.RPM
         }
         public void MicrophoneControl()
         {
-            InworldController.Client.IsRecording = !m_SwitchMic.isOn;
+            AudioCapture.Instance.IsBlocked = !m_SwitchMic.isOn;
         }
-        public void SwitchVolume() => m_Interaction.IsMute = m_Mute.isOn;
+        public void SwitchVolume()
+        {
+            m_Interaction.IsMute = m_Mute.isOn;
+        }
 
         protected override void OnStatusChanged(InworldConnectionStatus incomingStatus)
         {
@@ -112,6 +115,12 @@ namespace Inworld.Sample.RPM
             m_PlayPause.interactable = isOn;
             m_Mute.interactable = isOn && !playBtnOnly;
             m_SwitchMic.interactable = isOn && !playBtnOnly;
+            
+            if (isOn && !playBtnOnly)
+            {
+                MicrophoneControl();
+                SwitchVolume();
+            }
         }
         void _UpdatePing(int nPingTime)
         {
