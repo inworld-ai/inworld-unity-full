@@ -1,6 +1,8 @@
 using Inworld.Packet;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using UnityEngine;
 
 
 namespace Inworld.NDK
@@ -61,13 +63,19 @@ namespace Inworld.NDK
 
         public override LoadSceneResponse GetLiveSessionInfo() => InworldNDK.From.NDKLoadSceneResponse(AgentList);
         
-        public override void StartSession()
+        public override void StartSession() => StartCoroutine(_StartSession());
+
+        IEnumerator _StartSession()
         {
             if (!IsTokenValid)
-                return;
+                yield break;
+            yield return new WaitForFixedUpdate();
             Status = InworldConnectionStatus.Connecting;
+            yield return new WaitForFixedUpdate();
             NDKInterop.Unity_StartSession();
+            yield return new WaitForFixedUpdate();
             Status = InworldConnectionStatus.Connected;
+            yield return new WaitForFixedUpdate();
         }
 
         public override void SendText(string characterID, string textToSend)
