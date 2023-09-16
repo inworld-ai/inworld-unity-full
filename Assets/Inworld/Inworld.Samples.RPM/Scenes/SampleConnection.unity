@@ -2040,6 +2040,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 4881369807930947640}
+  m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
   m_AutoStart: 0
 --- !u!114 &3127888446599029823
@@ -2095,7 +2096,7 @@ MonoBehaviour:
   m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
   m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
-  m_CustomToken: 
+  m_CustomToken: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
 --- !u!1 &5395192720743982845
 GameObject:
   m_ObjectHideFlags: 0
