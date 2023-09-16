@@ -46,7 +46,7 @@ namespace Inworld
         protected const int k_SizeofInt16 = sizeof(short);
 
         protected bool m_isCapturing;
-        protected string k_CurrentDevice;
+        protected string m_CurrentDevice;
         protected byte[] m_ByteBuffer;
         protected float[] m_FloatBuffer;
         protected AudioClip m_Recording;
@@ -58,11 +58,23 @@ namespace Inworld
         // Last known position in AudioClip buffer.
         protected int m_LastPosition;
 
+        public void SwitchAudioInputDevice(string deviceName)
+        {
+            if(m_CurrentDevice == deviceName)
+                return;
+            
+            if (Microphone.IsRecording(m_CurrentDevice))
+                Microphone.End(m_CurrentDevice);
+
+            m_CurrentDevice = deviceName;
+            m_Recording = Microphone.Start(m_CurrentDevice, true, m_BufferSeconds, m_AudioRate);
+        }
+
         internal void StartRecording()
         {
             if (m_isCapturing)
                 return;
-            m_LastPosition = Microphone.GetPosition(null);
+            m_LastPosition = Microphone.GetPosition(m_CurrentDevice);
             m_isCapturing = true;
             OnRecordingStart.Invoke();
         }
@@ -93,24 +105,24 @@ namespace Inworld
         }
         protected virtual void OnEnable()
         {
-            m_Recording = Microphone.Start(k_CurrentDevice, true, m_BufferSeconds, m_AudioRate);
+            m_Recording = Microphone.Start(m_CurrentDevice, true, m_BufferSeconds, m_AudioRate);
         }
 
         protected virtual void OnDisable()
         {
-            Microphone.End(k_CurrentDevice);
+            Microphone.End(m_CurrentDevice);
         }
         protected virtual void OnDestroy()
         {
-            Microphone.End(k_CurrentDevice);
+            Microphone.End(m_CurrentDevice);
         }
 
         protected virtual void Update()
         {
             if (!m_isCapturing || IsBlocked)
                 return;
-            if (!Microphone.IsRecording(k_CurrentDevice))
-                StartRecording();
+            if (!Microphone.IsRecording(m_CurrentDevice))
+                m_Recording = Microphone.Start(m_CurrentDevice, true, m_BufferSeconds, m_AudioRate);
             if (m_CDCounter <= 0)
             {
                 m_CDCounter = 0.1f;
@@ -132,7 +144,7 @@ namespace Inworld
         }
         protected virtual int GetAudioData()
         {
-            int nPosition = Microphone.GetPosition(k_CurrentDevice);
+            int nPosition = Microphone.GetPosition(m_CurrentDevice);
             if (nPosition < m_LastPosition)
                 nPosition = m_BufferSize;
             if (nPosition <= m_LastPosition)

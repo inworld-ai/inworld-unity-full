@@ -40,7 +40,7 @@ public class AudioCaptureTest : AudioCapture
     {
         if (!IsCapturing)
             return;
-        if (!Microphone.IsRecording(k_CurrentDevice))
+        if (!Microphone.IsRecording(m_CurrentDevice))
             StartRecording();
         Collect();
     }
@@ -52,7 +52,9 @@ public class AudioCaptureTest : AudioCapture
             m_Text.text = "Please Choose Input Device!";
             return;
         }
-        m_Text.text = k_CurrentDevice = Microphone.devices[nDeviceIndex];
+        string newDevice = Microphone.devices[nDeviceIndex];
+        m_Text.text = newDevice;
+        SwitchAudioInputDevice(newDevice);
         StartRecording();
         m_Button.interactable = true;
         m_Button.image.sprite = m_MicOn;
