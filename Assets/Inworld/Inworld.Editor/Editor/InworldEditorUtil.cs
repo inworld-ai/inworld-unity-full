@@ -1,12 +1,15 @@
-﻿using Inworld.Util;
+﻿#if UNITY_EDITOR
+using Inworld.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
+
 using UnityEngine;
+using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine.Networking;
+
 
 namespace Inworld.AI.Editor
 {
@@ -185,3 +188,4 @@ namespace Inworld.AI.Editor
 
     }
 }
+#endif

@@ -188,6 +188,8 @@ namespace Inworld.Sample.RPM
         protected void HandleLipSync(AudioPacket audioPacket)
         {
             _Reset();
+            if (audioPacket.dataChunk == null)
+                return;
             foreach (var phoneme in audioPacket.dataChunk.additionalPhonemeInfo)
             {
                 PhonemeToViseme p2vRes = m_LipsyncMap.p2vMap.FirstOrDefault(p2v => p2v.phoneme == phoneme.phoneme);

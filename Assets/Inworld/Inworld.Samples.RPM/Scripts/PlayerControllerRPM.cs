@@ -23,20 +23,24 @@ namespace Inworld.Sample.RPM
             {
                 if (m_SendButton)
                     m_SendButton.interactable = true;
-                if (!InworldController.IsRecording)
+                if (InworldController.Instance.CurrentCharacter)
                     InworldController.Instance.StartAudio(InworldController.Instance.CurrentCharacter.ID);
             }
             else
             {
                 if (m_SendButton)
                     m_SendButton.interactable = false;
-                if (InworldController.IsRecording)
+                if (InworldController.Instance.CurrentCharacter)
                     InworldController.Instance.StopAudio(InworldController.Instance.CurrentCharacter.ID);
             }
             if (m_StatusText)
                 m_StatusText.text = newStatus.ToString();
             if (newStatus == InworldConnectionStatus.Error)
-                m_StatusText.text = InworldController.Client.Error;
+            {
+                if (m_StatusText)
+                    m_StatusText.text = InworldController.Client.Error;
+            }
+                
         }
         protected override void OnCharacterRegistered(InworldCharacterData charData)
         {

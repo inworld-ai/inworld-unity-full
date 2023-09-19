@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using Inworld.AI.Editor;
 using Inworld.NDK;
 using UnityEditor;
@@ -28,4 +29,4 @@ namespace Inworld
         public static void UpgradeNDK() => InworldEditorUtil.UpgradeProtocol<InworldNDKClient>();
     }
 }
-
+#endif

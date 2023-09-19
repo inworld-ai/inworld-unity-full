@@ -191,10 +191,10 @@ namespace Inworld
             string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter.ID : charID;
             if (InworldAI.IsDebugMode)
                 InworldAI.Log($"Stop Audio Event {charIDToSend}");
+            m_CurrentAudioID = null;
             if (!IsRegistered(charIDToSend))
                 return;
             m_Client.StopAudio(charIDToSend);
-            m_CurrentAudioID = null;
         }
         public void SendAudio(string base64, string charID = "")
         {

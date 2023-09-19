@@ -60,13 +60,12 @@ public class PlayerController : MonoBehaviour
         if (newStatus == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter)
         {
             m_SendButton.interactable = true;
-            if (!InworldController.IsRecording)
-                InworldController.Instance.StartAudio(InworldController.Instance.CurrentCharacter.ID);
+            InworldController.Instance.StartAudio(InworldController.Instance.CurrentCharacter.ID);
         }
         else
         {
             m_SendButton.interactable = false;
-            if (InworldController.IsRecording)
+            if (InworldController.Instance.CurrentCharacter)
                 InworldController.Instance.StopAudio(InworldController.Instance.CurrentCharacter.ID);
         }
         

@@ -1042,7 +1042,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1921052527070687568
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1059,7 +1059,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &2025559071161676140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1278,6 +1279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 4881369808059828751}
+  m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/innequin_gallery
   m_AutoStart: 1
 --- !u!114 &2404778410810529725
@@ -1896,15 +1898,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 393ccca29f43636448025acee26204bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_UserSpeechThreshold: 0.01
+  m_AudioRate: 16000
+  m_BufferSeconds: 1
+  m_DeviceName: 
   OnRecordingStart:
     m_PersistentCalls:
       m_Calls: []
   OnRecordingEnd:
     m_PersistentCalls:
       m_Calls: []
-  m_UserSpeechThreshold: 0.01
-  m_AudioRate: 16000
-  m_BufferSeconds: 1
 --- !u!4 &3138453234662044001
 Transform:
   m_ObjectHideFlags: 0
@@ -2825,7 +2828,7 @@ CanvasRenderer:
   m_CullTransparentMesh: 1
 --- !u!95 &5085467240365127113
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2842,7 +2845,8 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5138512523939493728
 GameObject:
   m_ObjectHideFlags: 0
@@ -3623,8 +3627,8 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 6662721371746022343}
   m_AABB:
-    m_Center: {x: 0, y: 0.8424903, z: 0.03157915}
-    m_Extent: {x: 0.9185131, y: 0.8444667, z: 0.16999246}
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 2, y: 2, z: 2}
   m_DirtyAABB: 0
 --- !u!4 &6656665932304175406
 Transform:
@@ -3680,6 +3684,8 @@ MonoBehaviour:
       rpmImageUriPosture: 
       avatarImg: 
       avatarImgOriginal: 
+      thumbnailProgress: 0
+      avatarProgress: 0
     thumbnail: {fileID: 0}
   m_VerboseLog: 0
   onBeginSpeaking:
@@ -3817,7 +3823,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3483127850249723202}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5556377779205328930}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &6830306280290612827
 RectTransform:
   m_ObjectHideFlags: 0

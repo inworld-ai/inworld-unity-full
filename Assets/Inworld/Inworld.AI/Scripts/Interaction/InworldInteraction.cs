@@ -136,7 +136,9 @@ namespace Inworld.Interactions
         void Add(InworldPacket packet)
         {
             if (packet.packetId == null || string.IsNullOrEmpty(packet.packetId.interactionId))
+            {
                 return;
+            }
             Interaction interaction = this[packet.packetId.interactionId] ?? new Interaction(packet.packetId.interactionId);
             Utterance utterance = interaction[packet.packetId.utteranceId] ?? new Utterance(packet.packetId.utteranceId);
             interaction.Status = PacketStatus.RECEIVED; // Refresh Interaction Status.
