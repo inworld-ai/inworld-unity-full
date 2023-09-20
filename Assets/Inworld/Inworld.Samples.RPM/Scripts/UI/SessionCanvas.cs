@@ -135,6 +135,7 @@ namespace Inworld.Sample.RPM
         {
             while (enabled)
             {
+                #if !UNITY_WEBGL
                 if (m_IsConnecting)
                 {
                     Ping ping = new Ping(ipv4);
@@ -146,6 +147,7 @@ namespace Inworld.Sample.RPM
                     m_CurrentDuration = 0;
                     _UpdatePing(ping.isDone ? ping.time : 1000);
                 }
+                #endif
                 yield return new WaitForSeconds(m_PingDuration);
             }
         }

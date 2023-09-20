@@ -83,6 +83,7 @@ namespace Inworld
     public class UserRequest
     {
         public string name;
+        public string id;
     }
     [Serializable]
     public class UserSetting

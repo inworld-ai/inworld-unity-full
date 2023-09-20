@@ -82,7 +82,6 @@ public class PlayerController : MonoBehaviour
             m_ConnectButton.interactable = newStatus == InworldConnectionStatus.Idle || newStatus == InworldConnectionStatus.Connected;
         if(m_ConnectButtonText)
             m_ConnectButtonText.text = newStatus == InworldConnectionStatus.Connected ? "DISCONNECT" : "CONNECT";
-
         if (newStatus == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter)
         {
             if (m_SendButton)

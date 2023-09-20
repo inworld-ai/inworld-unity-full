@@ -47,7 +47,7 @@ namespace Inworld
         public virtual InworldConnectionStatus Status
         {
             get => m_Status;
-            protected set
+            set
             {
                 m_Status = value;
                 OnStatusChanged?.Invoke(value);
@@ -99,6 +99,7 @@ namespace Inworld
         {
             m_AudioCapture = GetComponent<AudioCapture>();
         }
+        public void ChangeStatus(InworldConnectionStatus status) => OnStatusChanged?.Invoke(status);
         public void Dispatch(InworldPacket packet) => OnPacketReceived?.Invoke(packet);
 
         internal string APIKey

@@ -4,13 +4,12 @@
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
-
-using Google.Protobuf;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Linq;
+
 
 namespace Inworld
 {
@@ -55,6 +54,7 @@ namespace Inworld
         public string DeviceName => m_DeviceName;
         
         protected const int k_SizeofInt16 = sizeof(short);
+        protected const int k_SizeofInt32 = sizeof(int);
         
         protected readonly List<string> m_AudioToPush = new List<string>();
         
@@ -165,6 +165,7 @@ namespace Inworld
         }
         protected virtual void Collect()
         {
+#if !UNITY_WEBGL
             int nPosition = Microphone.GetPosition(m_DeviceName);
             if (nPosition < m_LastPosition)
                 nPosition = m_BufferSize;
@@ -184,6 +185,7 @@ namespace Inworld
             // Check if player is speaking based on audio amplitude
             float amplitude = CalculateAmplitude(m_InputBuffer);
             m_PlayerIsSpeaking = amplitude > m_UserSpeechThreshold;
+#endif            
         }
         protected virtual byte[] Output(int nSize)
         {

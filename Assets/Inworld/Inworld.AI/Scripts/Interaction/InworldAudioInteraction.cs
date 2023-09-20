@@ -2,6 +2,7 @@
 using UnityEngine;
 using Inworld.Packet;
 using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 namespace Inworld.Interactions
 {
