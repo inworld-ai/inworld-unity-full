@@ -1918,7 +1918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 393ccca29f43636448025acee26204bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AutoPush: 1
+  m_AutoPush: 0
   m_UserSpeechThreshold: 0.01
   m_AudioRate: 16000
   m_BufferSeconds: 1
@@ -3383,7 +3383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 445d631026be4dff9ea5c295e0e0cb9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PushToTalk: 0
+  m_PushToTalk: 1
   m_PushToTalkKey: 99
   m_CharButtonAnchor: {fileID: 0}
   m_ContentRT: {fileID: 0}

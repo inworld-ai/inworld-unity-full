@@ -22,6 +22,11 @@ namespace Inworld.Sample.RPM
             }
             base.HandleInput();
         }
+        
+        protected override void OnCharacterRegistered(InworldCharacterData charData)
+        {
+            
+        }
 
         protected override void HandleTrigger(CustomPacket customPacket)
         {
