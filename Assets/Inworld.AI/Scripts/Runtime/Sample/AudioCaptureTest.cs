@@ -25,10 +25,6 @@ public class AudioCaptureTest : AudioCapture
         base.Awake();
         _InitUI();
     }
-    protected override void Start()
-    {
-        
-    }
     void _InitUI()
     {
         string[] devices = Microphone.devices;
@@ -40,7 +36,7 @@ public class AudioCaptureTest : AudioCapture
             m_Dropdown.options.Add(new TMP_Dropdown.OptionData(device));
         }
     }
-    void Update()
+    protected override void Update()
     {
         if (!IsCapturing)
             return;
@@ -56,10 +52,12 @@ public class AudioCaptureTest : AudioCapture
             m_Text.text = "Please Choose Input Device!";
             return;
         }
-        m_Text.text = m_CurrentDevice = Microphone.devices[nDeviceIndex];
+        string newDevice = Microphone.devices[nDeviceIndex];
+        m_Text.text = newDevice;
+        SwitchAudioInputDevice(newDevice);
         StartRecording();
         m_Button.interactable = true;
-        m_Button.image.sprite = m_MicOff;
+        m_Button.image.sprite = m_MicOn;
     }
     protected override void Collect()
     {
@@ -73,12 +71,12 @@ public class AudioCaptureTest : AudioCapture
             return;
         if (m_Button.image.sprite == m_MicOff)
         {
-            StopRecording();
+            StartRecording();
             m_Button.image.sprite = m_MicOn;
         }
         else
         {
-            StartRecording();
+            StopRecording();
             m_Button.image.sprite = m_MicOff;
         }
     }

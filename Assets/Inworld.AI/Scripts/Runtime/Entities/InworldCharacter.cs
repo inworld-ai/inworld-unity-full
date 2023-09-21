@@ -77,18 +77,17 @@ namespace Inworld
         ///     Returns Unity Event of Interaction.
         /// </summary>
         public InteractionEvent InteractionEvent { get; } = new InteractionEvent();
+
         public bool IsMute
         {
             get
-            {
-                if (PlaybackSource)
-                    return true;
-                return PlaybackSource.volume == 0;
+            { 
+                return PlaybackSource == null || PlaybackSource.mute || !PlaybackSource.enabled;
             }
             set
             {
                 if (PlaybackSource)
-                    PlaybackSource.volume = value ? 0 : 1;
+                    PlaybackSource.mute = value;
             }
         }
         /// <summary>
@@ -341,28 +340,31 @@ namespace Inworld
                 m_Interaction.Clear();
         }
         /// <summary>
-        ///     Start Audio Capture to this character manually.
+        ///     Start an interaction with this character manually.
+        ///     This sets the CurrentCharacter of InworldController.
         /// </summary>
-        public void StartAudioCapture()
+        public void StartInteraction()
         {
             if (string.IsNullOrEmpty(ID))
             {
                 InworldAI.LogError($"Failed to start audio capture: {CharacterName} not registerd in live session");
                 return;
             }
-            InworldController.Instance.StartAudioCapture(ID);
+            InworldController.Instance.CurrentCharacter = this;
         }
         /// <summary>
-        ///     Stop Audio Capture to this character manually.
+        ///     Ends an interaction with this character manually.
+        ///     This updates the CurrentCharacter of InworldController.
         /// </summary>
-        public void EndAudioCapture()
+        public void EndInteraction()
         {
             if (string.IsNullOrEmpty(ID))
             {
                 InworldAI.LogError($"Failed to end audio capture: {CharacterName} not registerd in live session");
                 return;
             }
-            InworldController.Instance.EndAudioCapture(ID);
+            if (InworldController.Instance.CurrentCharacter == this)
+                InworldController.Instance.CurrentCharacter = null;
         }
         /// <summary>
         ///     Send Text to this Character via InworldPacket.
@@ -370,6 +372,7 @@ namespace Inworld
         /// <param name="text">string of the Text.</param>
         public void SendText(string text)
         {
+            Debug.Log("Send text: " + text);
             SendEventToAgent
             (
                 new TextEvent
