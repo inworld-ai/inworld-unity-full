@@ -14,14 +14,32 @@ namespace Inworld.Sample.Innequin
             if (Input.GetKeyUp(KeyCode.BackQuote))
             {
                 m_ChatCanvas.SetActive(!m_ChatCanvas.activeSelf);
-                InworldController.Instance.StopAudio();
-                AudioCapture.Instance.AutoPush = !m_ChatCanvas.activeSelf;
                 m_BlockAudioHandling = m_ChatCanvas.activeSelf;
+                if (m_PushToTalk)
+                {
+                    if (InworldController.Instance.CurrentCharacter)
+                        InworldController.Instance.StopAudio(InworldController.Instance.CurrentCharacter.ID);
+                }
+                else
+                {
+                    if (m_ChatCanvas.activeSelf)
+                    {
+                        if (InworldController.Instance.CurrentCharacter)
+                            InworldController.Instance.StopAudio(InworldController.Instance.CurrentCharacter.ID);
+                    }
+                    else
+                    {
+                        if (InworldController.Instance.CurrentCharacter)
+                            InworldController.Instance.StartAudio(InworldController.Instance.CurrentCharacter.ID);
+                    }
+                }
 
-                if (!m_ChatCanvas.activeSelf)
-                    return;
             }
-            base.HandleInput();
+            if (m_ChatCanvas.activeSelf)
+            {
+                if (Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(KeyCode.KeypadEnter))
+                    SendText();
+            }
         }
         protected override void OnCharacterRegistered(InworldCharacterData charData){}
         

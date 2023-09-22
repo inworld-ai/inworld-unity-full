@@ -94,6 +94,7 @@ namespace Inworld
         public virtual void SendTrigger(string charID, string triggerName, Dictionary<string, string> parameters) => Error = k_NotImplented;
         public virtual void StartAudio(string charID) => Error = k_NotImplented;
         public virtual void StopAudio(string charID) => Error = k_NotImplented;
+        public virtual void PushAudio(string charID) => Error = k_NotImplented;
         public virtual void SendAudio(string charID, string base64) => Error = k_NotImplented;
         protected virtual void Init()
         {

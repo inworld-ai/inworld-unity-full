@@ -95,6 +95,8 @@ namespace Inworld
         {
             if (string.IsNullOrEmpty(charID))
                 return;
+            if (m_AudioCapture.IsCapturing)
+                m_AudioCapture.StopRecording();
             InworldPacket packet = new ControlPacket
             {
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
@@ -108,8 +110,12 @@ namespace Inworld
             };
             string jsonToSend = JsonUtility.ToJson(packet);
             m_Socket.SendAsync(jsonToSend);
-            if (m_AudioCapture.IsCapturing)
-                m_AudioCapture.StopRecording();
+        }
+        public override void PushAudio(string charID)
+        {
+            if (string.IsNullOrEmpty(charID))
+                return;
+            m_AudioCapture.PushAudio(charID);
         }
         public override void SendAudio(string charID, string base64)
         {

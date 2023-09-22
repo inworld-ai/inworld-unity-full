@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] protected TMP_Text m_ConnectButtonText;
     [SerializeField] protected TMP_InputField m_InputField;
     [SerializeField] protected Button m_SendButton;
+    [SerializeField] protected Button m_RecordButton;
     [SerializeField] protected Button m_ConnectButton;
     readonly Dictionary<string, CharacterButton> m_Characters = new Dictionary<string, CharacterButton>();
     readonly protected Dictionary<string, ChatBubble> m_Bubbles = new Dictionary<string, ChatBubble>();
@@ -39,18 +41,20 @@ public class PlayerController : MonoBehaviour
             InworldController.Instance.Disconnect();
     }
     
-    public void SendText(bool isTrigger = false)
+    public void SendText()
     {
-        if (string.IsNullOrEmpty(m_InputField.text) || !m_SendButton.interactable)
+        if (!InworldController.Instance.CurrentCharacter || !m_InputField || string.IsNullOrEmpty(m_InputField.text))
             return;
         InworldController.Instance.SendText(m_InputField.text);
         m_InputField.text = "";
     }
-    
+
     protected virtual void Awake()
     {
         if (m_SendButton)
             m_SendButton.interactable = false;
+        if (m_RecordButton)
+            m_RecordButton.interactable = false;
     }
     protected virtual void OnEnable()
     {
@@ -86,6 +90,8 @@ public class PlayerController : MonoBehaviour
         {
             if (m_SendButton)
                 m_SendButton.interactable = true;
+            if (m_RecordButton)
+                m_RecordButton.interactable = true;
             if ((!m_PushToTalk || m_PTTKeyPressed) && !InworldController.IsRecording && !m_BlockAudioHandling)
                 InworldController.Instance.StartAudio(InworldController.Instance.CurrentCharacter.ID);
         }
@@ -93,6 +99,8 @@ public class PlayerController : MonoBehaviour
         {
             if (m_SendButton)
                 m_SendButton.interactable = false;
+            if (m_RecordButton)
+                m_RecordButton.interactable = false;
             if ((!m_PushToTalk || !m_PTTKeyPressed) && InworldController.IsRecording && !m_BlockAudioHandling)
                 InworldController.Instance.StopAudio(InworldController.Instance.CurrentCharacter.ID);
         }
@@ -108,7 +116,10 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
     {
-        m_SendButton.interactable = InworldController.Status == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter;
+        if(m_RecordButton)
+            m_RecordButton.interactable = InworldController.Status == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter;
+        if(m_SendButton)
+            m_SendButton.interactable = InworldController.Status == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter;
         if (newChar != null)
         {
             InworldAI.Log($"Now Talking to: {newChar.Name}");
@@ -227,7 +238,6 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void HandleInput()
     {
-        if (Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(KeyCode.KeypadEnter))
-            SendText();
+
     }
 }

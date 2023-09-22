@@ -158,6 +158,8 @@ namespace Inworld
         // ReSharper disable Unity.PerformanceAnalysis
         public void SendText(string txtToSend)
         {
+            if (!m_CurrentCharacter)
+                return;
             // 1. Interrupt current speaking.
             m_CurrentCharacter.CancelResponse();
             // 2. Send Text.
@@ -195,6 +197,11 @@ namespace Inworld
             if (!IsRegistered(charIDToSend))
                 return;
             m_Client.StopAudio(charIDToSend);
+        }
+        public void PushAudio(string charID = "")
+        {
+            string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter.ID : charID;
+            m_Client.PushAudio(charIDToSend);
         }
         public void SendAudio(string base64, string charID = "")
         {

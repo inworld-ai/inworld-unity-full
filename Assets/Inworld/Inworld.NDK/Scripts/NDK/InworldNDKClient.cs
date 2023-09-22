@@ -119,9 +119,15 @@ namespace Inworld.NDK
         {
             if (string.IsNullOrEmpty(charID))
                 return;
-            NDKInterop.Unity_StopAudio(charID);
             if (m_AudioCapture.IsCapturing)
                 m_AudioCapture.StopRecording();
+            NDKInterop.Unity_StopAudio(charID);
+        }
+        public override void PushAudio(string charID)
+        {
+            if (string.IsNullOrEmpty(charID))
+                return;
+            m_AudioCapture.PushAudio(charID);
         }
         public override void SendAudio(string charID, string base64)
         {

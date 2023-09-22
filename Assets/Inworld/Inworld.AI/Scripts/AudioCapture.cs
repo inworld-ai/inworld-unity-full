@@ -92,28 +92,28 @@ namespace Inworld
 #endif
             OnRecordingStart.Invoke();
         }
-        public void StopRecording(bool pushAudio = false)
+        public void StopRecording()
         {
 #if !UNITY_WEBGL
             if (!m_IsCapturing)
                 return;
-            if (pushAudio)
-                PushAudio();
-            else 
-                m_AudioToPush.Clear();
+            m_AudioToPush.Clear();
             m_IsCapturing = false;
 #endif
             OnRecordingEnd.Invoke();
         }
-        public void PushAudio()
+        public void PushAudio(string charID)
         {
 #if !UNITY_WEBGL
             foreach (string audioData in m_AudioToPush)
             {
-                InworldController.Instance.SendAudio(audioData);
+                InworldController.Instance.SendAudio(audioData, charID);
             }
-            m_AudioToPush.Clear();
 #endif
+        }
+        public void Clear()
+        {
+            m_AudioToPush.Clear();
         }
 #endregion
 
