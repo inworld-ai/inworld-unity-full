@@ -35,10 +35,7 @@ namespace Inworld.Sample.RPM
 
             }
             if (m_ChatCanvas.activeSelf)
-            {
-                if (Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(KeyCode.KeypadEnter))
-                    SendText();
-            }
+                base.HandleInput();
         }
         
         protected override void OnCharacterRegistered(InworldCharacterData charData)

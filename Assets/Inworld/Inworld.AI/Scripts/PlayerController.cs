@@ -238,6 +238,7 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void HandleInput()
     {
-
+        if (Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(KeyCode.KeypadEnter))
+            SendText();
     }
 }
