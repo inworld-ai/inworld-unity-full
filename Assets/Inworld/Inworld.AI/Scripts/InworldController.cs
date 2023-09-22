@@ -178,9 +178,9 @@ namespace Inworld
         }
         public void StartAudio(string charID = "")
         {
-            if (m_CurrentAudioID == charID)
-                return;
             string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter.ID : charID;
+            if (m_CurrentAudioID == charIDToSend)
+                return;
             if (InworldAI.IsDebugMode)
                 InworldAI.Log($"Start Audio Event {charIDToSend}");
             if (!IsRegistered(charIDToSend))
