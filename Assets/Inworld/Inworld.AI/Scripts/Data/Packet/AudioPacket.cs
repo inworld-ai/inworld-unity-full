@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using UnityEngine;
 
 namespace Inworld.Packet
@@ -32,9 +33,16 @@ namespace Inworld.Packet
             {
                 if (dataChunk == null || string.IsNullOrEmpty(dataChunk.chunk))
                     return null;
-                byte[] bytes = Convert.FromBase64String(dataChunk.chunk);
-                AudioClip clip = WavUtility.ToAudioClip(bytes);
-                return clip;
+                try
+                {
+                    byte[] bytes = Convert.FromBase64String(dataChunk.chunk);
+                    return WavUtility.ToAudioClip(bytes);
+                }
+                catch (Exception)
+                {
+                    InworldAI.LogError("Data converting failed.");
+                    return null;
+                }
             }
         }
     }

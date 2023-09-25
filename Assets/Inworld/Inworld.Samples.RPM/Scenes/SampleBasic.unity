@@ -262,6 +262,7 @@ MonoBehaviour:
   OnRecordingEnd:
     m_PersistentCalls:
       m_Calls: []
+  IsCapturing: 1
 --- !u!114 &359806128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,7 +291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21ebe20281149b5af3916a834d90391, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IsEnabled: 0
+  m_IsEnabled: 1
 --- !u!1 &444891039
 GameObject:
   m_ObjectHideFlags: 0

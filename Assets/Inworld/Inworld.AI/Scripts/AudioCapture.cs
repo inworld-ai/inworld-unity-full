@@ -30,7 +30,7 @@ namespace Inworld
         /// <summary>
         /// Signifies if microphone is capturing audio.
         /// </summary>
-        public bool IsCapturing { get; set; }
+        public bool IsCapturing = true; //{ get; set; }
         /// <summary>
         /// Signifies if user is speaking based on audio amplitud and threshold.
         /// </summary>
@@ -62,7 +62,7 @@ namespace Inworld
 #if !UNITY_WEBGL
             m_LastPosition = Microphone.GetPosition(null);
             m_AudioToPush.Clear();
-            IsCapturing = true;
+            // IsCapturing = true;
             if (!Microphone.IsRecording(m_DeviceName))
                 m_Recording = Microphone.Start(m_DeviceName, true, m_BufferSeconds, m_AudioRate);
 #endif
