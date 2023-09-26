@@ -36,6 +36,7 @@ namespace Inworld.Packet
                 try
                 {
                     byte[] bytes = Convert.FromBase64String(dataChunk.chunk);
+                    
                     return WavUtility.ToAudioClip(bytes);
                 }
                 catch (Exception)

@@ -90,7 +90,7 @@ namespace Inworld.NDK
     public struct AudioPacket
     {
         public Packet packet;
-        [MarshalAs(UnmanagedType.LPWStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string audioChunk;
         public int type;
         public int phonemeCount;
