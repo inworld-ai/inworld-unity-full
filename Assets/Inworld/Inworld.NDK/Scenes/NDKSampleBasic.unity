@@ -278,6 +278,7 @@ MonoBehaviour:
   OnRecordingEnd:
     m_PersistentCalls:
       m_Calls: []
+  IsCapturing: 1
 --- !u!114 &359806130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,7 +291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21ebe20281149b5af3916a834d90391, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IsEnabled: 0
+  m_IsEnabled: 1
 --- !u!1 &444891039
 GameObject:
   m_ObjectHideFlags: 0
@@ -3158,7 +3159,7 @@ GameObject:
   m_IsActive: 1
 --- !u!95 &6301156353467882248
 Animator:
-  serializedVersion: 5
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3175,8 +3176,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!224 &6399228851079108952
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3766,7 +3766,7 @@ MonoBehaviour:
       thumbnailProgress: 0
       avatarProgress: 0
     thumbnail: {fileID: 0}
-  m_VerboseLog: 1
+  m_VerboseLog: 0
   onBeginSpeaking:
     m_PersistentCalls:
       m_Calls: []

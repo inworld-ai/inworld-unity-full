@@ -198,7 +198,7 @@ namespace Inworld
         }
         public void SendAudio(string base64, string charID = "")
         {
-            string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter.ID : charID;
+            string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter ? m_CurrentCharacter.ID : "" : charID ;
             if (!IsRegistered(charIDToSend))
                 return;
             m_Client.SendAudio(charIDToSend, base64);

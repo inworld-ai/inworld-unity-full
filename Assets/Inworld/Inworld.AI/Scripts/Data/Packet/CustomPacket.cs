@@ -21,7 +21,7 @@ namespace Inworld.Packet
         public CustomEvent()
         {
             name = "";
-            parameters = null;
+            parameters = new List<TriggerParamer>();
         }
 
         public CustomEvent(string eventName, Dictionary<string, string> eventParameters)
@@ -49,7 +49,20 @@ namespace Inworld.Packet
                 return match.Success && match.Groups.Count > 1 ? match.Groups[1].Value : custom.name;
             }
         }
-        public string Trigger => custom.parameters.Aggregate(TriggerName, (current, param) => current + $" {param.name}: {param.value}");
+        public string Trigger
+        {
+            get
+            {
+                string result = TriggerName;
+                if (custom.parameters == null || custom.parameters.Count == 0)
+                    return result;
+                foreach (var param in custom.parameters)
+                {
+                    result += $"{param.name}: {param.value} ";
+                }
+                return result;
+            }
+        }
 
         public CustomPacket()
         {
