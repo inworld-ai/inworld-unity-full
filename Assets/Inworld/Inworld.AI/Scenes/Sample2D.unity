@@ -249,6 +249,7 @@ GameObject:
   - component: {fileID: 5385648865442779241}
   - component: {fileID: 4653857099923982790}
   - component: {fileID: 2901360918157399489}
+  - component: {fileID: 6911381471636183287}
   m_Layer: 0
   m_Name: InworldController
   m_TagString: Untagged
@@ -359,6 +360,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6911381471636183287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2801687289496358892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4f92db331c103a4aa88a10e82275245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ManualAudioHandling: 1
+  m_DefaultCharacter: {fileID: 0}
 --- !u!1001 &7328141237567351055
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -389,7 +404,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 401423953070606001, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
       propertyPath: m_Name
-      value: PlayerController
+      value: PlayerController2D
       objectReference: {fileID: 0}
     - target: {fileID: 476010710970603916, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
       propertyPath: m_AnchorMax.y

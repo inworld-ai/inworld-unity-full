@@ -201,6 +201,7 @@ GameObject:
   - component: {fileID: 359806126}
   - component: {fileID: 359806128}
   - component: {fileID: 359806129}
+  - component: {fileID: 359806130}
   m_Layer: 0
   m_Name: Inworld Controller
   m_TagString: Untagged
@@ -292,6 +293,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IsEnabled: 0
+--- !u!114 &359806130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359806122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4f92db331c103a4aa88a10e82275245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ManualAudioHandling: 0
+  m_DefaultCharacter: {fileID: 2043750324}
 --- !u!1 &444891039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1079,6 +1094,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1934973844}
   m_CullTransparentMesh: 1
+--- !u!114 &2043750324 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2779047371885436891, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+  m_PrefabInstance: {fileID: 1453845965}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39f0a4db40e914b489ec8b9169ecb4e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4551171349568899441
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1095,6 +1121,10 @@ PrefabInstance:
       propertyPath: m_StatusText
       value: 
       objectReference: {fileID: 1934973846}
+    - target: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
+      propertyPath: m_ConnectButton
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
       propertyPath: m_PushToTalkKey
       value: 99

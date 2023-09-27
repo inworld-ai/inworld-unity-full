@@ -4,9 +4,6 @@
 * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 using UnityEngine;
 namespace Inworld.Sample
 {
@@ -14,6 +11,7 @@ namespace Inworld.Sample
     public class InworldCameraController : MonoBehaviour
     {
         [Header("Movement Settings")]
+        [Range(0, 5)]
         [Tooltip("Exponential boost factor on translation, controllable by mouse wheel.")]
         public float boost = 3.5f;
 
@@ -32,6 +30,7 @@ namespace Inworld.Sample
         readonly CameraState m_InterpolatingCameraState = new CameraState();
 
         readonly CameraState m_TargetCameraState = new CameraState();
+
         void Update()
         {
             // Exit Sample  
@@ -43,17 +42,18 @@ namespace Inworld.Sample
             if (Input.GetMouseButtonDown(0))
             {
                 Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
 
             // Unlock and show cursor when right mouse button released
             if (Input.GetMouseButtonUp(0))
             {
-                Cursor.visible = !Cursor.visible;
-                Cursor.lockState = Cursor.visible ? CursorLockMode.None : CursorLockMode.Locked;
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
 
             // Rotation
-            if (Cursor.lockState == CursorLockMode.Locked)
+            if (Cursor.lockState != CursorLockMode.None)
             {
                 Vector2 mouseMovement = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y") * (invertY ? 1 : -1));
                 float mouseSensitivityFactor = mouseSensitivityCurve.Evaluate(mouseMovement.magnitude);

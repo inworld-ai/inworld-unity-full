@@ -40,10 +40,10 @@ namespace Inworld.Interactions
             if (HistoryItem.Count > m_MaxItemCount)
                 RemoveHistoryItem();
             
-            float targetVolume = InworldController.IsPlayerSpeaking ? m_VolumeOnPlayerSpeaking : 1f;
+            float targetVolume = InworldController.Instance.IsPlayerSpeaking ? m_VolumeOnPlayerSpeaking : 1f;
             m_PlaybackSource.volume = Mathf.Lerp(m_PlaybackSource.volume, targetVolume, m_VolumeInterpolationSpeed * Time.deltaTime);
 
-            m_PlaybackSource.volume = InworldController.IsPlayerSpeaking ? m_VolumeOnPlayerSpeaking : 1f;
+            m_PlaybackSource.volume = InworldController.Instance.IsPlayerSpeaking ? m_VolumeOnPlayerSpeaking : 1f;
             
             if (m_PlaybackSource && !m_PlaybackSource.isPlaying)
                 PlayNextUtterance();

@@ -17,7 +17,7 @@ namespace Inworld.Sample.RPM
         void Start()
         {
             InworldController.Client.OnStatusChanged += OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged += OnCharacterChanged;
+            CharacterHandler.Instance.OnCharacterChanged += OnCharacterChanged;
             
         }
         void OnDisable()
@@ -25,7 +25,7 @@ namespace Inworld.Sample.RPM
             if (!InworldController.Instance)
                 return;
             InworldController.Client.OnStatusChanged -= OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged -= OnCharacterChanged;
+            CharacterHandler.Instance.OnCharacterChanged -= OnCharacterChanged;
         }
         protected override void OnStatusChanged(InworldConnectionStatus incomingStatus)
         {
@@ -45,9 +45,9 @@ namespace Inworld.Sample.RPM
         void Update()
         {
             if (Input.GetKeyUp(KeyCode.Alpha1))
-                InworldController.Instance.CurrentCharacter = m_Character1;
+                CharacterHandler.Instance.CurrentCharacter = m_Character1;
             if (Input.GetKeyUp(KeyCode.Alpha2))
-                InworldController.Instance.CurrentCharacter = m_Character2;
+                CharacterHandler.Instance.CurrentCharacter = m_Character2;
         }
     }
 }

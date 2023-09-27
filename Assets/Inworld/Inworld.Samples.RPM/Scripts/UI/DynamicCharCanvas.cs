@@ -17,7 +17,7 @@ namespace Inworld.Sample.RPM
         void Start()
         {
             InworldController.Client.OnStatusChanged += OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged += OnCharacterChanged;
+            CharacterHandler.Instance.OnCharacterChanged += OnCharacterChanged;
         }
         void Update()
         {
@@ -31,7 +31,7 @@ namespace Inworld.Sample.RPM
             if (!InworldController.Instance)
                 return;
             InworldController.Client.OnStatusChanged -= OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged -= OnCharacterChanged;
+            CharacterHandler.Instance.OnCharacterChanged -= OnCharacterChanged;
         }
         void _CreateCharacter()
         {
@@ -39,6 +39,7 @@ namespace Inworld.Sample.RPM
                 Destroy(m_CurrentCharacter.gameObject);
             m_CurrentCharacter = Instantiate(m_Model, m_Player.position + m_Player.rotation * Vector3.forward * m_Distance, Quaternion.identity);
             m_CurrentCharacter.RegisterLiveSession();
+            CharacterHandler.Instance.CurrentCharacter = m_CurrentCharacter;
         }
 
         protected override void OnStatusChanged(InworldConnectionStatus incomingStatus)

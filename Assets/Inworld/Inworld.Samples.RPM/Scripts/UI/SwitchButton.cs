@@ -11,11 +11,13 @@ namespace Inworld.Runtime.RPM
 {
     public class SwitchButton : MonoBehaviour
     {
+        [SerializeField] Sprite m_OnSprite;
+        [SerializeField] Sprite m_OffSprite;
         [SerializeField] Image m_Image;
         
         public void CheckBackground(bool isOn)
         {
-            m_Image.enabled = !isOn;
+            m_Image.sprite = isOn ? m_OnSprite : m_OffSprite;
         }
     }
 }

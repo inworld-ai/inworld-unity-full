@@ -23,7 +23,7 @@ namespace Inworld.Sample.RPM
         void Start()
         {
             InworldController.Client.OnStatusChanged += OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged += OnCharacterChanged;
+            CharacterHandler.Instance.OnCharacterChanged += OnCharacterChanged;
             StartCoroutine(ShowRealAnswer());
         }
         
@@ -32,7 +32,7 @@ namespace Inworld.Sample.RPM
             if (!InworldController.Instance)
                 return;
             InworldController.Client.OnStatusChanged -= OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged -= OnCharacterChanged;
+            CharacterHandler.Instance.OnCharacterChanged -= OnCharacterChanged;
         }
         protected override void OnStatusChanged(InworldConnectionStatus newStatus)
         {

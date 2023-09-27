@@ -102,12 +102,12 @@ namespace Inworld
 #endif
             OnRecordingEnd.Invoke();
         }
-        public void PushAudio(string charID)
+        public void PushAudio()
         {
 #if !UNITY_WEBGL
             foreach (string audioData in m_AudioToPush)
             {
-                InworldController.Instance.SendAudio(audioData, charID);
+                InworldController.Instance.SendAudio(audioData);
             }
 #endif
         }

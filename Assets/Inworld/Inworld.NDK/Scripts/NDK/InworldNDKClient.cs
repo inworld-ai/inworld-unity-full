@@ -22,9 +22,9 @@ namespace Inworld.NDK
                 m_CurrentStatus = value;
             }
         }
-        
-        void OnDisable() => NDKInterop.Unity_EndSession();
 
+        void OnDisable() => NDKInterop.Unity_EndSession();
+        
         void Update()
         {
             _ProcessStatusChange();
@@ -39,7 +39,10 @@ namespace Inworld.NDK
             base.Init();
             InworldNDK.API.Init();
         }
-        public override void Disconnect() => NDKInterop.Unity_EndSession();
+        public override void Disconnect()
+        {
+            NDKInterop.Unity_EndSession();
+        }
 
         public override void GetAccessToken()
         {
@@ -112,22 +115,12 @@ namespace Inworld.NDK
             if (string.IsNullOrEmpty(charID))
                 return;
             NDKInterop.Unity_StartAudio(charID);
-            if (!m_AudioCapture.IsCapturing)
-                m_AudioCapture.StartRecording();
         }
         public override void StopAudio(string charID)
         {
             if (string.IsNullOrEmpty(charID))
                 return;
-            if (m_AudioCapture.IsCapturing)
-                m_AudioCapture.StopRecording();
             NDKInterop.Unity_StopAudio(charID);
-        }
-        public override void PushAudio(string charID)
-        {
-            if (string.IsNullOrEmpty(charID))
-                return;
-            m_AudioCapture.PushAudio(charID);
         }
         public override void SendAudio(string charID, string base64)
         {

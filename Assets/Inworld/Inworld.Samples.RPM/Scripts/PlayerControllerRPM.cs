@@ -4,49 +4,23 @@ using UnityEngine;
 
 namespace Inworld.Sample.RPM
 {
-    public class PlayerControllerRPM : PlayerController
+    public class PlayerControllerRPM : PlayerController3D
     {
-        [SerializeField] GameObject m_ChatCanvas;
+        InworldCameraController m_CameraController;
 
-        protected override void HandleInput()
+        protected override void Awake()
         {
-            if (Input.GetKeyUp(KeyCode.BackQuote))
-            {
-                m_ChatCanvas.SetActive(!m_ChatCanvas.activeSelf);
-                m_BlockAudioHandling = m_ChatCanvas.activeSelf;
-                if (m_PushToTalk)
-                {
-                    if (InworldController.Instance.CurrentCharacter)
-                        InworldController.Instance.StopAudio(InworldController.Instance.CurrentCharacter.ID);
-                }
-                else
-                {
-                    if (m_ChatCanvas.activeSelf)
-                    {
-                        if (InworldController.Instance.CurrentCharacter)
-                            InworldController.Instance.StopAudio(InworldController.Instance.CurrentCharacter.ID);
-                    }
-                    else
-                    {
-                        if (InworldController.Instance.CurrentCharacter)
-                            InworldController.Instance.StartAudio(InworldController.Instance.CurrentCharacter.ID);
-                    }
-                }
-
-            }
-            if (m_ChatCanvas.activeSelf)
-                base.HandleInput();
+            base.Awake();
+            m_CameraController = GetComponent<InworldCameraController>();
         }
         
-        protected override void OnCharacterRegistered(InworldCharacterData charData)
+        protected override void HandleInput()
         {
-            
+            base.HandleInput();
+            if (Input.GetKeyUp(KeyCode.BackQuote))
+            {
+                m_CameraController.enabled = !m_ChatCanvas.activeSelf;
+            }
         }
-
-        protected override void HandleTrigger(CustomPacket customPacket)
-        {
-            InworldAI.Log($"(Received {customPacket.Trigger})");
-        }
-        protected override void HandleEmotion(EmotionPacket packet) => m_CurrentEmotion = packet.emotion.ToString();
     }
 }

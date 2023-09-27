@@ -16,6 +16,9 @@ namespace Inworld.UI
 
         public void SelectCharacter()
         {
+            if (InworldController.Status != InworldConnectionStatus.Connected)
+                return;
+
             InworldCharacter iwChar = GetCharacter();
             if (!iwChar)
             {
@@ -24,7 +27,7 @@ namespace Inworld.UI
             }
             iwChar.Data = m_Data;
             iwChar.RegisterLiveSession();
-            InworldController.Instance.CurrentCharacter = iwChar;
+            CharacterHandler.Instance.CurrentCharacter = iwChar;
         }
         InworldCharacter GetCharacter()
         {

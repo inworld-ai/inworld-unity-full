@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Inworld.Sample.RPM
@@ -21,7 +22,7 @@ namespace Inworld.Sample.RPM
         [SerializeField] Image m_Indicator;
         [SerializeField] Toggle m_PlayPause;
         [SerializeField] Toggle m_SwitchMic;
-        [SerializeField] Toggle m_Mute;
+        [SerializeField] Toggle m_Speaker;
         [SerializeField] float m_PingDuration = 1f;
         [SerializeField] InworldAudioInteraction m_Interaction;
         string ipv4;
@@ -30,7 +31,7 @@ namespace Inworld.Sample.RPM
         bool m_HasInit;
         readonly Queue<float> m_LagQueue = new Queue<float>(12);
 
-        public bool EnableCtrl => m_PlayPause && m_SwitchMic && m_Mute;
+        public bool EnableCtrl => m_PlayPause && m_SwitchMic && m_Speaker;
         void Awake()
         {
             if (string.IsNullOrEmpty(ipv4))
@@ -40,7 +41,7 @@ namespace Inworld.Sample.RPM
         void Start()
         {
             InworldController.Client.OnStatusChanged += OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged += OnCharacterChanged;
+            CharacterHandler.Instance.OnCharacterChanged += OnCharacterChanged;
             StartCoroutine(_PingInworld());
         }
 
@@ -49,7 +50,7 @@ namespace Inworld.Sample.RPM
             if (!InworldController.Instance)
                 return;
             InworldController.Client.OnStatusChanged -= OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged -= OnCharacterChanged;
+            CharacterHandler.Instance.OnCharacterChanged -= OnCharacterChanged;
         }
         public void PlayPause()
         {
@@ -65,11 +66,15 @@ namespace Inworld.Sample.RPM
         }
         public void MicrophoneControl()
         {
+            if (!m_SwitchMic)
+                return;
             AudioCapture.Instance.IsBlocked = !m_SwitchMic.isOn;
         }
         public void SwitchVolume()
         {
-            m_Interaction.IsMute = m_Mute.isOn;
+            if (!m_Speaker || !m_Interaction)
+                return;
+            m_Interaction.IsMute = !m_Speaker.isOn;
         }
 
         protected override void OnStatusChanged(InworldConnectionStatus incomingStatus)
@@ -112,9 +117,10 @@ namespace Inworld.Sample.RPM
         {
             if (!EnableCtrl)
                 return;
-            m_PlayPause.interactable = isOn;
-            m_Mute.interactable = isOn && !playBtnOnly;
-            m_SwitchMic.interactable = isOn && !playBtnOnly;
+            if(m_Speaker)
+                m_Speaker.interactable = isOn && !playBtnOnly;
+            if(m_SwitchMic)
+                m_SwitchMic.interactable = isOn && !playBtnOnly;
             
             if (isOn && !playBtnOnly)
             {

@@ -38,7 +38,7 @@ namespace Inworld.Sample.RPM
             get
             {
                 string emotion = m_LastSpaff == m_CurrentSpaff ? m_CurrentSpaff.ToString() : $"Last: {m_LastSpaff} Current: {m_CurrentSpaff}";
-                return $"Server Status:\nEmotion: <color=green>{emotion}</color>\n";
+                return $"Server Status: <color=green>{m_ServerStatus}</color>\nEmotion: <color=green>{emotion}</color>\n";
             }
         }
 
@@ -51,7 +51,7 @@ namespace Inworld.Sample.RPM
                 Emotion emotion = (Emotion)m_Animator.GetInteger(s_Emotion);
                 Gesture gesture = (Gesture)m_Animator.GetInteger(s_Gesture);
                 AnimMainStatus animMainStatus = (AnimMainStatus)m_Animator.GetInteger(s_Motion);
-                return $"Client Status:\nEmotion: <color=green>{emotion}</color>\tGesture: <color=green>{gesture}</color>\nMain Status: <color=green>{animMainStatus}</color>";
+                return $"Client:\nEmotion: <color=green>{emotion}</color>\tGesture: <color=green>{gesture}</color>\nMain Status: <color=green>{animMainStatus}</color>";
             }
         }
 
@@ -59,7 +59,7 @@ namespace Inworld.Sample.RPM
         void Start()
         {
             InworldController.Client.OnStatusChanged += OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged += OnCharacterChanged;
+            CharacterHandler.Instance.OnCharacterChanged += OnCharacterChanged;
             InworldController.Instance.OnCharacterInteraction += OnPacketEvents;
             Debug.Log("EmotionCanvas Start");
         }
@@ -79,7 +79,7 @@ namespace Inworld.Sample.RPM
             if (!InworldController.Instance)
                 return;
             InworldController.Client.OnStatusChanged -= OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged -= OnCharacterChanged;
+            CharacterHandler.Instance.OnCharacterChanged -= OnCharacterChanged;
             InworldController.Instance.OnCharacterInteraction -= OnPacketEvents;
         }
 
@@ -95,7 +95,7 @@ namespace Inworld.Sample.RPM
         }
         void OnPacketEvents(InworldPacket packet)
         {
-            string charID = InworldController.Instance.CurrentCharacter.ID;
+            string charID = CharacterHandler.Instance.CurrentCharacter.ID;
             if (packet.routing.target.name != charID && packet.routing.source.name != charID)
             {            
                 return;
@@ -123,35 +123,35 @@ namespace Inworld.Sample.RPM
         }
         public void SendEmotion(int emotion)
         {
-            if (!InworldController.Instance.CurrentCharacter || !m_Animator)
+            if (!CharacterHandler.Instance.CurrentCharacter || !m_Animator)
                 return;
             m_Animator.SetInteger(s_Emotion, emotion);
             m_Title.text = $"Set Emotion {(Emotion)emotion}";
         }
         public void SendGesture(int gesture)
         {
-            if (!InworldController.Instance.CurrentCharacter || !m_Animator)
+            if (!CharacterHandler.Instance.CurrentCharacter || !m_Animator)
                 return;
             m_Animator.SetInteger(s_Gesture, gesture);
             m_Title.text = $"Set Gesture {(Gesture)gesture}";
         }
         public void SetMainStatus(int mainStatus)
         {
-            if (!InworldController.Instance.CurrentCharacter || !m_Animator)
+            if (!CharacterHandler.Instance.CurrentCharacter || !m_Animator)
                 return;
             m_Animator.SetInteger(s_Motion, mainStatus);
             m_Title.text = $"Set Main {(AnimMainStatus)mainStatus}";
         }
         public void MockServerEmoEvents(int nSpaffCode)
         {
-            if (!InworldController.Instance.CurrentCharacter)
+            if (!CharacterHandler.Instance.CurrentCharacter)
             {
                 InworldAI.LogError("Please wait until character initialized!");
                 return;
             }
             EmotionPacket evt = new EmotionPacket
             {
-                routing = new Routing(InworldController.Instance.CurrentCharacter.ID),
+                routing = new Routing(CharacterHandler.Instance.CurrentCharacter.ID),
                 emotion = new EmotionEvent
                 {
                     behavior = m_EmotionMap.data[nSpaffCode].name
