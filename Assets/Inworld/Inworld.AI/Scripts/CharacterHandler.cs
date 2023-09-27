@@ -76,7 +76,7 @@ namespace Inworld
             }
             catch (InworldException e)
             {
-                
+                InworldAI.LogWarning($"Audio failed to start: {e}");
             }
         }
 
@@ -99,7 +99,7 @@ namespace Inworld
             }
             catch (InworldException e)
             {
-                
+                InworldAI.LogWarning($"Audio failed to stop: {e}");
             }
         }
         
@@ -113,7 +113,7 @@ namespace Inworld
             }
             catch (InworldException e)
             {
-                
+                InworldAI.LogWarning($"Audio failed to push: {e}");
             }
         }
 
