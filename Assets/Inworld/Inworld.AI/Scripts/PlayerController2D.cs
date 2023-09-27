@@ -26,8 +26,8 @@ namespace Inworld
         {
             if (m_PushToTalk)
             {
-                CharacterHandler.Instance.ManualAudioHandling = true;
-                AudioCapture.Instance.AutoPush = false;
+                m_CharacterHandler.ManualAudioHandling = true;
+                m_AudioCapture.AutoPush = false;
             }
         }
         

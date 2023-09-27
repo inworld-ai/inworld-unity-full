@@ -988,6 +988,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 4881369807582071654}
+  m_AudioCapture: {fileID: 3127888446146746209}
+  m_CharacterHandler: {fileID: 5556377779683873100}
   m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
   m_AutoStart: 1
@@ -1237,10 +1239,42 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4136739464818171235}
     m_Modifications:
+    - target: {fileID: 45748550511176666, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 45748550511176666, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 45748550511176666, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 45748550511176666, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1773045222114684554, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1131924867}
+    - target: {fileID: 4624287931213198828, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624287931213198828, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624287931213198828, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624287931213198828, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7365615600221086446, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -1249,10 +1283,58 @@ PrefabInstance:
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1131924867}
+    - target: {fileID: 7821871128474361819, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7821871128474361819, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7821871128474361819, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7821871128474361819, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8438608367253957521, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1131924867}
+    - target: {fileID: 8523746526182891266, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523746526182891266, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523746526182891266, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523746526182891266, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523746526761861307, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523746526761861307, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523746526761861307, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523746526761861307, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8523746527207003296, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1340,6 +1422,22 @@ PrefabInstance:
     - target: {fileID: 8523746527207003324, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
       propertyPath: m_Name
       value: EmotionPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523746527358580466, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523746527358580466, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523746527358580466, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8523746527358580466, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

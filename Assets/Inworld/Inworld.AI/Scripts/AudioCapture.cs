@@ -17,7 +17,7 @@ namespace Inworld
     /// YAN: This is a global Audio Capture controller.
     ///      For each separate InworldCharacter, we use class AudioInteraction to handle audio clips.
     /// </summary>
-    public class AudioCapture : SingletonBehavior<AudioCapture>
+    public class AudioCapture : MonoBehaviour
     {
         [SerializeField] protected bool m_AutoPush = true;
         [SerializeField] protected float  m_UserSpeechThreshold = 0.01f;

@@ -293,6 +293,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 6911381471636183287}
+  m_AudioCapture: {fileID: 4653857099923982790}
+  m_CharacterHandler: {fileID: 6911381471636183288}
   m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/browserblooper
   m_AutoStart: 1
@@ -404,7 +406,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 162201157703380547, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -849.77405
+      value: -789.9256
       objectReference: {fileID: 0}
     - target: {fileID: 401423953070606001, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
       propertyPath: m_Name

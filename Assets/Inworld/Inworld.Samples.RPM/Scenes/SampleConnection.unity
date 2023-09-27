@@ -2054,6 +2054,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 4881369807930947640}
+  m_AudioCapture: {fileID: 3127888446599029823}
+  m_CharacterHandler: {fileID: 5556377779061858838}
   m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
   m_AutoStart: 0

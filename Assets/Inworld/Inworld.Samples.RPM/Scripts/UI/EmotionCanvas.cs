@@ -56,10 +56,9 @@ namespace Inworld.Sample.RPM
         }
 
         // Start is called before the first frame update
-        void Start()
+        protected override void Start()
         {
-            InworldController.Client.OnStatusChanged += OnStatusChanged;
-            CharacterHandler.Instance.OnCharacterChanged += OnCharacterChanged;
+            base.Start();
             InworldController.Instance.OnCharacterInteraction += OnPacketEvents;
             Debug.Log("EmotionCanvas Start");
         }
@@ -74,12 +73,11 @@ namespace Inworld.Sample.RPM
             }
             
         }
-        void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             if (!InworldController.Instance)
                 return;
-            InworldController.Client.OnStatusChanged -= OnStatusChanged;
-            CharacterHandler.Instance.OnCharacterChanged -= OnCharacterChanged;
             InworldController.Instance.OnCharacterInteraction -= OnPacketEvents;
         }
 
@@ -95,7 +93,7 @@ namespace Inworld.Sample.RPM
         }
         void OnPacketEvents(InworldPacket packet)
         {
-            string charID = CharacterHandler.Instance.CurrentCharacter.ID;
+            string charID = m_CharacterHandler.CurrentCharacter.ID;
             if (packet.routing.target.name != charID && packet.routing.source.name != charID)
             {            
                 return;
@@ -123,35 +121,35 @@ namespace Inworld.Sample.RPM
         }
         public void SendEmotion(int emotion)
         {
-            if (!CharacterHandler.Instance.CurrentCharacter || !m_Animator)
+            if (!m_CharacterHandler.CurrentCharacter || !m_Animator)
                 return;
             m_Animator.SetInteger(s_Emotion, emotion);
             m_Title.text = $"Set Emotion {(Emotion)emotion}";
         }
         public void SendGesture(int gesture)
         {
-            if (!CharacterHandler.Instance.CurrentCharacter || !m_Animator)
+            if (!m_CharacterHandler.CurrentCharacter || !m_Animator)
                 return;
             m_Animator.SetInteger(s_Gesture, gesture);
             m_Title.text = $"Set Gesture {(Gesture)gesture}";
         }
         public void SetMainStatus(int mainStatus)
         {
-            if (!CharacterHandler.Instance.CurrentCharacter || !m_Animator)
+            if (!m_CharacterHandler.CurrentCharacter || !m_Animator)
                 return;
             m_Animator.SetInteger(s_Motion, mainStatus);
             m_Title.text = $"Set Main {(AnimMainStatus)mainStatus}";
         }
         public void MockServerEmoEvents(int nSpaffCode)
         {
-            if (!CharacterHandler.Instance.CurrentCharacter)
+            if (!m_CharacterHandler.CurrentCharacter)
             {
                 InworldAI.LogError("Please wait until character initialized!");
                 return;
             }
             EmotionPacket evt = new EmotionPacket
             {
-                routing = new Routing(CharacterHandler.Instance.CurrentCharacter.ID),
+                routing = new Routing(m_CharacterHandler.CurrentCharacter.ID),
                 emotion = new EmotionEvent
                 {
                     behavior = m_EmotionMap.data[nSpaffCode].name

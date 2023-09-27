@@ -14,19 +14,7 @@ namespace Inworld.Sample.RPM
         [SerializeField] InworldCharacter m_Character2;
         // Start is called before the first frame update
         const string k_ContentHeader = "Press <color=green>\"1\"</color> and <color=green>\"2\"</color> to switch interact characters.\n";
-        void Start()
-        {
-            InworldController.Client.OnStatusChanged += OnStatusChanged;
-            CharacterHandler.Instance.OnCharacterChanged += OnCharacterChanged;
-            
-        }
-        void OnDisable()
-        {
-            if (!InworldController.Instance)
-                return;
-            InworldController.Client.OnStatusChanged -= OnStatusChanged;
-            CharacterHandler.Instance.OnCharacterChanged -= OnCharacterChanged;
-        }
+
         protected override void OnStatusChanged(InworldConnectionStatus incomingStatus)
         {
             if (incomingStatus == InworldConnectionStatus.Connected)
@@ -45,9 +33,9 @@ namespace Inworld.Sample.RPM
         void Update()
         {
             if (Input.GetKeyUp(KeyCode.Alpha1))
-                CharacterHandler.Instance.CurrentCharacter = m_Character1;
+                m_CharacterHandler.CurrentCharacter = m_Character1;
             if (Input.GetKeyUp(KeyCode.Alpha2))
-                CharacterHandler.Instance.CurrentCharacter = m_Character2;
+                m_CharacterHandler.CurrentCharacter = m_Character2;
         }
     }
 }

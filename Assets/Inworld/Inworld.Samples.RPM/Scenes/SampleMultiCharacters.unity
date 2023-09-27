@@ -2067,6 +2067,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 4881369806898590790}
+  m_AudioCapture: {fileID: 3127888445483968577}
+  m_CharacterHandler: {fileID: 5556377780025863788}
   m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/browserblooper
   m_AutoStart: 1

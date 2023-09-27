@@ -1773,6 +1773,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 4881369807252966087}
+  m_AudioCapture: {fileID: 3127888445939013312}
+  m_CharacterHandler: {fileID: 5556377779474272491}
   m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/transform
   m_AutoStart: 1

@@ -9,11 +9,11 @@ namespace Inworld.UI
     {
         public void OnPointerDown(PointerEventData eventData)
         {
-            CharacterHandler.Instance.StartAudio();
+            InworldController.CharacterHandler.StartAudio();
         }
         public void OnPointerUp(PointerEventData eventData)
         {
-            CharacterHandler.Instance.StopAudio(true);
+            InworldController.CharacterHandler.StopAudio(true);
         }
     }
 }

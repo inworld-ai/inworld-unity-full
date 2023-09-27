@@ -38,20 +38,12 @@ namespace Inworld.Sample.RPM
                 ipv4 = Dns.GetHostAddresses(InworldController.Client.Server.web)[0].ToString();
             _SwitchToggles(true, true);
         }
-        void Start()
+        protected override void Start()
         {
-            InworldController.Client.OnStatusChanged += OnStatusChanged;
-            CharacterHandler.Instance.OnCharacterChanged += OnCharacterChanged;
+            base.Start();
             StartCoroutine(_PingInworld());
         }
-
-        void OnDisable()
-        {
-            if (!InworldController.Instance)
-                return;
-            InworldController.Client.OnStatusChanged -= OnStatusChanged;
-            CharacterHandler.Instance.OnCharacterChanged -= OnCharacterChanged;
-        }
+        
         public void PlayPause()
         {
             if (m_PlayPause.isOn)
@@ -68,7 +60,7 @@ namespace Inworld.Sample.RPM
         {
             if (!m_SwitchMic)
                 return;
-            AudioCapture.Instance.IsBlocked = !m_SwitchMic.isOn;
+            InworldController.AudioCapture.IsBlocked = !m_SwitchMic.isOn;
         }
         public void SwitchVolume()
         {

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Inworld
 {
-    public class CharacterHandler : SingletonBehavior<CharacterHandler>
+    public class CharacterHandler : MonoBehaviour
     {
         [SerializeField] bool m_ManualAudioHandling;
         public bool ManualAudioHandling

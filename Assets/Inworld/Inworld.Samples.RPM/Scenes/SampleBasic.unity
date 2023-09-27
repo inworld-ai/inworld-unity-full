@@ -238,6 +238,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 359806128}
+  m_AudioCapture: {fileID: 359806127}
+  m_CharacterHandler: {fileID: 359806130}
   m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
   m_AutoStart: 1
@@ -264,7 +266,6 @@ MonoBehaviour:
   OnRecordingEnd:
     m_PersistentCalls:
       m_Calls: []
-  IsCapturing: 1
 --- !u!114 &359806128
 MonoBehaviour:
   m_ObjectHideFlags: 0

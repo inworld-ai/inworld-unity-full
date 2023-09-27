@@ -13,9 +13,9 @@ namespace Inworld
                 m_ChatCanvas.SetActive(!m_ChatCanvas.activeSelf);
                 m_BlockAudioHandling = m_ChatCanvas.activeSelf;
                 if (m_PushToTalk)
-                    CharacterHandler.Instance.StopAudio();
-                AudioCapture.Instance.AutoPush = !m_ChatCanvas.activeSelf && !m_PushToTalk;
-                CharacterHandler.Instance.ManualAudioHandling = m_ChatCanvas.activeSelf || m_PushToTalk;
+                   m_CharacterHandler.StopAudio();
+                m_AudioCapture.AutoPush = !m_ChatCanvas.activeSelf && !m_PushToTalk;
+                m_CharacterHandler.ManualAudioHandling = m_ChatCanvas.activeSelf || m_PushToTalk;
             }
             if (m_ChatCanvas.activeSelf)
                 base.HandleInput();

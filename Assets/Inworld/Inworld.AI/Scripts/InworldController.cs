@@ -15,6 +15,8 @@ namespace Inworld
     public class InworldController : SingletonBehavior<InworldController>
     {
         [SerializeField] protected InworldClient m_Client;
+        [SerializeField] protected AudioCapture m_AudioCapture;
+        [SerializeField] protected CharacterHandler m_CharacterHandler;
         [SerializeField] protected InworldGameData m_GameData;
         [SerializeField] protected string m_SceneFullName;
         [Space(10)][SerializeField] protected bool m_AutoStart;
@@ -25,9 +27,11 @@ namespace Inworld
         // YAN: Although InworldCharacterData also has agentID, it won't be always updated. Please check m_LiveSession
         //      And Call RegisterLiveSession if outdated.
         protected readonly Dictionary<string, InworldCharacterData> m_Characters = new Dictionary<string, InworldCharacterData>();
-        protected AudioCapture m_AudioCapture;
-        string m_CurrentAudioID;
         
+        string m_CurrentAudioID;
+
+        public static AudioCapture AudioCapture => Instance ? Instance.m_AudioCapture : null;
+        public static CharacterHandler CharacterHandler => Instance ? Instance.m_CharacterHandler : null;
         public static InworldClient Client
         {
             get => Instance ? Instance.m_Client : null;
@@ -47,7 +51,7 @@ namespace Inworld
 
         public float LastPlayerResponseTime { get; set; }
         public void InitWithCustomToken(string token) => m_Client.InitWithCustomToken(token);
-
+        
         public string CurrentWorkspace
         {
             get
@@ -66,7 +70,10 @@ namespace Inworld
         protected virtual void Awake()
         {
             m_Client = GetComponent<InworldClient>();
-            m_AudioCapture = GetComponent<AudioCapture>();
+            if(!m_AudioCapture)
+                m_AudioCapture = GetComponent<AudioCapture>();
+            if(!m_CharacterHandler)
+                m_CharacterHandler = GetComponent<CharacterHandler>();
         }
         protected virtual void OnEnable()
         {

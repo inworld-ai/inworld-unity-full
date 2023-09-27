@@ -309,6 +309,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 2901360918157399489}
+  m_AudioCapture: {fileID: 4653857099923982790}
+  m_CharacterHandler: {fileID: 6911381471636183287}
   m_GameData: {fileID: 11400000, guid: 036696d7520eb5145b65e12fc1058448, type: 2}
   m_SceneFullName: workspaces/unitytest/scenes/innequin_gallery
   m_AutoStart: 1
@@ -401,6 +403,10 @@ PrefabInstance:
     - target: {fileID: 140105174593608277, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 162201157703380547, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -789.9262
       objectReference: {fileID: 0}
     - target: {fileID: 401423953070606001, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
       propertyPath: m_Name

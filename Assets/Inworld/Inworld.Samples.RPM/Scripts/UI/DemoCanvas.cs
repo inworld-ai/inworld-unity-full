@@ -15,17 +15,20 @@ namespace Inworld.Sample.RPM
         [SerializeField] protected TMP_Text m_Content;
         // Start is called before the first frame update
         protected string m_ServerStatus;
-        void Start()
-        {
+        protected CharacterHandler m_CharacterHandler;
+        protected virtual void Start()
+        { 
+            m_CharacterHandler = InworldController.CharacterHandler;
+            
             InworldController.Client.OnStatusChanged += OnStatusChanged;
-            CharacterHandler.Instance.OnCharacterChanged += OnCharacterChanged;
+            m_CharacterHandler.OnCharacterChanged += OnCharacterChanged;
         }
-        void OnDisable()
+        protected virtual void OnDisable()
         {
             if (!InworldController.Instance)
                 return;
             InworldController.Client.OnStatusChanged -= OnStatusChanged;
-            CharacterHandler.Instance.OnCharacterChanged -= OnCharacterChanged;
+            m_CharacterHandler.OnCharacterChanged -= OnCharacterChanged;
         }
         protected virtual void OnStatusChanged(InworldConnectionStatus incomingStatus)
         {
