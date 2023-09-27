@@ -41,7 +41,7 @@ namespace Inworld.Packet
                 }
                 catch (Exception)
                 {
-                    InworldAI.LogError("Data converting failed.");
+                    InworldAI.LogError($"Data converting failed. {dataChunk.chunk.Length}");
                     return null;
                 }
             }
