@@ -80,10 +80,12 @@ namespace Inworld
             }
         }
 
-        public void StopAudio()
+        public void StopAudio(bool pushAudio = false)
         {
             if (!ManualAudioHandling)
                 return;
+            if(pushAudio)
+                PushAudio();
             _StopAudio();
         }
         

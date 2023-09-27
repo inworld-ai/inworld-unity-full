@@ -19,32 +19,32 @@ namespace Inworld.NDK
     [StructLayout(LayoutKind.Sequential)]
     public struct AgentInfo
     {
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string BrainName;
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string AgentId;
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string GivenName;
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string RpmModelUri;
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string RpmImageUriPortrait;
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string RpmImageUriPosture;
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string AvatarImg;
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string AvatarImgOriginal;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SessionInfo
     {
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string sessionId;
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string token;
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string sessionSavedState;
         public long expirationTime;
         public bool isValid;
@@ -53,20 +53,20 @@ namespace Inworld.NDK
     [StructLayout(LayoutKind.Sequential)]
     public struct PacketId
     {
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string uid;
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string utteranceID;
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string interactionID;
     };
 
     [StructLayout(LayoutKind.Sequential)]
     public struct Routing
     {
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string source;
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string target;
     };
 
@@ -81,7 +81,7 @@ namespace Inworld.NDK
     public struct TextPacket
     {
         public Packet packet;
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string text;
         public int isFinal;
     };
@@ -90,7 +90,7 @@ namespace Inworld.NDK
     public struct AudioPacket
     {
         public Packet packet;
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string audioChunk;
         public int type;
         public int phonemeCount;
@@ -114,34 +114,34 @@ namespace Inworld.NDK
     public struct CancelResponsePacket
     {
         public Packet packet;
-        [MarshalAs(UnmanagedType.BStr)]
-        public string  cancelInteractionID; // Yan: No need to receive utterance as they won't be sent.
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string cancelInteractionID; // Yan: No need to receive utterance as they won't be sent.
 
     };
     [StructLayout(LayoutKind.Sequential)]
     public struct CustomPacket
     {
         public Packet packet;
-        [MarshalAs(UnmanagedType.BStr)]
-        public string  triggerName;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string triggerName;
     };
     [StructLayout(LayoutKind.Sequential)]
     public struct TriggerParam
     {
-        [MarshalAs(UnmanagedType.BStr)]
-        public string  packetID;
-        [MarshalAs(UnmanagedType.BStr)]
-        public string  paramName;
-        [MarshalAs(UnmanagedType.BStr)]
-        public string  paramValue;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string packetID;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string paramName;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string paramValue;
 
     };
     [StructLayout(LayoutKind.Sequential)]
     public struct PhonemeInfo
     {
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPStr)]
         public string packetID;
-        [MarshalAs(UnmanagedType.BStr)]
+        [MarshalAs(UnmanagedType.LPUTF8Str)]
         public string code;
         public float timeStamp;
     };

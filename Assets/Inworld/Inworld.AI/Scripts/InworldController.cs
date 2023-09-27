@@ -202,9 +202,7 @@ namespace Inworld
 
         public virtual void SendAudio(string base64)
         {
-            if (string.IsNullOrEmpty(m_CurrentAudioID))
-                return;
-            if (!IsRegistered(m_CurrentAudioID))
+            if (string.IsNullOrEmpty(m_CurrentAudioID) || !IsRegistered(m_CurrentAudioID))
                 return;
             m_Client.SendAudio(m_CurrentAudioID, base64);
             LastPlayerResponseTime = Time.time;

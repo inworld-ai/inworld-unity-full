@@ -174,7 +174,7 @@ namespace Inworld
             else if (Input.GetKeyUp(m_PushToTalkKey))
             {
                 m_PTTKeyPressed = false;
-                CharacterHandler.Instance.StopAudio();
+                CharacterHandler.Instance.StopAudio(true);
             }
         }
 

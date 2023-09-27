@@ -71,6 +71,10 @@ namespace Inworld
         protected int m_LastPosition;
 
 #region Public Functions
+        public virtual void SamplePlayingWavData(float[] data, int channels)
+        {
+
+        }
         public void ChangeInputDevice(string deviceName)
         {
             if (deviceName == m_DeviceName)
@@ -109,11 +113,8 @@ namespace Inworld
             {
                 InworldController.Instance.SendAudio(audioData);
             }
-#endif
-        }
-        public void Clear()
-        {
             m_AudioToPush.Clear();
+#endif
         }
 #endregion
 
@@ -195,11 +196,6 @@ namespace Inworld
             Buffer.BlockCopy(m_ByteBuffer, 0, output, 0, nWavCount);
             return output;
         }
-        public virtual void SamplePlayingWavData(float[] data, int channels)
-        {
-
-        }
-        
         // Helper method to calculate the amplitude of audio data
         protected float CalculateAmplitude(float[] audioData)
         {

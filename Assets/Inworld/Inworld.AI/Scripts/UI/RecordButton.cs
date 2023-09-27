@@ -13,8 +13,7 @@ namespace Inworld.UI
         }
         public void OnPointerUp(PointerEventData eventData)
         {
-            CharacterHandler.Instance.PushAudio();
-            CharacterHandler.Instance.StopAudio();
+            CharacterHandler.Instance.StopAudio(true);
         }
     }
 }

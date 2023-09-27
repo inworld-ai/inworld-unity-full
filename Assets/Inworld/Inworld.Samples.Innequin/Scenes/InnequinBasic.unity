@@ -175,6 +175,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5982336311836649238, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+      propertyPath: m_PushToTalk
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2017,7 +2021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f92db331c103a4aa88a10e82275245, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ManualAudioHandling: 0
+  m_ManualAudioHandling: 0
   m_DefaultCharacter: {fileID: 6669471509548845689}
 --- !u!4 &5566405438834257203
 Transform:
