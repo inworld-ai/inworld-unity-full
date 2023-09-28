@@ -17,7 +17,8 @@ public class InworldAI : ScriptableObject
     [SerializeField] string m_Version;
     [SerializeField] string m_ImportedTime;
     [Space(10)][SerializeField] bool m_DebugMode;
-    
+
+    public const string k_CompanyName = "Inworld.AI";
     const string k_GlobalDataPath = "InworldAI";
     static InworldAI __inst;
     
