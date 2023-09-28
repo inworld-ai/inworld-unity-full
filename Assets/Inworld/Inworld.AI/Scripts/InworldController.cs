@@ -16,12 +16,12 @@ namespace Inworld
         [SerializeField] protected InworldGameData m_GameData;
         [SerializeField] protected string m_SceneFullName;
         [Space(10)][SerializeField] protected bool m_AutoStart;
+
         
         string m_CurrentAudioID;
 
         public static AudioCapture Audio => Instance ? Instance.m_AudioCapture : null;
         public static CharacterHandler CharacterHandler => Instance ? Instance.m_CharacterHandler : null;
-
         public static InworldCharacter CurrentCharacter
         {
             get => Instance ? Instance.m_CharacterHandler ? Instance.m_CharacterHandler.CurrentCharacter : null : null;
@@ -48,6 +48,7 @@ namespace Inworld
         }
         public static InworldConnectionStatus Status => Instance.m_Client.Status;
 
+        public static bool IsAutoStart => Instance.m_AutoStart;
         public void InitWithCustomToken(string token) => m_Client.InitWithCustomToken(token);
         
         public string CurrentWorkspace

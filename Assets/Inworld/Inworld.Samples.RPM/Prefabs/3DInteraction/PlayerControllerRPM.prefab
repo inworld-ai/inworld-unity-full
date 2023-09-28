@@ -1266,6 +1266,7 @@ MonoBehaviour:
   m_BubbleContentAnchor: {fileID: 8422684618343011769}
   m_BubbleLeftPrefab: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
   m_BubbleRightPrefab: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
+  m_DisplaySplash: 1
   m_ChatCanvas: {fileID: 933114256894992333}
 --- !u!1 &8001467349072717886
 GameObject:

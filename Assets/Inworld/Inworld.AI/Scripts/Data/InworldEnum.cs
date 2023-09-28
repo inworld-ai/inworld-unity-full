@@ -11,6 +11,7 @@
         Connecting, // Controller is connecting to World-Engine
         Connected, // Controller is connected to World-Engine and ready to work.
         LostConnect,
+        Exhausted,
         Error // Some error occured.
     }
     public enum PacketType

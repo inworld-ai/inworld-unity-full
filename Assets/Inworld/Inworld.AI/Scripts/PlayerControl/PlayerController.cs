@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Inworld.Packet;
+using Inworld.Sample;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,9 +19,10 @@ namespace Inworld
         [SerializeField] protected Button m_SendButton;
         [SerializeField] protected Button m_RecordButton;
         [SerializeField] protected Button m_ConnectButton;
-        [SerializeField] RectTransform m_BubbleContentAnchor;
-        [SerializeField] ChatBubble m_BubbleLeftPrefab;
-        [SerializeField] ChatBubble m_BubbleRightPrefab;
+        [SerializeField] protected RectTransform m_BubbleContentAnchor;
+        [SerializeField] protected ChatBubble m_BubbleLeftPrefab;
+        [SerializeField] protected ChatBubble m_BubbleRightPrefab;
+        [Space(10)][SerializeField] protected bool m_DisplaySplash;
         
         protected string m_CurrentEmotion;
         protected bool m_PTTKeyPressed;
@@ -57,6 +59,8 @@ namespace Inworld
                 m_SendButton.interactable = false;
             if (m_RecordButton)
                 m_RecordButton.interactable = false;
+            if (m_DisplaySplash && InworldController.IsAutoStart && !SplashScreen.Instance && InworldAI.SplashScreen)
+                Instantiate(InworldAI.SplashScreen);
         }
         protected virtual void Start()
         {
