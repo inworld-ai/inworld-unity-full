@@ -30,7 +30,7 @@ namespace Inworld
         
         string m_CurrentAudioID;
 
-        public static AudioCapture AudioCapture => Instance ? Instance.m_AudioCapture : null;
+        public static AudioCapture Audio => Instance ? Instance.m_AudioCapture : null;
         public static CharacterHandler CharacterHandler => Instance ? Instance.m_CharacterHandler : null;
         public static InworldClient Client
         {
@@ -61,8 +61,6 @@ namespace Inworld
             }
         }
         public string CurrentScene => m_SceneFullName;
-        public bool IsRecording => m_AudioCapture.IsCapturing;
-        public bool IsPlayerSpeaking => m_AudioCapture.PlayerIsSpeaking;
 
         public event Action<InworldCharacterData> OnCharacterRegistered;
         public event Action<InworldPacket> OnCharacterInteraction;

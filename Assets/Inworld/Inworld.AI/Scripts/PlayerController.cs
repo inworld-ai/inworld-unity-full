@@ -64,7 +64,7 @@ namespace Inworld
         protected virtual void Start()
         {
             m_CharacterHandler = InworldController.CharacterHandler;
-            m_AudioCapture = InworldController.AudioCapture;
+            m_AudioCapture = InworldController.Audio;
             m_CharacterHandler.ManualAudioHandling = m_PushToTalk;
             m_AudioCapture.AutoPush = !m_PushToTalk;
         }

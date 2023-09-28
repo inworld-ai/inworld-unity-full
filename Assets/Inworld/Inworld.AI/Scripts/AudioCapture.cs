@@ -47,7 +47,7 @@ namespace Inworld
         /// <summary>
         /// Signifies if user is speaking based on audio amplitude and threshold.
         /// </summary>
-        public bool PlayerIsSpeaking => m_PlayerIsSpeaking;
+        public bool IsPlayerSpeaking => m_IsPlayerSpeaking;
         /// <summary>
         /// Get Audio Input Device Name for recording.
         /// </summary>
@@ -59,7 +59,7 @@ namespace Inworld
         protected readonly List<string> m_AudioToPush = new List<string>();
         
         protected AudioClip m_Recording;
-        protected bool m_PlayerIsSpeaking;
+        protected bool m_IsPlayerSpeaking;
         protected bool m_IsCapturing;
         // Size of audioclip used to collect information, need to be big enough to keep up with collect. 
         protected int m_BufferSize;
@@ -185,7 +185,7 @@ namespace Inworld
                 m_AudioToPush.Add(audioData);
             // Check if player is speaking based on audio amplitude
             float amplitude = CalculateAmplitude(m_InputBuffer);
-            m_PlayerIsSpeaking = amplitude > m_UserSpeechThreshold;
+            m_IsPlayerSpeaking = amplitude > m_UserSpeechThreshold;
 #endif            
         }
         protected virtual byte[] Output(int nSize)

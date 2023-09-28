@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Inworld.Sample.RPM
@@ -60,7 +59,7 @@ namespace Inworld.Sample.RPM
         {
             if (!m_SwitchMic)
                 return;
-            InworldController.AudioCapture.IsBlocked = !m_SwitchMic.isOn;
+            InworldController.Audio.IsBlocked = !m_SwitchMic.isOn;
         }
         public void SwitchVolume()
         {
