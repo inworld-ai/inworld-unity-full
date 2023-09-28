@@ -23,14 +23,15 @@ namespace Inworld
         [SerializeField] protected Button m_SendButton;
         [SerializeField] protected Button m_RecordButton;
         [SerializeField] protected Button m_ConnectButton;
+        [SerializeField] RectTransform m_BubbleContentAnchor;
+        [SerializeField] ChatBubble m_BubbleLeftPrefab;
+        [SerializeField] ChatBubble m_BubbleRightPrefab;
+        
         protected string m_CurrentEmotion;
         protected bool m_PTTKeyPressed;
         protected bool m_BlockAudioHandling;
+        readonly protected Dictionary<string, ChatBubble> m_Bubbles = new Dictionary<string, ChatBubble>();
 
-        protected AudioCapture m_AudioCapture;
-        protected CharacterHandler m_CharacterHandler;
-        
-        // YAN: Direct 2D Sample.
         public void ConnectInworld()
         {
             if (InworldController.Status == InworldConnectionStatus.Idle)
@@ -41,11 +42,12 @@ namespace Inworld
         
         public void SendText()
         {
-            if (!m_InputField || string.IsNullOrEmpty(m_InputField.text) || !m_CharacterHandler.CurrentCharacter)
+            if (!m_InputField || string.IsNullOrEmpty(m_InputField.text) || !InworldController.CurrentCharacter)
                 return;
             try
             {
-                m_CharacterHandler.SendText(m_InputField.text);
+                if (InworldController.CurrentCharacter)
+                    InworldController.CurrentCharacter.SendText(m_InputField.text);
                 m_InputField.text = "";
             }
             catch (InworldException e)
@@ -56,9 +58,6 @@ namespace Inworld
 
         protected virtual void Awake()
         {
-            m_CharacterHandler = InworldController.CharacterHandler;
-            m_AudioCapture = InworldController.Audio;
-            
             if (m_SendButton)
                 m_SendButton.interactable = false;
             if (m_RecordButton)
@@ -66,13 +65,13 @@ namespace Inworld
         }
         protected virtual void Start()
         {
-            m_CharacterHandler.ManualAudioHandling = m_PushToTalk;
-            m_AudioCapture.AutoPush = !m_PushToTalk;
+            InworldController.CharacterHandler.ManualAudioHandling = m_PushToTalk;
+            InworldController.Audio.AutoPush = !m_PushToTalk;
         }
         protected virtual void OnEnable()
         {
             InworldController.Client.OnStatusChanged += OnStatusChanged;
-            m_CharacterHandler.OnCharacterChanged += OnCharacterChanged;
+            InworldController.CharacterHandler.OnCharacterChanged += OnCharacterChanged;
             InworldController.Instance.OnCharacterInteraction += OnInteraction;
         }
         protected virtual void OnDisable()
@@ -80,7 +79,7 @@ namespace Inworld
             if (!InworldController.Instance)
                 return;
             InworldController.Client.OnStatusChanged -= OnStatusChanged;
-            m_CharacterHandler.OnCharacterChanged -= OnCharacterChanged;
+            InworldController.CharacterHandler.OnCharacterChanged -= OnCharacterChanged;
             InworldController.Instance.OnCharacterInteraction -= OnInteraction;
         }
         
@@ -90,16 +89,16 @@ namespace Inworld
                 m_ConnectButton.interactable = newStatus == InworldConnectionStatus.Idle || newStatus == InworldConnectionStatus.Connected;
             if(m_ConnectButtonText)
                 m_ConnectButtonText.text = newStatus == InworldConnectionStatus.Connected ? "DISCONNECT" : "CONNECT";
-            if (newStatus == InworldConnectionStatus.Connected && m_CharacterHandler.CurrentCharacter)
+            if (newStatus == InworldConnectionStatus.Connected && InworldController.CurrentCharacter)
             {
                 if (m_SendButton)
                     m_SendButton.interactable = true;
                 if (m_RecordButton)
                     m_RecordButton.interactable = true;
                 if (m_StatusText)
-                    m_StatusText.text = $"Current: {m_CharacterHandler.CurrentCharacter.Name}";
+                    m_StatusText.text = $"Current: {InworldController.CurrentCharacter.Name}";
                 if (m_PushToTalk && m_PTTKeyPressed && !m_BlockAudioHandling)
-                    m_CharacterHandler.StartAudio();
+                    InworldController.Instance.StartAudio();
             }
             else
             {
@@ -110,7 +109,7 @@ namespace Inworld
                 if (m_StatusText)
                     m_StatusText.text = newStatus.ToString();
                 if (m_PushToTalk && !m_PTTKeyPressed && !m_BlockAudioHandling)
-                    m_CharacterHandler.StopAudio();
+                    InworldController.Instance.StopAudio();
             }
             
             if (newStatus == InworldConnectionStatus.Error)
@@ -123,17 +122,16 @@ namespace Inworld
         protected virtual void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
         {
             if(m_RecordButton)
-                m_RecordButton.interactable = InworldController.Status == InworldConnectionStatus.Connected && m_CharacterHandler.CurrentCharacter;
+                m_RecordButton.interactable = InworldController.Status == InworldConnectionStatus.Connected && InworldController.CurrentCharacter;
             if(m_SendButton)
-                m_SendButton.interactable = InworldController.Status == InworldConnectionStatus.Connected && m_CharacterHandler.CurrentCharacter;
-            if (newChar != null)
-            {
-                InworldAI.Log($"Now Talking to: {newChar.Name}");
-                if (m_StatusText)
-                    m_StatusText.text = $"Current: {newChar.Name}";
-                if (m_PushToTalk && m_PTTKeyPressed && !m_BlockAudioHandling)
-                    m_CharacterHandler.StartAudio();
-            }
+                m_SendButton.interactable = InworldController.Status == InworldConnectionStatus.Connected && InworldController.CurrentCharacter;
+            if (newChar == null)
+                return;
+            InworldAI.Log($"Now Talking to: {newChar.Name}");
+            if (m_StatusText)
+                m_StatusText.text = $"Current: {newChar.Name}";
+            if (m_PushToTalk && m_PTTKeyPressed && !m_BlockAudioHandling)
+                InworldController.Instance.StartAudio();
         }
 
         protected void OnInteraction(InworldPacket incomingPacket)
@@ -164,7 +162,39 @@ namespace Inworld
 
         protected virtual void HandleText(TextPacket packet)
         {
-
+            if (packet.text == null || string.IsNullOrEmpty(packet.text.text) || string.IsNullOrWhiteSpace(packet.text.text))
+                return;
+            switch (packet.routing.source.type.ToUpper())
+            {
+                case "AGENT":
+                    if (!m_Bubbles.ContainsKey(packet.packetId.utteranceId))
+                    {
+                        m_Bubbles[packet.packetId.utteranceId] = Instantiate(m_BubbleLeftPrefab, m_BubbleContentAnchor);
+                        InworldCharacterData charData = InworldController.CharacterHandler.GetCharacterDataByID(packet.routing.source.name);
+                        if (charData != null)
+                        {
+                            string charName = charData.givenName ?? "Character";
+                            string title = $"{charName}: {m_CurrentEmotion}";
+                            Texture2D thumbnail = charData.thumbnail ? charData.thumbnail : InworldAI.DefaultThumbnail;
+                            m_Bubbles[packet.packetId.utteranceId].SetBubble(title, thumbnail);
+                        }
+                    }
+                    break;
+                case "PLAYER":
+                    if (!m_Bubbles.ContainsKey(packet.packetId.utteranceId))
+                    {
+                        m_Bubbles[packet.packetId.utteranceId] = Instantiate(m_BubbleRightPrefab, m_BubbleContentAnchor);
+                        m_Bubbles[packet.packetId.utteranceId].SetBubble(InworldAI.User.Name, InworldAI.DefaultThumbnail);
+                    }
+                    break;
+            }
+            m_Bubbles[packet.packetId.utteranceId].Text = packet.text.text;
+            SetContentHeight(m_BubbleContentAnchor, m_BubbleRightPrefab);
+        }
+        
+        protected virtual void SetContentHeight(RectTransform scrollAnchor, InworldUIElement element)
+        {
+            scrollAnchor.sizeDelta = new Vector2(m_BubbleContentAnchor.sizeDelta.x, scrollAnchor.childCount * element.Height);
         }
         
         protected virtual void Update()
@@ -179,12 +209,12 @@ namespace Inworld
             if (Input.GetKeyDown(m_PushToTalkKey))
             {
                 m_PTTKeyPressed = true;
-                m_CharacterHandler.StartAudio();
+                InworldController.Instance.StartAudio();
             }
             else if (Input.GetKeyUp(m_PushToTalkKey))
             {
                 m_PTTKeyPressed = false;
-                m_CharacterHandler.StopAudio(true);
+                InworldController.Instance.PushAudio();
             }
         }
 

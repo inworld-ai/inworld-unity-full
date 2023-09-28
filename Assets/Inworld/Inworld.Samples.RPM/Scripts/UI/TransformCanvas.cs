@@ -17,7 +17,7 @@ namespace Inworld.Sample.RPM
         [SerializeField] InworldCharacterData m_CharData;
         [SerializeField] InworldFacialAnimationRPM m_LipAnimation;
         [SerializeField] string m_CheckTrigger;
-        InworldCharacter m_CurrentCharacter;
+        [SerializeField] InworldCharacter m_CurrentCharacter;
 
         // Start is called before the first frame update
         protected override void Start()
@@ -30,10 +30,7 @@ namespace Inworld.Sample.RPM
         {
             if (newStatus != InworldConnectionStatus.Connected)
                 return;
-            if (m_CurrentCharacter.Data.givenName == m_CharData.givenName)
-            {
-                InworldController.Client.SendTrigger(m_CurrentCharacter.Data.agentId, "initconvo", new Dictionary<string, string>());
-            }
+            m_CurrentCharacter.SendTrigger("initconvo");
         }
         protected override void OnCharacterChanged(InworldCharacter oldCharacter, InworldCharacter newCharacter)
         {
@@ -42,7 +39,6 @@ namespace Inworld.Sample.RPM
             else
             {
                 m_Title.text = $"{newCharacter.transform.name} connected!";
-                m_CurrentCharacter = newCharacter;
             }
         }
         

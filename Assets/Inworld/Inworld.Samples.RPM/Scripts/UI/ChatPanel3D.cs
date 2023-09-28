@@ -110,7 +110,7 @@ namespace Inworld.Sample.RPM
                 if (!m_Bubbles.ContainsKey(packet.packetId.utteranceId))
                 {
                     m_Bubbles[packet.packetId.utteranceId] = Instantiate(m_BubbleLeft, m_ContentRT);
-                    InworldCharacterData charData = InworldController.Instance.GetCharacter(packet.routing.source.name);
+                    InworldCharacterData charData = InworldController.CharacterHandler.GetCharacterDataByID(packet.routing.source.name);
                     if (charData != null)
                     {
                         string charName = charData.givenName ?? "Character";

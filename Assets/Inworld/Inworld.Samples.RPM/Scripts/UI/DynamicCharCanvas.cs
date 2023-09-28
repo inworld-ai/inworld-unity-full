@@ -29,7 +29,7 @@ namespace Inworld.Sample.RPM
                 Destroy(m_CurrentCharacter.gameObject);
             m_CurrentCharacter = Instantiate(m_Model, m_Player.position + m_Player.rotation * Vector3.forward * m_Distance, Quaternion.identity);
             m_CurrentCharacter.RegisterLiveSession();
-            InworldController.CharacterHandler.CurrentCharacter = m_CurrentCharacter;
+            InworldController.CurrentCharacter = m_CurrentCharacter;
         }
 
         protected override void OnStatusChanged(InworldConnectionStatus incomingStatus)

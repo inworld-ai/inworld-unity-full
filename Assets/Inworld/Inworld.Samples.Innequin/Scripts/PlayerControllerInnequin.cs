@@ -1,8 +1,4 @@
-using Inworld.Sample;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Inworld;
 using Inworld.Packet;
 using TMPro;
 
@@ -20,7 +16,7 @@ namespace Inworld.Sample.Innequin
             switch (packet.routing.source.type.ToUpper())
             {
                 case "AGENT":
-                    InworldCharacterData character = InworldController.Instance.GetCharacter(packet.routing.source.name);
+                    InworldCharacterData character = InworldController.CharacterHandler.GetCharacterDataByID(packet.routing.source.name);
                     string charName = character?.givenName ?? "Character";
                     string title = $"{charName}({m_CurrentEmotion}):";
                     m_Subtitle.text = $"{title} {packet.text.text}";

@@ -10,8 +10,7 @@ using UnityEditor;
 
 namespace Inworld
 {
-    [RequireComponent(typeof(InworldClient))]
-    [RequireComponent(typeof(AudioCapture))]
+    [RequireComponent(typeof(InworldClient), typeof(AudioCapture), typeof(CharacterHandler))]
     public class InworldController : SingletonBehavior<InworldController>
     {
         [SerializeField] protected InworldClient m_Client;
@@ -20,18 +19,21 @@ namespace Inworld
         [SerializeField] protected InworldGameData m_GameData;
         [SerializeField] protected string m_SceneFullName;
         [Space(10)][SerializeField] protected bool m_AutoStart;
-
-        // YAN: Now LiveSessionID is handled by InworldController Only. To prevent unable to chat.
-        //      Both Keys are BrainNames
-        protected readonly Dictionary<string, string> m_LiveSession = new Dictionary<string, string>();
-        // YAN: Although InworldCharacterData also has agentID, it won't be always updated. Please check m_LiveSession
-        //      And Call RegisterLiveSession if outdated.
-        protected readonly Dictionary<string, InworldCharacterData> m_Characters = new Dictionary<string, InworldCharacterData>();
         
         string m_CurrentAudioID;
 
         public static AudioCapture Audio => Instance ? Instance.m_AudioCapture : null;
         public static CharacterHandler CharacterHandler => Instance ? Instance.m_CharacterHandler : null;
+
+        public static InworldCharacter CurrentCharacter
+        {
+            get => Instance ? Instance.m_CharacterHandler ? Instance.m_CharacterHandler.CurrentCharacter : null : null;
+            set
+            {
+                if (Instance && Instance.m_CharacterHandler)
+                    Instance.m_CharacterHandler.CurrentCharacter = value;
+            }
+        }
         public static InworldClient Client
         {
             get => Instance ? Instance.m_Client : null;
@@ -49,7 +51,6 @@ namespace Inworld
         }
         public static InworldConnectionStatus Status => Instance.m_Client.Status;
 
-        public float LastPlayerResponseTime { get; set; }
         public void InitWithCustomToken(string token) => m_Client.InitWithCustomToken(token);
         
         public string CurrentWorkspace
@@ -61,13 +62,12 @@ namespace Inworld
             }
         }
         public string CurrentScene => m_SceneFullName;
-
-        public event Action<InworldCharacterData> OnCharacterRegistered;
         public event Action<InworldPacket> OnCharacterInteraction;
 
         protected virtual void Awake()
         {
-            m_Client = GetComponent<InworldClient>();
+            if (!m_Client)
+                m_Client = GetComponent<InworldClient>();
             if(!m_AudioCapture)
                 m_AudioCapture = GetComponent<AudioCapture>();
             if(!m_CharacterHandler)
@@ -120,36 +120,12 @@ namespace Inworld
             m_Client.Disconnect();
         }
         public void CharacterInteract(InworldPacket packet) => OnCharacterInteraction?.Invoke(packet);
-        public string GetLiveSessionID(InworldCharacter character)
-        {
-            if (!character || string.IsNullOrEmpty(character.BrainName) || !m_LiveSession.ContainsKey(character.BrainName))
-                return null;
-            // ReSharper disable once CanSimplifyDictionaryLookupWithTryAdd
-            if (!m_Characters.ContainsKey(character.BrainName))
-                m_Characters[character.BrainName] = character.Data;
-            return m_LiveSession[character.BrainName];
-        }
-        public bool IsRegistered(string characterID) => !string.IsNullOrEmpty(characterID) && m_LiveSession.ContainsValue(characterID);
-        public InworldCharacterData GetCharacter(string agentID)
-        {
-            if (!m_LiveSession.ContainsValue(agentID))
-            {
-                InworldAI.LogError($"{agentID} Not Registered!");
-                return null;
-            }
-            string key = m_LiveSession.First(kvp => kvp.Value == agentID).Key;
-            if (m_Characters.TryGetValue(key, out InworldCharacterData character))
-                return character;
-            InworldAI.LogError($"{key} Not Registered!");
-            return null;
-        }
 
         public void SendText(string charID, string text)
         {
             if (Client.Status != InworldConnectionStatus.Connected)
                 InworldAI.LogException($"Tried to send text to {charID}, but not connected to server.");
             m_Client.SendText(charID, text);
-            LastPlayerResponseTime = Time.time;
         }
         public void SendCancelEvent(string charID, string interactionID)
         {
@@ -171,22 +147,32 @@ namespace Inworld
                 return;
             m_AudioCapture.SamplePlayingWavData(data, channels);
         }
-        public virtual void StartAudio(string charID)
+        public virtual void StartAudio(string charID = "")
         {
             if (Client.Status != InworldConnectionStatus.Connected)
                 InworldAI.LogException($"Tried to start audio for {charID}, but not connected to server.");
             if (string.IsNullOrEmpty(charID))
-                throw new ArgumentException("Character ID is empty.");
+            {
+                if (CurrentCharacter && !string.IsNullOrEmpty(CurrentCharacter.ID))
+                    charID = CurrentCharacter.ID;
+                else
+                    throw new ArgumentException("Character ID is empty.");
+            }
             if (m_CurrentAudioID == charID)
                 return;
             if (InworldAI.IsDebugMode)
                 InworldAI.Log($"Start Audio Event {charID}");
-            if (!IsRegistered(charID))
+            if (!m_CharacterHandler.IsRegistered(charID))
                 return;
             
             m_CurrentAudioID = charID;
             m_AudioCapture.StartRecording();
             m_Client.StartAudio(charID);
+        }
+        public virtual void StopAudio()
+        {
+            if (CurrentCharacter)
+                StopAudio(CurrentCharacter.ID);
         }
 
         public virtual void StopAudio(string charID)
@@ -200,17 +186,16 @@ namespace Inworld
             
             ResetAudio();
             
-            if (!IsRegistered(charID) || Client.Status != InworldConnectionStatus.Connected)
+            if (!m_CharacterHandler.IsRegistered(charID) || Client.Status != InworldConnectionStatus.Connected)
                 return;
             m_Client.StopAudio(charID);
         }
 
         public virtual void SendAudio(string base64)
         {
-            if (string.IsNullOrEmpty(m_CurrentAudioID) || !IsRegistered(m_CurrentAudioID))
+            if (string.IsNullOrEmpty(m_CurrentAudioID) || !m_CharacterHandler.IsRegistered(m_CurrentAudioID))
                 return;
             m_Client.SendAudio(m_CurrentAudioID, base64);
-            LastPlayerResponseTime = Time.time;
         }
         protected virtual void ResetAudio()
         {
@@ -225,6 +210,7 @@ namespace Inworld
             if (Client.Status != InworldConnectionStatus.Connected)
                 InworldAI.LogException($"Tried to push audio, but not connected to server.");
             m_AudioCapture.PushAudio();
+            StopAudio();
         }
 
         void _Setup()
@@ -241,7 +227,7 @@ namespace Inworld
                         LoadScene(m_SceneFullName);
                     break;
                 case InworldConnectionStatus.LoadingSceneCompleted:
-                    StartCoroutine(_RegisterLiveSession());
+                    _StartSession();
                     break;
                 case InworldConnectionStatus.LostConnect:
                     ResetAudio();
@@ -254,31 +240,7 @@ namespace Inworld
                     break;
             }
         }
-        IEnumerator _RegisterLiveSession()
-        {
-            LoadSceneResponse response = m_Client.GetLiveSessionInfo();
-            if (response == null)
-                yield break;
-            m_LiveSession.Clear();
-            foreach (InworldCharacterData agent in response.agents.Where(agent => !string.IsNullOrEmpty(agent.agentId) && !string.IsNullOrEmpty(agent.brainName)))
-            {
-                m_LiveSession[agent.brainName] = agent.agentId;
-                m_Characters[agent.brainName] = agent;
-                string url = agent.characterAssets?.ThumbnailURL;
-                if (!string.IsNullOrEmpty(url))
-                {
-                    UnityWebRequest uwr = new UnityWebRequest(url);
-                    uwr.downloadHandler = new DownloadHandlerTexture();
-                    yield return uwr.SendWebRequest();
-                    if (uwr.isDone && uwr.result == UnityWebRequest.Result.Success)
-                    {
-                        agent.thumbnail = (uwr.downloadHandler as DownloadHandlerTexture)?.texture;
-                    }
-                }
-                OnCharacterRegistered?.Invoke(agent);
-            }
-            _StartSession();
-        }
+
         void _StartSession() => m_Client.StartSession();
     }
 }
