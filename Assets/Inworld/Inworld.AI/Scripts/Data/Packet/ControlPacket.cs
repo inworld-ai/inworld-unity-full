@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace Inworld.Packet
 {
     [Serializable]

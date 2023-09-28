@@ -1,12 +1,7 @@
 using System.Collections.Generic;
-using Inworld;
-using Inworld.UI;
 using Inworld.Packet;
-using System;
-using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Inworld

@@ -1,23 +1,21 @@
-﻿using Inworld.Interactions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
 namespace Inworld
 {
     public class SharedAudioData
     {
-        private readonly Dictionary<int, float> m_MixedData = new Dictionary<int, float>();
-        private readonly object m_LockObj = new object();
-        private int m_sampleRate;
-        private float m_LastTimestamp = -1;
+        readonly object m_LockObj = new object();
+        readonly Dictionary<int, float> m_MixedData = new Dictionary<int, float>();
+        float m_LastTimestamp = -1;
+        readonly int m_sampleRate;
 
         public SharedAudioData(int sampleRate = 16000)
         {
             m_sampleRate = sampleRate;
         }
-        
+
         public void Add(float[] audioData, float time)
         {
             lock (m_LockObj)
@@ -49,25 +47,25 @@ namespace Inworld
                 }
             }
         }
-        
+
         public short[] GetDataAsMixedShortArray()
         {
             if (!m_MixedData.Any())
                 return Array.Empty<short>();
 
             // Convert the mixed data dictionary into a sorted list
-            var sortedData = m_MixedData.OrderBy(pair => pair.Key).ToList();
+            List<KeyValuePair<int, float>> sortedData = m_MixedData.OrderBy(pair => pair.Key).ToList();
 
             // Create a continuous array of shorts for the audio data
             int totalSamples = (int)((m_LastTimestamp + 1) * m_sampleRate); // +1 to account for potential rounding errors
             short[] shortData = new short[totalSamples];
 
-            foreach (var pair in sortedData)
+            foreach (KeyValuePair<int, float> pair in sortedData)
             {
-                float sampleValue = Mathf.Clamp(pair.Value, -1.0f, 1.0f);  // prevent clipping
+                float sampleValue = Mathf.Clamp(pair.Value, -1.0f, 1.0f); // prevent clipping
                 shortData[pair.Key] = (short)(sampleValue * 32767);
             }
-            
+
             return shortData;
         }
     }

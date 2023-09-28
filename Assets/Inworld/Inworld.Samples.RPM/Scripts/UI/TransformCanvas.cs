@@ -5,8 +5,8 @@
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 namespace Inworld.Sample.RPM
 {
     public class TransformCanvas : DemoCanvas
