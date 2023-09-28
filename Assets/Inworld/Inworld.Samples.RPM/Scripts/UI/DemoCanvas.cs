@@ -1,9 +1,10 @@
 /*************************************************************************************************
-* Copyright 2022 Theai, Inc. (DBA Inworld)
-*
-* Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
-* that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
-*************************************************************************************************/
+ * Copyright 2022 Theai, Inc. (DBA Inworld)
+ *
+ * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+ * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+ *************************************************************************************************/
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -14,20 +15,32 @@ namespace Inworld.Sample.RPM
         [SerializeField] protected TMP_Text m_Title;
         [SerializeField] protected TMP_Text m_Content;
         // Start is called before the first frame update
-        void Start()
+        protected string m_ServerStatus;
+        protected CharacterHandler m_CharacterHandler;
+
+        protected virtual void Awake()
         {
-            InworldController.Client.OnStatusChanged += OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged += OnCharacterChanged;
+            m_CharacterHandler = InworldController.CharacterHandler;
         }
-        void OnDisable()
+        protected virtual void Start()
+        {
+            
+        }
+        protected virtual void OnEnable()
+        { 
+            InworldController.Client.OnStatusChanged += OnStatusChanged;
+            m_CharacterHandler.OnCharacterChanged += OnCharacterChanged;
+        }
+        protected virtual void OnDisable()
         {
             if (!InworldController.Instance)
                 return;
             InworldController.Client.OnStatusChanged -= OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged -= OnCharacterChanged;
+            m_CharacterHandler.OnCharacterChanged -= OnCharacterChanged;
         }
         protected virtual void OnStatusChanged(InworldConnectionStatus incomingStatus)
         {
+            m_ServerStatus = incomingStatus.ToString();
             m_Title.text = $"Inworld {incomingStatus}";
         }
         protected virtual void OnCharacterChanged(InworldCharacter oldCharacter, InworldCharacter newCharacter)

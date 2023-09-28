@@ -48,8 +48,6 @@ namespace Inworld
         public void RegisterLiveSession()
         {
             m_Interaction.LiveSessionID = Data.agentId = InworldController.Instance.GetLiveSessionID(this);
-            if (InworldController.Status == InworldConnectionStatus.Connected && !InworldController.Instance.CurrentCharacter)
-                InworldController.Instance.CurrentCharacter = this;
         }
 
         void Awake()
@@ -60,7 +58,6 @@ namespace Inworld
         protected virtual void OnEnable()
         {
             InworldController.Instance.OnCharacterRegistered += OnCharRegistered;
-            InworldController.Instance.OnCharacterChanged += OnCharChanged;
             InworldController.Client.OnStatusChanged += OnStatusChanged;
             m_Interaction.OnStartStopInteraction += OnStartStopInteraction;
             // YAN: This event is for handling global packets. Please only use it in InworldCharacter.
@@ -70,7 +67,7 @@ namespace Inworld
         void OnAudioFilterRead(float[] data, int channels)
         {
             if(InworldController.Status == InworldConnectionStatus.Connected)
-                InworldController.Client.SamplePlayingWave(data, channels);
+                InworldController.Instance.SamplePlayingWave(data, channels);
         }
         protected virtual void OnDisable()
         {
@@ -79,7 +76,6 @@ namespace Inworld
             if (!InworldController.Instance)
                 return;
             InworldController.Instance.OnCharacterRegistered -= OnCharRegistered;
-            InworldController.Instance.OnCharacterChanged -= OnCharChanged;
             InworldController.Client.OnStatusChanged -= OnStatusChanged;
         }
         protected virtual void OnStartStopInteraction(bool isStarting)
@@ -99,9 +95,8 @@ namespace Inworld
         }
         protected virtual void OnCharRegistered(InworldCharacterData charData)
         {
-
+            
         }
-        protected virtual void OnCharChanged(InworldCharacter oldChar, InworldCharacter newChar) {}
         protected virtual void OnStatusChanged(InworldConnectionStatus newStatus)
         {
             

@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.TestTools;
 namespace Inworld
 {
-    [RequireComponent(typeof(AudioCapture))]
     public class InworldClient : MonoBehaviour
     {
         [SerializeField] protected InworldServerConfig m_ServerConfig;
@@ -16,22 +15,9 @@ namespace Inworld
         public event Action<InworldPacket> OnPacketReceived;
         const string k_NotImplented = "No InworldClient found. Need at least one connection protocol";
         protected Token m_Token;
-        protected AudioCapture m_AudioCapture;
         protected string m_SessionKey;
         InworldConnectionStatus m_Status;
         protected string m_Error;
-
-        public void SamplePlayingWave(float[] data, int channels)
-        {
-            if (!m_AudioCapture || data == null || data.Length == 0)
-                return;
-            m_AudioCapture.SamplePlayingWavData(data, channels);
-        }
-        public bool IsRecording
-        {
-            get => m_AudioCapture.IsCapturing;
-            set => m_AudioCapture.IsCapturing = value;
-        }
         public InworldServerConfig Server
         {
             get => m_ServerConfig;
@@ -42,7 +28,6 @@ namespace Inworld
             get => m_Token;
             set => m_Token = value;
         }
-        public bool IsSpeaking =>  m_AudioCapture.IsSpeaking;
         public virtual bool IsTokenValid => m_Token != null && m_Token.IsValid;
         public virtual void GetAccessToken()
         {
@@ -99,10 +84,7 @@ namespace Inworld
         public virtual void StartAudio(string charID) => Error = k_NotImplented;
         public virtual void StopAudio(string charID) => Error = k_NotImplented;
         public virtual void SendAudio(string charID, string base64) => Error = k_NotImplented;
-        protected virtual void Init()
-        {
-            m_AudioCapture = GetComponent<AudioCapture>();
-        }
+        protected virtual void Init() {}
         public void ChangeStatus(InworldConnectionStatus status) => OnStatusChanged?.Invoke(status);
         public void Dispatch(InworldPacket packet) => OnPacketReceived?.Invoke(packet);
 

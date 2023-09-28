@@ -6,174 +6,193 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour
+namespace Inworld
 {
-    [SerializeField] RectTransform m_CharButtonAnchor;
-    [SerializeField] RectTransform m_ContentRT;
-    [SerializeField] CharacterButton m_CharSelector;
-    [SerializeField] ChatBubble m_BubbleLeft;
-    [SerializeField] ChatBubble m_BubbleRight;
-    [SerializeField] protected TMP_Text m_StatusText;
-    [SerializeField] protected TMP_Text m_ConnectButtonText;
-    [SerializeField] protected TMP_InputField m_InputField;
-    [SerializeField] protected Button m_SendButton;
-    [SerializeField] protected Button m_ConnectButton;
-    readonly Dictionary<string, CharacterButton> m_Characters = new Dictionary<string, CharacterButton>();
-    readonly protected Dictionary<string, ChatBubble> m_Bubbles = new Dictionary<string, ChatBubble>();
-    protected string m_CurrentEmotion;
-    void Awake()
+    public class PlayerController : MonoBehaviour
     {
-        if (m_SendButton)
-            m_SendButton.interactable = false;
-    }
-    void OnEnable()
-    {
-        InworldController.Client.OnStatusChanged += OnStatusChanged;
-        InworldController.Instance.OnCharacterRegistered += OnCharacterRegistered;
-        InworldController.Instance.OnCharacterChanged += OnCharacterChanged;
-        InworldController.Instance.OnCharacterInteraction += OnInteraction;
-    }
-    void OnDisable()
-    {
-        if (!InworldController.Instance)
-            return;
-        InworldController.Client.OnStatusChanged -= OnStatusChanged;
-        InworldController.Instance.OnCharacterRegistered -= OnCharacterRegistered;
-        InworldController.Instance.OnCharacterChanged -= OnCharacterChanged;
-        InworldController.Instance.OnCharacterInteraction -= OnInteraction;
-    }
-    protected virtual void OnCharacterRegistered(InworldCharacterData charData)
-    {
-        if (!m_Characters.ContainsKey(charData.brainName))
-            m_Characters[charData.brainName] = Instantiate(m_CharSelector, m_CharButtonAnchor);
-        m_Characters[charData.brainName].SetData(charData);
-        _SetContentHeight(m_CharButtonAnchor, m_CharSelector);
-    }
+        [Header("Audio Capture")]
+        [SerializeField] protected bool m_PushToTalk;
+        [SerializeField] protected KeyCode m_PushToTalkKey = KeyCode.C;
+        [Header("References")]
+        [SerializeField] protected TMP_Text m_StatusText;
+        [SerializeField] protected TMP_Text m_ConnectButtonText;
+        [SerializeField] protected TMP_InputField m_InputField;
+        [SerializeField] protected Button m_SendButton;
+        [SerializeField] protected Button m_RecordButton;
+        [SerializeField] protected Button m_ConnectButton;
+        protected string m_CurrentEmotion;
+        protected bool m_PTTKeyPressed;
+        protected bool m_BlockAudioHandling;
 
-    protected virtual void OnStatusChanged(InworldConnectionStatus newStatus)
-    {
-        m_ConnectButton.interactable = newStatus == InworldConnectionStatus.Idle || newStatus == InworldConnectionStatus.Connected;
-        m_ConnectButtonText.text = newStatus == InworldConnectionStatus.Connected ? "DISCONNECT" : "CONNECT";
-
-        if (newStatus == InworldConnectionStatus.Connected && InworldController.Instance.CurrentCharacter)
+        protected AudioCapture m_AudioCapture;
+        protected CharacterHandler m_CharacterHandler;
+        
+        // YAN: Direct 2D Sample.
+        public void ConnectInworld()
         {
-            m_SendButton.interactable = true;
-            InworldController.Instance.StartAudio(InworldController.Instance.CurrentCharacter.ID);
-        }
-        else
-        {
-            m_SendButton.interactable = false;
-            if (InworldController.Instance.CurrentCharacter)
-                InworldController.Instance.StopAudio(InworldController.Instance.CurrentCharacter.ID);
+            if (InworldController.Status == InworldConnectionStatus.Idle)
+                InworldController.Instance.Reconnect();
+            else if (InworldController.Status == InworldConnectionStatus.Connected)
+                InworldController.Instance.Disconnect();
         }
         
-        if (m_StatusText)
-            m_StatusText.text = newStatus.ToString();
-        if (newStatus == InworldConnectionStatus.Error)
-            m_StatusText.text = InworldController.Client.Error;
-    }
-
-    // YAN: Direct 2D Sample.
-    public void ConnectInworld()
-    {
-        if (InworldController.Status == InworldConnectionStatus.Idle)
-            InworldController.Instance.Reconnect();
-        else if (InworldController.Status == InworldConnectionStatus.Connected)
-            InworldController.Instance.Disconnect();
-    }
-
-    protected virtual void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
-    {
-        m_SendButton.interactable = newChar != null;
-        if (newChar != null && m_StatusText)
-            m_StatusText.text = $"Current: {newChar.Name}";
-        StartCoroutine(_SwapAudioCapture(oldChar, newChar));
-    }
-    IEnumerator _SwapAudioCapture(InworldCharacter oldChar, InworldCharacter newchar)
-    {
-        if (oldChar != null && !string.IsNullOrEmpty(oldChar.ID))
-            InworldController.Instance.StopAudio(oldChar.ID);
-        yield return new WaitForFixedUpdate();
-        if (newchar != null && !string.IsNullOrEmpty(newchar.ID))
+        public void SendText()
         {
-            InworldController.Instance.StartAudio(newchar.ID);
-        }
-    }
-    protected void OnInteraction(InworldPacket incomingPacket)
-    {
-        switch (incomingPacket)
-        {
-            case AudioPacket audioPacket: // Already Played.
-                break;
-            case TextPacket textPacket:
-                HandleText(textPacket);
-                break;
-            case EmotionPacket emotionPacket:
-                HandleEmotion(emotionPacket);
-                break;
-            case CustomPacket customPacket:
-                HandleTrigger(customPacket);
-                break;
-            default:
-                InworldAI.Log($"Received {incomingPacket}");
-                break;
-        }
-    }
-    protected virtual void HandleTrigger(CustomPacket customPacket)
-    {
-        InworldAI.Log($"Received Trigger {customPacket.Trigger}");
-    }
-    protected virtual void HandleEmotion(EmotionPacket packet) => m_CurrentEmotion = packet.emotion.ToString();
-
-    protected virtual void HandleText(TextPacket packet)
-    {
-        if (packet.text == null || string.IsNullOrEmpty(packet.text.text) || string.IsNullOrWhiteSpace(packet.text.text))
+            if (!m_InputField || string.IsNullOrEmpty(m_InputField.text) || !m_CharacterHandler.CurrentCharacter)
                 return;
-        switch (packet.routing.source.type.ToUpper())
-        {
-            case "AGENT":
-                if (!m_Bubbles.ContainsKey(packet.packetId.utteranceId))
-                {
-                    m_Bubbles[packet.packetId.utteranceId] = Instantiate(m_BubbleLeft, m_ContentRT);
-                    InworldCharacterData charData = InworldController.Instance.GetCharacter(packet.routing.source.name);
-                    if (charData != null)
-                    {
-                        string charName = charData.givenName ?? "Character";
-                        string title = $"{charName}: {m_CurrentEmotion}";
-                        Texture2D thumbnail = charData.thumbnail ? charData.thumbnail : InworldAI.DefaultThumbnail;
-                        m_Bubbles[packet.packetId.utteranceId].SetBubble(title, thumbnail);
-                    }
-                }
-                break;
-            case "PLAYER":
-                if (!m_Bubbles.ContainsKey(packet.packetId.utteranceId))
-                {
-                    m_Bubbles[packet.packetId.utteranceId] = Instantiate(m_BubbleRight, m_ContentRT);
-                    m_Bubbles[packet.packetId.utteranceId].SetBubble(InworldAI.User.Name, InworldAI.DefaultThumbnail);
-                }
-                break;
+            try
+            {
+                m_CharacterHandler.SendText(m_InputField.text);
+                m_InputField.text = "";
+            }
+            catch (InworldException e)
+            {
+                InworldAI.LogWarning($"Failed to send text: {e}");
+            }
         }
-        m_Bubbles[packet.packetId.utteranceId].Text = packet.text.text;
-        _SetContentHeight(m_ContentRT, m_BubbleRight);
-    }
 
-    void _SetContentHeight(RectTransform scrollAnchor, InworldUIElement element)
-    {
-        scrollAnchor.sizeDelta = new Vector2(m_ContentRT.sizeDelta.x, scrollAnchor.childCount * element.Height);
-    }
+        protected virtual void Awake()
+        {
+            m_CharacterHandler = InworldController.CharacterHandler;
+            m_AudioCapture = InworldController.Audio;
+            
+            if (m_SendButton)
+                m_SendButton.interactable = false;
+            if (m_RecordButton)
+                m_RecordButton.interactable = false;
+        }
+        protected virtual void Start()
+        {
+            m_CharacterHandler.ManualAudioHandling = m_PushToTalk;
+            m_AudioCapture.AutoPush = !m_PushToTalk;
+        }
+        protected virtual void OnEnable()
+        {
+            InworldController.Client.OnStatusChanged += OnStatusChanged;
+            m_CharacterHandler.OnCharacterChanged += OnCharacterChanged;
+            InworldController.Instance.OnCharacterInteraction += OnInteraction;
+        }
+        protected virtual void OnDisable()
+        {
+            if (!InworldController.Instance)
+                return;
+            InworldController.Client.OnStatusChanged -= OnStatusChanged;
+            m_CharacterHandler.OnCharacterChanged -= OnCharacterChanged;
+            InworldController.Instance.OnCharacterInteraction -= OnInteraction;
+        }
+        
+        protected virtual void OnStatusChanged(InworldConnectionStatus newStatus)
+        {
+            if(m_ConnectButton)
+                m_ConnectButton.interactable = newStatus == InworldConnectionStatus.Idle || newStatus == InworldConnectionStatus.Connected;
+            if(m_ConnectButtonText)
+                m_ConnectButtonText.text = newStatus == InworldConnectionStatus.Connected ? "DISCONNECT" : "CONNECT";
+            if (newStatus == InworldConnectionStatus.Connected && m_CharacterHandler.CurrentCharacter)
+            {
+                if (m_SendButton)
+                    m_SendButton.interactable = true;
+                if (m_RecordButton)
+                    m_RecordButton.interactable = true;
+                if (m_StatusText)
+                    m_StatusText.text = $"Current: {m_CharacterHandler.CurrentCharacter.Name}";
+                if (m_PushToTalk && m_PTTKeyPressed && !m_BlockAudioHandling)
+                    m_CharacterHandler.StartAudio();
+            }
+            else
+            {
+                if (m_SendButton)
+                    m_SendButton.interactable = false;
+                if (m_RecordButton)
+                    m_RecordButton.interactable = false;
+                if (m_StatusText)
+                    m_StatusText.text = newStatus.ToString();
+                if (m_PushToTalk && !m_PTTKeyPressed && !m_BlockAudioHandling)
+                    m_CharacterHandler.StopAudio();
+            }
+            
+            if (newStatus == InworldConnectionStatus.Error)
+            {
+                if(m_StatusText)
+                    m_StatusText.text = InworldController.Client.Error;
+            }
+        }
 
-    void Update()
-    {
-        if (Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(KeyCode.KeypadEnter))
-            SendText();
-    }
-    public void SendText(bool isTrigger = false)
-    {
-        if (string.IsNullOrEmpty(m_InputField.text) || !m_SendButton.interactable)
-            return;
-        InworldController.Instance.SendText(m_InputField.text);
-        m_InputField.text = "";
+        protected virtual void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
+        {
+            if(m_RecordButton)
+                m_RecordButton.interactable = InworldController.Status == InworldConnectionStatus.Connected && m_CharacterHandler.CurrentCharacter;
+            if(m_SendButton)
+                m_SendButton.interactable = InworldController.Status == InworldConnectionStatus.Connected && m_CharacterHandler.CurrentCharacter;
+            if (newChar != null)
+            {
+                InworldAI.Log($"Now Talking to: {newChar.Name}");
+                if (m_StatusText)
+                    m_StatusText.text = $"Current: {newChar.Name}";
+                if (m_PushToTalk && m_PTTKeyPressed && !m_BlockAudioHandling)
+                    m_CharacterHandler.StartAudio();
+            }
+        }
+
+        protected void OnInteraction(InworldPacket incomingPacket)
+        {
+            switch (incomingPacket)
+            {
+                case AudioPacket audioPacket: // Already Played.
+                    break;
+                case TextPacket textPacket:
+                    HandleText(textPacket);
+                    break;
+                case EmotionPacket emotionPacket:
+                    HandleEmotion(emotionPacket);
+                    break;
+                case CustomPacket customPacket:
+                    HandleTrigger(customPacket);
+                    break;
+                default:
+                    InworldAI.Log($"Received {incomingPacket}");
+                    break;
+            }
+        }
+        protected virtual void HandleTrigger(CustomPacket customPacket)
+        {
+            InworldAI.Log($"Received Trigger {customPacket.Trigger}");
+        }
+        protected virtual void HandleEmotion(EmotionPacket packet) => m_CurrentEmotion = packet.emotion.ToString();
+
+        protected virtual void HandleText(TextPacket packet)
+        {
+
+        }
+        
+        protected virtual void Update()
+        {
+            if(m_PushToTalk && !m_BlockAudioHandling)
+                HandlePTT();
+            HandleInput();
+        }
+        
+        protected virtual void HandlePTT()
+        {
+            if (Input.GetKeyDown(m_PushToTalkKey))
+            {
+                m_PTTKeyPressed = true;
+                m_CharacterHandler.StartAudio();
+            }
+            else if (Input.GetKeyUp(m_PushToTalkKey))
+            {
+                m_PTTKeyPressed = false;
+                m_CharacterHandler.StopAudio(true);
+            }
+        }
+
+        protected virtual void HandleInput()
+        {
+            if (Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(KeyCode.KeypadEnter))
+                SendText();
+        }
     }
 }
+

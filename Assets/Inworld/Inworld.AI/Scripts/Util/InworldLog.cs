@@ -56,7 +56,7 @@ namespace Inworld
         }
         public static void LogException(string exception)
         {
-            throw new Exception(exception);
+            throw new InworldException(exception);
         }
     }
 }

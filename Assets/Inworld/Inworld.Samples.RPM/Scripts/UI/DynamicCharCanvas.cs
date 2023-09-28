@@ -14,11 +14,7 @@ namespace Inworld.Sample.RPM
         [SerializeField] float m_Distance = 5f;
         [SerializeField] string m_RuntimeInstructions;
         InworldCharacter m_CurrentCharacter;
-        void Start()
-        {
-            InworldController.Client.OnStatusChanged += OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged += OnCharacterChanged;
-        }
+
         void Update()
         {
             if (Input.GetKeyUp(KeyCode.F))
@@ -26,19 +22,14 @@ namespace Inworld.Sample.RPM
                 _CreateCharacter();
             }
         }
-        void OnDisable()
-        {
-            if (!InworldController.Instance)
-                return;
-            InworldController.Client.OnStatusChanged -= OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged -= OnCharacterChanged;
-        }
+        
         void _CreateCharacter()
         {
             if (m_CurrentCharacter)
                 Destroy(m_CurrentCharacter.gameObject);
             m_CurrentCharacter = Instantiate(m_Model, m_Player.position + m_Player.rotation * Vector3.forward * m_Distance, Quaternion.identity);
             m_CurrentCharacter.RegisterLiveSession();
+            InworldController.CharacterHandler.CurrentCharacter = m_CurrentCharacter;
         }
 
         protected override void OnStatusChanged(InworldConnectionStatus incomingStatus)

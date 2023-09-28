@@ -35,7 +35,7 @@ namespace Inworld.Assets
             m_vecInitEuler = m_Transform.localEulerAngles;
             m_vecInitPosition = m_Transform.localPosition;
             m_Interaction.OnStartStopInteraction += OnStartStopInteraction;
-            InworldController.Instance.OnCharacterChanged += OnCharChanged;
+            InworldController.CharacterHandler.OnCharacterChanged += OnCharChanged;
             InworldController.Instance.OnCharacterInteraction += OnInteractionChanged;
         }
 
@@ -44,7 +44,7 @@ namespace Inworld.Assets
             m_Interaction.OnStartStopInteraction -= OnStartStopInteraction;
             if (!InworldController.Instance)
                 return;
-            InworldController.Instance.OnCharacterChanged -= OnCharChanged;
+            InworldController.CharacterHandler.OnCharacterChanged -= OnCharChanged;
             InworldController.Instance.OnCharacterInteraction -= OnInteractionChanged;
         }
         void OnAnimatorIK(int layerIndex)

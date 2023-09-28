@@ -12,13 +12,5 @@ namespace Inworld.Sample.Innequin
             if (charData.brainName == Data.brainName)
                 RegisterLiveSession();
         }
-
-        protected override void OnStatusChanged(InworldConnectionStatus newStatus)
-        {
-            if (newStatus != InworldConnectionStatus.Connected || InworldController.Instance.CurrentCharacter)
-                return;
-            InworldController.Instance.CurrentCharacter = this;
-            InworldController.Instance.StartAudio();
-        }
     }
 }

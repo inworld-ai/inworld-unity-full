@@ -20,20 +20,12 @@ namespace Inworld.Sample.RPM
         InworldCharacter m_CurrentCharacter;
 
         // Start is called before the first frame update
-        void Start()
+        protected override void Start()
         {
-            InworldController.Client.OnStatusChanged += OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged += OnCharacterChanged;
+            base.Start();
             StartCoroutine(ShowRealAnswer());
         }
         
-        void OnDisable()
-        {
-            if (!InworldController.Instance)
-                return;
-            InworldController.Client.OnStatusChanged -= OnStatusChanged;
-            InworldController.Instance.OnCharacterChanged -= OnCharacterChanged;
-        }
         protected override void OnStatusChanged(InworldConnectionStatus newStatus)
         {
             if (newStatus != InworldConnectionStatus.Connected)

@@ -19,14 +19,12 @@ namespace Inworld.Interactions
         {
             get
             {
-                if (m_PlaybackSource)
-                    return true;
-                return m_PlaybackSource.volume == 0;
+                return m_PlaybackSource == null || !m_PlaybackSource.enabled || m_PlaybackSource.mute;
             }
             set
             {
                 if (m_PlaybackSource)
-                    m_PlaybackSource.volume = value ? 0 : 1;
+                    m_PlaybackSource.mute = value;
             }
         }
 
@@ -42,10 +40,10 @@ namespace Inworld.Interactions
             if (HistoryItem.Count > m_MaxItemCount)
                 RemoveHistoryItem();
             
-            float targetVolume = InworldController.IsPlayerSpeaking ? m_VolumeOnPlayerSpeaking : 1f;
+            float targetVolume = InworldController.Audio.IsPlayerSpeaking ? m_VolumeOnPlayerSpeaking : 1f;
             m_PlaybackSource.volume = Mathf.Lerp(m_PlaybackSource.volume, targetVolume, m_VolumeInterpolationSpeed * Time.deltaTime);
 
-            m_PlaybackSource.volume = InworldController.IsPlayerSpeaking ? m_VolumeOnPlayerSpeaking : 1f;
+            m_PlaybackSource.volume = InworldController.Audio.IsPlayerSpeaking ? m_VolumeOnPlayerSpeaking : 1f;
             
             if (m_PlaybackSource && !m_PlaybackSource.isPlaying)
                 PlayNextUtterance();

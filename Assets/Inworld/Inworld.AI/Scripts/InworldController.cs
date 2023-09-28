@@ -11,23 +11,27 @@ using UnityEditor;
 namespace Inworld
 {
     [RequireComponent(typeof(InworldClient))]
+    [RequireComponent(typeof(AudioCapture))]
     public class InworldController : SingletonBehavior<InworldController>
     {
-        [SerializeField] InworldClient m_Client;
-        [SerializeField] InworldGameData m_GameData;
-        [SerializeField] string m_SceneFullName;
-        [Space(10)][SerializeField] bool m_AutoStart;
+        [SerializeField] protected InworldClient m_Client;
+        [SerializeField] protected AudioCapture m_AudioCapture;
+        [SerializeField] protected CharacterHandler m_CharacterHandler;
+        [SerializeField] protected InworldGameData m_GameData;
+        [SerializeField] protected string m_SceneFullName;
+        [Space(10)][SerializeField] protected bool m_AutoStart;
 
         // YAN: Now LiveSessionID is handled by InworldController Only. To prevent unable to chat.
         //      Both Keys are BrainNames
-        readonly Dictionary<string, string> m_LiveSession = new Dictionary<string, string>();
+        protected readonly Dictionary<string, string> m_LiveSession = new Dictionary<string, string>();
         // YAN: Although InworldCharacterData also has agentID, it won't be always updated. Please check m_LiveSession
         //      And Call RegisterLiveSession if outdated.
-        readonly Dictionary<string, InworldCharacterData> m_Characters = new Dictionary<string, InworldCharacterData>();
-
-        InworldCharacter m_CurrentCharacter;
-        InworldCharacter m_LastCharacter;
+        protected readonly Dictionary<string, InworldCharacterData> m_Characters = new Dictionary<string, InworldCharacterData>();
+        
         string m_CurrentAudioID;
+
+        public static AudioCapture Audio => Instance ? Instance.m_AudioCapture : null;
+        public static CharacterHandler CharacterHandler => Instance ? Instance.m_CharacterHandler : null;
         public static InworldClient Client
         {
             get => Instance ? Instance.m_Client : null;
@@ -47,7 +51,7 @@ namespace Inworld
 
         public float LastPlayerResponseTime { get; set; }
         public void InitWithCustomToken(string token) => m_Client.InitWithCustomToken(token);
-
+        
         public string CurrentWorkspace
         {
             get
@@ -57,41 +61,27 @@ namespace Inworld
             }
         }
         public string CurrentScene => m_SceneFullName;
-        public static bool IsRecording => Instance.m_Client.IsRecording;
-        public static bool IsPlayerSpeaking => Instance.m_Client.IsSpeaking;
-        public InworldCharacter CurrentCharacter
-        {
-            get => m_CurrentCharacter;
-            set
-            {
-                string oldBrainName = m_CurrentCharacter ? m_CurrentCharacter.BrainName : "";
-                string newBrainName = value ? value.BrainName : "";
-                if (oldBrainName == newBrainName)
-                    return;
-                m_LastCharacter = m_CurrentCharacter;
-                m_CurrentCharacter = value;
-                OnCharacterChanged?.Invoke(m_LastCharacter, m_CurrentCharacter);
-            }
-        }
+
         public event Action<InworldCharacterData> OnCharacterRegistered;
-        public event Action<InworldCharacter, InworldCharacter> OnCharacterChanged;
         public event Action<InworldPacket> OnCharacterInteraction;
 
-        void Awake()
+        protected virtual void Awake()
         {
             m_Client = GetComponent<InworldClient>();
+            if(!m_AudioCapture)
+                m_AudioCapture = GetComponent<AudioCapture>();
+            if(!m_CharacterHandler)
+                m_CharacterHandler = GetComponent<CharacterHandler>();
         }
-        void OnEnable()
+        protected virtual void OnEnable()
         {
             _Setup();
         }
-        void OnDisable()
+        protected virtual void OnDisable()
         {
             m_Client.OnStatusChanged -= OnStatusChanged;
-            if (m_CurrentCharacter != null)
-                StopAudio(m_CurrentCharacter.ID);
         }
-        void Start()
+        protected virtual void Start()
         {
             if (m_GameData)
                 LoadData(m_GameData);
@@ -128,7 +118,6 @@ namespace Inworld
         public void Disconnect()
         {
             m_Client.Disconnect();
-            CurrentCharacter = null;
         }
         public void CharacterInteract(InworldPacket packet) => OnCharacterInteraction?.Invoke(packet);
         public string GetLiveSessionID(InworldCharacter character)
@@ -155,61 +144,95 @@ namespace Inworld
             return null;
         }
 
-        // ReSharper disable Unity.PerformanceAnalysis
-        public void SendText(string txtToSend)
+        public void SendText(string charID, string text)
         {
-            // 1. Interrupt current speaking.
-            m_CurrentCharacter.CancelResponse();
-            // 2. Send Text.
-            m_Client.SendText( m_CurrentCharacter.ID, txtToSend);
-        }
-        public void SendText(string charID, string txtToSend)
-        {
-            m_Client.SendText(charID, txtToSend);
+            if (Client.Status != InworldConnectionStatus.Connected)
+                InworldAI.LogException($"Tried to send text to {charID}, but not connected to server.");
+            m_Client.SendText(charID, text);
             LastPlayerResponseTime = Time.time;
         }
-        public void SendCancelEvent(string charID, string interactionID) => m_Client.SendCancelEvent(charID, interactionID);
-        public void SendTrigger(string triggerName, string charID = "", Dictionary<string, string> parameters = null)
+        public void SendCancelEvent(string charID, string interactionID)
         {
-            string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter.ID : charID;
-            m_Client.SendTrigger(charIDToSend, triggerName, parameters);
+            if (Client.Status != InworldConnectionStatus.Connected)
+                InworldAI.LogException($"Tried to send cancel event to {charID}, but not connected to server.");
+            m_Client.SendCancelEvent(charID, interactionID);
+        } 
+        public void SendTrigger(string triggerName, string charID, Dictionary<string, string> parameters = null)
+        {
+            if (Client.Status != InworldConnectionStatus.Connected)
+                InworldAI.LogException($"Tried to send trigger to {charID}, but not connected to server.");
+            if (string.IsNullOrEmpty(charID))
+                throw new ArgumentException("Character ID is empty.");
+            m_Client.SendTrigger(charID, triggerName, parameters);
         }
-        public void StartAudio(string charID = "")
+        public void SamplePlayingWave(float[] data, int channels)
         {
+            if (!m_AudioCapture || data == null || data.Length == 0)
+                return;
+            m_AudioCapture.SamplePlayingWavData(data, channels);
+        }
+        public virtual void StartAudio(string charID)
+        {
+            if (Client.Status != InworldConnectionStatus.Connected)
+                InworldAI.LogException($"Tried to start audio for {charID}, but not connected to server.");
+            if (string.IsNullOrEmpty(charID))
+                throw new ArgumentException("Character ID is empty.");
             if (m_CurrentAudioID == charID)
                 return;
-            string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter.ID : charID;
             if (InworldAI.IsDebugMode)
-                InworldAI.Log($"Start Audio Event {charIDToSend}");
-            if (!IsRegistered(charIDToSend))
+                InworldAI.Log($"Start Audio Event {charID}");
+            if (!IsRegistered(charID))
                 return;
-            m_CurrentAudioID = charIDToSend;
-            m_Client.StartAudio(charIDToSend);
+            
+            m_CurrentAudioID = charID;
+            m_AudioCapture.StartRecording();
+            m_Client.StartAudio(charID);
         }
-        public void StopAudio(string charID = "")
+
+        public virtual void StopAudio(string charID)
         {
-            string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter.ID : charID;
+            if (string.IsNullOrEmpty(charID))
+                throw new ArgumentException("Character ID is empty.");
+            if (m_CurrentAudioID != charID)
+                return;
             if (InworldAI.IsDebugMode)
-                InworldAI.Log($"Stop Audio Event {charIDToSend}");
-            m_CurrentAudioID = null;
-            if (!IsRegistered(charIDToSend))
+                InworldAI.Log($"Stop Audio Event {charID}");
+            
+            ResetAudio();
+            
+            if (!IsRegistered(charID) || Client.Status != InworldConnectionStatus.Connected)
                 return;
-            m_Client.StopAudio(charIDToSend);
+            m_Client.StopAudio(charID);
         }
-        public void SendAudio(string base64, string charID = "")
+
+        public virtual void SendAudio(string base64)
         {
-            string charIDToSend = string.IsNullOrEmpty(charID) ? m_CurrentCharacter ? m_CurrentCharacter.ID : "" : charID ;
-            if (!IsRegistered(charIDToSend))
+            if (string.IsNullOrEmpty(m_CurrentAudioID) || !IsRegistered(m_CurrentAudioID))
                 return;
-            m_Client.SendAudio(charIDToSend, base64);
+            m_Client.SendAudio(m_CurrentAudioID, base64);
             LastPlayerResponseTime = Time.time;
         }
+        protected virtual void ResetAudio()
+        {
+            if (InworldAI.IsDebugMode)
+                InworldAI.Log($"Audio Reset");
+            m_AudioCapture.StopRecording();
+            m_CurrentAudioID = null;
+        }
+        
+        public void PushAudio()
+        {
+            if (Client.Status != InworldConnectionStatus.Connected)
+                InworldAI.LogException($"Tried to push audio, but not connected to server.");
+            m_AudioCapture.PushAudio();
+        }
+
         void _Setup()
         {
             m_Client ??= GetComponent<InworldClient>();
             m_Client.OnStatusChanged += OnStatusChanged;
         }
-        void OnStatusChanged(InworldConnectionStatus incomingStatus)
+        protected virtual void OnStatusChanged(InworldConnectionStatus incomingStatus)
         {
             switch (incomingStatus)
             {
@@ -221,8 +244,13 @@ namespace Inworld
                     StartCoroutine(_RegisterLiveSession());
                     break;
                 case InworldConnectionStatus.LostConnect:
+                    ResetAudio();
                     if (m_AutoStart)
                         Reconnect();
+                    break;
+                case InworldConnectionStatus.Error:
+                case InworldConnectionStatus.Idle:
+                    ResetAudio();
                     break;
             }
         }

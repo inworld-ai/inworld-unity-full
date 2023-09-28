@@ -4,7 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
-
+using Debug = UnityEngine.Debug;
 
 public class InworldAECAudioCapture : AudioCapture
 {
@@ -16,8 +16,9 @@ public class InworldAECAudioCapture : AudioCapture
     float[] m_CharacterBuffer;
     short[] m_CurrentPlayingWavData;
 
-    void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         if (m_AECHandle == IntPtr.Zero)
             return;
         AECInterop.WebRtcAec3_Free(m_AECHandle);
