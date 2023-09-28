@@ -48,7 +48,7 @@ namespace Inworld
         public void RegisterLiveSession()
         {
             m_Interaction.LiveSessionID = Data.agentId = InworldController.CharacterHandler.GetLiveSessionID(this);
-            if (!InworldController.CurrentCharacter)
+            if (!InworldController.CurrentCharacter && !string.IsNullOrEmpty(m_Interaction.LiveSessionID))
                 InworldController.CharacterHandler.SetDefaultCharacter(this);
         }
 
@@ -192,6 +192,8 @@ namespace Inworld
             // 2. Send Text.
             InworldController.Instance.SendTrigger(trgger, ID, parameters);
         }
+        public virtual void EnableGoal(string goalName) => InworldController.Instance.SendTrigger($"inworld.goal.enable.{goalName}", ID);
+        public virtual void DisableGoal(string goalName) => InworldController.Instance.SendTrigger($"inworld.goal.disable.{goalName}", ID);
         public virtual void CancelResponse() => m_Interaction.CancelResponse();
     }
 }
