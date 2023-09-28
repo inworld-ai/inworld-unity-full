@@ -56,6 +56,9 @@ namespace Inworld
 
         protected virtual void Awake()
         {
+            m_CharacterHandler = InworldController.CharacterHandler;
+            m_AudioCapture = InworldController.Audio;
+            
             if (m_SendButton)
                 m_SendButton.interactable = false;
             if (m_RecordButton)
@@ -63,8 +66,6 @@ namespace Inworld
         }
         protected virtual void Start()
         {
-            m_CharacterHandler = InworldController.CharacterHandler;
-            m_AudioCapture = InworldController.Audio;
             m_CharacterHandler.ManualAudioHandling = m_PushToTalk;
             m_AudioCapture.AutoPush = !m_PushToTalk;
         }

@@ -1,9 +1,10 @@
 /*************************************************************************************************
-* Copyright 2022 Theai, Inc. (DBA Inworld)
-*
-* Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
-* that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
-*************************************************************************************************/
+ * Copyright 2022 Theai, Inc. (DBA Inworld)
+ *
+ * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+ * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+ *************************************************************************************************/
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -16,10 +17,17 @@ namespace Inworld.Sample.RPM
         // Start is called before the first frame update
         protected string m_ServerStatus;
         protected CharacterHandler m_CharacterHandler;
-        protected virtual void Start()
-        { 
+
+        protected virtual void Awake()
+        {
             m_CharacterHandler = InworldController.CharacterHandler;
+        }
+        protected virtual void Start()
+        {
             
+        }
+        protected virtual void OnEnable()
+        { 
             InworldController.Client.OnStatusChanged += OnStatusChanged;
             m_CharacterHandler.OnCharacterChanged += OnCharacterChanged;
         }

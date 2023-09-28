@@ -31,8 +31,9 @@ namespace Inworld.Sample.RPM
         readonly Queue<float> m_LagQueue = new Queue<float>(12);
 
         public bool EnableCtrl => m_PlayPause && m_SwitchMic && m_Speaker;
-        void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             if (string.IsNullOrEmpty(ipv4))
                 ipv4 = Dns.GetHostAddresses(InworldController.Client.Server.web)[0].ToString();
             _SwitchToggles(true, true);
