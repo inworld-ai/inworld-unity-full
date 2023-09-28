@@ -107,7 +107,10 @@ namespace Inworld
                 InworldAI.LogWarning($"Audio failed to stop: {e}");
             }
         }
-
+        public void SetDefaultCharacter(InworldCharacter character)
+        {
+            m_DefaultCharacter = character;
+        }
 
         public string GetLiveSessionID(InworldCharacter character)
         {
