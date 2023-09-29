@@ -4,7 +4,7 @@
 * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
-using Inworld.Util;
+
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -32,8 +32,10 @@ namespace Inworld.Sample
         }
         bool Init()
         {
-            m_Canvas ??= GetComponent<Canvas>();
-            m_BG ??= GetComponent<Image>();
+            if (!m_Canvas)
+                m_Canvas = GetComponent<Canvas>();
+            if (!m_BG)
+                m_BG = GetComponent<Image>();
             return m_Canvas && m_BG && m_DlgError && m_MainText && m_HintText && m_Title && m_Content;
         }
         void OnEnable()
@@ -70,6 +72,7 @@ namespace Inworld.Sample
                         break;
                     case InworldConnectionStatus.Error:
                     {
+                        //TODO(Yan): Instantiate InworldError Class and deserialize.
                         _SetDialog(m_TitleError, InworldController.Client.Error);
                         break;
                     }

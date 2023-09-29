@@ -167,16 +167,7 @@ namespace Inworld
         protected virtual void Collect()
         {
 #if !UNITY_WEBGL
-            int nPosition = Microphone.GetPosition(m_DeviceName);
-            if (nPosition < m_LastPosition)
-                nPosition = m_BufferSize;
-            if (nPosition <= m_LastPosition)
-                return;
-            int nSize = nPosition - m_LastPosition;
-            if (!m_Recording.GetData(m_InputBuffer, m_LastPosition))
-                return;
-            m_LastPosition = nPosition % m_BufferSize;
-            
+            int nSize = GetAudioData();
             byte[] output = Output(nSize * m_Recording.channels);
             string audioData = Convert.ToBase64String(output);
             if(m_AutoPush)
@@ -187,6 +178,23 @@ namespace Inworld
             float amplitude = CalculateAmplitude(m_InputBuffer);
             m_IsPlayerSpeaking = amplitude > m_UserSpeechThreshold;
 #endif            
+        }
+        protected int GetAudioData()
+        {
+#if UNITY_WEBGL
+            return -1;
+#else
+            int nPosition = Microphone.GetPosition(m_DeviceName);
+            if (nPosition < m_LastPosition)
+                nPosition = m_BufferSize;
+            if (nPosition <= m_LastPosition)
+                return -1;
+            int nSize = nPosition - m_LastPosition;
+            if (!m_Recording.GetData(m_InputBuffer, m_LastPosition))
+                return -1;
+            m_LastPosition = nPosition % m_BufferSize;
+            return nSize;
+#endif
         }
         protected virtual byte[] Output(int nSize)
         {
