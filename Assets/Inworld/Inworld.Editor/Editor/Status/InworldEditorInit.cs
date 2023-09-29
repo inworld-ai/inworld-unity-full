@@ -23,6 +23,7 @@ namespace Inworld.AI.Editor
         {
             GUIStyle customStyle = new GUIStyle(GUI.skin.textArea)
             {
+                padding = new RectOffset(10, 10, 10, 200),
                 wordWrap = true 
             };
             m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition, GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true));
