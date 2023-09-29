@@ -16,7 +16,6 @@ namespace Inworld
         [SerializeField] protected InworldGameData m_GameData;
         [SerializeField] protected string m_SceneFullName;
         [Space(10)][SerializeField] protected bool m_AutoStart;
-
         
         string m_CurrentAudioID;
 
@@ -44,13 +43,10 @@ namespace Inworld
                 AssetDatabase.SaveAssets();
 #endif
             }
-
         }
         public static InworldConnectionStatus Status => Instance.m_Client.Status;
-
         public static bool IsAutoStart => Instance.m_AutoStart;
         public void InitWithCustomToken(string token) => m_Client.InitWithCustomToken(token);
-        
         public string CurrentWorkspace
         {
             get

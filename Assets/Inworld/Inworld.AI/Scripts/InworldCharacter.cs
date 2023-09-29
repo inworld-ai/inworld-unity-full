@@ -45,7 +45,7 @@ namespace Inworld
         public string Name => Data?.givenName ?? "";
         public string BrainName => Data?.brainName ?? "";
         public string ID => string.IsNullOrEmpty(Data?.agentId) ? InworldController.CharacterHandler.GetLiveSessionID(this) : Data?.agentId;
-        public void RegisterLiveSession()
+        public virtual void RegisterLiveSession()
         {
             m_Interaction.LiveSessionID = Data.agentId = InworldController.CharacterHandler.GetLiveSessionID(this);
             if (!InworldController.CurrentCharacter && !string.IsNullOrEmpty(m_Interaction.LiveSessionID))

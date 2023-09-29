@@ -35,7 +35,7 @@ public class AudioCaptureTest : AudioCapture
             m_Dropdown.options.Add(new TMP_Dropdown.OptionData(device));
         }
     }
-    void Update()
+    protected override void Update()
     {
         if (!IsCapturing)
             return;
