@@ -44,10 +44,12 @@ namespace Inworld
         
         public string Name => Data?.givenName ?? "";
         public string BrainName => Data?.brainName ?? "";
-        public string ID => string.IsNullOrEmpty(Data?.agentId) ? InworldController.Instance.GetLiveSessionID(this) : Data?.agentId;
-        public void RegisterLiveSession()
+        public string ID => string.IsNullOrEmpty(Data?.agentId) ? InworldController.CharacterHandler.GetLiveSessionID(this) : Data?.agentId;
+        public virtual void RegisterLiveSession()
         {
-            m_Interaction.LiveSessionID = Data.agentId = InworldController.Instance.GetLiveSessionID(this);
+            m_Interaction.LiveSessionID = Data.agentId = InworldController.CharacterHandler.GetLiveSessionID(this);
+            if (!InworldController.CurrentCharacter && !string.IsNullOrEmpty(m_Interaction.LiveSessionID))
+                InworldController.CharacterHandler.SetDefaultCharacter(this);
         }
 
         void Awake()
@@ -57,7 +59,7 @@ namespace Inworld
 
         protected virtual void OnEnable()
         {
-            InworldController.Instance.OnCharacterRegistered += OnCharRegistered;
+            InworldController.CharacterHandler.OnCharacterRegistered += OnCharRegistered;
             InworldController.Client.OnStatusChanged += OnStatusChanged;
             m_Interaction.OnStartStopInteraction += OnStartStopInteraction;
             // YAN: This event is for handling global packets. Please only use it in InworldCharacter.
@@ -75,7 +77,7 @@ namespace Inworld
             m_Interaction.OnInteractionChanged -= OnInteractionChanged;
             if (!InworldController.Instance)
                 return;
-            InworldController.Instance.OnCharacterRegistered -= OnCharRegistered;
+            InworldController.CharacterHandler.OnCharacterRegistered -= OnCharRegistered;
             InworldController.Client.OnStatusChanged -= OnStatusChanged;
         }
         protected virtual void OnStartStopInteraction(bool isStarting)
@@ -133,7 +135,6 @@ namespace Inworld
                     break;
             }
         }
-        
         protected virtual void HandleText(TextPacket packet)
         {
             if (packet.text == null || string.IsNullOrEmpty(packet.text.text) || string.IsNullOrWhiteSpace(packet.text.text))
@@ -160,7 +161,6 @@ namespace Inworld
                 InworldAI.Log($"{Name}: {packet.emotion.behavior} {packet.emotion.strength}");
             onEmotionChanged.Invoke(packet.emotion.strength, packet.emotion.behavior);
         }
-        
         protected virtual void HandleTrigger(CustomPacket customPacket)
         {
             if (m_VerboseLog)
@@ -177,6 +177,23 @@ namespace Inworld
         {
             // Won't process lip sync in pure text 2D conversation
         }
-        public void CancelResponse() => m_Interaction.CancelResponse();
+        public virtual void SendText(string text)
+        {
+            // 1. Interrupt current speaking.
+            CancelResponse();
+            // 2. Send Text.
+            InworldController.Instance.SendText(ID, text);
+        }
+        public virtual void SendTrigger(string trgger, Dictionary<string, string> parameters = null, bool needCancelResponse = false)
+        {
+            // 1. Interrupt current speaking.
+            if (needCancelResponse)
+                CancelResponse();
+            // 2. Send Text.
+            InworldController.Instance.SendTrigger(trgger, ID, parameters);
+        }
+        public virtual void EnableGoal(string goalName) => InworldController.Instance.SendTrigger($"inworld.goal.enable.{goalName}", ID);
+        public virtual void DisableGoal(string goalName) => InworldController.Instance.SendTrigger($"inworld.goal.disable.{goalName}", ID);
+        public virtual void CancelResponse() => m_Interaction.CancelResponse();
     }
 }

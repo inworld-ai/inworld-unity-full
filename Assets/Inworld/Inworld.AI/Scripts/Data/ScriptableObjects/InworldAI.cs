@@ -1,4 +1,5 @@
 using Inworld;
+using Inworld.Sample;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -13,11 +14,13 @@ public class InworldAI : ScriptableObject
     [SerializeField] Texture2D m_DefaultThumbnail;
     [SerializeField] InworldUserSetting m_DefaultUserSetting;
     [SerializeField] InworldController m_ControllerPrefab;
+    [SerializeField] SplashScreen m_SplashScreen;
     [Space(10)]
     [SerializeField] string m_Version;
     [SerializeField] string m_ImportedTime;
     [Space(10)][SerializeField] bool m_DebugMode;
-    
+
+    public const string k_CompanyName = "Inworld.AI";
     const string k_GlobalDataPath = "InworldAI";
     static InworldAI __inst;
     
@@ -42,6 +45,7 @@ public class InworldAI : ScriptableObject
     {
         id = "unity"
     };
+    public static SplashScreen SplashScreen => Instance.m_SplashScreen;
     public static InworldController ControllerPrefab => Instance.m_ControllerPrefab;
     public static Capabilities Capabilities
     {

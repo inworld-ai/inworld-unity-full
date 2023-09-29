@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,11 +8,11 @@ namespace Inworld.UI
     {
         public void OnPointerDown(PointerEventData eventData)
         {
-            InworldController.CharacterHandler.StartAudio();
+            InworldController.Instance.StartAudio();
         }
         public void OnPointerUp(PointerEventData eventData)
         {
-            InworldController.CharacterHandler.StopAudio(true);
+            InworldController.Instance.PushAudio();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Inworld.Packet
     public class ActionPacket : InworldPacket
     {
         public ActionEvent action;
-        
+
         public ActionPacket()
         {
             action = new ActionEvent();

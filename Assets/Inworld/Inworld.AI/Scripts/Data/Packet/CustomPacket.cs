@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using UnityEngine.TextCore.Text;
-
 namespace Inworld.Packet
 {
     [Serializable]
@@ -17,7 +15,7 @@ namespace Inworld.Packet
     {
         public string name;
         public List<TriggerParamer> parameters;
-        
+
         public CustomEvent()
         {
             name = "";
@@ -28,12 +26,15 @@ namespace Inworld.Packet
         {
             name = eventName;
             if (eventParameters != null)
-                parameters = eventParameters.Select(parameter =>
-                                                                                 new TriggerParamer
-                                                                                 {
-                                                                                     name = parameter.Key,
-                                                                                     value = parameter.Value
-                                                                                 }).ToList();
+                parameters = eventParameters.Select
+                (
+                    parameter =>
+                        new TriggerParamer
+                        {
+                            name = parameter.Key,
+                            value = parameter.Value
+                        }
+                ).ToList();
         }
     }
     [Serializable]
@@ -41,6 +42,15 @@ namespace Inworld.Packet
     {
         const string k_Pattern = @"^inworld\.goal\.complete\.(.+)$";
         public CustomEvent custom;
+
+        public CustomPacket()
+        {
+            custom = new CustomEvent();
+        }
+        public CustomPacket(InworldPacket rhs, CustomEvent evt) : base(rhs)
+        {
+            custom = evt;
+        }
         public string TriggerName
         {
             get
@@ -56,21 +66,12 @@ namespace Inworld.Packet
                 string result = TriggerName;
                 if (custom.parameters == null || custom.parameters.Count == 0)
                     return result;
-                foreach (var param in custom.parameters)
+                foreach (TriggerParamer param in custom.parameters)
                 {
                     result += $"{param.name}: {param.value} ";
                 }
                 return result;
             }
-        }
-
-        public CustomPacket()
-        {
-            custom = new CustomEvent();
-        }
-        public CustomPacket(InworldPacket rhs, CustomEvent evt) : base(rhs)
-        {
-            custom = evt;
         }
     }
 }

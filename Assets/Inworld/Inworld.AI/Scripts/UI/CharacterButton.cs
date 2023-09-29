@@ -27,7 +27,7 @@ namespace Inworld.UI
             }
             iwChar.Data = m_Data;
             iwChar.RegisterLiveSession();
-            InworldController.CharacterHandler.CurrentCharacter = iwChar;
+            InworldController.CurrentCharacter = iwChar;
         }
         InworldCharacter GetCharacter()
         {

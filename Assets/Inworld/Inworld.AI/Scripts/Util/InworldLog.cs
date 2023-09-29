@@ -5,6 +5,10 @@ using UnityEngine;
 using Debug = UnityEngine.Debug;
 namespace Inworld
 {
+    public class InworldException : Exception
+    {
+        public InworldException(string errorMessage) : base(errorMessage) {}
+    } 
     public class InworldLog : MonoBehaviour
     {
         [SerializeField] TMP_Text m_LogArea;

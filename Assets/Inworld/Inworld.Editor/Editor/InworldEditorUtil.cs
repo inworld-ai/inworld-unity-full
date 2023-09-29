@@ -51,6 +51,26 @@ namespace Inworld.AI.Editor
                 InworldAI.ImportedTime = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
             SendWebGetRequest(k_VersionCheckURL, false, OnUpdateRequestComplete);
         }
+
+        static void OnUpdateRequestComplete(AsyncOperation obj)
+        {
+            UnityWebRequest uwr = GetResponse(obj);
+            string jsonStr = "{ \"package\": " + uwr.downloadHandler.text + "}";
+            ReleaseData date = JsonUtility.FromJson<ReleaseData>(jsonStr);
+            if (date.package == null || date.package.Length <= 0)
+                return;
+            string publishedDate = date.package[0].published_at;
+            DateTime currentVersion = DateTime.ParseExact(publishedDate, "yyyy-MM-ddTHH:mm:ssZ", null, System.Globalization.DateTimeStyles.RoundtripKind);
+            DateTime importedTime = DateTime.ParseExact(InworldAI.ImportedTime, "yyyy-MM-ddTHH:mm:ssZ", null, System.Globalization.DateTimeStyles.RoundtripKind);
+            if (importedTime < currentVersion) 
+            {
+                InworldAI.LogWarning($"Your Inworld SDK is outdated. Please fetch the newest from Asset Store or {k_ReleaseURL}");
+            }
+            else
+            {
+                InworldAI.Version = date.package[0]?.tag_name;
+            }
+        }
         public static void SendWebGetRequest(string url, bool withToken, Action<AsyncOperation> callback)
         {
             UnityWebRequest uwr = new UnityWebRequest(url, "GET");
@@ -75,25 +95,7 @@ namespace Inworld.AI.Editor
         public static string UserDataPath => Path.GetDirectoryName(AssetDatabase.GetAssetPath(InworldAI.User));
 
         public static UnityWebRequest GetResponse(AsyncOperation op) => op is UnityWebRequestAsyncOperation webTask ? webTask.webRequest : null;
-        static void OnUpdateRequestComplete(AsyncOperation obj)
-        {
-            UnityWebRequest uwr = GetResponse(obj);
-            string jsonStr = "{ \"package\": " + uwr.downloadHandler.text + "}";
-            ReleaseData date = JsonUtility.FromJson<ReleaseData>(jsonStr);
-            if (date.package == null || date.package.Length <= 0)
-                return;
-            string publishedDate = date.package[0].published_at;
-            DateTime currentVersion = DateTime.ParseExact(publishedDate, "yyyy-MM-ddTHH:mm:ssZ", null, System.Globalization.DateTimeStyles.RoundtripKind);
-            DateTime importedTime = DateTime.ParseExact(InworldAI.ImportedTime, "yyyy-MM-ddTHH:mm:ssZ", null, System.Globalization.DateTimeStyles.RoundtripKind);
-            if (importedTime < currentVersion) 
-            {
-                InworldAI.LogWarning($"Your Inworld SDK is outdated. Please fetch the newest from Asset Store or {k_ReleaseURL}");
-            }
-            else
-            {
-                InworldAI.Version = date.package[0]?.tag_name;
-            }
-        }
+
         static void _AddDebugMacro()
         {
             BuildTargetGroup buildTargetGroup = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);

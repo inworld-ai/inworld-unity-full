@@ -47,6 +47,7 @@ namespace Inworld
             get => m_BillingAccount;
             set => m_BillingAccount = value;
         }
+        public string Account => $"{Name}:{BillingAccount}";
         public string ID
         {
             get => m_UserID;

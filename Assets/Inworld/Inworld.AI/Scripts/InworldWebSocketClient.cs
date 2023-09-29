@@ -13,6 +13,7 @@ namespace Inworld
     {
         WebSocket m_Socket;
         LoadSceneResponse m_CurrentSceneData;
+        const string k_DisconnectMsg = "The remote party closed the WebSocket connection without completing the close handshake.";
         public override void GetAccessToken() => StartCoroutine(_GetAccessToken());
         public override void LoadScene(string sceneFullName) => StartCoroutine(_LoadScene(sceneFullName));
         public override void StartSession() => StartCoroutine(_StartSession());
@@ -259,7 +260,8 @@ namespace Inworld
 
         void OnSocketError(object sender, ErrorEventArgs e)
         {
-            Error = e.Message;
+            if (e.Message != k_DisconnectMsg)
+                Error = e.Message;
         }
     }
 }

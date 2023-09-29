@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using Inworld.VSP;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -95,6 +96,10 @@ namespace Inworld.AI.Editor
                 InworldAI.User.Name = displayName;
             }
             EditorUtility.DisplayProgressBar("Inworld", "Getting Billing Account Completed!", 0.5f);
+#if VSP
+            if (!string.IsNullOrEmpty(InworldAI.User.Account))
+                VSAttribution.SendAttributionEvent("Login Studio", InworldAI.k_CompanyName, InworldAI.User.Account);
+#endif
             _ListWorkspace();
         }
         void OnListWorkspaceCompleted(AsyncOperation obj)
