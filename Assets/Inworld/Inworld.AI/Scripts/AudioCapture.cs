@@ -168,6 +168,8 @@ namespace Inworld
         {
 #if !UNITY_WEBGL
             int nSize = GetAudioData();
+            if (nSize <= 0)
+                return;
             byte[] output = Output(nSize * m_Recording.channels);
             string audioData = Convert.ToBase64String(output);
             if(m_AutoPush)
