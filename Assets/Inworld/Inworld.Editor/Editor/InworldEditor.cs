@@ -41,6 +41,7 @@ namespace Inworld.AI.Editor
         [SerializeField] string m_ScenesURL;
         
         const string k_GlobalDataPath = "InworldEditor";
+        public const string k_TokenErrorInstruction = "Token Error or Expired.\nPlease login again";
         const float k_LuminanceRed = 0.2126f;
         const float k_LuminanceGreen = 0.7152f;
         const float k_LuminanceBlue = 0.0722f;
@@ -114,6 +115,8 @@ namespace Inworld.AI.Editor
         }
         public static string Token => $"Bearer {TokenForExchange.Split(':')[0]}";
 
+        public static string GetError(string strErrorFromWeb) => strErrorFromWeb.Contains("Unauthorized") ? k_TokenErrorInstruction : strErrorFromWeb;
+
         float GetLuminance(Color color) => k_LuminanceRed * color.r + k_LuminanceGreen * color.g + k_LuminanceBlue * color.b;
 
         public GUIStyle TitleStyle => new GUIStyle(GUI.skin.label)
@@ -121,6 +124,17 @@ namespace Inworld.AI.Editor
             fontSize = 14,
             fontStyle = FontStyle.Bold,
             padding = new RectOffset(10, 10, 0, 0)
+        };
+        public GUIStyle ErrorStyle => new GUIStyle(GUI.skin.label)
+        {
+            fontSize = 14,
+            fontStyle = FontStyle.Bold,
+            normal = new GUIStyleState
+            {
+                textColor = Color.red
+            },
+            padding = new RectOffset(10, 10, 10, 50),
+            wordWrap = true
         };
         public GUIStyle BtnStyle => new GUIStyle(GUI.skin.button)
         {

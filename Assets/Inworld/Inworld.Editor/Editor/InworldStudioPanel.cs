@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,6 +20,10 @@ namespace Inworld.AI.Editor
         {
             titleContent = new GUIContent("Inworld Studio");
             Show();
+        }
+        void OnEnable()
+        {
+            InworldEditor.Instance.CurrentState.OnOpenWindow();
         }
         void OnGUI()
         {

@@ -11,6 +11,10 @@ namespace Inworld.AI.Editor
         const string k_DefaultTitle = "Please paste Auth token here:";
 
         Vector2 m_ScrollPosition = Vector2.zero;
+        public void OnOpenWindow()
+        {
+            InworldEditor.TokenForExchange = "";
+        }
         public void DrawTitle()
         {
             GUILayout.Label(k_DefaultTitle, EditorStyles.boldLabel);
@@ -65,7 +69,7 @@ namespace Inworld.AI.Editor
             UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
             if (uwr.result != UnityWebRequest.Result.Success)
             {
-                InworldEditor.Instance.Error = $"Get User Failed: {uwr.error}";
+                InworldEditor.Instance.Error = $"Get User Failed: {InworldEditor.GetError(uwr.error)}";
                 EditorUtility.ClearProgressBar();
                 return;
             }
@@ -108,7 +112,7 @@ namespace Inworld.AI.Editor
             if (uwr.result != UnityWebRequest.Result.Success)
             {
                 EditorUtility.ClearProgressBar();
-                InworldEditor.Instance.Error = $"List Workspace Failed: {uwr.error}";
+                InworldEditor.Instance.Error = $"List Workspace Failed: {InworldEditor.GetError(uwr.error)}";
                 return;
             }
             EditorUtility.DisplayProgressBar("Inworld", "Getting Workspace data Completed", 1f);

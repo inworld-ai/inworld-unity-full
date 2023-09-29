@@ -5,11 +5,14 @@ namespace Inworld.AI.Editor
 {
     public class InworldEditorError : IEditorState
     {
-
+        public void OnOpenWindow()
+        {
+            
+        }
         public void DrawTitle()
         {
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField(InworldEditor.Instance.Error, InworldEditor.Instance.TitleStyle);
+            EditorGUILayout.LabelField(InworldEditor.Instance.Error, InworldEditor.Instance.ErrorStyle);
             EditorGUILayout.Space();
         }
         public void DrawContent()

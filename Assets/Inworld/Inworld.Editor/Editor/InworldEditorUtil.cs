@@ -80,7 +80,7 @@ namespace Inworld.AI.Editor
             {
                 if (string.IsNullOrEmpty(InworldEditor.Token))
                 {
-                    InworldEditor.Instance.Error = $"Login Expired. Please login again";
+                    InworldEditor.Instance.Error = InworldEditor.k_TokenErrorInstruction;
                     return;
                 }
                 uwr.SetRequestHeader("Authorization", InworldEditor.Token);
