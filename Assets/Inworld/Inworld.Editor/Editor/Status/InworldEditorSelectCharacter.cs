@@ -8,6 +8,13 @@ namespace Inworld.AI.Editor
     public class InworldEditorSelectCharacter: IEditorState
     {
         Vector2 m_ScrollPosition;
+        public void OnOpenWindow()
+        {
+            if (!InworldController.Instance || !InworldController.Instance.GameData)
+            {
+                InworldEditor.Instance.Status = EditorStatus.SelectGameData; // YAN: Fall back.
+            }
+        }
         public void DrawTitle()
         {
             EditorGUILayout.Space();
@@ -22,7 +29,7 @@ namespace Inworld.AI.Editor
         }
         public void DrawContent()
         {
-            if (!InworldEditor.Is3D)
+            if (!InworldEditor.Is3D || !InworldController.Instance || !InworldController.Instance.GameData)
                 return;
             // 1. Get the character prefab for character in current scene. (Default or Specific)
             InworldSceneData sceneData = InworldAI.User.GetSceneByFullName(InworldController.Instance.GameData.sceneFullName);

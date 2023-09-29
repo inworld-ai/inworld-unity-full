@@ -23,6 +23,10 @@ namespace Inworld.AI.Editor
         bool m_DisplayDataMissing = false;
         bool m_StartDownload = false;
 
+        public void OnOpenWindow()
+        {
+            
+        }
         public void DrawTitle()
         {
             EditorGUILayout.Space();
@@ -218,7 +222,7 @@ namespace Inworld.AI.Editor
             UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
             if (uwr.result != UnityWebRequest.Result.Success)
             {
-                InworldEditor.Instance.Error = $"List Scene Failed: {uwr.error}";
+                InworldEditor.Instance.Error = $"List Scene Failed: {InworldEditor.GetError(uwr.error)}";
                 EditorUtility.ClearProgressBar();
                 return;
             }
@@ -237,7 +241,7 @@ namespace Inworld.AI.Editor
             UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
             if (uwr.result != UnityWebRequest.Result.Success)
             {
-                InworldEditor.Instance.Error = $"List Key Failed: {uwr.error}";
+                InworldEditor.Instance.Error = $"List Key Failed: {InworldEditor.GetError(uwr.error)}";
                 EditorUtility.ClearProgressBar();
                 return;
             }

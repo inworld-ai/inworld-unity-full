@@ -2,6 +2,7 @@
 {
     public interface IEditorState
     {
+        public void OnOpenWindow();
         public void DrawTitle();
         public void DrawContent();
         public void DrawButtons();
