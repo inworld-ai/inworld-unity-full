@@ -118,9 +118,10 @@ namespace Inworld
         public bool silence;
         public bool text;
         public bool triggers;
-        public bool continuation;
         public bool turnBasedStt;
         public bool phonemeInfo;
+        public bool relations;
+        public bool debugInfo;
 
         public Capabilities() {}
         public Capabilities(Capabilities rhs)
@@ -132,9 +133,10 @@ namespace Inworld
             silence = rhs.silence;
             text = rhs.text;
             triggers = rhs.triggers;
-            continuation = rhs.continuation;
             turnBasedStt = rhs.turnBasedStt;
             phonemeInfo = rhs.phonemeInfo;
+            relations = rhs.relations;
+            debugInfo = rhs.debugInfo;
         }
         public void CopyFrom(Capabilities rhs)
         {
@@ -145,9 +147,10 @@ namespace Inworld
             silence = rhs.silence;
             text = rhs.text;
             triggers = rhs.triggers;
-            continuation = rhs.continuation;
             turnBasedStt = rhs.turnBasedStt;
             phonemeInfo = rhs.phonemeInfo;
+            relations = rhs.relations;
+            debugInfo = rhs.debugInfo;
         }
 }
     [Serializable]

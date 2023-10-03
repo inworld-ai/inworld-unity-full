@@ -11,15 +11,16 @@ namespace Inworld
     {
         [SerializeField] InworldCharacterData m_Data;
         [SerializeField] bool m_VerboseLog;
-        
-        // ReSharper disable all InconsistentNaming
+       
         public UnityEvent onBeginSpeaking;
         public UnityEvent onEndSpeaking;
         public UnityEvent<InworldPacket> onPacketReceived;
         public UnityEvent<string ,string> onCharacterSpeaks;
         public UnityEvent<string, string> onEmotionChanged;
         public UnityEvent<string> onGoalCompleted;
+        public UnityEvent onRelationUpdated;
         
+        RelationState m_CurrentRelation = new RelationState();
         protected InworldInteraction m_Interaction;
         public bool IsSpeaking
         {
@@ -29,6 +30,17 @@ namespace Inworld
                 if (!m_Interaction)
                     return;
                 m_Interaction.IsSpeaking = value;
+            }
+        }
+        public RelationState CurrRelation
+        {
+            get => m_CurrentRelation;
+            set
+            {
+                if (m_VerboseLog)
+                    InworldAI.Log($"{Name}: {m_CurrentRelation.GetUpdate(value)}");
+                m_CurrentRelation = value;
+                onRelationUpdated.Invoke();
             }
         }
         public InworldCharacterData Data
@@ -65,11 +77,6 @@ namespace Inworld
             // YAN: This event is for handling global packets. Please only use it in InworldCharacter.
             //      For customized integration, please use InworldController.Instance.OnCharacterInteraction
             m_Interaction.OnInteractionChanged += OnInteractionChanged;
-        }
-        void OnAudioFilterRead(float[] data, int channels)
-        {
-            if(InworldController.Status == InworldConnectionStatus.Connected)
-                InworldController.Instance.SamplePlayingWave(data, channels);
         }
         protected virtual void OnDisable()
         {
@@ -118,8 +125,13 @@ namespace Inworld
             
             switch (incomingPacket)
             {
+                case ActionPacket actionPacket:
+                    HandleAction(actionPacket);
+                    break;
                 case AudioPacket audioPacket: // Already Played.
                     HandleLipSync(audioPacket);
+                    break;
+                case ControlPacket controlPacket: // Interaction_End
                     break;
                 case TextPacket textPacket:
                     HandleText(textPacket);
@@ -130,11 +142,16 @@ namespace Inworld
                 case CustomPacket customPacket:
                     HandleTrigger(customPacket);
                     break;
+                case RelationPacket relationPacket:
+                    HandleRelation(relationPacket);
+                    break;
                 default:
                     Debug.LogError($"Received Unknown {incomingPacket}");
                     break;
             }
         }
+        protected virtual void HandleRelation(RelationPacket relationPacket) => CurrRelation = relationPacket.debugInfo.relation.relationUpdate;
+
         protected virtual void HandleText(TextPacket packet)
         {
             if (packet.text == null || string.IsNullOrEmpty(packet.text.text) || string.IsNullOrWhiteSpace(packet.text.text))
@@ -173,9 +190,19 @@ namespace Inworld
             }
             onGoalCompleted.Invoke(customPacket.TriggerName);
         }
+        protected virtual void HandleAction(ActionPacket actionPacket)
+        {
+            if (m_VerboseLog)
+                InworldAI.Log($"{Name} {actionPacket.action.narratedAction.content}");
+        }
         protected virtual void HandleLipSync(AudioPacket audioPacket)
         {
             // Won't process lip sync in pure text 2D conversation
+        }
+        void OnAudioFilterRead(float[] data, int channels)
+        {
+            if (InworldController.Instance)
+                InworldController.Audio.SamplePlayingWavData(data, channels);
         }
         public virtual void SendText(string text)
         {

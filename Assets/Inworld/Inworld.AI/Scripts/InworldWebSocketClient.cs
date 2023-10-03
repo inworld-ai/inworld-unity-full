@@ -250,6 +250,10 @@ namespace Inworld
                     else
                         Error = e.Data;
                 }
+                else
+                {
+                    InworldAI.LogWarning($"Received Unknown {e.Data}");
+                }
             }
             Dispatch(packetReceived.Packet);
         }
