@@ -211,13 +211,13 @@ namespace Inworld
             // 2. Send Text.
             InworldController.Instance.SendText(ID, text);
         }
-        public virtual void SendTrigger(string trgger, Dictionary<string, string> parameters = null, bool needCancelResponse = false)
+        public virtual void SendTrigger(string trigger, bool needCancelResponse = false, Dictionary<string, string> parameters = null)
         {
             // 1. Interrupt current speaking.
             if (needCancelResponse)
                 CancelResponse();
-            // 2. Send Text.
-            InworldController.Instance.SendTrigger(trgger, ID, parameters);
+            // 2. Send Text. YAN: Now all trigger has to be lower cases.
+            InworldController.Instance.SendTrigger(trigger.ToLower(), ID, parameters);
         }
         public virtual void EnableGoal(string goalName) => InworldController.Instance.SendTrigger($"inworld.goal.enable.{goalName}", ID);
         public virtual void DisableGoal(string goalName) => InworldController.Instance.SendTrigger($"inworld.goal.disable.{goalName}", ID);

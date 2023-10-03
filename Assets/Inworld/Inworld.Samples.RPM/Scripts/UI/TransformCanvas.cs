@@ -1,9 +1,10 @@
 /*************************************************************************************************
-* Copyright 2022 Theai, Inc. (DBA Inworld)
-*
-* Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
-* that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
-*************************************************************************************************/
+ * Copyright 2022 Theai, Inc. (DBA Inworld)
+ *
+ * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+ * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+ *************************************************************************************************/
+
 using System.Collections;
 using UnityEngine;
 
@@ -11,11 +12,10 @@ namespace Inworld.Sample.RPM
 {
     public class TransformCanvas : DemoCanvas
     {
-        public string trigger;
         [SerializeField] GameObject m_Stone;
         [SerializeField] GameObject m_Avatar;
-        [SerializeField] InworldCharacterData m_CharData;
         [SerializeField] InworldFacialAnimationRPM m_LipAnimation;
+        [SerializeField] string m_InitTrigger;
         [SerializeField] string m_CheckTrigger;
         [SerializeField] InworldCharacter m_CurrentCharacter;
 
@@ -25,20 +25,17 @@ namespace Inworld.Sample.RPM
             base.Start();
             StartCoroutine(ShowRealAnswer());
         }
-        
-        protected override void OnStatusChanged(InworldConnectionStatus newStatus)
-        {
-            if (newStatus != InworldConnectionStatus.Connected)
-                return;
-            m_CurrentCharacter.SendTrigger("initconvo");
-        }
+
         protected override void OnCharacterChanged(InworldCharacter oldCharacter, InworldCharacter newCharacter)
         {
             if (!newCharacter && oldCharacter)
                 m_Title.text = $"{oldCharacter.transform.name} Disconnected!";
             else
             {
-                m_Title.text = $"{newCharacter.transform.name} connected!";
+                if (newCharacter.ID == m_CurrentCharacter.ID)
+                {
+                    m_CurrentCharacter.SendTrigger(m_InitTrigger, true);
+                }
             }
         }
         

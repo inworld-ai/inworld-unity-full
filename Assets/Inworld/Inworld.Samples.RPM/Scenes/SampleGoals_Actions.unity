@@ -406,23 +406,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Title: {fileID: 1934973846}
   m_Content: {fileID: 1624441892}
-  trigger: initConvo
   m_Stone: {fileID: 44800359}
   m_Avatar: {fileID: 297884304}
-  m_CharData:
-    agentId: 
-    brainName: workspaces/unitytest/characters/prince_stone
-    givenName: Prince Stone
-    characterAssets:
-      rpmModelUri: 
-      rpmImageUriPortrait: 
-      rpmImageUriPosture: 
-      avatarImg: 
-      avatarImgOriginal: 
-      thumbnailProgress: 0
-      avatarProgress: 0
-    thumbnail: {fileID: 2800000, guid: 3cae29afb07cf234fbd6320de356f7bb, type: 3}
   m_LipAnimation: {fileID: 3025297061302042100}
+  m_InitTrigger: initconvo
   m_CheckTrigger: turnback
   m_CurrentCharacter: {fileID: 617440777708311051}
 --- !u!1001 &1318710383
@@ -1310,7 +1297,7 @@ MonoBehaviour:
       thumbnailProgress: 0
       avatarProgress: 0
     thumbnail: {fileID: 0}
-  m_VerboseLog: 0
+  m_VerboseLog: 1
   onBeginSpeaking:
     m_PersistentCalls:
       m_Calls: []
@@ -1341,6 +1328,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
+  onRelationUpdated:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!222 &800086743014677056
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1630,6 +1620,7 @@ MonoBehaviour:
   m_BubbleContentAnchor: {fileID: 8422684618375494235}
   m_BubbleLeftPrefab: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
   m_BubbleRightPrefab: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
+  m_DisplaySplash: 0
   m_ChatCanvas: {fileID: 933114256994709551}
 --- !u!1 &1874934492293414086
 GameObject:
@@ -2511,6 +2502,7 @@ MonoBehaviour:
   m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
   m_CustomToken: 
+  m_PublicWorkspace: 
 --- !u!224 &4896383556178456145
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2864,6 +2856,7 @@ MonoBehaviour:
   m_BubbleLeft: {fileID: -5829000521551651004, guid: 6e31716df34c4f04a8a382ad03c5790d, type: 3}
   m_BubbleRight: {fileID: 7032387963612836835, guid: ce19183024b657340b5e830b1549618e, type: 3}
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
+  m_Relation: {fileID: 0}
   m_EmoIcon: {fileID: 4527467879313149719}
   m_Character: {fileID: 617440777708311051}
 --- !u!222 &6094872163634914935

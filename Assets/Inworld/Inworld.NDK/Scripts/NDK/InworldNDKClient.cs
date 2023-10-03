@@ -100,7 +100,7 @@ namespace Inworld.NDK
         {
             if (string.IsNullOrEmpty(charID))
                 return;
-            if (parameters.Count == 0)
+            if (parameters == null || parameters.Count == 0)
                 NDKInterop.Unity_SendTrigger(charID, triggerName);
             else
             {
