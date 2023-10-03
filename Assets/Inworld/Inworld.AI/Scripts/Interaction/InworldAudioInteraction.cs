@@ -68,8 +68,6 @@ namespace Inworld.Interactions
             if (nextAudio.Clip)
                 AudioLength = nextAudio.Clip.length;
             Dispatch(GetUnsolvedPackets(NextAudio));
-            // UpdateInteraction(nextAudio);
-            // Dispatch(this[nextAudio.packetId.interactionId][nextAudio.packetId.utteranceId].Packets);
         }
         
         

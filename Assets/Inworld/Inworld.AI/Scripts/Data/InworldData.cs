@@ -40,6 +40,7 @@ namespace Inworld
     public class AccessTokenRequest
     {
         public string api_key;
+        public string resource_id;
     }
     [Serializable]
     public class LoadSceneRequest // TODO(Yan): Rename all to requests.

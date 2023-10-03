@@ -11,10 +11,11 @@ namespace Inworld
 {
     public class InworldWebSocketClient : InworldClient
     {
+        [SerializeField] string m_PublicWorkspace;
         WebSocket m_Socket;
         LoadSceneResponse m_CurrentSceneData;
         const string k_DisconnectMsg = "The remote party closed the WebSocket connection without completing the close handshake.";
-        public override void GetAccessToken() => StartCoroutine(_GetAccessToken());
+        public override void GetAccessToken() => StartCoroutine(_GetAccessToken(m_PublicWorkspace));
         public override void LoadScene(string sceneFullName) => StartCoroutine(_LoadScene(sceneFullName));
         public override void StartSession() => StartCoroutine(_StartSession());
         public override void Disconnect() => StartCoroutine(_DisconnectAsync());
@@ -127,7 +128,7 @@ namespace Inworld
             string jsonToSend = JsonUtility.ToJson(packet);
             m_Socket.SendAsync(jsonToSend);
         }
-        IEnumerator _GetAccessToken()
+        IEnumerator _GetAccessToken(string workspaceFullName = "")
         {
             Status = InworldConnectionStatus.Initializing;
             string responseJson = m_CustomToken;
@@ -149,9 +150,11 @@ namespace Inworld
 
                 uwr.SetRequestHeader("Authorization", header);
                 uwr.SetRequestHeader("Content-Type", "application/json");
+
                 AccessTokenRequest req = new AccessTokenRequest
                 {
-                    api_key = m_APIKey
+                    api_key = m_APIKey,
+                    resource_id = workspaceFullName
                 };
                 string json = JsonUtility.ToJson(req);
                 byte[] bodyRaw = Encoding.UTF8.GetBytes(json);

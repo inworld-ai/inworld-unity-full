@@ -77,17 +77,7 @@ namespace Inworld.Interactions
         }
 
         protected void Dispatch(List<InworldPacket> packet) => OnInteractionChanged?.Invoke(packet);
-
-        protected void UpdateInteraction(InworldPacket packet)
-        {
-            Interaction interaction = this[packet.packetId.interactionId];
-            CurrentUtterance = interaction?[packet.packetId.utteranceId];
-            if (CurrentUtterance == null)
-                return;
-            CurrentUtterance.Status = PacketStatus.PLAYED;
-            if (interaction != null && interaction.Utterances.All(u => u.Status != PacketStatus.RECEIVED))
-                interaction.Status = PacketStatus.PLAYED;
-        }
+        
         protected List<InworldPacket> GetUnsolvedPackets(InworldPacket packet)
         {
             List<InworldPacket> result = new List<InworldPacket>();
@@ -124,8 +114,6 @@ namespace Inworld.Interactions
                 return;
             }
             Dispatch(GetUnsolvedPackets(utterance.Packets[0]));
-            // UpdateInteraction(utterance.Packets[0]);
-            // Dispatch(utterance.Packets);
         }
 
         protected void RemoveHistoryItem()
