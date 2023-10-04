@@ -2,6 +2,7 @@
 using UnityEngine;
 using Inworld.Packet;
 using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 namespace Inworld.Interactions
 {
@@ -66,9 +67,10 @@ namespace Inworld.Interactions
             m_PlaybackSource.PlayOneShot(nextAudio.Clip, 1f);
             if (nextAudio.Clip)
                 AudioLength = nextAudio.Clip.length;
-            UpdateInteraction(nextAudio);
-            Dispatch(this[nextAudio.packetId.interactionId][nextAudio.packetId.utteranceId].Packets);
+            Dispatch(GetUnsolvedPackets(NextAudio));
         }
+        
+        
         
         public override void CancelResponse()
         {

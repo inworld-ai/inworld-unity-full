@@ -135,12 +135,6 @@ namespace Inworld
                 throw new ArgumentException("Character ID is empty.");
             m_Client.SendTrigger(charID, triggerName, parameters);
         }
-        public void SamplePlayingWave(float[] data, int channels)
-        {
-            if (!m_AudioCapture || data == null || data.Length == 0)
-                return;
-            m_AudioCapture.SamplePlayingWavData(data, channels);
-        }
         public virtual void StartAudio(string charID = "")
         {
             if (Client.Status != InworldConnectionStatus.Connected)

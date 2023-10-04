@@ -10,7 +10,7 @@ namespace Inworld.Interactions
         public List<Utterance> Utterances { get; set; } = new List<Utterance>();
         public PacketStatus Status { get; set; }
         public Utterance this[string utteranceID] => Utterances.FirstOrDefault(u => u.UtteranceID == utteranceID);
-
+        
         public Interaction()
         {
             Status = PacketStatus.RECEIVED;

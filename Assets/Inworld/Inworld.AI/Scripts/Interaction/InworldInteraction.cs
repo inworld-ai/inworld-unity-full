@@ -36,6 +36,16 @@ namespace Inworld.Interactions
         public List<Interaction> HistoryItem { get; set; } = new List<Interaction>();
         public event Action<List<InworldPacket>> OnInteractionChanged;
         public event Action<bool> OnStartStopInteraction;
+        public int IndexOf(InworldPacket packet)
+        {
+            for (int i = 0; i < HistoryItem.Count; i++)
+            {
+                if (HistoryItem[i].InteractionID != packet.packetId.interactionId)
+                    continue;
+                return i;
+            }
+            return -1;
+        }
         public Interaction this[string interactionID] => HistoryItem.FirstOrDefault(i => i.InteractionID == interactionID);
         public Utterance NextUtterance => HistoryItem
                                           .Where(i => i.Status == PacketStatus.RECEIVED)
@@ -67,16 +77,32 @@ namespace Inworld.Interactions
         }
 
         protected void Dispatch(List<InworldPacket> packet) => OnInteractionChanged?.Invoke(packet);
-
-        protected void UpdateInteraction(InworldPacket packet)
+        
+        protected List<InworldPacket> GetUnsolvedPackets(InworldPacket packet)
         {
-            Interaction interaction = this[packet.packetId.interactionId];
-            CurrentUtterance = interaction?[packet.packetId.utteranceId];
-            if (CurrentUtterance == null)
-                return;
-            CurrentUtterance.Status = PacketStatus.PLAYED;
-            if (interaction != null && interaction.Utterances.All(u => u.Status != PacketStatus.RECEIVED))
-                interaction.Status = PacketStatus.PLAYED;
+            List<InworldPacket> result = new List<InworldPacket>();
+            // 1. Get Index of Current interaction.
+            int nInteractionIndex = IndexOf(packet);
+            if (nInteractionIndex == -1)
+                return result;
+            // 2. Check all unsolved packets till now.
+            for (int i = 0; i <= nInteractionIndex; i++)
+            {
+                foreach (Utterance utterance in HistoryItem[i].Utterances.Where(utterance => utterance.Status == PacketStatus.RECEIVED))
+                {
+                    utterance.Status = PacketStatus.PLAYED;
+                    result.AddRange(utterance.Packets);
+                }
+            }
+            // 3. Also update Interaction status.
+            for (int i = 0; i <= nInteractionIndex; i++)
+            {
+                if (HistoryItem[i].Utterances.All(u => u.Status != PacketStatus.RECEIVED))
+                {
+                    HistoryItem[i].Status = PacketStatus.PLAYED;
+                }
+            }
+            return result;
         }
 
         protected virtual void PlayNextUtterance()
@@ -87,8 +113,7 @@ namespace Inworld.Interactions
                 IsSpeaking = false;
                 return;
             }
-            UpdateInteraction(utterance.Packets[0]);
-            Dispatch(utterance.Packets);
+            Dispatch(GetUnsolvedPackets(utterance.Packets[0]));
         }
 
         protected void RemoveHistoryItem()

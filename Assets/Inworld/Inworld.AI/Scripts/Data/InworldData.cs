@@ -40,6 +40,35 @@ namespace Inworld
     public class AccessTokenRequest
     {
         public string api_key;
+        public string resource_id;
+    }
+    [Serializable]
+    public class SessionContinuation
+    {
+        public PreviousDialog previousDialog;
+    }
+    [Serializable]
+    public class PreviousDialog
+    {
+        public PreviousDialogPhrase[] phrases;
+    }
+    [Serializable]
+    public enum PreviousTalker
+    {
+        UNKNOWN,
+        PLAYER,
+        CHARACTER
+    }
+    [Serializable]
+    public class PreviousDialogPhrase
+    {
+        public PreviousTalker talker; 
+        public string phrase;
+    }
+    [Serializable]
+    public class SessionContinuationContinuationInfo
+    {
+        public string millisPassed;
     }
     [Serializable]
     public class LoadSceneRequest // TODO(Yan): Rename all to requests.
@@ -48,7 +77,9 @@ namespace Inworld
         public UserRequest user;
         public Capabilities capabilities;
         public UserSetting userSetting;
+        public SessionContinuation sessionContinuation;
     }
+
     [Serializable]
     public class LoadSceneResponse
     {
@@ -118,9 +149,10 @@ namespace Inworld
         public bool silence;
         public bool text;
         public bool triggers;
-        public bool continuation;
         public bool turnBasedStt;
         public bool phonemeInfo;
+        public bool relations;
+        public bool debugInfo;
 
         public Capabilities() {}
         public Capabilities(Capabilities rhs)
@@ -132,9 +164,10 @@ namespace Inworld
             silence = rhs.silence;
             text = rhs.text;
             triggers = rhs.triggers;
-            continuation = rhs.continuation;
             turnBasedStt = rhs.turnBasedStt;
             phonemeInfo = rhs.phonemeInfo;
+            relations = rhs.relations;
+            debugInfo = rhs.debugInfo;
         }
         public void CopyFrom(Capabilities rhs)
         {
@@ -145,9 +178,10 @@ namespace Inworld
             silence = rhs.silence;
             text = rhs.text;
             triggers = rhs.triggers;
-            continuation = rhs.continuation;
             turnBasedStt = rhs.turnBasedStt;
             phonemeInfo = rhs.phonemeInfo;
+            relations = rhs.relations;
+            debugInfo = rhs.debugInfo;
         }
 }
     [Serializable]

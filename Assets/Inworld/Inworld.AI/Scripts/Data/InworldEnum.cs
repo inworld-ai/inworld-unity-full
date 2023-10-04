@@ -24,7 +24,8 @@
         CUSTOM,
         CANCEL_RESPONSE,
         EMOTION,
-        ACTION
+        ACTION,
+        RELATION
     }
     public enum PacketStatus
     {

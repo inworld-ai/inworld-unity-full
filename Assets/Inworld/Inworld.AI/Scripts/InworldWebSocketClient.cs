@@ -11,10 +11,12 @@ namespace Inworld
 {
     public class InworldWebSocketClient : InworldClient
     {
+        [SerializeField] string m_PublicWorkspace;
+        [SerializeField] PreviousDialog m_PreviousDialog;
         WebSocket m_Socket;
         LoadSceneResponse m_CurrentSceneData;
         const string k_DisconnectMsg = "The remote party closed the WebSocket connection without completing the close handshake.";
-        public override void GetAccessToken() => StartCoroutine(_GetAccessToken());
+        public override void GetAccessToken() => StartCoroutine(_GetAccessToken(m_PublicWorkspace));
         public override void LoadScene(string sceneFullName) => StartCoroutine(_LoadScene(sceneFullName));
         public override void StartSession() => StartCoroutine(_StartSession());
         public override void Disconnect() => StartCoroutine(_DisconnectAsync());
@@ -127,7 +129,7 @@ namespace Inworld
             string jsonToSend = JsonUtility.ToJson(packet);
             m_Socket.SendAsync(jsonToSend);
         }
-        IEnumerator _GetAccessToken()
+        IEnumerator _GetAccessToken(string workspaceFullName = "")
         {
             Status = InworldConnectionStatus.Initializing;
             string responseJson = m_CustomToken;
@@ -149,9 +151,11 @@ namespace Inworld
 
                 uwr.SetRequestHeader("Authorization", header);
                 uwr.SetRequestHeader("Content-Type", "application/json");
+
                 AccessTokenRequest req = new AccessTokenRequest
                 {
-                    api_key = m_APIKey
+                    api_key = m_APIKey,
+                    resource_id = workspaceFullName
                 };
                 string json = JsonUtility.ToJson(req);
                 byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
@@ -183,6 +187,13 @@ namespace Inworld
                 userSetting = InworldAI.User.Setting,
                 capabilities = InworldAI.Capabilities
             };
+            if (m_PreviousDialog.phrases.Length != 0)
+            {
+                req.sessionContinuation = new SessionContinuation
+                {
+                    previousDialog = m_PreviousDialog
+                };
+            }
             string json = JsonUtility.ToJson(req);
             UnityWebRequest uwr = new UnityWebRequest(m_ServerConfig.LoadSceneURL(sceneFullName), "POST");
             uwr.SetRequestHeader("Grpc-Metadata-session-id", m_Token.sessionId);
@@ -197,6 +208,7 @@ namespace Inworld
             if (uwr.result != UnityWebRequest.Result.Success)
             {
                 Error = $"Error loading scene {m_Token.sessionId}: {uwr.error}";
+                uwr.uploadHandler.Dispose();
                 yield break;
             }
             string responseJson = uwr.downloadHandler.text;
@@ -249,6 +261,10 @@ namespace Inworld
                         Status = InworldConnectionStatus.LostConnect;
                     else
                         Error = e.Data;
+                }
+                else
+                {
+                    InworldAI.LogWarning($"Received Unknown {e.Data}");
                 }
             }
             Dispatch(packetReceived.Packet);

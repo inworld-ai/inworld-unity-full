@@ -139,6 +139,9 @@ namespace Inworld
             {
                 case AudioPacket audioPacket: // Already Played.
                     break;
+                case ActionPacket actionPacket:
+                    HandleAction(actionPacket);
+                    break;
                 case TextPacket textPacket:
                     HandleText(textPacket);
                     break;
@@ -147,6 +150,10 @@ namespace Inworld
                     break;
                 case CustomPacket customPacket:
                     HandleTrigger(customPacket);
+                    break;
+                case ControlPacket controlEvent:
+                    break;
+                case RelationPacket relationPacket:
                     break;
                 default:
                     InworldAI.Log($"Received {incomingPacket}");
@@ -159,6 +166,22 @@ namespace Inworld
         }
         protected virtual void HandleEmotion(EmotionPacket packet) => m_CurrentEmotion = packet.emotion.ToString();
 
+        protected virtual void HandleAction(ActionPacket packet)
+        {
+            if (packet.action == null || packet.action.narratedAction == null || string.IsNullOrWhiteSpace(packet.action.narratedAction.content))
+                return;
+            m_Bubbles[packet.packetId.utteranceId] = Instantiate(m_BubbleLeftPrefab, m_BubbleContentAnchor);
+            InworldCharacterData charData = InworldController.CharacterHandler.GetCharacterDataByID(packet.routing.source.name);
+            if (charData != null)
+            {
+                string charName = charData.givenName ?? "Character";
+                string title = $"{charName}: {m_CurrentEmotion}";
+                Texture2D thumbnail = charData.thumbnail ? charData.thumbnail : InworldAI.DefaultThumbnail;
+                m_Bubbles[packet.packetId.utteranceId].SetBubble(title, thumbnail);
+            }
+            m_Bubbles[packet.packetId.utteranceId].Text = $"<i>{packet.action.narratedAction.content}</i>";
+            SetContentHeight(m_BubbleContentAnchor, m_BubbleRightPrefab);
+        }
         protected virtual void HandleText(TextPacket packet)
         {
             if (packet.text == null || string.IsNullOrEmpty(packet.text.text) || string.IsNullOrWhiteSpace(packet.text.text))

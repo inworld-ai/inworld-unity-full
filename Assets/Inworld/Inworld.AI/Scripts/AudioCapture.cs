@@ -65,16 +65,12 @@ namespace Inworld
         protected int m_BufferSize;
         protected byte[] m_ByteBuffer;
         protected float[] m_InputBuffer;
-        protected float[] m_OutputBuffer;
         protected float m_CDCounter;
         // Last known position in AudioClip buffer.
         protected int m_LastPosition;
 
 #region Public Functions
-        public virtual void SamplePlayingWavData(float[] data, int channels)
-        {
 
-        }
         public void ChangeInputDevice(string deviceName)
         {
             if (deviceName == m_DeviceName)
@@ -162,7 +158,6 @@ namespace Inworld
             m_BufferSize = m_BufferSeconds * m_AudioRate;
             m_ByteBuffer = new byte[m_BufferSize * 1 * k_SizeofInt16];
             m_InputBuffer = new float[m_BufferSize * 1];
-            m_OutputBuffer = new float[m_BufferSeconds * 1];
         }
         protected virtual void Collect()
         {
@@ -205,6 +200,10 @@ namespace Inworld
             byte[] output = new byte[nWavCount];
             Buffer.BlockCopy(m_ByteBuffer, 0, output, 0, nWavCount);
             return output;
+        }
+        public virtual void SamplePlayingWavData(float[] data, int channels)
+        {
+
         }
         // Helper method to calculate the amplitude of audio data
         protected float CalculateAmplitude(float[] audioData)

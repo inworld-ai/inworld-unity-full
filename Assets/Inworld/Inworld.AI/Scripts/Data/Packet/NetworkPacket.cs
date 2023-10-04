@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 
 namespace Inworld.Packet
 {
@@ -18,6 +19,7 @@ namespace Inworld.Packet
         public MutationEvent mutation;
         public EmotionEvent emotion;
         public ActionEvent action;
+        public RelationEvent debugInfo;
 
         public InworldPacket Packet
         {
@@ -37,8 +39,10 @@ namespace Inworld.Packet
                     return new MutationPacket(this, mutation);
                 if (emotion != null && !string.IsNullOrEmpty(emotion.behavior))
                     return new EmotionPacket(this, emotion);
-                if (action != null && !string.IsNullOrEmpty(action.content))
+                if (action != null && action.narratedAction != null && !string.IsNullOrEmpty(action.narratedAction.content))
                     return new ActionPacket(this, action);
+                if (debugInfo != null)
+                    return new RelationPacket(this, debugInfo);
                 return this;
             }
         }
@@ -60,8 +64,10 @@ namespace Inworld.Packet
                     return PacketType.CANCEL_RESPONSE;
                 if (emotion != null && !string.IsNullOrEmpty(emotion.behavior))
                     return PacketType.EMOTION;
-                if (action != null && !string.IsNullOrEmpty(action.content))
+                if (action != null && action.narratedAction != null && !string.IsNullOrEmpty(action.narratedAction.content))
                     return PacketType.ACTION;
+                if (debugInfo != null)
+                    return PacketType.RELATION;
                 return PacketType.UNKNOWN;
             }
         }
