@@ -60,7 +60,7 @@ namespace Inworld
         
         protected AudioClip m_Recording;
         protected bool m_IsPlayerSpeaking;
-        protected bool m_IsCapturing = true;
+        protected bool m_IsCapturing;
         // Size of audioclip used to collect information, need to be big enough to keep up with collect. 
         protected int m_BufferSize;
         protected byte[] m_ByteBuffer;
