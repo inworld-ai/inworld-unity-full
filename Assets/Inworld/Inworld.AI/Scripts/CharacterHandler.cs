@@ -10,10 +10,8 @@ namespace Inworld
     public class CharacterHandler : MonoBehaviour
     {
         [SerializeField] bool m_ManualAudioHandling;
-        [SerializeField] InworldCharacter m_DefaultCharacter;
         InworldCharacter m_CurrentCharacter;
         InworldCharacter m_LastCharacter;
-        bool m_IsFirstConnection = true;
         public event Action<InworldCharacterData> OnCharacterRegistered;
         public event Action<InworldCharacter, InworldCharacter> OnCharacterChanged;
 
@@ -23,7 +21,7 @@ namespace Inworld
         // YAN: Although InworldCharacterData also has agentID, it won't be always updated. Please check m_LiveSession
         //      And Call RegisterLiveSession if outdated.
         protected readonly Dictionary<string, InworldCharacterData> m_Characters = new Dictionary<string, InworldCharacterData>();
-        
+
         public InworldCharacter CurrentCharacter
         {
             get => m_CurrentCharacter;
@@ -82,7 +80,7 @@ namespace Inworld
 
         void _StartAudio()
         {
-            if (!m_CurrentCharacter)
+            if (!m_CurrentCharacter || InworldController.Client.Status != InworldConnectionStatus.Connected)
                 return;
             try
             {
@@ -106,10 +104,6 @@ namespace Inworld
             {
                 InworldAI.LogWarning($"Audio failed to stop: {e}");
             }
-        }
-        public void SetDefaultCharacter(InworldCharacter character)
-        {
-            m_DefaultCharacter = character;
         }
 
         public string GetLiveSessionID(InworldCharacter character)
@@ -144,12 +138,6 @@ namespace Inworld
             }
             if (newStatus == InworldConnectionStatus.Connected)
             {
-                if (m_IsFirstConnection)
-                {
-                    if (m_DefaultCharacter)
-                        CurrentCharacter = m_DefaultCharacter;
-                    m_IsFirstConnection = false;
-                }
                 if (!ManualAudioHandling)
                     _StartAudio();
             }
