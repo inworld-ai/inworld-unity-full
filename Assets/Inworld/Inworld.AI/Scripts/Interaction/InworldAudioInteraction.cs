@@ -30,8 +30,11 @@ namespace Inworld.Interactions
 
         void Awake()
         {
-            m_PlaybackSource ??= GetComponent<AudioSource>();
-            m_PlaybackSource ??= gameObject.AddComponent<AudioSource>();
+            m_PlaybackSource = GetComponent<AudioSource>();
+            if(!m_PlaybackSource)
+                m_PlaybackSource = gameObject.AddComponent<AudioSource>();
+            m_PlaybackSource.playOnAwake = false;
+            m_PlaybackSource.Stop();
             stopwatch ??= Stopwatch.StartNew();
         }
 
@@ -64,7 +67,7 @@ namespace Inworld.Interactions
                 return;
             }
             m_PlaybackSource.clip = nextAudio.Clip; //YAN: Now Clip will not clean AudioChunk data.
-            m_PlaybackSource.PlayOneShot(nextAudio.Clip, 1f);
+            m_PlaybackSource.Play();
             if (nextAudio.Clip)
                 AudioLength = nextAudio.Clip.length;
             Dispatch(GetUnsolvedPackets(NextAudio));
