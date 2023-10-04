@@ -20,6 +20,7 @@ namespace Inworld.Interactions
             InteractionID = interactionID;
             Status = PacketStatus.RECEIVED;
         }
+        public bool IsEmpty => Utterances.Any(u => u.IsEmpty);
     }
     public class Utterance
     {
@@ -35,5 +36,6 @@ namespace Inworld.Interactions
             UtteranceID = utteranceID;
             Status = PacketStatus.RECEIVED;
         }
+        public bool IsEmpty => Packets.Count == 0;
     }
 }
