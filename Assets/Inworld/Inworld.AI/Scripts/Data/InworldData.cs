@@ -43,13 +43,43 @@ namespace Inworld
         public string resource_id;
     }
     [Serializable]
+    public class SessionContinuation
+    {
+        public PreviousDialog previousDialog;
+    }
+    [Serializable]
+    public class PreviousDialog
+    {
+        public PreviousDialogPhrase[] phrases;
+    }
+    [Serializable]
+    public enum PreviousTalker
+    {
+        UNKNOWN,
+        PLAYER,
+        CHARACTER
+    }
+    [Serializable]
+    public class PreviousDialogPhrase
+    {
+        public PreviousTalker talker; 
+        public string phrase;
+    }
+    [Serializable]
+    public class SessionContinuationContinuationInfo
+    {
+        public string millisPassed;
+    }
+    [Serializable]
     public class LoadSceneRequest // TODO(Yan): Rename all to requests.
     {
         public Client client;
         public UserRequest user;
         public Capabilities capabilities;
         public UserSetting userSetting;
+        public SessionContinuation sessionContinuation;
     }
+
     [Serializable]
     public class LoadSceneResponse
     {
