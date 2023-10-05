@@ -61,7 +61,7 @@ namespace Inworld
         {
             m_Interaction.LiveSessionID = Data.agentId = InworldController.CharacterHandler.GetLiveSessionID(this);
             if (!InworldController.CurrentCharacter && !string.IsNullOrEmpty(m_Interaction.LiveSessionID))
-                InworldController.CharacterHandler.SetDefaultCharacter(this);
+                InworldController.CharacterHandler.CurrentCharacter = this;
         }
 
         void Awake()
