@@ -19,7 +19,6 @@ namespace Inworld.Interactions
             get => m_Interruptable;
             set => m_Interruptable = value;
         }
-        public Utterance CurrentUtterance { get; set; }
         public bool IsSpeaking
         {
             get => m_IsSpeaking;
@@ -37,7 +36,6 @@ namespace Inworld.Interactions
         Interaction m_ProcessingInteraction = new Interaction();
         public event Action<List<InworldPacket>> OnInteractionChanged;
         public event Action<bool> OnStartStopInteraction;
-
         public Interaction this[string interactionID] => HistoryItem.FirstOrDefault(i => i.InteractionID == interactionID);
         public Utterance NextUtterance => HistoryItem
                                           .Where(i => i.Status == PacketStatus.RECEIVED)
@@ -196,31 +194,5 @@ namespace Inworld.Interactions
             if (!HistoryItem.Contains(m_ProcessingInteraction))
                 HistoryItem.Add(m_ProcessingInteraction);
         }
-        void AddBak(InworldPacket packet)
-        {
-            if (packet.packetId == null || string.IsNullOrEmpty(packet.packetId.interactionId))
-            {
-                return;
-            }
-            Interaction interaction = this[packet.packetId.interactionId] ?? new Interaction(packet.packetId.interactionId);
-            Utterance utterance = interaction[packet.packetId.utteranceId] ?? new Utterance(packet.packetId.utteranceId);
-            interaction.Status = PacketStatus.RECEIVED; // Refresh Interaction Status.
-            utterance.Packets.Add(packet);
-            
-            if (!interaction.Utterances.Contains(utterance))
-            {
-                interaction.Utterances.Add(utterance);
-            }
-
-            if (!HistoryItem.Contains(interaction))
-                HistoryItem.Add(interaction);
-
-            if (CurrentUtterance != null && packet.packetId.utteranceId == CurrentUtterance.UtteranceID || packet is CustomPacket)
-            {
-                // YAN: Send Overdue packets and trigger
-                OnInteractionChanged?.Invoke(utterance.Packets);
-            } 
-        }
-
     }
 }
