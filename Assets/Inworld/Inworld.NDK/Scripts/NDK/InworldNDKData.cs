@@ -80,7 +80,6 @@ namespace Inworld.NDK
     [StructLayout(LayoutKind.Sequential)]
     public struct TextPacket
     {
-        public Packet packet;
         [MarshalAs(UnmanagedType.LPStr)]
         public string text;
         public int isFinal;
@@ -89,7 +88,6 @@ namespace Inworld.NDK
     [StructLayout(LayoutKind.Sequential)]
     public struct AudioPacket
     {
-        public Packet packet;
         [MarshalAs(UnmanagedType.LPStr)]
         public string audioChunk;
         public int type;
@@ -99,21 +97,18 @@ namespace Inworld.NDK
     [StructLayout(LayoutKind.Sequential)]
     public struct ControlPacket
     {
-        public Packet packet;
         public int action;
     };
     
     [StructLayout(LayoutKind.Sequential)]
     public struct EmotionPacket
     {
-        public Packet packet;
         public int behavior;
         public int strength;
     };
     [StructLayout(LayoutKind.Sequential)]
     public struct CancelResponsePacket
     {
-        public Packet packet;
         [MarshalAs(UnmanagedType.LPStr)]
         public string cancelInteractionID; // Yan: No need to receive utterance as they won't be sent.
 
@@ -121,9 +116,21 @@ namespace Inworld.NDK
     [StructLayout(LayoutKind.Sequential)]
     public struct CustomPacket
     {
-        public Packet packet;
         [MarshalAs(UnmanagedType.LPStr)]
         public string triggerName;
+    };
+    [StructLayout(LayoutKind.Sequential)]
+    public struct NDKPacket
+    {
+        public Packet packetInfo;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string packetType;
+        public TextPacket textPacket;
+        public AudioPacket audioPacket;
+        public ControlPacket ctrlPacket;
+        public EmotionPacket emoPacket;
+        public CancelResponsePacket cancelResponsePacket;
+        public CustomPacket customPacket;
     };
     [StructLayout(LayoutKind.Sequential)]
     public struct TriggerParam
@@ -169,6 +176,9 @@ namespace Inworld.NDK
     
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void TriggerCallBack(CustomPacket packet);
+    
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void NDKPacketCallBack(NDKPacket packet);
     
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void TriggerParamCallBack(TriggerParam packet);

@@ -260,6 +260,12 @@ MonoBehaviour:
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
   m_CustomToken: 
   m_PublicWorkspace: 
+  m_PreviousDialog:
+    phrases:
+    - talker: 1
+      phrase: Remember my favorite fruit is banana!
+    - talker: 2
+      phrase: Got it
 --- !u!114 &359806129
 MonoBehaviour:
   m_ObjectHideFlags: 0

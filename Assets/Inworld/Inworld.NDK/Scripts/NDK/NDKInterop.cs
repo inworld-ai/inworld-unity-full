@@ -49,12 +49,7 @@ namespace Inworld.NDK
         
         [DllImport(DLL_NAME)]
         public static extern void Unity_SetPacketCallback(
-            TextCallBack textCallBack,
-            AudioCallBack audioCallBack,
-            ControlCallBack controlCallBack,
-            EmotionCallBack emotionCallBack,
-            CancelResponseCallBack cancelResponseCallBack,
-            TriggerCallBack customCallBack,
+            NDKPacketCallBack pktCallBack,
             PhonemeCallBack phonemeCallBack,
             TriggerParamCallBack triggerParamCallBack);
         
