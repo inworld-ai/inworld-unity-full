@@ -1936,6 +1936,7 @@ MonoBehaviour:
   m_BubbleContentAnchor: {fileID: 1668428372}
   m_BubbleLeftPrefab: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
   m_BubbleRightPrefab: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
+  m_DisplaySplash: 0
   m_ChatCanvas: {fileID: 519391663}
 --- !u!82 &500944304512089310
 AudioSource:
@@ -1948,7 +1949,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -2404,6 +2405,7 @@ MonoBehaviour:
   m_BubbleLeft: {fileID: -5829000521551651004, guid: 6e31716df34c4f04a8a382ad03c5790d, type: 3}
   m_BubbleRight: {fileID: 7032387963612836835, guid: ce19183024b657340b5e830b1549618e, type: 3}
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
+  m_Relation: {fileID: 0}
   m_EmoIcon: {fileID: 5295392914518966894}
   m_Character: {fileID: 9047055560386739720}
 --- !u!114 &3737309538741492351
@@ -3815,6 +3817,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onGoalCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelationUpdated:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &9047055560386739721

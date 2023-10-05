@@ -2,7 +2,7 @@
 using UnityEngine;
 using Inworld.Packet;
 using System.Diagnostics;
-using Debug = UnityEngine.Debug;
+
 
 namespace Inworld.Interactions
 {
@@ -45,7 +45,6 @@ namespace Inworld.Interactions
             
             float targetVolume = InworldController.Audio.IsPlayerSpeaking ? m_VolumeOnPlayerSpeaking : 1f;
             m_PlaybackSource.volume = Mathf.Lerp(m_PlaybackSource.volume, targetVolume, m_VolumeInterpolationSpeed * Time.deltaTime);
-
             m_PlaybackSource.volume = InworldController.Audio.IsPlayerSpeaking ? m_VolumeOnPlayerSpeaking : 1f;
             
             if (m_PlaybackSource && !m_PlaybackSource.isPlaying)

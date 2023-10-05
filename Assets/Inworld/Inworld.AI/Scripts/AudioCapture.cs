@@ -28,6 +28,21 @@ namespace Inworld
         public UnityEvent OnRecordingStart;
         public UnityEvent OnRecordingEnd;
         
+        protected const int k_SizeofInt16 = sizeof(short);
+        protected const int k_SizeofInt32 = sizeof(int);
+        
+        protected readonly List<string> m_AudioToPush = new List<string>();
+        
+        protected AudioClip m_Recording;
+        protected bool m_IsPlayerSpeaking;
+        protected bool m_IsCapturing;
+        // Size of audioclip used to collect information, need to be big enough to keep up with collect. 
+        protected int m_BufferSize;
+        protected byte[] m_ByteBuffer;
+        protected float[] m_InputBuffer;
+        protected float m_CDCounter;
+        // Last known position in AudioClip buffer.
+        protected int m_LastPosition;
         /// <summary>
         /// Signifies if audio is currently blocked from being captured.
         /// </summary>
@@ -53,21 +68,7 @@ namespace Inworld
         /// </summary>
         public string DeviceName => m_DeviceName;
         
-        protected const int k_SizeofInt16 = sizeof(short);
-        protected const int k_SizeofInt32 = sizeof(int);
-        
-        protected readonly List<string> m_AudioToPush = new List<string>();
-        
-        protected AudioClip m_Recording;
-        protected bool m_IsPlayerSpeaking;
-        protected bool m_IsCapturing;
-        // Size of audioclip used to collect information, need to be big enough to keep up with collect. 
-        protected int m_BufferSize;
-        protected byte[] m_ByteBuffer;
-        protected float[] m_InputBuffer;
-        protected float m_CDCounter;
-        // Last known position in AudioClip buffer.
-        protected int m_LastPosition;
+
 
 #region Public Functions
 

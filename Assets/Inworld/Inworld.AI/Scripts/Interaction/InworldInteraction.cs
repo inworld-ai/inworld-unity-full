@@ -11,6 +11,8 @@ namespace Inworld.Interactions
         [SerializeField] bool m_Interruptable = true;
         [SerializeField] protected int m_MaxItemCount = 100;
         [SerializeField] float m_TextDuration = 0.5f;
+        float m_CurrentTime;
+        bool m_IsSpeaking;
         public float AudioLength { get; set; }
         public bool Interruptable
         {
@@ -18,9 +20,6 @@ namespace Inworld.Interactions
             set => m_Interruptable = value;
         }
         public Utterance CurrentUtterance { get; set; }
-        
-        float m_CurrentTime;
-        bool m_IsSpeaking;
         public bool IsSpeaking
         {
             get => m_IsSpeaking;
@@ -34,18 +33,11 @@ namespace Inworld.Interactions
         }
         public string LiveSessionID { get; set; }
         public List<Interaction> HistoryItem { get; set; } = new List<Interaction>();
+
+        Interaction m_ProcessingInteraction = new Interaction();
         public event Action<List<InworldPacket>> OnInteractionChanged;
         public event Action<bool> OnStartStopInteraction;
-        public int IndexOf(InworldPacket packet)
-        {
-            for (int i = 0; i < HistoryItem.Count; i++)
-            {
-                if (HistoryItem[i].InteractionID != packet.packetId.interactionId)
-                    continue;
-                return i;
-            }
-            return -1;
-        }
+
         public Interaction this[string interactionID] => HistoryItem.FirstOrDefault(i => i.InteractionID == interactionID);
         public Utterance NextUtterance => HistoryItem
                                           .Where(i => i.Status == PacketStatus.RECEIVED)
@@ -76,35 +68,42 @@ namespace Inworld.Interactions
             PlayNextUtterance();
         }
 
-        protected void Dispatch(List<InworldPacket> packet) => OnInteractionChanged?.Invoke(packet);
+        protected void Dispatch(InworldPacket packet) => OnInteractionChanged?.Invoke(new List<InworldPacket> {packet});
+        protected void Dispatch(List<InworldPacket> packets) => OnInteractionChanged?.Invoke(packets);
         
         protected List<InworldPacket> GetUnsolvedPackets(InworldPacket packet)
         {
             List<InworldPacket> result = new List<InworldPacket>();
-            // 1. Get Index of Current interaction.
-            int nInteractionIndex = IndexOf(packet);
-            if (nInteractionIndex == -1)
-                return result;
-            // 2. Check all unsolved packets till now.
-            for (int i = 0; i <= nInteractionIndex; i++)
+
+            // 1. Check all unsolved packets till now.
+            foreach (Interaction i in HistoryItem)
             {
-                foreach (Utterance utterance in HistoryItem[i].Utterances.Where(utterance => utterance.Status == PacketStatus.RECEIVED))
+                foreach (Utterance u in i.Utterances.Where(t1 => t1.Status == PacketStatus.RECEIVED))
                 {
-                    utterance.Status = PacketStatus.PLAYED;
-                    result.AddRange(utterance.Packets);
+                    u.Status = PacketStatus.PLAYED;
+                    result.AddRange(u.Packets);
+                    if (u.Packets.Contains(packet))
+                        break;
                 }
-            }
-            // 3. Also update Interaction status.
-            for (int i = 0; i <= nInteractionIndex; i++)
-            {
-                if (HistoryItem[i].Utterances.All(u => u.Status != PacketStatus.RECEIVED))
+                // 2. Also update Interaction status.
+                if (i.Utterances.All(u => u.Status != PacketStatus.RECEIVED))
                 {
-                    HistoryItem[i].Status = PacketStatus.PLAYED;
+                    i.Status = PacketStatus.PLAYED;
                 }
             }
             return result;
         }
-
+        public virtual void CancelResponse()
+        {
+            if (string.IsNullOrEmpty(LiveSessionID) || !Interruptable)
+                return;
+            Interaction item = HistoryItem.LastOrDefault(i => i.Status == PacketStatus.RECEIVED);
+            if (item == null)
+                return;
+            item.Status = PacketStatus.CANCELLED;
+            string interactionToCancel = item.InteractionID;
+            InworldController.Instance.SendCancelEvent(LiveSessionID, interactionToCancel);
+        }
         protected virtual void PlayNextUtterance()
         {
             Utterance utterance = NextUtterance;
@@ -139,26 +138,65 @@ namespace Inworld.Interactions
                 switch (incomingPacket?.routing?.source?.type.ToUpper())
                 {
                     case "AGENT":
-                        Add(incomingPacket);
+                        switch (incomingPacket)
+                        {
+                            case ControlPacket controlPacket:
+                                _FinishCurrInteraction();
+                                break;
+                            case CustomPacket customPacket:
+                                Dispatch(customPacket);
+                                break;
+                            default:
+                                Add(incomingPacket);
+                                break;
+                        }
                         break;
                     case "PLAYER":
                         // Send Directly.
-                        OnInteractionChanged?.Invoke
-                        (
-                            new List<InworldPacket>
-                            {
-                                incomingPacket
-                            }
-                        );
+                        Dispatch(incomingPacket);
                         break;
                 }
             }
             catch (Exception e)
             {
-                Debug.LogError(e);
+                InworldAI.LogException(e.Message);
             }
         }
         void Add(InworldPacket packet)
+        {
+            if (packet.packetId == null || string.IsNullOrEmpty(packet.packetId.interactionId))
+            {
+                return;
+            }
+            Interaction overdueInteraction = HistoryItem.FirstOrDefault(i => i.InteractionID == packet.packetId.interactionId);
+            if (overdueInteraction != null)
+            {
+                Dispatch(packet);
+                return;
+            }
+            if (m_ProcessingInteraction.InteractionID != packet.packetId.interactionId)
+            {
+                if (!string.IsNullOrEmpty(m_ProcessingInteraction.InteractionID))
+                    _FinishCurrInteraction();
+                m_ProcessingInteraction = new Interaction
+                {
+                    InteractionID = packet.packetId.interactionId,
+                    Status = PacketStatus.RECEIVED
+                };
+            }
+            Utterance utterance = m_ProcessingInteraction[packet.packetId.utteranceId] ?? new Utterance(packet.packetId.utteranceId);
+            utterance.Packets.Add(packet);
+            if (!m_ProcessingInteraction.Utterances.Contains(utterance))
+            {
+                m_ProcessingInteraction.Utterances.Add(utterance);
+            }
+        }
+        void _FinishCurrInteraction()
+        {
+            if (!HistoryItem.Contains(m_ProcessingInteraction))
+                HistoryItem.Add(m_ProcessingInteraction);
+        }
+        void AddBak(InworldPacket packet)
         {
             if (packet.packetId == null || string.IsNullOrEmpty(packet.packetId.interactionId))
             {
@@ -183,16 +221,6 @@ namespace Inworld.Interactions
                 OnInteractionChanged?.Invoke(utterance.Packets);
             } 
         }
-        public virtual void CancelResponse()
-        {
-            if (string.IsNullOrEmpty(LiveSessionID) || !Interruptable)
-                return;
-            Interaction item = HistoryItem.LastOrDefault(i => i.Status == PacketStatus.RECEIVED);
-            if (item == null)
-                return;
-            item.Status = PacketStatus.CANCELLED;
-            string interactionToCancel = item.InteractionID;
-            InworldController.Instance.SendCancelEvent(LiveSessionID, interactionToCancel);
-        }
+
     }
 }

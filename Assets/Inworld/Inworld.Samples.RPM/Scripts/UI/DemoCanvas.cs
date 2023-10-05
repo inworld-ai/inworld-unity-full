@@ -39,11 +39,15 @@ namespace Inworld.Sample.RPM
         }
         protected virtual void OnStatusChanged(InworldConnectionStatus incomingStatus)
         {
+            if (!m_Title)
+                return;
             m_ServerStatus = incomingStatus.ToString();
             m_Title.text = $"Inworld {incomingStatus}";
         }
         protected virtual void OnCharacterChanged(InworldCharacter oldCharacter, InworldCharacter newCharacter)
         {
+            if (!m_Title)
+                return;
             if (!newCharacter && oldCharacter)
                 m_Title.text = $"Inworld Disconnected!";
             else if (newCharacter && !oldCharacter)
