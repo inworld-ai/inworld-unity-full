@@ -38,7 +38,7 @@ namespace Inworld.Interactions
             stopwatch ??= Stopwatch.StartNew();
         }
 
-        void Update()
+        protected override void Update()
         {
             if (HistoryItem.Count > m_MaxItemCount)
                 RemoveHistoryItem();

@@ -45,16 +45,16 @@ namespace Inworld.Interactions
         public bool IsRelated(InworldPacket packet) => !string.IsNullOrEmpty(LiveSessionID) 
             && (packet.routing.source.name == LiveSessionID || packet.routing.target.name == LiveSessionID);
         
-        void OnEnable()
+        protected virtual void OnEnable()
         {
             InworldController.Client.OnPacketReceived += ReceivePacket;
         }
-        void OnDisable()
+        protected virtual void OnDisable()
         {
             if (InworldController.Instance)
                 InworldController.Client.OnPacketReceived -= ReceivePacket;
         }
-        void Update()
+        protected virtual void Update()
         {
             if (HistoryItem.Count > m_MaxItemCount)
                 RemoveHistoryItem();
