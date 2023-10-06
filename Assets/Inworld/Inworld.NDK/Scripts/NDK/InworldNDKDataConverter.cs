@@ -126,7 +126,50 @@ namespace Inworld.NDK
                     name = rhs.customPacket.triggerName
                 }
             };
-            public static InworldPacket NDKUnknownPacket(NDKPacket rhs) => new InworldPacket()
+            public static Inworld.Packet.RelationPacket NDKRelationPacket(NDKPacket rhs) => new Inworld.Packet.RelationPacket
+            {
+                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                type = "CUSTOM",
+                packetId = NDKPacketId(rhs.packetInfo.packetId),
+                routing = NDKRouting(rhs.packetInfo.routing),
+                debugInfo = new RelationEvent
+                {
+                    relation = new RelationData
+                    {
+                        relationState = new RelationState
+                        {
+                            attraction = rhs.relationPacket.attraction,
+                            flirtatious = rhs.relationPacket.flirtatious,
+                            familiar = rhs.relationPacket.familiar,
+                            respect = rhs.relationPacket.respect,
+                            trust = rhs.relationPacket.trust,
+                        },
+                        relationUpdate = new RelationState
+                        {
+                            attraction = rhs.relationPacket.attraction,
+                            flirtatious = rhs.relationPacket.flirtatious,
+                            familiar = rhs.relationPacket.familiar,
+                            respect = rhs.relationPacket.respect,
+                            trust = rhs.relationPacket.trust,
+                        }
+                    }
+                }
+            };
+            public static Inworld.Packet.ActionPacket NDKActionPacket(NDKPacket rhs) => new Inworld.Packet.ActionPacket
+            {
+                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                type = "CUSTOM",
+                packetId = NDKPacketId(rhs.packetInfo.packetId),
+                routing = NDKRouting(rhs.packetInfo.routing),
+                action = new ActionEvent
+                {
+                    narratedAction = new NarrativeAction
+                    {
+                        content = rhs.actionPacket.content
+                    }
+                }
+            };
+            public static InworldPacket NDKUnknownPacket(NDKPacket rhs) => new InworldPacket
             {
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
                 type = rhs.packetType,

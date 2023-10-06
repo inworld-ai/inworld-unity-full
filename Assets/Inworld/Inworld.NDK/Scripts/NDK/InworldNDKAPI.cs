@@ -23,6 +23,7 @@ namespace Inworld.NDK
                 PhonemeInfo = capabilities.text,
                 TurnBasedSTT  = capabilities.turnBasedStt,
                 NarratedActions = capabilities.narratedActions,
+                Relations = capabilities.relations
             };
             NDKInterop.Unity_SetCapabilities(ref cap);
             if (string.IsNullOrEmpty(InworldAI.User.ID))

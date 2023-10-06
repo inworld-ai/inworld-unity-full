@@ -68,6 +68,12 @@ namespace Inworld.NDK
                 case "CUSTOM":
                     ndkClient.Enqueue(InworldNDK.From.NDKCustomPacket(packet));
                     break;
+                case "RELATION":
+                    ndkClient.Enqueue(InworldNDK.From.NDKRelationPacket(packet));
+                    break;
+                case "ACTION":
+                    ndkClient.Enqueue(InworldNDK.From.NDKActionPacket(packet));
+                    break;
                 default:
                     ndkClient.Enqueue(InworldNDK.From.NDKUnknownPacket(packet));
                     break;

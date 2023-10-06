@@ -14,6 +14,7 @@ namespace Inworld.NDK
         public bool PhonemeInfo;
         public bool TurnBasedSTT;
         public bool NarratedActions;
+        public bool Relations;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -120,6 +121,21 @@ namespace Inworld.NDK
         public string triggerName;
     };
     [StructLayout(LayoutKind.Sequential)]
+    public struct RelationPacket
+    {
+        public int attraction;
+        public int familiar;
+        public int flirtatious;
+        public int respect;
+        public int trust;
+    };
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ActionPacket
+    {
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string content;
+    };
+    [StructLayout(LayoutKind.Sequential)]
     public struct NDKPacket
     {
         public Packet packetInfo;
@@ -131,6 +147,8 @@ namespace Inworld.NDK
         public EmotionPacket emoPacket;
         public CancelResponsePacket cancelResponsePacket;
         public CustomPacket customPacket;
+        public RelationPacket relationPacket;
+        public ActionPacket actionPacket;
     };
     [StructLayout(LayoutKind.Sequential)]
     public struct TriggerParam
@@ -158,24 +176,6 @@ namespace Inworld.NDK
     
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void NDKCallback();
-    
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void TextCallBack(TextPacket packet);
-    
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void AudioCallBack(AudioPacket packet);
-    
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void ControlCallBack(ControlPacket packet);
-    
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void EmotionCallBack(EmotionPacket packet);
-    
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void CancelResponseCallBack(CancelResponsePacket packet);
-    
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void TriggerCallBack(CustomPacket packet);
     
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void NDKPacketCallBack(NDKPacket packet);
