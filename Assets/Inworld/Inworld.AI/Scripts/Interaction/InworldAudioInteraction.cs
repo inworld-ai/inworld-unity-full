@@ -9,7 +9,7 @@ namespace Inworld.Interactions
     [RequireComponent(typeof(AudioSource))]
     public class InworldAudioInteraction : InworldInteraction
     {
-        AudioSource m_PlaybackSource;
+        protected AudioSource m_PlaybackSource;
         [SerializeField] protected float m_VolumeInterpolationSpeed = 1f;
         [Range (0, 1)]
         [SerializeField] protected float m_VolumeOnPlayerSpeaking = 1f;
