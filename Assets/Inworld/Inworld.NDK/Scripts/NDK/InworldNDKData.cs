@@ -14,6 +14,7 @@ namespace Inworld.NDK
         public bool PhonemeInfo;
         public bool TurnBasedSTT;
         public bool NarratedActions;
+        public bool Relations;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -80,7 +81,6 @@ namespace Inworld.NDK
     [StructLayout(LayoutKind.Sequential)]
     public struct TextPacket
     {
-        public Packet packet;
         [MarshalAs(UnmanagedType.LPStr)]
         public string text;
         public int isFinal;
@@ -89,7 +89,6 @@ namespace Inworld.NDK
     [StructLayout(LayoutKind.Sequential)]
     public struct AudioPacket
     {
-        public Packet packet;
         [MarshalAs(UnmanagedType.LPStr)]
         public string audioChunk;
         public int type;
@@ -99,21 +98,18 @@ namespace Inworld.NDK
     [StructLayout(LayoutKind.Sequential)]
     public struct ControlPacket
     {
-        public Packet packet;
         public int action;
     };
     
     [StructLayout(LayoutKind.Sequential)]
     public struct EmotionPacket
     {
-        public Packet packet;
         public int behavior;
         public int strength;
     };
     [StructLayout(LayoutKind.Sequential)]
     public struct CancelResponsePacket
     {
-        public Packet packet;
         [MarshalAs(UnmanagedType.LPStr)]
         public string cancelInteractionID; // Yan: No need to receive utterance as they won't be sent.
 
@@ -121,9 +117,38 @@ namespace Inworld.NDK
     [StructLayout(LayoutKind.Sequential)]
     public struct CustomPacket
     {
-        public Packet packet;
         [MarshalAs(UnmanagedType.LPStr)]
         public string triggerName;
+    };
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RelationPacket
+    {
+        public int attraction;
+        public int familiar;
+        public int flirtatious;
+        public int respect;
+        public int trust;
+    };
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ActionPacket
+    {
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string content;
+    };
+    [StructLayout(LayoutKind.Sequential)]
+    public struct NDKPacket
+    {
+        public Packet packetInfo;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string packetType;
+        public TextPacket textPacket;
+        public AudioPacket audioPacket;
+        public ControlPacket ctrlPacket;
+        public EmotionPacket emoPacket;
+        public CancelResponsePacket cancelResponsePacket;
+        public CustomPacket customPacket;
+        public RelationPacket relationPacket;
+        public ActionPacket actionPacket;
     };
     [StructLayout(LayoutKind.Sequential)]
     public struct TriggerParam
@@ -153,22 +178,7 @@ namespace Inworld.NDK
     public delegate void NDKCallback();
     
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void TextCallBack(TextPacket packet);
-    
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void AudioCallBack(AudioPacket packet);
-    
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void ControlCallBack(ControlPacket packet);
-    
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void EmotionCallBack(EmotionPacket packet);
-    
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void CancelResponseCallBack(CancelResponsePacket packet);
-    
-    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void TriggerCallBack(CustomPacket packet);
+    public delegate void NDKPacketCallBack(NDKPacket packet);
     
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void TriggerParamCallBack(TriggerParam packet);

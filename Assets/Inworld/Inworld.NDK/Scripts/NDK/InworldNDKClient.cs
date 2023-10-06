@@ -37,7 +37,7 @@ namespace Inworld.NDK
         protected override void Init()
         {
             base.Init();
-            InworldNDK.API.Init();
+            InworldNDKAPI.Init();
         }
         public override void Disconnect()
         {
@@ -60,9 +60,9 @@ namespace Inworld.NDK
                 Error = "Please fill API Secret!";
                 return;
             }
-            InworldNDK.API.GetAccessToken(m_ServerConfig.RuntimeServer, m_APIKey, m_APISecret);
+            InworldNDKAPI.GetAccessToken(m_ServerConfig.RuntimeServer, m_APIKey, m_APISecret);
         }
-        public override void LoadScene(string sceneFullName) => InworldNDK.API.LoadScene(sceneFullName);
+        public override void LoadScene(string sceneFullName) => InworldNDKAPI.LoadScene(sceneFullName);
 
         public override LoadSceneResponse GetLiveSessionInfo() => InworldNDK.From.NDKLoadSceneResponse(AgentList);
         
