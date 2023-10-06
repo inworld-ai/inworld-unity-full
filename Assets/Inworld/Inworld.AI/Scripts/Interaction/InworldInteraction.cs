@@ -54,7 +54,7 @@ namespace Inworld.Interactions
             if (InworldController.Instance)
                 InworldController.Client.OnPacketReceived -= ReceivePacket;
         }
-        protected virtual void Update()
+        protected void Update()
         {
             if (HistoryItem.Count > m_MaxItemCount)
                 RemoveHistoryItem();
