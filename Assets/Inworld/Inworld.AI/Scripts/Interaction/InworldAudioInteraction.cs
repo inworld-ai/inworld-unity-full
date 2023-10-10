@@ -9,11 +9,10 @@ namespace Inworld.Interactions
     [RequireComponent(typeof(AudioSource))]
     public class InworldAudioInteraction : InworldInteraction
     {
-        AudioSource m_PlaybackSource;
+        protected AudioSource m_PlaybackSource;
         [SerializeField] protected float m_VolumeInterpolationSpeed = 1f;
         [Range (0, 1)]
         [SerializeField] protected float m_VolumeOnPlayerSpeaking = 1f;
-        public static Stopwatch stopwatch;
 
         public bool IsMute
         {
@@ -35,10 +34,9 @@ namespace Inworld.Interactions
                 m_PlaybackSource = gameObject.AddComponent<AudioSource>();
             m_PlaybackSource.playOnAwake = false;
             m_PlaybackSource.Stop();
-            stopwatch ??= Stopwatch.StartNew();
         }
 
-        void Update()
+        protected new void Update()
         {
             if (HistoryItem.Count > m_MaxItemCount)
                 RemoveHistoryItem();

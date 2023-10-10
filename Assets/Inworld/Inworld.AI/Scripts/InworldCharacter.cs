@@ -64,7 +64,7 @@ namespace Inworld
                 InworldController.CharacterHandler.CurrentCharacter = this;
         }
 
-        void Awake()
+        protected virtual void Awake()
         {
             m_Interaction ??= GetComponent<InworldInteraction>();
         }
