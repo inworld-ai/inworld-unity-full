@@ -168,7 +168,7 @@ namespace Inworld
 
         protected virtual void HandleAction(ActionPacket packet)
         {
-            if (packet.action == null || packet.action.narratedAction == null || string.IsNullOrWhiteSpace(packet.action.narratedAction.content))
+            if (packet.action == null || packet.action.narratedAction == null || string.IsNullOrWhiteSpace(packet.action.narratedAction.content) || m_Bubbles == null || !m_BubbleLeftPrefab)
                 return;
             m_Bubbles[packet.packetId.utteranceId] = Instantiate(m_BubbleLeftPrefab, m_BubbleContentAnchor);
             InworldCharacterData charData = InworldController.CharacterHandler.GetCharacterDataByID(packet.routing.source.name);

@@ -43,7 +43,7 @@ namespace Inworld.NDK
             NDKInterop.Unity_InitWrapper();
             InworldAI.Log("[NDK] Start Set Logger");
             NDKInterop.Unity_SetLogger(InworldNDKCallBack.OnLogReceived);
-            InworldAI.Log("[NDK] Start Set Back");
+            InworldAI.Log("[NDK] Start Set CallBack");
             NDKInterop.Unity_SetPacketCallback(InworldNDKCallBack.OnNDKPacketReceived,
                                                InworldNDKCallBack.OnPhonemeReceived, 
                                                InworldNDKCallBack.OnTriggerParamReceived);

@@ -68,13 +68,13 @@ namespace Inworld.NDK
 
 #region Getter
         [DllImport(DLL_NAME)]
-        public static extern AgentInfo Unity_GetAgentInfo(int nIndex);
+        public static extern IntPtr Unity_GetAgentInfo(int nIndex);
         
         [DllImport(DLL_NAME)]
         public static extern int Unity_GetAgentCount();
         
         [DllImport(DLL_NAME)]
-        public static extern SessionInfo Unity_GetSessionInfo();        
+        public static extern IntPtr Unity_GetSessionInfo();        
 #endregion        
     }
 }
