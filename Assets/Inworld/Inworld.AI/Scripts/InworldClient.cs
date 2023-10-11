@@ -88,6 +88,7 @@ namespace Inworld
         public void ChangeStatus(InworldConnectionStatus status) => OnStatusChanged?.Invoke(status);
         public void Dispatch(InworldPacket packet) => OnPacketReceived?.Invoke(packet);
 
+
         internal string APIKey
         {
             get => m_APIKey;

@@ -32,9 +32,6 @@ namespace Inworld.Sample.Innequin
         bool m_IsBlinking;
         float m_CurrentAudioTime;
         static readonly int s_Emotion = Animator.StringToHash("Emotion");
-        static readonly int s_SrcBlend = Shader.PropertyToID("_SrcBlend");
-        static readonly int s_DstBlend = Shader.PropertyToID("_DstBlend");
-        static readonly int s_ZWrite = Shader.PropertyToID("_ZWrite");
         const int k_VisemeSil = 0;
         const int k_VisemeCount = 15;
 

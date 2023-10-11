@@ -1,15 +1,23 @@
+using AOT;
+using System;
+using System.Runtime.InteropServices;
+using UnityEngine;
 namespace Inworld.NDK
 {
     public static class InworldNDKCallBack
     {
         static ProcessingAudioChunk s_ProcessingAudioChunk = new ProcessingAudioChunk();
+        
+        [MonoPInvokeCallback(typeof(NDKCallback))]
         static internal void OnTokenGenerated()
         {
-            SessionInfo sessionInfo = NDKInterop.Unity_GetSessionInfo();
+            SessionInfo sessionInfo = Marshal.PtrToStructure<SessionInfo>(NDKInterop.Unity_GetSessionInfo());
             InworldController.Client.Token = InworldNDK.From.NDKToken(sessionInfo);
             InworldAI.Log("Get Session ID: " + sessionInfo.sessionId);
+            InworldAI.Log("[NDK] Token Generated");
             InworldController.Client.Status = InworldConnectionStatus.Initialized;
         }
+        [MonoPInvokeCallback(typeof(NDKCallback))]
         static internal void OnSceneLoaded()
         {
             InworldAI.Log("[NDK] Scene loaded");
@@ -19,11 +27,11 @@ namespace Inworld.NDK
             ndkClient.AgentList.Clear();
             for (int i = 0; i < nAgentSize; i++)
             {
-                ndkClient.AgentList.Add(NDKInterop.Unity_GetAgentInfo(i));
+                ndkClient.AgentList.Add(Marshal.PtrToStructure<AgentInfo>(NDKInterop.Unity_GetAgentInfo(i)));
             }
             InworldController.Client.Status = InworldConnectionStatus.LoadingSceneCompleted;
         }
-        
+        [MonoPInvokeCallback(typeof(NDKLogCallBack))]
         static internal void OnLogReceived(string log, int severity)
         {
             switch (severity)
@@ -42,7 +50,7 @@ namespace Inworld.NDK
                     break;
             }
         }
-        
+        [MonoPInvokeCallback(typeof(NDKPacketCallBack))]
         static internal void OnNDKPacketReceived(NDKPacket packet)
         {
             if (InworldController.Client is not InworldNDKClient ndkClient)
@@ -79,8 +87,10 @@ namespace Inworld.NDK
                     break;
             }
         }
+        [MonoPInvokeCallback(typeof(PhonemeCallBack))]
         static internal void OnPhonemeReceived(PhonemeInfo packet) => s_ProcessingAudioChunk.ReceivePhoneme(packet);
 
+        [MonoPInvokeCallback(typeof(TriggerParamCallBack))]
         static internal void OnTriggerParamReceived(TriggerParam packet)
         {
             // Currently server doesn't support send trigger callback with param. 

@@ -36,7 +36,6 @@ namespace Inworld.NDK
         
         protected override void Init()
         {
-            base.Init();
             InworldNDKAPI.Init();
         }
         public override void Disconnect()
