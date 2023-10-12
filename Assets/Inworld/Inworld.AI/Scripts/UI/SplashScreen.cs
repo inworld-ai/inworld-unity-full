@@ -101,7 +101,7 @@ namespace Inworld.Sample
                 yield return new WaitForFixedUpdate();
             }
             m_HintText.text = m_MainText.text = "";
-            m_Canvas.enabled = false;
+            gameObject.SetActive(false);
         }
         public void ExitApp()
         {
