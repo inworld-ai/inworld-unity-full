@@ -32,6 +32,11 @@ namespace Inworld.Sample.RPM
         }
         protected void OnInteraction(InworldPacket incomingPacket)
         {
+            if (!m_Character ||
+                string.IsNullOrEmpty(m_Character.ID) ||
+                (incomingPacket?.routing?.source?.name != m_Character.ID && incomingPacket?.routing?.target?.name != m_Character.ID))
+                return;
+            
             switch (incomingPacket)
             {
                 case ActionPacket actionPacket:

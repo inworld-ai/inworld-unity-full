@@ -18,15 +18,18 @@ namespace Inworld.Sample.RPM
         protected override void OnStatusChanged(InworldConnectionStatus incomingStatus)
         {
             if (incomingStatus == InworldConnectionStatus.Connected)
-                m_Content.text = k_ContentHeader;
+            {
+                m_Title.text = $"Inworld Connected!";
+                m_CharacterHandler.CurrentCharacter = m_Character1;
+            }
+            else
+            {
+                m_Title.text = $"Inworld Disconnected!";
+            }
             base.OnStatusChanged(incomingStatus);
         }
         protected override void OnCharacterChanged(InworldCharacter oldCharacter, InworldCharacter newCharacter)
         {
-            if (!newCharacter && oldCharacter)
-                m_Title.text = $"Inworld Disconnected!";
-            else if (newCharacter && !oldCharacter)
-                m_Title.text = $"Inworld Connected!";
             if (newCharacter)
                 m_Content.text = $"{k_ContentHeader}Now Talking to <color=green>{newCharacter.Name}</color>";
         }
