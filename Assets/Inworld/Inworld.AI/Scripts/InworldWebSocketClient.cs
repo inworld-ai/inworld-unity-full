@@ -15,7 +15,7 @@ namespace Inworld
         [SerializeField] protected PreviousDialog m_PreviousDialog;
         protected WebSocket m_Socket;
         protected LoadSceneResponse m_CurrentSceneData;
-        const string k_DisconnectMsg = "The remote party closed the WebSocket connection without completing the close handshake.";
+        protected const string k_DisconnectMsg = "The remote party closed the WebSocket connection without completing the close handshake.";
         public override void GetAccessToken() => StartCoroutine(_GetAccessToken(m_PublicWorkspace));
         public override void LoadScene(string sceneFullName) => StartCoroutine(_LoadScene(sceneFullName));
         public override void StartSession() => StartCoroutine(_StartSession());

@@ -9,9 +9,9 @@ namespace Inworld
 {
     public class CharacterHandler : MonoBehaviour
     {
-        [SerializeField] protected bool m_ManualAudioHandling;
-        protected InworldCharacter m_CurrentCharacter;
-        protected InworldCharacter m_LastCharacter;
+        [SerializeField] bool m_ManualAudioHandling;
+        InworldCharacter m_CurrentCharacter;
+        InworldCharacter m_LastCharacter;
         public event Action<InworldCharacterData> OnCharacterRegistered;
         public event Action<InworldCharacter, InworldCharacter> OnCharacterChanged;
 
@@ -115,7 +115,7 @@ namespace Inworld
                 m_Characters[character.BrainName] = character.Data;
             return m_LiveSession[character.BrainName];
         }
-        protected IEnumerator UpdateThumbnail(InworldCharacterData agent)
+        IEnumerator UpdateThumbnail(InworldCharacterData agent)
         {
             if (agent.thumbnail)
                 yield break;

@@ -10,7 +10,7 @@ namespace Inworld
     public class InworldCharacter : MonoBehaviour
     {
         [SerializeField] protected InworldCharacterData m_Data;
-        [SerializeField] protected bool m_VerboseLog;
+        [SerializeField] bool m_VerboseLog;
        
         public UnityEvent onBeginSpeaking;
         public UnityEvent onEndSpeaking;
@@ -199,7 +199,7 @@ namespace Inworld
         {
             // Won't process lip sync in pure text 2D conversation
         }
-        protected void OnAudioFilterRead(float[] data, int channels)
+        void OnAudioFilterRead(float[] data, int channels)
         {
             if (InworldController.Instance)
                 InworldController.Audio.SamplePlayingWavData(data, channels);
