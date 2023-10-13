@@ -78,7 +78,7 @@ namespace Inworld
             InworldController.Client.OnStatusChanged -= OnStatusChanged;
         }
 
-        void _StartAudio()
+        protected void _StartAudio()
         {
             if (!m_CurrentCharacter || InworldController.Client.Status != InworldConnectionStatus.Connected)
                 return;
@@ -92,7 +92,7 @@ namespace Inworld
             }
         }
         
-        void _StopAudio()
+        protected void _StopAudio()
         {
             if (!m_CurrentCharacter)
                 return;
@@ -146,7 +146,7 @@ namespace Inworld
                 _StopAudio();
             }
         }
-        void _RegisterLiveSession()
+        protected void _RegisterLiveSession()
         {
             LoadSceneResponse response = InworldController.Client.GetLiveSessionInfo();
             if (response == null)

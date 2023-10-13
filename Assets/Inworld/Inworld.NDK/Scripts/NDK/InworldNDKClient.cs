@@ -23,16 +23,15 @@ namespace Inworld.NDK
             }
         }
 
-        void OnDisable() => NDKInterop.Unity_EndSession();
+        protected virtual void OnDisable() => NDKInterop.Unity_EndSession();
         
         void Update()
         {
             _ProcessStatusChange();
             _ProcessPackage();
         }
-
-
-        void OnDestroy() => NDKInterop.Unity_DestroyWrapper();
+        
+        protected virtual void OnDestroy() => NDKInterop.Unity_DestroyWrapper();
         
         protected override void Init()
         {
@@ -67,17 +66,17 @@ namespace Inworld.NDK
         
         public override void StartSession() => StartCoroutine(_StartSession());
 
-        IEnumerator _StartSession()
+        protected IEnumerator _StartSession()
         {
             if (!IsTokenValid)
                 yield break;
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
             Status = InworldConnectionStatus.Connecting;
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
             NDKInterop.Unity_StartSession();
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
             Status = InworldConnectionStatus.Connected;
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
         }
 
         public override void SendText(string characterID, string textToSend)

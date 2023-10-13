@@ -168,7 +168,7 @@ namespace Inworld
 
         protected virtual void HandleAction(ActionPacket packet)
         {
-            if (packet.action == null || packet.action.narratedAction == null || string.IsNullOrWhiteSpace(packet.action.narratedAction.content) || m_Bubbles == null || !m_BubbleLeftPrefab)
+            if (packet.action == null || packet.action.narratedAction == null || string.IsNullOrWhiteSpace(packet.action.narratedAction.content) || m_Bubbles == null || !m_BubbleContentAnchor || !m_BubbleLeftPrefab || !m_BubbleRightPrefab)
                 return;
             m_Bubbles[packet.packetId.utteranceId] = Instantiate(m_BubbleLeftPrefab, m_BubbleContentAnchor);
             InworldCharacterData charData = InworldController.CharacterHandler.GetCharacterDataByID(packet.routing.source.name);
@@ -184,7 +184,7 @@ namespace Inworld
         }
         protected virtual void HandleText(TextPacket packet)
         {
-            if (packet.text == null || string.IsNullOrEmpty(packet.text.text) || string.IsNullOrWhiteSpace(packet.text.text))
+            if (packet.text == null || string.IsNullOrEmpty(packet.text.text) || string.IsNullOrWhiteSpace(packet.text.text) || !m_BubbleContentAnchor || !m_BubbleLeftPrefab || !m_BubbleRightPrefab)
                 return;
             switch (packet.routing.source.type.ToUpper())
             {
@@ -216,6 +216,8 @@ namespace Inworld
         
         protected virtual void SetContentHeight(RectTransform scrollAnchor, InworldUIElement element)
         {
+            if (!m_BubbleContentAnchor)
+                return;
             scrollAnchor.sizeDelta = new Vector2(m_BubbleContentAnchor.sizeDelta.x, scrollAnchor.childCount * element.Height);
         }
         

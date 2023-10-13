@@ -9,7 +9,7 @@ namespace Inworld
     [RequireComponent(typeof(InworldInteraction))]
     public class InworldCharacter : MonoBehaviour
     {
-        [SerializeField] InworldCharacterData m_Data;
+        [SerializeField] protected InworldCharacterData m_Data;
         [SerializeField] bool m_VerboseLog;
        
         public UnityEvent onBeginSpeaking;
@@ -25,7 +25,7 @@ namespace Inworld
         public bool IsSpeaking
         {
             get => m_Interaction && m_Interaction.IsSpeaking;
-            internal set
+            protected set
             {
                 if (!m_Interaction)
                     return;
