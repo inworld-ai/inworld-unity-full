@@ -19,6 +19,8 @@ namespace Inworld.Sample.RPM
         [SerializeField] string m_CheckTrigger;
         [SerializeField] InworldCharacter m_CurrentCharacter;
 
+        bool m_InitTriggerSent;
+
         // Start is called before the first frame update
         protected override void Start()
         {
@@ -26,17 +28,19 @@ namespace Inworld.Sample.RPM
             StartCoroutine(ShowRealAnswer());
         }
 
+        protected override void OnStatusChanged(InworldConnectionStatus incomingStatus)
+        {
+            if (incomingStatus == InworldConnectionStatus.Connected && m_CurrentCharacter && !m_InitTriggerSent)
+            {
+                m_CurrentCharacter.SendTrigger(m_InitTrigger, true);
+                m_InitTriggerSent = true;
+            }
+        }
+
         protected override void OnCharacterChanged(InworldCharacter oldCharacter, InworldCharacter newCharacter)
         {
             if (!newCharacter && oldCharacter)
                 m_Title.text = $"{oldCharacter.transform.name} Disconnected!";
-            else
-            {
-                if (newCharacter.ID == m_CurrentCharacter.ID)
-                {
-                    m_CurrentCharacter.SendTrigger(m_InitTrigger, true);
-                }
-            }
         }
         
         IEnumerator ShowRealAnswer()
