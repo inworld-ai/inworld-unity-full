@@ -29,18 +29,7 @@ namespace Inworld
             name = Name,
             id = ID
         };
-        public UserSetting Setting => new UserSetting
-        {
-            viewTranscriptConsent = true,
-            playerProfile = new PlayerProfile
-            {
-                fields = m_PlayerData.Select(data => new PlayerProfileField
-                {
-                    fieldId = data.property,
-                    fieldValue = data.value
-                })
-            }
-        };
+        public UserSetting Setting => new UserSetting(m_PlayerData);
         public List<InworldPlayerProfile> PlayerProfiles => m_PlayerData;
         public string BillingAccount
         {

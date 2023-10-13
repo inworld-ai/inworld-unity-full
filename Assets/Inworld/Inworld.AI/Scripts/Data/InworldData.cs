@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+
 // TODO(YAN): This file is huge. Split to data/req/response.
 namespace Inworld
 {
@@ -76,7 +77,7 @@ namespace Inworld
         public Client client;
         public UserRequest user;
         public Capabilities capabilities;
-        public UserSetting userSetting;
+        public UserSetting userSettings;
         public SessionContinuation sessionContinuation;
     }
 
@@ -121,13 +122,30 @@ namespace Inworld
     {
         public bool viewTranscriptConsent;
         public PlayerProfile playerProfile;
+
+        public UserSetting(List<InworldPlayerProfile> rhs)
+        {
+            viewTranscriptConsent = true;
+            playerProfile = new PlayerProfile
+            {
+                fields = new List<PlayerProfileField>()
+            };
+            foreach (InworldPlayerProfile pp in rhs)
+            {
+                playerProfile.fields.Add(new PlayerProfileField
+                {
+                    fieldId = pp.property,
+                    fieldValue = pp.value
+                });
+            }
+        }
     }
     [Serializable]
     public class PlayerProfile
     {
-        public IEnumerable<PlayerProfileField> fields;
+        public List<PlayerProfileField> fields;
     }
-    [SerializeField]
+    [Serializable]
     public class PlayerProfileField
     {
         public string fieldId;
