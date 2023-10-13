@@ -184,7 +184,7 @@ namespace Inworld
             {
                 client = InworldAI.UnitySDK,
                 user = InworldAI.User.Request,
-                userSetting = InworldAI.User.Setting,
+                userSettings = InworldAI.User.Setting,
                 capabilities = InworldAI.Capabilities
             };
             if (m_PreviousDialog.phrases.Length != 0)
