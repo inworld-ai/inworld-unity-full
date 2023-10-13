@@ -9,9 +9,9 @@ namespace Inworld
 {
     public class CharacterHandler : MonoBehaviour
     {
-        [SerializeField] bool m_ManualAudioHandling;
-        InworldCharacter m_CurrentCharacter;
-        InworldCharacter m_LastCharacter;
+        [SerializeField] protected bool m_ManualAudioHandling;
+        protected InworldCharacter m_CurrentCharacter;
+        protected InworldCharacter m_LastCharacter;
         public event Action<InworldCharacterData> OnCharacterRegistered;
         public event Action<InworldCharacter, InworldCharacter> OnCharacterChanged;
 
@@ -78,7 +78,7 @@ namespace Inworld
             InworldController.Client.OnStatusChanged -= OnStatusChanged;
         }
 
-        void _StartAudio()
+        protected void _StartAudio()
         {
             if (!m_CurrentCharacter || InworldController.Client.Status != InworldConnectionStatus.Connected)
                 return;
@@ -92,7 +92,7 @@ namespace Inworld
             }
         }
         
-        void _StopAudio()
+        protected void _StopAudio()
         {
             if (!m_CurrentCharacter)
                 return;
@@ -115,7 +115,7 @@ namespace Inworld
                 m_Characters[character.BrainName] = character.Data;
             return m_LiveSession[character.BrainName];
         }
-        IEnumerator UpdateThumbnail(InworldCharacterData agent)
+        protected IEnumerator UpdateThumbnail(InworldCharacterData agent)
         {
             if (agent.thumbnail)
                 yield break;
@@ -146,7 +146,7 @@ namespace Inworld
                 _StopAudio();
             }
         }
-        void _RegisterLiveSession()
+        protected void _RegisterLiveSession()
         {
             LoadSceneResponse response = InworldController.Client.GetLiveSessionInfo();
             if (response == null)

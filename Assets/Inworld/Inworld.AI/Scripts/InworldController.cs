@@ -17,7 +17,7 @@ namespace Inworld
         [SerializeField] protected string m_SceneFullName;
         [Space(10)][SerializeField] protected bool m_AutoStart;
         
-        string m_CurrentAudioID;
+        protected string m_CurrentAudioID;
 
         public static AudioCapture Audio => Instance ? Instance.m_AudioCapture : null;
         public static CharacterHandler CharacterHandler => Instance ? Instance.m_CharacterHandler : null;
@@ -201,7 +201,7 @@ namespace Inworld
             StopAudio();
         }
 
-        void _Setup()
+        protected void _Setup()
         {
             m_Client ??= GetComponent<InworldClient>();
             m_Client.OnStatusChanged += OnStatusChanged;
@@ -229,6 +229,6 @@ namespace Inworld
             }
         }
 
-        void _StartSession() => m_Client.StartSession();
+        protected void _StartSession() => m_Client.StartSession();
     }
 }

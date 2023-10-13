@@ -11,10 +11,10 @@ namespace Inworld
 {
     public class InworldWebSocketClient : InworldClient
     {
-        [SerializeField] string m_PublicWorkspace;
-        [SerializeField] PreviousDialog m_PreviousDialog;
-        WebSocket m_Socket;
-        LoadSceneResponse m_CurrentSceneData;
+        [SerializeField] protected string m_PublicWorkspace;
+        [SerializeField] protected PreviousDialog m_PreviousDialog;
+        protected WebSocket m_Socket;
+        protected LoadSceneResponse m_CurrentSceneData;
         const string k_DisconnectMsg = "The remote party closed the WebSocket connection without completing the close handshake.";
         public override void GetAccessToken() => StartCoroutine(_GetAccessToken(m_PublicWorkspace));
         public override void LoadScene(string sceneFullName) => StartCoroutine(_LoadScene(sceneFullName));
@@ -129,7 +129,7 @@ namespace Inworld
             string jsonToSend = JsonUtility.ToJson(packet);
             m_Socket.SendAsync(jsonToSend);
         }
-        IEnumerator _GetAccessToken(string workspaceFullName = "")
+        protected IEnumerator _GetAccessToken(string workspaceFullName = "")
         {
             Status = InworldConnectionStatus.Initializing;
             string responseJson = m_CustomToken;
@@ -178,7 +178,7 @@ namespace Inworld
             }
             Status = InworldConnectionStatus.Initialized;
         }
-        IEnumerator _LoadScene(string sceneFullName)
+        protected IEnumerator _LoadScene(string sceneFullName)
         {
             LoadSceneRequest req = new LoadSceneRequest
             {
@@ -216,7 +216,7 @@ namespace Inworld
             m_CurrentSceneData = JsonUtility.FromJson<LoadSceneResponse>(responseJson);
             Status = InworldConnectionStatus.LoadingSceneCompleted;
         }
-        IEnumerator _StartSession()
+        protected IEnumerator _StartSession()
         {
             if (!IsTokenValid)
                 yield break;
@@ -230,7 +230,7 @@ namespace Inworld
             Status = InworldConnectionStatus.Connecting;
             m_Socket.ConnectAsync();
         }
-        IEnumerator _DisconnectAsync()
+        protected IEnumerator _DisconnectAsync()
         {
             yield return new WaitForEndOfFrame();
             m_Socket?.CloseAsync();

@@ -10,9 +10,9 @@ namespace Inworld.NDK
     public class InworldNDKClient : InworldClient
     {
         public List<AgentInfo> AgentList { get; } = new List<AgentInfo>();
-        ConcurrentQueue<InworldPacket> m_IncomingQueue = new ConcurrentQueue<InworldPacket>();
+        protected ConcurrentQueue<InworldPacket> m_IncomingQueue = new ConcurrentQueue<InworldPacket>();
 
-        InworldConnectionStatus m_LastStatus, m_CurrentStatus;
+        protected InworldConnectionStatus m_LastStatus, m_CurrentStatus;
         public override InworldConnectionStatus Status
         {
             get => m_CurrentStatus;
@@ -23,7 +23,7 @@ namespace Inworld.NDK
             }
         }
 
-        void OnDisable() => NDKInterop.Unity_EndSession();
+        protected virtual void OnDisable() => NDKInterop.Unity_EndSession();
         
         void Update()
         {
@@ -32,7 +32,7 @@ namespace Inworld.NDK
         }
 
 
-        void OnDestroy() => NDKInterop.Unity_DestroyWrapper();
+        protected virtual void OnDestroy() => NDKInterop.Unity_DestroyWrapper();
         
         protected override void Init()
         {
@@ -67,7 +67,7 @@ namespace Inworld.NDK
         
         public override void StartSession() => StartCoroutine(_StartSession());
 
-        IEnumerator _StartSession()
+        protected IEnumerator _StartSession()
         {
             if (!IsTokenValid)
                 yield break;
@@ -128,14 +128,14 @@ namespace Inworld.NDK
             NDKInterop.Unity_SendAudio(charID, base64);
         }
         
-        void _ProcessStatusChange()
+        protected void _ProcessStatusChange()
         {
             if (m_CurrentStatus == m_LastStatus)
                 return;
             ChangeStatus(m_CurrentStatus);
             m_LastStatus = m_CurrentStatus;
         }
-        void _ProcessPackage()
+        protected void _ProcessPackage()
         {
             if (m_IncomingQueue.Count == 0)
                 return;
