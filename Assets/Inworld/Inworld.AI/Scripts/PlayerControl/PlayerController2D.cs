@@ -7,10 +7,10 @@ namespace Inworld
 {
     public class PlayerController2D : PlayerController
     {
-        [SerializeField] RectTransform m_CharContentAnchor;
-        [SerializeField] CharacterButton m_CharSelectorPrefab;
+        [SerializeField] protected RectTransform m_CharContentAnchor;
+        [SerializeField] protected CharacterButton m_CharSelectorPrefab;
        
-        readonly Dictionary<string, CharacterButton> m_Characters = new Dictionary<string, CharacterButton>();
+        protected readonly Dictionary<string, CharacterButton> m_Characters = new Dictionary<string, CharacterButton>();
         
 
         protected override void Start()
