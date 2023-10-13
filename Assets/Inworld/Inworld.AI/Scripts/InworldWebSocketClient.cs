@@ -220,7 +220,7 @@ namespace Inworld
         {
             if (!IsTokenValid)
                 yield break;
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
             string[] param = {m_Token.type, m_Token.token};
             m_Socket = new WebSocket(m_ServerConfig.SessionURL(m_Token.sessionId), param);
             m_Socket.OnOpen += OnSocketOpen;
@@ -232,9 +232,9 @@ namespace Inworld
         }
         IEnumerator _DisconnectAsync()
         {
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
             m_Socket?.CloseAsync();
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
             Status = InworldConnectionStatus.Idle;
         }
         void OnSocketOpen(object sender, OpenEventArgs e)

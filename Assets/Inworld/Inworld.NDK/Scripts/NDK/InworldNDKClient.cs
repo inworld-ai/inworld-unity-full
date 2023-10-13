@@ -71,13 +71,13 @@ namespace Inworld.NDK
         {
             if (!IsTokenValid)
                 yield break;
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
             Status = InworldConnectionStatus.Connecting;
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
             NDKInterop.Unity_StartSession();
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
             Status = InworldConnectionStatus.Connected;
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
         }
 
         public override void SendText(string characterID, string textToSend)
