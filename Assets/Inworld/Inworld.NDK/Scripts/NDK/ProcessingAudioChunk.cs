@@ -5,6 +5,7 @@ namespace Inworld.NDK
         readonly Inworld.Packet.AudioPacket m_CurrentAudioPacket;
         readonly int m_PhonemeCount;
         readonly bool m_Initialized;
+        bool m_IsPacketPushed;
 
         public ProcessingAudioChunk()
         {
@@ -31,8 +32,13 @@ namespace Inworld.NDK
         }
         public void ToInworldPacket()
         {
+            if (m_IsPacketPushed)
+                return;
             if (m_Initialized && InworldController.Client is InworldNDKClient ndkClient)
+            {
                 ndkClient.Enqueue(m_CurrentAudioPacket);
+                m_IsPacketPushed = true;
+            }
         }
     }
 }
