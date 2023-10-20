@@ -60,7 +60,7 @@ namespace Inworld.Interactions
         public Interaction(string interactionID)
         {
             InteractionID = interactionID;
-            Status = InteractionStatus.STARTED;
+            Status = InteractionStatus.CREATED;
         }
     }
     public class Utterance

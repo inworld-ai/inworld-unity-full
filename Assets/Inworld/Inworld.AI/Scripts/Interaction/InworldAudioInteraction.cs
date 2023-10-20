@@ -4,6 +4,7 @@ using Inworld.Packet;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 
 namespace Inworld.Interactions
@@ -36,6 +37,9 @@ namespace Inworld.Interactions
                 m_PlaybackSource = gameObject.AddComponent<AudioSource>();
             m_PlaybackSource.playOnAwake = false;
             m_PlaybackSource.Stop();
+
+            if (!InworldAI.Capabilities.audio)
+                InworldAI.LogException("Audio Capabilities have been disabled in the Inworld AI object. Audio is required to be enabled when using the InworldAudioInteraction component.");
         }
 
         protected new void Update()
@@ -85,11 +89,13 @@ namespace Inworld.Interactions
             switch (inworldPacket)
             {
                 case ControlPacket:
+                    Debug.Log("Received Interaction End");
                     historyItem.Item1.RecievedInteractionEnd = true;
                     break;
                 case AudioPacket:
                 case TextPacket:
-                    QueueUtterance(historyItem.Item2);
+                    if(historyItem.Item1.Status is not InteractionStatus.CANCELLED and not InteractionStatus.COMPLETED)
+                        QueueUtterance(historyItem.Item2);
                     break;
                 default:
                     Dispatch(inworldPacket);

@@ -45,6 +45,7 @@
 
     public enum InteractionStatus
     {
+        CREATED,
         STARTED,
         COMPLETED,
         CANCELLED

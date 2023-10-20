@@ -74,6 +74,13 @@ namespace Inworld.Interactions
             
             m_CurrentInteraction.Status = InteractionStatus.CANCELLED;
             InworldController.Instance.SendCancelEvent(LiveSessionID, m_CurrentInteraction.InteractionID);
+
+            if (m_CurrentUtterance != null)
+                m_CurrentUtterance.Status = UtteranceStatus.CANCELLED;
+            
+            foreach (var utterance in UtteranceQueue)
+                utterance.Status = UtteranceStatus.CANCELLED;
+            UtteranceQueue.Clear();
             
             m_CurrentUtterance = null;
             m_CurrentInteraction = null;
@@ -96,8 +103,12 @@ namespace Inworld.Interactions
             
             if(m_CurrentInteraction != null && m_CurrentInteraction != m_CurrentUtterance.Interaction)
                 InworldAI.LogException("Attempted to play utterance for an interaction that was not the current interaction.");
-            
-            m_CurrentInteraction = m_CurrentUtterance.Interaction;
+
+            if (m_CurrentInteraction == null)
+            {
+                m_CurrentInteraction = m_CurrentUtterance.Interaction;
+                m_CurrentInteraction.Status = InteractionStatus.STARTED;
+            }
             
             Dispatch(m_CurrentUtterance.GetTextPacket());
             UpdateHistory(m_CurrentUtterance, UtteranceStatus.STARTED);
@@ -146,7 +157,8 @@ namespace Inworld.Interactions
                     historyItem.Item1.RecievedInteractionEnd = true;
                     break;
                 case TextPacket:
-                    QueueUtterance(historyItem.Item2);
+                    if(historyItem.Item1.Status is not InteractionStatus.CANCELLED and not InteractionStatus.COMPLETED)
+                        QueueUtterance(historyItem.Item2);
                     break;
                 default:
                     Dispatch(inworldPacket);
