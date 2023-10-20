@@ -34,4 +34,19 @@
         PLAYED,
         CANCELLED
     }
+
+    public enum UtteranceStatus
+    {
+        CREATED,
+        STARTED,
+        COMPLETED,
+        CANCELLED
+    }
+
+    public enum InteractionStatus
+    {
+        STARTED,
+        COMPLETED,
+        CANCELLED
+    }
 }
