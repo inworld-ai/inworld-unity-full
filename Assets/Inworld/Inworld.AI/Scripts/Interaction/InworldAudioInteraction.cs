@@ -1,7 +1,12 @@
-﻿using System.Linq;
+﻿/*************************************************************************************************
+ * Copyright 2022 Theai, Inc. (DBA Inworld)
+ *
+ * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+ * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+ *************************************************************************************************/
+using System.Linq;
 using UnityEngine;
 using Inworld.Packet;
-using System.Diagnostics;
 
 
 namespace Inworld.Interactions

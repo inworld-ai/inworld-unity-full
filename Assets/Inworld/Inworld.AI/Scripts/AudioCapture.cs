@@ -21,7 +21,6 @@ namespace Inworld
     {
         [SerializeField] protected bool m_AutoPush = true;
         [SerializeField] protected float  m_UserSpeechThreshold = 0.01f;
-        [SerializeField] protected int m_AudioRate = 16000;
         [SerializeField] protected int m_BufferSeconds = 1;
         [SerializeField] protected string m_DeviceName;
 
@@ -29,7 +28,8 @@ namespace Inworld
         public UnityEvent OnRecordingEnd;
         
         protected const int k_SizeofInt16 = sizeof(short);
-        protected const int k_SizeofInt32 = sizeof(int);
+        protected const int k_SampleRate = 16000;
+        
         
         protected readonly List<string> m_AudioToPush = new List<string>();
         
@@ -156,7 +156,7 @@ namespace Inworld
 #region Protected Functions
         protected virtual void Init()
         {
-            m_BufferSize = m_BufferSeconds * m_AudioRate;
+            m_BufferSize = m_BufferSeconds * k_SampleRate;
             m_ByteBuffer = new byte[m_BufferSize * 1 * k_SizeofInt16];
             m_InputBuffer = new float[m_BufferSize * 1];
         }
@@ -214,7 +214,7 @@ namespace Inworld
         }
         protected void StartMicrophone(string deviceName)
         {
-            m_Recording = Microphone.Start(deviceName, true, m_BufferSeconds, m_AudioRate);
+            m_Recording = Microphone.Start(deviceName, true, m_BufferSeconds, k_SampleRate);
         }
         protected void StopMicrophone(string deviceName)
         {

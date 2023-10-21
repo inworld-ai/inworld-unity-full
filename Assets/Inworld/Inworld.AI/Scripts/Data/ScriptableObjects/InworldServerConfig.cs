@@ -1,11 +1,16 @@
-﻿using UnityEngine;
+﻿/*************************************************************************************************
+ * Copyright 2022 Theai, Inc. (DBA Inworld)
+ *
+ * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+ * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+ *************************************************************************************************/
+using UnityEngine;
 
 namespace Inworld
 {
     public class InworldServerConfig : ScriptableObject
     {
         [Header("Server Info:")]
-        public string studio;
         public string runtime;
         public string token;
         public string web;
@@ -15,7 +20,6 @@ namespace Inworld
         const string k_SessionURL = "v1/session/default?session_id=";
         const string k_TokenURL = "v1/sessionTokens/token:generate";
         public string RuntimeServer => $"{runtime}:{port}";
-        public string StudioServer => $"{studio}:{port}";
         
         public string LoadSceneURL(string sceneFullName) => $"https://{web}/v1/{sceneFullName}:load";
         
