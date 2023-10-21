@@ -17,7 +17,6 @@ public class InworldAI : ScriptableObject
     [SerializeField] SplashScreen m_SplashScreen;
     [Space(10)]
     [SerializeField] string m_Version;
-    [SerializeField] string m_ImportedTime;
     [Space(10)][SerializeField] bool m_DebugMode;
 
     public const string k_CompanyName = "Inworld.AI";
@@ -80,20 +79,6 @@ public class InworldAI : ScriptableObject
     }
     public static void LogException(string exception) => InworldLog.LogException(exception);
     
-    public static string ImportedTime 
-    {
-        get => Instance ? Instance.m_ImportedTime : "";
-        set 
-        {
-            if (!Instance)
-                return;
-            #if UNITY_EDITOR
-            Instance.m_ImportedTime = value;
-            EditorUtility.SetDirty(Instance);
-            AssetDatabase.SaveAssets();
-            #endif
-        }
-    }
     public static string InworldPath => "Assets/Inworld";
     public static string Version 
     {

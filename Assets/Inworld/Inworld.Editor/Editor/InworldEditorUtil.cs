@@ -20,7 +20,6 @@ namespace Inworld.AI.Editor
     public class InworldEditorUtil : IPreprocessBuildWithReport
     {
         const string k_VersionCheckURL = "https://api.github.com/repos/inworld-ai/inworld-unity-sdk/releases";
-        const string k_ReleaseURL = "https://github.com/inworld-ai/inworld-unity-sdk/releases";
         
         public int callbackOrder { get; }
         public void OnPreprocessBuild(BuildReport report)
@@ -47,9 +46,8 @@ namespace Inworld.AI.Editor
         }
         static void _CheckUpdates()
         {
-            if (string.IsNullOrEmpty(InworldAI.ImportedTime))
-                InworldAI.ImportedTime = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
-            SendWebGetRequest(k_VersionCheckURL, false, OnUpdateRequestComplete);
+            if (string.IsNullOrEmpty(InworldAI.Version))
+                SendWebGetRequest(k_VersionCheckURL, false, OnUpdateRequestComplete);
         }
 
         static void OnUpdateRequestComplete(AsyncOperation obj)
@@ -59,17 +57,7 @@ namespace Inworld.AI.Editor
             ReleaseData date = JsonUtility.FromJson<ReleaseData>(jsonStr);
             if (date.package == null || date.package.Length <= 0)
                 return;
-            string publishedDate = date.package[0].published_at;
-            DateTime currentVersion = DateTime.ParseExact(publishedDate, "yyyy-MM-ddTHH:mm:ssZ", null, System.Globalization.DateTimeStyles.RoundtripKind);
-            DateTime importedTime = DateTime.ParseExact(InworldAI.ImportedTime, "yyyy-MM-ddTHH:mm:ssZ", null, System.Globalization.DateTimeStyles.RoundtripKind);
-            if (importedTime < currentVersion) 
-            {
-                InworldAI.LogWarning($"Your Inworld SDK is outdated. Please fetch the newest from Asset Store or {k_ReleaseURL}");
-            }
-            else
-            {
-                InworldAI.Version = date.package[0]?.tag_name;
-            }
+            InworldAI.Version = date.package[0]?.tag_name;
         }
         public static void SendWebGetRequest(string url, bool withToken, Action<AsyncOperation> callback)
         {
@@ -187,7 +175,6 @@ namespace Inworld.AI.Editor
         [MenuItem("Assets/Inworld/Editor Settings", false, 1)]
         static void EditorPanel() => Selection.SetActiveObjectWithContext(InworldEditor.Instance, InworldEditor.Instance);
 #endregion
-
     }
 }
 #endif
