@@ -74,7 +74,10 @@ namespace Inworld.Interactions
 
         protected void Dispatch(InworldPacket packet) => OnInteractionChanged?.Invoke(new List<InworldPacket> {packet});
         protected void Dispatch(List<InworldPacket> packets) => OnInteractionChanged?.Invoke(packets);
-        
+        public virtual short[] GetCurrentAudioFragment()
+        {
+            return null;
+        }
         protected List<InworldPacket> GetUnsolvedPackets(InworldPacket packet)
         {
             List<InworldPacket> result = new List<InworldPacket>();

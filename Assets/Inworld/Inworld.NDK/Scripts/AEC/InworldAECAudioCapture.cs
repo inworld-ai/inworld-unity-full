@@ -5,7 +5,9 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
+using Inworld.Interactions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -17,8 +19,8 @@ namespace Inworld.AEC
         IntPtr m_AECHandle;
 
         float[] m_CharacterBuffer;
-        short[] m_CurrentPlayingWavData;
-
+        List<short> m_CurrentPlayingWavData = new List<short>();
+        Dictionary<string, InworldInteraction> m_SoundEnv = new Dictionary<string, InworldInteraction>();
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -30,18 +32,31 @@ namespace Inworld.AEC
         protected override void Init()
         {
             m_AECHandle = AECInterop.WebRtcAec3_Create(k_SampleRate);
-            m_CurrentPlayingWavData = new short[k_SampleRate];
+            m_CurrentPlayingWavData = new List<short>();
             base.Init();
         }
 
-        public override void SamplePlayingWavData(float[] data, int channels)
-        {
-            m_CurrentPlayingWavData = WavUtility.ConvertAudioClipDataToInt16Array(data, data.Length);
-        }
         protected override byte[] Output(int nSize)
         {
-            short[] shortBuffer = WavUtility.ConvertAudioClipDataToInt16Array(m_InputBuffer, nSize * m_Recording.channels);
-            return FilterAudio(shortBuffer, m_CurrentPlayingWavData, m_AECHandle);
+            short[] inputBuffer = WavUtility.ConvertAudioClipDataToInt16Array(m_InputBuffer, nSize * m_Recording.channels);
+            m_CurrentPlayingWavData.Clear();
+            foreach (InworldInteraction interaction in m_SoundEnv.Values)
+            {
+                _Mix(interaction.GetCurrentAudioFragment());
+            }
+            return FilterAudio(inputBuffer, m_CurrentPlayingWavData.ToArray(), m_AECHandle);
+        }
+        void _Mix(short[] currAudio)
+        {
+            if (currAudio == null || currAudio.Length == 0)
+                return;
+            for (int i = 0; i < currAudio.Length; i++)
+            {
+                if (i < m_CurrentPlayingWavData.Count)
+                    m_CurrentPlayingWavData[i] += currAudio[i];
+                else
+                    m_CurrentPlayingWavData.Add(currAudio[i]);
+            }
         }
         public byte[] FilterAudio(short[] inputData, short[] outputData, IntPtr aecHandle)
         {
@@ -62,6 +77,11 @@ namespace Inworld.AEC
             byte[] byteArray = new byte[filteredAudio.Length * 2]; // Each short is 2 bytes
             Buffer.BlockCopy(filteredAudio, 0, byteArray, 0, filteredAudio.Length * 2);
             return byteArray;
+        }
+        public override bool EnableAEC => true;
+        public override void RegisterLiveSession(string dataAgentId, InworldInteraction interaction)
+        {
+            m_SoundEnv[dataAgentId] = interaction;
         }
     }
 }

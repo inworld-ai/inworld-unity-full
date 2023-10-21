@@ -17,6 +17,14 @@ namespace Inworld.Sample.RPM
             if (charData.brainName == Data.brainName)
                 RegisterLiveSession();
         }
+        public override void RegisterLiveSession()
+        {
+            base.RegisterLiveSession();
+            if (InworldController.Audio && InworldController.Audio.EnableAEC)
+            {
+                InworldController.Audio.RegisterLiveSession(m_Data.agentId, m_Interaction);
+            }
+        }
     }
     
 }
