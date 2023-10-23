@@ -16,6 +16,7 @@ namespace Inworld.Packet
         
         public AudioPacket()
         {
+            type = "AUDIO";
             dataChunk = new DataChunk
             {
                 type = "AUDIO"
@@ -23,6 +24,7 @@ namespace Inworld.Packet
         }
         public AudioPacket(InworldPacket rhs, DataChunk chunk) : base(rhs)
         {
+            type = "AUDIO";
             dataChunk = chunk;
         }
 

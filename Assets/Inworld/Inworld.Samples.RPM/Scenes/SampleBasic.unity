@@ -274,6 +274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21ebe20281149b5af3916a834d90391, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_PacketType: AUDIO
   m_IsEnabled: 1
 --- !u!114 &359806130
 MonoBehaviour:

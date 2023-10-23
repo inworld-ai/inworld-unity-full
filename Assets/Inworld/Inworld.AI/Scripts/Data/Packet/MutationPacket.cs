@@ -20,10 +20,12 @@ namespace Inworld.Packet
         
         public MutationPacket()
         {
+            type = "MUTATION";
             mutation = new MutationEvent();
         }
         public MutationPacket(InworldPacket rhs, MutationEvent evt) : base(rhs)
         {
+            type = "MUTATION";
             mutation = evt;
         }
     }

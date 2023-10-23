@@ -20,11 +20,13 @@ namespace Inworld.Packet
 
         public ActionPacket()
         {
+            type = "ACTION";
             action = new ActionEvent();
         }
         public ActionPacket(InworldPacket rhs, ActionEvent evt) : base(rhs)
         {
             action = evt;
+            type = "ACTION";
         }
     }
 }

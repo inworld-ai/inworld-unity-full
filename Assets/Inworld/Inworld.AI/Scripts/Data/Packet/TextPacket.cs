@@ -25,6 +25,7 @@ namespace Inworld.Packet
         }
         public TextPacket(InworldPacket rhs, TextEvent evt) : base(rhs)
         {
+            type = "TEXT";
             text = evt;
         }
     }

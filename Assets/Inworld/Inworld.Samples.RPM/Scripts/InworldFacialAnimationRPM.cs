@@ -188,7 +188,7 @@ namespace Inworld.Sample.RPM
         protected void HandleLipSync(AudioPacket audioPacket)
         {
             _Reset();
-            if (audioPacket.dataChunk == null)
+            if (audioPacket.dataChunk == null || audioPacket.dataChunk.additionalPhonemeInfo == null)
                 return;
             foreach (var phoneme in audioPacket.dataChunk.additionalPhonemeInfo)
             {

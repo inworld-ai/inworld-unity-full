@@ -15,10 +15,12 @@ namespace Inworld.Packet
 
         public ControlPacket()
         {
+            type = "CONTROL";
             control = new ControlEvent();
         }
         public ControlPacket(InworldPacket rhs, ControlEvent evt) : base(rhs)
         {
+            type = "CONTROL";
             control = evt;
         }
     }
