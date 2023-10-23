@@ -274,6 +274,7 @@ namespace Inworld
         void OnSocketClosed(object sender, CloseEventArgs e)
         {
             InworldAI.Log($"Closed: StatusCode: {e.StatusCode}, Reason: {e.Reason}");
+            Status = InworldConnectionStatus.LostConnect;
         }
 
         void OnSocketError(object sender, ErrorEventArgs e)
