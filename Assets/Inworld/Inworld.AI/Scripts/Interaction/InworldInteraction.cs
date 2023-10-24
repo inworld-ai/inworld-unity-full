@@ -100,7 +100,7 @@ namespace Inworld.Interactions
             m_CurrentUtterance = UtteranceQueue.Dequeue();
             TextPacket textPacket = m_CurrentUtterance.GetTextPacket();
 
-            const float timePerChar = 0.1f;
+            const float timePerChar = 0.04f;
             
             m_CurrentTime = (textPacket.text.text.Length * timePerChar) / m_TextSpeed;
             
