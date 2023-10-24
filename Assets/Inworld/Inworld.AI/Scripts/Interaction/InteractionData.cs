@@ -5,51 +5,6 @@ using System;
 
 namespace Inworld.Interactions
 {
-    // public class AudioEvent : UtteranceEvent
-    // {
-    //     AudioPacket m_AudioPacket;
-    //     public AudioEvent(PacketId packetId) : base(packetId)
-    //     {
-    //         
-    //     }
-    //     public void AddPacket(AudioPacket audioPacket)
-    //     {
-    //         m_AudioPacket = audioPacket;
-    //     }
-    //     public bool HasAudioPacket()
-    //     {
-    //         return m_AudioPacket != null;
-    //     }
-    //     public AudioPacket GetAudioPacket()
-    //     {
-    //         return m_AudioPacket;
-    //     }
-    // }
-    // public class UtteranceEvent
-    // {
-    //     public readonly string InteractionId;
-    //     public readonly string UtteranceId;
-    //     TextPacket m_TextPacket;
-    //
-    //     public UtteranceEvent(PacketId packetId)
-    //     {
-    //         InteractionId = packetId.interactionId;
-    //         UtteranceId = packetId.utteranceId;
-    //     }
-    //
-    //     public void AddPacket(TextPacket textPacket)
-    //     {
-    //         m_TextPacket = textPacket;
-    //     }
-    //     public bool HasTextPacket()
-    //     {
-    //         return m_TextPacket != null;
-    //     }
-    //     public TextPacket GetTextPacket()
-    //     {
-    //         return m_TextPacket;
-    //     }
-    // }
     public class Interaction
     {
         public string InteractionID { get; set; }

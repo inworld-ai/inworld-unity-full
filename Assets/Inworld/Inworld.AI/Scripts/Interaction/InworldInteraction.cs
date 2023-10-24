@@ -14,6 +14,8 @@ namespace Inworld.Interactions
         float m_CurrentTime;
         bool m_IsSpeaking;
         protected List<Interaction> m_History { get; } = new List<Interaction>();
+        protected Interaction m_CurrentInteraction;
+        protected Utterance m_CurrentUtterance;
         
         public float AudioLength { get; set; }
         public bool Interruptable
@@ -37,9 +39,6 @@ namespace Inworld.Interactions
         public event Action<List<InworldPacket>> OnInteractionChanged;
         public event Action<bool> OnStartStopInteraction;
         public Interaction FindInteraction(string interactionID) => m_History.FirstOrDefault(i => i.InteractionID == interactionID);
-
-        protected Interaction m_CurrentInteraction;
-        protected Utterance m_CurrentUtterance;
 
         public bool IsRelated(InworldPacket packet) => !string.IsNullOrEmpty(LiveSessionID) 
             && (packet.routing.source.name == LiveSessionID || packet.routing.target.name == LiveSessionID);
@@ -101,9 +100,12 @@ namespace Inworld.Interactions
             m_CurrentTime = m_TextDuration;
             m_CurrentUtterance = UtteranceQueue.Dequeue();
             
-            if(m_CurrentInteraction != null && m_CurrentInteraction != m_CurrentUtterance.Interaction)
-                InworldAI.LogException("Attempted to play utterance for an interaction that was not the current interaction.");
-
+            if (m_CurrentInteraction != null && m_CurrentInteraction != m_CurrentUtterance.Interaction)
+            {
+                InworldAI.LogWarning("Moving to next interaction before previous has completed.");
+                m_CurrentInteraction = null;
+            }
+            
             if (m_CurrentInteraction == null)
             {
                 m_CurrentInteraction = m_CurrentUtterance.Interaction;

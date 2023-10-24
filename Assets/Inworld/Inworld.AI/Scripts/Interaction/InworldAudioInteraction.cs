@@ -66,11 +66,18 @@ namespace Inworld.Interactions
             }
             
             m_CurrentUtterance = UtteranceQueue.Dequeue();
+
+            if (m_CurrentInteraction != null && m_CurrentInteraction != m_CurrentUtterance.Interaction)
+            {
+                InworldAI.LogWarning("Moving to next interaction before previous has completed.");
+                m_CurrentInteraction = null;
+            }
             
-            if(m_CurrentInteraction != null && m_CurrentInteraction != m_CurrentUtterance.Interaction)
-                InworldAI.LogException("Attempted to play utterance for an interaction that was not the current interaction.");
-            
-            m_CurrentInteraction = m_CurrentUtterance.Interaction;
+            if (m_CurrentInteraction == null)
+            {
+                m_CurrentInteraction = m_CurrentUtterance.Interaction;
+                m_CurrentInteraction.Status = InteractionStatus.STARTED;
+            }
 
             AudioPacket audioPacket = m_CurrentUtterance.GetAudioPacket();
             Dispatch(m_CurrentUtterance.GetTextPacket());
@@ -89,7 +96,6 @@ namespace Inworld.Interactions
             switch (inworldPacket)
             {
                 case ControlPacket:
-                    Debug.Log("Received Interaction End");
                     historyItem.Item1.RecievedInteractionEnd = true;
                     break;
                 case AudioPacket:
