@@ -23,12 +23,12 @@ namespace Inworld.Interactions
         public Interaction Interaction { get; set; }
         public string UtteranceID { get; set; }
         public List<InworldPacket> Packets { get; set; } = new List<InworldPacket>();
-        public UtteranceStatus Status { get; set; }
+        public InteractionStatus Status { get; set; }
         public Utterance(Interaction interaction, string utteranceID)
         {
             Interaction = interaction;
             UtteranceID = utteranceID;
-            Status = UtteranceStatus.CREATED;
+            Status = InteractionStatus.CREATED;
         }
         public TextPacket GetTextPacket()
         {

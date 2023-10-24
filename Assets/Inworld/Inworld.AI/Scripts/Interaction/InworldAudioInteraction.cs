@@ -1,21 +1,16 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using Inworld.Packet;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Debug = UnityEngine.Debug;
-
 
 namespace Inworld.Interactions
 {
     [RequireComponent(typeof(AudioSource))]
     public class InworldAudioInteraction : InworldInteraction
     {
-        protected AudioSource m_PlaybackSource;
         [SerializeField] protected float m_VolumeInterpolationSpeed = 1f;
         [Range (0, 1)]
         [SerializeField] protected float m_VolumeOnPlayerSpeaking = 1f;
+        protected AudioSource m_PlaybackSource;
         
         public bool IsMute
         {
@@ -55,7 +50,7 @@ namespace Inworld.Interactions
         protected override void PlayNextUtterance()
         {
             if (m_CurrentUtterance != null)
-                UpdateHistory(m_CurrentUtterance, UtteranceStatus.COMPLETED);
+                UpdateHistory(m_CurrentUtterance, InteractionStatus.COMPLETED);
             
             if (UtteranceQueue.Count == 0)
             {
@@ -82,7 +77,7 @@ namespace Inworld.Interactions
             AudioPacket audioPacket = m_CurrentUtterance.GetAudioPacket();
             Dispatch(m_CurrentUtterance.GetTextPacket());
             Dispatch(audioPacket);
-            UpdateHistory(m_CurrentUtterance, UtteranceStatus.STARTED);
+            UpdateHistory(m_CurrentUtterance, InteractionStatus.STARTED);
             
             m_PlaybackSource.clip = audioPacket.Clip;
             m_PlaybackSource.Play();
