@@ -30,7 +30,7 @@
     public enum PacketStatus
     {
         RECEIVED,
-        SEND,
+        PROCESSED,
         PLAYED,
         CANCELLED
     }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Inworld.Packet;
 using System;
+using System.Linq;
 
 namespace Inworld.Interactions
 {
@@ -50,34 +51,31 @@ namespace Inworld.Interactions
         protected override void PlayNextUtterance()
         {
             if (m_CurrentUtterance != null)
-                UpdateHistory(m_CurrentUtterance, InteractionStatus.COMPLETED);
+            {
+                m_CurrentUtterance.GetTextPacket().packetId.Status = PacketStatus.PLAYED;
+                m_CurrentUtterance.GetAudioPacket().packetId.Status = PacketStatus.PLAYED;
+                UpdateHistory(m_CurrentUtterance.Interaction);
+                m_CurrentUtterance = null;
+            }
             
             if (UtteranceQueue.Count == 0)
             {
                 IsSpeaking = false;
-                m_CurrentUtterance = null;
                 m_CurrentInteraction = null;
                 return;
             }
             
             m_CurrentUtterance = UtteranceQueue.Dequeue();
 
-            if (m_CurrentInteraction != null && m_CurrentInteraction != m_CurrentUtterance.Interaction)
-            {
-                InworldAI.LogWarning("Moving to next interaction before previous has completed.");
-                m_CurrentInteraction = null;
-            }
-            
-            if (m_CurrentInteraction == null)
-            {
-                m_CurrentInteraction = m_CurrentUtterance.Interaction;
+            m_CurrentInteraction = m_CurrentUtterance.Interaction;
+            m_LastInteractionSequenceNumber = m_CurrentInteraction.SequenceNumber;
+
+            if(m_CurrentInteraction.Status == InteractionStatus.CREATED)
                 m_CurrentInteraction.Status = InteractionStatus.STARTED;
-            }
 
             AudioPacket audioPacket = m_CurrentUtterance.GetAudioPacket();
             Dispatch(m_CurrentUtterance.GetTextPacket());
             Dispatch(audioPacket);
-            UpdateHistory(m_CurrentUtterance, InteractionStatus.STARTED);
             
             m_PlaybackSource.clip = audioPacket.Clip;
             m_PlaybackSource.Play();
@@ -88,14 +86,19 @@ namespace Inworld.Interactions
         protected override void HandleAgentPacket(InworldPacket inworldPacket)
         {
             Tuple<Interaction, Utterance> historyItem = AddToHistory(inworldPacket);
+            Interaction interaction = historyItem.Item1;
+            
             switch (inworldPacket)
             {
                 case ControlPacket:
-                    historyItem.Item1.RecievedInteractionEnd = true;
+                    historyItem.Item1.ReceivedInteractionEnd = true;
+                    inworldPacket.packetId.Status = PacketStatus.PROCESSED;
+                    UpdateHistory(historyItem.Item1);
                     break;
                 case AudioPacket:
                 case TextPacket:
-                    if(historyItem.Item1.Status is not InteractionStatus.CANCELLED and not InteractionStatus.COMPLETED)
+                    if (interaction == m_CurrentInteraction ||
+                        interaction.SequenceNumber > m_LastInteractionSequenceNumber)
                         QueueUtterance(historyItem.Item2);
                     break;
                 default:
@@ -116,6 +119,11 @@ namespace Inworld.Interactions
             base.CancelResponse();
             if(Interruptable)
                 m_PlaybackSource.Stop();
+        }
+
+        protected override Utterance CreateUtterance(Interaction interaction, string utteranceId)
+        {
+            return new AudioUtterance(interaction, utteranceId);
         }
     }
 }

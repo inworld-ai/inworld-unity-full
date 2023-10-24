@@ -13,6 +13,8 @@ namespace Inworld.Interactions
         [SerializeField] float m_TextSpeed = 1.0f;
         float m_CurrentTime;
         bool m_IsSpeaking;
+        protected int m_LastInteractionSequenceNumber;
+        protected int m_SequenceNumber;
         protected List<Interaction> m_History = new List<Interaction>();
         protected Interaction m_CurrentInteraction;
         protected Utterance m_CurrentUtterance;
@@ -63,36 +65,45 @@ namespace Inworld.Interactions
             PlayNextUtterance();
         }
 
-        protected void Dispatch(InworldPacket packet) => OnInteractionChanged?.Invoke(new List<InworldPacket> {packet});
-        protected void Dispatch(List<InworldPacket> packets) => OnInteractionChanged?.Invoke(packets);
+        protected void Dispatch(InworldPacket packet)
+        {
+            OnInteractionChanged?.Invoke
+            (
+                new List<InworldPacket>
+                {
+                    packet
+                }
+            );
+            packet.packetId.Status = PacketStatus.PROCESSED;
+        }
 
         public virtual void CancelResponse()
         {
             if (string.IsNullOrEmpty(LiveSessionID) || m_CurrentInteraction == null || !Interruptable)
                 return;
             
-            m_CurrentInteraction.Status = InteractionStatus.CANCELLED;
             InworldController.Instance.SendCancelEvent(LiveSessionID, m_CurrentInteraction.InteractionID);
 
-            if (m_CurrentUtterance != null)
-                m_CurrentUtterance.Status = InteractionStatus.CANCELLED;
-            
-            foreach (var utterance in UtteranceQueue)
-                utterance.Status = InteractionStatus.CANCELLED;
-            UtteranceQueue.Clear();
+            m_CurrentInteraction.Cancel();
+            while (UtteranceQueue.Peek().Interaction == m_CurrentInteraction)
+                UtteranceQueue.Dequeue();
             
             m_CurrentUtterance = null;
             m_CurrentInteraction = null;
+            m_CurrentTime = 0;
         }
         protected virtual void PlayNextUtterance()
         {
             if (m_CurrentUtterance != null)
-                UpdateHistory(m_CurrentUtterance, InteractionStatus.COMPLETED);
+            {
+                m_CurrentUtterance.GetTextPacket().packetId.Status = PacketStatus.PLAYED;
+                UpdateHistory(m_CurrentUtterance.Interaction);
+                m_CurrentUtterance = null;
+            }
             
             if (UtteranceQueue.Count == 0)
             {
                 IsSpeaking = false;
-                m_CurrentUtterance = null;
                 m_CurrentInteraction = null;
                 return;
             }
@@ -100,24 +111,18 @@ namespace Inworld.Interactions
             m_CurrentUtterance = UtteranceQueue.Dequeue();
             TextPacket textPacket = m_CurrentUtterance.GetTextPacket();
 
-            const float timePerChar = 0.04f;
+            const float timePerChar = 0.05f;
             
             m_CurrentTime = (textPacket.text.text.Length * timePerChar) / m_TextSpeed;
             
-            if (m_CurrentInteraction != null && m_CurrentInteraction != m_CurrentUtterance.Interaction)
-            {
-                InworldAI.LogWarning("Moving to next interaction before previous has completed.");
-                m_CurrentInteraction = null;
-            }
-            
-            if (m_CurrentInteraction == null)
-            {
-                m_CurrentInteraction = m_CurrentUtterance.Interaction;
+            m_CurrentInteraction = m_CurrentUtterance.Interaction;
+            m_LastInteractionSequenceNumber = m_CurrentInteraction.SequenceNumber;
+
+            if(m_CurrentInteraction.Status == InteractionStatus.CREATED)
                 m_CurrentInteraction.Status = InteractionStatus.STARTED;
-            }
             
             Dispatch(textPacket);
-            UpdateHistory(m_CurrentUtterance, InteractionStatus.STARTED);
+            m_CurrentUtterance.Status = InteractionStatus.STARTED;
         }
 
         protected void RemoveHistoryItem()
@@ -157,16 +162,22 @@ namespace Inworld.Interactions
         protected virtual void HandleAgentPacket(InworldPacket inworldPacket)
         {
             Tuple<Interaction, Utterance> historyItem = AddToHistory(inworldPacket);
+            Interaction interaction = historyItem.Item1;
+            
             switch (inworldPacket)
             {
                 case ControlPacket:
-                    historyItem.Item1.RecievedInteractionEnd = true;
+                    historyItem.Item1.ReceivedInteractionEnd = true;
+                    inworldPacket.packetId.Status = PacketStatus.PROCESSED;
+                    UpdateHistory(historyItem.Item1);
                     break;
                 case AudioPacket:
                     // Ignore Audio Packets
+                    inworldPacket.packetId.Status = PacketStatus.PROCESSED;
                     break;
                 case TextPacket:
-                    if(historyItem.Item1.Status is not InteractionStatus.CANCELLED and not InteractionStatus.COMPLETED)
+                    if (interaction == m_CurrentInteraction ||
+                        interaction.SequenceNumber > m_LastInteractionSequenceNumber)
                         QueueUtterance(historyItem.Item2);
                     break;
                 default:
@@ -180,20 +191,15 @@ namespace Inworld.Interactions
             UtteranceQueue.Enqueue(utterance);
         }
 
-        protected void UpdateHistory(Utterance utterance, InteractionStatus utteranceStatus)
+        protected void UpdateHistory(Interaction interaction)
         {
-            Interaction interaction = utterance.Interaction;
-            utterance.Status = utteranceStatus;
-
-            InteractionStatus interactionStatus = interaction.Status;
-            if (interactionStatus is InteractionStatus.COMPLETED or InteractionStatus.CANCELLED)
+            if (!interaction.ReceivedInteractionEnd)
                 return;
+            
+            interaction.UpdateStatus();
 
-            if (interaction.RecievedInteractionEnd && interaction.Utterances.All(u => u.Status == InteractionStatus.COMPLETED))
-            {
-                interaction.Status = InteractionStatus.COMPLETED;
+            if (interaction.Status == InteractionStatus.COMPLETED && interaction == m_CurrentInteraction)
                 m_CurrentInteraction = null;
-            }
         }
         
         protected Tuple<Interaction, Utterance> AddToHistory(InworldPacket packet)
@@ -206,18 +212,20 @@ namespace Inworld.Interactions
             {
                 if (m_History.Count == m_MaxItemCount)
                     RemoveHistoryItem();
-                interaction = new Interaction(packet.packetId.interactionId);
+                interaction = new Interaction(packet.packetId.interactionId, ++m_SequenceNumber);
                 m_History.Add(interaction);
             }
 
-            if (m_CurrentInteraction == null)
-                m_CurrentInteraction = interaction;
-
-            Utterance utterance = interaction[packet.packetId.utteranceId] ?? new Utterance(interaction, packet.packetId.utteranceId);
+            Utterance utterance = interaction[packet.packetId.utteranceId] ?? CreateUtterance(interaction, packet.packetId.utteranceId);
             utterance.Packets.Add(packet);
             if (!interaction.Utterances.Contains(utterance))
                 interaction.Utterances.Add(utterance);
             return new Tuple<Interaction, Utterance>(interaction, utterance);
+        }
+
+        protected virtual Utterance CreateUtterance(Interaction interaction, string utteranceId)
+        {
+            return new Utterance(interaction, utteranceId);
         }
     }
 }
