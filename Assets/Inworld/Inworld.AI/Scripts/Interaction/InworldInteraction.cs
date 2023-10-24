@@ -10,7 +10,7 @@ namespace Inworld.Interactions
     {
         [SerializeField] bool m_Interruptable = true;
         [SerializeField] protected int m_MaxItemCount = 100;
-        [SerializeField] float m_TextDuration = 0.5f;
+        [SerializeField] float m_TextSpeed = 1.0f;
         float m_CurrentTime;
         bool m_IsSpeaking;
         protected List<Interaction> m_History = new List<Interaction>();
@@ -96,9 +96,13 @@ namespace Inworld.Interactions
                 m_CurrentInteraction = null;
                 return;
             }
-
-            m_CurrentTime = m_TextDuration;
+            
             m_CurrentUtterance = UtteranceQueue.Dequeue();
+            TextPacket textPacket = m_CurrentUtterance.GetTextPacket();
+
+            const float timePerChar = 0.1f;
+            
+            m_CurrentTime = (textPacket.text.text.Length * timePerChar) / m_TextSpeed;
             
             if (m_CurrentInteraction != null && m_CurrentInteraction != m_CurrentUtterance.Interaction)
             {
@@ -112,7 +116,7 @@ namespace Inworld.Interactions
                 m_CurrentInteraction.Status = InteractionStatus.STARTED;
             }
             
-            Dispatch(m_CurrentUtterance.GetTextPacket());
+            Dispatch(textPacket);
             UpdateHistory(m_CurrentUtterance, InteractionStatus.STARTED);
         }
 
@@ -157,6 +161,9 @@ namespace Inworld.Interactions
             {
                 case ControlPacket:
                     historyItem.Item1.RecievedInteractionEnd = true;
+                    break;
+                case AudioPacket:
+                    // Ignore Audio Packets
                     break;
                 case TextPacket:
                     if(historyItem.Item1.Status is not InteractionStatus.CANCELLED and not InteractionStatus.COMPLETED)
