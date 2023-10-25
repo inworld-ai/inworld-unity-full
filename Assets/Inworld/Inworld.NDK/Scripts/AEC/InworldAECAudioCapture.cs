@@ -20,7 +20,7 @@ namespace Inworld.AEC
 
         float[] m_CharacterBuffer;
         List<short> m_CurrentPlayingWavData = new List<short>();
-        Dictionary<string, InworldInteraction> m_SoundEnv = new Dictionary<string, InworldInteraction>();
+        Dictionary<string, InworldAudioInteraction> m_SoundEnv = new Dictionary<string, InworldAudioInteraction>();
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -40,9 +40,9 @@ namespace Inworld.AEC
         {
             short[] inputBuffer = WavUtility.ConvertAudioClipDataToInt16Array(m_InputBuffer, nSize * m_Recording.channels);
             m_CurrentPlayingWavData.Clear();
-            foreach (InworldInteraction interaction in m_SoundEnv.Values)
+            foreach (InworldAudioInteraction audioInteraction in m_SoundEnv.Values)
             {
-                _Mix(interaction.GetCurrentAudioFragment());
+                _Mix(audioInteraction.GetCurrentAudioFragment());
             }
             return FilterAudio(inputBuffer, m_CurrentPlayingWavData.ToArray(), m_AECHandle);
         }
@@ -81,7 +81,8 @@ namespace Inworld.AEC
         public override bool EnableAEC => true;
         public override void RegisterLiveSession(string dataAgentId, InworldInteraction interaction)
         {
-            m_SoundEnv[dataAgentId] = interaction;
+            if(interaction is InworldAudioInteraction audioInteraction)
+                m_SoundEnv[dataAgentId] = audioInteraction;
         }
     }
 }

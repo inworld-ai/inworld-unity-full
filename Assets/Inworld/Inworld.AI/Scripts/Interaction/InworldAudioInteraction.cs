@@ -157,7 +157,7 @@ namespace Inworld.Interactions
                 m_PlaybackSource.Stop();
         }
         
-        public override short[] GetCurrentAudioFragment()
+        public short[] GetCurrentAudioFragment()
         {
             m_LastSampleTime = m_CurrentSampleTime;
             m_CurrentSampleTime = m_PlaybackSource.time;

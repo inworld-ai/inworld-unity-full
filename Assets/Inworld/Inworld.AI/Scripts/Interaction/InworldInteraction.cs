@@ -70,11 +70,6 @@ namespace Inworld.Interactions
                 
             PlayNextUtterance();
         }
-        
-        public virtual short[] GetCurrentAudioFragment()
-        {
-            return null;
-        }
 
         protected void Dispatch(InworldPacket packet)
         {
