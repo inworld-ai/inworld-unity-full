@@ -137,7 +137,7 @@ namespace Inworld
             StopMicrophone(m_DeviceName);
         }
 #if !UNITY_WEBGL
-        protected virtual void Update()
+        protected void Update()
         {
             if (!m_IsCapturing || IsBlocked)
                 return;
