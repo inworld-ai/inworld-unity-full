@@ -30,8 +30,16 @@
     public enum PacketStatus
     {
         RECEIVED,
-        SEND,
+        PROCESSED,
         PLAYED,
+        CANCELLED
+    }
+
+    public enum InteractionStatus
+    {
+        CREATED,
+        STARTED,
+        COMPLETED,
         CANCELLED
     }
 }

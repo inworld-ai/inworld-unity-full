@@ -19,10 +19,12 @@ namespace Inworld.Packet
         
         public EmotionPacket()
         {
+            type = "EMOTION";
             emotion = new EmotionEvent();
         }
         public EmotionPacket(InworldPacket rhs, EmotionEvent evt) : base(rhs)
         {
+            type = "EMOTION";
             emotion = evt;
         }
     }
