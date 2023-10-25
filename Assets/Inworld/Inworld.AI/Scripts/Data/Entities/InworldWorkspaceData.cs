@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Inworld
 {
@@ -15,10 +16,10 @@ namespace Inworld
     {
         public string name; // Full Name
         public string displayName;
-        public List<string> experimentalFeatures;
-        public string billingAccount;
-        public string meta;
-        public string runtimeAccess;
+        [HideInInspector] public List<string> experimentalFeatures;
+        [HideInInspector] public string billingAccount;
+        [HideInInspector] public string meta;
+        [HideInInspector] public string runtimeAccess;
         // YAN: Now charRef in scenes would be updated. No need to list characters.
         public List<InworldSceneData> scenes;
         public List<InworldKeySecret> keySecrets;

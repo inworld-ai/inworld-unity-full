@@ -12,17 +12,25 @@ namespace Inworld
     {
         [Header("Server Info:")]
         public string runtime;
-        public string token;
         public string web;
         public string tutorialPage;
         public int port;
         public string TokenServer => $"https://{web}/{k_TokenURL}"; 
         const string k_SessionURL = "v1/session/default?session_id=";
         const string k_TokenURL = "v1/sessionTokens/token:generate";
+        /// <summary>
+        /// Get the URL of runtime server.
+        /// </summary>
         public string RuntimeServer => $"{runtime}:{port}";
-        
+        /// <summary>
+        /// Get the URL for loadscene request.
+        /// </summary>
+        /// <param name="sceneFullName">the full name of the scene you want to load</param>
         public string LoadSceneURL(string sceneFullName) => $"https://{web}/v1/{sceneFullName}:load";
-        
+        /// <summary>
+        /// Get the URL for the websocket session.
+        /// </summary>
+        /// <param name="sessionID">The current session ID obtained from the response of the `LoadSceneRequest`.</param>
         public string SessionURL(string sessionID) => $"wss://{web}/{k_SessionURL}{sessionID}";
     }
 }

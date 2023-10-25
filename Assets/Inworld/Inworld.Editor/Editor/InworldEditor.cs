@@ -57,6 +57,11 @@ namespace Inworld.AI.Editor
         string m_StudioTokenForExchange;
         string m_ErrorMsg;
 
+        /// <summary>
+        /// Gets an instance of InworldEditor.
+        /// By default, it is at `Assets/Inworld/Inworld.Editor/Resources/InworldEditor.asset`.
+        /// Please do not modify it.
+        /// </summary>
         public static InworldEditor Instance
         {
             get
@@ -67,14 +72,25 @@ namespace Inworld.AI.Editor
                 return __inst;
             }
         }
+        /// <summary>
+        /// Gets the banner image displayed at the top of the Inworld Studio Panel.
+        /// </summary>
         public static Texture2D Banner => Instance.m_Banner;
+        /// <summary>
+        /// Gets/Sets if you want the Readme to be displayed on load.
+        /// </summary>
         public static bool LoadedReadme
         {
             get => Instance.m_DisplayReadmeOnLoad;
             set => Instance.m_DisplayReadmeOnLoad = value;
         }
+        /// <summary>
+        /// Gets the default Readme asset.
+        /// </summary>
         public static Readme ReadMe => Instance.m_Readme;
-
+        /// <summary>
+        /// Gets/Sets the current status of Inworld Editor.
+        /// </summary>
         public EditorStatus Status
         {
             get => m_CurrentStatus;
@@ -86,22 +102,61 @@ namespace Inworld.AI.Editor
                 CurrentState.OnEnter();
             }
         }
+        /// <summary>
+        /// Gets the last Editor State.
+        /// </summary>
         public IEditorState LastState => m_InworldEditorStates[m_LastStatus];
+        /// <summary>
+        /// Gets the current Editor State.
+        /// </summary>
         public IEditorState CurrentState => m_InworldEditorStates[m_CurrentStatus];
+        /// <summary>
+        /// Gets the location for generating and storing user data.
+        /// </summary>
         public static string UserDataPath => $"{InworldAI.InworldPath}/{Instance.m_UserDataPath}";
+        /// <summary>
+        /// Gets the location for generating and storing game data.
+        /// </summary>
         public static string GameDataPath => Instance.m_GameDataPath;
+        /// <summary>
+        /// Gets the location for downloading and storing thumbnails.
+        /// </summary>
         public static string ThumbnailPath => Instance.m_ThumbnailPath;
+        /// <summary>
+        /// Gets the location for downloading and storing user data.
+        /// </summary>
         public static string AvatarPath => Instance.m_AvatarPath;
+        /// <summary>
+        /// Gets the location for generating and storing the prefabs for the Inworld character.
+        /// </summary>
         public static string PrefabPath => Instance.m_PrefabPath;
+        /// <summary>
+        /// Gets if the current Inworld Character prefab is 3D.
+        /// </summary>
         public static bool Is3D => Instance.m_RPMPrefab != null || Instance.m_InnequinPrefab != null;
+        /// <summary>
+        /// Gets the current Player Controller prefab.
+        /// </summary>
         public static PlayerController PlayerController => Instance.m_PlayerController;
+        /// <summary>
+        /// Gets if it's using Innequin model.
+        /// </summary>
         public static bool UseInnequin => Instance.m_InnequinPrefab != null;
+        /// <summary>
+        /// Gets the current default prefab for Inworld character.
+        /// </summary>
         public InworldCharacter DefaultPrefab => Is3D ? UseInnequin ? m_InnequinPrefab : m_RPMPrefab : m_Character2DPrefab;
+        /// <summary>
+        /// Gets the current prefab for Inworld Character with Ready Player Me implementation.
+        /// </summary>
         public InworldCharacter RPMPrefab
         {
             get => m_RPMPrefab;
             set => m_RPMPrefab = value;
         }
+        /// <summary>
+        /// Gets the current prefab for Inworld Character with Innequin implementation.
+        /// </summary>
         public InworldCharacter InnequinPrefab
         {
             get => m_InnequinPrefab;
@@ -114,23 +169,40 @@ namespace Inworld.AI.Editor
             m_InworldEditorStates[EditorStatus.SelectCharacter] = new InworldEditorSelectCharacter();
             m_InworldEditorStates[EditorStatus.Error] = new InworldEditorError();
         }
+        /// <summary>
+        /// Gets/Sets the token used for login Inworld Studio.
+        /// </summary>
         public static string TokenForExchange
         {
             get => Instance.m_StudioTokenForExchange;
             set => Instance.m_StudioTokenForExchange = value;
         }
+        /// <summary>
+        /// Gets the actual token part.
+        /// </summary>
         public static string Token => $"Bearer {TokenForExchange.Split(':')[0]}";
-
+        /// <summary>
+        /// Get the error messages, if it's related to `Unauthorized`, rename it with a better explanation.
+        /// </summary>
+        /// <param name="strErrorFromWeb">the received error message.</param>
         public static string GetError(string strErrorFromWeb) => strErrorFromWeb.Contains("Unauthorized") ? k_TokenErrorInstruction : strErrorFromWeb;
-
+        /// <summary>
+        /// Get the picture's luminance. Used to display the opposite color of the text.
+        /// </summary>
+        /// <param name="color">the color of a pixel.</param>
         float GetLuminance(Color color) => k_LuminanceRed * color.r + k_LuminanceGreen * color.g + k_LuminanceBlue * color.b;
-
+        /// <summary>
+        /// Gets the GUI style for the title in Inworld Studio Panel.
+        /// </summary>
         public GUIStyle TitleStyle => new GUIStyle(GUI.skin.label)
         {
             fontSize = 14,
             fontStyle = FontStyle.Bold,
             padding = new RectOffset(10, 10, 0, 0)
         };
+        /// <summary>
+        /// Gets the GUI style for the error text in Inworld Studio Panel.
+        /// </summary>
         public GUIStyle ErrorStyle => new GUIStyle(GUI.skin.label)
         {
             fontSize = 14,
@@ -142,12 +214,20 @@ namespace Inworld.AI.Editor
             padding = new RectOffset(10, 10, 10, 50),
             wordWrap = true
         };
+        /// <summary>
+        /// Gets the GUI style for the button in Inworld Studio Panel.
+        /// </summary>
         public GUIStyle BtnStyle => new GUIStyle(GUI.skin.button)
         {
             fontSize = 12,
             fixedWidth = 100,
             margin = new RectOffset(10, 10, 10, 10),
         };
+        /// <summary>
+        /// Gets the GUI style for the text floating on the thumbnails.
+        /// </summary>
+        /// <param name="bg">The character's thumbnail</param>
+        /// <returns></returns>
         public GUIStyle BtnCharStyle(Texture2D bg)
         {
             float avgLuminance = bg == InworldAI.DefaultThumbnail ? 0 : bg.GetPixels().Average(GetLuminance);
@@ -165,16 +245,35 @@ namespace Inworld.AI.Editor
                 }
             };
         }
-
+        /// <summary>
+        /// Gets the GUI style for the drop down fields in Inworld Studio Panel.
+        /// </summary>
         public GUIStyle DropDownStyle => new GUIStyle("MiniPullDown")
         {
             margin = new RectOffset(10, 10, 0, 0)
         };
-
+        /// <summary>
+        /// Gets the URL for fetching billing account.
+        /// </summary>
         public static string BillingAccountURL => $"https://{Instance.m_ServerConfig.web}/v1alpha/{Instance.m_BillingAccountURL}";
+        /// <summary>
+        /// Gets the URL for listing workspaces
+        /// </summary>
         public static string ListWorkspaceURL => $"https://{Instance.m_ServerConfig.web}/v1alpha/{Instance.m_WorkspaceURL}";
+        /// <summary>
+        /// Gets the url for listing Inworld scenes.
+        /// </summary>
+        /// <param name="wsFullName">the full name of the target workspace</param>
         public static string ListScenesURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/v1alpha/{wsFullName}/{Instance.m_ScenesURL}";
+        /// <summary>
+        /// Gets the url for listing keys.
+        /// </summary>
+        /// <param name="wsFullName">the full name of the target workspace</param>
         public static string ListKeyURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/v1alpha/{wsFullName}/{Instance.m_KeyURL}";
+        /// <summary>
+        /// Gets/Sets the current Error message.
+        /// If setting, also set the current status of InworldEditor.
+        /// </summary>
         public string Error
         {
             get => m_ErrorMsg;
@@ -185,6 +284,9 @@ namespace Inworld.AI.Editor
                 m_ErrorMsg = value;
             }
         }
+        /// <summary>
+        /// Save all the current scriptable objects.
+        /// </summary>
         public void SaveData()
         {
             EditorUtility.SetDirty(InworldAI.Instance);

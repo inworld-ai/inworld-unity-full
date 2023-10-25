@@ -17,27 +17,20 @@ namespace Inworld
         public string name;
         public string id;
     }
+
     [Serializable]
     public class UserSetting
     {
         public bool viewTranscriptConsent;
         public PlayerProfile playerProfile;
 
-        public UserSetting(List<InworldPlayerProfile> rhs)
+        public UserSetting(List<PlayerProfileField> rhs)
         {
             viewTranscriptConsent = true;
             playerProfile = new PlayerProfile
             {
-                fields = new List<PlayerProfileField>()
+                fields = rhs
             };
-            foreach (InworldPlayerProfile pp in rhs)
-            {
-                playerProfile.fields.Add(new PlayerProfileField
-                {
-                    fieldId = pp.property,
-                    fieldValue = pp.value
-                });
-            }
         }
     }
     [Serializable]

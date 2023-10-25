@@ -29,7 +29,7 @@ public class InworldAI : ScriptableObject
     static InworldAI __inst;
     
     /// <summary>
-    /// Gets an instance of [**InworldAI**](InworldAI).
+    /// Gets an instance of InworldAI.
     /// By default, it is at `Assets/Inworld/Inworld.AI/Resources/InworldAI.asset`.
     /// Please do not modify it.
     /// </summary>
@@ -106,35 +106,40 @@ public class InworldAI : ScriptableObject
         }
     }
     /// <summary>
-    /// Send basic type of the debug log used in Inworld.
-    /// If DebugMode is checked, it'll also be displayed in console.
+    /// Logs a basic type of debug message used in Inworld.
+    /// If the DebugMode is enabled, the message will also be displayed in the console.
     /// </summary>
-    /// <param name="log">log to send</param>
+    /// <param name="log">The message to log</param>
     public static void Log(string log)
     {
         if (IsDebugMode)
             InworldLog.Log(log);
     }
     /// <summary>
-    /// Send warning type of the debug log used in Inworld.
-    /// If DebugMode is checked, it'll also be displayed in console.
+    /// Logs a warning type of debug message used in Inworld.
+    /// If the DebugMode is enabled, the message will also be displayed in the console.
     /// </summary>
-    /// <param name="log">log to send</param>
+    /// <param name="log">the warning message to log</param>
     public static void LogWarning(string log)
     {
         if (IsDebugMode)
             InworldLog.LogWarning(log);
     }
     /// <summary>
-    /// Send error type of the debug log used in Inworld.
-    /// If DebugMode is checked, it'll also be displayed in console.
+    /// Logs an error type of debug message used in Inworld.
+    /// If the DebugMode is enabled, the message will also be displayed in the console.
     /// </summary>
-    /// <param name="log">log to send</param>
+    /// <param name="log">the error message to log</param>
     public static void LogError(string log)
     {
         if (IsDebugMode)
             InworldLog.LogError(log);
     }
+    /// <summary>
+    /// Logs an exception message used in Inworld.
+    /// This method is used to log exceptions in Inworld, and the provided exception message will be recorded.
+    /// </summary>
+    /// <param name="exception">The exception message to log</param>
     public static void LogException(string exception) => InworldLog.LogException(exception);
     
 

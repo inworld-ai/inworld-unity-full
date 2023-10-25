@@ -194,9 +194,9 @@ namespace Inworld.Sample.RPM
         protected void HandleLipSync(AudioPacket audioPacket)
         {
             _Reset();
-            if (audioPacket.dataChunk == null)
+            if (audioPacket.dataChunk?.additionalPhonemeInfo == null)
                 return;
-            foreach (var phoneme in audioPacket.dataChunk.additionalPhonemeInfo)
+            foreach (PhonemeInfo phoneme in audioPacket.dataChunk.additionalPhonemeInfo)
             {
                 PhonemeToViseme p2vRes = m_LipsyncMap.p2vMap.FirstOrDefault(p2v => p2v.phoneme == phoneme.phoneme);
                 int visemeIndex = p2vRes?.visemeIndex ?? -1;
@@ -211,13 +211,12 @@ namespace Inworld.Sample.RPM
         void _ProcessEmotion(string emotion)
         {
             FacialAnimation targetEmo = m_FacialEmotion.emotions.FirstOrDefault(emo => emo.emotion.ToUpper() == emotion);
-            if (targetEmo != null && m_CurrentFacial != targetEmo)
-            {
-                _ResetLastEmo(m_LastFacial);
-                m_LastFacial = m_CurrentFacial;
-                m_CurrentFacial = targetEmo;
-                StartCoroutine(_MorphEmotion());
-            }
+            if (targetEmo == null || m_CurrentFacial == targetEmo)
+                return;
+            _ResetLastEmo(m_LastFacial);
+            m_LastFacial = m_CurrentFacial;
+            m_CurrentFacial = targetEmo;
+            StartCoroutine(_MorphEmotion());
         }
         void _ResetLastEmo(FacialAnimation emo)
         {

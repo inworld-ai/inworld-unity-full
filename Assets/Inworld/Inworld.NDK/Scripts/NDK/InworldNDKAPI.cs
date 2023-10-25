@@ -35,9 +35,9 @@ namespace Inworld.NDK
             if (string.IsNullOrEmpty(InworldAI.User.ID))
                 InworldAI.User.ID = SystemInfo.deviceUniqueIdentifier;
             NDKInterop.Unity_SetUserRequest(InworldAI.User.Name, InworldAI.User.ID);
-            foreach (InworldPlayerProfile profile in InworldAI.User.PlayerProfiles)
+            foreach (PlayerProfileField profile in InworldAI.User.PlayerProfiles)
             {
-                NDKInterop.Unity_AddUserProfile(profile.property, profile.value);
+                NDKInterop.Unity_AddUserProfile(profile.fieldId, profile.fieldValue);
             }
             NDKInterop.Unity_SetClientRequest("Unity NDK", InworldAI.Version);
             NDKInterop.Unity_LoadScene(sceneFullName, InworldNDKCallBack.OnSceneLoaded);
