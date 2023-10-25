@@ -51,10 +51,12 @@ namespace Inworld.Packet
 
         public CustomPacket()
         {
+            type = "CUSTOM";
             custom = new CustomEvent();
         }
         public CustomPacket(InworldPacket rhs, CustomEvent evt) : base(rhs)
         {
+            type = "CUSTOM";
             custom = evt;
         }
         public string TriggerName

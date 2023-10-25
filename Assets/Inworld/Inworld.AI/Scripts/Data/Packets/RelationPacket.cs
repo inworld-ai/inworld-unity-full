@@ -47,10 +47,12 @@ namespace Inworld.Packet
         
         public RelationPacket()
         {
+            type = "RELATION";
             debugInfo = new RelationEvent();
         }
         public RelationPacket(InworldPacket rhs, RelationEvent evt) : base(rhs)
         {
+            type = "RELATION";
             debugInfo = evt;
         }
     }

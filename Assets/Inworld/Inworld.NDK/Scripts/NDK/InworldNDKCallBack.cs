@@ -46,6 +46,8 @@ namespace Inworld.NDK
                     break;
                 case 2:
                     InworldAI.LogError($"[NDK]: {log}");
+                    if (log.Contains("inactivity"))
+                        InworldController.Client.Status = InworldConnectionStatus.LostConnect;
                     break;
                 case 3:
                     InworldAI.LogException($"[NDK]: {log}");
