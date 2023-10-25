@@ -333,7 +333,6 @@ GameObject:
   - component: {fileID: 359806124}
   - component: {fileID: 359806126}
   - component: {fileID: 359806128}
-  - component: {fileID: 359806130}
   - component: {fileID: 359806131}
   - component: {fileID: 359806132}
   m_Layer: 0
@@ -393,20 +392,6 @@ MonoBehaviour:
   m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
   m_CustomToken: 
---- !u!114 &359806130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 359806122}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f21ebe20281149b5af3916a834d90391, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_PacketType: AUDIO
-  m_IsEnabled: 1
 --- !u!114 &359806131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3904,7 +3889,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Interruptable: 1
   m_MaxItemCount: 100
-  m_TextDuration: 0.5
+  m_TextSpeed: 1
   m_VolumeInterpolationSpeed: 1
   m_VolumeOnPlayerSpeaking: 1
 --- !u!114 &9047055560386739720

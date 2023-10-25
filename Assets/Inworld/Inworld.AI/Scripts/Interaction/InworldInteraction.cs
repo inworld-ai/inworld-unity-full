@@ -85,7 +85,7 @@ namespace Inworld.Interactions
             InworldController.Instance.SendCancelEvent(LiveSessionID, m_CurrentInteraction.InteractionID);
 
             m_CurrentInteraction.Cancel();
-            while (UtteranceQueue.Peek().Interaction == m_CurrentInteraction)
+            while (UtteranceQueue.Count > 0 && UtteranceQueue.Peek().Interaction == m_CurrentInteraction)
                 UtteranceQueue.Dequeue();
             
             m_CurrentUtterance = null;
