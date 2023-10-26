@@ -26,8 +26,6 @@ namespace Inworld.Sample.Innequin
     public class FaceTransformData : ScriptableObject
     {
         public List<FaceTransform> data;
-
         public FaceTransform this[string facialName] => data.FirstOrDefault(f => f.name == facialName);
-
     }
 }

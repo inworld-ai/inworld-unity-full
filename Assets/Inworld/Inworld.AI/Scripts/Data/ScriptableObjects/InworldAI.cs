@@ -141,6 +141,4 @@ public class InworldAI : ScriptableObject
     /// </summary>
     /// <param name="exception">The exception message to log</param>
     public static void LogException(string exception) => InworldLog.LogException(exception);
-    
-
 }

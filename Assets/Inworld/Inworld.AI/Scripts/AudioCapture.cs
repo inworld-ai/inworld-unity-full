@@ -30,20 +30,18 @@ namespace Inworld
         
         protected const int k_SizeofInt16 = sizeof(short);
         protected const int k_SampleRate = 16000;
-        
-        
-        protected readonly List<string> m_AudioToPush = new List<string>();
-        
         protected AudioClip m_Recording;
         protected bool m_IsPlayerSpeaking;
         protected bool m_IsCapturing;
-        // Size of audioclip used to collect information, need to be big enough to keep up with collect. 
-        protected int m_BufferSize;
-        protected byte[] m_ByteBuffer;
-        protected float[] m_InputBuffer;
         protected float m_CDCounter;
         // Last known position in AudioClip buffer.
         protected int m_LastPosition;
+        // Size of audioclip used to collect information, need to be big enough to keep up with collect. 
+        protected int m_BufferSize;
+        protected readonly List<string> m_AudioToPush = new List<string>();
+        protected byte[] m_ByteBuffer;
+        protected float[] m_InputBuffer;
+
         /// <summary>
         /// Signifies if audio is currently blocked from being captured.
         /// </summary>
@@ -68,11 +66,16 @@ namespace Inworld
         /// Get Audio Input Device Name for recording.
         /// </summary>
         public string DeviceName => m_DeviceName;
-        
+        /// <summary>
+        /// Get if aec is enabled. The parent class by default is false.
+        /// </summary>
         public virtual bool EnableAEC => false;
 
 #region Public Functions
-
+        /// <summary>
+        /// Change the device of microphone input.
+        /// </summary>
+        /// <param name="deviceName">the device name to input.</param>
         public void ChangeInputDevice(string deviceName)
         {
             if (deviceName == m_DeviceName)
@@ -84,10 +87,19 @@ namespace Inworld
             m_DeviceName = deviceName;
             StartMicrophone(m_DeviceName);
         }
+        /// <summary>
+        /// Called when character registers live session.
+        /// It's a virtual class that implemented by the child class.  
+        /// </summary>
+        /// <param name="dataAgentId">the live session ID of the client agent.</param>
+        /// <param name="interaction">the Interaction component of the Inworld character.</param>
         public virtual void RegisterLiveSession(string dataAgentId, InworldInteraction interaction)
         {
             
         }
+        /// <summary>
+        /// Unity's official microphone module starts recording, will trigger OnRecordingStart event.
+        /// </summary>
         public void StartRecording()
         {
 #if !UNITY_WEBGL
@@ -98,6 +110,9 @@ namespace Inworld
 #endif
             OnRecordingStart.Invoke();
         }
+        /// <summary>
+        /// Unity's official microphone module stops recording, will trigger OnRecordingEnd event.
+        /// </summary>
         public void StopRecording()
         {
 #if !UNITY_WEBGL
@@ -108,6 +123,9 @@ namespace Inworld
 #endif
             OnRecordingEnd.Invoke();
         }
+        /// <summary>
+        /// Manually push the audio wave data to server.
+        /// </summary>
         public void PushAudio()
         {
 #if !UNITY_WEBGL
@@ -117,6 +135,16 @@ namespace Inworld
             }
             m_AudioToPush.Clear();
 #endif
+        }
+        /// <summary>
+        /// Virtual function for sampling environment audios for echo cancellation.
+        /// Would be implemented in the child class.
+        /// </summary>
+        /// <param name="data">the current environment audio.</param>
+        /// <param name="channels">the channels of the environment audio.</param>
+        public virtual void SamplePlayingWavData(float[] data, int channels)
+        {
+
         }
 #endregion
 
@@ -206,10 +234,6 @@ namespace Inworld
             byte[] output = new byte[nWavCount];
             Buffer.BlockCopy(m_ByteBuffer, 0, output, 0, nWavCount);
             return output;
-        }
-        public virtual void SamplePlayingWavData(float[] data, int channels)
-        {
-
         }
         // Helper method to calculate the amplitude of audio data
         protected float CalculateAmplitude(float[] audioData)

@@ -17,6 +17,9 @@ public class InworldGameData : ScriptableObject
     public List<InworldCharacterData> characters;
     public Capabilities capabilities;
 
+    /// <summary>
+    /// Get the generated name for the scriptable object.
+    /// </summary>
     public string SceneFileName
     {
         get
@@ -25,7 +28,11 @@ public class InworldGameData : ScriptableObject
             return data.Length < 4 ? sceneFullName : $"{data[3]}_{data[1]}";
         }
     }
-
+    /// <summary>
+    /// Set the data for the scriptable object instantiated.
+    /// </summary>
+    /// <param name="sceneData">The InworldSceneData to load</param>
+    /// <param name="keySecret">The API key secret to use</param>
     public void SetData(InworldSceneData sceneData, InworldKeySecret keySecret)
     {
         if (sceneData != null)

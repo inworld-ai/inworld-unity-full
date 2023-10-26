@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5abd9eaac9cc3e4585d7e8574c2511c, type: 3}
+  m_Name: heretic_aa001
+  m_EditorClassIdentifier: 
+  sceneFullName: workspaces/aa001/scenes/heretic
+  apiKey: UL9BMXcjmeiLUvpCzqrKHTxXYzXxEFTu
+  apiSecret: yv9iPMiO6Z3gvBVhxXyhfJ0w5fnauRsePFrNdR0jPNUEaNw5i0z7RzveFX12CXh4
+  characters:
+  - agentId: 
+    brainName: workspaces/aa001/characters/jifen_liu
+    givenName: Jifen Liu
+    characterAssets:
+      rpmModelUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_model/93bb8168-9593-4b62-9668-98069ca1e7cf.glb
+      rpmImageUriPortrait: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_image/93bb8168-9593-4b62-9668-98069ca1e7cf_portrait.jpg
+      rpmImageUriPosture: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_image/93bb8168-9593-4b62-9668-98069ca1e7cf_posture.jpg
+      avatarImg: 
+      avatarImgOriginal: 
+      thumbnailProgress: 0
+      avatarProgress: 0
+    thumbnail: {fileID: 0}
+  - agentId: 
+    brainName: workspaces/aa001/characters/anotherchar
+    givenName: AnotherChar2
+    characterAssets:
+      rpmModelUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_model/625549a3-8aa2-4e11-a02d-09df9d31082d.glb
+      rpmImageUriPortrait: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_image/625549a3-8aa2-4e11-a02d-09df9d31082d_portrait.jpg
+      rpmImageUriPosture: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_image/625549a3-8aa2-4e11-a02d-09df9d31082d_posture.jpg
+      avatarImg: https://storage.googleapis.com/inworld-ai-usercontent-prod/2d_image/5dacab67-937e-4585-912d-c54308c17946.jpg
+      avatarImgOriginal: https://storage.googleapis.com/inworld-ai-usercontent-prod/2d_image/5dacab67-937e-4585-912d-c54308c17946-original.jpg
+      thumbnailProgress: 0
+      avatarProgress: 0
+    thumbnail: {fileID: 0}
+  capabilities:
+    audio: 1
+    emotions: 1
+    interruptions: 1
+    narratedActions: 1
+    silence: 1
+    text: 1
+    triggers: 1
+    turnBasedStt: 1
+    phonemeInfo: 1
+    relations: 1
+    debugInfo: 1
