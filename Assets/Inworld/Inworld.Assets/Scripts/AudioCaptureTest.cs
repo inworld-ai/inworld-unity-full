@@ -33,6 +33,7 @@ public class AudioCaptureTest : AudioCapture
     }
     void _InitUI()
     {
+#if !UNITY_WEBGL
         string[] devices = Microphone.devices;
         m_Dropdown.options ??= new List<TMP_Dropdown.OptionData>();
         m_Dropdown.options.Clear();
@@ -41,8 +42,11 @@ public class AudioCaptureTest : AudioCapture
         {
             m_Dropdown.options.Add(new TMP_Dropdown.OptionData(device));
         }
+#endif
     }
-    protected override void Update()
+    
+#if !UNITY_WEBGL
+    protected new void Update()
     {
         if (!IsCapturing)
             return;
@@ -50,8 +54,11 @@ public class AudioCaptureTest : AudioCapture
             StartRecording();
         Collect();
     }
+#endif
+    
     public void UpdateAudioInput(int nIndex)
     {
+#if !UNITY_WEBGL
         int nDeviceIndex = nIndex - 1;
         if (nDeviceIndex < 0)
         {
@@ -62,6 +69,7 @@ public class AudioCaptureTest : AudioCapture
         StartRecording();
         m_Button.interactable = true;
         m_Button.image.sprite = m_MicOff;
+#endif
     }
     protected override void Collect()
     {

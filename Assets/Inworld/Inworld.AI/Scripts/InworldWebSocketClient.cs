@@ -133,6 +133,8 @@ namespace Inworld
                 }
             };
             string jsonToSend = JsonUtility.ToJson(packet);
+            if (InworldController.Audio.IsPlayerSpeaking)
+                Dispatch(packet);
             m_Socket.SendAsync(jsonToSend);
         }
         protected IEnumerator _GetAccessToken(string workspaceFullName = "")
@@ -278,6 +280,7 @@ namespace Inworld
         void OnSocketClosed(object sender, CloseEventArgs e)
         {
             InworldAI.Log($"Closed: StatusCode: {e.StatusCode}, Reason: {e.Reason}");
+            Status = InworldConnectionStatus.LostConnect;
         }
 
         void OnSocketError(object sender, ErrorEventArgs e)

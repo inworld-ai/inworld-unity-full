@@ -13,7 +13,9 @@ namespace Inworld.Util
 {
     public class PackageLatencyTest : MonoBehaviour
     {
+        [SerializeField] string m_PacketType = "TEXT";
         [SerializeField] bool m_IsEnabled;
+        
         bool IsFromPlayer(InworldPacket packet) => packet.routing.source.type.ToUpper() == "PLAYER";
         bool m_LastPacketIsFromPlayer;
         float m_PlayerTime;
@@ -32,12 +34,12 @@ namespace Inworld.Util
 
         void OnInteraction(InworldPacket incomingPacket)
         {
-            if (IsFromPlayer(incomingPacket))
+            if (incomingPacket.type.ToUpper() == m_PacketType && IsFromPlayer(incomingPacket))
             {
                 m_LastPacketIsFromPlayer = true;
                 m_PlayerTime = Time.time;
             }
-            else
+            else if (incomingPacket.type.ToUpper() == m_PacketType)
             {
                 if (m_LastPacketIsFromPlayer && m_IsEnabled)
                     InworldAI.Log($"Package Latency: {Time.time - m_PlayerTime}");

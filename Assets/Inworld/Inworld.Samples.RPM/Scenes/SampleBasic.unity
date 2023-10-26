@@ -199,7 +199,6 @@ GameObject:
   - component: {fileID: 359806124}
   - component: {fileID: 359806126}
   - component: {fileID: 359806128}
-  - component: {fileID: 359806129}
   - component: {fileID: 359806130}
   - component: {fileID: 359806131}
   m_Layer: 0
@@ -262,19 +261,6 @@ MonoBehaviour:
   m_PublicWorkspace: 
   m_PreviousDialog:
     phrases: []
---- !u!114 &359806129
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 359806122}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f21ebe20281149b5af3916a834d90391, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IsEnabled: 1
 --- !u!114 &359806130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -735,6 +721,10 @@ PrefabInstance:
     - target: {fileID: 2717743084740492485, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_Name
       value: Alice the Guide
+      objectReference: {fileID: 0}
+    - target: {fileID: 5611356199224546472, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

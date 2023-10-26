@@ -78,6 +78,7 @@ namespace Inworld
         /// <param name="deviceName">the device name to input.</param>
         public void ChangeInputDevice(string deviceName)
         {
+#if !UNITY_WEBGL
             if (deviceName == m_DeviceName)
                 return;
             
@@ -86,6 +87,7 @@ namespace Inworld
 
             m_DeviceName = deviceName;
             StartMicrophone(m_DeviceName);
+#endif
         }
         /// <summary>
         /// Called when character registers live session.
@@ -165,7 +167,7 @@ namespace Inworld
             StopMicrophone(m_DeviceName);
         }
 #if !UNITY_WEBGL
-        protected virtual void Update()
+        protected void Update()
         {
             if (!m_IsCapturing || IsBlocked)
                 return;
@@ -243,11 +245,15 @@ namespace Inworld
         }
         protected void StartMicrophone(string deviceName)
         {
+#if !UNITY_WEBGL
             m_Recording = Microphone.Start(deviceName, true, m_BufferSeconds, k_SampleRate);
+#endif
         }
         protected void StopMicrophone(string deviceName)
         {
+#if !UNITY_WEBGL
             Microphone.End(deviceName);
+#endif
         }
 #endregion
     }
