@@ -9,10 +9,12 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Networking;
 namespace Inworld.AI.Editor
 {
     public class InworldEditorSelectCharacter: IEditorState
     {
+        bool m_StartDownload = false;
         Vector2 m_ScrollPosition;
         public void OnOpenWindow()
         {
@@ -64,6 +66,10 @@ namespace Inworld.AI.Editor
             {
                 InworldEditor.Instance.Status = EditorStatus.SelectGameData;
             }
+            if (GUILayout.Button("Refresh", InworldEditor.Instance.BtnStyle))
+            {
+                _DownloadRelatedAssets();
+            }
             GUILayout.EndHorizontal();
         }
         public void OnExit()
@@ -72,12 +78,21 @@ namespace Inworld.AI.Editor
         }
         public void OnEnter()
         {
+            m_StartDownload = false;
             EditorUtility.ClearProgressBar();
             _CreatePrefabVariants();
         }
         public void PostUpdate()
         {
-            
+            if (!m_StartDownload || !InworldController.Instance.GameData)
+                return;
+            var sceneData = InworldController.Instance.GameData;
+            EditorUtility.DisplayProgressBar("Inworld", "Downloading Assets", sceneData.Progress);
+            if (sceneData.Progress > 0.95f)
+            {
+                m_StartDownload = false;
+                EditorUtility.ClearProgressBar();
+            }
         }
         void _CreatePrefabVariants()
         {
@@ -91,6 +106,24 @@ namespace Inworld.AI.Editor
                 _CreateVariant(charRef, downloadedModel);
             }
             // 2. Save the prefab variant as the new data.
+        }
+        void _DownloadRelatedAssets()
+        {
+            if (!InworldController.Instance.GameData)
+                return;
+            // Download Thumbnails and put under User name's folder.
+            m_StartDownload = true;
+            InworldGameData sceneData = InworldController.Instance.GameData;
+            foreach (InworldCharacterData character in sceneData.characters)
+            {
+                string thumbURL = character.characterAssets.ThumbnailURL;
+                string modelURL = character.characterAssets.rpmModelUri;
+                if (!string.IsNullOrEmpty(thumbURL))
+                    InworldEditorUtil.DownloadCharacterAsset(character.brainName, thumbURL, _OnCharThumbnailDownloaded);
+                if (!string.IsNullOrEmpty(modelURL))
+                    InworldEditorUtil.DownloadCharacterAsset(character.brainName, modelURL, _OnCharModelDownloaded);
+            }
+            // Meanwhile, showcasing progress bar.
         }
         static void _CreateVariant(CharacterReference charRef, GameObject customModel)
         { 
@@ -146,6 +179,50 @@ namespace Inworld.AI.Editor
                 return AssetDatabase.LoadAssetAtPath<GameObject>(filePath);
             InworldAI.LogError($"Cannot find {charRef.CharacterFileName}.prefab");
             return null;
+        }
+                // Download Avatars and put under User name's folder.
+        void _OnCharModelDownloaded(string charFullName, AsyncOperation downloadContent)
+        {
+            InworldCharacterData charRef = InworldController.Instance.GameData.characters.FirstOrDefault(c => c.brainName == charFullName);
+            if (charRef == null)
+                return;
+            UnityWebRequest uwr = InworldEditorUtil.GetResponse(downloadContent);
+            
+            if (string.IsNullOrEmpty(InworldEditorUtil.UserDataPath) || uwr.result != UnityWebRequest.Result.Success)
+            {
+                InworldAI.LogError($"Failed to download model: {charFullName} with {uwr.url}");
+                charRef.characterAssets.avatarProgress = 1;
+                return;
+            }
+            // YAN: Currently we only download .glb files.
+            if (!Directory.Exists($"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}"))
+            {
+                Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}");
+            }
+            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
+            File.WriteAllBytes(newAssetPath, uwr.downloadHandler.data);
+            charRef.characterAssets.avatarProgress = 1;
+        }
+        void _OnCharThumbnailDownloaded(string charFullName, AsyncOperation downloadContent)
+        {
+            InworldCharacterData charRef = InworldController.Instance.GameData.characters.FirstOrDefault(c => c.brainName == charFullName);
+            if (charRef == null)
+                return;
+            UnityWebRequest uwr = InworldEditorUtil.GetResponse(downloadContent);
+            
+            if (string.IsNullOrEmpty(InworldEditorUtil.UserDataPath) || uwr.result != UnityWebRequest.Result.Success)
+            {
+                InworldAI.LogError($"Failed to download Thumbnail: {charFullName} with {uwr.url}");
+                charRef.characterAssets.thumbnailProgress = 1;
+                return;
+            }
+            if (!Directory.Exists($"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}"))
+            {
+                Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}");
+            }
+            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterFileName}.png";
+            File.WriteAllBytes(newAssetPath, uwr.downloadHandler.data);
+            charRef.characterAssets.thumbnailProgress = 1;
         }
     }
 }

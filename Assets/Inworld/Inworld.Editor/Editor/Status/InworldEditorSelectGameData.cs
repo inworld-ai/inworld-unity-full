@@ -106,7 +106,6 @@ namespace Inworld.AI.Editor
             {
                 InworldEditor.Instance.Status = EditorStatus.SelectCharacter;
             }
-                
         }
 
         void _SaveCurrentSettings()

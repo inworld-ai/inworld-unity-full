@@ -6,6 +6,7 @@
  *************************************************************************************************/
 using Inworld;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +29,8 @@ public class InworldGameData : ScriptableObject
             return data.Length < 4 ? sceneFullName : $"{data[3]}_{data[1]}";
         }
     }
+    public float Progress => characters?.Count > 0 ? characters.Sum(character => character.characterAssets.Progress) / characters.Count : 1;
+
     /// <summary>
     /// Set the data for the scriptable object instantiated.
     /// </summary>

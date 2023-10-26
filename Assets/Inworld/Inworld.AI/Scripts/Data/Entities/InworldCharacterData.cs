@@ -26,6 +26,14 @@ namespace Inworld
             givenName = charRef.characterOverloads[0].defaultCharacterDescription.givenName;
             characterAssets = new CharacterAssets(charRef.characterOverloads[0].defaultCharacterAssets);
         }
+        public string CharacterFileName
+        {
+            get
+            {
+                string[] data = brainName.Split('/');
+                return data.Length < 4 ? brainName : $"{data[3]}_{data[1]}";
+            }
+        }
     }
     [Serializable]
     public class CharacterAssets
