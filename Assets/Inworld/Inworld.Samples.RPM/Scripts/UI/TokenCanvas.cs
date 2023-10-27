@@ -23,6 +23,9 @@ namespace Inworld.Sample.RPM
                 gameObject.SetActive(false);
             }
         }
+        /// <summary>
+        /// Send the custom token to InworldClient.
+        /// </summary>
         public void SendToken()
         {
             if (string.IsNullOrEmpty(m_TokenInput.text))

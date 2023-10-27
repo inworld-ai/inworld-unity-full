@@ -239,7 +239,7 @@ MonoBehaviour:
   m_Client: {fileID: 359806128}
   m_AudioCapture: {fileID: 359806131}
   m_CharacterHandler: {fileID: 359806130}
-  m_GameData: {fileID: 11400000, guid: df738b28c897fde49b7e009d6beab6f2, type: 2}
+  m_GameData: {fileID: 11400000, guid: 4ef2d204249ad4843828ba3c37e8061a, type: 2}
   m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
   m_AutoStart: 1
 --- !u!114 &359806128
@@ -288,7 +288,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AutoPush: 1
   m_UserSpeechThreshold: 0.01
-  m_AudioRate: 16000
   m_BufferSeconds: 1
   m_DeviceName: 
   OnRecordingStart:

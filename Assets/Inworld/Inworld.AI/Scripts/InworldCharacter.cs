@@ -1,4 +1,10 @@
-﻿using Inworld.Interactions;
+﻿/*************************************************************************************************
+ * Copyright 2022 Theai, Inc. (DBA Inworld)
+ *
+ * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+ * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+ *************************************************************************************************/
+using Inworld.Interactions;
 using Inworld.Packet;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +28,9 @@ namespace Inworld
         
         RelationState m_CurrentRelation = new RelationState();
         protected InworldInteraction m_Interaction;
+        /// <summary>
+        /// Gets/Sets if this character is speaking.
+        /// </summary>
         public bool IsSpeaking
         {
             get => m_Interaction && m_Interaction.IsSpeaking;
@@ -32,6 +41,9 @@ namespace Inworld
                 m_Interaction.IsSpeaking = value;
             }
         }
+        /// <summary>
+        /// Gets/Sets the charater's current relationship towards players. Will invoke onRelationUpdated when set.
+        /// </summary>
         public RelationState CurrRelation
         {
             get => m_CurrentRelation;
@@ -43,6 +55,10 @@ namespace Inworld
                 onRelationUpdated.Invoke();
             }
         }
+        /// <summary>
+        /// Gets/Sets the character's data.
+        /// If set, it'll also allocate the live session ID to the character's `InworldInteraction` component.
+        /// </summary>
         public InworldCharacterData Data
         {
             get => m_Data;
@@ -53,17 +69,72 @@ namespace Inworld
                     m_Interaction.LiveSessionID = m_Data.agentId;
             }
         }
-        
+        /// <summary>
+        /// Get the display name for the character. Note that name may not be unique.
+        /// </summary>
         public string Name => Data?.givenName ?? "";
+        /// <summary>
+        /// The `BrainName` for the character.
+        /// Note that `BrainName` is actually the character's full name, formatted like `workspace/xxx/characters/xxx`.
+        /// It is unique.
+        /// </summary>
         public string BrainName => Data?.brainName ?? "";
+        /// <summary>
+        /// Gets the live session ID of the character. If not registered, will try to fetch one from InworldController's CharacterHandler.
+        /// </summary>
         public string ID => string.IsNullOrEmpty(Data?.agentId) ? InworldController.CharacterHandler.GetLiveSessionID(this) : Data?.agentId;
+        
+        /// <summary>
+        /// Register live session. Get the live session ID for this character, and also assign it to this character's components.
+        /// </summary>
         public virtual void RegisterLiveSession()
         {
             m_Interaction.LiveSessionID = Data.agentId = InworldController.CharacterHandler.GetLiveSessionID(this);
             if (!InworldController.CurrentCharacter && !string.IsNullOrEmpty(m_Interaction.LiveSessionID))
                 InworldController.CharacterHandler.CurrentCharacter = this;
         }
-
+        /// <summary>
+        /// Send the message to this character.
+        /// </summary>
+        /// <param name="text">the message to send</param>
+        public virtual void SendText(string text)
+        {
+            // 1. Interrupt current speaking.
+            CancelResponse();
+            // 2. Send Text.
+            InworldController.Instance.SendText(ID, text);
+        }
+        /// <summary>
+        /// Send the trigger to this character.
+        /// Trigger is defined in the goals section of the character in Inworld Studio.
+        /// </summary>
+        /// <param name="trigger">the name of the trigger.</param>
+        /// <param name="needCancelResponse">If checked, this sending process will interrupt the character's current speaking.</param>
+        /// <param name="parameters">The parameters and values of the trigger.</param>
+        public virtual void SendTrigger(string trigger, bool needCancelResponse = false, Dictionary<string, string> parameters = null)
+        {
+            // 1. Interrupt current speaking.
+            if (needCancelResponse)
+                CancelResponse();
+            // 2. Send Text. YAN: Now all trigger has to be lower cases.
+            InworldController.Instance.SendTrigger(trigger.ToLower(), ID, parameters);
+        }
+        /// <summary>
+        /// Enable target goal of this character.
+        /// By default, all the goals are already enabled.
+        /// </summary>
+        /// <param name="goalName">the name of the goal to enable.</param>
+        public virtual void EnableGoal(string goalName) => InworldController.Instance.SendTrigger($"inworld.goal.enable.{goalName}", ID);
+        /// <summary>
+        /// Disable target goal of this character.
+        /// </summary>
+        /// <param name="goalName">the name of the goal to disable.</param>
+        public virtual void DisableGoal(string goalName) => InworldController.Instance.SendTrigger($"inworld.goal.disable.{goalName}", ID);
+        /// <summary>
+        /// Interrupt the current character's speaking.
+        /// Ignore all the current incoming messages from the character.
+        /// </summary>
+        public virtual void CancelResponse() => m_Interaction.CancelResponse();
         protected virtual void Awake()
         {
             m_Interaction ??= GetComponent<InworldInteraction>();
@@ -204,23 +275,5 @@ namespace Inworld
             if (InworldController.Instance)
                 InworldController.Audio.SamplePlayingWavData(data, channels);
         }
-        public virtual void SendText(string text)
-        {
-            // 1. Interrupt current speaking.
-            CancelResponse();
-            // 2. Send Text.
-            InworldController.Instance.SendText(ID, text);
-        }
-        public virtual void SendTrigger(string trigger, bool needCancelResponse = false, Dictionary<string, string> parameters = null)
-        {
-            // 1. Interrupt current speaking.
-            if (needCancelResponse)
-                CancelResponse();
-            // 2. Send Text. YAN: Now all trigger has to be lower cases.
-            InworldController.Instance.SendTrigger(trigger.ToLower(), ID, parameters);
-        }
-        public virtual void EnableGoal(string goalName) => InworldController.Instance.SendTrigger($"inworld.goal.enable.{goalName}", ID);
-        public virtual void DisableGoal(string goalName) => InworldController.Instance.SendTrigger($"inworld.goal.disable.{goalName}", ID);
-        public virtual void CancelResponse() => m_Interaction.CancelResponse();
     }
 }

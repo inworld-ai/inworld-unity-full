@@ -1,4 +1,10 @@
-﻿#if UNITY_EDITOR
+﻿/*************************************************************************************************
+ * Copyright 2022 Theai, Inc. (DBA Inworld)
+ *
+ * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+ * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+ *************************************************************************************************/
+#if UNITY_EDITOR
 using Inworld.VSP;
 using System.IO;
 using UnityEditor;
@@ -11,14 +17,24 @@ namespace Inworld.AI.Editor
         const string k_DefaultTitle = "Please paste Auth token here:";
 
         Vector2 m_ScrollPosition = Vector2.zero;
+        
+        /// <summary>
+        /// Triggers when open editor window.
+        /// </summary>
         public void OnOpenWindow()
         {
             InworldEditor.TokenForExchange = "";
         }
+        /// <summary>
+        /// Triggers when drawing the title of the editor panel page.
+        /// </summary>
         public void DrawTitle()
         {
             GUILayout.Label(k_DefaultTitle, EditorStyles.boldLabel);
         }
+        /// <summary>
+        /// Triggers when drawing the content of the editor panel page.
+        /// </summary>
         public void DrawContent()
         {
             GUIStyle customStyle = new GUIStyle(GUI.skin.textArea)
@@ -30,6 +46,9 @@ namespace Inworld.AI.Editor
             InworldEditor.TokenForExchange = GUILayout.TextArea(InworldEditor.TokenForExchange, customStyle);
             EditorGUILayout.EndScrollView();
         }
+        /// <summary>
+        /// Triggers when drawing the buttons at the bottom of the editor panel page.
+        /// </summary>
         public void DrawButtons()
         {
             GUILayout.FlexibleSpace();
@@ -42,14 +61,23 @@ namespace Inworld.AI.Editor
             GUILayout.EndHorizontal();
 
         }
+        /// <summary>
+        /// Triggers when this state exits.
+        /// </summary>
         public void OnExit()
         {
             
         }
+        /// <summary>
+        /// Triggers when this state enters.
+        /// </summary>
         public void OnEnter()
         {
             InworldEditor.TokenForExchange = "";
         }
+        /// <summary>
+        /// Triggers when other general update logic has been finished.
+        /// </summary>
         public void PostUpdate()
         {
             

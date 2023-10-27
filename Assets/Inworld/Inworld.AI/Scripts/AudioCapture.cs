@@ -4,6 +4,7 @@
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
+using Inworld.Interactions;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
@@ -21,7 +22,6 @@ namespace Inworld
     {
         [SerializeField] protected bool m_AutoPush = true;
         [SerializeField] protected float  m_UserSpeechThreshold = 0.01f;
-        [SerializeField] protected int m_AudioRate = 16000;
         [SerializeField] protected int m_BufferSeconds = 1;
         [SerializeField] protected string m_DeviceName;
 
@@ -29,20 +29,19 @@ namespace Inworld
         public UnityEvent OnRecordingEnd;
         
         protected const int k_SizeofInt16 = sizeof(short);
-        protected const int k_SizeofInt32 = sizeof(int);
-        
-        protected readonly List<string> m_AudioToPush = new List<string>();
-        
+        protected const int k_SampleRate = 16000;
         protected AudioClip m_Recording;
         protected bool m_IsPlayerSpeaking;
         protected bool m_IsCapturing;
-        // Size of audioclip used to collect information, need to be big enough to keep up with collect. 
-        protected int m_BufferSize;
-        protected byte[] m_ByteBuffer;
-        protected float[] m_InputBuffer;
         protected float m_CDCounter;
         // Last known position in AudioClip buffer.
         protected int m_LastPosition;
+        // Size of audioclip used to collect information, need to be big enough to keep up with collect. 
+        protected int m_BufferSize;
+        protected readonly List<string> m_AudioToPush = new List<string>();
+        protected byte[] m_ByteBuffer;
+        protected float[] m_InputBuffer;
+
         /// <summary>
         /// Signifies if audio is currently blocked from being captured.
         /// </summary>
@@ -67,13 +66,19 @@ namespace Inworld
         /// Get Audio Input Device Name for recording.
         /// </summary>
         public string DeviceName => m_DeviceName;
-        
-
+        /// <summary>
+        /// Get if aec is enabled. The parent class by default is false.
+        /// </summary>
+        public virtual bool EnableAEC => false;
 
 #region Public Functions
-
+        /// <summary>
+        /// Change the device of microphone input.
+        /// </summary>
+        /// <param name="deviceName">the device name to input.</param>
         public void ChangeInputDevice(string deviceName)
         {
+#if !UNITY_WEBGL
             if (deviceName == m_DeviceName)
                 return;
             
@@ -82,7 +87,21 @@ namespace Inworld
 
             m_DeviceName = deviceName;
             StartMicrophone(m_DeviceName);
+#endif
         }
+        /// <summary>
+        /// Called when character registers live session.
+        /// It's a virtual class that implemented by the child class.  
+        /// </summary>
+        /// <param name="dataAgentId">the live session ID of the client agent.</param>
+        /// <param name="interaction">the Interaction component of the Inworld character.</param>
+        public virtual void RegisterLiveSession(string dataAgentId, InworldInteraction interaction)
+        {
+            
+        }
+        /// <summary>
+        /// Unity's official microphone module starts recording, will trigger OnRecordingStart event.
+        /// </summary>
         public void StartRecording()
         {
 #if !UNITY_WEBGL
@@ -93,6 +112,9 @@ namespace Inworld
 #endif
             OnRecordingStart.Invoke();
         }
+        /// <summary>
+        /// Unity's official microphone module stops recording, will trigger OnRecordingEnd event.
+        /// </summary>
         public void StopRecording()
         {
 #if !UNITY_WEBGL
@@ -103,6 +125,9 @@ namespace Inworld
 #endif
             OnRecordingEnd.Invoke();
         }
+        /// <summary>
+        /// Manually push the audio wave data to server.
+        /// </summary>
         public void PushAudio()
         {
 #if !UNITY_WEBGL
@@ -112,6 +137,16 @@ namespace Inworld
             }
             m_AudioToPush.Clear();
 #endif
+        }
+        /// <summary>
+        /// Virtual function for sampling environment audios for echo cancellation.
+        /// Would be implemented in the child class.
+        /// </summary>
+        /// <param name="data">the current environment audio.</param>
+        /// <param name="channels">the channels of the environment audio.</param>
+        public virtual void SamplePlayingWavData(float[] data, int channels)
+        {
+
         }
 #endregion
 
@@ -132,7 +167,7 @@ namespace Inworld
             StopMicrophone(m_DeviceName);
         }
 #if !UNITY_WEBGL
-        protected virtual void Update()
+        protected void Update()
         {
             if (!m_IsCapturing || IsBlocked)
                 return;
@@ -156,7 +191,7 @@ namespace Inworld
 #region Protected Functions
         protected virtual void Init()
         {
-            m_BufferSize = m_BufferSeconds * m_AudioRate;
+            m_BufferSize = m_BufferSeconds * k_SampleRate;
             m_ByteBuffer = new byte[m_BufferSize * 1 * k_SizeofInt16];
             m_InputBuffer = new float[m_BufferSize * 1];
         }
@@ -202,10 +237,6 @@ namespace Inworld
             Buffer.BlockCopy(m_ByteBuffer, 0, output, 0, nWavCount);
             return output;
         }
-        public virtual void SamplePlayingWavData(float[] data, int channels)
-        {
-
-        }
         // Helper method to calculate the amplitude of audio data
         protected float CalculateAmplitude(float[] audioData)
         {
@@ -214,11 +245,15 @@ namespace Inworld
         }
         protected void StartMicrophone(string deviceName)
         {
-            m_Recording = Microphone.Start(deviceName, true, m_BufferSeconds, m_AudioRate);
+#if !UNITY_WEBGL
+            m_Recording = Microphone.Start(deviceName, true, m_BufferSeconds, k_SampleRate);
+#endif
         }
         protected void StopMicrophone(string deviceName)
         {
+#if !UNITY_WEBGL
             Microphone.End(deviceName);
+#endif
         }
 #endregion
     }

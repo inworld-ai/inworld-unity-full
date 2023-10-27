@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*************************************************************************************************
+ * Copyright 2022 Theai, Inc. (DBA Inworld)
+ *
+ * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+ * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+ *************************************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -18,13 +24,24 @@ namespace Inworld.Interactions
         protected List<Interaction> m_History = new List<Interaction>();
         protected Interaction m_CurrentInteraction;
         protected Utterance m_CurrentUtterance;
-        
+        public event Action<List<InworldPacket>> OnInteractionChanged;
+        public event Action<bool> OnStartStopInteraction;
+        /// <summary>
+        /// Gets the length of the playing audio.
+        /// </summary>
         public float AudioLength { get; set; }
+        /// <summary>
+        /// Gets/Sets if this character's message is interruptable.
+        /// </summary>
         public bool Interruptable
         {
             get => m_Interruptable;
             set => m_Interruptable = value;
         }
+        /// <summary>
+        /// Gets/Sets if this character is speaking.
+        /// If set, will trigger the event OnStartStopInteraction.
+        /// </summary>
         public bool IsSpeaking
         {
             get => m_IsSpeaking;
@@ -36,15 +53,44 @@ namespace Inworld.Interactions
                 OnStartStopInteraction?.Invoke(m_IsSpeaking);
             }
         }
+        /// <summary>
+        /// Gets/Sets the live session ID of the character.
+        /// </summary>
         public string LiveSessionID { get; set; }
+        /// <summary>
+        /// Gets the history items of the utterances.
+        /// </summary>
         public Queue<Utterance> UtteranceQueue { get; } = new Queue<Utterance>();
-        public event Action<List<InworldPacket>> OnInteractionChanged;
-        public event Action<bool> OnStartStopInteraction;
+        /// <summary>
+        /// Gets an interaction by its ID.
+        /// </summary>
+        /// <param name="interactionID">the target interaction's ID</param>
+        /// <returns></returns>
         public Interaction FindInteraction(string interactionID) => m_History.FirstOrDefault(i => i.InteractionID == interactionID);
-
+        /// <summary>
+        /// If the target packet is sent or received by this character.
+        /// </summary>
+        /// <param name="packet">the target packet.</param>
         public bool IsRelated(InworldPacket packet) => !string.IsNullOrEmpty(LiveSessionID) 
             && (packet.routing.source.name == LiveSessionID || packet.routing.target.name == LiveSessionID);
-        
+        /// <summary>
+        /// Interrupt this character by cancelling its incoming sentences.
+        /// </summary>
+        public virtual void CancelResponse()
+        {
+            if (string.IsNullOrEmpty(LiveSessionID) || m_CurrentInteraction == null || !Interruptable)
+                return;
+            
+            InworldController.Instance.SendCancelEvent(LiveSessionID, m_CurrentInteraction.InteractionID);
+
+            m_CurrentInteraction.Cancel();
+            while (UtteranceQueue.Count > 0 && UtteranceQueue.Peek().Interaction == m_CurrentInteraction)
+                UtteranceQueue.Dequeue();
+            
+            m_CurrentUtterance = null;
+            m_CurrentInteraction = null;
+            m_CurrentTime = 0;
+        }
         protected virtual void OnEnable()
         {
             InworldController.Client.OnPacketReceived += ReceivePacket;
@@ -64,7 +110,6 @@ namespace Inworld.Interactions
                 
             PlayNextUtterance();
         }
-
         protected void Dispatch(InworldPacket packet)
         {
             OnInteractionChanged?.Invoke
@@ -75,22 +120,6 @@ namespace Inworld.Interactions
                 }
             );
             packet.packetId.Status = PacketStatus.PROCESSED;
-        }
-
-        public virtual void CancelResponse()
-        {
-            if (string.IsNullOrEmpty(LiveSessionID) || m_CurrentInteraction == null || !Interruptable)
-                return;
-            
-            InworldController.Instance.SendCancelEvent(LiveSessionID, m_CurrentInteraction.InteractionID);
-
-            m_CurrentInteraction.Cancel();
-            while (UtteranceQueue.Count > 0 && UtteranceQueue.Peek().Interaction == m_CurrentInteraction)
-                UtteranceQueue.Dequeue();
-            
-            m_CurrentUtterance = null;
-            m_CurrentInteraction = null;
-            m_CurrentTime = 0;
         }
         protected virtual void PlayNextUtterance()
         {

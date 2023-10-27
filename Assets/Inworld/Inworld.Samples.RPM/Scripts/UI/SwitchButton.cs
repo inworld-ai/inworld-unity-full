@@ -15,6 +15,10 @@ namespace Inworld.Runtime.RPM
         [SerializeField] Sprite m_OffSprite;
         [SerializeField] Image m_Image;
         
+        /// <summary>
+        /// Switch the sprite based on this toggle's status. 
+        /// </summary>
+        /// <param name="isOn"></param>
         public void CheckBackground(bool isOn)
         {
             m_Image.sprite = isOn ? m_OnSprite : m_OffSprite;

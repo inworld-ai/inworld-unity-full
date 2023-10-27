@@ -1,4 +1,10 @@
-﻿#if UNITY_EDITOR
+﻿/*************************************************************************************************
+ * Copyright 2022 Theai, Inc. (DBA Inworld)
+ *
+ * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+ * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+ *************************************************************************************************/
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,16 +29,25 @@ namespace Inworld.AI.Editor
         bool m_DisplayDataMissing = false;
         bool m_StartDownload = false;
 
+        /// <summary>
+        /// Triggers when open editor window.
+        /// </summary>
         public void OnOpenWindow()
         {
             
         }
+        /// <summary>
+        /// Triggers when drawing the title of the editor panel page.
+        /// </summary>
         public void DrawTitle()
         {
             EditorGUILayout.Space();
             EditorGUILayout.LabelField($"Welcome, {InworldAI.User.Name}", InworldEditor.Instance.TitleStyle);
             EditorGUILayout.Space();
         }
+        /// <summary>
+        /// Triggers when drawing the content of the editor panel page.
+        /// </summary>
         public void DrawContent()
         {
             _DrawWorkspaceDropDown();
@@ -41,6 +56,9 @@ namespace Inworld.AI.Editor
             if (m_DisplayDataMissing)
                 EditorGUILayout.LabelField(k_DataMissing, InworldEditor.Instance.TitleStyle);
         }
+        /// <summary>
+        /// Triggers when drawing the buttons at the bottom of the editor panel page.
+        /// </summary>
         public void DrawButtons()
         {
             GUILayout.FlexibleSpace();
@@ -67,11 +85,16 @@ namespace Inworld.AI.Editor
             }
             GUILayout.EndHorizontal();
         }
-
+        /// <summary>
+        /// Triggers when this state exits.
+        /// </summary>
         public void OnExit()
         {
             
         }
+        /// <summary>
+        /// Triggers when this state enters.
+        /// </summary>
         public void OnEnter()
         {
             m_DisplayDataMissing = false;
@@ -88,6 +111,9 @@ namespace Inworld.AI.Editor
             InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
             return ws?.scenes.FirstOrDefault(scene => scene.displayName == m_CurrentScene);
         }
+        /// <summary>
+        /// Triggers when other general update logic has been finished.
+        /// </summary>
         public void PostUpdate()
         {
             if (!m_StartDownload)
@@ -100,7 +126,6 @@ namespace Inworld.AI.Editor
             {
                 InworldEditor.Instance.Status = EditorStatus.SelectCharacter;
             }
-                
         }
 
         void _SaveCurrentSettings()

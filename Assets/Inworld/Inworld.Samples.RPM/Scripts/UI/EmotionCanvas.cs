@@ -24,6 +24,9 @@ namespace Inworld.Sample.RPM
 
         string m_CurrentSpaff = "";
         string m_LastSpaff = "";
+        /// <summary>
+        /// Get the current spaffcode of emotion.
+        /// </summary>
         public string Emotion
         {
             get => m_CurrentSpaff;
@@ -32,6 +35,60 @@ namespace Inworld.Sample.RPM
                 m_LastSpaff = m_CurrentSpaff;
                 m_CurrentSpaff = value;
             }
+        }
+        /// <summary>
+        /// Set the current emotion of the animator.
+        /// </summary>
+        /// <param name="emotion">the enum of the emotion to send.</param>
+        public void SendEmotion(int emotion)
+        {
+            if (!m_CharacterHandler.CurrentCharacter || !m_Animator)
+                return;
+            m_Animator.SetInteger(s_Emotion, emotion);
+            m_Title.text = $"Set Emotion {(Emotion)emotion}";
+        }
+        /// <summary>
+        /// Set the current gesture of the animator.
+        /// </summary>
+        /// <param name="gesture">the enum of the gesture to send.</param>
+        public void SendGesture(int gesture)
+        {
+            if (!m_CharacterHandler.CurrentCharacter || !m_Animator)
+                return;
+            m_Animator.SetInteger(s_Gesture, gesture);
+            m_Title.text = $"Set Gesture {(Gesture)gesture}";
+        }
+        /// <summary>
+        /// Set the main status of the animator.
+        /// </summary>
+        /// <param name="mainStatus">the enum of the main status to send.</param>
+        public void SetMainStatus(int mainStatus)
+        {
+            if (!m_CharacterHandler.CurrentCharacter || !m_Animator)
+                return;
+            m_Animator.SetInteger(s_Motion, mainStatus);
+            m_Title.text = $"Set Main {(AnimMainStatus)mainStatus}";
+        }
+        /// <summary>
+        /// Create a mock emotion events (similar data from server) and test its behavior.
+        /// </summary>
+        /// <param name="nSpaffCode">the spaffcode of the emotion.</param>
+        public void MockServerEmoEvents(int nSpaffCode)
+        {
+            if (!m_CharacterHandler.CurrentCharacter)
+            {
+                InworldAI.LogError("Please wait until character initialized!");
+                return;
+            }
+            EmotionPacket evt = new EmotionPacket
+            {
+                routing = new Routing(m_CharacterHandler.CurrentCharacter.ID),
+                emotion = new EmotionEvent
+                {
+                    behavior = m_EmotionMap.data[nSpaffCode].name
+                }
+            };
+            InworldController.Instance.CharacterInteract(evt);
         }
         string _ServerState
         {
@@ -118,44 +175,6 @@ namespace Inworld.Sample.RPM
                 m_ServerEventDropDown.value = i;
                 break;
             }
-        }
-        public void SendEmotion(int emotion)
-        {
-            if (!m_CharacterHandler.CurrentCharacter || !m_Animator)
-                return;
-            m_Animator.SetInteger(s_Emotion, emotion);
-            m_Title.text = $"Set Emotion {(Emotion)emotion}";
-        }
-        public void SendGesture(int gesture)
-        {
-            if (!m_CharacterHandler.CurrentCharacter || !m_Animator)
-                return;
-            m_Animator.SetInteger(s_Gesture, gesture);
-            m_Title.text = $"Set Gesture {(Gesture)gesture}";
-        }
-        public void SetMainStatus(int mainStatus)
-        {
-            if (!m_CharacterHandler.CurrentCharacter || !m_Animator)
-                return;
-            m_Animator.SetInteger(s_Motion, mainStatus);
-            m_Title.text = $"Set Main {(AnimMainStatus)mainStatus}";
-        }
-        public void MockServerEmoEvents(int nSpaffCode)
-        {
-            if (!m_CharacterHandler.CurrentCharacter)
-            {
-                InworldAI.LogError("Please wait until character initialized!");
-                return;
-            }
-            EmotionPacket evt = new EmotionPacket
-            {
-                routing = new Routing(m_CharacterHandler.CurrentCharacter.ID),
-                emotion = new EmotionEvent
-                {
-                    behavior = m_EmotionMap.data[nSpaffCode].name
-                }
-            };
-            InworldController.Instance.CharacterInteract(evt);
         }
     }
 }

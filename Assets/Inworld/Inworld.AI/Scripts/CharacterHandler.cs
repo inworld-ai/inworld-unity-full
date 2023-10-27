@@ -1,3 +1,9 @@
+/*************************************************************************************************
+ * Copyright 2022 Theai, Inc. (DBA Inworld)
+ *
+ * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+ * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+ *************************************************************************************************/
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,6 +28,10 @@ namespace Inworld
         //      And Call RegisterLiveSession if outdated.
         protected readonly Dictionary<string, InworldCharacterData> m_Characters = new Dictionary<string, InworldCharacterData>();
 
+        /// <summary>
+        /// Gets/Sets the current interacting character.
+        /// If set, it'll also start audio sampling if `ManualAudioHandling` is false, and invoke the event OnCharacterChanged
+        /// </summary>
         public InworldCharacter CurrentCharacter
         {
             get => m_CurrentCharacter;
@@ -39,6 +49,10 @@ namespace Inworld
                 OnCharacterChanged?.Invoke(m_LastCharacter, m_CurrentCharacter);
             }
         }
+        /// <summary>
+        /// If it's false, AudioCapture of the InworldController will automatically start recording player's voice when at least a character is selected.
+        /// Otherwise, developers need to manually call `InworldController.Instance.StartAudio()` to start microphone.
+        /// </summary>
         public bool ManualAudioHandling
         {
             get => m_ManualAudioHandling;
@@ -53,8 +67,28 @@ namespace Inworld
                     _StartAudio();
             }
         }
+        /// <summary>
+        /// Check if a character is registered.
+        /// </summary>
+        /// <param name="characterID">The live session ID of the Inworld character.</param>
         public bool IsRegistered(string characterID) => !string.IsNullOrEmpty(characterID) && m_LiveSession.ContainsValue(characterID);
-        
+        /// <summary>
+        /// Get the live session ID for an Inworld character.
+        /// </summary>
+        /// <param name="character">The request Inworld character.</param>
+        public string GetLiveSessionID(InworldCharacter character)
+        {
+            if (!character || string.IsNullOrEmpty(character.BrainName))
+                return null;
+            // ReSharper disable once CanSimplifyDictionaryLookupWithTryAdd
+            if (!m_Characters.ContainsKey(character.BrainName))
+                m_Characters[character.BrainName] = character.Data;
+            return m_LiveSession[character.BrainName];
+        }
+        /// <summary>
+        /// Get the InworldCharacterData by character's live session ID.
+        /// </summary>
+        /// <param name="agentID">the request character's live session ID.</param>
         public InworldCharacterData GetCharacterDataByID(string agentID)
         {
             if (!m_LiveSession.ContainsValue(agentID))
@@ -104,16 +138,6 @@ namespace Inworld
             {
                 InworldAI.LogWarning($"Audio failed to stop: {e}");
             }
-        }
-
-        public string GetLiveSessionID(InworldCharacter character)
-        {
-            if (!character || string.IsNullOrEmpty(character.BrainName))
-                return null;
-            // ReSharper disable once CanSimplifyDictionaryLookupWithTryAdd
-            if (!m_Characters.ContainsKey(character.BrainName))
-                m_Characters[character.BrainName] = character.Data;
-            return m_LiveSession[character.BrainName];
         }
         IEnumerator UpdateThumbnail(InworldCharacterData agent)
         {

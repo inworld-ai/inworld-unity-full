@@ -1,9 +1,18 @@
+/*************************************************************************************************
+ * Copyright 2022 Theai, Inc. (DBA Inworld)
+ *
+ * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+ * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+ *************************************************************************************************/
 using AOT;
-using System;
 using System.Runtime.InteropServices;
-using UnityEngine;
+
 namespace Inworld.NDK
 {
+    /// <summary>
+    /// This static class stores all the callback function.
+    /// Because we're receiving data from dll, they have to be static as well.
+    /// </summary>
     public static class InworldNDKCallBack
     {
         static ProcessingAudioChunk s_ProcessingAudioChunk = new ProcessingAudioChunk();

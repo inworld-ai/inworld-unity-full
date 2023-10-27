@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*************************************************************************************************
+ * Copyright 2022 Theai, Inc. (DBA Inworld)
+ *
+ * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+ * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+ *************************************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -20,8 +26,6 @@ namespace Inworld.Sample.Innequin
     public class FaceTransformData : ScriptableObject
     {
         public List<FaceTransform> data;
-
         public FaceTransform this[string facialName] => data.FirstOrDefault(f => f.name == facialName);
-
     }
 }

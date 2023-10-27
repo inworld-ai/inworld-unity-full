@@ -1,3 +1,9 @@
+/*************************************************************************************************
+ * Copyright 2022 Theai, Inc. (DBA Inworld)
+ *
+ * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+ * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+ *************************************************************************************************/
 using Inworld.Assets;
 using Inworld.Packet;
 using System.Collections;
@@ -45,16 +51,25 @@ namespace Inworld.Sample.RPM
         public InworldCharacter Character { get; set; }
         #endregion
         
+        /// <summary>
+        /// Initialize the component, including finding the first index of the viseme of the character. 
+        /// </summary>
+        public void Init()
+        {
+            Character ??= GetComponent<InworldCharacter>();
+            m_Skin ??= Character.GetComponentInChildren<SkinnedMeshRenderer>();
+            m_VisemeMap ??= new ConcurrentQueue<Vector2>();
+            m_VisemeMap.Clear();
+            _MappingBlendShape();
+        }
         void Awake()
         {
             Init();
         }
-        
         protected virtual void OnEnable()
         {
             InworldController.Instance.OnCharacterInteraction += OnInteractionChanged;
         }
-
         protected virtual void OnDisable()
         {
             if (InworldController.Instance)
@@ -66,16 +81,6 @@ namespace Inworld.Sample.RPM
             _BlinkEyes();
             _MorphLipsync();
         }
-        
-        public void Init()
-        {
-            Character ??= GetComponent<InworldCharacter>();
-            m_Skin ??= Character.GetComponentInChildren<SkinnedMeshRenderer>();
-            m_VisemeMap ??= new ConcurrentQueue<Vector2>();
-            m_VisemeMap.Clear();
-            _MappingBlendShape();
-        }
-        
         bool _MappingBlendShape()
         {
             if (!m_Skin)
@@ -188,9 +193,9 @@ namespace Inworld.Sample.RPM
         protected void HandleLipSync(AudioPacket audioPacket)
         {
             _Reset();
-            if (audioPacket.dataChunk == null || audioPacket.dataChunk.additionalPhonemeInfo == null)
+            if (audioPacket.dataChunk?.additionalPhonemeInfo == null)
                 return;
-            foreach (var phoneme in audioPacket.dataChunk.additionalPhonemeInfo)
+            foreach (PhonemeInfo phoneme in audioPacket.dataChunk.additionalPhonemeInfo)
             {
                 PhonemeToViseme p2vRes = m_LipsyncMap.p2vMap.FirstOrDefault(p2v => p2v.phoneme == phoneme.phoneme);
                 int visemeIndex = p2vRes?.visemeIndex ?? -1;
@@ -205,13 +210,12 @@ namespace Inworld.Sample.RPM
         void _ProcessEmotion(string emotion)
         {
             FacialAnimation targetEmo = m_FacialEmotion.emotions.FirstOrDefault(emo => emo.emotion.ToUpper() == emotion);
-            if (targetEmo != null && m_CurrentFacial != targetEmo)
-            {
-                _ResetLastEmo(m_LastFacial);
-                m_LastFacial = m_CurrentFacial;
-                m_CurrentFacial = targetEmo;
-                StartCoroutine(_MorphEmotion());
-            }
+            if (targetEmo == null || m_CurrentFacial == targetEmo)
+                return;
+            _ResetLastEmo(m_LastFacial);
+            m_LastFacial = m_CurrentFacial;
+            m_CurrentFacial = targetEmo;
+            StartCoroutine(_MorphEmotion());
         }
         void _ResetLastEmo(FacialAnimation emo)
         {

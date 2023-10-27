@@ -1,3 +1,10 @@
+/*************************************************************************************************
+ * Copyright 2022 Theai, Inc. (DBA Inworld)
+ *
+ * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+ * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+ *************************************************************************************************/
+
 using Inworld;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,37 +21,14 @@ public class AudioCaptureTest : AudioCapture
     [SerializeField] Button m_Button;
     [SerializeField] Sprite m_MicOn;
     [SerializeField] Sprite m_MicOff;
-    // Start is called before the first frame update
-    protected override void Awake()
-    {
-        base.Awake();
-        _InitUI();
-    }
-    protected override void OnEnable()
-    {
-        
-    }
-    void _InitUI()
-    {
-        string[] devices = Microphone.devices;
-        m_Dropdown.options ??= new List<TMP_Dropdown.OptionData>();
-        m_Dropdown.options.Clear();
-        m_Dropdown.options.Add(new TMP_Dropdown.OptionData("--- CHOOSE YOUR DEVICE ---"));
-        foreach (string device in devices)
-        {
-            m_Dropdown.options.Add(new TMP_Dropdown.OptionData(device));
-        }
-    }
-    protected override void Update()
-    {
-        if (!IsCapturing)
-            return;
-        if (!Microphone.IsRecording(m_DeviceName))
-            StartRecording();
-        Collect();
-    }
+    
+    /// <summary>
+    /// Change the current input device from the selection of drop down field.
+    /// </summary>
+    /// <param name="nIndex">the index of the audio input devices.</param>
     public void UpdateAudioInput(int nIndex)
     {
+#if !UNITY_WEBGL
         int nDeviceIndex = nIndex - 1;
         if (nDeviceIndex < 0)
         {
@@ -55,13 +39,11 @@ public class AudioCaptureTest : AudioCapture
         StartRecording();
         m_Button.interactable = true;
         m_Button.image.sprite = m_MicOff;
+#endif
     }
-    protected override void Collect()
-    {
-        int nSize = GetAudioData();
-        m_Volume.fillAmount = m_InputBuffer.Max() * 5f;
-    }
-
+    /// <summary>
+    /// Mute/Unmute microphone.
+    /// </summary>
     public void SwitchMicrophone()
     {
         if (!m_Button.interactable)
@@ -76,5 +58,43 @@ public class AudioCaptureTest : AudioCapture
             StartRecording();
             m_Button.image.sprite = m_MicOff;
         }
+    }
+    protected override void Awake()
+    {
+        base.Awake();
+        _InitUI();
+    }
+    protected override void OnEnable()
+    {
+        
+    }
+    void _InitUI()
+    {
+#if !UNITY_WEBGL
+        string[] devices = Microphone.devices;
+        m_Dropdown.options ??= new List<TMP_Dropdown.OptionData>();
+        m_Dropdown.options.Clear();
+        m_Dropdown.options.Add(new TMP_Dropdown.OptionData("--- CHOOSE YOUR DEVICE ---"));
+        foreach (string device in devices)
+        {
+            m_Dropdown.options.Add(new TMP_Dropdown.OptionData(device));
+        }
+#endif
+    }
+    
+#if !UNITY_WEBGL
+    protected new void Update()
+    {
+        if (!IsCapturing)
+            return;
+        if (!Microphone.IsRecording(m_DeviceName))
+            StartRecording();
+        Collect();
+    }
+#endif
+    protected override void Collect()
+    {
+        int nSize = GetAudioData();
+        m_Volume.fillAmount = m_InputBuffer.Max() * 5f;
     }
 }
