@@ -39,7 +39,6 @@ namespace Inworld.NDK
                 Interruptions  = capabilities.interruptions,
                 Triggers  = capabilities.triggers,
                 PhonemeInfo = capabilities.text,
-                TurnBasedSTT  = capabilities.turnBasedStt,
                 NarratedActions = capabilities.narratedActions,
                 Relations = capabilities.relations
             };

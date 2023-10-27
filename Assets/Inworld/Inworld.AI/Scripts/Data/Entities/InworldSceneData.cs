@@ -29,7 +29,7 @@ namespace Inworld
     }
     
     [Serializable]
-    public class LoadSceneRequest // TODO(Yan): Rename all to requests.
+    public class LoadSceneRequest 
     {
         public Client client;
         public UserRequest user;

@@ -15,10 +15,8 @@ namespace Inworld
         public bool emotions;
         public bool interruptions;
         public bool narratedActions;
-        public bool silence;
         public bool text;
         public bool triggers;
-        public bool turnBasedStt;
         public bool phonemeInfo;
         public bool relations;
         public bool debugInfo;
@@ -30,10 +28,8 @@ namespace Inworld
             emotions = rhs.emotions;
             interruptions = rhs.interruptions;
             narratedActions = rhs.narratedActions;
-            silence = rhs.silence;
             text = rhs.text;
             triggers = rhs.triggers;
-            turnBasedStt = rhs.turnBasedStt;
             phonemeInfo = rhs.phonemeInfo;
             relations = rhs.relations;
             debugInfo = rhs.debugInfo;
@@ -44,10 +40,8 @@ namespace Inworld
             emotions = rhs.emotions;
             interruptions = rhs.interruptions;
             narratedActions = rhs.narratedActions;
-            silence = rhs.silence;
             text = rhs.text;
             triggers = rhs.triggers;
-            turnBasedStt = rhs.turnBasedStt;
             phonemeInfo = rhs.phonemeInfo;
             relations = rhs.relations;
             debugInfo = rhs.debugInfo;
