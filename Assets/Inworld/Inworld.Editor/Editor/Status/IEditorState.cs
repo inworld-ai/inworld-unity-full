@@ -7,14 +7,38 @@
 #if UNITY_EDITOR
 namespace Inworld.AI.Editor
 {
+    /// <summary>
+    /// The state interface used for multiple editor pages.
+    /// </summary>
     public interface IEditorState
     {
+        /// <summary>
+        /// Triggers when open editor window.
+        /// </summary>
         public void OnOpenWindow();
+        /// <summary>
+        /// Triggers when drawing the title of the editor panel page.
+        /// </summary>
         public void DrawTitle();
+        /// <summary>
+        /// Triggers when drawing the content of the editor panel page.
+        /// </summary>
         public void DrawContent();
+        /// <summary>
+        /// Triggers when drawing the buttons at the bottom of the editor panel page.
+        /// </summary>
         public void DrawButtons();
+        /// <summary>
+        /// Triggers when this state exits.
+        /// </summary>
         public void OnExit();
+        /// <summary>
+        /// Triggers when this state enters.
+        /// </summary>
         public void OnEnter();
+        /// <summary>
+        /// Triggers when other general update logic has been finished.
+        /// </summary>
         public void PostUpdate();
 
     }

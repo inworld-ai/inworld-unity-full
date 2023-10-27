@@ -20,9 +20,13 @@ namespace Inworld.Interactions
         AudioSource m_PlaybackSource;
         float m_LastSampleTime;
         float m_CurrentSampleTime;
-
+        /// <summary>
+        /// Gets this character's audio source
+        /// </summary>
         public AudioSource PlaybackSource => m_PlaybackSource;
-        
+        /// <summary>
+        /// Mute/Unmute this character.
+        /// </summary>
         public bool IsMute
         {
             get
@@ -34,6 +38,25 @@ namespace Inworld.Interactions
                 if (m_PlaybackSource)
                     m_PlaybackSource.mute = value;
             }
+        }
+        /// <summary>
+        /// Interrupt this character by cancelling its incoming responses.
+        /// </summary>
+        public override void CancelResponse()
+        {
+            base.CancelResponse();
+            if(Interruptable)
+                m_PlaybackSource.Stop();
+        }
+        /// <summary>
+        /// Gets this current characters audio.
+        /// Used in the mixer to calculate the environment noise.
+        /// </summary>
+        public short[] GetCurrentAudioFragment()
+        {
+            m_LastSampleTime = m_CurrentSampleTime;
+            m_CurrentSampleTime = m_PlaybackSource.time;
+            return ExtractAudioSegment(m_PlaybackSource.clip, m_LastSampleTime, m_CurrentSampleTime);
         }
 
         void Awake()
@@ -145,24 +168,9 @@ namespace Inworld.Interactions
             originalClip.GetData(originalData, 0);
 
             float[] extractedData = new float[sampleLength * originalClip.channels];
-            System.Array.Copy(originalData, startSample * originalClip.channels, extractedData, 0, sampleLength * originalClip.channels);
+            Array.Copy(originalData, startSample * originalClip.channels, extractedData, 0, sampleLength * originalClip.channels);
 
             return WavUtility.ConvertAudioClipDataToInt16Array(extractedData, extractedData.Length);
         }
-        
-        public override void CancelResponse()
-        {
-            base.CancelResponse();
-            if(Interruptable)
-                m_PlaybackSource.Stop();
-        }
-        
-        public short[] GetCurrentAudioFragment()
-        {
-            m_LastSampleTime = m_CurrentSampleTime;
-            m_CurrentSampleTime = m_PlaybackSource.time;
-            return ExtractAudioSegment(m_PlaybackSource.clip, m_LastSampleTime, m_CurrentSampleTime);
-        }
-        
     }
 }

@@ -30,20 +30,14 @@ namespace Inworld.Sample.RPM
         bool m_HasInit;
         readonly Queue<float> m_LagQueue = new Queue<float>(12);
 
+        /// <summary>
+        /// Get if this canvas allows user to control the audio options.
+        /// </summary>
         public bool EnableCtrl => m_PlayPause && m_SwitchMic && m_Speaker;
-        protected override void Awake()
-        {
-            base.Awake();
-            if (string.IsNullOrEmpty(ipv4))
-                ipv4 = Dns.GetHostAddresses(InworldController.Client.Server.web)[0].ToString();
-            _SwitchToggles(true, true);
-        }
-        protected override void Start()
-        {
-            base.Start();
-            StartCoroutine(_PingInworld());
-        }
         
+        /// <summary>
+        /// Pause/Continue the current live session.
+        /// </summary>
         public void PlayPause()
         {
             if (m_PlayPause.isOn)
@@ -56,19 +50,38 @@ namespace Inworld.Sample.RPM
             else
                 InworldController.Instance.Disconnect();
         }
+        
+        /// <summary>
+        /// Mute/Unmute the microphone.
+        /// </summary>
         public void MicrophoneControl()
         {
             if (!m_SwitchMic)
                 return;
             InworldController.Audio.IsBlocked = !m_SwitchMic.isOn;
         }
+        
+        /// <summary>
+        /// Mute/Unmute the speaker.
+        /// </summary>
         public void SwitchVolume()
         {
             if (!m_Speaker || !m_Interaction)
                 return;
             m_Interaction.IsMute = !m_Speaker.isOn;
         }
-
+        protected override void Awake()
+        {
+            base.Awake();
+            if (string.IsNullOrEmpty(ipv4))
+                ipv4 = Dns.GetHostAddresses(InworldController.Client.Server.web)[0].ToString();
+            _SwitchToggles(true, true);
+        }
+        protected override void Start()
+        {
+            base.Start();
+            StartCoroutine(_PingInworld());
+        }
         protected override void OnStatusChanged(InworldConnectionStatus incomingStatus)
         {
             base.OnStatusChanged(incomingStatus);

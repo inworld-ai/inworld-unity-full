@@ -16,6 +16,10 @@ namespace Inworld.AI.Editor
     {
         bool m_StartDownload = false;
         Vector2 m_ScrollPosition;
+        
+        /// <summary>
+        /// Triggers when open editor window.
+        /// </summary>
         public void OnOpenWindow()
         {
             if (!InworldController.Instance || !InworldController.Instance.GameData)
@@ -23,6 +27,9 @@ namespace Inworld.AI.Editor
                 InworldEditor.Instance.Status = EditorStatus.SelectGameData; // YAN: Fall back.
             }
         }
+        /// <summary>
+        /// Triggers when drawing the title of the editor panel page.
+        /// </summary>
         public void DrawTitle()
         {
             EditorGUILayout.Space();
@@ -35,6 +42,9 @@ namespace Inworld.AI.Editor
             }
             EditorGUILayout.Space();
         }
+        /// <summary>
+        /// Triggers when drawing the content of the editor panel page.
+        /// </summary>
         public void DrawContent()
         {
             if (!InworldEditor.Is3D || !InworldController.Instance || !InworldController.Instance.GameData)
@@ -58,6 +68,9 @@ namespace Inworld.AI.Editor
                     Object.Instantiate(InworldEditor.PlayerController);
             }
         }
+        /// <summary>
+        /// Triggers when drawing the buttons at the bottom of the editor panel page.
+        /// </summary>
         public void DrawButtons()
         {
             GUILayout.FlexibleSpace();
@@ -72,16 +85,25 @@ namespace Inworld.AI.Editor
             }
             GUILayout.EndHorizontal();
         }
+        /// <summary>
+        /// Triggers when this state exits.
+        /// </summary>
         public void OnExit()
         {
             
-        }
+        }       
+        /// <summary>
+        /// Triggers when this state enters.
+        /// </summary>
         public void OnEnter()
         {
             m_StartDownload = false;
             EditorUtility.ClearProgressBar();
             _CreatePrefabVariants();
         }
+        /// <summary>
+        /// Triggers when other general update logic has been finished.
+        /// </summary>
         public void PostUpdate()
         {
             if (!m_StartDownload || !InworldController.Instance.GameData)

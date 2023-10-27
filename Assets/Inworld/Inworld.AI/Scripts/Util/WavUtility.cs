@@ -13,9 +13,10 @@ namespace Inworld
 {
     public class WavUtility
     {
-        const int BlockSize_16Bit = 2;
-        const int k_SizeofInt16 = 2;
-
+        /// <summary>
+        /// Gets the wave file from Unity's Resource folder.
+        /// </summary>
+        /// <param name="filePath">the file path to load the wave data</param>
         public static AudioClip ToAudioClip(string filePath)
         {
             if (filePath.StartsWith(Application.persistentDataPath) || filePath.StartsWith(Application.dataPath))
@@ -23,7 +24,12 @@ namespace Inworld
             Debug.LogWarning("This only supports files that are stored using Unity's Application data path. \nTo load bundled resources use 'Resources.Load(\"filename\") typeof(AudioClip)' method. \nhttps://docs.unity3d.com/ScriptReference/Resources.Load.html");
             return null;
         }
-
+        /// <summary>
+        /// Generate the Audio clip by byte array.
+        /// </summary>
+        /// <param name="fileBytes">the date to convert.</param>
+        /// <param name="offsetSamples">the offset of the audio.</param>
+        /// <param name="name">the name of the wav file.</param>
         public static AudioClip ToAudioClip(byte[] fileBytes, int offsetSamples = 0, string name = "wav")
         {
             int int32_1 = BitConverter.ToInt32(fileBytes, 16);
@@ -54,10 +60,17 @@ namespace Inworld
                     throw new Exception(uint16_3 + " bit depth is not supported.");
             }
             AudioClip audioClip = AudioClip.Create(name, audioClipData.Length, uint16_2, int32_2, false);
-            audioClip.SetData(audioClipData, 0);
+            audioClip.SetData(audioClipData, offsetSamples);
             return audioClip;
         }
 
+        /// <summary>
+        /// Convert the audio clip float data to int16 array then convert to byte array.
+        /// Short array is the data format we use in the Inworld server.
+        /// </summary>
+        /// <param name="input">the audio clip data.</param>
+        /// <param name="size">the size of the wave data.</param>
+        /// <param name="output">the short array.</param>
         public static void ConvertAudioClipDataToInt16ByteArray
         (
             IReadOnlyList<float> input,
@@ -70,6 +83,13 @@ namespace Inworld
                 memoryStream.Write(BitConverter.GetBytes(Convert.ToInt16(input[index] * short.MaxValue)), 0, 2);
             memoryStream.Dispose();
         }
+        /// <summary>
+        /// Convert the audio clip float data to int array.
+        /// Still keep the API but Inworld don't process int array.
+        /// </summary>
+        /// <param name="input">the audio clip data.</param>
+        /// <param name="size">the size of the wave data.</param>
+        /// <param name="output">the int32 array.</param>
         public static void ConvertAudioClipDataToInt32ByteArray
         (
             IReadOnlyList<float> input,
@@ -85,6 +105,13 @@ namespace Inworld
             }
             memoryStream.Dispose();
         }
+        /// <summary>
+        /// Convert the audio clip float data to short array.
+        /// Short array is the data format we use in the Inworld server.
+        /// </summary>
+        /// <param name="input">the audio clip data.</param>
+        /// <param name="size">the size of the wave data.</param>
+        /// <param name="output">the short array.</param>
         public static short[] ConvertAudioClipDataToInt16Array(IReadOnlyList<float> input, int size)
         {
             if (input == null || input.Count == 0)
@@ -96,6 +123,85 @@ namespace Inworld
                 output[index] = (short)(input[index] * short.MaxValue);
             }
             return output;
+        }
+        /// <summary>
+        /// Get the byte array of the wave data from AudioClip
+        /// </summary>
+        /// <param name="audioClip">the input audio clip</param>
+        public static byte[] FromAudioClip(AudioClip audioClip)
+        {
+            return FromAudioClip(audioClip, out string _, false);
+        }
+        /// <summary>
+        /// Get the byte array of the wave data from AudioClip
+        /// </summary>
+        /// <param name="audioClip">the input audio clip</param>
+        public static byte[] FromAudioClip
+        (
+            AudioClip audioClip,
+            out string filepath,
+            bool saveAsFile = true,
+            string dirname = "recordings"
+        )
+        {
+            MemoryStream stream = new MemoryStream();
+            ushort bitDepth = 16;
+            int fileSize = audioClip.samples * 2 + 44;
+            WriteFileHeader(ref stream, fileSize);
+            WriteFileFormat(ref stream, audioClip.channels, audioClip.frequency, bitDepth);
+            WriteFileData(ref stream, audioClip, bitDepth);
+            byte[] array = stream.ToArray();
+            Debug.AssertFormat((array.Length == fileSize ? 1 : 0) != 0, "Unexpected AudioClip to wav format byte count: {0} == {1}", array.Length, fileSize);
+            if (saveAsFile)
+            {
+                filepath = string.Format("{0}/{1}/{2}.{3}", Application.persistentDataPath, dirname, DateTime.UtcNow.ToString("yyMMdd-HHmmss-fff"), "wav");
+                Directory.CreateDirectory(Path.GetDirectoryName(filepath));
+                File.WriteAllBytes(filepath, array);
+            }
+            else
+                filepath = null;
+            stream.Dispose();
+            return array;
+        }
+        /// <summary>
+        /// Convert the float array to int16 array then convert to byte array.
+        /// Short array is the data format we use in the Inworld server.
+        /// </summary>
+        /// <param name="data">the float array of wave data.</param>
+        public static byte[] ConvertAudioClipDataToInt16ByteArray(float[] data)
+        {
+            MemoryStream memoryStream = new MemoryStream();
+            int count = 2;
+            short maxValue = short.MaxValue;
+            for (int index = 0; index < data.Length; ++index)
+                memoryStream.Write(BitConverter.GetBytes(Convert.ToInt16(data[index] * maxValue)), 0, count);
+            byte[] array = memoryStream.ToArray();
+            Debug.AssertFormat((data.Length * count == array.Length ? 1 : 0) != 0, "Unexpected float[] to Int16 to byte[] size: {0} == {1}", data.Length * count, array.Length);
+            memoryStream.Dispose();
+            return array;
+        }
+        /// <summary>
+        /// Get the bit depth of the audio clip
+        /// </summary>
+        /// <param name="audioClip">the target clip to sample.</param>
+        /// <returns></returns>
+        public static ushort BitDepth(AudioClip audioClip)
+        {
+            ushort uint16 = Convert.ToUInt16(audioClip.samples * audioClip.channels * audioClip.length / audioClip.frequency);
+            int num;
+            switch (uint16)
+            {
+                case 8:
+                case 16:
+                    num = 1;
+                    break;
+                default:
+                    num = uint16 == 32 ? 1 : 0;
+                    break;
+            }
+            object[] objArray = new object[1] {uint16};
+            Debug.AssertFormat(num != 0, "Unexpected AudioClip bit depth: {0}. Expected 8 or 16 or 32 bit.", objArray);
+            return uint16;
         }
         static float[] Convert8BitByteArrayToAudioClipData
         (
@@ -161,7 +267,6 @@ namespace Inworld
             Debug.AssertFormat((audioClipData.Length == length ? 1 : 0) != 0, "AudioClip .wav data is wrong size: {0} == {1}", audioClipData.Length, length);
             return audioClipData;
         }
-
         static float[] Convert32BitByteArrayToAudioClipData
         (
             byte[] source,
@@ -184,40 +289,6 @@ namespace Inworld
             Debug.AssertFormat((audioClipData.Length == length ? 1 : 0) != 0, "AudioClip .wav data is wrong size: {0} == {1}", audioClipData.Length, length);
             return audioClipData;
         }
-
-        public static byte[] FromAudioClip(AudioClip audioClip)
-        {
-            return FromAudioClip(audioClip, out string _, false);
-        }
-
-        public static byte[] FromAudioClip
-        (
-            AudioClip audioClip,
-            out string filepath,
-            bool saveAsFile = true,
-            string dirname = "recordings"
-        )
-        {
-            MemoryStream stream = new MemoryStream();
-            ushort bitDepth = 16;
-            int fileSize = audioClip.samples * 2 + 44;
-            WriteFileHeader(ref stream, fileSize);
-            WriteFileFormat(ref stream, audioClip.channels, audioClip.frequency, bitDepth);
-            WriteFileData(ref stream, audioClip, bitDepth);
-            byte[] array = stream.ToArray();
-            Debug.AssertFormat((array.Length == fileSize ? 1 : 0) != 0, "Unexpected AudioClip to wav format byte count: {0} == {1}", array.Length, fileSize);
-            if (saveAsFile)
-            {
-                filepath = string.Format("{0}/{1}/{2}.{3}", Application.persistentDataPath, dirname, DateTime.UtcNow.ToString("yyMMdd-HHmmss-fff"), "wav");
-                Directory.CreateDirectory(Path.GetDirectoryName(filepath));
-                File.WriteAllBytes(filepath, array);
-            }
-            else
-                filepath = null;
-            stream.Dispose();
-            return array;
-        }
-
         static int WriteFileHeader(ref MemoryStream stream, int fileSize)
         {
             int num1 = 0;
@@ -231,7 +302,6 @@ namespace Inworld
             Debug.AssertFormat((num6 == num2 ? 1 : 0) != 0, "Unexpected wav descriptor byte count: {0} == {1}", num6, num2);
             return num6;
         }
-
         static int WriteFileFormat
         (
             ref MemoryStream stream,
@@ -257,7 +327,6 @@ namespace Inworld
             Debug.AssertFormat((num11 == num2 ? 1 : 0) != 0, "Unexpected wav fmt byte count: {0} == {1}", num11, num2);
             return num11;
         }
-
         static int WriteFileData(ref MemoryStream stream, AudioClip audioClip, ushort bitDepth)
         {
             int num1 = 0;
@@ -274,51 +343,16 @@ namespace Inworld
             Debug.AssertFormat((int16ByteArray.Length == int32 ? 1 : 0) != 0, "Unexpected AudioClip to wav subchunk2 size: {0} == {1}", int16ByteArray.Length, int32);
             return num5;
         }
-
-        public static byte[] ConvertAudioClipDataToInt16ByteArray(float[] data)
-        {
-            MemoryStream memoryStream = new MemoryStream();
-            int count = 2;
-            short maxValue = short.MaxValue;
-            for (int index = 0; index < data.Length; ++index)
-                memoryStream.Write(BitConverter.GetBytes(Convert.ToInt16(data[index] * maxValue)), 0, count);
-            byte[] array = memoryStream.ToArray();
-            Debug.AssertFormat((data.Length * count == array.Length ? 1 : 0) != 0, "Unexpected float[] to Int16 to byte[] size: {0} == {1}", data.Length * count, array.Length);
-            memoryStream.Dispose();
-            return array;
-        }
-
         static int WriteBytesToMemoryStream(ref MemoryStream stream, byte[] bytes, string tag = "")
         {
             int length = bytes.Length;
             stream.Write(bytes, 0, length);
             return length;
         }
-
-        public static ushort BitDepth(AudioClip audioClip)
-        {
-            ushort uint16 = Convert.ToUInt16(audioClip.samples * audioClip.channels * audioClip.length / audioClip.frequency);
-            int num;
-            switch (uint16)
-            {
-                case 8:
-                case 16:
-                    num = 1;
-                    break;
-                default:
-                    num = uint16 == 32 ? 1 : 0;
-                    break;
-            }
-            object[] objArray = new object[1] {uint16};
-            Debug.AssertFormat(num != 0, "Unexpected AudioClip bit depth: {0}. Expected 8 or 16 or 32 bit.", objArray);
-            return uint16;
-        }
-
         static int BytesPerSample(ushort bitDepth)
         {
             return bitDepth / 8;
         }
-
         static int BlockSize(ushort bitDepth)
         {
             switch (bitDepth)
@@ -333,7 +367,6 @@ namespace Inworld
                     throw new Exception(bitDepth + " bit depth is not supported.");
             }
         }
-
         static string FormatCode(ushort code)
         {
             switch (code)

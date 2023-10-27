@@ -15,10 +15,17 @@ namespace Inworld.NDK
 {
     public class InworldNDKClient : InworldClient
     {
-        public List<AgentInfo> AgentList { get; } = new List<AgentInfo>();
         ConcurrentQueue<InworldPacket> m_IncomingQueue = new ConcurrentQueue<InworldPacket>();
 
         InworldConnectionStatus m_LastStatus, m_CurrentStatus;
+        
+        /// <summary>
+        /// Gets the Inworld character list.
+        /// </summary>
+        public List<AgentInfo> AgentList { get; } = new List<AgentInfo>();
+        /// <summary>
+        /// Gets the current client status.
+        /// </summary>
         public override InworldConnectionStatus Status
         {
             get => m_CurrentStatus;
@@ -28,26 +35,16 @@ namespace Inworld.NDK
                 m_CurrentStatus = value;
             }
         }
-
-        protected virtual void OnDisable() => NDKInterop.Unity_EndSession();
-        
-        void Update()
-        {
-            _ProcessStatusChange();
-            _ProcessPackage();
-        }
-        
-        protected virtual void OnDestroy() => NDKInterop.Unity_DestroyWrapper();
-        
-        protected override void Init()
-        {
-            InworldNDKAPI.Init();
-        }
+        /// <summary>
+        /// Disconnect with Inworld server via NDK.
+        /// </summary>
         public override void Disconnect()
         {
             NDKInterop.Unity_EndSession();
         }
-
+        /// <summary>
+        /// Get the access token. The returned token data is through call back. 
+        /// </summary>
         public override void GetAccessToken()
         {
             Status = InworldConnectionStatus.Initializing;
@@ -66,25 +63,27 @@ namespace Inworld.NDK
             }
             InworldNDKAPI.GetAccessToken(m_ServerConfig.RuntimeServer, m_APIKey, m_APISecret);
         }
+        /// <summary>
+        /// Send load scene request to Inworld server.
+        /// </summary>
+        /// <param name="sceneFullName">the full name of the Inworld scene to load.</param>
         public override void LoadScene(string sceneFullName) => InworldNDKAPI.LoadScene(sceneFullName);
 
+        /// <summary>
+        /// Gets the load scene response when load scene success is sent through call back.
+        /// </summary>
         public override LoadSceneResponse GetLiveSessionInfo() => InworldNDK.From.NDKLoadSceneResponse(AgentList);
         
+        /// <summary>
+        /// Starts the session. Should wait several frame to let NDK fully start.
+        /// </summary>
         public override void StartSession() => StartCoroutine(_StartSession());
 
-        protected IEnumerator _StartSession()
-        {
-            if (!IsTokenValid)
-                yield break;
-            yield return new WaitForEndOfFrame();
-            Status = InworldConnectionStatus.Connecting;
-            yield return new WaitForEndOfFrame();
-            NDKInterop.Unity_StartSession();
-            yield return new WaitForEndOfFrame();
-            Status = InworldConnectionStatus.Connected;
-            yield return new WaitForEndOfFrame();
-        }
-
+        /// <summary>
+        /// Send text to Inworld server. Will immediately generate a local packet.
+        /// </summary>
+        /// <param name="characterID">the live session ID of the character to send.</param>
+        /// <param name="textToSend">the message to send.</param>
         public override void SendText(string characterID, string textToSend)
         {
             if (string.IsNullOrEmpty(characterID) || string.IsNullOrEmpty(textToSend))
@@ -92,14 +91,25 @@ namespace Inworld.NDK
             Dispatch(InworldNDK.To.TextPacket(characterID, textToSend));
             NDKInterop.Unity_SendText(characterID, textToSend);
         }
-
+        
+        /// <summary>
+        /// Send the cancel response event to interrupt character.
+        /// </summary>
+        /// <param name="characterID">the live session ID of the character to send.</param>
+        /// <param name="interactionID">the ID of the incoming message from the character to cancel.</param>
         public override void SendCancelEvent(string characterID, string interactionID)
         {
             if (string.IsNullOrEmpty(characterID))
                 return;
             NDKInterop.Unity_CancelResponse(characterID, interactionID);
         }
-
+        
+        /// <summary>
+        /// Sen the trigger to the character.
+        /// </summary>
+        /// <param name="charID">the live session ID of the character to send.</param>
+        /// <param name="triggerName">the name of the trigger to send.</param>
+        /// <param name="parameters">the parameters and values of the trigger to send.</param>
         public override void SendTrigger(string charID, string triggerName, Dictionary<string, string> parameters)
         {
             if (string.IsNullOrEmpty(charID))
@@ -114,18 +124,34 @@ namespace Inworld.NDK
                 }
             }
         }
+        
+        /// <summary>
+        /// Send AUDIO_SESSION_START control event to let the character enable receiving packets.
+        /// </summary>
+        /// <param name="charID">the ID of the character to send.</param>
         public override void StartAudio(string charID)
         {
             if (string.IsNullOrEmpty(charID))
                 return;
             NDKInterop.Unity_StartAudio(charID);
         }
+        /// <summary>
+        /// Send AUDIO_SESSION_START control event to let the character disable receiving packets.
+        /// </summary>
+        /// <param name="charID">the ID of the character to send.</param>
         public override void StopAudio(string charID)
         {
             if (string.IsNullOrEmpty(charID))
                 return;
             NDKInterop.Unity_StopAudio(charID);
         }
+        
+        /// <summary>
+        /// Send base64 string of wavedata to the character.
+        /// The original wave data before transcoding to base64 should be short array (Int16)
+        /// </summary>
+        /// <param name="charID">the ID of the character to send.</param>
+        /// <param name="base64">the wave data to send.</param>
         public override void SendAudio(string charID, string base64)
         {
             if (string.IsNullOrEmpty(charID) || string.IsNullOrEmpty(base64))
@@ -133,6 +159,40 @@ namespace Inworld.NDK
             NDKInterop.Unity_SendAudio(charID, base64);
         }
         
+        /// <summary>
+        /// Put the received but not processed packet in queue.
+        /// </summary>
+        /// <param name="packet">the target packet to enqueue.</param>
+        public void Enqueue(InworldPacket packet)
+        {
+            m_IncomingQueue.Enqueue(packet);
+        }
+        protected virtual void OnDisable() => NDKInterop.Unity_EndSession();
+        
+        void Update()
+        {
+            _ProcessStatusChange();
+            _ProcessPackage();
+        }
+        
+        protected virtual void OnDestroy() => NDKInterop.Unity_DestroyWrapper();
+        
+        protected override void Init()
+        {
+            InworldNDKAPI.Init();
+        }
+        protected IEnumerator _StartSession()
+        {
+            if (!IsTokenValid)
+                yield break;
+            yield return new WaitForEndOfFrame();
+            Status = InworldConnectionStatus.Connecting;
+            yield return new WaitForEndOfFrame();
+            NDKInterop.Unity_StartSession();
+            yield return new WaitForEndOfFrame();
+            Status = InworldConnectionStatus.Connected;
+            yield return new WaitForEndOfFrame();
+        }
         void _ProcessStatusChange()
         {
             if (m_CurrentStatus == m_LastStatus)
@@ -146,10 +206,6 @@ namespace Inworld.NDK
                 return;
             if (m_IncomingQueue.TryDequeue(out InworldPacket packet))
                 Dispatch(packet);
-        }
-        public void Enqueue(InworldPacket packet)
-        {
-            m_IncomingQueue.Enqueue(packet);
         }
     }
 }

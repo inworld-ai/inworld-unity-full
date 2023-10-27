@@ -51,16 +51,25 @@ namespace Inworld.Sample.RPM
         public InworldCharacter Character { get; set; }
         #endregion
         
+        /// <summary>
+        /// Initialize the component, including finding the first index of the viseme of the character. 
+        /// </summary>
+        public void Init()
+        {
+            Character ??= GetComponent<InworldCharacter>();
+            m_Skin ??= Character.GetComponentInChildren<SkinnedMeshRenderer>();
+            m_VisemeMap ??= new ConcurrentQueue<Vector2>();
+            m_VisemeMap.Clear();
+            _MappingBlendShape();
+        }
         void Awake()
         {
             Init();
         }
-        
         protected virtual void OnEnable()
         {
             InworldController.Instance.OnCharacterInteraction += OnInteractionChanged;
         }
-
         protected virtual void OnDisable()
         {
             if (InworldController.Instance)
@@ -72,16 +81,6 @@ namespace Inworld.Sample.RPM
             _BlinkEyes();
             _MorphLipsync();
         }
-        
-        public void Init()
-        {
-            Character ??= GetComponent<InworldCharacter>();
-            m_Skin ??= Character.GetComponentInChildren<SkinnedMeshRenderer>();
-            m_VisemeMap ??= new ConcurrentQueue<Vector2>();
-            m_VisemeMap.Clear();
-            _MappingBlendShape();
-        }
-        
         bool _MappingBlendShape()
         {
             if (!m_Skin)

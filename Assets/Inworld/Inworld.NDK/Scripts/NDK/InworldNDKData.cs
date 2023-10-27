@@ -9,6 +9,10 @@ using System.Runtime.InteropServices;
 
 namespace Inworld.NDK 
 {
+    /// <summary>
+    /// This file stores all the NDK acceptable data.
+    /// All the Unity packet data need to serialize/deserialize to those data format first.
+    /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct Capabilities
     {

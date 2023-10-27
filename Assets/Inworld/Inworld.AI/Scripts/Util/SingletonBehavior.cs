@@ -11,6 +11,9 @@ namespace Inworld
     {
         static T __inst;
 
+        /// <summary>
+        /// Gets the instance of this singleton.
+        /// </summary>
         public static T Instance
         {
             get

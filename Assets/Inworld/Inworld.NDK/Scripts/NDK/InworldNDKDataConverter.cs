@@ -12,30 +12,28 @@ using System.Linq;
 
 namespace Inworld.NDK
 {
+    /// <summary>
+    /// This is the data converter class for converting Unity data to NDK acceptable data, or vise versa.
+    /// </summary>
     public static class InworldNDK
     {
         public static class From
         {
+            /// <summary>
+            /// Transform the load scene response from NDK's format to Unity.
+            /// </summary>
+            /// <param name="rhs">the list of the agent info (InworldCharacterData in Unity)</param>
+            /// <returns></returns>
             public static LoadSceneResponse NDKLoadSceneResponse(List<AgentInfo> rhs) => new LoadSceneResponse
             {
                 key = "",
                 agents = rhs.Select(_GenerateAgent).ToList()
             };
-
-            static InworldCharacterData _GenerateAgent(AgentInfo rhs) => new InworldCharacterData
-            {
-                agentId = rhs.AgentId,
-                brainName = rhs.BrainName,
-                givenName = rhs.GivenName,
-                characterAssets = new CharacterAssets
-                {
-                    rpmModelUri = rhs.RpmModelUri,
-                    rpmImageUriPortrait = rhs.RpmImageUriPortrait,
-                    rpmImageUriPosture = rhs.RpmImageUriPosture,
-                    avatarImg = rhs.AvatarImg,
-                    avatarImgOriginal = rhs.AvatarImgOriginal
-                }
-            };
+            /// <summary>
+            /// Convert access token from NDK to Unity.
+            /// </summary>
+            /// <param name="rhs"></param>
+            /// <returns></returns>
             public static Token NDKToken(SessionInfo rhs) => new Token
             {
                 sessionId = rhs.sessionId,
@@ -43,25 +41,10 @@ namespace Inworld.NDK
                 type = "Bearer",
                 expirationTime = DateTime.UtcNow.AddHours(1).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
             };
-            static Inworld.Packet.PacketId NDKPacketId(PacketId rhs) => new Inworld.Packet.PacketId()
-            {
-                packetId = rhs.uid,
-                interactionId = rhs.interactionID,
-                utteranceId = rhs.utteranceID,
-            };
-            static Inworld.Packet.Routing NDKRouting(Routing rhs) => new Inworld.Packet.Routing
-            {
-                source = new Source
-                {
-                    name = rhs.source,
-                    type = string.IsNullOrEmpty(rhs.source) ? "PLAYER" : "AGENT"
-                },
-                target = new Source
-                {
-                    name = rhs.target,
-                    type = string.IsNullOrEmpty(rhs.target) ? "PLAYER" : "AGENT"
-                }
-            };
+            /// <summary>
+            /// Convert text packet from NDK to Unity
+            /// </summary>
+            /// <param name="rhs">the text packet from NDK</param>
             public static Inworld.Packet.TextPacket NDKTextPacket(NDKPacket rhs) => new Inworld.Packet.TextPacket
             {
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
@@ -70,6 +53,11 @@ namespace Inworld.NDK
                 routing = NDKRouting(rhs.packetInfo.routing),
                 text = new TextEvent(rhs.textPacket.text)
             };
+            /// <summary>
+            /// Convert audio chunk from NDK to unity.
+            /// Note: We cannot get phoneme data immediately from NDK. phonemes will be gathered afterwards.
+            /// </summary>
+            /// <param name="rhs">the audio packet from NDK</param>
             public static Inworld.Packet.AudioPacket NDKAudioChunk(NDKPacket rhs) => new Inworld.Packet.AudioPacket
             {
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
@@ -83,7 +71,10 @@ namespace Inworld.NDK
                     additionalPhonemeInfo = new List<Inworld.Packet.PhonemeInfo>()
                 }
             };
-
+            /// <summary>
+            /// Convert control packet from NDK to unity.
+            /// </summary>
+            /// <param name="rhs">the control packets from NDK to convert.</param>
             public static Inworld.Packet.ControlPacket NDKControlPacket(NDKPacket rhs) => new Inworld.Packet.ControlPacket
             {
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
@@ -95,6 +86,10 @@ namespace Inworld.NDK
                     action = InworldNDKEnum.GetAction(rhs.ctrlPacket.action)
                 }
             };
+            /// <summary>
+            /// Convert emotion packet from NDK to Unity
+            /// </summary>
+            /// <param name="rhs">the emotion packets from NDK to convert.</param>
             public static Inworld.Packet.EmotionPacket NDKEmotionPacket(NDKPacket rhs) => new Inworld.Packet.EmotionPacket
             {
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
@@ -107,6 +102,10 @@ namespace Inworld.NDK
                     strength = InworldNDKEnum.GetStrength(rhs.emoPacket.strength)
                 } 
             };
+            /// <summary>
+            /// Convert cancel response packets from NDK to Unity
+            /// </summary>
+            /// <param name="rhs">the NDK packets to convert.</param>
             public static MutationPacket NDKCancelResponse(NDKPacket rhs) => new MutationPacket
             {
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
@@ -121,6 +120,10 @@ namespace Inworld.NDK
                     }
                 } 
             };
+            /// <summary>
+            /// Convert custom packets (Triggers) from NDK to unity.
+            /// </summary>
+            /// <param name="rhs">the NDK packet to convert.</param>
             public static Inworld.Packet.CustomPacket NDKCustomPacket(NDKPacket rhs) => new Inworld.Packet.CustomPacket
             {
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
@@ -132,6 +135,10 @@ namespace Inworld.NDK
                     name = rhs.customPacket.triggerName
                 }
             };
+            /// <summary>
+            /// Convert the relation packets from NDK to unity.
+            /// </summary>
+            /// <param name="rhs">the relation packets to convert.</param>
             public static Inworld.Packet.RelationPacket NDKRelationPacket(NDKPacket rhs) => new Inworld.Packet.RelationPacket
             {
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
@@ -161,6 +168,10 @@ namespace Inworld.NDK
                     }
                 }
             };
+            /// <summary>
+            /// Convert the narrative action packets from NDK to Unity
+            /// </summary>
+            /// <param name="rhs">the packets from NDK to convert</param>
             public static Inworld.Packet.ActionPacket NDKActionPacket(NDKPacket rhs) => new Inworld.Packet.ActionPacket
             {
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
@@ -175,6 +186,11 @@ namespace Inworld.NDK
                     }
                 }
             };
+            /// <summary>
+            /// Convert unknown packets from NDK to Unity.
+            /// Sometimes the packets may be defined in NDK but not implemented in Unity yet.
+            /// </summary>
+            /// <param name="rhs">the packet from NDK to convert.</param>
             public static InworldPacket NDKUnknownPacket(NDKPacket rhs) => new InworldPacket
             {
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
@@ -182,10 +198,49 @@ namespace Inworld.NDK
                 packetId = NDKPacketId(rhs.packetInfo.packetId),
                 routing = NDKRouting(rhs.packetInfo.routing),
             };
+            static InworldCharacterData _GenerateAgent(AgentInfo rhs) => new InworldCharacterData
+            {
+                agentId = rhs.AgentId,
+                brainName = rhs.BrainName,
+                givenName = rhs.GivenName,
+                characterAssets = new CharacterAssets
+                {
+                    rpmModelUri = rhs.RpmModelUri,
+                    rpmImageUriPortrait = rhs.RpmImageUriPortrait,
+                    rpmImageUriPosture = rhs.RpmImageUriPosture,
+                    avatarImg = rhs.AvatarImg,
+                    avatarImgOriginal = rhs.AvatarImgOriginal
+                }
+            };
+
+            static Inworld.Packet.PacketId NDKPacketId(PacketId rhs) => new Inworld.Packet.PacketId()
+            {
+                packetId = rhs.uid,
+                interactionId = rhs.interactionID,
+                utteranceId = rhs.utteranceID,
+            };
+            static Inworld.Packet.Routing NDKRouting(Routing rhs) => new Inworld.Packet.Routing
+            {
+                source = new Source
+                {
+                    name = rhs.source,
+                    type = string.IsNullOrEmpty(rhs.source) ? "PLAYER" : "AGENT"
+                },
+                target = new Source
+                {
+                    name = rhs.target,
+                    type = string.IsNullOrEmpty(rhs.target) ? "PLAYER" : "AGENT"
+                }
+            };
         }
         
         public static class To
         {
+            /// <summary>
+            /// Convert the text packet from Unity to NDK.
+            /// </summary>
+            /// <param name="characterID">the live session ID of the character</param>
+            /// <param name="textToSend">the message to send.</param>
             public static Inworld.Packet.TextPacket TextPacket(string characterID, string textToSend) => new Inworld.Packet.TextPacket
             {
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),

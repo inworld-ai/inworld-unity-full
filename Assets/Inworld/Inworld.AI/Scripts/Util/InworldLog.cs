@@ -50,23 +50,23 @@ namespace Inworld
             }
         }
         [Conditional("INWORLD_DEBUG")]
-        public static void Log(string msg)
+        static internal void Log(string msg)
         {
             Debug.Log(msg);
         }
 
         [Conditional("INWORLD_DEBUG")]
-        public static void LogWarning(string msg)
+        static internal void LogWarning(string msg)
         {
             Debug.LogWarning(msg);
         }
 
         [Conditional("INWORLD_DEBUG")]
-        public static void LogError(string msg)
+        static internal void LogError(string msg)
         {
             Debug.LogError($"[Inworld {InworldAI.Version}] {msg}");
         }
-        public static void LogException(string exception)
+        static internal void LogException(string exception)
         {
             throw new InworldException(exception);
         }

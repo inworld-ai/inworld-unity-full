@@ -49,6 +49,10 @@ namespace Inworld.Sample.RPM
             m_Content.text = "The answer for the spell is <color=green>WWW</color>\nTry say that!";
         }
 
+        /// <summary>
+        /// Callback function registered in the UnityEvent of InworldCharacter.
+        /// </summary>
+        /// <param name="trigger">the callback trigger to process.</param>
         public void OnGoalComplete(string trigger)
         {
             if (trigger != m_CheckTrigger)

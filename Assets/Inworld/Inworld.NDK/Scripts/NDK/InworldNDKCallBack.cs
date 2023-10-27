@@ -9,6 +9,10 @@ using System.Runtime.InteropServices;
 
 namespace Inworld.NDK
 {
+    /// <summary>
+    /// This static class stores all the callback function.
+    /// Because we're receiving data from dll, they have to be static as well.
+    /// </summary>
     public static class InworldNDKCallBack
     {
         static ProcessingAudioChunk s_ProcessingAudioChunk = new ProcessingAudioChunk();

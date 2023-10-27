@@ -100,7 +100,7 @@ namespace Inworld.Assets
                 HandleMainStatus(AnimMainStatus.Hello);
             }
         }
-        public void HandleMainStatus(AnimMainStatus status) => m_BodyAnimator.SetInteger(s_Motion, (int)status);
+        protected void HandleMainStatus(AnimMainStatus status) => m_BodyAnimator.SetInteger(s_Motion, (int)status);
         
         protected void HandleEmotion(EmotionPacket packet)
         {

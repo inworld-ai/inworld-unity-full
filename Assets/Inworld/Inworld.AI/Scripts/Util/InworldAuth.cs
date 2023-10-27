@@ -37,6 +37,12 @@ namespace Inworld
                 hmacshA256.Key = hmacshA256.ComputeHash(Encoding.UTF8.GetBytes(s));
             return BitConverter.ToString(hmacshA256.Key).ToLower().Replace("-", "");
         }
+        /// <summary>
+        /// Generate the header to access token
+        /// </summary>
+        /// <param name="studioServer">the server to generate token.</param>
+        /// <param name="apiKey">the input API key.</param>
+        /// <param name="apiSecret">the input API secret.</param>
         public static string GetHeader(string studioServer, string apiKey, string apiSecret)
         {
             List<string> strings = new List<string>();

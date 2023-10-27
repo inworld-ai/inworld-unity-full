@@ -13,6 +13,10 @@ using UnityEngine.UI;
 
 namespace Inworld
 {
+    /// <summary>
+    /// This is the demo use case for how to interact with Inworld.
+    /// For developers please feel free to create your own.
+    /// </summary>
     public class PlayerController : MonoBehaviour
     {
         [Header("Audio Capture")]
@@ -35,6 +39,9 @@ namespace Inworld
         protected bool m_BlockAudioHandling;
         readonly protected Dictionary<string, ChatBubble> m_Bubbles = new Dictionary<string, ChatBubble>();
 
+        /// <summary>
+        /// Control the InworldController to connect inworld server.
+        /// </summary>
         public void ConnectInworld()
         {
             if (InworldController.Status == InworldConnectionStatus.Idle)
@@ -42,7 +49,9 @@ namespace Inworld
             else if (InworldController.Status == InworldConnectionStatus.Connected)
                 InworldController.Instance.Disconnect();
         }
-        
+        /// <summary>
+        /// Send target message in the input field.
+        /// </summary>
         public void SendText()
         {
             if (!m_InputField || string.IsNullOrEmpty(m_InputField.text) || !InworldController.CurrentCharacter)

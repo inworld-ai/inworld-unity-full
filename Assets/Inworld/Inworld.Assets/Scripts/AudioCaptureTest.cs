@@ -21,7 +21,44 @@ public class AudioCaptureTest : AudioCapture
     [SerializeField] Button m_Button;
     [SerializeField] Sprite m_MicOn;
     [SerializeField] Sprite m_MicOff;
-    // Start is called before the first frame update
+    
+    /// <summary>
+    /// Change the current input device from the selection of drop down field.
+    /// </summary>
+    /// <param name="nIndex">the index of the audio input devices.</param>
+    public void UpdateAudioInput(int nIndex)
+    {
+#if !UNITY_WEBGL
+        int nDeviceIndex = nIndex - 1;
+        if (nDeviceIndex < 0)
+        {
+            m_Text.text = "Please Choose Input Device!";
+            return;
+        }
+        ChangeInputDevice(Microphone.devices[nDeviceIndex]);
+        StartRecording();
+        m_Button.interactable = true;
+        m_Button.image.sprite = m_MicOff;
+#endif
+    }
+    /// <summary>
+    /// Mute/Unmute microphone.
+    /// </summary>
+    public void SwitchMicrophone()
+    {
+        if (!m_Button.interactable)
+            return;
+        if (m_Button.image.sprite == m_MicOff)
+        {
+            StopRecording();
+            m_Button.image.sprite = m_MicOn;
+        }
+        else
+        {
+            StartRecording();
+            m_Button.image.sprite = m_MicOff;
+        }
+    }
     protected override void Awake()
     {
         base.Awake();
@@ -55,41 +92,9 @@ public class AudioCaptureTest : AudioCapture
         Collect();
     }
 #endif
-    
-    public void UpdateAudioInput(int nIndex)
-    {
-#if !UNITY_WEBGL
-        int nDeviceIndex = nIndex - 1;
-        if (nDeviceIndex < 0)
-        {
-            m_Text.text = "Please Choose Input Device!";
-            return;
-        }
-        ChangeInputDevice(Microphone.devices[nDeviceIndex]);
-        StartRecording();
-        m_Button.interactable = true;
-        m_Button.image.sprite = m_MicOff;
-#endif
-    }
     protected override void Collect()
     {
         int nSize = GetAudioData();
         m_Volume.fillAmount = m_InputBuffer.Max() * 5f;
-    }
-
-    public void SwitchMicrophone()
-    {
-        if (!m_Button.interactable)
-            return;
-        if (m_Button.image.sprite == m_MicOff)
-        {
-            StopRecording();
-            m_Button.image.sprite = m_MicOn;
-        }
-        else
-        {
-            StartRecording();
-            m_Button.image.sprite = m_MicOff;
-        }
     }
 }

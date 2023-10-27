@@ -21,6 +21,21 @@ namespace Inworld.AEC
         float[] m_CharacterBuffer;
         List<short> m_CurrentPlayingWavData = new List<short>();
         Dictionary<string, InworldAudioInteraction> m_SoundEnv = new Dictionary<string, InworldAudioInteraction>();
+        
+        /// <summary>
+        /// A flag for this component is using AEC (in this class always True)
+        /// </summary>
+        public override bool EnableAEC => true;
+        /// <summary>
+        /// When scene loaded, add the AudioInteraction for each character to get the mixed audio environment.
+        /// </summary>
+        /// <param name="dataAgentId">the live session id of the character</param>
+        /// <param name="interaction">the interaction to attach.</param>
+        public override void RegisterLiveSession(string dataAgentId, InworldInteraction interaction)
+        {
+            if(interaction is InworldAudioInteraction audioInteraction)
+                m_SoundEnv[dataAgentId] = audioInteraction;
+        }
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -58,7 +73,7 @@ namespace Inworld.AEC
                     m_CurrentPlayingWavData.Add(currAudio[i]);
             }
         }
-        public byte[] FilterAudio(short[] inputData, short[] outputData, IntPtr aecHandle)
+        protected byte[] FilterAudio(short[] inputData, short[] outputData, IntPtr aecHandle)
         {
             short[] filteredAudio = new short[inputData.Length]; // Create a new array for filtered audio
             if (outputData == null || outputData.Length == 0 || outputData.Average(x => Mathf.Abs(x)) == 0)
@@ -77,12 +92,6 @@ namespace Inworld.AEC
             byte[] byteArray = new byte[filteredAudio.Length * 2]; // Each short is 2 bytes
             Buffer.BlockCopy(filteredAudio, 0, byteArray, 0, filteredAudio.Length * 2);
             return byteArray;
-        }
-        public override bool EnableAEC => true;
-        public override void RegisterLiveSession(string dataAgentId, InworldInteraction interaction)
-        {
-            if(interaction is InworldAudioInteraction audioInteraction)
-                m_SoundEnv[dataAgentId] = audioInteraction;
         }
     }
 }

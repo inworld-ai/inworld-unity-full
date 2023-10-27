@@ -18,6 +18,11 @@ namespace Inworld.Sample.Innequin
             if (charData.brainName == Data.brainName)
                 RegisterLiveSession();
         }
+        /// <summary>
+        /// Register live session once load scene completed.
+        ///
+        /// This overwritten function will also send its audio interaction to the mixer of AudioCapture
+        /// </summary>
         public override void RegisterLiveSession()
         {
             base.RegisterLiveSession();
