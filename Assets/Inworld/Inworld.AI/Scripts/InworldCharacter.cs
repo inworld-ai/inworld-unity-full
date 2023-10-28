@@ -254,7 +254,7 @@ namespace Inworld
             if (m_VerboseLog)
             {
                 InworldAI.Log($"{Name}: Received Trigger {customPacket.custom.name}");
-                foreach (TriggerParamer param in customPacket.custom.parameters)
+                foreach (TriggerParameter param in customPacket.custom.parameters)
                 {
                     InworldAI.Log($"With {param.name}: {param.value}");
                 }
