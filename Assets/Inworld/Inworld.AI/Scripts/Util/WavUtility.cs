@@ -111,7 +111,6 @@ namespace Inworld
         /// </summary>
         /// <param name="input">the audio clip data.</param>
         /// <param name="size">the size of the wave data.</param>
-        /// <param name="output">the short array.</param>
         public static short[] ConvertAudioClipDataToInt16Array(IReadOnlyList<float> input, int size)
         {
             if (input == null || input.Count == 0)
@@ -136,6 +135,10 @@ namespace Inworld
         /// Get the byte array of the wave data from AudioClip
         /// </summary>
         /// <param name="audioClip">the input audio clip</param>
+        /// <param name="filepath">the file path of the wave file.</param>
+        /// <param name="saveAsFile">check if the data is saved as file</param>
+        /// <param name="dirname">the directory of the wave file.</param>
+        /// <returns></returns>
         public static byte[] FromAudioClip
         (
             AudioClip audioClip,
