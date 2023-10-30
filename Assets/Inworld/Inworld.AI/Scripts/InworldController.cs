@@ -297,7 +297,8 @@ namespace Inworld
         }
         protected void _Setup()
         {
-            m_Client ??= GetComponent<InworldClient>();
+            if (!m_Client)
+                m_Client = GetComponent<InworldClient>();
             m_Client.OnStatusChanged += OnStatusChanged;
         }
         protected virtual void OnStatusChanged(InworldConnectionStatus incomingStatus)

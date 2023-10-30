@@ -72,7 +72,8 @@ namespace Inworld.Sample
     {
 #if !UNITY_WEBGL
         string[] devices = Microphone.devices;
-        m_Dropdown.options ??= new List<TMP_Dropdown.OptionData>();
+        if (m_Dropdown.options == null)
+            m_Dropdown.options = new List<TMP_Dropdown.OptionData>();
         m_Dropdown.options.Clear();
         m_Dropdown.options.Add(new TMP_Dropdown.OptionData("--- CHOOSE YOUR DEVICE ---"));
         foreach (string device in devices)

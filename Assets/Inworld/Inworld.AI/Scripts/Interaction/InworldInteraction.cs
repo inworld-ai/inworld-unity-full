@@ -192,26 +192,26 @@ namespace Inworld.Interactions
         {
             Tuple<Interaction, Utterance> historyItem = AddToHistory(inworldPacket);
             Interaction interaction = historyItem.Item1;
-            
-            switch (inworldPacket)
+
+            if (inworldPacket is ControlPacket)
             {
-                case ControlPacket:
-                    historyItem.Item1.ReceivedInteractionEnd = true;
-                    inworldPacket.packetId.Status = PacketStatus.PROCESSED;
-                    UpdateHistory(historyItem.Item1);
-                    break;
-                case AudioPacket:
-                    // Ignore Audio Packets
-                    inworldPacket.packetId.Status = PacketStatus.PROCESSED;
-                    break;
-                case TextPacket:
-                    if (interaction == m_CurrentInteraction ||
-                        interaction.SequenceNumber > m_LastInteractionSequenceNumber)
-                        QueueUtterance(historyItem.Item2);
-                    break;
-                default:
-                    Dispatch(inworldPacket);
-                    break;
+                historyItem.Item1.ReceivedInteractionEnd = true;
+                inworldPacket.packetId.Status = PacketStatus.PROCESSED;
+                UpdateHistory(historyItem.Item1);
+            }
+            else if (inworldPacket is AudioPacket)
+            {
+                inworldPacket.packetId.Status = PacketStatus.PROCESSED;
+            }
+            else if (inworldPacket is TextPacket)
+            {
+                if (interaction == m_CurrentInteraction ||
+                    interaction.SequenceNumber > m_LastInteractionSequenceNumber)
+                    QueueUtterance(historyItem.Item2);
+            }
+            else
+            {
+                Dispatch(inworldPacket);
             }
         }
 

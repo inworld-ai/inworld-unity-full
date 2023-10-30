@@ -43,7 +43,8 @@ namespace Inworld
             if (sceneData != null)
             {
                 sceneFullName = sceneData.name;
-                characters ??= new List<InworldCharacterData>();
+                if (characters == null)
+                    characters = new List<InworldCharacterData>();
                 characters.Clear();
                 foreach (CharacterReference charRef in sceneData.characterReferences)
                 {

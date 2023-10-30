@@ -107,17 +107,15 @@ namespace Inworld.Interactions
             bool isComplete = true;
             foreach (InworldPacket packet in Packets)
             {
-                switch (packet)
+                if (packet is TextPacket || packet is AudioPacket)
                 {
-                    case TextPacket:
-                    case AudioPacket:
-                        if (packet.packetId.Status != PacketStatus.PLAYED)
-                            isComplete = false;
-                        break;
-                    default:
-                        if (packet.packetId.Status != PacketStatus.PROCESSED)
-                            isComplete = false;
-                        break;
+                    if (packet.packetId.Status != PacketStatus.PLAYED)
+                        isComplete = false;
+                }
+                else
+                {
+                    if (packet.packetId.Status != PacketStatus.PROCESSED)
+                        isComplete = false;
                 }
                 if (!isComplete)
                     break;
@@ -132,17 +130,15 @@ namespace Inworld.Interactions
         {
             foreach (InworldPacket packet in Packets)
             {
-                switch (packet)
+                if (packet is TextPacket || packet is AudioPacket)
                 {
-                    case TextPacket:
-                    case AudioPacket:
-                        if (packet.packetId.Status != PacketStatus.PLAYED)
-                            packet.packetId.Status = PacketStatus.CANCELLED;
-                        break;
-                    default:
-                        if (packet.packetId.Status != PacketStatus.PROCESSED)
-                            packet.packetId.Status = PacketStatus.CANCELLED;
-                        break;
+                    if (packet.packetId.Status != PacketStatus.PLAYED)
+                        packet.packetId.Status = PacketStatus.CANCELLED;
+                }
+                else
+                {
+                    if (packet.packetId.Status != PacketStatus.PROCESSED)
+                        packet.packetId.Status = PacketStatus.CANCELLED;
                 }
             }
             Status = InteractionStatus.CANCELLED;
@@ -207,16 +203,15 @@ namespace Inworld.Interactions
             bool isComplete = true;
             foreach (InworldPacket packet in Packets)
             {
-                switch (packet)
+                if (packet is TextPacket)
                 {
-                    case TextPacket:
-                        if (packet.packetId.Status != PacketStatus.PLAYED)
-                            isComplete = false;
-                        break;
-                    default:
-                        if (packet.packetId.Status != PacketStatus.PROCESSED)
-                            isComplete = false;
-                        break;
+                    if (packet.packetId.Status != PacketStatus.PLAYED)
+                        isComplete = false;
+                }
+                else
+                {
+                    if (packet.packetId.Status != PacketStatus.PROCESSED)
+                        isComplete = false;
                 }
                 if (!isComplete)
                     break;
@@ -231,16 +226,15 @@ namespace Inworld.Interactions
         {
             foreach (InworldPacket packet in Packets)
             {
-                switch (packet)
+                if (packet is TextPacket)
                 {
-                    case TextPacket:
-                        if (packet.packetId.Status != PacketStatus.PLAYED)
-                            packet.packetId.Status = PacketStatus.CANCELLED;
-                        break;
-                    default:
-                        if (packet.packetId.Status != PacketStatus.PROCESSED)
-                            packet.packetId.Status = PacketStatus.CANCELLED;
-                        break;
+                    if (packet.packetId.Status != PacketStatus.PLAYED)
+                        packet.packetId.Status = PacketStatus.CANCELLED;
+                }
+                else
+                {
+                    if (packet.packetId.Status != PacketStatus.PROCESSED)
+                        packet.packetId.Status = PacketStatus.CANCELLED;
                 }
             }
             Status = InteractionStatus.CANCELLED;

@@ -138,7 +138,8 @@ namespace Inworld
         public virtual void CancelResponse() => m_Interaction.CancelResponse();
         protected virtual void Awake()
         {
-            m_Interaction ??= GetComponent<InworldInteraction>();
+            if (m_Interaction == null)
+                m_Interaction = GetComponent<InworldInteraction>();
         }
 
         protected virtual void OnEnable()

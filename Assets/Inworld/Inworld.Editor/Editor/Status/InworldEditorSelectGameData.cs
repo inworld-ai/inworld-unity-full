@@ -258,7 +258,8 @@ namespace Inworld.Editors
                 m_DisplayDataMissing = true;
             }
             InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
-            ws.scenes ??= new List<InworldSceneData>();
+            if (ws.scenes == null)
+                ws.scenes = new List<InworldSceneData>();
             ws.scenes.Clear();
             ws.scenes.AddRange(resp.scenes); 
         }
@@ -275,7 +276,8 @@ namespace Inworld.Editors
             if (resp.apiKeys.Count == 0)
                 m_DisplayDataMissing = true;
             InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
-            ws.keySecrets ??= new List<InworldKeySecret>();
+            if (ws.keySecrets == null)
+                ws.keySecrets = new List<InworldKeySecret>();
             ws.keySecrets.Clear();
             ws.keySecrets.AddRange(resp.apiKeys); 
         }
