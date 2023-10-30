@@ -13,8 +13,9 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using Inworld.Entities;
 
-namespace Inworld.AI.Editor
+namespace Inworld.Editors
 {
     // YAN: At this moment, the ws data has already filled.
     public class InworldEditorSelectGameData : IEditorState

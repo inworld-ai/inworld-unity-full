@@ -5,11 +5,11 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 #if UNITY_EDITOR
-using Inworld.AI.Editor;
+using Inworld.UI;
 using UnityEngine;
 using UnityEditor;
 
-namespace Inworld
+namespace Inworld.Editors
 {
     [CustomEditor(typeof(Readme))][InitializeOnLoad]
     public class ReadmeEditor : Editor 

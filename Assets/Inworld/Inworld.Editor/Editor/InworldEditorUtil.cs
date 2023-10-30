@@ -14,9 +14,9 @@ using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine.Networking;
+using Inworld.Entities;
 
-
-namespace Inworld.AI.Editor
+namespace Inworld.Editors
 {
     /// <summary>
     ///     This class would be called when package is imported, or Unity Editor is opened.

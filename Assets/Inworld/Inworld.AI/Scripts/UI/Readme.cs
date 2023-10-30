@@ -8,7 +8,7 @@
 using System;
 using UnityEngine;
 
-namespace Inworld
+namespace Inworld.UI
 {
     public class Readme : ScriptableObject
     {

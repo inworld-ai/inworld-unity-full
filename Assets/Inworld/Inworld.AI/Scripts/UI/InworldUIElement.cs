@@ -7,7 +7,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
-namespace Inworld
+namespace Inworld.UI
 {
     public class InworldUIElement : MonoBehaviour
     {    

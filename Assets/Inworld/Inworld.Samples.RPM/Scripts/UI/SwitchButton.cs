@@ -18,7 +18,7 @@ namespace Inworld.Runtime.RPM
         /// <summary>
         /// Switch the sprite based on this toggle's status. 
         /// </summary>
-        /// <param name="isOn"></param>
+        /// <param name="isOn">the incoming status of the toggle.</param>
         public void CheckBackground(bool isOn)
         {
             m_Image.sprite = isOn ? m_OnSprite : m_OffSprite;

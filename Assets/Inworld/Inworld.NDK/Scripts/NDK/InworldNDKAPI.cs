@@ -5,7 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 using UnityEngine.Device;
-
+using Inworld.Entities;
 
 namespace Inworld.NDK
 {
@@ -30,7 +30,7 @@ namespace Inworld.NDK
         /// <param name="sceneFullName">the full name of the Inworld scene to load.</param>
         public static void LoadScene(string sceneFullName)
         {
-            Inworld.Capabilities capabilities = InworldAI.Capabilities;
+            Inworld.Entities.Capabilities capabilities = InworldAI.Capabilities;
             Capabilities cap = new Capabilities
             {
                 Text  = capabilities.text,

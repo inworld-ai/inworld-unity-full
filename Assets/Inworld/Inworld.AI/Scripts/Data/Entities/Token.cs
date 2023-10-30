@@ -6,7 +6,7 @@
  *************************************************************************************************/
 using System;
 
-namespace Inworld
+namespace Inworld.Entities
 {
     [Serializable]
     public class Token

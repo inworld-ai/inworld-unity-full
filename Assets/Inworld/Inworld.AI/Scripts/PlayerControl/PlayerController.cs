@@ -6,12 +6,13 @@
  *************************************************************************************************/
 using System.Collections.Generic;
 using Inworld.Packet;
-using Inworld.Sample;
+using Inworld.Entities;
+using Inworld.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Inworld
+namespace Inworld.Sample
 {
     /// <summary>
     /// This is the demo use case for how to interact with Inworld.

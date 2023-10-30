@@ -8,7 +8,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Inworld.AI.Editor
+namespace Inworld.Editors
 {
     public class InworldStudioPanel : EditorWindow
     {

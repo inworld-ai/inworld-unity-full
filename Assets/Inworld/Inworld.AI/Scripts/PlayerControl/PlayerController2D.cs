@@ -7,10 +7,11 @@
 
 using System.Collections.Generic;
 using Inworld.UI;
+using Inworld.Entities;
 using UnityEngine;
 
 
-namespace Inworld
+namespace Inworld.Sample
 {
     public class PlayerController2D : PlayerController
     {

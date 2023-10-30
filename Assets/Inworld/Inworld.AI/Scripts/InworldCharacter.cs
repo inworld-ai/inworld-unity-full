@@ -6,6 +6,7 @@
  *************************************************************************************************/
 using Inworld.Interactions;
 using Inworld.Packet;
+using Inworld.Entities;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;

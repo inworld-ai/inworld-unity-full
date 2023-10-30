@@ -1,9 +1,8 @@
 #if UNITY_EDITOR
-using Inworld.AI.Editor;
 using Inworld.NDK;
 using UnityEditor;
 
-namespace Inworld
+namespace Inworld.Editors
 {
     public class ProtocolSwitcherNDK
     {

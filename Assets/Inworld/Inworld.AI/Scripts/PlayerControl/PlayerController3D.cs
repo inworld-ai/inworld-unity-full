@@ -8,7 +8,7 @@
 using UnityEngine;
 using Inworld.Packet;
 
-namespace Inworld
+namespace Inworld.Sample
 {
     public class PlayerController3D : PlayerController
     {

@@ -6,7 +6,9 @@
  *************************************************************************************************/
 using UnityEngine;
 using Inworld.Packet;
+using Inworld.Entities;
 using TMPro;
+
 
 namespace Inworld.Sample.Innequin
 {
