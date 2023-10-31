@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace Inworld.Sample.RPM
 {
-    public class InworldFacialAnimationRPM : MonoBehaviour
+    public class InworldFacialAnimationRPM : InworldFacialAnimation
     {
         const int k_VisemeLength = 15;
         [SerializeField] LipsyncMap m_LipsyncMap;
@@ -48,42 +48,30 @@ namespace Inworld.Sample.RPM
         /// <summary>
         ///     Get/Set the Inworld Character this component used.
         /// </summary>
-        public InworldCharacter Character { get; set; }
+        public InworldCharacter Character
+        {
+            get => m_Character; 
+            set => m_Character = value;
+        }
         #endregion
         
         /// <summary>
         /// Initialize the component, including finding the first index of the viseme of the character. 
         /// </summary>
-        public void Init()
+        public void InitLipSync() => enabled = Init();
+        
+        protected override bool Init()
         {
-            if (!Character)
-                Character = GetComponent<InworldCharacter>();
+            if (!base.Init())
+                return false;
             if (!m_Skin)
-                m_Skin = Character.GetComponentInChildren<SkinnedMeshRenderer>();
+                m_Skin = m_Character.GetComponentInChildren<SkinnedMeshRenderer>();
             if (m_VisemeMap == null)
                 m_VisemeMap = new ConcurrentQueue<Vector2>();
             m_VisemeMap.Clear();
-            _MappingBlendShape();
-        }
-        void Awake()
-        {
-            Init();
-        }
-        protected virtual void OnEnable()
-        {
-            InworldController.Instance.OnCharacterInteraction += OnInteractionChanged;
-        }
-        protected virtual void OnDisable()
-        {
-            if (InworldController.Instance)
-                InworldController.Instance.OnCharacterInteraction -= OnInteractionChanged;
+            return _MappingBlendShape();
         }
 
-        void FixedUpdate()
-        {
-            _BlinkEyes();
-            _MorphLipsync();
-        }
         bool _MappingBlendShape()
         {
             if (!m_Skin)
@@ -103,7 +91,7 @@ namespace Inworld.Sample.RPM
             }
             return m_BlinkIndex + m_VisemeIndex != 0;
         }
-        void _BlinkEyes()
+        protected override void BlinkEyes()
         {
             if (!m_Skin)
                 return;
@@ -111,7 +99,7 @@ namespace Inworld.Sample.RPM
             blendshapeValue = Mathf.Clamp(blendshapeValue, 0, 1);
             m_Skin.SetBlendShapeWeight(m_BlinkIndex, blendshapeValue);
         }
-        void _MorphLipsync()
+        protected override void ProcessLipSync()
         {
             if (!m_Skin)
                 return;
@@ -138,7 +126,7 @@ namespace Inworld.Sample.RPM
                 _MorphViseme(m_CurrViseme);
         }
 
-        void _Reset()
+        protected override void Reset()
         {
             m_VisemeMap.Clear();
             m_CurrViseme = Vector2.zero;
@@ -174,28 +162,10 @@ namespace Inworld.Sample.RPM
                 m_Skin.SetBlendShapeWeight(m_VisemeIndex + i, 0);
             }
         }
-        void OnInteractionChanged(InworldPacket packet)
+
+        protected override void HandleLipSync(AudioPacket audioPacket)
         {
-            if (Character &&
-                !string.IsNullOrEmpty(Character.ID) &&
-                packet?.routing?.source?.name == Character.ID || packet?.routing?.target?.name == Character.ID)
-                ProcessPacket(packet);
-        }
-        protected virtual void ProcessPacket(InworldPacket incomingPacket)
-        {
-            switch (incomingPacket)
-            {
-                case AudioPacket audioPacket: // Already Played.
-                    HandleLipSync(audioPacket);
-                    break;
-                case EmotionPacket emotionPacket:
-                    HandleEmotion(emotionPacket);
-                    break;
-            }
-        }
-        protected void HandleLipSync(AudioPacket audioPacket)
-        {
-            _Reset();
+            Reset();
             if (audioPacket.dataChunk?.additionalPhonemeInfo == null)
                 return;
             foreach (PhonemeInfo phoneme in audioPacket.dataChunk.additionalPhonemeInfo)
@@ -205,7 +175,7 @@ namespace Inworld.Sample.RPM
                 m_VisemeMap.Enqueue(new Vector2(visemeIndex, phoneme.startOffset));
             }
         }
-        protected void HandleEmotion(EmotionPacket packet)
+        protected override void HandleEmotion(EmotionPacket packet)
         {
             _ProcessEmotion(packet.emotion.behavior.ToUpper());
         }
