@@ -4,7 +4,6 @@
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
-using System.Linq;
 using UnityEngine;
 using Inworld.Packet;
 using System;
@@ -119,24 +118,21 @@ namespace Inworld.Interactions
         {
             Tuple<Interaction, Utterance> historyItem = AddToHistory(inworldPacket);
             Interaction interaction = historyItem.Item1;
-            
-            switch (inworldPacket)
+
+            if (inworldPacket is ControlPacket)
             {
-                case ControlPacket:
-                    historyItem.Item1.ReceivedInteractionEnd = true;
-                    inworldPacket.packetId.Status = PacketStatus.PROCESSED;
-                    UpdateHistory(historyItem.Item1);
-                    break;
-                case AudioPacket:
-                case TextPacket:
-                    if (interaction == m_CurrentInteraction ||
-                        interaction.SequenceNumber > m_LastInteractionSequenceNumber)
-                        QueueUtterance(historyItem.Item2);
-                    break;
-                default:
-                    Dispatch(inworldPacket);
-                    break;
+                historyItem.Item1.ReceivedInteractionEnd = true;
+                inworldPacket.packetId.Status = PacketStatus.PROCESSED;
+                UpdateHistory(historyItem.Item1);
             }
+            else if (inworldPacket is AudioPacket || inworldPacket is TextPacket)
+            {
+                if (interaction == m_CurrentInteraction ||
+                    interaction.SequenceNumber > m_LastInteractionSequenceNumber)
+                    QueueUtterance(historyItem.Item2);
+            }
+            else
+                Dispatch(inworldPacket);
         }
 
         protected override void QueueUtterance(Utterance utterance)

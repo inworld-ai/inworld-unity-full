@@ -56,9 +56,12 @@ namespace Inworld.Sample.RPM
         /// </summary>
         public void Init()
         {
-            Character ??= GetComponent<InworldCharacter>();
-            m_Skin ??= Character.GetComponentInChildren<SkinnedMeshRenderer>();
-            m_VisemeMap ??= new ConcurrentQueue<Vector2>();
+            if (!Character)
+                Character = GetComponent<InworldCharacter>();
+            if (!m_Skin)
+                m_Skin = Character.GetComponentInChildren<SkinnedMeshRenderer>();
+            if (m_VisemeMap == null)
+                m_VisemeMap = new ConcurrentQueue<Vector2>();
             m_VisemeMap.Clear();
             _MappingBlendShape();
         }

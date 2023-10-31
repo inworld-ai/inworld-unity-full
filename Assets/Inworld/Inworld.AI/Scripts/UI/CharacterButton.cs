@@ -6,6 +6,7 @@
  *************************************************************************************************/
 
 using UnityEngine;
+using Inworld.Entities;
 
 namespace Inworld.UI
 {

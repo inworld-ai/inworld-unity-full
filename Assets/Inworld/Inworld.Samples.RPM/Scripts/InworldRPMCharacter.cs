@@ -5,6 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 using Inworld.Interactions;
+using Inworld.Entities;
 using UnityEngine;
 
 namespace Inworld.Sample.RPM
@@ -19,7 +20,7 @@ namespace Inworld.Sample.RPM
         }
         /// <summary>
         /// Register the live session once the load scene request completed.
-        /// In this overwritten functioon, it'll also send its audio interaction component to the mixer of the AudioCapture.
+        /// In this overwritten function, it'll also send its audio interaction component to the mixer of the AudioCapture.
         /// </summary>
         public override void RegisterLiveSession()
         {

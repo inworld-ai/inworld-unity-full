@@ -5,15 +5,15 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
-using Inworld;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-public class AudioCaptureTest : AudioCapture
+namespace Inworld.Sample
+{
+    public class AudioCaptureTest : AudioCapture
 {
     [SerializeField] TMP_Dropdown m_Dropdown;
     [SerializeField] TMP_Text m_Text;
@@ -72,7 +72,8 @@ public class AudioCaptureTest : AudioCapture
     {
 #if !UNITY_WEBGL
         string[] devices = Microphone.devices;
-        m_Dropdown.options ??= new List<TMP_Dropdown.OptionData>();
+        if (m_Dropdown.options == null)
+            m_Dropdown.options = new List<TMP_Dropdown.OptionData>();
         m_Dropdown.options.Clear();
         m_Dropdown.options.Add(new TMP_Dropdown.OptionData("--- CHOOSE YOUR DEVICE ---"));
         foreach (string device in devices)
@@ -98,3 +99,5 @@ public class AudioCaptureTest : AudioCapture
         m_Volume.fillAmount = m_InputBuffer.Max() * 5f;
     }
 }
+}
+

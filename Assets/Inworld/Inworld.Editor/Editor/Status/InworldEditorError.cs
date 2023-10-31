@@ -7,7 +7,8 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-namespace Inworld.AI.Editor
+
+namespace Inworld.Editors
 {
     public class InworldEditorError : IEditorState
     {

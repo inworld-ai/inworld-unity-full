@@ -8,8 +8,7 @@
 using Inworld.Packet;
 using UnityEngine;
 
-
-namespace Inworld.Util
+namespace Inworld.Sample
 {
     public class PackageLatencyTest : MonoBehaviour
     {

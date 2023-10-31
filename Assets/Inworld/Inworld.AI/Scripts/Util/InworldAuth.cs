@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using Random = UnityEngine.Random;
+
 namespace Inworld
 {
     public class InworldAuth

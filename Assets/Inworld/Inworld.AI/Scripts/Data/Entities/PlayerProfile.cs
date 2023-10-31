@@ -7,8 +7,9 @@
 
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-namespace Inworld
+namespace Inworld.Entities
 {
 
     [Serializable]
@@ -21,7 +22,7 @@ namespace Inworld
     [Serializable]
     public class UserSetting
     {
-        public bool viewTranscriptConsent;
+        [HideInInspector] public bool viewTranscriptConsent;
         public PlayerProfile playerProfile;
 
         public UserSetting(List<PlayerProfileField> rhs)

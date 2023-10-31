@@ -18,10 +18,8 @@ MonoBehaviour:
     emotions: 1
     interruptions: 1
     narratedActions: 1
-    silence: 1
     text: 1
     triggers: 1
-    turnBasedStt: 1
     phonemeInfo: 1
     relations: 1
     debugInfo: 1
@@ -29,5 +27,5 @@ MonoBehaviour:
   m_DefaultUserSetting: {fileID: 11400000, guid: 807ae59688a93054c95af3e6a6f724b1, type: 2}
   m_ControllerPrefab: {fileID: 2395919966041133306, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
   m_SplashScreen: {fileID: 4393447035193857883, guid: 79956e5abae7ea2448261fd738eeaf6e, type: 3}
-  m_Version: 3.0.0-preview3
+  m_Version: 3.0.0-preview4
   m_DebugMode: 1

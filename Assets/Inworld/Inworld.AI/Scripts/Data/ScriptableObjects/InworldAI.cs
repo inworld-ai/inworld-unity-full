@@ -4,14 +4,16 @@
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
-using Inworld;
 using Inworld.Sample;
+using Inworld.Entities;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
 
-public class InworldAI : ScriptableObject
+namespace Inworld
+{
+    public class InworldAI : ScriptableObject
 {
     [SerializeField] InworldUserSetting m_UserSetting;
     
@@ -142,3 +144,5 @@ public class InworldAI : ScriptableObject
     /// <param name="exception">The exception message to log</param>
     public static void LogException(string exception) => InworldLog.LogException(exception);
 }
+}
+

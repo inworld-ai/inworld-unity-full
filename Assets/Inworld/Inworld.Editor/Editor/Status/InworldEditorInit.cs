@@ -6,11 +6,12 @@
  *************************************************************************************************/
 #if UNITY_EDITOR
 using Inworld.VSP;
+using Inworld.Entities;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
-namespace Inworld.AI.Editor
+namespace Inworld.Editors
 {
     public class InworldEditorInit : IEditorState
     {

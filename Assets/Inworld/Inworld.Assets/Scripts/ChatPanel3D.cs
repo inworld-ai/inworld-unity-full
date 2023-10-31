@@ -4,15 +4,18 @@
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
-using Inworld.Assets;
+
 using Inworld.Packet;
+using Inworld.Entities;
+using Inworld.UI;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Inworld.Sample.RPM
+
+namespace Inworld.Assets
 {
     public class ChatPanel3D : MonoBehaviour
     {

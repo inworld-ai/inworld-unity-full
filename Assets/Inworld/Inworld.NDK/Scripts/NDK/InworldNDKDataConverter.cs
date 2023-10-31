@@ -5,6 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 using Inworld.Packet;
+using Inworld.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

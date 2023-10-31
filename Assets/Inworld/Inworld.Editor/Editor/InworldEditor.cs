@@ -9,8 +9,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using Inworld.Sample;
+using Inworld.UI;
 
-namespace Inworld.AI.Editor
+namespace Inworld.Editors
 {
     public enum EditorStatus
     {

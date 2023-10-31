@@ -66,8 +66,10 @@ namespace Inworld.Sample.Innequin
         }
         bool _Init()
         {
-            m_Character ??= GetComponent<InworldCharacter>();
-            m_Interaction ??= GetComponent<InworldInteraction>();
+            if (!m_Character)
+                m_Character = GetComponent<InworldCharacter>();
+            if (!m_Interaction)
+                m_Interaction = GetComponent<InworldInteraction>();
             return m_Character && m_Interaction;
         }
         void _InitMaterials()

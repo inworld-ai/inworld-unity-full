@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 namespace Inworld.Packet
 {
     [Serializable]
-    public class TriggerParamer
+    public class TriggerParameter
     {
         public string name;
         public string value;
@@ -20,12 +20,12 @@ namespace Inworld.Packet
     public class CustomEvent
     {
         public string name;
-        public List<TriggerParamer> parameters;
+        public List<TriggerParameter> parameters;
 
         public CustomEvent()
         {
             name = "";
-            parameters = new List<TriggerParamer>();
+            parameters = new List<TriggerParameter>();
         }
 
         public CustomEvent(string eventName, Dictionary<string, string> eventParameters)
@@ -35,7 +35,7 @@ namespace Inworld.Packet
                 parameters = eventParameters.Select
                 (
                     parameter =>
-                        new TriggerParamer
+                        new TriggerParameter
                         {
                             name = parameter.Key,
                             value = parameter.Value
@@ -74,7 +74,7 @@ namespace Inworld.Packet
                 string result = TriggerName;
                 if (custom.parameters == null || custom.parameters.Count == 0)
                     return result;
-                foreach (TriggerParamer param in custom.parameters)
+                foreach (TriggerParameter param in custom.parameters)
                 {
                     result += $"{param.name}: {param.value} ";
                 }

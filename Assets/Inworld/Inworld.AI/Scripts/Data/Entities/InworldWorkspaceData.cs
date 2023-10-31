@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Inworld
+namespace Inworld.Entities
 {
     [Serializable]
     public class InworldWorkspaceData

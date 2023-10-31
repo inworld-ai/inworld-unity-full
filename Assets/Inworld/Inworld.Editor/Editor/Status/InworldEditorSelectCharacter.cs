@@ -10,7 +10,10 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
-namespace Inworld.AI.Editor
+using Inworld.Sample;
+using Inworld.Entities;
+
+namespace Inworld.Editors
 {
     public class InworldEditorSelectCharacter: IEditorState
     {

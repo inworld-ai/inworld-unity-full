@@ -5,7 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 #if UNITY_EDITOR
-namespace Inworld.AI.Editor
+namespace Inworld.Editors
 {
     /// <summary>
     /// The state interface used for multiple editor pages.

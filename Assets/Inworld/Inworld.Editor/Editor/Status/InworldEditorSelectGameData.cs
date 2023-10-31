@@ -13,8 +13,9 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using Inworld.Entities;
 
-namespace Inworld.AI.Editor
+namespace Inworld.Editors
 {
     // YAN: At this moment, the ws data has already filled.
     public class InworldEditorSelectGameData : IEditorState
@@ -257,7 +258,8 @@ namespace Inworld.AI.Editor
                 m_DisplayDataMissing = true;
             }
             InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
-            ws.scenes ??= new List<InworldSceneData>();
+            if (ws.scenes == null)
+                ws.scenes = new List<InworldSceneData>();
             ws.scenes.Clear();
             ws.scenes.AddRange(resp.scenes); 
         }
@@ -274,7 +276,8 @@ namespace Inworld.AI.Editor
             if (resp.apiKeys.Count == 0)
                 m_DisplayDataMissing = true;
             InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
-            ws.keySecrets ??= new List<InworldKeySecret>();
+            if (ws.keySecrets == null)
+                ws.keySecrets = new List<InworldKeySecret>();
             ws.keySecrets.Clear();
             ws.keySecrets.AddRange(resp.apiKeys); 
         }
