@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcf7219bab7fe46a1ad266029b2fee19, type: 3}
+  m_Name: README
+  m_EditorClassIdentifier: 
+  titleFont: {fileID: 12800000, guid: ac1308377b6e09a4d8349fc0033248ed, type: 3}
+  contentFont: {fileID: 12800000, guid: 2c9ee65233da755438228fafa684047d, type: 3}
+  icon: {fileID: 2800000, guid: eba83e009e6da2a4ab4d9e016b19216b, type: 3}
+  title: Inworld.Editor
+  sections:
+  - heading: 
+    text: This is the Unity package of Unity Editor expansions of Inworld.AI.
+    linkText: 
+    url: 
+  - heading: 'Basic Requirements:'
+    text: Unity 2020.2
+    linkText: 
+    url: 
+  - heading: 'Dependencies:'
+    text: 1. Inworld.AI
+    linkText: 
+    url: 
+  - heading: 
+    text: 
+    linkText: 2. InworldAI.Assets
+    url: 
+  - heading: 'Capabilities:'
+    text: Support all platforms except WebGL Build. If you wish to build WebGL applications, please remove this package before build.
+    linkText: 
+    url: 
+  loadedLayout: 1

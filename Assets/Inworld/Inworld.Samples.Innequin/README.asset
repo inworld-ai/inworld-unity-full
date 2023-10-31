@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcf7219bab7fe46a1ad266029b2fee19, type: 3}
+  m_Name: README
+  m_EditorClassIdentifier: 
+  titleFont: {fileID: 12800000, guid: ac1308377b6e09a4d8349fc0033248ed, type: 3}
+  contentFont: {fileID: 12800000, guid: 2c9ee65233da755438228fafa684047d, type: 3}
+  icon: {fileID: 2800000, guid: 8254b7aca77468c4bb735c8e69e9e137, type: 3}
+  title: InworldAI Samples
+  sections:
+  - heading: Description
+    text: This is Inworld's Innequin Sample package.
+    linkText: 
+    url: 
+  - heading: 'Dependencies:'
+    text: 1. Inworld.AI
+    linkText: 
+    url: 
+  - heading: 
+    text: 2. InworldAI.Assets
+    linkText: 
+    url: 
+  - heading: 
+    text: 3. TextMesh Pro
+    linkText: 
+    url: 
+  - heading: How to use
+    text: 'Copy paste your API key/secret into `InworldController`. For more information,
+      please visit: '
+    linkText: Inworld Studio Tutorial
+    url: https://docs.inworld.ai/docs/intro
+  loadedLayout: 0
