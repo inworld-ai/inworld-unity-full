@@ -28,13 +28,32 @@ jobs:
               restore-keys: Library-build
           - uses: game-ci/unity-builder@v2
             with:
-              unityVersion: 2021.3.6f1
-              buildMethod: ExportPackage.Editor.UnityPackageExporter.Export
+              unityVersion: 2022.3.12f1
+              buildMethod: Inworld.Editors.UnityPackageExporter.ExportFull
           - name: upload-artifact
             uses: actions/upload-artifact@v3
             with:
-              name: Inworld-Unity-SDK
+              name: InworldAI.Full
               path: Build/
+          - name: Discard changes
+            run: |
+              git restore --staged .
+              git checkout .
+              git clean -fd
+          - uses: game-ci/unity-builder@v2
+            with:
+              unityVersion: 2022.3.12f1
+              buildMethod: Inworld.Editors.UnityPackageExporter.Lite
+          - name: upload-artifact
+            uses: actions/upload-artifact@v3
+            with:
+              name: InworldAI.Lite
+              path: Build/              
+          - name: Discard changes
+            run: |
+              git restore --staged .
+              git checkout .
+              git clean -fd          
               
   attach-to-release:
     needs: [build]
@@ -43,24 +62,33 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       
-    - uses: actions/download-artifact@v3
-      id: download
+    - name: Download SDK Full
+      uses: actions/download-artifact@v3
       with:
-        name: Inworld-Unity-SDK
+        name: InworldAI.Full
         path: Build/
-        
-    ##- name: Print artifact directory
-    ##  run: |
-    ##        ls ${{steps.download.outputs.download-path}}
 
-    ##- name: Print entire directory structure
-    ##  run: |
-    ##    pwd
-    ##    ls -R
-              
-    - name: Attach package to release
+    - name: Download SDK Lite
+      uses: actions/download-artifact@v3
+      with:
+        name: InworldAI.Lite
+        path: Build/
+    
+    - name: Rename packages with release tag
+      run: |
+        TAG_NAME=${GITHUB_REF/refs\/tags\//}
+        mv Build/InworldAI.Full.unitypackage Build/InworldAI.Full.$TAG_NAME.unitypackage
+        mv Build/InworldAI.Lite.unitypackage Build/InworldAI.Lite$TAG_NAME.unitypackage
+    
+    - name: Attach Full package to release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: Build/ai.inworld.runtime-sdk.unitypackage
+        files: Build/InworldAI.Full.${{ github.ref/refs/tags/ }}.unitypackage
+
+    - name: Attach Lite package to release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: Build/InworldAI.Lite.${{ github.ref/refs/tags/ }}.unitypackage
 
