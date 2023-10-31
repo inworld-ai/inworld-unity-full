@@ -112,7 +112,8 @@ namespace Inworld.Sample.Innequin
                 Debug.LogError($"Unhandled emotion {emotionBehavior}");
                 return;
             }
-            m_EmoteAnimator.SetInteger(s_Emotion, (int)emoMapData.emoteAnimation);
+            if (m_EmoteAnimator)
+                m_EmoteAnimator.SetInteger(s_Emotion, (int)emoMapData.emoteAnimation);
             _MorphFaceEmotion(emoMapData.facialEmotion);
         }
         void _BlinkEyes()
