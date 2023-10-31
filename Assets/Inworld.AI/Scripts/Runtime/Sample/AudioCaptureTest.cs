@@ -1,15 +1,10 @@
-/*************************************************************************************************
-* Copyright 2022 Theai, Inc. (DBA Inworld)
-*
-* Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
-* that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
-*************************************************************************************************/
 using Inworld;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 
 public class AudioCaptureTest : AudioCapture
 {
@@ -25,6 +20,7 @@ public class AudioCaptureTest : AudioCapture
         base.Awake();
         _InitUI();
     }
+
     void _InitUI()
     {
         string[] devices = Microphone.devices;
@@ -62,7 +58,7 @@ public class AudioCaptureTest : AudioCapture
     protected override void Collect()
     {
         int nSize = GetAudioData();
-        m_Volume.fillAmount = m_FloatBuffer.Max();
+        m_Volume.fillAmount = m_FloatBuffer.Max() * 5f;
     }
 
     public void SwitchMicrophone()
@@ -71,12 +67,12 @@ public class AudioCaptureTest : AudioCapture
             return;
         if (m_Button.image.sprite == m_MicOff)
         {
-            StartRecording();
+	        StartRecording();
             m_Button.image.sprite = m_MicOn;
         }
         else
         {
-            StopRecording();
+	        StopRecording();
             m_Button.image.sprite = m_MicOff;
         }
     }

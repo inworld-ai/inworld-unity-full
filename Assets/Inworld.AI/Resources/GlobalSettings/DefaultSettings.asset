@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultSettings
   m_EditorClassIdentifier: 
   m_CanReceiveAudio: 1
-  m_Interruptible: 0
+  m_Interruptible: 1
   m_SaveConversation: 0
   m_ThumbnailFolder: Thumbnails
   m_AvatarFolder: Avatars
@@ -23,6 +23,7 @@ MonoBehaviour:
   m_KeySecretDataFolder: APIKeys
   m_DefaultThumbnail: {fileID: 2800000, guid: 7d909e8510c90f543a68fd42ee8f38a4, type: 3}
   m_DefaultAvatar: {fileID: 919132149155446097, guid: 712eed03e3b83f040a1ebd177679a750, type: 3}
+  m_MainCanvas: {fileID: 4393447035193857883, guid: 79956e5abae7ea2448261fd738eeaf6e, type: 3}
   m_DefaultWorkspace: {fileID: 11400000, guid: d809abc8a24341d40ae9c288fa6ea5cb, type: 2}
   m_EnableVerboseLog: 1
   m_EnableSharedCharacters: 1

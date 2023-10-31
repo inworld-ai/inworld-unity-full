@@ -77,13 +77,9 @@ namespace Inworld
         ///     Returns Unity Event of Interaction.
         /// </summary>
         public InteractionEvent InteractionEvent { get; } = new InteractionEvent();
-
         public bool IsMute
         {
-            get
-            { 
-                return PlaybackSource == null || PlaybackSource.mute || !PlaybackSource.enabled;
-            }
+            get => PlaybackSource == null || PlaybackSource.mute || !PlaybackSource.enabled;
             set
             {
                 if (PlaybackSource)
@@ -329,6 +325,8 @@ namespace Inworld
             }
             InworldAI.Log($"Register {CharacterName}: {agentID}");
             Data.characterID = agentID;
+            if (!InworldController.Instance.CurrentCharacter)
+	            InworldController.Instance.CurrentCharacter = this;
         }
         /// <summary>
         ///     Reset Character's history items and cleanup Audio Caches
@@ -340,8 +338,7 @@ namespace Inworld
                 m_Interaction.Clear();
         }
         /// <summary>
-        ///     Start an interaction with this character manually.
-        ///     This sets the CurrentCharacter of InworldController.
+        ///     Start Audio Capture to this character manually.
         /// </summary>
         public void StartInteraction()
         {
@@ -353,8 +350,7 @@ namespace Inworld
             InworldController.Instance.CurrentCharacter = this;
         }
         /// <summary>
-        ///     Ends an interaction with this character manually.
-        ///     This updates the CurrentCharacter of InworldController.
+        ///     Stop Audio Capture to this character manually.
         /// </summary>
         public void EndInteraction()
         {
@@ -364,7 +360,7 @@ namespace Inworld
                 return;
             }
             if (InworldController.Instance.CurrentCharacter == this)
-                InworldController.Instance.CurrentCharacter = null;
+	            InworldController.Instance.CurrentCharacter = null;
         }
         /// <summary>
         ///     Send Text to this Character via InworldPacket.
@@ -372,7 +368,6 @@ namespace Inworld
         /// <param name="text">string of the Text.</param>
         public void SendText(string text)
         {
-            Debug.Log("Send text: " + text);
             SendEventToAgent
             (
                 new TextEvent
@@ -399,6 +394,18 @@ namespace Inworld
                 evt.Parameters = param;
             SendEventToAgent(evt);
         }
+        /// <summary>
+        /// By default, all goals are active. But if you disable it, you can call this API to reenable.
+        /// </summary>
+        /// <param name="goalName"></param>
+        public void EnableGoal(string goalName) => SendTrigger($"inworld.goal.enable.{goalName}");
+        
+        /// <summary>
+        /// Deactivate goal
+        /// </summary>
+        /// <param name="goalName"></param>
+        public void DisableGoal(string goalName) => SendTrigger($"inworld.goal.disable.{goalName}");
+
         /// <summary>
         ///     Send general events to this Character.
         /// </summary>

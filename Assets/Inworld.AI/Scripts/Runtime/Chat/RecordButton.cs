@@ -16,23 +16,24 @@ namespace Inworld.Sample.UI
     {
         void OnDisable()
         {
-            if (!InworldController.Instance)
-                return;
+	        if (!InworldController.Instance)
+		        return;
+	        InworldController.Instance.PushAudio();
             InworldController.Instance.EndAudioCapture();
         }
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (!InworldController.Instance)
-                return;
-            InworldController.Instance.StartAudioCapture();
+	        if (!InworldController.Instance)
+		        return;
+	        InworldController.Instance.StartAudioCapture();
         }
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            if (!InworldController.Instance)
-                return;
-            InworldController.Instance.PushAudio();
-            InworldController.Instance.EndAudioCapture();
+	        if (!InworldController.Instance)
+		        return;
+	        InworldController.Instance.PushAudio();
+	        InworldController.Instance.EndAudioCapture();
         }
     }
 }

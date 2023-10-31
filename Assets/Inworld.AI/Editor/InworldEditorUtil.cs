@@ -8,13 +8,14 @@
 #if UNITY_EDITOR
 using Inworld.Model.Sample;
 using Inworld.Util;
+using System;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using System.Linq;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.Networking;
+using Object = UnityEngine.Object;
 #if UNITY_IPHONE
 using System.IO;
 using UnityEditor.Callbacks;
@@ -29,6 +30,8 @@ namespace Inworld.Editor
     [InitializeOnLoad]
     public class InitInworld : IPreprocessBuildWithReport
     {
+        const string k_VersionCheckURL = "https://api.github.com/repos/inworld-ai/inworld-unity-sdk/releases";
+        const string k_ReleaseURL = "https://github.com/inworld-ai/inworld-unity-sdk/releases";
         static InitInworld()
         {
             AssetDatabase.importPackageCompleted += packName =>
@@ -43,11 +46,42 @@ namespace Inworld.Editor
             EditorApplication.wantsToQuit += _ClearStatus;
             SceneView.duringSceneGui += OnSceneGUIChanged;
         }
+        static void _CheckUpdates()
+        {
+            if (string.IsNullOrEmpty(InworldAI.ImportedTime))
+                InworldAI.ImportedTime = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
+            UnityWebRequest uwr = new UnityWebRequest(k_VersionCheckURL, "GET");
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            uwr.timeout = 60;
+            UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
+            updateRequest.completed += OnUpdateRequestComplete;
+        }
+        static UnityWebRequest _GetResponse(AsyncOperation op)
+        {
+            return op is not UnityWebRequestAsyncOperation webTask ? null : webTask.webRequest;
+        }
+        static void OnUpdateRequestComplete(AsyncOperation obj)
+        {
+            UnityWebRequest uwr = _GetResponse(obj);
+            string jsonStr = "{ \"package\": " + uwr.downloadHandler.text + "}";
+            ReleaseData date = JsonUtility.FromJson<ReleaseData>(jsonStr);
+            if (date.package.Length <= 0)
+                return;
+            string publishedDate = date.package[0].published_at;
+            DateTime currentVersion = DateTime.ParseExact(publishedDate, "yyyy-MM-ddTHH:mm:ssZ", null, System.Globalization.DateTimeStyles.RoundtripKind);
+            DateTime importedTime = DateTime.ParseExact(InworldAI.ImportedTime, "yyyy-MM-ddTHH:mm:ssZ", null, System.Globalization.DateTimeStyles.RoundtripKind);
+            if (importedTime < currentVersion) 
+            {
+                InworldAI.LogWarning($"Your Inworld SDK is outdated. Please fetch the newest from Asset Store or {k_ReleaseURL}");
+            }
+        }
         public int callbackOrder { get; }
 
         #region Call backs
         static void OnSceneGUIChanged(SceneView view)
         {
+            if (Application.isPlaying)
+                return;
             if (InworldAI.IsDebugMode)
                 _DrawGizmos();
             if (Event.current.type != EventType.DragExited)
@@ -58,6 +92,8 @@ namespace Inworld.Editor
         }
         static void OnHierarchyChanged()
         {
+            if (Application.isPlaying)
+                return;
             if (_WillSetupInworldCharacter)
                 _SetupInworldCharacter(Selection.activeGameObject);
         }
@@ -160,7 +196,8 @@ namespace Inworld.Editor
             {
                 InworldCharacterData[] charList = Resources.LoadAll<InworldCharacterData>("Characters");
                 selectedCharacter = charList.FirstOrDefault(charData => charData.avatar.transform.name == avatar.transform.name);
-                if (selectedCharacter)
+                // YAN: If it's a RPM character already initialized, skip the setup because it'll add components again.
+                if (selectedCharacter && !string.IsNullOrEmpty(selectedCharacter.modelUri) && !avatar.GetComponent<InworldCharacter>())
                     InworldEditor.SetupInworldCharacter(avatar, selectedCharacter);
             }
 

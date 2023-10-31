@@ -1943,6 +1943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39a9b83c049a50a498f6788ca72e9566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_LoadPreviousData: 0
   m_AutoStart: 1
   m_Data: {fileID: 11400000, guid: 4952df7b265f22a4b95b85966797af56, type: 2}
   m_InworldPlayer: {fileID: 467126464424144635}
@@ -11845,6 +11846,7 @@ MonoBehaviour:
   m_BubbleLeft: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
   m_BubbleRight: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
   m_InputField: {fileID: 0}
+  m_LoadConnectingPanel: 1
   m_CameraController: {fileID: 467126464424144639}
   m_TriggerCanvas: {fileID: 0}
   m_RecordButton: {fileID: 0}

@@ -6,7 +6,6 @@
 *************************************************************************************************/
 using Google.Protobuf;
 using Inworld.Grpc;
-using Inworld.Packets;
 using Inworld.Util;
 using System;
 using System.Collections;
@@ -31,8 +30,9 @@ namespace Inworld
     public class InworldController : SingletonBehavior<InworldController>
     {
         #region Inspector Variables
-        [SerializeField] bool m_AutoStart;
+        [SerializeField] bool m_LoadPreviousData;
         [SerializeField] bool m_ManualAudioCapture;
+        [SerializeField] bool m_AutoStart;
         [SerializeField] InworldSceneData m_Data;
         [SerializeField] GameObject m_InworldPlayer;
         [SerializeField] AudioCapture m_Capture;
@@ -49,6 +49,7 @@ namespace Inworld
         InworldClient m_Client;
         InworldCharacter m_CurrentCharacter;
         InworldCharacter m_LastCharacter;
+        InworldError m_ErrorMsg;
         string m_CurrentRecordingID;
         float m_BackOffTime = 0.2f;
         float m_CurrentCountDown;
@@ -59,16 +60,21 @@ namespace Inworld
         #endregion
 
         #region Properties
+		/// <summary>
+		/// Get the audio sampling component.
+		/// </summary>
+	    public static AudioCapture Audio => Instance.m_Capture;
+	    /// <summary>
+	    ///     Whether audio capture is handled automatically.
+	    /// </summary>
+	    public bool ManualAudioCapture
+	    {
+		    get => m_ManualAudioCapture;
+		    set => m_ManualAudioCapture = value;
+	    }
         /// <summary>
-        ///     Whether audio capture is handled automatically.
-        /// </summary>
-        public bool ManualAudioCapture
-        {
-            get => m_ManualAudioCapture;
-            set => m_ManualAudioCapture = value;
-        }
-        /// <summary>
-        ///     Whether audio is currently being captured.
+        ///     Get/Set Audio Recording.
+        ///     Can only be used when audio capture has been established.
         /// </summary>
         public static bool IsCapturing
         {
@@ -76,8 +82,7 @@ namespace Inworld
             {
                 if (!Instance)
                     return false;
-                AudioCapture capture = Instance.m_Capture;
-                return capture != null && capture.IsCapturing;
+                return Audio != null && Audio.IsCapturing;
             }
         }
         /// <summary>
@@ -140,6 +145,46 @@ namespace Inworld
             private set => Instance._SetState(value);
         }
         /// <summary>
+        /// Get the error from server.
+        /// Also enable set, but it'll terminate session.
+        /// </summary>
+        public static string Error
+        {
+            get => Instance.m_ErrorMsg.Message;
+            internal set
+            {
+                Instance.m_ErrorMsg = InworldError.FromString(value);
+                InworldAI.LogError(Instance.m_ErrorMsg.Message);
+                State = ControllerStates.Error;
+            }
+        }
+        /// <summary>
+        /// Get if player has saved game for the current scene before.
+        /// </summary>
+        public bool HasSavedData
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(m_Client.LastState))
+                    return true;
+                if (PlayerPrefs.HasKey(CurrentScene.fullName))
+                    m_Client.LastState = PlayerPrefs.GetString(CurrentScene.fullName);
+                return !string.IsNullOrEmpty(m_Client.LastState);
+            }
+        }
+        /// <summary>
+        /// Get/Set if LoadScene with saved data (New game or load game).
+        /// </summary>
+        public bool LoadSaveData
+        {
+            get => m_LoadPreviousData;
+            set => m_LoadPreviousData = value;
+        }
+        /// <summary>
+        /// Get the session message.
+        /// </summary>
+        public static InworldError ErrorMsg => Instance.m_ErrorMsg;
+        /// <summary>
         ///     Check if all the data is correct.
         /// </summary>
         public static bool IsValid
@@ -169,7 +214,7 @@ namespace Inworld
         }
         void Start()
         {
-            if (InworldAI.Settings.SaveConversation && PlayerPrefs.HasKey(CurrentScene.fullName))
+            if (m_LoadPreviousData && PlayerPrefs.HasKey(CurrentScene.fullName))
                 m_Client.LastState = PlayerPrefs.GetString(CurrentScene.fullName);
             if (m_AutoStart)
                 Init();
@@ -219,12 +264,8 @@ namespace Inworld
                     await LoadScene();
                     break;
                 case RuntimeStatus.InitFailed:
-                    Debug.LogError(msg);
-                    State = ControllerStates.InitFailed;
-                    break;
                 case RuntimeStatus.LoadSceneFailed:
-                    Debug.LogError(msg);
-                    State = ControllerStates.Error;
+                    Error = msg;
                     break;
             }
         }
@@ -247,8 +288,9 @@ namespace Inworld
                 fPriority = iwChar.Priority;
                 targetCharacter = iwChar;
             }
-            CurrentCharacter = targetCharacter;
-       }
+            if (targetCharacter)
+                CurrentCharacter = targetCharacter;
+        }
         void _StartAudioCapture(string characterID)
         {
             if (m_CurrentRecordingID == characterID)
@@ -284,8 +326,7 @@ namespace Inworld
             }
             if (characters.Count != 0)
                 return;
-            InworldAI.LogError("Cannot Find Characters. Need Init first.");
-            State = ControllerStates.Error;
+            Error = "Cannot Find Characters. Need Init first.";
         }
         void _GetIncomingEvents()
         {
@@ -312,7 +353,8 @@ namespace Inworld
                 {
                     while (m_Client.Errors.TryDequeue(out Exception exception))
                     {
-                        if (exception.Message.Contains("inactivity"))
+                        InworldError msg = InworldError.FromString(exception.Message);
+                        if (msg.statusCode == "Aborted")
                         {
                             //YAN: Filter it.
                             m_BackOffTime = Random.Range(m_BackOffTime, m_BackOffTime * 2);
@@ -320,8 +362,12 @@ namespace Inworld
                             State = ControllerStates.LostConnect;
                             break;
                         }
-                        InworldAI.LogException($"{m_Client.SessionID}: {exception.Message}");
-                        State = ControllerStates.Error;
+                        if (msg.statusCode == "ResourceExhausted")
+                        {
+                            State = ControllerStates.Exhausted;
+                            break;
+                        }
+                        Error = exception.Message;
                     }
                 }
                 yield return new WaitForSeconds(0.1f);
@@ -335,6 +381,8 @@ namespace Inworld
 #pragma warning restore 4014
             State = ControllerStates.Connected;
             InworldAI.Log($"InworldController Connected {m_Client.SessionID}");
+            if (m_Characters.Count > 0)
+                CurrentCharacter ??= m_Characters[0];
             StartCoroutine(InteractionCoroutine());
         }
         IEnumerator SwitchAudioCapture()
@@ -445,10 +493,7 @@ namespace Inworld
                         if (response != null)
                         {
                             _ListCharactersFromServer(response.Agents.ToList());
-                            if (InworldAI.Settings.SaveConversation)
-                            {
-                                _LoadPreviousData(response);
-                            }
+                            _LoadPreviousData(response);
                             _StartSession();
                         }
                         break;
@@ -462,14 +507,13 @@ namespace Inworld
             }
             catch (Exception e)
             {
-                State = ControllerStates.Error;
-                Debug.LogError(e);
+                Error = e?.Message;
             }
         }
 
         void _LoadPreviousData(LoadSceneResponse response)
         {
-            if (response.PreviousState == null)
+            if (!m_LoadPreviousData || response.PreviousState == null)
                 return;
             foreach (PreviousState.Types.StateHolder stateHolder in response.PreviousState.StateHolders)
             {
@@ -477,6 +521,7 @@ namespace Inworld
                     InworldAI.Log(" ======= Previous Dialog: ======= ");
                 foreach (GrpcPacket packet in stateHolder.Packets)
                 {
+                    //m_Client.ResolveGRPCPackets(packet);
                     TextEvent packets = m_Client.ResolvePreviousPackets(packet);
                     if (packets != null)
                     {
@@ -484,6 +529,10 @@ namespace Inworld
                     }
                 }
             }
+        }
+        public void SaveGame()
+        {
+            m_Client.SaveGame(InworldAI.Game.CurrentWorkspace.fullName);
         }
         /// <summary>
         ///     Reconnect
@@ -499,13 +548,12 @@ namespace Inworld
         public async Task Disconnect()
         {
             EndAudioCapture(CurrentCharacter.ID);
+	        SaveGame();
             if (m_Client != null)
                 await m_Client.EndSession();
 
             StopCoroutine(nameof(InteractionCoroutine));
             CurrentCharacter = null;
-            if (InworldAI.Settings.SaveConversation)
-                PlayerPrefs.SetString(CurrentScene.fullName, m_Client.LastState);
             State = ControllerStates.Idle;
         }
 
@@ -523,32 +571,30 @@ namespace Inworld
         /// </summary>
         /// <param name="characterID">
         ///     string of Character ID, would be generated only after InworldScene is loaded and session is
-        ///     started
+        ///     started. If it's null, start the current character.
         /// </param>
-        public void StartAudioCapture(string characterID) => StartCoroutine(SwitchAudioCapture(characterID));
-
-        /// <summary>
-        ///     Start communicating with the current character via audio input.
-        /// </summary>
-        public void StartAudioCapture()
+        public void StartAudioCapture(string characterID = "")
         {
-            if (CurrentCharacter != null)
-            {
-                StartCoroutine(SwitchAudioCapture(CurrentCharacter.ID));
-            }
+	        if (string.IsNullOrEmpty(characterID))
+	        {
+		        if (CurrentCharacter != null)
+		        {
+			        StartCoroutine(SwitchAudioCapture(CurrentCharacter.ID));
+		        }
+	        }
+	        else
+		        StartCoroutine(SwitchAudioCapture(characterID));
         }
-        
         /// <summary>
         ///     Push captured audio to server.
         ///     For use when m_ManualAudioCapture = true
         /// </summary>
         public void PushAudio()
         {
-            m_Capture.PushAudio();
+	        m_Capture.PushAudio();
         }
-
         /// <summary>
-        ///     Stop communicating with target character via audio input
+        ///     Stop Communicating with target Character via Audio
         /// </summary>
         /// <param name="characterID">
         ///     string of Character ID, would be generated only after InworldScene is loaded and session is
@@ -556,9 +602,8 @@ namespace Inworld
         /// </param>
         public void EndAudioCapture(string characterID = null)
         {
-            if (m_CurrentRecordingID == null)
-                return;
-            
+	        if (m_CurrentRecordingID == null)
+		        return;
             if (string.IsNullOrEmpty(characterID) || characterID.Equals(m_CurrentRecordingID))
             {
                 m_Client.EndAudio(Routing.FromPlayerToAgent(m_CurrentRecordingID));

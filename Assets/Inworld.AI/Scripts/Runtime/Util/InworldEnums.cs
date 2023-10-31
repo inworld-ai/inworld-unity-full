@@ -58,11 +58,11 @@ namespace Inworld.Util
     {
         Idle, // Initial state
         Initializing,
-        InitFailed,
         Initialized, // Logged in the server with API Key/Secret or Oculus Nonce/ID
         Connecting, // Controller is connecting to World-Engine
         Connected, // Controller is connected to World-Engine and ready to work.
         LostConnect,
+        Exhausted,
         Error // Some error occured.
     }
 

@@ -7,6 +7,7 @@
 using Inworld.Packets;
 using Inworld.Sample.UI;
 using Inworld.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -21,6 +22,7 @@ namespace Inworld.Sample
         [SerializeField] ChatBubble m_BubbleLeft;
         [SerializeField] ChatBubble m_BubbleRight;
         [SerializeField] TMP_InputField m_InputField;
+        [SerializeField] bool m_LoadConnectingPanel;
         #endregion
 
         #region Private Variables
@@ -49,7 +51,15 @@ namespace Inworld.Sample
         #endregion
 
         #region Monobehavior Functions
-        protected virtual void Start()
+
+	    void Awake()
+	    {
+		    if (!m_LoadConnectingPanel || !InworldController.AutoStart) // YAN: Status Canvas is unnecessary and wouldn't show up if Auto Start is not enabled.
+			    return; 
+		    if (!MainCanvas.Instance && InworldAI.Settings.MainCanvas)
+			    Instantiate(InworldAI.Settings.MainCanvas);
+	    }
+	    protected virtual void Start()
         {
             InworldController.Instance.OnStateChanged += OnControllerStatusChanged;
         }

@@ -21,6 +21,13 @@ namespace Inworld.Sample
         [SerializeField] Toggle m_PlayPause;
         [SerializeField] Toggle m_SwitchMic;
         [SerializeField] Toggle m_Mute;
+
+        [SerializeField] Button m_NewGame;
+        [SerializeField] Button m_SaveGame;
+        [SerializeField] Button m_LoadGame;
+        [SerializeField] Button m_Disconnect;
+
+        
         [SerializeField] float m_PingDuration = 1f;
         string ipv4;
         float m_CurrentDuration;
@@ -34,6 +41,7 @@ namespace Inworld.Sample
             if (string.IsNullOrEmpty(ipv4))
                 ipv4 = Dns.GetHostAddresses(InworldAI.Game.currentServer.runtime)[0].ToString();
             _SwitchToggles(true, true);
+            _ResetButtons(false);
         }
         void Start()
         {
@@ -52,34 +60,40 @@ namespace Inworld.Sample
         public async void PlayPause()
         {
             if (m_PlayPause.isOn)
-            {
-                if (!m_HasInit)
-                    InworldController.Instance.Init();
-                else
-                    InworldController.Instance.Reconnect();
-            }
+                StartGame(true);
             else
                 await InworldController.Instance.Disconnect();
         }
+        public void StartGame(bool loadSaveData)
+        {
+            InworldController.Instance.LoadSaveData = loadSaveData;
+            if (!m_HasInit)
+                InworldController.Instance.Init();
+            else
+                InworldController.Instance.Reconnect();
+        }
+        public async void Disconnect() => await InworldController.Instance.Disconnect();
+        public void SaveGame() => InworldController.Instance.SaveGame();
         public void MicrophoneControl()
         {
-            AudioCapture.Instance.IsBlocked = !m_SwitchMic.isOn;
+	        if (!m_SwitchMic)
+		        return;
+			InworldController.Audio.IsBlocked = !m_SwitchMic.isOn;
         }
         public void SwitchVolume()
         {
-            if (InworldController.Instance.CurrentCharacter == null)
-                return;
-            
-            InworldController.Instance.CurrentCharacter.IsMute = !m_Mute.isOn;
+	        if (InworldController.Instance.CurrentCharacter == null)
+		        return;
+	        if (!m_Mute)
+		        return;
+            InworldController.Instance.CurrentCharacter.IsMute = m_Mute.isOn;
         }
-        
         protected override void OnCharacterChanged(InworldCharacter oldCharacter, InworldCharacter newCharacter)
         {
-            base.OnCharacterChanged(oldCharacter, newCharacter);
-            MicrophoneControl();
-            SwitchVolume();
+	        base.OnCharacterChanged(oldCharacter, newCharacter);
+	        MicrophoneControl();
+	        SwitchVolume();
         }
-        
         protected override void OnStatusChanged(ControllerStates incomingStatus)
         {
             base.OnStatusChanged(incomingStatus);
@@ -90,6 +104,7 @@ namespace Inworld.Sample
                     m_Indicator.color = Color.white;
                     m_IsConnecting = false;
                     _SwitchToggles(true, true);
+                    _ResetButtons(false);
                     break;
                 case ControllerStates.Initialized:
                     m_HasInit = true;
@@ -99,6 +114,7 @@ namespace Inworld.Sample
                     break;
                 case ControllerStates.Connected:
                     _SwitchToggles(true);
+                    _ResetButtons(true);
                     break;
                 case ControllerStates.Initializing:
                     m_Indicator.color = m_ColorGraph.Evaluate(0.5f);
@@ -107,14 +123,20 @@ namespace Inworld.Sample
                 case ControllerStates.Error:
                     m_Indicator.color = m_ColorGraph.Evaluate(1f);
                     m_IsConnecting = false;
-                    break;
-                case ControllerStates.InitFailed:
-                    m_Indicator.color = m_ColorGraph.Evaluate(1f);
-                    m_IsConnecting = false;
+                    _ResetButtons(false);
                     break;
             }
 
         }
+        void _ResetButtons(bool isConnected)
+        {
+            m_NewGame.interactable = !isConnected;
+            m_LoadGame.interactable = !isConnected && InworldController.Instance.HasSavedData;
+            m_SaveGame.interactable = isConnected;
+            m_Disconnect.interactable = isConnected;
+        }
+        
+        
         void _SwitchToggles(bool isOn, bool playBtnOnly = false)
         {
             if (!EnableCtrl)
@@ -122,12 +144,10 @@ namespace Inworld.Sample
             m_PlayPause.interactable = isOn;
             m_Mute.interactable = isOn && !playBtnOnly;
             m_SwitchMic.interactable = isOn && !playBtnOnly;
-
-            if (isOn && !playBtnOnly)
-            {
-                MicrophoneControl();
-                SwitchVolume();
-            }
+            if (!isOn || playBtnOnly) 
+	            return;
+            MicrophoneControl();
+            SwitchVolume();
         }
         void _UpdatePing(int nPingTime)
         {

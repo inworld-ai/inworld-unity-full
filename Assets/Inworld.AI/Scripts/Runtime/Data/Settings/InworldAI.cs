@@ -1,11 +1,11 @@
 /*************************************************************************************************
-* Copyright 2022 Theai, Inc. (DBA Inworld)
-*
-* Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
-* that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
-*************************************************************************************************/
+ * Copyright 2022 Theai, Inc. (DBA Inworld)
+ *
+ * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+ * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+ *************************************************************************************************/
 using Inworld.Model;
-using System;
+using UnityEditor;
 using UnityEngine;
 namespace Inworld.Util
 {
@@ -31,6 +31,8 @@ namespace Inworld.Util
         [SerializeField] InworldController m_ControllerPrefab;
         [SerializeField] InworldCharacter m_CharacterPrefab;
         [SerializeField] InworldCharacter m_InnequinCharacterPrefab;
+        [Space(10)]
+        [SerializeField] string m_ImportedTime;
         #endregion
 
         #region Private Variables
@@ -48,8 +50,7 @@ namespace Inworld.Util
         /// </summary>
         public static InworldAI Instance
         {
-            get
-            {
+            get {
                 if (__inst)
                     return __inst;
                 __inst = Resources.Load<InworldAI>(k_GlobalDataPath);
@@ -68,7 +69,7 @@ namespace Inworld.Util
         /// </summary>
         public static InworldGameSettings Game
         {
-            get => Instance.m_GameSettings; 
+            get => Instance.m_GameSettings;
             set => Instance.m_GameSettings = value;
         }
         /// <summary>
@@ -156,7 +157,23 @@ namespace Inworld.Util
         {
             InworldLog.LogError(log);
         }
-        public static void LogException(string exception) => InworldLog.LogException(exception);
+        public static void LogException(string exception)
+        {
+            InworldLog.LogException(exception);
+        }
+
+        static internal string ImportedTime
+        {
+            get => Instance.m_ImportedTime;
+            set 
+            {
+                Instance.m_ImportedTime = value;
+                #if UNITY_EDITOR
+                EditorUtility.SetDirty(Instance);
+                AssetDatabase.SaveAssets();
+                #endif
+            }
+        }
         #endregion
     }
 }

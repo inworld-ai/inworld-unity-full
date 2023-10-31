@@ -194,6 +194,10 @@ PrefabInstance:
       propertyPath: m_GlobalChatCanvas
       value: 
       objectReference: {fileID: 1725804783}
+    - target: {fileID: 5850455540921699961, guid: 377a3199ab75de842bf039ecaaf6063f, type: 3}
+      propertyPath: m_LoadConnectingPanel
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 377a3199ab75de842bf039ecaaf6063f, type: 3}
 --- !u!1 &128697891 stripped
@@ -297,6 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39a9b83c049a50a498f6788ca72e9566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_LoadPreviousData: 0
   m_AutoStart: 1
   m_Data: {fileID: 11400000, guid: 4952df7b265f22a4b95b85966797af56, type: 2}
   m_InworldPlayer: {fileID: 128697891}

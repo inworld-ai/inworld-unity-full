@@ -1,9 +1,9 @@
 ﻿/*************************************************************************************************
- * Copyright 2022 Theai, Inc. (DBA Inworld)
- *
- * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
- * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
- *************************************************************************************************/
+* Copyright 2022 Theai, Inc. (DBA Inworld)
+*
+* Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+* that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+*************************************************************************************************/
 using Inworld.Runtime;
 using Inworld.Sample.UI;
 using UnityEngine;
@@ -38,8 +38,8 @@ namespace Inworld.Sample
             trPlayer.eulerAngles = m_InitRotation;
         }
         #endregion
-#region Monobehavior Functions
 
+        #region Monobehavior Functions
         protected override void Update()
         {
             if (Input.GetKeyUp(KeyCode.BackQuote))
@@ -49,13 +49,12 @@ namespace Inworld.Sample
                     m_CameraController.enabled = !m_GlobalChatCanvas.activeSelf;
                 if (m_TriggerCanvas)
                     m_TriggerCanvas.SetActive(!m_TriggerCanvas.activeSelf);
-                
                 InworldController.Instance.ManualAudioCapture = m_GlobalChatCanvas.activeSelf;
-                AudioCapture.Instance.AutoPush = !m_GlobalChatCanvas.activeSelf;
+                InworldController.Audio.AutoPush = !m_GlobalChatCanvas.activeSelf;
                 if (m_GlobalChatCanvas.activeSelf)
-                    InworldController.Instance.EndAudioCapture();
+	                InworldController.Instance.EndAudioCapture();
                 else
-                    InworldController.Instance.StartAudioCapture();
+	                InworldController.Instance.StartAudioCapture();
             }
             UpdateSendText();
         }
