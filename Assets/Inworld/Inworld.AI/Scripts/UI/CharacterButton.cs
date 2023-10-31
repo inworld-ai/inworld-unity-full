@@ -7,6 +7,9 @@
 
 using UnityEngine;
 using Inworld.Entities;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.Networking;
 
 namespace Inworld.UI
 {
@@ -19,11 +22,25 @@ namespace Inworld.UI
         /// Set the character's data.
         /// </summary>
         /// <param name="data">the data to set</param>
-        public void SetData(InworldCharacterData data)
+        public IEnumerator SetData(InworldCharacterData data)
         {
             m_Data = data;
+            m_Title.text = data.givenName;
             if (data.thumbnail)
+            {
                 m_Icon.texture = data.thumbnail;
+                yield break;
+            }
+            string url = data.characterAssets?.ThumbnailURL;
+            if (string.IsNullOrEmpty(url))
+                yield break;
+            UnityWebRequest uwr = new UnityWebRequest(url);
+            uwr.downloadHandler = new DownloadHandlerTexture();
+            yield return uwr.SendWebRequest();
+            if (uwr.isDone && uwr.result == UnityWebRequest.Result.Success)
+            {
+                m_Icon.texture = (uwr.downloadHandler as DownloadHandlerTexture)?.texture;
+            }
         }
         /// <summary>
         /// Select this character to interact with.
