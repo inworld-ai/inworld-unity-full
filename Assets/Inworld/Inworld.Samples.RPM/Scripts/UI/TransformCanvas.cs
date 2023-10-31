@@ -61,7 +61,7 @@ namespace Inworld.Sample.RPM
                 return;
             m_Stone.SetActive(false);
             m_Avatar.SetActive(true);
-            m_LipAnimation.Init();
+            m_LipAnimation.InitLipSync();
         }
     }
 }

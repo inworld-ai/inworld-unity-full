@@ -48,11 +48,9 @@ namespace Inworld.Sample
         {
             if (!m_Characters.ContainsKey(charData.brainName))
                 m_Characters[charData.brainName] = Instantiate(m_CharSelectorPrefab, m_CharContentAnchor);
-            m_Characters[charData.brainName].SetData(charData);
+            StartCoroutine(m_Characters[charData.brainName].SetData(charData));
             SetContentHeight(m_CharContentAnchor, m_CharSelectorPrefab);
         }
-        
-
     }
 }
 

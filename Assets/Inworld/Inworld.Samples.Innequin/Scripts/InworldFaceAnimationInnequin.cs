@@ -5,7 +5,6 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 using Inworld.Assets;
-using Inworld.Interactions;
 using Inworld.Packet;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +12,7 @@ using UnityEngine;
 
 namespace Inworld.Sample.Innequin
 {
-    public class InworldFaceAnimationInnequin : MonoBehaviour
+    public class InworldFaceAnimationInnequin : InworldFacialAnimation
     {
         [SerializeField] Animator m_EmoteAnimator;
         [SerializeField] EmotionMap m_EmotionMap;
@@ -25,8 +24,7 @@ namespace Inworld.Sample.Innequin
         [Range(-1, 1)][SerializeField] float m_BlinkRate;
         List<Texture> m_LipsyncTextures = new List<Texture>();
         List<PhonemeInfo> m_CurrentPhoneme = new List<PhonemeInfo>();
-        InworldCharacter m_Character;
-        InworldInteraction m_Interaction;
+
         Texture m_CurrentEyeOpen;
         Texture m_CurrentEyeClosed;
         
@@ -41,37 +39,11 @@ namespace Inworld.Sample.Innequin
         const int k_VisemeSil = 0;
         const int k_VisemeCount = 15;
 
-        void Awake()
-        {
-            enabled = _Init();
-        }
-        protected virtual void OnEnable()
-        {
-            InworldController.Instance.OnCharacterInteraction += OnInteractionChanged;
-        }
-
-        protected virtual void OnDisable()
-        {
-            if (InworldController.Instance)
-                InworldController.Instance.OnCharacterInteraction -= OnInteractionChanged;
-        }
         void Start()
         {
             _InitMaterials();
         }
-        void FixedUpdate()
-        {
-            _BlinkEyes();
-            _ProcessLipSync();
-        }
-        bool _Init()
-        {
-            if (!m_Character)
-                m_Character = GetComponent<InworldCharacter>();
-            if (!m_Interaction)
-                m_Interaction = GetComponent<InworldInteraction>();
-            return m_Character && m_Interaction;
-        }
+
         void _InitMaterials()
         {
             m_matEyeBlow = _CreateFacialMaterial($"eyeBlow_{m_Character.Data.brainName.GetHashCode()}");
@@ -112,33 +84,34 @@ namespace Inworld.Sample.Innequin
                 Debug.LogError($"Unhandled emotion {emotionBehavior}");
                 return;
             }
-            m_EmoteAnimator.SetInteger(s_Emotion, (int)emoMapData.emoteAnimation);
+            if (m_EmoteAnimator)
+                m_EmoteAnimator.SetInteger(s_Emotion, (int)emoMapData.emoteAnimation);
             _MorphFaceEmotion(emoMapData.facialEmotion);
         }
-        void _BlinkEyes()
+        protected override void BlinkEyes()
         {
             m_IsBlinking = Mathf.Sin(Time.time) < m_BlinkRate;
             m_matEye.mainTexture = m_IsBlinking ? m_CurrentEyeClosed : m_CurrentEyeOpen;
         }
-        void _ResetMouth()
+        protected override void Reset()
         {
             if (m_LipsyncTextures.Count == k_VisemeCount)
                 m_matMouth.mainTexture = m_LipsyncTextures[k_VisemeSil];
             else
                 m_matMouth.mainTexture = m_DefaultMouth;
         }
-        void _ProcessLipSync()
+        protected override void ProcessLipSync()
         {
             if (!m_Interaction.IsSpeaking)
             {
-                _ResetMouth();
+                Reset();
                 return;
             }
             m_CurrentAudioTime += Time.deltaTime;
             PhonemeInfo data = m_CurrentPhoneme.LastOrDefault(p => p.startOffset < m_CurrentAudioTime);
             if (data == null || string.IsNullOrEmpty(data.phoneme))
             {
-                _ResetMouth();
+                Reset();
                 return;
             }
             PhonemeToViseme p2v = m_FaceAnimData.p2vMap.FirstOrDefault(v => v.phoneme == data.phoneme);
@@ -150,31 +123,13 @@ namespace Inworld.Sample.Innequin
             if (p2v.visemeIndex >= 0 && p2v.visemeIndex < m_LipsyncTextures.Count)
                 m_matMouth.mainTexture = m_LipsyncTextures[p2v.visemeIndex];
         }
-        protected virtual void OnInteractionChanged(InworldPacket packet)
-        {
-            if (m_Character &&
-                !string.IsNullOrEmpty(m_Character.ID) &&
-                packet?.routing?.source?.name == m_Character.ID || packet?.routing?.target?.name == m_Character.ID)
-                ProcessPacket(packet);
-        }
-        protected virtual void ProcessPacket(InworldPacket incomingPacket)
-        {
-            switch (incomingPacket)
-            {
-                case AudioPacket audioPacket: // Already Played.
-                    HandleLipSync(audioPacket);
-                    break;
-                case EmotionPacket emotionPacket:
-                    HandleEmotion(emotionPacket);
-                    break;
-            }
-        }
-        protected void HandleLipSync(AudioPacket audioPacket)
+
+        protected override void HandleLipSync(AudioPacket audioPacket)
         {
             m_CurrentAudioTime = 0;
             m_CurrentPhoneme = audioPacket.dataChunk.additionalPhonemeInfo;
         }
-        protected void HandleEmotion(EmotionPacket packet)
+        protected override void HandleEmotion(EmotionPacket packet)
         {
             _ProcessEmotion(packet.emotion.behavior.ToUpper());
         }
