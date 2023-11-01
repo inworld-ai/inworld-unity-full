@@ -75,6 +75,7 @@ header:
     - '**/UnityWebSocket/**'
     - '**/Packages/**'
     - '**/ProjectSettings/**'
+    - '**/UserSettings/**'
     - '**/*.anim'
     - '**/*.meta'
     - '**/*.asset'
