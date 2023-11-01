@@ -29,6 +29,7 @@
             uses: actions/checkout@v3
             with:
               lfs: true
+              path: Assets/Inworld/Inworld.AI/
           - uses: actions/cache@v3
             with:
               path: Library
@@ -38,8 +39,8 @@
             env:
               UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
             with:
-              unityVersion: 2021.3.19f1
-              projectPath: Assets/PlatformBuildTester~/BuildTester
+              unityVersion: 2022.3.12f1
+              projectPath: BuildTester
               customParameters: -CleanBuildCache
               targetPlatform: ${{ matrix.targetPlatform }}
           - uses: actions/upload-artifact@v3
