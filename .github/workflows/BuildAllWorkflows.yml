@@ -39,8 +39,8 @@
             env:
               UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
             with:
-              unityVersion: 2022.3.12f1
-              projectPath: BuildTester
+              unityVersion: 2022.3.4f1
+              projectPath: ./BuildTester
               customParameters: -CleanBuildCache
               targetPlatform: ${{ matrix.targetPlatform }}
           - uses: actions/upload-artifact@v3
