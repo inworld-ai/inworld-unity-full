@@ -80,6 +80,8 @@ header:
     - '**/*.asset'
     - '**/*.unity'
     - '**/*.prefab'
+    - '**/*.dwlt'
+    - '**/*.cginc'
     - '**/*.mat'
     - '**/*.lighting'
     - '**/*.uxml'
