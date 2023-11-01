@@ -72,6 +72,7 @@ header:
     - '**/src/main/proto/opentelemetry/**'
     - 'oap-server/server-starter/src/main/resources/version.properties'
     - '**/ThirdParty/**'
+    - '**/UnityWebSocket/**'
     - '**/*.anim'
     - '**/*.meta'
     - '**/*.asset'
