@@ -73,6 +73,8 @@ header:
     - 'oap-server/server-starter/src/main/resources/version.properties'
     - '**/ThirdParty/**'
     - '**/UnityWebSocket/**'
+    - '**/Packages/**'
+    - '**/ProjectSettings/**'
     - '**/*.anim'
     - '**/*.meta'
     - '**/*.asset'
