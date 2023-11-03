@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 990
   m_ShowMode: 4
-  m_Title: Project
+  m_Title: Console
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 492}
   m_MaxSize: {x: 10000, y: 10000}
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 175
+  controlID: 53
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -317,7 +317,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: -33994
+  m_LastSelectedObjectID: 22388
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1899,6 +1899,19 @@ MonoBehaviour:
       layout: 4
       size: {x: 0, y: 0}
       sizeOverriden: 0
+    - dockPosition: 1
+      containerId: overlay-container--right
+      floating: 0
+      collapsed: 0
+      displayed: 1
+      snapOffset: {x: 48, y: 48}
+      snapOffsetDelta: {x: 0, y: 0}
+      snapCorner: 0
+      id: UnityEditor.SceneViewCameraOverlay
+      index: 8
+      layout: 4
+      size: {x: 0, y: 0}
+      sizeOverriden: 0
     m_OverlaysVisible: 1
   m_WindowGUID: 4b8319cf38167a14c971a1bd9c114e16
   m_Gizmos: 0
@@ -1960,7 +1973,7 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: -0.00033973152, y: 0.99939585, z: -0.03330198, w: -0.010193342}
     speed: 2
-    m_Value: {x: -0.00033973152, y: 0.9993959, z: -0.03330198, w: -0.010193342}
+    m_Value: {x: -0.00033973067, y: 0.99939334, z: -0.033301897, w: -0.010193317}
   m_Size:
     m_Target: 29.4629
     speed: 2
@@ -2124,9 +2137,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 90440000
+      m_SelectedIDs: 68410000
       m_LastClickedID: 0
-      m_ExpandedIDs: 3cfbffff
+      m_ExpandedIDs: 48c5ffffc2ccffff58d7ffff08e9ffff0ce9ffff5ce9ffff94e9ffffb8f3ffffcef3ffffd8f3ffffe4f3fffff0f3fffff2f3ffff3cfbffffca5d0000de660000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -2195,7 +2208,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Inworld/Inworld.Samples.Innequin/Scripts
+    - Assets
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -2203,16 +2216,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Inworld/Inworld.Samples.Innequin/Scripts
+  - Assets
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Code\v3\inworld-unity-sdk
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 54560000
-    m_LastClickedID: 22100
-    m_ExpandedIDs: 0000000042500000445000007e5000008a5000008c5000009650000000ca9a3bffffff7f
+    m_SelectedIDs: 42500000
+    m_LastClickedID: 20546
+    m_ExpandedIDs: 00000000425000004450000046500000485000004a5000005a5000006050000064500000ae5a000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2267,7 +2280,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: b45900004a600000ee5f0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
