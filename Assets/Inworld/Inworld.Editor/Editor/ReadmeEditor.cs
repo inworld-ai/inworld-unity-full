@@ -11,7 +11,7 @@ using UnityEditor;
 
 namespace Inworld.Editors
 {
-    [CustomEditor(typeof(Readme))][InitializeOnLoad]
+    [CustomEditor(typeof(InworldReadme))][InitializeOnLoad]
     public class ReadmeEditor : Editor 
     {
         [SerializeField] GUIStyle m_LinkStyle;
@@ -38,15 +38,15 @@ namespace Inworld.Editors
 	    
 	    protected override void OnHeaderGUI()
 	    {
-		    Readme readme = (Readme)target;
-		    Init(readme);
+		    InworldReadme inworldReadme = (InworldReadme)target;
+		    Init(inworldReadme);
 		    
 		    float iconWidth = Mathf.Min(EditorGUIUtility.currentViewWidth/3f - 20f, 48f);
 		    
 		    GUILayout.BeginHorizontal("In BigTitle");
 		    {
-			    GUILayout.Label(readme.icon, GUILayout.Width(iconWidth), GUILayout.Height(iconWidth));
-			    GUILayout.Label(readme.title, TitleStyle);
+			    GUILayout.Label(inworldReadme.icon, GUILayout.Width(iconWidth), GUILayout.Height(iconWidth));
+			    GUILayout.Label(inworldReadme.title, TitleStyle);
 		    }
 		    GUILayout.EndHorizontal();
             
@@ -54,9 +54,9 @@ namespace Inworld.Editors
 	    
 	    public override void OnInspectorGUI()
 	    {
-		    Readme readme = (Readme)target;
-		    Init(readme);
-		    foreach (Readme.Section section in readme.sections)
+		    InworldReadme inworldReadme = (InworldReadme)target;
+		    Init(inworldReadme);
+		    foreach (InworldReadme.Section section in inworldReadme.sections)
 		    {
 			    if (!string.IsNullOrEmpty(section.heading))
 			    {
@@ -86,7 +86,7 @@ namespace Inworld.Editors
         GUIStyle BodyStyle => m_BodyStyle;
 
 	    
-	    void Init(Readme readme)
+	    void Init(InworldReadme inworldReadme)
 	    {
 		    if (m_Initialized)
 			    return;
@@ -94,14 +94,14 @@ namespace Inworld.Editors
             {
                 wordWrap = true,
                 fontSize = 14,
-                font = readme.contentFont,
+                font = inworldReadme.contentFont,
                 richText = true
             };
 
             m_TitleStyle = new GUIStyle(m_BodyStyle)
             {
                 fontSize = 32,
-                font = readme.titleFont,
+                font = inworldReadme.titleFont,
                 alignment = TextAnchor.LowerCenter
             };
 
@@ -109,7 +109,7 @@ namespace Inworld.Editors
             {
                 fontStyle = FontStyle.Bold
             };
-            m_TitleStyle.font = readme.titleFont;
+            m_TitleStyle.font = inworldReadme.titleFont;
 		    m_HeadingStyle.fontSize = 18 ;
 		    
 		    m_LinkStyle = new GUIStyle(m_BodyStyle)

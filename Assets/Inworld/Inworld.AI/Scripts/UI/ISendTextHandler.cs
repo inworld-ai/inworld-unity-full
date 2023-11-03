@@ -5,24 +5,12 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
-using System;
+using TMPro;
 using UnityEngine;
-
 namespace Inworld.UI
 {
-    public class Readme : ScriptableObject
+    public interface ISendTextHandler
     {
-        public Font titleFont;
-        public Font contentFont;
-        public Texture2D icon;
-        public string title;
-        public Section[] sections;
-	
-        [Serializable]
-        public class Section 
-        {
-            public string heading, text, linkText, url;
-        }
+
     }
 }
-

@@ -11,6 +11,7 @@ using UnityEditor;
 using UnityEngine;
 using Inworld.Sample;
 using Inworld.UI;
+using UnityEngine.Serialization;
 
 namespace Inworld.Editors
 {
@@ -25,7 +26,7 @@ namespace Inworld.Editors
     {
         [Header("Assets")]
         [SerializeField] Texture2D m_Banner;
-        [SerializeField] Readme m_Readme;
+        [FormerlySerializedAs("m_Readme")][SerializeField] InworldReadme m_InworldReadme;
         [SerializeField] bool m_DisplayReadmeOnLoad;
         [SerializeField] InworldCharacter m_Character2DPrefab;
         // TODO(Yan): Let other package's editor script to Upload those characters.
@@ -89,7 +90,7 @@ namespace Inworld.Editors
         /// <summary>
         /// Gets the default Readme asset.
         /// </summary>
-        public static Readme ReadMe => Instance.m_Readme;
+        public static InworldReadme ReadMe => Instance.m_InworldReadme;
         /// <summary>
         /// Gets/Sets the current status of Inworld Editor.
         /// </summary>
