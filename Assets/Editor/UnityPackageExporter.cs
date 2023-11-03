@@ -21,14 +21,15 @@ namespace Inworld.Editors
         const string k_LitePackageName = "InworldAI.Lite";
 
         // The path to the package under the `Assets/` folder.
-        const string k_FullPackagePath = "Assets/Inworld/";
-        const string k_LitePackagePath = "Assets/Inworld/Inworld.AI/";
+        const string k_FullPackagePath = "Assets/Inworld";
+        const string k_LitePackagePath = "Assets/Inworld/Inworld.AI";
 
         /// <summary>
         ///     Call it via outside command line to export package.
         /// </summary>
+        [MenuItem("Inworld/Export Package/Full")]
         public static void ExportFull() => ExportPackage($"{k_ExportPath}/{k_FullPackageName}.unitypackage", k_FullPackagePath);
-        
+        [MenuItem("Inworld/Export Package/Lite")]
         public static void ExportLite() => ExportPackage($"{k_ExportPath}/{k_LitePackageName}.unitypackage", k_LitePackagePath);
        
         /// <summary>
