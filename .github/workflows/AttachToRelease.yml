@@ -84,11 +84,11 @@ jobs:
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: Build/InworldAI.Full.${{ github.ref/refs/tags/ }}.unitypackage
+        files: Build/InworldAI.Full.${{ github.ref | replace('refs/tags/', '') }}.unitypackage
 
     - name: Attach Lite package to release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: Build/InworldAI.Lite.${{ github.ref/refs/tags/ }}.unitypackage
+        files: Build/InworldAI.Lite.${{ github.ref | replace('refs/tags/', '') }}.unitypackage
 

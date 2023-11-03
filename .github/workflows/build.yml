@@ -15,7 +15,7 @@
   jobs:   
     build:
       name: Build
-      runs-on: ubuntu-20.04
+      runs-on: ubuntu-latest
       concurrency:
         group: build-a-${{ github.ref }}
         cancel-in-progress: true
@@ -38,14 +38,14 @@
             uses: actions/upload-artifact@v3
             with:
               name: InworldAI.Full
-              path: Build/
+              path: Build/InworldAI.Full.unitypackage
 
           - uses: game-ci/unity-builder@v2
             with:
               unityVersion: 2022.3.4f1
-              buildMethod: Inworld.Editors.UnityPackageExporter.Lite
+              buildMethod: Inworld.Editors.UnityPackageExporter.ExportLite
           - name: upload-artifact
             uses: actions/upload-artifact@v3
             with:
               name: InworldAI.Lite
-              path: Build/      
+              path: Build/InworldAI.Lite.unitypackage 

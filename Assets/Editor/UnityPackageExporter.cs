@@ -9,7 +9,6 @@ using UnityEditor;
 
 namespace Inworld.Editors
 {
-
 	/// <summary>
 	///     This file would be called by commands, for auto-generate Unity packages.
 	/// </summary>
