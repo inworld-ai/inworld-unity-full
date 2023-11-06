@@ -27,8 +27,14 @@ namespace Inworld.Editors
     {
         static readonly int s_LegacyBaseMap = Shader.PropertyToID("_MainTex");
         static readonly int s_LegacyNormalMap = Shader.PropertyToID("_BumpMap");
-        static readonly int s_UpdatedBasedMap = Shader.PropertyToID("_BaseColorMap");
-        static readonly int s_UpdatedNormalMap = Shader.PropertyToID("_NormalMap");
+        static readonly int s_MetallicMap = Shader.PropertyToID("_MetallicGlossMap");
+        static readonly int s_Smoothness = Shader.PropertyToID("_Smoothness");
+        
+        static readonly int s_URPBaseMap = Shader.PropertyToID("_BaseMap");
+        static readonly int s_URPNormalMap = Shader.PropertyToID("_BumpMap");
+        
+        static readonly int s_HDRPBaseMap = Shader.PropertyToID("_BaseColorMap");
+        static readonly int s_HDRPNormalMap = Shader.PropertyToID("_NormalMap");
         
         const string k_VersionCheckURL = "https://api.github.com/repos/inworld-ai/inworld-unity-sdk/releases";
         const string k_UpdateTitle = "Notice";
@@ -248,10 +254,15 @@ namespace Inworld.Editors
                 Material newMat = new Material(GraphicsSettings.currentRenderPipeline.defaultMaterial);
                 if (material)
                 {
-                    Texture2D baseColorMap = material.GetTexture(s_LegacyBaseMap) as Texture2D;
+                    Texture2D baseMap = material.GetTexture(s_LegacyBaseMap) as Texture2D;
                     Texture2D normalMap = material.GetTexture(s_LegacyNormalMap) as Texture2D;
-                    newMat.SetTexture(s_UpdatedBasedMap, baseColorMap);
-                    newMat.SetTexture(s_UpdatedNormalMap, normalMap);
+                    Texture2D metallicMap = material.GetTexture(s_MetallicMap) as Texture2D;
+                    newMat.SetTexture(s_URPBaseMap, baseMap);
+                    newMat.SetTexture(s_HDRPBaseMap, baseMap);
+                    newMat.SetTexture(s_URPNormalMap, normalMap);
+                    newMat.SetTexture(s_HDRPNormalMap, normalMap);
+                    newMat.SetTexture(s_MetallicMap, metallicMap);
+                    newMat.SetFloat(s_Smoothness, 0.15f); // YAN: GLTF's smoothness = 1 - mainTex.g * _Roughness.
                 }
                 renderer.material = newMat;
             }
