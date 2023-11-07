@@ -38,6 +38,11 @@ namespace Inworld.UI
             if (m_TextField && !string.IsNullOrEmpty(text))
                 m_TextField.text = text;
         }
+        /// <summary>
+        /// Attach text to the current bubble.
+        /// </summary>
+        /// <param name="text"></param>
+        public override void AttachBubble(string text) => m_TextField.text += text;
     #endregion
     }
 

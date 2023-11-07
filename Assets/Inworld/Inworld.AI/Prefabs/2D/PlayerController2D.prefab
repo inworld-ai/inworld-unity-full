@@ -251,8 +251,6 @@ MonoBehaviour:
   m_BubbleLeftPrefab: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
   m_BubbleRightPrefab: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
   m_DisplaySplash: 1
-  m_CharContentAnchor: {fileID: 0}
-  m_CharSelectorPrefab: {fileID: 0}
 --- !u!1 &884715058101280083
 GameObject:
   m_ObjectHideFlags: 0
@@ -2639,6 +2637,7 @@ GameObject:
   - component: {fileID: 678369657000538080}
   - component: {fileID: 5576658489812693859}
   - component: {fileID: 8467372439031144053}
+  - component: {fileID: 153383985183162889}
   m_Layer: 0
   m_Name: ChatPanel
   m_TagString: Untagged
@@ -2731,3 +2730,26 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &153383985183162889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8889525223984767569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cae72343a18248318c024c7f8211c762, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ContentAnchor: {fileID: 162201157703380547}
+  m_BubbleLeft: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
+  m_BubbleRight: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
+  m_ChatOptions:
+    audio: 0
+    text: 1
+    emotion: 0
+    narrativeAction: 1
+    relation: 1
+    trigger: 1
+    longBubbleMode: 0

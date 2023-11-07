@@ -15,12 +15,23 @@ namespace Inworld.UI
         [SerializeField] RectTransform m_ContentAnchor;
 
         protected readonly Dictionary<string, InworldUIElement> m_Bubbles = new Dictionary<string, InworldUIElement>();
+        
+        /// <summary>
+        /// Return if the UI components are existing.
+        /// </summary>
+        public virtual bool IsUIReady => m_ContentAnchor && m_Bubbles != null;
 
-        protected virtual void InsertBubble(string key, InworldUIElement bubble, string title, string content = null, Texture2D thumbnail = null)
+        protected virtual void InsertBubble(string key, InworldUIElement bubble, string title, bool isAttachMode = false, string content = null, Texture2D thumbnail = null)
         {
             if (!m_Bubbles.ContainsKey(key))
+            {
                 m_Bubbles[key] = Instantiate(bubble, m_ContentAnchor);
-            m_Bubbles[key].SetBubble(title, thumbnail, content);
+                m_Bubbles[key].SetBubble(title, thumbnail, content);
+            }
+            else if (isAttachMode)
+            {
+                m_Bubbles[key].AttachBubble(content);
+            }
             SetContentHeight(bubble.Height);
         }
         protected virtual void RemoveBubble(string key)

@@ -48,5 +48,9 @@ namespace Inworld.UI
             if (m_Icon && thumbnail)
                 m_Icon.texture = thumbnail;
         }
+        public virtual void AttachBubble(string text)
+        {
+            
+        }
     }
 }

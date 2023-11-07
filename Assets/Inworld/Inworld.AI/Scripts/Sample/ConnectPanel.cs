@@ -14,30 +14,34 @@ namespace Inworld.Sample
 {
     public class ConnectPanel : BubblePanel
     {
-        [SerializeField] protected Button m_ConnectButton;
+        [SerializeField] Button m_ConnectButton;
         [SerializeField] CharacterButton m_CharSelectorPrefab;
-        protected void OnEnable()
+
+        public override bool IsUIReady => base.IsUIReady && m_ConnectButton && m_CharSelectorPrefab;
+        void OnEnable()
         {
             InworldController.Client.OnStatusChanged += OnStatusChanged;
             InworldController.CharacterHandler.OnCharacterRegistered += OnCharacterRegistered;
         }
 
-        protected void OnDisable()
+        void OnDisable()
         {
             if (!InworldController.Instance)
                 return;
             InworldController.Client.OnStatusChanged -= OnStatusChanged;
             InworldController.CharacterHandler.OnCharacterRegistered -= OnCharacterRegistered;
         }
-        
-        protected virtual void OnStatusChanged(InworldConnectionStatus newStatus)
+
+        void OnStatusChanged(InworldConnectionStatus newStatus)
         {
             if(m_ConnectButton)
                 m_ConnectButton.interactable = newStatus == InworldConnectionStatus.Idle || newStatus == InworldConnectionStatus.Connected;
         }
-        
-        protected virtual void OnCharacterRegistered(InworldCharacterData charData)
+
+        void OnCharacterRegistered(InworldCharacterData charData)
         {
+            if (!IsUIReady)
+                return;
             InsertBubble(charData.brainName, m_CharSelectorPrefab, charData.givenName);
             StartCoroutine((m_Bubbles[charData.brainName] as CharacterButton)?.SetData(charData));
         }
