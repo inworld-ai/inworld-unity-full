@@ -32,12 +32,10 @@ namespace Inworld.UI
         /// <param name="charName">The bubble's owner's name</param>
         /// <param name="thumbnail">The bubble's owner's thumbnail</param>
         /// <param name="text">The bubble's content</param>
-        public void SetBubble(string charName, Texture2D thumbnail, string text = null)
+        public override void SetBubble(string charName, Texture2D thumbnail = null, string text = null)
         {
-            m_Title.text = charName;
-            if (m_Icon)
-                m_Icon.texture = thumbnail;
-            if (!string.IsNullOrEmpty(text))
+            base.SetBubble(charName, thumbnail, text);
+            if (m_TextField && !string.IsNullOrEmpty(text))
                 m_TextField.text = text;
         }
     #endregion

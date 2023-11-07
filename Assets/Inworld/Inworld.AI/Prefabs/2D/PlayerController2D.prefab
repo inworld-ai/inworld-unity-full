@@ -246,13 +246,13 @@ MonoBehaviour:
   m_InputField: {fileID: 2831028762704786429}
   m_SendButton: {fileID: 3677230524082073424}
   m_RecordButton: {fileID: 5952658405422641008}
-  m_ConnectButton: {fileID: 7641490535946658150}
+  m_ConnectButton: {fileID: 0}
   m_BubbleContentAnchor: {fileID: 162201157703380547}
   m_BubbleLeftPrefab: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
   m_BubbleRightPrefab: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
   m_DisplaySplash: 1
-  m_CharContentAnchor: {fileID: 6743591771634413880}
-  m_CharSelectorPrefab: {fileID: 6195639810979007338, guid: d1ba5a119de078249bde6a62dd31356f, type: 3}
+  m_CharContentAnchor: {fileID: 0}
+  m_CharSelectorPrefab: {fileID: 0}
 --- !u!1 &884715058101280083
 GameObject:
   m_ObjectHideFlags: 0
@@ -1607,6 +1607,7 @@ GameObject:
   - component: {fileID: 6596221489369703996}
   - component: {fileID: 5281503145505770764}
   - component: {fileID: 8021228278018152654}
+  - component: {fileID: 3280333935681712427}
   m_Layer: 0
   m_Name: ConnectPanel
   m_TagString: Untagged
@@ -1700,6 +1701,21 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &3280333935681712427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4699955834602449843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f3f3ac19b5d47d398eabd32106eefd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ContentAnchor: {fileID: 6743591771634413880}
+  m_ConnectButton: {fileID: 7641490535946658150}
+  m_CharSelectorPrefab: {fileID: 6195639810979007338, guid: d1ba5a119de078249bde6a62dd31356f, type: 3}
 --- !u!1 &5483914066862284295
 GameObject:
   m_ObjectHideFlags: 0
@@ -2407,7 +2423,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -734.397}
+  m_AnchoredPosition: {x: 0, y: -735.20557}
   m_SizeDelta: {x: 0, y: 200}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &746336673031193634

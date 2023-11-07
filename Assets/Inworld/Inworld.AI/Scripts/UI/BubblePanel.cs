@@ -1,0 +1,46 @@
+﻿/*************************************************************************************************
+ * Copyright 2022 Theai, Inc. (DBA Inworld)
+ *
+ * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+ * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+ *************************************************************************************************/
+
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace Inworld.UI
+{
+    public class BubblePanel : MonoBehaviour
+    {
+        [SerializeField] RectTransform m_ContentAnchor;
+
+        protected readonly Dictionary<string, InworldUIElement> m_Bubbles = new Dictionary<string, InworldUIElement>();
+
+        protected virtual void InsertBubble(string key, InworldUIElement bubble, string title, string content = null, Texture2D thumbnail = null)
+        {
+            if (!m_Bubbles.ContainsKey(key))
+                m_Bubbles[key] = Instantiate(bubble, m_ContentAnchor);
+            m_Bubbles[key].SetBubble(title, thumbnail, content);
+            SetContentHeight(bubble.Height);
+        }
+        protected virtual void RemoveBubble(string key)
+        {
+            if (!m_Bubbles.ContainsKey(key))
+                return;
+            InworldUIElement elementToDestroy = m_Bubbles[key];
+            float height = elementToDestroy.Height;
+            m_Bubbles.Remove(key);
+            Destroy(elementToDestroy);
+            SetContentHeight(height);
+        }
+        protected virtual void Clear()
+        {
+            foreach (KeyValuePair<string, InworldUIElement> kvp in m_Bubbles)
+            {
+                Destroy(kvp.Value);
+            }
+            m_ContentAnchor.sizeDelta = new Vector2(m_ContentAnchor.sizeDelta.x, 0);
+        }
+        protected virtual void SetContentHeight(float height) => m_ContentAnchor.sizeDelta = new Vector2(m_ContentAnchor.sizeDelta.x, m_ContentAnchor.childCount * height);
+    }
+}
