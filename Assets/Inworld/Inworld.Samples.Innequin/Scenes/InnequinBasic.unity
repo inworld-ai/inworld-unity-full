@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.46488476, g: 0.5154878, b: 0.58985114, a: 1}
+  m_IndirectSpecularColor: {r: 0.18296637, g: 0.22865748, b: 0.30682936, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -131,6 +131,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2255605029174697231, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2310237008755668363, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
       propertyPath: m_Name
       value: PlayerControllerInnequin
@@ -175,13 +179,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5982336311836649238, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
-      propertyPath: m_PushToTalk
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5982336311836649238, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
-      propertyPath: m_DisplaySplash
-      value: 1
+    - target: {fileID: 8140473403581873121, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

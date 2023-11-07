@@ -27,11 +27,5 @@ namespace Inworld.Sample
             if (m_ChatCanvas.activeSelf)
                 base.HandleInput();
         }
-
-        protected override void HandleTrigger(CustomPacket customPacket)
-        {
-            InworldAI.Log($"(Received {customPacket.Trigger})");
-        }
-        protected override void HandleEmotion(EmotionPacket packet) => m_CurrentEmotion = packet.emotion.ToString();
     }
 }

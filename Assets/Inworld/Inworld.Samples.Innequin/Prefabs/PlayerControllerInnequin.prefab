@@ -31,7 +31,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 954147593563308236}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -166,7 +165,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 296488619747137218}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -281,7 +279,8 @@ GameObject:
   - component: {fileID: 5395921512146893128}
   - component: {fileID: 3963973871213933636}
   - component: {fileID: 8045039013291354835}
-  - component: {fileID: 5982336311836649238}
+  - component: {fileID: 365248474568820437}
+  - component: {fileID: 4558814171197039406}
   m_Layer: 0
   m_Name: PlayerControllerInnequin
   m_TagString: MainCamera
@@ -296,6 +295,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2310237008755668363}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.9993345, z: -0.036477968, w: 0}
   m_LocalPosition: {x: 0, y: 1.16, z: 1.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -304,7 +304,6 @@ Transform:
   - {fileID: 6253734799884903879}
   - {fileID: 4969889924391347627}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 4.181, y: 180, z: 0}
 --- !u!20 &3963973871213933636
 Camera:
@@ -320,9 +319,17 @@ Camera:
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -357,7 +364,7 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2310237008755668363}
   m_Enabled: 1
---- !u!114 &5982336311836649238
+--- !u!114 &365248474568820437
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -366,7 +373,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2310237008755668363}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1802ac1ed52e71148834ae1eb56d473d, type: 3}
+  m_Script: {fileID: 11500000, guid: 445d631026be4dff9ea5c295e0e0cb9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_PushToTalk: 0
@@ -377,11 +384,20 @@ MonoBehaviour:
   m_SendButton: {fileID: 2255605029174697231}
   m_RecordButton: {fileID: 4422169585796817090}
   m_ConnectButton: {fileID: 8140473403581873121}
-  m_BubbleContentAnchor: {fileID: 0}
-  m_BubbleLeftPrefab: {fileID: 0}
-  m_BubbleRightPrefab: {fileID: 0}
   m_DisplaySplash: 1
   m_ChatCanvas: {fileID: 8964929325927956365}
+--- !u!114 &4558814171197039406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2310237008755668363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32de1a52a128487780c156969ecbb167, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   m_Subtitle: {fileID: 928350430333564137}
 --- !u!1 &2486190843075938968
 GameObject:
@@ -415,7 +431,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6197203046648604296}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -573,7 +588,6 @@ RectTransform:
   m_Children:
   - {fileID: 5346985055672539687}
   m_Father: {fileID: 5011942533220262490}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -706,7 +720,6 @@ RectTransform:
   - {fileID: 7570698436348390596}
   - {fileID: 3673673956079331475}
   m_Father: {fileID: 6253734799884903879}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -774,7 +787,6 @@ RectTransform:
   - {fileID: 954147593563308236}
   - {fileID: 1296030376181920580}
   m_Father: {fileID: 6253734799884903879}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -878,7 +890,6 @@ RectTransform:
   m_Children:
   - {fileID: 3599040703931588071}
   m_Father: {fileID: 5011942533220262490}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -967,7 +978,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5982336311836649238}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Inworld.PlayerController, Inworld.AI
         m_MethodName: SendText
         m_Mode: 1
@@ -1010,7 +1021,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4969889924391347627}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -1146,7 +1156,6 @@ RectTransform:
   - {fileID: 2694427650045482660}
   - {fileID: 4014298355433016871}
   m_Father: {fileID: 5795093136944505860}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1200,7 +1209,6 @@ RectTransform:
   m_Children:
   - {fileID: 6197203046648604296}
   m_Father: {fileID: 5011942533220262490}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -1376,7 +1384,6 @@ RectTransform:
   m_Children:
   - {fileID: 76113310935648084}
   m_Father: {fileID: 296488619747137218}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -1465,7 +1472,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5982336311836649238}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Inworld.PlayerController, Inworld.AI
         m_MethodName: ConnectInworld
         m_Mode: 1
@@ -1508,7 +1515,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1296030376181920580}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1643,7 +1649,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6197203046648604296}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1780,7 +1785,6 @@ RectTransform:
   m_Children:
   - {fileID: 4879451901406936562}
   m_Father: {fileID: 5395921512146893128}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1804,7 +1808,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 1
   m_TargetDisplay: 0
@@ -1879,7 +1885,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7570698436348390596}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2017,7 +2022,6 @@ RectTransform:
   - {fileID: 5011942533220262490}
   - {fileID: 296488619747137218}
   m_Father: {fileID: 5395921512146893128}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -2041,7 +2045,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
