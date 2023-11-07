@@ -1927,9 +1927,9 @@ MonoBehaviour:
   m_SendButton: {fileID: 3289984425432866781}
   m_RecordButton: {fileID: 7655747527716154914}
   m_ConnectButton: {fileID: 0}
-  m_BubbleContentAnchor: {fileID: 8422684618305518129}
-  m_BubbleLeftPrefab: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
-  m_BubbleRightPrefab: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
+  m_BubbleContentAnchor: {fileID: 0}
+  m_BubbleLeftPrefab: {fileID: 0}
+  m_BubbleRightPrefab: {fileID: 0}
   m_DisplaySplash: 0
   m_ChatCanvas: {fileID: 933114256932499525}
 --- !u!1 &1874934492222946476
@@ -2096,7 +2096,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Interruptable: 1
   m_MaxItemCount: 100
-  m_TextDuration: 0.5
+  m_TextSpeed: 1
   m_VolumeInterpolationSpeed: 1
   m_VolumeOnPlayerSpeaking: 1
 --- !u!114 &2475915965323509607
@@ -2113,7 +2113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Interruptable: 1
   m_MaxItemCount: 100
-  m_TextDuration: 0.5
+  m_TextSpeed: 1
   m_VolumeInterpolationSpeed: 1
   m_VolumeOnPlayerSpeaking: 1
 --- !u!222 &2477898087267174439
@@ -2301,7 +2301,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AutoPush: 1
   m_UserSpeechThreshold: 0.01
-  m_AudioRate: 16000
   m_BufferSeconds: 1
   m_DeviceName: 
   OnRecordingStart:
@@ -3977,6 +3976,7 @@ GameObject:
   - component: {fileID: 4581147788584892759}
   - component: {fileID: 3458045423068385141}
   - component: {fileID: 1786583365446160387}
+  - component: {fileID: 7802538726628842765}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: MainCamera
@@ -3984,6 +3984,29 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &7802538726628842765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7802538726628842764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cae72343a18248318c024c7f8211c762, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ContentAnchor: {fileID: 8422684618305518129}
+  m_BubbleLeft: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
+  m_BubbleRight: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
+  m_ChatOptions:
+    audio: 0
+    text: 1
+    emotion: 0
+    narrativeAction: 1
+    relation: 1
+    trigger: 1
+    longBubbleMode: 0
 --- !u!114 &7860333138930663010
 MonoBehaviour:
   m_ObjectHideFlags: 0

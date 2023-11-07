@@ -1114,15 +1114,15 @@ PrefabInstance:
     - target: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
       propertyPath: m_BubbleLeftPrefab
       value: 
-      objectReference: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
       propertyPath: m_BubbleRightPrefab
       value: 
-      objectReference: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
       propertyPath: m_BubbleContentAnchor
       value: 
-      objectReference: {fileID: 4551171349568899442}
+      objectReference: {fileID: 0}
     - target: {fileID: 4136739465161379550, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1176,11 +1176,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
---- !u!224 &4551171349568899442 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8422684618343011769, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
-  m_PrefabInstance: {fileID: 4551171349568899441}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
