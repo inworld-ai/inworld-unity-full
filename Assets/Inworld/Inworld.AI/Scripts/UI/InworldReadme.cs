@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Inworld.UI
 {
-    public class Readme : ScriptableObject
+    public class InworldReadme : ScriptableObject
     {
         public Font titleFont;
         public Font contentFont;
