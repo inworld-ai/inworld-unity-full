@@ -280,7 +280,7 @@ GameObject:
   - component: {fileID: 3963973871213933636}
   - component: {fileID: 8045039013291354835}
   - component: {fileID: 365248474568820437}
-  - component: {fileID: 4558814171197039406}
+  - component: {fileID: 8695700088679634501}
   m_Layer: 0
   m_Name: PlayerControllerInnequin
   m_TagString: MainCamera
@@ -378,15 +378,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PushToTalk: 0
   m_PushToTalkKey: 99
-  m_StatusText: {fileID: 5569203801443586707}
-  m_ConnectButtonText: {fileID: 365237032366401524}
+  m_StatusText: {fileID: 0}
+  m_ConnectButtonText: {fileID: 0}
   m_InputField: {fileID: 6142353158197196822}
   m_SendButton: {fileID: 2255605029174697231}
   m_RecordButton: {fileID: 4422169585796817090}
   m_ConnectButton: {fileID: 8140473403581873121}
   m_DisplaySplash: 1
   m_ChatCanvas: {fileID: 8964929325927956365}
---- !u!114 &4558814171197039406
+--- !u!114 &8695700088679634501
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -395,10 +395,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2310237008755668363}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32de1a52a128487780c156969ecbb167, type: 3}
+  m_Script: {fileID: 11500000, guid: d80c9a6866b34b13b68dd12cc79d11f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Subtitle: {fileID: 928350430333564137}
+  m_Status: {fileID: 5569203801443586707}
+  m_ConnectButton: {fileID: 8140473403581873121}
+  m_ButtonText: {fileID: 365237032366401524}
 --- !u!1 &2486190843075938968
 GameObject:
   m_ObjectHideFlags: 0
@@ -1057,8 +1059,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3ea4ccbf5fad0a1429aba4e2d30550a9, type: 2}
+  m_sharedMaterial: {fileID: -2341376867643795472, guid: 3ea4ccbf5fad0a1429aba4e2d30550a9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1472,8 +1474,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Inworld.PlayerController, Inworld.AI
+      - m_Target: {fileID: 8695700088679634501}
+        m_TargetAssemblyTypeName: Inworld.UI.ConnectButton, Inworld.AI
         m_MethodName: ConnectInworld
         m_Mode: 1
         m_Arguments:
@@ -1764,6 +1766,7 @@ GameObject:
   - component: {fileID: 5027762418251715279}
   - component: {fileID: 8702126128709526844}
   - component: {fileID: 1368756799268922634}
+  - component: {fileID: 2591228756699067944}
   m_Layer: 0
   m_Name: SubtitleCanvas
   m_TagString: Untagged
@@ -1854,6 +1857,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &2591228756699067944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7407168045419547241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32de1a52a128487780c156969ecbb167, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Subtitle: {fileID: 928350430333564137}
 --- !u!1 &8613245877968640145
 GameObject:
   m_ObjectHideFlags: 0

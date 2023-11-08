@@ -7,22 +7,18 @@
 
 using Inworld.Entities;
 using Inworld.UI;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Inworld.Sample
 {
-    public class ConnectPanel : BubblePanel
+    public class CharSelectorPanel : BubblePanel
     {
-        [SerializeField] TMP_Text m_Status;
-        [SerializeField] Button m_ConnectButton;
+
         [SerializeField] CharacterButton m_CharSelectorPrefab;
 
-        public override bool IsUIReady => base.IsUIReady && m_ConnectButton && m_CharSelectorPrefab;
+        public override bool IsUIReady => base.IsUIReady  && m_CharSelectorPrefab;
         void OnEnable()
         {
-            InworldController.Client.OnStatusChanged += OnStatusChanged;
             InworldController.CharacterHandler.OnCharacterRegistered += OnCharacterRegistered;
         }
 
@@ -30,20 +26,10 @@ namespace Inworld.Sample
         {
             if (!InworldController.Instance)
                 return;
-            InworldController.Client.OnStatusChanged -= OnStatusChanged;
             InworldController.CharacterHandler.OnCharacterRegistered -= OnCharacterRegistered;
         }
 
-        void OnStatusChanged(InworldConnectionStatus newStatus)
-        {
-            if(m_ConnectButton)
-                m_ConnectButton.interactable = newStatus == InworldConnectionStatus.Idle || newStatus == InworldConnectionStatus.Connected || newStatus == InworldConnectionStatus.LostConnect;
-            if (!m_Status)
-                return;
-            m_Status.text = newStatus == InworldConnectionStatus.Connected && InworldController.CurrentCharacter
-                ?  $"Current: {InworldController.CurrentCharacter.Name}" 
-                : newStatus.ToString();
-        }
+
 
         void OnCharacterRegistered(InworldCharacterData charData)
         {

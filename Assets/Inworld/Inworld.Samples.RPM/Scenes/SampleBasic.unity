@@ -1135,7 +1135,7 @@ PrefabInstance:
     - target: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
       propertyPath: m_StatusText
       value: 
-      objectReference: {fileID: 1934973846}
+      objectReference: {fileID: 0}
     - target: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
       propertyPath: m_ConnectButton
       value: 

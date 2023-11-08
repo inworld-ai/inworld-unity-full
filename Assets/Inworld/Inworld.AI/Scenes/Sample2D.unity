@@ -461,6 +461,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 730931118121735442, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
+      propertyPath: m_ConnectButtonText
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 730931118121735442, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
       propertyPath: m_BubbleContentAnchor
       value: 
       objectReference: {fileID: 0}
@@ -636,6 +640,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7641490535946658150, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7328141237567351057}
+    - target: {fileID: 7641490535946658150, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ConnectInworld
+      objectReference: {fileID: 0}
+    - target: {fileID: 7641490535946658150, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Inworld.UI.ConnectButton, Inworld.AI
+      objectReference: {fileID: 0}
     - target: {fileID: 8834293374469211135, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -659,8 +675,53 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5483914066862284295, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7328141237567351057}
   m_SourcePrefab: {fileID: 100100000, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
+--- !u!1 &7328141237567351056 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5483914066862284295, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
+  m_PrefabInstance: {fileID: 7328141237567351055}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7328141237567351057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7328141237567351056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d80c9a6866b34b13b68dd12cc79d11f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Status: {fileID: 1867960616}
+  m_ConnectButton: {fileID: 7328141237567351059}
+  m_ButtonText: {fileID: 7328141237567351058}
+--- !u!114 &7328141237567351058 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7375454573500532388, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
+  m_PrefabInstance: {fileID: 7328141237567351055}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7328141237567351059 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7641490535946658150, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
+  m_PrefabInstance: {fileID: 7328141237567351055}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7328141237567351056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8853715024279358828
 MonoBehaviour:
   m_ObjectHideFlags: 0

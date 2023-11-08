@@ -5,8 +5,6 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 using System.Collections.Generic;
-using Inworld.Packet;
-using Inworld.Entities;
 using Inworld.UI;
 using TMPro;
 using UnityEngine;
@@ -24,12 +22,10 @@ namespace Inworld.Sample
         [SerializeField] protected bool m_PushToTalk;
         [SerializeField] protected KeyCode m_PushToTalkKey = KeyCode.C;
         [Header("References")]
-        [SerializeField] protected TMP_Text m_StatusText;
-        [SerializeField] protected TMP_Text m_ConnectButtonText;
+
         [SerializeField] protected TMP_InputField m_InputField;
         [SerializeField] protected Button m_SendButton;
         [SerializeField] protected Button m_RecordButton;
-        [SerializeField] protected Button m_ConnectButton;
         [Space(10)][SerializeField] protected bool m_DisplaySplash;
         
         protected string m_CurrentEmotion;
@@ -37,16 +33,7 @@ namespace Inworld.Sample
         protected bool m_BlockAudioHandling;
         readonly protected Dictionary<string, ChatBubble> m_Bubbles = new Dictionary<string, ChatBubble>();
 
-        /// <summary>
-        /// Control the InworldController to connect inworld server.
-        /// </summary>
-        public void ConnectInworld()
-        {
-            if (InworldController.Status == InworldConnectionStatus.Idle || InworldController.Status == InworldConnectionStatus.LostConnect)
-                InworldController.Instance.Reconnect();
-            else if (InworldController.Status == InworldConnectionStatus.Connected)
-                InworldController.Instance.Disconnect();
-        }
+
         /// <summary>
         /// Send target message in the input field.
         /// </summary>
@@ -95,18 +82,13 @@ namespace Inworld.Sample
         
         protected virtual void OnStatusChanged(InworldConnectionStatus newStatus)
         {
-            if(m_ConnectButton)
-                m_ConnectButton.interactable = newStatus == InworldConnectionStatus.Idle || newStatus == InworldConnectionStatus.Connected;
-            if(m_ConnectButtonText)
-                m_ConnectButtonText.text = newStatus == InworldConnectionStatus.Connected ? "DISCONNECT" : "CONNECT";
             if (newStatus == InworldConnectionStatus.Connected && InworldController.CurrentCharacter)
             {
                 if (m_SendButton)
                     m_SendButton.interactable = true;
                 if (m_RecordButton)
                     m_RecordButton.interactable = true;
-                if (m_StatusText)
-                    m_StatusText.text = $"Current: {InworldController.CurrentCharacter.Name}";
+
                 if (m_PushToTalk && m_PTTKeyPressed && !m_BlockAudioHandling)
                     InworldController.Instance.StartAudio();
             }
@@ -116,17 +98,11 @@ namespace Inworld.Sample
                     m_SendButton.interactable = false;
                 if (m_RecordButton)
                     m_RecordButton.interactable = false;
-                if (m_StatusText)
-                    m_StatusText.text = newStatus.ToString();
+
                 if (m_PushToTalk && !m_PTTKeyPressed && !m_BlockAudioHandling)
                     InworldController.Instance.StopAudio();
             }
-            
-            if (newStatus == InworldConnectionStatus.Error)
-            {
-                if(m_StatusText)
-                    m_StatusText.text = InworldController.Client.Error;
-            }
+
         }
 
         protected virtual void OnCharacterChanged(InworldCharacter oldChar, InworldCharacter newChar)
@@ -138,8 +114,7 @@ namespace Inworld.Sample
             if (newChar == null)
                 return;
             InworldAI.Log($"Now Talking to: {newChar.Name}");
-            if (m_StatusText)
-                m_StatusText.text = $"Current: {newChar.Name}";
+
             if (m_PushToTalk && m_PTTKeyPressed && !m_BlockAudioHandling)
                 InworldController.Instance.StartAudio();
         }
