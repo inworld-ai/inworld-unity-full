@@ -54,6 +54,8 @@ namespace Inworld
             get => m_Status;
             set
             {
+                if (m_Status == value)
+                    return;
                 m_Status = value;
                 OnStatusChanged?.Invoke(value);
             }
