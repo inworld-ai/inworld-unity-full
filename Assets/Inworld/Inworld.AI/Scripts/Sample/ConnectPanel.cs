@@ -7,6 +7,7 @@
 
 using Inworld.Entities;
 using Inworld.UI;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ namespace Inworld.Sample
 {
     public class ConnectPanel : BubblePanel
     {
+        [SerializeField] TMP_Text m_Status;
         [SerializeField] Button m_ConnectButton;
         [SerializeField] CharacterButton m_CharSelectorPrefab;
 
@@ -35,7 +37,12 @@ namespace Inworld.Sample
         void OnStatusChanged(InworldConnectionStatus newStatus)
         {
             if(m_ConnectButton)
-                m_ConnectButton.interactable = newStatus == InworldConnectionStatus.Idle || newStatus == InworldConnectionStatus.Connected;
+                m_ConnectButton.interactable = newStatus == InworldConnectionStatus.Idle || newStatus == InworldConnectionStatus.Connected || newStatus == InworldConnectionStatus.LostConnect;
+            if (!m_Status)
+                return;
+            m_Status.text = newStatus == InworldConnectionStatus.Connected && InworldController.CurrentCharacter
+                ?  $"Current: {InworldController.CurrentCharacter.Name}" 
+                : newStatus.ToString();
         }
 
         void OnCharacterRegistered(InworldCharacterData charData)

@@ -42,7 +42,7 @@ namespace Inworld.Sample
         /// </summary>
         public void ConnectInworld()
         {
-            if (InworldController.Status == InworldConnectionStatus.Idle)
+            if (InworldController.Status == InworldConnectionStatus.Idle || InworldController.Status == InworldConnectionStatus.LostConnect)
                 InworldController.Instance.Reconnect();
             else if (InworldController.Status == InworldConnectionStatus.Connected)
                 InworldController.Instance.Disconnect();

@@ -574,7 +574,6 @@ GameObject:
   - component: {fileID: 519391661}
   - component: {fileID: 519391660}
   - component: {fileID: 3737309538741492351}
-  - component: {fileID: 3737309538741492352}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1927,6 +1926,7 @@ GameObject:
   - component: {fileID: 467126463158232236}
   - component: {fileID: 467126463158232240}
   - component: {fileID: 467126463158232241}
+  - component: {fileID: 467126463158232242}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: MainCamera
@@ -2063,6 +2063,29 @@ MonoBehaviour:
   m_ConnectButton: {fileID: 0}
   m_DisplaySplash: 0
   m_ChatCanvas: {fileID: 519391663}
+--- !u!114 &467126463158232242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467126463158232237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cae72343a18248318c024c7f8211c762, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ContentAnchor: {fileID: 1668428372}
+  m_BubbleLeft: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
+  m_BubbleRight: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
+  m_ChatOptions:
+    audio: 0
+    text: 1
+    emotion: 0
+    narrativeAction: 1
+    relation: 1
+    trigger: 1
+    longBubbleMode: 0
 --- !u!82 &500944304512089310
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2566,29 +2589,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &3737309538741492352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 519391663}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cae72343a18248318c024c7f8211c762, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ContentAnchor: {fileID: 1668428372}
-  m_BubbleLeft: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
-  m_BubbleRight: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
-  m_ChatOptions:
-    audio: 0
-    text: 1
-    emotion: 0
-    narrativeAction: 1
-    relation: 1
-    trigger: 1
-    longBubbleMode: 0
 --- !u!1 &3889319702385550860
 GameObject:
   m_ObjectHideFlags: 0
