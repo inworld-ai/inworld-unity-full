@@ -170,7 +170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Interruptable: 1
   m_MaxItemCount: 100
-  m_TextDuration: 0.5
+  m_TextSpeed: 1
   m_VolumeInterpolationSpeed: 1
   m_VolumeOnPlayerSpeaking: 1
 --- !u!114 &617440776921082803
@@ -452,6 +452,30 @@ PrefabInstance:
       propertyPath: m_Character
       value: 
       objectReference: {fileID: 617440776921082803}
+    - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+      propertyPath: m_ContentAnchor
+      value: 
+      objectReference: {fileID: 9024173614366409592}
+    - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+      propertyPath: m_ChatOptions.text
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+      propertyPath: m_ChatOptions.emotion
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+      propertyPath: m_ChatOptions.trigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+      propertyPath: m_ChatOptions.relation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+      propertyPath: m_ChatOptions.narrativeAction
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8919320772099105508, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -464,6 +488,11 @@ PrefabInstance:
 --- !u!224 &1223215666348061408 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1585892423272747900, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+  m_PrefabInstance: {fileID: 503141929332613532}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &9024173614366409592 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8919320772099105508, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
   m_PrefabInstance: {fileID: 503141929332613532}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6519361980826799644

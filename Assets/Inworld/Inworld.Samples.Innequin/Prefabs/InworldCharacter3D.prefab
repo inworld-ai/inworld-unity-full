@@ -1180,7 +1180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Interruptable: 1
   m_MaxItemCount: 100
-  m_TextDuration: 0.5
+  m_TextSpeed: 1
   m_VolumeInterpolationSpeed: 1
   m_VolumeOnPlayerSpeaking: 1
 --- !u!114 &1720011606412808402
@@ -2719,6 +2719,10 @@ PrefabInstance:
       propertyPath: m_Character
       value: 
       objectReference: {fileID: 2030273176201225856}
+    - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+      propertyPath: m_ChatOptions.relation
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8919320772099105508, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0

@@ -90,7 +90,7 @@ namespace Inworld.Sample
             InworldCharacterData charData = InworldController.CharacterHandler.GetCharacterDataByID(relationPacket.routing.source.name);
             if (charData == null)
                 return;
-            string key = m_ChatOptions.longBubbleMode ? relationPacket.packetId.interactionId + charData.brainName : relationPacket.packetId.utteranceId;
+            string key = m_ChatOptions.longBubbleMode ? relationPacket.packetId.interactionId : relationPacket.packetId.utteranceId;
             string charName = charData.givenName ?? "Character";
             Texture2D thumbnail = charData.thumbnail ? charData.thumbnail : InworldAI.DefaultThumbnail;
             string content = relationPacket.Relation;
@@ -103,7 +103,7 @@ namespace Inworld.Sample
             InworldCharacterData charData = InworldController.CharacterHandler.GetCharacterDataByID(customPacket.routing.source.name);
             if (charData == null)
                 return;
-            string key = m_ChatOptions.longBubbleMode ? customPacket.packetId.interactionId + charData.brainName : customPacket.packetId.utteranceId;
+            string key = m_ChatOptions.longBubbleMode ? customPacket.packetId.interactionId : customPacket.packetId.utteranceId;
             string charName = charData.givenName ?? "Character";
             Texture2D thumbnail = charData.thumbnail ? charData.thumbnail : InworldAI.DefaultThumbnail;
             string content = $"(Received: {customPacket.Trigger})";
@@ -117,14 +117,14 @@ namespace Inworld.Sample
         {
             if (!m_ChatOptions.text || textPacket.text == null || string.IsNullOrWhiteSpace(textPacket.text.text) || !IsUIReady)
                 return;
-            string key = m_ChatOptions.longBubbleMode ? textPacket.packetId.interactionId : textPacket.packetId.utteranceId;
+            string key = "";
             switch (textPacket.routing.source.type.ToUpper())
             {
                 case "AGENT":
                     InworldCharacterData charData = InworldController.CharacterHandler.GetCharacterDataByID(textPacket.routing.source.name);
                     if (charData != null)
                     {
-                        key += charData.brainName;
+                        key = m_ChatOptions.longBubbleMode ? textPacket.packetId.interactionId : textPacket.packetId.utteranceId;
                         string charName = charData.givenName ?? "Character";
                         Texture2D thumbnail = charData.thumbnail ? charData.thumbnail : InworldAI.DefaultThumbnail;
                         string content = textPacket.text.text;
@@ -133,6 +133,8 @@ namespace Inworld.Sample
                     break;
                 case "PLAYER":
                     // YAN: Player Input does not apply longBubbleMode.
+                    //      And Key is always utteranceID.
+                    key = textPacket.packetId.utteranceId;
                     InsertBubble(key, m_BubbleRight, InworldAI.User.Name, false, textPacket.text.text, InworldAI.DefaultThumbnail);
                     break;
             }
@@ -144,7 +146,7 @@ namespace Inworld.Sample
             InworldCharacterData charData = InworldController.CharacterHandler.GetCharacterDataByID(actionPacket.routing.source.name);
             if (charData == null)
                 return;
-            string key = m_ChatOptions.longBubbleMode ? actionPacket.packetId.interactionId + charData.brainName : actionPacket.packetId.utteranceId;
+            string key = m_ChatOptions.longBubbleMode ? actionPacket.packetId.interactionId : actionPacket.packetId.utteranceId;
             string charName = charData.givenName ?? "Character";
             Texture2D thumbnail = charData.thumbnail ? charData.thumbnail : InworldAI.DefaultThumbnail;
             string content = $"<i>{actionPacket.action.narratedAction.content}</i>";

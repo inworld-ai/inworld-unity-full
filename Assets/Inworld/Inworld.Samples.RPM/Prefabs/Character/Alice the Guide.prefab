@@ -967,9 +967,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c22aafc375d6d24c99c2207aa2039a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ContentRT: {fileID: 2181744917861107564}
+  m_ContentAnchor: {fileID: 2181744917861107564}
   m_BubbleLeft: {fileID: -5829000521551651004, guid: 6e31716df34c4f04a8a382ad03c5790d, type: 3}
   m_BubbleRight: {fileID: 7032387963612836835, guid: ce19183024b657340b5e830b1549618e, type: 3}
+  m_ChatOptions:
+    audio: 0
+    text: 1
+    emotion: 1
+    narrativeAction: 1
+    relation: 1
+    trigger: 0
+    longBubbleMode: 0
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
   m_Relation: {fileID: 4840593601303544719}
   m_EmoIcon: {fileID: 7575428023401961657}

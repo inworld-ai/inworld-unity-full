@@ -32,6 +32,10 @@ namespace Inworld.UI
             {
                 m_Bubbles[key].AttachBubble(content);
             }
+            else
+            {
+                m_Bubbles[key].SetBubble(title, thumbnail, content);
+            }
             SetContentHeight(bubble.Height);
         }
         protected virtual void RemoveBubble(string key)

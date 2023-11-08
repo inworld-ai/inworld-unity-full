@@ -2061,9 +2061,6 @@ MonoBehaviour:
   m_SendButton: {fileID: 7118020155351980246}
   m_RecordButton: {fileID: 1386811813}
   m_ConnectButton: {fileID: 0}
-  m_BubbleContentAnchor: {fileID: 0}
-  m_BubbleLeftPrefab: {fileID: 0}
-  m_BubbleRightPrefab: {fileID: 0}
   m_DisplaySplash: 0
   m_ChatCanvas: {fileID: 519391663}
 --- !u!82 &500944304512089310
@@ -2528,9 +2525,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c22aafc375d6d24c99c2207aa2039a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ContentRT: {fileID: 4248716694990841504}
+  m_ContentAnchor: {fileID: 4248716694990841504}
   m_BubbleLeft: {fileID: -5829000521551651004, guid: 6e31716df34c4f04a8a382ad03c5790d, type: 3}
   m_BubbleRight: {fileID: 7032387963612836835, guid: ce19183024b657340b5e830b1549618e, type: 3}
+  m_ChatOptions:
+    audio: 0
+    text: 1
+    emotion: 1
+    narrativeAction: 1
+    relation: 1
+    trigger: 1
+    longBubbleMode: 1
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
   m_Relation: {fileID: 207251458}
   m_EmoIcon: {fileID: 5295392914518966894}
@@ -3940,7 +3945,7 @@ MonoBehaviour:
       thumbnailProgress: 0
       avatarProgress: 0
     thumbnail: {fileID: 0}
-  m_VerboseLog: 0
+  m_VerboseLog: 1
   onBeginSpeaking:
     m_PersistentCalls:
       m_Calls: []

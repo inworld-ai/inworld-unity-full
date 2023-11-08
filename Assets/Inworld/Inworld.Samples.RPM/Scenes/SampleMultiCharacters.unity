@@ -1927,9 +1927,6 @@ MonoBehaviour:
   m_SendButton: {fileID: 3289984425432866781}
   m_RecordButton: {fileID: 7655747527716154914}
   m_ConnectButton: {fileID: 0}
-  m_BubbleContentAnchor: {fileID: 0}
-  m_BubbleLeftPrefab: {fileID: 0}
-  m_BubbleRightPrefab: {fileID: 0}
   m_DisplaySplash: 0
   m_ChatCanvas: {fileID: 933114256932499525}
 --- !u!1 &1874934492222946476
@@ -3489,9 +3486,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c22aafc375d6d24c99c2207aa2039a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ContentRT: {fileID: 9024173614111811653}
+  m_ContentAnchor: {fileID: 9024173614111811653}
   m_BubbleLeft: {fileID: -5829000521551651004, guid: 6e31716df34c4f04a8a382ad03c5790d, type: 3}
   m_BubbleRight: {fileID: 7032387963612836835, guid: ce19183024b657340b5e830b1549618e, type: 3}
+  m_ChatOptions:
+    audio: 0
+    text: 1
+    emotion: 1
+    narrativeAction: 1
+    relation: 1
+    trigger: 1
+    longBubbleMode: 0
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
   m_Relation: {fileID: 0}
   m_EmoIcon: {fileID: 4527467878705487250}
@@ -3508,9 +3513,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c22aafc375d6d24c99c2207aa2039a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ContentRT: {fileID: 9024173615194795521}
+  m_ContentAnchor: {fileID: 9024173615194795521}
   m_BubbleLeft: {fileID: -5829000521551651004, guid: 6e31716df34c4f04a8a382ad03c5790d, type: 3}
   m_BubbleRight: {fileID: 7032387963612836835, guid: ce19183024b657340b5e830b1549618e, type: 3}
+  m_ChatOptions:
+    audio: 0
+    text: 1
+    emotion: 1
+    narrativeAction: 1
+    relation: 1
+    trigger: 1
+    longBubbleMode: 0
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
   m_Relation: {fileID: 0}
   m_EmoIcon: {fileID: 4527467877653961686}

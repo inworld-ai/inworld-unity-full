@@ -670,6 +670,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 359806124}
     m_Modifications:
+    - target: {fileID: 1000126265049968702, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_ContentAnchor
+      value: 
+      objectReference: {fileID: 1453845967}
+    - target: {fileID: 1000126265049968702, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_ChatOptions.text
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000126265049968702, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_ChatOptions.emotion
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000126265049968702, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_ChatOptions.trigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000126265049968702, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_ChatOptions.relation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000126265049968702, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_ChatOptions.narrativeAction
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -734,6 +758,11 @@ PrefabInstance:
 --- !u!4 &1453845966 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+  m_PrefabInstance: {fileID: 1453845965}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1453845967 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2181744917861107564, guid: 809fb4511befe9142893b7b016bea809, type: 3}
   m_PrefabInstance: {fileID: 1453845965}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1624441890
