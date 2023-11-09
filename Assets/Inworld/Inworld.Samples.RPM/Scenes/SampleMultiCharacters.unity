@@ -554,8 +554,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Title: {fileID: 1934973846}
   m_Content: {fileID: 1624441892}
-  m_Character1: {fileID: 617440778307290826}
-  m_Character2: {fileID: 617440777243312270}
 --- !u!1 &1351384361
 GameObject:
   m_ObjectHideFlags: 0
@@ -1230,6 +1228,7 @@ GameObject:
   - component: {fileID: 617440777243312270}
   - component: {fileID: 2910922992607588141}
   - component: {fileID: 3025297061768081265}
+  - component: {fileID: 8996923506770352438}
   m_Layer: 0
   m_Name: Amy
   m_TagString: Untagged
@@ -1252,6 +1251,7 @@ GameObject:
   - component: {fileID: 617440778307290826}
   - component: {fileID: 2910922991540988265}
   - component: {fileID: 3025297062847392053}
+  - component: {fileID: 8996923505721057138}
   m_Layer: 0
   m_Name: Dotcom
   m_TagString: Untagged
@@ -1921,12 +1921,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PushToTalk: 0
   m_PushToTalkKey: 99
-  m_StatusText: {fileID: 0}
-  m_ConnectButtonText: {fileID: 0}
   m_InputField: {fileID: 8145037987922617873}
   m_SendButton: {fileID: 3289984425432866781}
   m_RecordButton: {fileID: 7655747527716154914}
-  m_ConnectButton: {fileID: 0}
   m_DisplaySplash: 0
   m_ChatCanvas: {fileID: 933114256932499525}
 --- !u!1 &1874934492222946476
@@ -2168,7 +2165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b28951a4e1a362741ac8288d7560535e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlayerCamera: {fileID: 4136739465191022934}
   m_BodyAnimator: {fileID: 6602395912622188134}
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
 --- !u!114 &2910922992607588141
@@ -2183,7 +2179,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b28951a4e1a362741ac8288d7560535e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlayerCamera: {fileID: 4136739465191022934}
   m_BodyAnimator: {fileID: 6602395911574462498}
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
 --- !u!114 &3020574723504620589
@@ -3275,10 +3270,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5556377780025863787}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4f92db331c103a4aa88a10e82275245, type: 3}
+  m_Script: {fileID: 11500000, guid: d3241affa9c0462fa7193839038c32c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_ManualAudioHandling: 0
+  m_SelectingMethod: 2
+  m_RefreshRate: 0.5
 --- !u!114 &5911491782927597889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4784,6 +4781,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8996923505721057138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24757743150449931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Character: {fileID: 617440778307290826}
+  m_SightAngle: 130
+  m_SightDistance: 10
+  m_RefreshRate: 0.25
 --- !u!82 &8996923506770352437
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4880,6 +4893,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8996923506770352438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24757742050296655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Character: {fileID: 617440777243312270}
+  m_SightAngle: 150
+  m_SightDistance: 10
+  m_RefreshRate: 0.25
 --- !u!114 &9017551300735078912
 MonoBehaviour:
   m_ObjectHideFlags: 0
