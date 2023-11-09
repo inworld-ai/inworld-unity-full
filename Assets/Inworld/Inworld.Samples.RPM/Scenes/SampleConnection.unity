@@ -1754,12 +1754,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PushToTalk: 0
   m_PushToTalkKey: 99
-  m_StatusText: {fileID: 0}
-  m_ConnectButtonText: {fileID: 0}
   m_InputField: {fileID: 0}
   m_SendButton: {fileID: 0}
   m_RecordButton: {fileID: 0}
-  m_ConnectButton: {fileID: 0}
   m_DisplaySplash: 1
 --- !u!114 &1752403840574755136
 MonoBehaviour:

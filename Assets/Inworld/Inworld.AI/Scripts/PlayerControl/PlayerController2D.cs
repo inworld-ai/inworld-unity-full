@@ -14,9 +14,6 @@ namespace Inworld.Sample
 {
     public class PlayerController2D : PlayerController
     {
-
-        
-
         protected override void Start()
         {
             if (m_PushToTalk)

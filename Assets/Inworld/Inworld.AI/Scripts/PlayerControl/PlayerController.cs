@@ -4,8 +4,7 @@
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
-using System.Collections.Generic;
-using Inworld.UI;
+
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,8 +30,6 @@ namespace Inworld.Sample
         protected string m_CurrentEmotion;
         protected bool m_PTTKeyPressed;
         protected bool m_BlockAudioHandling;
-        readonly protected Dictionary<string, ChatBubble> m_Bubbles = new Dictionary<string, ChatBubble>();
-
 
         /// <summary>
         /// Send target message in the input field.
