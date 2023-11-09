@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Inworld.UI
 {
@@ -36,7 +37,7 @@ namespace Inworld.UI
             {
                 m_Bubbles[key].SetBubble(title, thumbnail, content);
             }
-            SetContentHeight(bubble.Height);
+            UpdateContentHeight();
         }
         protected virtual void RemoveBubble(string key)
         {
@@ -46,7 +47,7 @@ namespace Inworld.UI
             float height = elementToDestroy.Height;
             m_Bubbles.Remove(key);
             Destroy(elementToDestroy);
-            SetContentHeight(height);
+            UpdateContentHeight();
         }
         protected virtual void Clear()
         {
@@ -56,6 +57,9 @@ namespace Inworld.UI
             }
             m_ContentAnchor.sizeDelta = new Vector2(m_ContentAnchor.sizeDelta.x, 0);
         }
-        protected virtual void SetContentHeight(float height) => m_ContentAnchor.sizeDelta = new Vector2(m_ContentAnchor.sizeDelta.x, m_ContentAnchor.childCount * height);
+        protected void UpdateContentHeight()
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(m_ContentAnchor);
+        }
     }
 }
