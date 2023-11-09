@@ -15,7 +15,7 @@ namespace Inworld.Sample
     /// This is the demo use case for how to interact with Inworld.
     /// For developers please feel free to create your own.
     /// </summary>
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : SingletonBehavior<PlayerController>
     {
         [Header("Audio Capture")]
         [SerializeField] protected bool m_PushToTalk;

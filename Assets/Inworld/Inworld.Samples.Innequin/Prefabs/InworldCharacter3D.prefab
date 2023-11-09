@@ -977,6 +977,7 @@ GameObject:
   - component: {fileID: 5081194231765261366}
   - component: {fileID: 1720011606412808402}
   - component: {fileID: 7612811799215154238}
+  - component: {fileID: 9143434658667413275}
   m_Layer: 0
   m_Name: InworldCharacter3D
   m_TagString: Untagged
@@ -1215,9 +1216,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b28951a4e1a362741ac8288d7560535e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlayerCamera: {fileID: 0}
   m_BodyAnimator: {fileID: 6488192458725203369}
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
+--- !u!114 &9143434658667413275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3694925250822063550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Character: {fileID: 2030273176201225856}
+  m_SightAngle: 150
+  m_SightDistance: 10
 --- !u!1 &3804245501167605051
 GameObject:
   m_ObjectHideFlags: 0

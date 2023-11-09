@@ -5,19 +5,17 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 using Inworld.Packet;
+using Inworld.Sample;
 using UnityEngine;
 
 namespace Inworld.Assets
 {
     public class InworldBodyAnimation : InworldAnimation
     {
-        [SerializeField] Transform m_PlayerCamera;
         [SerializeField] Animator m_BodyAnimator;
         [SerializeField] EmotionMap m_EmotionMap;
 
         Transform m_Transform;
-        Transform m_MainCameraTransform;
-        Transform m_trLookAt;
         Vector3 m_vecInitPosition;
         Vector3 m_vecInitEuler;
         float m_LookAtWeight;
@@ -31,8 +29,6 @@ namespace Inworld.Assets
         protected override void OnEnable()
         {
             m_Transform = transform;
-            if (Camera.main)
-                m_MainCameraTransform = Camera.main.transform;
             m_vecInitEuler = m_Transform.localEulerAngles;
             m_vecInitPosition = m_Transform.localPosition;
             m_Interaction.OnStartStopInteraction += OnStartStopInteraction;
@@ -52,12 +48,12 @@ namespace Inworld.Assets
         {
             if (!m_BodyAnimator)
                 return;
-            if (m_trLookAt == null)
+            if (!PlayerController.Instance)
             {
                 _StopLookAt();
                 return;
             }
-            _StartLookAt(m_trLookAt.position);
+            _StartLookAt(PlayerController.Instance.transform.position);
         }
 
         protected virtual void OnStartStopInteraction(bool isStarting)
@@ -66,15 +62,13 @@ namespace Inworld.Assets
         }
         protected virtual void OnCharChanged(InworldCharacter oldChar, InworldCharacter newChar)
         {
-            if (oldChar != null && oldChar.BrainName == m_Character.Data.brainName)
+            if (oldChar && oldChar.BrainName == m_Character.Data.brainName)
             {
-                m_trLookAt = null;
                 HandleMainStatus(AnimMainStatus.Goodbye);
                 m_BodyAnimator.enabled = false;
             }
-            if (newChar != null && newChar.BrainName == m_Character.Data.brainName)
+            if (newChar && newChar.BrainName == m_Character.Data.brainName)
             {
-                m_trLookAt = m_PlayerCamera ? m_PlayerCamera :m_MainCameraTransform;
                 m_BodyAnimator.enabled = true;
                 HandleMainStatus(AnimMainStatus.Hello);
             }
