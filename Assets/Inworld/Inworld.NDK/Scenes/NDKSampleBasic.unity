@@ -371,7 +371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 359806128}
-  m_AudioCapture: {fileID: 0}
+  m_AudioCapture: {fileID: 359806132}
   m_CharacterHandler: {fileID: 359806131}
   m_GameData: {fileID: 11400000, guid: ddfc6d5fd8aef7e4d96034cee968d78a, type: 2}
   m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
@@ -414,12 +414,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 359806122}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 393ccca29f43636448025acee26204bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 37c7724d7f1e0394c9a79e9ff4fbd818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_AutoPush: 1
   m_UserSpeechThreshold: 0.01
-  m_AudioRate: 16000
   m_BufferSeconds: 1
   m_DeviceName: 
   OnRecordingStart:
@@ -2064,6 +2063,7 @@ MonoBehaviour:
   m_BubbleContentAnchor: {fileID: 1668428372}
   m_BubbleLeftPrefab: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
   m_BubbleRightPrefab: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
+  m_AudioListener: {fileID: 467126463158232236}
   m_DisplaySplash: 0
   m_ChatCanvas: {fileID: 519391663}
 --- !u!82 &500944304512089310

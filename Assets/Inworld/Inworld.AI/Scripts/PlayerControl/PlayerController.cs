@@ -18,7 +18,7 @@ namespace Inworld.Sample
     /// This is the demo use case for how to interact with Inworld.
     /// For developers please feel free to create your own.
     /// </summary>
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : SingletonBehavior<PlayerController>
     {
         [Header("Audio Capture")]
         [SerializeField] protected bool m_PushToTalk;
@@ -33,13 +33,14 @@ namespace Inworld.Sample
         [SerializeField] protected RectTransform m_BubbleContentAnchor;
         [SerializeField] protected ChatBubble m_BubbleLeftPrefab;
         [SerializeField] protected ChatBubble m_BubbleRightPrefab;
+        [SerializeField] protected AudioListener m_AudioListener;
         [Space(10)][SerializeField] protected bool m_DisplaySplash;
         
         protected string m_CurrentEmotion;
         protected bool m_PTTKeyPressed;
         protected bool m_BlockAudioHandling;
         readonly protected Dictionary<string, ChatBubble> m_Bubbles = new Dictionary<string, ChatBubble>();
-
+        
         /// <summary>
         /// Control the InworldController to connect inworld server.
         /// </summary>
@@ -68,9 +69,12 @@ namespace Inworld.Sample
                 InworldAI.LogWarning($"Failed to send text: {e}");
             }
         }
+        
 
         protected virtual void Awake()
         {
+            if (m_AudioListener)
+                m_AudioListener = GetComponent<AudioListener>();
             if (m_SendButton)
                 m_SendButton.interactable = false;
             if (m_RecordButton)
