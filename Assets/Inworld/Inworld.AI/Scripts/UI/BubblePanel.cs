@@ -21,6 +21,11 @@ namespace Inworld.UI
         /// Return if the UI components are existing.
         /// </summary>
         public virtual bool IsUIReady => m_ContentAnchor && m_Bubbles != null;
+                
+        public void UpdateContent()
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(m_ContentAnchor);
+        }
 
         protected virtual void InsertBubble(string key, InworldUIElement bubble, string title, bool isAttachMode = false, string content = null, Texture2D thumbnail = null)
         {
@@ -37,7 +42,7 @@ namespace Inworld.UI
             {
                 m_Bubbles[key].SetBubble(title, thumbnail, content);
             }
-            UpdateContentHeight();
+            UpdateContent();
         }
         protected virtual void RemoveBubble(string key)
         {
@@ -47,7 +52,7 @@ namespace Inworld.UI
             float height = elementToDestroy.Height;
             m_Bubbles.Remove(key);
             Destroy(elementToDestroy);
-            UpdateContentHeight();
+            UpdateContent();
         }
         protected virtual void Clear()
         {
@@ -56,10 +61,6 @@ namespace Inworld.UI
                 Destroy(kvp.Value);
             }
             m_ContentAnchor.sizeDelta = new Vector2(m_ContentAnchor.sizeDelta.x, 0);
-        }
-        protected void UpdateContentHeight()
-        {
-            LayoutRebuilder.ForceRebuildLayoutImmediate(m_ContentAnchor);
         }
     }
 }

@@ -30,7 +30,6 @@ namespace Inworld.Sample
         [SerializeField] protected ChatBubble m_BubbleLeft;
         [SerializeField] protected ChatBubble m_BubbleRight;
         [SerializeField] protected ChatOptions m_ChatOptions;
-
         public override bool IsUIReady => base.IsUIReady && m_BubbleLeft && m_BubbleRight;
         
         void OnEnable()
@@ -149,7 +148,7 @@ namespace Inworld.Sample
             string key = m_ChatOptions.longBubbleMode ? actionPacket.packetId.interactionId : actionPacket.packetId.utteranceId;
             string charName = charData.givenName ?? "Character";
             Texture2D thumbnail = charData.thumbnail ? charData.thumbnail : InworldAI.DefaultThumbnail;
-            string content = $"<i><color=#555555>{actionPacket.action.narratedAction.content}</color></i>";
+            string content = $"<i><color=#AAAAAA>{actionPacket.action.narratedAction.content}</color></i>";
             InsertBubble(key, m_BubbleLeft, charName, m_ChatOptions.longBubbleMode, content, thumbnail);
         }
     }

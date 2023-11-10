@@ -131,6 +131,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 64629504259169591, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+      propertyPath: m_VertexColorAlwaysGammaSpace
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2310237008755668363, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
       propertyPath: m_Name
       value: PlayerControllerInnequin
@@ -1176,7 +1180,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b28951a4e1a362741ac8288d7560535e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlayerCamera: {fileID: 0}
   m_BodyAnimator: {fileID: 1921052527070687568}
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
 --- !u!65 &2991375306069414090
