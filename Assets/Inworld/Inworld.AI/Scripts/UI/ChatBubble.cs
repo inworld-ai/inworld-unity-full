@@ -42,12 +42,8 @@ namespace Inworld.UI
         /// Attach text to the current bubble.
         /// </summary>
         /// <param name="text"></param>
-        public override void AttachBubble(string text)
-        {
-            if (!m_TextField.text.EndsWith(' ') && !text.StartsWith(' '))
-                m_TextField.text += ' ';
-            m_TextField.text += text;
-        }
+        public override void AttachBubble(string text) => m_TextField.text = $"{m_TextField.text.Trim()} {text.Trim()}";
+
     #endregion
     }
 

@@ -1798,6 +1798,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BodyAnimator: {fileID: 6602395912622188134}
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
+  show: 1
 --- !u!114 &2910922992607588141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1812,6 +1813,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_BodyAnimator: {fileID: 6602395911574462498}
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
+  show: 0
 --- !u!114 &3020574723504620589
 MonoBehaviour:
   m_ObjectHideFlags: 0
