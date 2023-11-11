@@ -167,10 +167,7 @@ namespace Inworld.Interactions
             try
             {
                 if (!IsRelated(incomingPacket))
-                {
                     return;
-                }
-
                 switch (incomingPacket?.routing?.source?.type.ToUpper())
                 {
                     case "AGENT":

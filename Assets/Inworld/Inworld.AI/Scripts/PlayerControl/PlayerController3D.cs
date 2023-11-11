@@ -7,17 +7,22 @@
 
 using UnityEngine;
 using Inworld.Packet;
+using Inworld.UI;
 
 namespace Inworld.Sample
 {
     public class PlayerController3D : PlayerController
     {
         [SerializeField] protected GameObject m_ChatCanvas;
+        [SerializeField] protected BubblePanel m_BubblePanel;
+        
         protected override void HandleInput()
         {
             if (Input.GetKeyUp(KeyCode.BackQuote))
             {
                 m_ChatCanvas.SetActive(!m_ChatCanvas.activeSelf);
+                if(m_BubblePanel)
+                    m_BubblePanel.UpdateContent();
                 m_BlockAudioHandling = m_ChatCanvas.activeSelf;
                 if (m_PushToTalk)
                     InworldController.Instance.StopAudio();
@@ -27,11 +32,5 @@ namespace Inworld.Sample
             if (m_ChatCanvas.activeSelf)
                 base.HandleInput();
         }
-
-        protected override void HandleTrigger(CustomPacket customPacket)
-        {
-            InworldAI.Log($"(Received {customPacket.Trigger})");
-        }
-        protected override void HandleEmotion(EmotionPacket packet) => m_CurrentEmotion = packet.emotion.ToString();
     }
 }

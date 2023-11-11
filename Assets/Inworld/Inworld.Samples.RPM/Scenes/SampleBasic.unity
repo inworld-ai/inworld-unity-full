@@ -384,7 +384,7 @@ Transform:
   m_GameObject: {fileID: 444891039}
   serializedVersion: 2
   m_LocalRotation: {x: 0.9120046, y: -0, z: -0, w: 0.41017997}
-  m_LocalPosition: {x: 1.1, y: 9.1, z: 6.3}
+  m_LocalPosition: {x: 0, y: 9.1, z: 6.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -551,7 +551,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -1.2, y: 5.2000003}
+  m_AnchoredPosition: {x: 0, y: 5.2000003}
   m_SizeDelta: {x: 1600, y: 900}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1131924867
@@ -670,6 +670,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 359806124}
     m_Modifications:
+    - target: {fileID: 1000126265049968702, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_ContentAnchor
+      value: 
+      objectReference: {fileID: 1453845967}
+    - target: {fileID: 1000126265049968702, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_ChatOptions.text
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000126265049968702, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_ChatOptions.emotion
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000126265049968702, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_ChatOptions.trigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000126265049968702, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_ChatOptions.relation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000126265049968702, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_ChatOptions.narrativeAction
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -734,6 +758,11 @@ PrefabInstance:
 --- !u!4 &1453845966 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+  m_PrefabInstance: {fileID: 1453845965}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1453845967 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2181744917861107564, guid: 809fb4511befe9142893b7b016bea809, type: 3}
   m_PrefabInstance: {fileID: 1453845965}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1624441890
@@ -1095,38 +1124,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
-      propertyPath: m_PushToTalk
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
-      propertyPath: m_StatusText
-      value: 
-      objectReference: {fileID: 1934973846}
-    - target: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
-      propertyPath: m_ConnectButton
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
-      propertyPath: m_PushToTalkKey
-      value: 99
-      objectReference: {fileID: 0}
-    - target: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
-      propertyPath: m_BubbleLeftPrefab
-      value: 
-      objectReference: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
-    - target: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
-      propertyPath: m_BubbleRightPrefab
-      value: 
-      objectReference: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
-    - target: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
-      propertyPath: m_BubbleContentAnchor
-      value: 
-      objectReference: {fileID: 4551171349568899442}
-    - target: {fileID: 4136739465161379550, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4136739465161379550, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1176,11 +1173,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
---- !u!224 &4551171349568899442 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8422684618343011769, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
-  m_PrefabInstance: {fileID: 4551171349568899441}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

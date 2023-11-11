@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3753617577465698405}
   - component: {fileID: 2395919966041133306}
-  - component: {fileID: 8871078975431514291}
   - component: {fileID: 3127888445581560149}
   - component: {fileID: 4881369806813467986}
+  - component: {fileID: 2995019885456371670}
   m_Layer: 0
   m_Name: InworldController
   m_TagString: Untagged
@@ -49,24 +49,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Client: {fileID: 4881369806813467986}
   m_AudioCapture: {fileID: 3127888445581560149}
-  m_CharacterHandler: {fileID: 8871078975431514291}
+  m_CharacterHandler: {fileID: 2995019885456371670}
   m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/transform
   m_AutoStart: 1
---- !u!114 &8871078975431514291
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5556377780116934527}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4f92db331c103a4aa88a10e82275245, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ManualAudioHandling: 0
-  m_DefaultCharacter: {fileID: 0}
 --- !u!114 &3127888445581560149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,7 +67,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AutoPush: 1
   m_UserSpeechThreshold: 0.01
-  m_AudioRate: 16000
   m_BufferSeconds: 1
   m_DeviceName: 
   OnRecordingStart:
@@ -106,3 +91,20 @@ MonoBehaviour:
   m_APIKey: 
   m_APISecret: 
   m_CustomToken: 
+  m_PublicWorkspace: 
+  m_PreviousDialog:
+    phrases: []
+--- !u!114 &2995019885456371670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5556377780116934527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3241affa9c0462fa7193839038c32c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ManualAudioHandling: 0
+  m_SelectingMethod: 2

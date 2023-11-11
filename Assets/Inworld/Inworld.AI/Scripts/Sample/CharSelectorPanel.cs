@@ -1,46 +1,42 @@
-/*************************************************************************************************
+﻿/*************************************************************************************************
  * Copyright 2022 Theai, Inc. (DBA Inworld)
  *
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
-
 using Inworld.Entities;
-
-
+using Inworld.UI;
+using UnityEngine;
 
 namespace Inworld.Sample
 {
-    public class PlayerController2D : PlayerController
+    public class CharSelectorPanel : BubblePanel
     {
-        protected override void Start()
+
+        [SerializeField] CharacterButton m_CharSelectorPrefab;
+
+        public override bool IsUIReady => base.IsUIReady  && m_CharSelectorPrefab;
+        void OnEnable()
         {
-            if (m_PushToTalk)
-            {
-                InworldController.CharacterHandler.ManualAudioHandling = true;
-                InworldController.Audio.AutoPush = false;
-            }
-        }
-        
-        protected override void OnEnable()
-        {
-            base.OnEnable();
             InworldController.CharacterHandler.OnCharacterRegistered += OnCharacterRegistered;
         }
 
-        protected override void OnDisable()
+        void OnDisable()
         {
-            base.OnDisable();
             if (!InworldController.Instance)
                 return;
             InworldController.CharacterHandler.OnCharacterRegistered -= OnCharacterRegistered;
         }
-        
-        protected virtual void OnCharacterRegistered(InworldCharacterData charData)
-        {
 
+
+
+        void OnCharacterRegistered(InworldCharacterData charData)
+        {
+            if (!IsUIReady)
+                return;
+            InsertBubble(charData.brainName, m_CharSelectorPrefab, charData.givenName);
+            StartCoroutine((m_Bubbles[charData.brainName] as CharacterButton)?.SetData(charData));
         }
     }
 }
-

@@ -108,7 +108,7 @@ namespace Inworld.Sample.Innequin
                 return;
             }
             m_CurrentAudioTime += Time.deltaTime;
-            PhonemeInfo data = m_CurrentPhoneme.LastOrDefault(p => p.startOffset < m_CurrentAudioTime);
+            PhonemeInfo data = m_CurrentPhoneme?.LastOrDefault(p => p.startOffset < m_CurrentAudioTime);
             if (data == null || string.IsNullOrEmpty(data.phoneme))
             {
                 Reset();

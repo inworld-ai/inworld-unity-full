@@ -14,6 +14,12 @@ using Inworld.Entities;
 
 namespace Inworld
 {
+    public enum CharSelectingMethod
+    {
+        Manual,
+        KeyCode,
+        SightAngle
+    }
     public class CharacterHandler : MonoBehaviour
     {
         [SerializeField] bool m_ManualAudioHandling;
@@ -69,6 +75,15 @@ namespace Inworld
             }
         }
         /// <summary>
+        ///     Get the current Character Selecting Method. By default it's manual.
+        /// </summary>
+        public virtual CharSelectingMethod SelectingMethod => CharSelectingMethod.Manual;
+
+        /// <summary>
+        ///     Change the method of how to select character.
+        /// </summary>
+        public virtual void ChangeSelectingMethod() {}
+        /// <summary>
         /// Check if a character is registered.
         /// </summary>
         /// <param name="characterID">The live session ID of the Inworld character.</param>
@@ -77,7 +92,7 @@ namespace Inworld
         /// Get the live session ID for an Inworld character.
         /// </summary>
         /// <param name="character">The request Inworld character.</param>
-        public string GetLiveSessionID(InworldCharacter character)
+        public virtual string GetLiveSessionID(InworldCharacter character)
         {
             if (!character || string.IsNullOrEmpty(character.BrainName))
                 return null;

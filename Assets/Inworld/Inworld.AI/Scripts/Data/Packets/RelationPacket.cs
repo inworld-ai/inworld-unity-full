@@ -55,5 +55,6 @@ namespace Inworld.Packet
             type = "RELATION";
             debugInfo = evt;
         }
+        public string Relation => debugInfo.relation.relationState.GetUpdate(debugInfo.relation.relationUpdate);
     }
 }
