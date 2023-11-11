@@ -93,7 +93,6 @@ namespace Inworld.Interactions
             if (UtteranceQueue.Count == 0)
             {
                 IsSpeaking = false;
-                m_CurrentInteraction = null;
                 return;
             }
             
@@ -127,8 +126,7 @@ namespace Inworld.Interactions
             }
             else if (inworldPacket is AudioPacket || inworldPacket is TextPacket)
             {
-                if (interaction == m_CurrentInteraction ||
-                    interaction.SequenceNumber > m_LastInteractionSequenceNumber)
+                if (interaction.SequenceNumber >= m_LastInteractionSequenceNumber)
                     QueueUtterance(historyItem.Item2);
             }
             else
