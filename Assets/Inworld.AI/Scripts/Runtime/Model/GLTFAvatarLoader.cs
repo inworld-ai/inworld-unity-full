@@ -112,6 +112,7 @@ namespace Inworld.Model.Sample
 
         bool IsUsingScriptableRenderPipeline()
         {
+            Debug.Log(GraphicsSettings.currentRenderPipeline);
             return GraphicsSettings.defaultRenderPipeline != null;
         }
         #endregion
