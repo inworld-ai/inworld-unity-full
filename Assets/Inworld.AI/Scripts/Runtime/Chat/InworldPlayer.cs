@@ -19,25 +19,10 @@ namespace Inworld.Sample
         [SerializeField] InworldCameraController m_CameraController;
         [SerializeField] GameObject m_TriggerCanvas;
         [SerializeField] RecordButton m_RecordButton;
-        [SerializeField] RuntimeCanvas m_RTCanvas;
         [SerializeField] Vector3 m_InitPosition;
         [SerializeField] Vector3 m_InitRotation;
         #endregion
-
-        #region Public Function
-        public void BackToLobby()
-        {
-            if (!m_RTCanvas)
-                return;
-            m_GlobalChatCanvas.gameObject.SetActive(false);
-            m_CameraController.enabled = true;
-            m_RTCanvas.gameObject.SetActive(true);
-            m_RTCanvas.BackToLobby();
-            Transform trPlayer = transform;
-            trPlayer.position = m_InitPosition;
-            trPlayer.eulerAngles = m_InitRotation;
-        }
-        #endregion
+        
 
         #region Monobehavior Functions
         protected override void Update()
