@@ -50,6 +50,7 @@ namespace Inworld.NDK
             {
                 NDKInterop.Unity_AddUserProfile(profile.fieldId, profile.fieldValue);
             }
+            //TODO(Yan): Update in the NDK to apply the client request changes.
             NDKInterop.Unity_SetClientRequest("Unity NDK", InworldAI.Version);
             NDKInterop.Unity_LoadScene(sceneFullName, InworldNDKCallBack.OnSceneLoaded);
         }

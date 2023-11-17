@@ -16,7 +16,7 @@ namespace Inworld
     public class InworldAI : ScriptableObject
     {
         [SerializeField] InworldUserSetting m_UserSetting;
-        
+
         [Header("Default Assets")]
         [SerializeField] Capabilities m_Capabilities;
         [SerializeField] Texture2D m_DefaultThumbnail;
@@ -29,7 +29,7 @@ namespace Inworld
         public const string k_CompanyName = "Inworld.AI";
         const string k_GlobalDataPath = "InworldAI";
         static InworldAI __inst;
-        
+
         /// <summary>
         /// Gets an instance of InworldAI.
         /// By default, it is at `Assets/Inworld/Inworld.AI/Resources/InworldAI.asset`.
@@ -57,12 +57,15 @@ namespace Inworld
         /// Gets if it's in debug mode. Could be toggled in the `InworldAI.asset`.
         /// </summary>
         public static bool IsDebugMode => Instance.m_DebugMode;
+
         /// <summary>
         /// Get the default Client Request that are sending to the server.
         /// </summary>
         public static Client UnitySDK => new Client
         {
-            id = "unity"
+            id = "unity",
+            version = Version,
+            description = $"{Protocol}; {Version}; {Application.unityVersion}; {SystemInfo.operatingSystem}; {Application.productName}"
         };
         /// <summary>
         /// Gets the Splash Screen prefab. Could be set in the `InworldAI.asset`.
@@ -91,12 +94,16 @@ namespace Inworld
         /// </summary>
         public static string InworldPath => "Assets/Inworld";
         /// <summary>
+        /// String of protocal. Set in runtime.
+        /// </summary>
+        public static string Protocol { get; set; }
+        /// <summary>
         /// Get the current version of Inworld Unity SDK.
         /// </summary>
-        public static string Version 
+        public static string Version
         {
             get => Instance ? Instance.m_Version : "";
-            set 
+            set
             {
                 if (!Instance)
                     return;

@@ -14,6 +14,7 @@ namespace Inworld.Entities
     {
         public string id;
         public string version;
+        public string description;
     }
     [Serializable]
     public class ReleaseData
