@@ -1637,6 +1637,7 @@ MonoBehaviour:
   m_RecordButton: {fileID: 7655747527652503112}
   m_DisplaySplash: 0
   m_ChatCanvas: {fileID: 933114256994709551}
+  m_BubblePanel: {fileID: 0}
 --- !u!1 &1874934492293414086
 GameObject:
   m_ObjectHideFlags: 0
@@ -1766,7 +1767,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 4881369807252966087}
-  m_AudioCapture: {fileID: 3127888445939013312}
+  m_AudioCapture: {fileID: 5556377779474272492}
   m_CharacterHandler: {fileID: 5556377779474272491}
   m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/transform
@@ -1835,7 +1836,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b28951a4e1a362741ac8288d7560535e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlayerCamera: {fileID: 0}
   m_BodyAnimator: {fileID: 6602395910966866599}
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
 --- !u!114 &3020574725080977644
@@ -1887,28 +1887,6 @@ MonoBehaviour:
   m_VisemeSil: viseme_sil
   m_BlinkBlendShape: eyesClosed
   m_CustomModel: 0
---- !u!114 &3127888445939013312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5556377779474272490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 393ccca29f43636448025acee26204bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AutoPush: 1
-  m_UserSpeechThreshold: 0.01
-  m_BufferSeconds: 1
-  m_DeviceName: 
-  OnRecordingStart:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRecordingEnd:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!224 &3150450691047687921
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2660,9 +2638,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3753617578099935216}
   - component: {fileID: 2395919966691626863}
-  - component: {fileID: 3127888445939013312}
   - component: {fileID: 4881369807252966087}
   - component: {fileID: 5556377779474272491}
+  - component: {fileID: 5556377779474272492}
   m_Layer: 0
   m_Name: InworldController
   m_TagString: Untagged
@@ -2683,6 +2661,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ManualAudioHandling: 0
+--- !u!114 &5556377779474272492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5556377779474272490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37c7724d7f1e0394c9a79e9ff4fbd818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AutoPush: 1
+  m_UserSpeechThreshold: 0.01
+  m_BufferSeconds: 1
+  m_DeviceName: 
+  OnRecordingStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRecordingEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &5911491782866075947
 MonoBehaviour:
   m_ObjectHideFlags: 0

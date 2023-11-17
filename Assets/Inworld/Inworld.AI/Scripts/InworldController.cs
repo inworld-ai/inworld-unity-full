@@ -10,7 +10,6 @@ using UnityEngine;
 using Inworld.Packet;
 using UnityEditor;
 
-
 namespace Inworld
 {
     [RequireComponent(typeof(InworldClient), typeof(AudioCapture), typeof(CharacterHandler))]

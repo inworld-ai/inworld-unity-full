@@ -371,7 +371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 359806128}
-  m_AudioCapture: {fileID: 0}
+  m_AudioCapture: {fileID: 359806132}
   m_CharacterHandler: {fileID: 359806131}
   m_GameData: {fileID: 11400000, guid: ddfc6d5fd8aef7e4d96034cee968d78a, type: 2}
   m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
@@ -414,7 +414,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 359806122}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 393ccca29f43636448025acee26204bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 37c7724d7f1e0394c9a79e9ff4fbd818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_AutoPush: 1
@@ -1537,7 +1537,7 @@ MonoBehaviour:
     narrativeAction: 1
     relation: 1
     trigger: 1
-    longBubbleMode: 1
+    longBubbleMode: 0
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
   m_Relation: {fileID: 207251458}
   m_EmoIcon: {fileID: 5295392914518966894}
