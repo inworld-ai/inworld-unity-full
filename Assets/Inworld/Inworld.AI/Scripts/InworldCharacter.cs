@@ -106,13 +106,21 @@ namespace Inworld
             InworldController.Instance.SendText(ID, text);
         }
         /// <summary>
+        /// Default Version of sending triggers that can be used in UnityEvent registration.
+        /// Parameters and values not supported.
+        /// Always Cancelling current response.
+        /// </summary>
+        /// <param name="trigger">the name of the trigger.</param>
+        public virtual void SendTrigger(string trigger) => SendTrigger(trigger, true);
+
+        /// <summary>
         /// Send the trigger to this character.
         /// Trigger is defined in the goals section of the character in Inworld Studio.
         /// </summary>
         /// <param name="trigger">the name of the trigger.</param>
         /// <param name="needCancelResponse">If checked, this sending process will interrupt the character's current speaking.</param>
         /// <param name="parameters">The parameters and values of the trigger.</param>
-        public virtual void SendTrigger(string trigger, bool needCancelResponse = false, Dictionary<string, string> parameters = null)
+        public virtual void SendTrigger(string trigger, bool needCancelResponse, Dictionary<string, string> parameters = null)
         {
             // 1. Interrupt current speaking.
             if (needCancelResponse)

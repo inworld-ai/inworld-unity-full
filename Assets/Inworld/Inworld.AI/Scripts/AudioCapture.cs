@@ -90,16 +90,6 @@ namespace Inworld
 #endif
         }
         /// <summary>
-        /// Called when character registers live session.
-        /// It's a virtual class that implemented by the child class.  
-        /// </summary>
-        /// <param name="dataAgentId">the live session ID of the client agent.</param>
-        /// <param name="interaction">the Interaction component of the Inworld character.</param>
-        public virtual void RegisterLiveSession(string dataAgentId, InworldInteraction interaction)
-        {
-            
-        }
-        /// <summary>
         /// Unity's official microphone module starts recording, will trigger OnRecordingStart event.
         /// </summary>
         public void StartRecording()

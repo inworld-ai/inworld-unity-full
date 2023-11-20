@@ -23,7 +23,7 @@ namespace Inworld.AEC
         /// <summary>
         /// Free the AECHandle. Please call it when destroy.
         /// </summary>
-        /// <param name="handle">the pointer AECHandle to destroy.</param>
+        /// <param name="handle">the pointer of AECHandle to destroy.</param>
 		[DllImport(DLL_NAME)]
 		public static extern void WebRtcAec3_Free(IntPtr handle);
 
@@ -44,13 +44,5 @@ namespace Inworld.AEC
         /// <returns></returns>
 		[DllImport(DLL_NAME)]
 		public static extern int WebRtcAec3_Process(IntPtr handle, short[] nearend, short[] output);
-
-        /// <summary>
-        /// Get the current AECHandle's settings. Will only be effected once processing data.
-        /// </summary>
-        /// <param name="handle">the current pointer AECHandle to use.</param>
-        /// <param name="metrics">the config to return.</param>
-		[DllImport(DLL_NAME)]
-		public static extern void WebRtcAec3_GetMetrics(IntPtr handle, ref Metrics metrics);
 	}
 }

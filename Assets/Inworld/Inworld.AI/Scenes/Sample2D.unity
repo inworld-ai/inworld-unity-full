@@ -247,9 +247,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6911381471636183286}
   - component: {fileID: 5385648865442779241}
-  - component: {fileID: 4653857099923982790}
   - component: {fileID: 2901360918157399489}
   - component: {fileID: 6911381471636183287}
+  - component: {fileID: 6911381471636183288}
   m_Layer: 0
   m_Name: InworldController
   m_TagString: Untagged
@@ -276,28 +276,6 @@ MonoBehaviour:
   m_PublicWorkspace: 
   m_PreviousDialog:
     phrases: []
---- !u!114 &4653857099923982790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2801687289496358892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 393ccca29f43636448025acee26204bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AutoPush: 0
-  m_UserSpeechThreshold: 0.01
-  m_BufferSeconds: 1
-  m_DeviceName: 
-  OnRecordingStart:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRecordingEnd:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &5385648865442779241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,7 +289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 2901360918157399489}
-  m_AudioCapture: {fileID: 4653857099923982790}
+  m_AudioCapture: {fileID: 6911381471636183288}
   m_CharacterHandler: {fileID: 6911381471636183287}
   m_GameData: {fileID: 11400000, guid: 036696d7520eb5145b65e12fc1058448, type: 2}
   m_SceneFullName: workspaces/unitytest/scenes/innequin_gallery
@@ -377,6 +355,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ManualAudioHandling: 1
+--- !u!114 &6911381471636183288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2801687289496358892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393ccca29f43636448025acee26204bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AutoPush: 1
+  m_UserSpeechThreshold: 0.01
+  m_BufferSeconds: 1
+  m_DeviceName: 
+  OnRecordingStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRecordingEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &7328141237567351055
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -411,7 +411,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 162201157703380547, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -648.8193
+      value: -920.54926
       objectReference: {fileID: 0}
     - target: {fileID: 401423953070606001, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
       propertyPath: m_Name

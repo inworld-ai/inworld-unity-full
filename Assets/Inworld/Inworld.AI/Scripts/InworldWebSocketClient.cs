@@ -189,6 +189,7 @@ namespace Inworld
         }
         protected IEnumerator _LoadScene(string sceneFullName)
         {
+            InworldAI.Protocol = "UnitySDK/WebSocket";
             LoadSceneRequest req = new LoadSceneRequest
             {
                 client = InworldAI.UnitySDK,

@@ -1101,33 +1101,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Client: {fileID: 4881369807155481902}
-  m_AudioCapture: {fileID: 3127888445772321065}
+  m_AudioCapture: {fileID: 5556377780305827589}
   m_CharacterHandler: {fileID: 5556377780305827588}
   m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
   m_AutoStart: 0
---- !u!114 &3127888445772321065
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5556377780305827587}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 393ccca29f43636448025acee26204bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AutoPush: 1
-  m_UserSpeechThreshold: 0.01
-  m_BufferSeconds: 1
-  m_DeviceName: 
-  OnRecordingStart:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRecordingEnd:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!4 &3753617577125838873
 Transform:
   m_ObjectHideFlags: 0
@@ -2402,12 +2380,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PushToTalk: 0
   m_PushToTalkKey: 99
-  m_StatusText: {fileID: 0}
-  m_ConnectButtonText: {fileID: 0}
   m_InputField: {fileID: 0}
   m_SendButton: {fileID: 0}
   m_RecordButton: {fileID: 0}
-  m_ConnectButton: {fileID: 0}
   m_DisplaySplash: 0
 --- !u!114 &4881369807155481902
 MonoBehaviour:
@@ -2471,9 +2446,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3753617577125838873}
   - component: {fileID: 2395919965713270918}
-  - component: {fileID: 3127888445772321065}
   - component: {fileID: 4881369807155481902}
   - component: {fileID: 5556377780305827588}
+  - component: {fileID: 5556377780305827589}
   m_Layer: 0
   m_Name: InworldController
   m_TagString: Untagged
@@ -2494,6 +2469,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ManualAudioHandling: 0
+--- !u!114 &5556377780305827589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5556377780305827587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37c7724d7f1e0394c9a79e9ff4fbd818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AutoPush: 1
+  m_UserSpeechThreshold: 0.01
+  m_BufferSeconds: 1
+  m_DeviceName: 
+  OnRecordingStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRecordingEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &6526292729113425018
 Transform:
   m_ObjectHideFlags: 0

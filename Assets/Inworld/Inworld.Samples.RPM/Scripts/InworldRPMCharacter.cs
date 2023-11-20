@@ -18,18 +18,6 @@ namespace Inworld.Sample.RPM
             if (charData.brainName == Data.brainName)
                 RegisterLiveSession();
         }
-        /// <summary>
-        /// Register the live session once the load scene request completed.
-        /// In this overwritten function, it'll also send its audio interaction component to the mixer of the AudioCapture.
-        /// </summary>
-        public override void RegisterLiveSession()
-        {
-            base.RegisterLiveSession();
-            if (InworldController.Audio && InworldController.Audio.EnableAEC)
-            {
-                InworldController.Audio.RegisterLiveSession(m_Data.agentId, m_Interaction);
-            }
-        }
     }
     
 }
