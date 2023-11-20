@@ -32,7 +32,7 @@ namespace Inworld.Sample.RPM
         {
             if (incomingStatus == InworldConnectionStatus.Connected && m_CurrentCharacter && !m_InitTriggerSent)
             {
-                m_CurrentCharacter.SendTrigger(m_InitTrigger, true);
+                m_CurrentCharacter.SendTrigger(m_InitTrigger);
                 m_InitTriggerSent = true;
             }
         }

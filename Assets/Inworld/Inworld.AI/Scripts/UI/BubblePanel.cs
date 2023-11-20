@@ -21,7 +21,10 @@ namespace Inworld.UI
         /// Return if the UI components are existing.
         /// </summary>
         public virtual bool IsUIReady => m_ContentAnchor && m_Bubbles != null;
-                
+        
+        /// <summary>
+        /// Update the layout if content updates.
+        /// </summary>
         public void UpdateContent()
         {
             LayoutRebuilder.ForceRebuildLayoutImmediate(m_ContentAnchor);

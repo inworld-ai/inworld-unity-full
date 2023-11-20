@@ -106,7 +106,7 @@ namespace Inworld.NDK
         }
         
         /// <summary>
-        /// Sen the trigger to the character.
+        /// Send the trigger to the character.
         /// </summary>
         /// <param name="charID">the live session ID of the character to send.</param>
         /// <param name="triggerName">the name of the trigger to send.</param>
@@ -137,7 +137,7 @@ namespace Inworld.NDK
             NDKInterop.Unity_StartAudio(charID);
         }
         /// <summary>
-        /// Send AUDIO_SESSION_START control event to let the character disable receiving packets.
+        /// Send AUDIO_SESSION_END control event to let the character disable receiving packets.
         /// </summary>
         /// <param name="charID">the ID of the character to send.</param>
         public override void StopAudio(string charID)
