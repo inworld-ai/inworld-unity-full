@@ -20,6 +20,15 @@ namespace Inworld.VSP
         const string k_VendorKey = "unity.vsp-attribution";
         const string k_EventName = "vspAttribution";
 
+        [Serializable]
+        struct VSAttributionData
+        {
+            public string actionName;
+            public string partnerName;
+            public string customerUid;
+            public string extra;
+        }
+        
         static bool RegisterEvent()
         {
             AnalyticsResult result = EditorAnalytics.RegisterEventWithLimit
@@ -65,15 +74,6 @@ namespace Inworld.VSP
                 // Fail silently
                 return AnalyticsResult.AnalyticsDisabled;
             }
-        }
-
-        [Serializable]
-        struct VSAttributionData
-        {
-            public string actionName;
-            public string partnerName;
-            public string customerUid;
-            public string extra;
         }
     }
 }

@@ -12,7 +12,7 @@ using UnityEditor;
 namespace Inworld.Editors
 {
     [CustomEditor(typeof(InworldReadme))][InitializeOnLoad]
-    public class ReadmeEditor : Editor 
+    public class InworldReadmeEditor : Editor 
     {
         [SerializeField] GUIStyle m_LinkStyle;
         [SerializeField] GUIStyle m_TitleStyle;
@@ -20,7 +20,7 @@ namespace Inworld.Editors
         [SerializeField] GUIStyle m_BodyStyle;
 
         const float k_Space = 16f;
-        static ReadmeEditor()
+        static InworldReadmeEditor()
 	    {
 		    EditorApplication.delayCall += SelectReadmeAutomatically;
 	    }
