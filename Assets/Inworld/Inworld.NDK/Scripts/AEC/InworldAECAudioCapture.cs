@@ -43,11 +43,14 @@ namespace Inworld.AEC
         //      We'll add resampling features in the next update.
         protected override void Init()
         {
-            AudioConfiguration audioSetting = AudioSettings.GetConfiguration();
-            audioSetting.speakerMode = AudioSpeakerMode.Mono;
-            audioSetting.sampleRate = k_SampleRate;
-            AudioSettings.Reset(audioSetting);
-            m_AECHandle = AECInterop.WebRtcAec3_Create(k_SampleRate);
+            if (IsAvailable)
+            {
+                AudioConfiguration audioSetting = AudioSettings.GetConfiguration();
+                audioSetting.speakerMode = AudioSpeakerMode.Mono;
+                audioSetting.sampleRate = k_SampleRate;
+                AudioSettings.Reset(audioSetting);
+                m_AECHandle = AECInterop.WebRtcAec3_Create(k_SampleRate);
+            }
             base.Init();
         }
 
