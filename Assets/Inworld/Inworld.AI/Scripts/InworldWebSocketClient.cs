@@ -18,7 +18,6 @@ namespace Inworld
 {
     public class InworldWebSocketClient : InworldClient
     {
-        [SerializeField] protected string m_PublicWorkspace;
         [SerializeField] protected PreviousDialog m_PreviousDialog;
         protected WebSocket m_Socket;
         protected LoadSceneResponse m_CurrentSceneData;

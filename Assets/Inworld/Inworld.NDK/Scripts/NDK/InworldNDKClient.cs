@@ -62,6 +62,8 @@ namespace Inworld.NDK
                 Error = "Please fill API Secret!";
                 return;
             }
+            if (!string.IsNullOrEmpty(m_PublicWorkspace))
+                InworldNDKAPI.SetPublicWorkspace(m_PublicWorkspace);
             InworldNDKAPI.GetAccessToken(m_ServerConfig.RuntimeServer, m_APIKey, m_APISecret);
         }
         /// <summary>

@@ -146,13 +146,16 @@ namespace Inworld.NDK
             PhonemeCallBack phonemeCallBack,
             TriggerParamCallBack triggerParamCallBack);
         
+        [DllImport(DLL_NAME)]
+        public static extern void Unity_SetPublicWorkspace(string strPublicWorkspace);
+        
         /// <summary>
         /// Send to the Inworld server with the client's info.
         /// </summary>
         /// <param name="strClientID">the client info, in this case should be Unity or UnityNDK</param>
         /// <param name="strClientVersion">the Inworld Unity SDK version.</param>
         [DllImport(DLL_NAME)]
-        public static extern void Unity_SetClientRequest(string strClientID, string strClientVersion);
+        public static extern void Unity_SetClientRequest(string strClientID, string strClientVersion, string strClientDescription);
         
         /// <summary>
         /// Send to the Inworld server with the user's info.

@@ -25,6 +25,14 @@ namespace Inworld.NDK
             NDKInterop.Unity_GetAccessToken(serverURL, apiKey, apiSecret, InworldNDKCallBack.OnTokenGenerated);
         }
         /// <summary>
+        /// Set public workspace for the scope of access token
+        /// </summary>
+        /// <param name="publicWorkspace">the full string of public workspace</param>
+        public static void SetPublicWorkspace(string publicWorkspace)
+        {
+            NDKInterop.Unity_SetPublicWorkspace(publicWorkspace);
+        }
+        /// <summary>
         /// Send load scene request to Inworld server via NDK.
         /// </summary>
         /// <param name="sceneFullName">the full name of the Inworld scene to load.</param>
@@ -50,8 +58,7 @@ namespace Inworld.NDK
             {
                 NDKInterop.Unity_AddUserProfile(profile.fieldId, profile.fieldValue);
             }
-            //TODO(Yan): Update in the NDK to apply the client request changes.
-            NDKInterop.Unity_SetClientRequest("Unity NDK", InworldAI.Version);
+            NDKInterop.Unity_SetClientRequest(InworldAI.UnitySDK.id, InworldAI.UnitySDK.version, InworldAI.UnitySDK.description);
             NDKInterop.Unity_LoadScene(sceneFullName, InworldNDKCallBack.OnSceneLoaded);
         }
         /// <summary>
