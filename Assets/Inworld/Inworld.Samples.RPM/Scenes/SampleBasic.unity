@@ -1398,7 +1398,7 @@ MonoBehaviour:
       thumbnailProgress: 0
       avatarProgress: 0
     thumbnail: {fileID: 0}
-  m_VerboseLog: 0
+  m_VerboseLog: 1
   onBeginSpeaking:
     m_PersistentCalls:
       m_Calls: []
