@@ -156,6 +156,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
+    Android: com.DefaultCompany.TestWebGL
     Standalone: com.DefaultCompany.TestWebGL
   buildNumber:
     Standalone: 0
@@ -832,6 +833,7 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
+    Android: INWORLD_DEBUG
     Standalone: INWORLD_DEBUG
     WebGL: 
   additionalCompilerArguments: {}
