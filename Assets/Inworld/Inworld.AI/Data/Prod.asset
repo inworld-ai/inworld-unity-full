@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99dcc74c1d4e4809bbd8ce3060ba209f, type: 3}
   m_Name: Prod
   m_EditorClassIdentifier: 
-  studio: api-studio.inworld.ai
   runtime: api-engine.inworld.ai
-  token: 127.0.0.1:4000
-  web: api.inworld.ai
+  web: studio.inworld.ai
   tutorialPage: https://docs.inworld.ai/docs/tutorial-integrations/Unity/
   port: 443

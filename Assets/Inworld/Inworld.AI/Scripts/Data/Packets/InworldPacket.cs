@@ -48,20 +48,14 @@ namespace Inworld.Packet
     [Serializable]
     public class PacketId
     {
-        public string packetId;    // Unique.
-        public string utteranceId; // Each sentence is an utterance. But can be interpreted as multiple behavior (Text, EmotionChange, Audio, etc)
-        public string interactionId; // Lot of sentences included in one interaction.
+        public string packetId = Guid.NewGuid().ToString();    // Unique.
+        public string utteranceId = Guid.NewGuid().ToString(); // Each sentence is an utterance. But can be interpreted as multiple behavior (Text, EmotionChange, Audio, etc)
+        public string interactionId = Guid.NewGuid().ToString(); // Lot of sentences included in one interaction.
         public string correlationId; // Used in future.
+
+        public override string ToString() => $"I: {interactionId} U: {utteranceId} P: {packetId}";
         
-        public PacketId()
-        {
-            packetId = Guid.NewGuid().ToString();
-            utteranceId = Guid.NewGuid().ToString();
-            interactionId = Guid.NewGuid().ToString();
-        }
-        public override string ToString() => $"{Status} I: {interactionId} U: {utteranceId} P: {packetId}";
-        
-        public PacketStatus Status { get; set; }
+        [Obsolete] public PacketStatus Status { get; set; }
     }
 
     [Serializable]
@@ -74,7 +68,7 @@ namespace Inworld.Packet
 
         public InworldPacket()
         {
-            timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ");
+            timestamp = InworldDateTime.UtcNow;
             packetId = new PacketId();
             routing = new Routing();
         }

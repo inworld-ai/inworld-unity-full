@@ -33,7 +33,7 @@ namespace Inworld
                 return;
             InworldPacket packet = new TextPacket
             {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                timestamp = InworldDateTime.UtcNow,
                 type = "TEXT",
                 packetId = new PacketId(),
                 routing = new Routing(characterID),
@@ -49,7 +49,7 @@ namespace Inworld
                 return;
             MutationPacket cancelPacket = new MutationPacket
             {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                timestamp = InworldDateTime.UtcNow,
                 type = "CANCEL_RESPONSE",
                 packetId = new PacketId(),
                 routing = new Routing(characterID)
@@ -69,7 +69,7 @@ namespace Inworld
                 return;
             InworldPacket packet = new CustomPacket
             {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                timestamp = InworldDateTime.UtcNow,
                 type = "CUSTOM",
                 packetId = new PacketId(),
                 routing = new Routing(charID),
@@ -86,7 +86,7 @@ namespace Inworld
 
             InworldPacket packet = new ControlPacket
             {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                timestamp = InworldDateTime.UtcNow,
                 type = "TEXT",
                 packetId = new PacketId(),
                 routing = new Routing(charID),
@@ -104,7 +104,7 @@ namespace Inworld
                 return;
             InworldPacket packet = new ControlPacket
             {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                timestamp = InworldDateTime.UtcNow,
                 type = "TEXT",
                 packetId = new PacketId(),
                 routing = new Routing(charID),
@@ -122,7 +122,7 @@ namespace Inworld
                 return;
             InworldPacket packet = new AudioPacket
             {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                timestamp = InworldDateTime.UtcNow,
                 type = "AUDIO",
                 packetId = new PacketId(),
                 routing = new Routing(charID),

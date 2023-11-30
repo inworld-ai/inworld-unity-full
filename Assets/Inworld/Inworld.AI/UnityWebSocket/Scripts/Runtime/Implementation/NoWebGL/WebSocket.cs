@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Net.WebSockets;
 using System.IO;
+using UnityEngine;
 
 namespace UnityWebSocket
 {
@@ -224,7 +225,8 @@ namespace UnityWebSocket
                 {
                     var result = await socket.ReceiveAsync(segment, CancellationToken.None);
                     ms.Write(segment.Array, 0, result.Count);
-                    if (!result.EndOfMessage) continue;
+                    if (!result.EndOfMessage) 
+                        continue;
                     var data = ms.ToArray();
                     ms.SetLength(0);
                     switch (result.MessageType)
@@ -253,7 +255,6 @@ namespace UnityWebSocket
             {
                 ms.Close();
             }
-
             HandleClose(closeCode, closeReason);
             SocketDispose();
 
