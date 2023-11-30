@@ -19,7 +19,7 @@ namespace Inworld.Interactions
         [SerializeField] protected bool m_Interruptable = true;
         [SerializeField] protected bool m_AutoProceed = true;
         [SerializeField] protected int m_MaxItemCount = 100;
-        [SerializeField] protected float m_TextSpeed = 1f;
+        [SerializeField] protected float m_TextSpeedMultipler = 0.02f;
         protected Interaction m_CurrentInteraction;
         protected IEnumerator m_CurrentCoroutine;
         protected readonly IndexQueue<Interaction> m_Prepared = new IndexQueue<Interaction>();
@@ -89,7 +89,7 @@ namespace Inworld.Interactions
         protected virtual void OnEnable()
         {
             InworldController.Client.OnPacketReceived += ReceivePacket;
-            m_CurrentCoroutine = PlayNextUtterance();
+            m_CurrentCoroutine = InteractionCoroutine();
             StartCoroutine(m_CurrentCoroutine);
         }
 
@@ -100,35 +100,30 @@ namespace Inworld.Interactions
                 InworldController.Client.OnPacketReceived -= ReceivePacket;
         }
 
-        protected virtual IEnumerator PlayNextUtterance()
+        protected virtual IEnumerator InteractionCoroutine()
         {
             while (true)
             {
-                RemoveExceedItems();
-                if (m_AutoProceed || Input.GetKeyUp(KeyCode.Space))
-                {
-                    if (m_CurrentInteraction == null)
-                        m_CurrentInteraction = GetNextInteraction();
-                    if (m_CurrentInteraction == null)
-                        yield return new WaitForSeconds(0.1f);
-                    else
-                    {
-                        if (m_CurrentInteraction.CurrentUtterance == null)
-                            m_CurrentInteraction.CurrentUtterance = GetNextUtterance();
-                        if (m_CurrentInteraction.CurrentUtterance == null)
-                            yield return new WaitForSeconds(0.1f);
-                        else
-                        {
-                            Dispatch(m_CurrentInteraction.CurrentUtterance.Packets);
-                            yield return new WaitForSeconds(m_CurrentInteraction.CurrentUtterance.GetTextSpeed() * 0.05f);
-                            m_CurrentInteraction.CurrentUtterance = null;
-                        }
-                    }
-                    
-                }
-                else
-                    yield return null;
+                yield return RemoveExceedItems();
+                yield return HandleNextUtterance();
             }
+        }
+        protected IEnumerator HandleNextUtterance()
+        {
+            if (m_AutoProceed || Input.GetKeyUp(KeyCode.Space))
+            {
+                if (m_CurrentInteraction == null)
+                {
+                    m_CurrentInteraction = GetNextInteraction();
+                }
+                if (m_CurrentInteraction != null && m_CurrentInteraction.CurrentUtterance == null)
+                {
+                    m_CurrentInteraction.CurrentUtterance = GetNextUtterance();
+                }
+                yield return PlayNextUtterance();
+            }
+            else
+                yield return null;
         }
         void ReceivePacket(InworldPacket incomingPacket)
         {
@@ -163,11 +158,12 @@ namespace Inworld.Interactions
                 m_Prepared.Add(packet);
             }
         }
-        protected void RemoveExceedItems()
+        protected IEnumerator RemoveExceedItems()
         {
             m_Cancelled.Clear();
             if (m_Processed.Count > m_MaxItemCount)
                 m_Processed.Dequeue();
+            yield break;
         }
         protected Interaction GetNextInteraction()
         {
@@ -188,6 +184,14 @@ namespace Inworld.Interactions
             m_CurrentInteraction = null; 
             return null;
         }
-        
+        protected virtual IEnumerator PlayNextUtterance()
+        {
+            if (m_CurrentInteraction == null || m_CurrentInteraction.CurrentUtterance == null)
+                yield break;
+            Dispatch(m_CurrentInteraction.CurrentUtterance.Packets);
+            yield return new WaitForSeconds(m_CurrentInteraction.CurrentUtterance.GetTextSpeed() * m_TextSpeedMultipler);
+            if (m_CurrentInteraction != null)
+                m_CurrentInteraction.CurrentUtterance = null; // YAN: Processed.
+        }
     }
 }

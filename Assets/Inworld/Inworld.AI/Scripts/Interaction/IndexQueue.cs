@@ -9,7 +9,7 @@ using Inworld.Packet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+
 
 namespace Inworld.Interactions
 {
@@ -29,6 +29,8 @@ namespace Inworld.Interactions
         public int Count => m_Elements.Count;
         public bool Contains(InworldPacket packet) => m_Elements.Any(i => i.Contains(packet));
         public bool IsOverDue(InworldPacket packet) => RecentTime > InworldDateTime.ToDateTime(packet?.timestamp);
+        public T this[int index] => index < m_Elements.Count ? m_Elements[index] : default;
+
         public void Add(InworldPacket packet)
         {
             if (packet == null || packet.packetId == null)
@@ -41,7 +43,6 @@ namespace Inworld.Interactions
             else
             {
                 T t = (T)Activator.CreateInstance(typeof(T), packet);
-                t.Add(packet);
                 m_Elements.Add(t);
             }
         }
@@ -54,6 +55,7 @@ namespace Inworld.Interactions
         }
         public T Dequeue(bool needCallback = false)
         {
+            // YAN: No need to update RecentTime while dequeuing.
             if (m_Elements.Count == 0)
                 return default;
             T result = m_Elements[0];

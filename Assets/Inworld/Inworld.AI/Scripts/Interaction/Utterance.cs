@@ -27,6 +27,9 @@ namespace Inworld.Interactions
             ID = packet?.packetId?.utteranceId;
             RecentTime = InworldDateTime.ToDateTime(packet?.timestamp);
             m_Packets = new Dictionary<string, InworldPacket>();
+            string packetID = packet?.packetId?.packetId;
+            if (!string.IsNullOrEmpty(packetID))
+                m_Packets[packetID] = packet;
         }
         public void Add(InworldPacket packet)
         {

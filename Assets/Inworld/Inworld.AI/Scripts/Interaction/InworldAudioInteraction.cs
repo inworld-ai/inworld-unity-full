@@ -6,7 +6,6 @@
  *************************************************************************************************/
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 
 namespace Inworld.Interactions
@@ -14,8 +13,6 @@ namespace Inworld.Interactions
     [RequireComponent(typeof(AudioSource))]
     public class InworldAudioInteraction : InworldInteraction
     {
-        //TODO(Yan): Use WaveGraph to replace volume change.
-        [SerializeField] protected float m_VolumeInterpolationSpeed = 1f;
         [Range (0, 1)][SerializeField] protected float m_VolumeOnPlayerSpeaking = 1f;
         AudioSource m_PlaybackSource;
         AudioClip m_AudioClip;
@@ -60,48 +57,41 @@ namespace Inworld.Interactions
             if (!InworldAI.Capabilities.audio)
                 InworldAI.LogException(k_NoAudioCapabilities);
         }
-        protected override IEnumerator PlayNextUtterance()
+        protected override IEnumerator InteractionCoroutine()
         {
             while (true)
             {
-                RemoveExceedItems();
-                if (m_AutoProceed || Input.GetKeyUp(KeyCode.Space))
-                {
-                    if (m_CurrentInteraction == null)
-                    {
-                        m_CurrentInteraction = GetNextInteraction();
-                        yield return new WaitForSeconds(0.1f);
-                    }
-                    if (m_CurrentInteraction != null && m_CurrentInteraction.CurrentUtterance == null)
-                    {
-                        m_CurrentInteraction.CurrentUtterance = GetNextUtterance();
-                        yield return new WaitForSeconds(0.1f);
-                    }
-                    if (m_CurrentInteraction != null && m_CurrentInteraction.CurrentUtterance != null)
-                    {
-                        m_AudioClip = m_CurrentInteraction.CurrentUtterance.GetAudioClip();
-                        if (m_AudioClip == null)
-                        {
-                            Dispatch(m_CurrentInteraction.CurrentUtterance.Packets);
-                            yield return new WaitForSeconds(0.1f);
-                            if (m_CurrentInteraction != null)
-                                m_CurrentInteraction.CurrentUtterance = null;
-                        }
-                        else
-                        {
-                            AnimFactor = m_AudioClip.length;
-                            m_PlaybackSource.PlayOneShot(m_AudioClip);
-                            Dispatch(m_CurrentInteraction.CurrentUtterance.Packets);
-                            yield return new WaitUntil(() => !m_PlaybackSource.isPlaying);
-                            if (m_CurrentInteraction != null)
-                                m_CurrentInteraction.CurrentUtterance = null;
-                        }
-                    }
-                }
-                else
-                    yield return null;
+                yield return AdjustVolume();
+                yield return RemoveExceedItems();
+                yield return HandleNextUtterance();
             }
         }
-
+        protected override IEnumerator PlayNextUtterance()
+        {
+            if (m_CurrentInteraction == null || m_CurrentInteraction.CurrentUtterance == null)
+                yield break;
+            m_AudioClip = m_CurrentInteraction.CurrentUtterance.GetAudioClip();
+            if (m_AudioClip == null)
+            {
+                Dispatch(m_CurrentInteraction.CurrentUtterance.Packets);
+                yield return new WaitForSeconds(m_CurrentInteraction.CurrentUtterance.GetTextSpeed() * m_TextSpeedMultipler);
+                if (m_CurrentInteraction != null)
+                    m_CurrentInteraction.CurrentUtterance = null;
+            }
+            else
+            {
+                AnimFactor = m_AudioClip.length;
+                m_PlaybackSource.PlayOneShot(m_AudioClip);
+                Dispatch(m_CurrentInteraction.CurrentUtterance.Packets);
+                yield return new WaitUntil(() => !m_PlaybackSource.isPlaying);
+                if (m_CurrentInteraction != null)
+                    m_CurrentInteraction.CurrentUtterance = null;
+            }
+        }
+        protected IEnumerator AdjustVolume()
+        {
+            m_PlaybackSource.volume = InworldController.Audio.IsPlayerSpeaking ? m_VolumeOnPlayerSpeaking : 1f;
+            yield break;
+        }
     }
 }
