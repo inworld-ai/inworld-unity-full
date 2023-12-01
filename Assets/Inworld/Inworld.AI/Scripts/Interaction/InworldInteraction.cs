@@ -10,12 +10,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using Inworld.Packet;
 using System.Collections;
+using System.Linq;
 using Random = UnityEngine.Random;
 
 namespace Inworld.Interactions
 {
     public class InworldInteraction : MonoBehaviour
     {
+        [SerializeField] KeyCode m_PauseKey = KeyCode.Space;
+        [SerializeField] KeyCode m_SkipKey = KeyCode.LeftControl;
+        [SerializeField] GameObject m_ContinueButton;
         [SerializeField] protected bool m_Interruptable = true;
         [SerializeField] protected bool m_AutoProceed = true;
         [SerializeField] protected int m_MaxItemCount = 100;
@@ -26,10 +30,14 @@ namespace Inworld.Interactions
         protected readonly IndexQueue<Interaction> m_Processed = new IndexQueue<Interaction>();
         protected readonly IndexQueue<Interaction> m_Cancelled = new IndexQueue<Interaction>();
         protected bool m_IsSpeaking;
+        protected bool m_Proceed = true;
         public event Action<List<InworldPacket>> OnInteractionChanged;
         public event Action<bool> OnStartStopInteraction;
 
         protected float m_AnimFactor;
+
+        protected bool m_IsPauseKeyPressed;
+        protected bool m_LastFromPlayer;
         /// <summary>
         /// Gets the factor for selecting animation clips.
         /// If without Audio, it's a random value between 0 and 1.
@@ -99,7 +107,29 @@ namespace Inworld.Interactions
             if (InworldController.Instance)
                 InworldController.Client.OnPacketReceived -= ReceivePacket;
         }
-
+        void Update()
+        {
+            if (Input.GetKeyUp(m_SkipKey))
+                SkipCurrentUtterance();
+            if (Input.GetKeyDown(m_PauseKey))
+                UnpauseUtterance();
+            if (Input.GetKeyUp(m_PauseKey))
+                PauseUtterance();
+            m_Proceed = m_AutoProceed || m_LastFromPlayer || m_IsPauseKeyPressed;
+        }
+        protected virtual void UnpauseUtterance()
+        {
+            m_IsPauseKeyPressed = true;
+        }
+        protected virtual void PauseUtterance()
+        {
+            m_IsPauseKeyPressed = false;
+        }
+        protected virtual void SkipCurrentUtterance()
+        {
+            if (m_CurrentInteraction != null && m_CurrentInteraction.CurrentUtterance != null)
+                m_CurrentInteraction.CurrentUtterance = null;
+        }
         protected virtual IEnumerator InteractionCoroutine()
         {
             while (true)
@@ -110,8 +140,9 @@ namespace Inworld.Interactions
         }
         protected IEnumerator HandleNextUtterance()
         {
-            if (m_AutoProceed || Input.GetKeyUp(KeyCode.Space))
+            if (m_Proceed)
             {
+                HideContinue();
                 if (m_CurrentInteraction == null)
                 {
                     m_CurrentInteraction = GetNextInteraction();
@@ -121,12 +152,27 @@ namespace Inworld.Interactions
                     m_CurrentInteraction.CurrentUtterance = GetNextUtterance();
                 }
                 if (m_CurrentInteraction != null && m_CurrentInteraction.CurrentUtterance != null)
+                {
                     yield return PlayNextUtterance();
+                }
                 else
                     IsSpeaking = false;
             }
             else
+            {
+                ShowContinue();
                 yield return null;
+            }
+        }
+        void HideContinue()
+        {
+            if (m_ContinueButton)
+                m_ContinueButton.SetActive(false);
+        }
+        void ShowContinue()
+        {
+            if (m_ContinueButton)
+                m_ContinueButton.SetActive(true);
         }
         void ReceivePacket(InworldPacket incomingPacket)
         {
@@ -135,10 +181,12 @@ namespace Inworld.Interactions
             switch (incomingPacket.routing?.source?.type.ToUpper())
             {
                 case "AGENT":
+                    m_LastFromPlayer = false;
                     HandleAgentPackets(incomingPacket);
                     break;
                 case "PLAYER":
                     // Send Directly.
+                    m_LastFromPlayer = true;
                     Dispatch(incomingPacket);
                     break;
             }
@@ -153,13 +201,9 @@ namespace Inworld.Interactions
             else if (m_Cancelled.IsOverDue(packet))
                 m_Cancelled.Add(packet);
             else if (m_CurrentInteraction != null && m_CurrentInteraction.Contains(packet))
-            {
                 m_CurrentInteraction.Add(packet);
-            }
             else
-            {
                 m_Prepared.Add(packet);
-            }
         }
         protected IEnumerator RemoveExceedItems()
         {
@@ -179,6 +223,7 @@ namespace Inworld.Interactions
         {
             if (m_CurrentInteraction.CurrentUtterance != null)
                 return null;
+            // YAN: At the moment of Dequeuing, the utterance is already in processed.
             m_CurrentInteraction.CurrentUtterance = m_CurrentInteraction.Dequeue();
             if (m_CurrentInteraction.CurrentUtterance != null)
                 return m_CurrentInteraction.CurrentUtterance;

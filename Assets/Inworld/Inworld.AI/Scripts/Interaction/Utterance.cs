@@ -20,8 +20,8 @@ namespace Inworld.Interactions
         public DateTime RecentTime { get; set; }
         public Dictionary<string, InworldPacket> m_Packets;
         public List<InworldPacket> Packets => m_Packets.Values.ToList();
+        public bool IsPlayer => m_Packets.Values.Any(i => i.routing.source.isPlayer);
         public bool Contains(InworldPacket packet) => ID == packet?.packetId?.utteranceId;
-
         public Utterance(InworldPacket packet)
         {
             ID = packet?.packetId?.utteranceId;

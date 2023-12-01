@@ -86,6 +86,11 @@ namespace Inworld.Interactions
                     m_CurrentInteraction.CurrentUtterance = null;
             }
         }
+        protected override void SkipCurrentUtterance()
+        {
+            base.SkipCurrentUtterance();
+            m_PlaybackSource.Stop();
+        }
         protected IEnumerator AdjustVolume()
         {
             m_PlaybackSource.volume = InworldController.Audio.IsPlayerSpeaking ? m_VolumeOnPlayerSpeaking : 1f;
