@@ -120,7 +120,10 @@ namespace Inworld.Interactions
                 {
                     m_CurrentInteraction.CurrentUtterance = GetNextUtterance();
                 }
-                yield return PlayNextUtterance();
+                if (m_CurrentInteraction != null && m_CurrentInteraction.CurrentUtterance != null)
+                    yield return PlayNextUtterance();
+                else
+                    IsSpeaking = false;
             }
             else
                 yield return null;
@@ -186,8 +189,6 @@ namespace Inworld.Interactions
         }
         protected virtual IEnumerator PlayNextUtterance()
         {
-            if (m_CurrentInteraction == null || m_CurrentInteraction.CurrentUtterance == null)
-                yield break;
             Dispatch(m_CurrentInteraction.CurrentUtterance.Packets);
             yield return new WaitForSeconds(m_CurrentInteraction.CurrentUtterance.GetTextSpeed() * m_TextSpeedMultipler);
             if (m_CurrentInteraction != null)

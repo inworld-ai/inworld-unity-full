@@ -84,20 +84,13 @@ namespace Inworld.Sample
 #endif
     }
     
-#if !UNITY_WEBGL
-    protected new void Update()
-    {
-        if (!IsCapturing)
-            return;
-        if (!Microphone.IsRecording(m_DeviceName))
-            StartRecording();
-        Collect();
-    }
-#endif
+
     protected override IEnumerator Collect()
     {
+#if !UNITY_WEBGL
         int nSize = GetAudioData();
         m_Volume.fillAmount = m_InputBuffer.Max() * 5f;
+#endif
         yield return new WaitForSeconds(0.1f);
     }
 }

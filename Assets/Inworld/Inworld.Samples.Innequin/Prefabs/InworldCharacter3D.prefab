@@ -1180,10 +1180,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Interruptable: 1
+  m_AutoProceed: 1
   m_MaxItemCount: 100
-  m_TextSpeed: 1
-  m_VolumeInterpolationSpeed: 1
-  m_VolumeOnPlayerSpeaking: 1
+  m_TextSpeedMultipler: 0.02
+  m_VolumeOnPlayerSpeaking: 0.5
 --- !u!114 &1720011606412808402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1233,6 +1233,7 @@ MonoBehaviour:
   m_Character: {fileID: 2030273176201225856}
   m_SightAngle: 150
   m_SightDistance: 10
+  m_RefreshRate: 0.25
 --- !u!1 &3804245501167605051
 GameObject:
   m_ObjectHideFlags: 0

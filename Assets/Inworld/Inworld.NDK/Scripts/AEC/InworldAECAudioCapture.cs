@@ -49,21 +49,25 @@ namespace Inworld.AEC
                 AudioSettings.Reset(audioSetting);
                 m_AECHandle = AECInterop.WebRtcAec3_Create(k_SampleRate);
             }
+            else
+                m_SamplingMode = MicSampleMode.TURN_BASED;
             base.Init();
         }
 
         protected override byte[] Output(int nSize)
         {
             short[] inputBuffer = WavUtility.ConvertAudioClipDataToInt16Array(m_InputBuffer, nSize * m_Recording.channels);
+              
             m_OutputBuffer = new float[nSize];
             AudioListener.GetOutputData(m_OutputBuffer, 0);
+
             short[] outputBuffer = WavUtility.ConvertAudioClipDataToInt16Array(m_OutputBuffer, nSize * m_Recording.channels);
             return FilterAudio(inputBuffer, outputBuffer, m_AECHandle);
         }
         protected byte[] FilterAudio(short[] inputData, short[] outputData, IntPtr aecHandle)
         {
             List<short> filterBuffer = new List<short>();
-            if (outputData == null || outputData.Length == 0 || !IsAvailable)
+            if (outputData == null || outputData.Length == 0 || !IsAvailable ||IsPlayerTurn)
             {
                 filterBuffer.AddRange(inputData);
             }
@@ -85,6 +89,7 @@ namespace Inworld.AEC
             Buffer.BlockCopy(filterBuffer.ToArray(), 0, byteArray, 0, filterBuffer.Count * 2);
             return byteArray;
         }
+        
     }
 }
 

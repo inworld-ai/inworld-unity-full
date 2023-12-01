@@ -68,8 +68,6 @@ namespace Inworld.Interactions
         }
         protected override IEnumerator PlayNextUtterance()
         {
-            if (m_CurrentInteraction == null || m_CurrentInteraction.CurrentUtterance == null)
-                yield break;
             m_AudioClip = m_CurrentInteraction.CurrentUtterance.GetAudioClip();
             if (m_AudioClip == null)
             {

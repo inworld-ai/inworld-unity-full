@@ -43,11 +43,12 @@ namespace Inworld
         CANCELLED
     }
 
-    public enum InteractionStatus
+    public enum MicSampleMode
     {
-        CREATED,
-        STARTED,
-        COMPLETED,
-        CANCELLED
+        NO_MIC,
+        NO_FILTER,
+        PUSH_TO_TALK,
+        AEC,
+        TURN_BASED
     }
 }

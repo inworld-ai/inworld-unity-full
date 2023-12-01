@@ -367,14 +367,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 393ccca29f43636448025acee26204bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AutoPush: 1
-  m_UserSpeechThreshold: 0.01
+  m_SamplingMode: 4
+  m_PlayerVolumeThreshold: 2
   m_BufferSeconds: 1
   m_DeviceName: 
   OnRecordingStart:
     m_PersistentCalls:
       m_Calls: []
   OnRecordingEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayerStartSpeaking:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayerStopSpeaking:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1001 &7328141237567351055
@@ -411,7 +417,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 162201157703380547, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -920.54926
+      value: -731.6905
       objectReference: {fileID: 0}
     - target: {fileID: 401423953070606001, guid: d3611a2c36d56be4dbb74eaf7b5de58e, type: 3}
       propertyPath: m_Name

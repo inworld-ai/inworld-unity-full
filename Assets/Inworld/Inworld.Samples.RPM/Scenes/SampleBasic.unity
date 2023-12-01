@@ -286,14 +286,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37c7724d7f1e0394c9a79e9ff4fbd818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AutoPush: 1
-  m_UserSpeechThreshold: 0.01
+  m_SamplingMode: 3
+  m_PlayerVolumeThreshold: 2
   m_BufferSeconds: 1
   m_DeviceName: 
   OnRecordingStart:
     m_PersistentCalls:
       m_Calls: []
   OnRecordingEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayerStartSpeaking:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayerStopSpeaking:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &444891039
@@ -1784,9 +1790,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Interruptable: 1
+  m_AutoProceed: 1
   m_MaxItemCount: 100
-  m_TextSpeed: 1
-  m_VolumeInterpolationSpeed: 1
+  m_TextSpeedMultipler: 0.02
   m_VolumeOnPlayerSpeaking: 1
 --- !u!114 &5664802913418632895
 MonoBehaviour:
