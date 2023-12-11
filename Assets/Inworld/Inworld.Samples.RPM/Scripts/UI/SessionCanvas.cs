@@ -17,17 +17,24 @@ namespace Inworld.Sample.RPM
     public class SessionCanvas : DemoCanvas
     {
         [Header("UI")]
+        [Header("Ping:")]
         [SerializeField] Gradient m_ColorGraph;
         [SerializeField] Image m_Indicator;
+        [SerializeField] float m_PingDuration = 1f;
+        [Header("Toggles")]
         [SerializeField] Toggle m_PlayPause;
         [SerializeField] Toggle m_SwitchMic;
         [SerializeField] Toggle m_Speaker;
-        [SerializeField] float m_PingDuration = 1f;
+        [Header("Session")]
+        [SerializeField] Button m_NewGame;
+        [SerializeField] Button m_SaveGame;
+        [SerializeField] Button m_LoadGame;
         [SerializeField] InworldAudioInteraction m_Interaction;
         string ipv4;
         float m_CurrentDuration;
         bool m_IsConnecting;
         bool m_HasInit;
+        bool m_IsLoad;
         readonly Queue<float> m_LagQueue = new Queue<float>(12);
 
         /// <summary>
@@ -60,6 +67,7 @@ namespace Inworld.Sample.RPM
                 return;
             InworldController.Audio.IsBlocked = !m_SwitchMic.isOn;
         }
+        public void QuitGame() => InworldController.Instance.Disconnect();
         
         /// <summary>
         /// Mute/Unmute the speaker.
@@ -70,6 +78,20 @@ namespace Inworld.Sample.RPM
                 return;
             m_Interaction.IsMute = !m_Speaker.isOn;
         }
+        /// <summary>
+        /// Clear the saved data
+        /// </summary>
+        public void NewGame(bool loadHistory)
+        {
+            m_IsLoad = loadHistory;
+            if (InworldController.Status == InworldConnectionStatus.Connected)
+                InworldController.Instance.Disconnect();
+            InworldController.Instance.Init();
+        }
+        /// <summary>
+        /// Save game
+        /// </summary>
+        public void SaveGame() => InworldController.Client.GetHistoryAsync(InworldController.Instance.CurrentScene);
         protected override void Awake()
         {
             base.Awake();
@@ -92,16 +114,21 @@ namespace Inworld.Sample.RPM
                     m_Indicator.color = Color.white;
                     m_IsConnecting = false;
                     _SwitchToggles(true, true);
+                    _SessionButtonReadyToStart();
                     break;
                 case InworldConnectionStatus.Initialized:
                     m_HasInit = true;
-                    InworldController.Instance.LoadScene();
+                    string history = m_IsLoad ? InworldController.Client.SessionHistory : "";
+                    InworldAI.Log($"Load History: {history}");
+                    InworldController.Instance.LoadScene(InworldController.Instance.CurrentScene, history);
                     break;
                 case InworldConnectionStatus.Connecting:
                     _SwitchToggles(false);
+                    _SessionButtonConnecting();
                     break;
                 case InworldConnectionStatus.Connected:
                     _SwitchToggles(true);
+                    _SessionButtonConnected();
                     break;
                 case InworldConnectionStatus.Initializing:
                     m_Indicator.color = m_ColorGraph.Evaluate(0.5f);
@@ -117,6 +144,24 @@ namespace Inworld.Sample.RPM
                     break;
             }
 
+        }
+        void _SessionButtonReadyToStart()
+        {
+            m_NewGame.interactable = true;
+            m_LoadGame.interactable = true;
+            m_SaveGame.interactable = false;
+        }
+        void _SessionButtonConnecting()
+        {
+            m_NewGame.interactable = false;
+            m_LoadGame.interactable = false;
+            m_SaveGame.interactable = false;
+        }
+        void _SessionButtonConnected()
+        {
+            m_NewGame.interactable = true;
+            m_LoadGame.interactable = true;
+            m_SaveGame.interactable = true;
         }
         void _SwitchToggles(bool isOn, bool playBtnOnly = false)
         {

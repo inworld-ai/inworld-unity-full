@@ -23,7 +23,7 @@ namespace Inworld
         protected LoadSceneResponse m_CurrentSceneData;
         protected const string k_DisconnectMsg = "The remote party closed the WebSocket connection without completing the close handshake.";
         public override void GetAccessToken() => StartCoroutine(_GetAccessToken(m_PublicWorkspace));
-        public override void LoadScene(string sceneFullName) => StartCoroutine(_LoadScene(sceneFullName));
+        public override void LoadScene(string sceneFullName, string history = "") => StartCoroutine(_LoadScene(sceneFullName, history));
         public override void StartSession() => StartCoroutine(_StartSession());
         public override void Disconnect() => StartCoroutine(_DisconnectAsync());
         public override LoadSceneResponse GetLiveSessionInfo() => m_CurrentSceneData;
@@ -186,7 +186,8 @@ namespace Inworld
             }
             Status = InworldConnectionStatus.Initialized;
         }
-        protected IEnumerator _LoadScene(string sceneFullName)
+
+        protected IEnumerator _LoadScene(string sceneFullName, string history)
         {
             InworldAI.Protocol = "UnitySDK/WebSocket";
             LoadSceneRequest req = new LoadSceneRequest
@@ -196,12 +197,19 @@ namespace Inworld
                 userSettings = InworldAI.User.Setting,
                 capabilities = InworldAI.Capabilities
             };
+            if (string.IsNullOrEmpty(history))
+                yield return _GetHistoryAsync(sceneFullName);
+            else
+            {
+                SessionHistory = history;
+            }
+            req.sessionContinuation = new SessionContinuation
+            {
+                previousState = SessionHistory
+            };
             if (m_PreviousDialog.phrases.Length != 0)
             {
-                req.sessionContinuation = new SessionContinuation
-                {
-                    previousDialog = m_PreviousDialog
-                };
+                req.sessionContinuation.previousDialog = m_PreviousDialog;
             }
             string json = JsonUtility.ToJson(req);
             UnityWebRequest uwr = new UnityWebRequest(m_ServerConfig.LoadSceneURL(sceneFullName), "POST");
@@ -222,8 +230,36 @@ namespace Inworld
             }
             string responseJson = uwr.downloadHandler.text;
             uwr.uploadHandler.Dispose();
-            m_CurrentSceneData = JsonUtility.FromJson<LoadSceneResponse>(responseJson);
+            //TODO(Yan): Solve PreviousSessionResponse.
+            m_CurrentSceneData = JsonUtility.FromJson<LoadSceneResponse>(responseJson); 
             Status = InworldConnectionStatus.LoadingSceneCompleted;
+        }
+        public override void GetHistoryAsync(string sceneFullName) => StartCoroutine(_GetHistoryAsync(sceneFullName));
+
+        protected IEnumerator _GetHistoryAsync(string sceneFullName)
+        {
+            string sessionFullName = _GetSessionFullName(sceneFullName);
+            UnityWebRequest uwr = new UnityWebRequest(m_ServerConfig.LoadSessionURL(sessionFullName), "GET");
+            uwr.SetRequestHeader("Grpc-Metadata-session-id", m_Token.sessionId);
+            uwr.SetRequestHeader("Authorization", $"Bearer {m_Token.token}");
+            uwr.SetRequestHeader("Content-Type", "application/json");
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            yield return uwr.SendWebRequest();
+            if (uwr.result != UnityWebRequest.Result.Success)
+            {
+                Error = $"Error loading scene {m_Token.sessionId}: {uwr.error} {uwr.downloadHandler.text}";
+                uwr.uploadHandler.Dispose();
+                yield break;
+            }
+            string responseJson = uwr.downloadHandler.text;
+            PreviousSessionResponse response = JsonUtility.FromJson<PreviousSessionResponse>(responseJson);
+            SessionHistory = response.state;
+            InworldAI.Log($"YAN: Get Previous Content Encrypted: {SessionHistory}");
+        }
+        string _GetSessionFullName(string sceneFullName)
+        {
+            string[] data = sceneFullName.Split('/');
+            return data.Length != 4 ? "" : $"workspaces/{data[1]}/sessions/{m_Token.sessionId}";
         }
         protected IEnumerator _StartSession()
         {
