@@ -7,7 +7,7 @@
 using System.IO;
 using UnityEditor;
 
-namespace Inworld.Editors
+namespace Inworld
 {
 	/// <summary>
 	///     This file would be called by commands, for auto-generate Unity packages.
@@ -23,38 +23,38 @@ namespace Inworld.Editors
         // The path to the package under the `Assets/` folder.
         const string k_FullPackagePath = "Assets/Inworld";
         const string k_LitePackagePath = "Assets/Inworld/Inworld.AI";
+        const string k_ExtraPackagePath = "Assets/Inworld/InworldExtraAssets.unitypackage";
 
         /// <summary>
         ///     Call it via outside command line to export package.
         /// </summary>
         [MenuItem("Inworld/Export Package/Full")]
-        public static void ExportFull() => ExportPackage($"{k_ExportPath}/{k_FullPackageName}.unitypackage", k_FullPackagePath);
-        [MenuItem("Inworld/Export Package/Lite")]
-        public static void ExportLite() => ExportPackage($"{k_ExportPath}/{k_LitePackageName}.unitypackage", k_LitePackagePath);
-       
-        /// <summary>
-        ///     Export package to target path.
-        /// </summary>
-        /// <param name="exportPath">target path to export.</param>
-        /// <param name="includePath">target path to include.</param>
-        /// <returns>string of the output full path</returns>
-        public static string ExportPackage(string exportPath, string includePath)
+        public static void ExportFull()
         {
-            // Ensure export path.
-            DirectoryInfo dir = new FileInfo(exportPath).Directory;
-            if (dir != null && !dir.Exists)
+            ExportExtraAssets();
+            string[] assetPaths =
             {
-                dir.Create();
-            }
-
-            // Export
-            AssetDatabase.ExportPackage
-            (
-                includePath,
-                exportPath,
-                ExportPackageOptions.Recurse
-            );
-            return Path.GetFullPath(exportPath);
+                "Assets/Inworld/Inworld.AI", 
+                "Assets/Inworld/Editor",
+                k_ExtraPackagePath
+            }; 
+            AssetDatabase.ExportPackage(assetPaths, $"{k_FullPackagePath}/{k_FullPackageName}.unitypackage", ExportPackageOptions.Recurse);
+        }
+        [MenuItem("Inworld/Export Package/Lite")]
+        public static void ExportLite() => AssetDatabase.ExportPackage(k_LitePackagePath, $"{k_FullPackagePath}/{k_LitePackageName}.unitypackage", ExportPackageOptions.Recurse);
+        
+        [MenuItem("Inworld/Export Package/Extra Assets")]
+        public static void ExportExtraAssets()
+        {
+            string[] assetPaths =
+            {
+                "Assets/Inworld/Inworld.Assets", 
+                "Assets/Inworld/Inworld.Editor",
+                "Assets/Inworld/Inworld.NDK",
+                "Assets/Inworld/Inworld.Samples.Innequin",
+                "Assets/Inworld/Inworld.Samples.RPM"
+            }; 
+            AssetDatabase.ExportPackage(assetPaths, k_ExtraPackagePath, ExportPackageOptions.Recurse); 
         }
     }
 }

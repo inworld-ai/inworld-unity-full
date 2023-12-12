@@ -9,7 +9,7 @@ using System;
 using UnityEditor;
 using UnityEngine.Analytics;
 
-namespace Inworld.VSP
+namespace Inworld
 {
     public static class VSAttribution
     {

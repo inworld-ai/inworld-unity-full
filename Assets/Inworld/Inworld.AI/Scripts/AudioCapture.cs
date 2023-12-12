@@ -80,6 +80,7 @@ namespace Inworld
         /// </summary>
         public bool IsPlayerTurn => 
             m_SamplingMode == MicSampleMode.NO_FILTER || 
+            m_SamplingMode == MicSampleMode.PUSH_TO_TALK ||
             m_SamplingMode == MicSampleMode.TURN_BASED && !InworldController.CharacterHandler.IsAnyCharacterSpeaking;
 
         /// <summary>
@@ -251,7 +252,7 @@ namespace Inworld
 #if !UNITY_WEBGL
             if (m_SamplingMode == MicSampleMode.NO_MIC)
                 yield break;
-            if (m_BackgroundNoise == 0)
+            if (m_SamplingMode != MicSampleMode.PUSH_TO_TALK && m_BackgroundNoise == 0)
                 yield break;
             int nSize = GetAudioData();
             if (nSize <= 0)

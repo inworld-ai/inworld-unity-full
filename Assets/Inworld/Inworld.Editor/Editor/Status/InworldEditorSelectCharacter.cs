@@ -184,6 +184,7 @@ namespace Inworld.Editors
         }
         GameObject _GetModel(CharacterReference charRef)
         {
+            AssetDatabase.Refresh();
             string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
             return !File.Exists(filePath) ? null : AssetDatabase.LoadAssetAtPath<GameObject>(filePath);
         }
@@ -226,6 +227,7 @@ namespace Inworld.Editors
             }
             string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
             File.WriteAllBytes(newAssetPath, uwr.downloadHandler.data);
+            AssetDatabase.Refresh();
             charRef.characterAssets.avatarProgress = 1;
         }
         void _OnCharThumbnailDownloaded(string charFullName, AsyncOperation downloadContent)

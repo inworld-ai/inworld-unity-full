@@ -10,9 +10,10 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
+using UnityEngine;
 
 
-namespace Inworld.Editors
+namespace Inworld
 {
     public class DependencyImporter : AssetPostprocessor
     {
@@ -21,9 +22,9 @@ namespace Inworld.Editors
         {
             "com.unity.cloud.gltfast"
         };
-        public static async void InstallDependencies()
+        public static async Task InstallDependencies()
         {
-            InworldAI.Log("Import Dependency Packages...");
+            Debug.Log("Import Dependency Packages...");
             foreach (string dependency in s_DependencyPackages)
             {
                 await _AddPackage(dependency);
@@ -41,12 +42,12 @@ namespace Inworld.Editors
             }
             if (listRequest.Status != StatusCode.Success)
             {
-                InworldAI.LogError(listRequest.Error.ToString());
+                Debug.LogError(listRequest.Error.ToString());
                 return;
             }
             if (listRequest.Result.Any(x => x.name == packageFullName))
             {
-                InworldAI.Log($"{packageFullName} Found.");
+                Debug.Log($"{packageFullName} Found.");
                 return;
             }
 
@@ -58,10 +59,10 @@ namespace Inworld.Editors
 
             if (addRequest.Status != StatusCode.Success)
             {
-                InworldAI.LogError($"Failed to add {packageFullName}.");
+                Debug.LogError($"Failed to add {packageFullName}.");
                 return;
             }
-            InworldAI.Log($"Import {packageFullName} Completed");
+            Debug.Log($"Import {packageFullName} Completed");
         }
     }
 }

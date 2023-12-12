@@ -5,7 +5,6 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 #if UNITY_EDITOR
-using Inworld.VSP;
 using Inworld.Entities;
 using System.IO;
 using UnityEditor;
@@ -130,10 +129,6 @@ namespace Inworld.Editors
                 InworldAI.User.Name = displayName;
             }
             EditorUtility.DisplayProgressBar("Inworld", "Getting Billing Account Completed!", 0.5f);
-#if UNITY_EDITOR && VSP
-            if (!string.IsNullOrEmpty(InworldAI.User.Account))
-                VSAttribution.SendAttributionEvent("Login Studio", InworldAI.k_CompanyName, InworldAI.User.Account);
-#endif
             _ListWorkspace();
         }
         void OnListWorkspaceCompleted(AsyncOperation obj)
