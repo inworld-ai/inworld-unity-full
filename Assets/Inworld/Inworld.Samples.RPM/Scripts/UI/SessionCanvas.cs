@@ -103,13 +103,11 @@ namespace Inworld.Sample.RPM
             if (InworldController.Status == InworldConnectionStatus.Connected)
             {
                 InworldController.Instance.Disconnect(); 
-                m_PlayPause.isOn = false;
             }
             while (InworldController.Status != InworldConnectionStatus.Idle && InworldController.Status != InworldConnectionStatus.LostConnect)
             {
                 yield return new WaitForFixedUpdate();
             }
-            m_PlayPause.isOn = true;
             InworldController.Instance.Init();
         }
         protected override void OnStatusChanged(InworldConnectionStatus incomingStatus)
@@ -156,6 +154,7 @@ namespace Inworld.Sample.RPM
             m_LoadGame.interactable = true;
             m_SaveGame.interactable = false;
             m_PlayPause.interactable = true;
+            m_PlayPause.isOn = false;
             m_SwitchMic.interactable = false;
             m_Speaker.interactable = false;
         }
@@ -174,6 +173,7 @@ namespace Inworld.Sample.RPM
             m_LoadGame.interactable = true;
             m_SaveGame.interactable = true;
             m_PlayPause.interactable = true;
+            m_PlayPause.isOn = true;
             m_SwitchMic.interactable = true;
             m_Speaker.interactable = true;
         }
