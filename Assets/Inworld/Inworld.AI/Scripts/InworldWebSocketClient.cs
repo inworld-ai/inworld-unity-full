@@ -280,7 +280,6 @@ namespace Inworld
             yield return new WaitForEndOfFrame();
             m_Socket?.CloseAsync();
             yield return new WaitForEndOfFrame();
-            Status = InworldConnectionStatus.Idle;
         }
         void OnSocketOpen(object sender, OpenEventArgs e)
         {
@@ -317,7 +316,7 @@ namespace Inworld
         void OnSocketClosed(object sender, CloseEventArgs e)
         {
             InworldAI.Log($"Closed: StatusCode: {e.StatusCode}, Reason: {e.Reason}");
-            Status = InworldConnectionStatus.LostConnect;
+            Status = e.StatusCode == CloseStatusCode.Normal ? InworldConnectionStatus.Idle : InworldConnectionStatus.LostConnect;
         }
 
         void OnSocketError(object sender, ErrorEventArgs e)
