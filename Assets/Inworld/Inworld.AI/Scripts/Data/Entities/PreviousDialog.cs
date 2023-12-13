@@ -16,16 +16,22 @@ namespace Inworld.Entities
         CHARACTER
     }
     [Serializable]
+    public class PreviousSessionResponse
+    {
+        public string state;
+        public string creationTime;
+    }
+    [Serializable]
     public class SessionContinuation
     {
         public PreviousDialog previousDialog;
+        public string previousState;
     }
     [Serializable]
     public class PreviousDialog
     {
         public PreviousDialogPhrase[] phrases;
     }
-
     [Serializable]
     public class PreviousDialogPhrase
     {
@@ -37,4 +43,5 @@ namespace Inworld.Entities
     {
         public string millisPassed;
     }
+
 }
