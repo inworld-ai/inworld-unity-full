@@ -36,8 +36,9 @@
               path: Library
               key: Library-${{ matrix.targetPlatform }}
               restore-keys: Library-
-                
+
           - name: Export Package 
+            uses: game-ci/cli
             run: Unity -quit -batchmode -projectPath "${{ github.workspace }}" -executeMethod Inworld.UnityPackageExporter.ExportLite
           
           - name: Run tests
