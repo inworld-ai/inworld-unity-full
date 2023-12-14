@@ -7,6 +7,7 @@
 using Inworld.Packet;
 using Inworld.Entities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,6 +27,12 @@ namespace Inworld
         protected string m_SessionKey;
         InworldConnectionStatus m_Status;
         protected string m_Error;
+        
+        /// <summary>
+        /// Get/Set the session history.
+        /// Session History is a string
+        /// </summary>
+        public string SessionHistory { get; set; }
         /// <summary>
         /// Gets/Sets the current Inworld server this client is connecting.
         /// </summary>
@@ -75,6 +82,7 @@ namespace Inworld
                 InworldAI.LogError(m_Error);
             }
         }
+        public virtual void GetHistoryAsync(string sceneFullName) {}
         /// <summary>
         /// Gets the access token. Would be implemented by child class.
         /// </summary>
@@ -129,7 +137,8 @@ namespace Inworld
         /// Send LoadScene request to Inworld Server.
         /// </summary>
         /// <param name="sceneFullName">the full string of the scene to load.</param>
-        public virtual void LoadScene(string sceneFullName) => Error = k_NotImplented;
+        /// <param name="history">the full string of the encrypted history content to send.</param>
+        public virtual void LoadScene(string sceneFullName, string history = "") => Error = k_NotImplented;
         /// <summary>
         /// Send messages to an InworldCharacter in this current scene.
         /// </summary>

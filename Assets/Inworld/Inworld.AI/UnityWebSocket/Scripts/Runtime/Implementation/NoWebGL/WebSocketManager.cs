@@ -1,14 +1,15 @@
 #if !NET_LEGACY && (UNITY_EDITOR || !UNITY_WEBGL) && !UNITY_WEB_SOCKET_ENABLE_ASYNC
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace UnityWebSocket
 {
     [DefaultExecutionOrder(-10000)]
-    internal class WebSocketManager : MonoBehaviour
+    public class WebSocketManager : MonoBehaviour
     {
-        private const string rootName = "[UnityWebSocket]";
-        private static WebSocketManager _instance;
+        const string rootName = "[UnityWebSocket]";
+        static WebSocketManager _instance;
         public static WebSocketManager Instance
         {
             get
@@ -18,7 +19,7 @@ namespace UnityWebSocket
             }
         }
 
-        private void Awake()
+        void Awake()
         {
             DontDestroyOnLoad(gameObject);
         }
@@ -31,11 +32,12 @@ namespace UnityWebSocket
             if (!_instance) _instance = go.AddComponent<WebSocketManager>();
         }
 
-        private readonly List<WebSocket> sockets = new List<WebSocket>();
+        readonly List<WebSocket> sockets = new List<WebSocket>();
 
+        public bool Contains(string sessionURL) => sockets.Any(s => s.Address == sessionURL);
         public void Add(WebSocket socket)
         {
-            if (!sockets.Contains(socket))
+            if (!Contains(socket.Address))
                 sockets.Add(socket);
         }
 
@@ -45,14 +47,13 @@ namespace UnityWebSocket
                 sockets.Remove(socket);
         }
 
-        private void Update()
+        void Update()
         {
             if (sockets.Count <= 0) return;
             for (int i = sockets.Count - 1; i >= 0; i--)
-            {
                 sockets[i].Update();
-            }
         }
+
     }
 }
 #endif

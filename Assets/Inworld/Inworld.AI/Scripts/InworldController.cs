@@ -132,7 +132,12 @@ namespace Inworld
         /// Send LoadScene request to Inworld Server.
         /// </summary>
         /// <param name="sceneFullName">the full string of the scene to load.</param>
-        public void LoadScene(string sceneFullName = "") => m_Client.LoadScene(string.IsNullOrEmpty(sceneFullName) ? m_SceneFullName : sceneFullName);
+        public void LoadScene(string sceneFullName = "", string history = "")
+        {
+            string sceneToLoad = string.IsNullOrEmpty(sceneFullName) ? m_SceneFullName : sceneFullName;
+            string historyToLoad = string.IsNullOrEmpty(history) ? Client.SessionHistory : history;
+            m_Client.LoadScene(sceneToLoad, historyToLoad);
+        }
         /// <summary>
         /// Disconnect Inworld Server.
         /// </summary>
