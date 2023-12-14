@@ -13,7 +13,7 @@ namespace Inworld
         [Header("Server Info:")]
         public string runtime;
         public string web;
-        public string tutorialPage;
+        public string tutorialPage; //TODO(Yan): Add reference in Editor panel.
         public int port;
         public string TokenServer => $"https://{web}/{k_TokenURL}"; 
         const string k_SessionURL = "v1/session/default?session_id=";
@@ -32,5 +32,13 @@ namespace Inworld
         /// </summary>
         /// <param name="sessionID">The current session ID obtained from the response of the `LoadSceneRequest`.</param>
         public string SessionURL(string sessionID) => $"wss://{web}/{k_SessionURL}{sessionID}";
+        /// <summary>
+        /// Get the URL for loading previous content 
+        /// </summary>
+        /// <param name="sessionFullName">
+        ///     the full name of the scene you want to load。
+        ///     Format should be workspaces/{workspaceName}/sessions/{sessionID}
+        /// </param>
+        public string LoadSessionURL(string sessionFullName) => $"https://{web}/v1/{sessionFullName}/state?name={sessionFullName}";
     }
 }
