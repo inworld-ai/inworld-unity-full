@@ -36,7 +36,9 @@
               path: Library
               key: Library-${{ matrix.targetPlatform }}
               restore-keys: Library-
-
+          - name: Export Package 
+            run: Unity -quit -batchmode -projectPath "${{ github.workspace }}" -executeMethod Inworld.UnityPackageExporter.ExportLite
+          
           - name: Run tests
             uses: game-ci/unity-test-runner@v4
             env:
@@ -46,6 +48,5 @@
             with:
               githubToken: ${{ secrets.GITHUB_TOKEN }}
            
-          - name: Export Package 
-            run: Unity -quit -batchmode -projectPath "${{ github.workspace }}" -executeMethod Inworld.UnityPackageExporter.ExportLite
+          
 
