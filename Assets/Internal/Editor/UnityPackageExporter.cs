@@ -4,8 +4,9 @@
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
-using System.IO;
 using UnityEditor;
+using UnityEditor.Build.Reporting;
+using UnityEngine;
 
 namespace Inworld
 {
@@ -14,8 +15,6 @@ namespace Inworld
 	/// </summary>
 	public static class UnityPackageExporter
     {
-        // Path to export to.
-        const string k_ExportPath = "Build";
         // The name of the unitypackage to output.
         const string k_FullPackageName = "InworldAI.Full";
         const string k_LitePackageName = "InworldAI.Lite";
@@ -41,7 +40,7 @@ namespace Inworld
             AssetDatabase.ExportPackage(assetPaths, $"{k_FullPackagePath}/{k_FullPackageName}.unitypackage", ExportPackageOptions.Recurse);
         }
         [MenuItem("Inworld/Export Package/Lite")]
-        public static void ExportLite() => AssetDatabase.ExportPackage(k_LitePackagePath, $"{k_FullPackagePath}/{k_LitePackageName}.unitypackage", ExportPackageOptions.Recurse);
+        public static void ExportLite() => AssetDatabase.ExportPackage(k_LitePackagePath, $"Builds/{k_LitePackageName}.unitypackage", ExportPackageOptions.Recurse);
         
         [MenuItem("Inworld/Export Package/Extra Assets")]
         public static void ExportExtraAssets()
@@ -55,6 +54,44 @@ namespace Inworld
                 "Assets/Inworld/Inworld.Samples.RPM"
             }; 
             AssetDatabase.ExportPackage(assetPaths, k_ExtraPackagePath, ExportPackageOptions.Recurse); 
+        }
+
+        [MenuItem("Inworld/Build Test")]
+        public static void BuildTestScene()
+        {
+            string[] scenes = { "Assets/Inworld/Inworld.AI/Scenes/Sample2D.unity"};
+            BuildTarget[] platforms =
+            {
+                BuildTarget.Android, BuildTarget.iOS, BuildTarget.StandaloneWindows64, BuildTarget.WebGL, BuildTarget.StandaloneOSX
+            };
+            foreach (BuildTarget platform in platforms)
+            {
+                __BuildTestOnPlatform(scenes, platform);
+            }
+        }
+
+        static void __BuildTestOnPlatform(string[] scenes, BuildTarget targetPlatform)
+        {
+            BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
+            {
+                scenes = scenes,
+                locationPathName = $"Builds/{targetPlatform}/InworldTest", // YAN: As a build test, we don't care the extension name
+                target = targetPlatform,
+                options = BuildOptions.None
+            };
+
+            BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+            BuildSummary summary = report.summary;
+
+            switch (summary.result)
+            {
+                case BuildResult.Succeeded:
+                    Debug.Log("Build succeeded: " + summary.totalSize + " bytes");
+                    break;
+                case BuildResult.Failed:
+                    Debug.LogError("Build failed");
+                    break;
+            }
         }
     }
 }

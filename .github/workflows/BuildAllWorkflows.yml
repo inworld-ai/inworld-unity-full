@@ -22,26 +22,28 @@
             - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
             - StandaloneWindows # Build a Windows standalone.
             - StandaloneWindows64 # Build a Windows 64-bit standalone.
+            - iOS # Build an iOS player.
+            - Android # Build an Android .apk standalone app.
       steps:
-          - name: Checkout code
+          - name: Checkout Repo
             uses: actions/checkout@v3
             with:
-              lfs: true
-              path: Assets/Inworld/Inworld.AI/
-          - uses: actions/cache@v3
+              lfs: true        
+
+          - name: Cache Library          
+            uses: actions/cache@v3
             with:
               path: Library
               key: Library-${{ matrix.targetPlatform }}
               restore-keys: Library-
-          - uses: game-ci/unity-builder@v2
+
+          - name: Setup Unity
+            uses: game-ci/unity-setup@v2
             env:
               UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
             with:
               unityVersion: 2022.3.4f1
-              projectPath: Assets/Inworld/Inworld.AI/
-              customParameters: -CleanBuildCache
-              targetPlatform: ${{ matrix.targetPlatform }}
-          - uses: actions/upload-artifact@v3
-            with:
-              name: Build-${{ matrix.targetPlatform }}
-              path: Build/${{ matrix.targetPlatform }}
+           
+          - name: Export Package 
+            run: Unity -quit -batchmode -projectPath "${{ github.workspace }}" -executeMethod Inworld.UnityPackageExporter.ExportLite
+
