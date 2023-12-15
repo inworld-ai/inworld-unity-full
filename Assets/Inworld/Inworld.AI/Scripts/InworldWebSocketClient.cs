@@ -254,7 +254,7 @@ namespace Inworld
             string responseJson = uwr.downloadHandler.text;
             PreviousSessionResponse response = JsonUtility.FromJson<PreviousSessionResponse>(responseJson);
             SessionHistory = response.state;
-            InworldAI.Log($"YAN: Get Previous Content Encrypted: {SessionHistory}");
+            InworldAI.Log($"Get Previous Content Encrypted: {SessionHistory}");
         }
         string _GetSessionFullName(string sceneFullName)
         {

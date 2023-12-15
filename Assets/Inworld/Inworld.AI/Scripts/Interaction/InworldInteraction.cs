@@ -11,13 +11,14 @@ using UnityEngine;
 using Inworld.Packet;
 using System.Collections;
 using System.Linq;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Inworld.Interactions
 {
     public class InworldInteraction : MonoBehaviour
     {
-        [SerializeField] KeyCode m_PauseKey = KeyCode.Space;
+        [SerializeField] KeyCode m_ContinueKey = KeyCode.Space;
         [SerializeField] KeyCode m_SkipKey = KeyCode.LeftControl;
         [SerializeField] GameObject m_ContinueButton;
         [SerializeField] protected bool m_Interruptable = true;
@@ -36,7 +37,7 @@ namespace Inworld.Interactions
 
         protected float m_AnimFactor;
 
-        protected bool m_IsPauseKeyPressed;
+        protected bool m_IsContinueKeyPressed;
         protected bool m_LastFromPlayer;
         /// <summary>
         /// Gets the factor for selecting animation clips.
@@ -111,19 +112,19 @@ namespace Inworld.Interactions
         {
             if (Input.GetKeyUp(m_SkipKey))
                 SkipCurrentUtterance();
-            if (Input.GetKeyDown(m_PauseKey))
+            if (Input.GetKeyDown(m_ContinueKey))
                 UnpauseUtterance();
-            if (Input.GetKeyUp(m_PauseKey))
+            if (Input.GetKeyUp(m_ContinueKey))
                 PauseUtterance();
-            m_Proceed = m_AutoProceed || m_LastFromPlayer || m_IsPauseKeyPressed;
+            m_Proceed = m_AutoProceed || m_LastFromPlayer || m_IsContinueKeyPressed;
         }
         protected virtual void UnpauseUtterance()
         {
-            m_IsPauseKeyPressed = true;
+            m_IsContinueKeyPressed = true;
         }
         protected virtual void PauseUtterance()
         {
-            m_IsPauseKeyPressed = false;
+            m_IsContinueKeyPressed = false;
         }
         protected virtual void SkipCurrentUtterance()
         {
@@ -186,7 +187,8 @@ namespace Inworld.Interactions
                     break;
                 case "PLAYER":
                     // Send Directly.
-                    m_LastFromPlayer = true;
+                    if (!(incomingPacket is AudioPacket))
+                        m_LastFromPlayer = true;
                     Dispatch(incomingPacket);
                     break;
             }
