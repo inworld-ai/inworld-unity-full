@@ -15,15 +15,23 @@
     buildForAllSupportedPlatforms:
       name: Build for ${{ matrix.targetPlatform }}
       runs-on: ubuntu-latest
+      
       strategy:
         fail-fast: false
         matrix:
+          projectPath: 
+            - InworldBuildTest~
+          unityVersion: 
+            - 2022.3.4f1
+          testMode:
+            - playmode
           targetPlatform:
             - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
             - StandaloneWindows # Build a Windows standalone.
             - StandaloneWindows64 # Build a Windows 64-bit standalone.
             - iOS # Build an iOS player.
             - Android # Build an Android .apk standalone app.
+
       steps:
           - name: Checkout Repo
             uses: actions/checkout@v3
@@ -36,15 +44,6 @@
               path: Library
               key: Library-${{ matrix.targetPlatform }}
               restore-keys: Library-
-
-          - name: Export Package 
-            uses: game-ci/unity-builder@v4
-            env:
-              UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-              UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-              UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-            with:
-              buildMethod: Inworld.UnityPackageExporter.ExportLite
           
           - name: Run tests
             uses: game-ci/unity-test-runner@v4
@@ -54,6 +53,7 @@
               UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
             with:
               githubToken: ${{ secrets.GITHUB_TOKEN }}
+              projectPath: "../InworldBuildTest~"
            
           
 
