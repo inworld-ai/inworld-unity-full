@@ -1,3 +1,19 @@
+# 3.1.0
+New Features:
+1. Procedually loading packages for avoiding import errors.
+2. Multiple audio input method support including turn based, push to talk, and aec.
+3. Pausing interactions (By default it's space key).
+4. Skipping interactions (By default it's left ctrl).
+5. Save/load sessions for websocket.
+
+# 3.0.0
+New Features:
+1. Replaced communication protocol from GRPC to Websocket and Inworld NDK
+2. Reorganized package structure.
+3. Replaced GLTFUtility by GLTFast.
+4. Implemented echo cancellation.
+5. Added WebGL support.
+
 # 2.2.0 
 New features:
 1. Added Innequin model as default avatar.
