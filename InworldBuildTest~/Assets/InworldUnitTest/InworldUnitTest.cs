@@ -8,7 +8,7 @@ public class NewTestScript
 {
     // A Test behaves as an ordinary method
     [Test]
-    public void NewTestScriptSimplePasses()
+    public void CreateInworldController()
     {
         Object.Instantiate(InworldAI.ControllerPrefab2D);
         Assert.AreEqual(true, InworldController.Instance != null);
@@ -17,12 +17,12 @@ public class NewTestScript
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
     [UnityTest]
-    public IEnumerator NewTestScriptWithEnumeratorPasses()
+    public IEnumerator CreateInworldControllerAsync()
     {
         Object.Instantiate(InworldAI.ControllerPrefab2D);
-        Assert.AreEqual(true, InworldController.Instance != null);
         // Use the Assert class to test conditions.
         // Use yield to skip a frame.
         yield return null;
+        Assert.AreEqual(true, InworldController.Instance != null);
     }
 }
