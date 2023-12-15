@@ -10,26 +10,30 @@ public class InworldUnitTest
     [Test]
     public void CreateInworldController()
     {
-        Object.Instantiate(InworldAI.ControllerPrefab2D);
+        if (!InworldController.Instance)
+            Object.Instantiate(InworldAI.ControllerPrefab2D);
         Assert.AreEqual(true, InworldController.Instance != null);
     }
 
     [Test]
     public void CreateInworldController2()
     {
-        Object.Instantiate(InworldAI.ControllerPrefab2D);
+        if (!InworldController.Instance)
+            Object.Instantiate(InworldAI.ControllerPrefab2D);
         Assert.AreEqual(true, InworldController.Instance != null);
     }
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
     
-    // [UnityTest]
-    // public IEnumerator CreateInworldControllerAsync()
-    // {
-    //     Object.Instantiate(InworldAI.ControllerPrefab2D);
-    //     // Use the Assert class to test conditions.
-    //     // Use yield to skip a frame.
-    //     yield return null;
-    //     Assert.AreEqual(true, InworldController.Instance != null);
-    // }
+    [UnityTest]
+    public IEnumerator CreateInworldControllerAsync()
+    {
+        if (!InworldController.Instance)
+            Object.Instantiate(InworldAI.ControllerPrefab2D);
+        Assert.AreEqual(true, InworldController.Instance != null);
+        // Use the Assert class to test conditions.
+        // Use yield to skip a frame.
+        yield return null;
+        Assert.AreEqual(true, InworldController.Instance != null);
+    }
 }
