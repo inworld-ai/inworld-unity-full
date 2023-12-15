@@ -1,5 +1,5 @@
 
-  name: BuildAllPlatforms
+  name: TestAllPlatforms
 
   on:
     workflow_dispatch:
@@ -13,7 +13,7 @@
 
   jobs:   
     buildForAllSupportedPlatforms:
-      name: Build for ${{ matrix.targetPlatform }}
+      name: Test for ${{ matrix.targetPlatform }}
       runs-on: ubuntu-latest
 
       strategy:
