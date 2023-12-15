@@ -264,11 +264,13 @@ namespace Inworld
         protected IEnumerator _StartSession()
         {
             string url = m_ServerConfig.SessionURL(m_Token.sessionId);
-            if (!IsTokenValid || WebSocketManager.Instance.Contains(url))
+            if (!IsTokenValid)
                 yield break;
             yield return new WaitForEndOfFrame();
             string[] param = {m_Token.type, m_Token.token};
-            m_Socket = new WebSocket(url, param);
+            m_Socket = WebSocketManager.Instance.GetWebSocket(url);
+            if (m_Socket == null)
+                m_Socket = new WebSocket(url, param);
             m_Socket.OnOpen += OnSocketOpen;
             m_Socket.OnMessage += OnMessageReceived;
             m_Socket.OnClose += OnSocketClosed;
