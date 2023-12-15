@@ -117,6 +117,7 @@ namespace Inworld.Editors
             {
                 m_StartDownload = false;
                 EditorUtility.ClearProgressBar();
+                _CreatePrefabVariants();
             }
         }
         void _CreatePrefabVariants()
