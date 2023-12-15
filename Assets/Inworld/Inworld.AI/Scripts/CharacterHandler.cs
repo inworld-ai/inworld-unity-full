@@ -36,6 +36,11 @@ namespace Inworld
         protected readonly Dictionary<string, InworldCharacterData> m_Characters = new Dictionary<string, InworldCharacterData>();
 
         /// <summary>
+        ///     Return if any character is speaking.
+        /// </summary>
+        public virtual bool IsAnyCharacterSpeaking => CurrentCharacter.IsSpeaking;
+
+        /// <summary>
         /// Gets/Sets the current interacting character.
         /// If set, it'll also start audio sampling if `ManualAudioHandling` is false, and invoke the event OnCharacterChanged
         /// </summary>

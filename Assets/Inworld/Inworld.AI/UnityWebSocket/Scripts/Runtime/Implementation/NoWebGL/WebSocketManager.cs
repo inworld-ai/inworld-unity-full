@@ -35,6 +35,7 @@ namespace UnityWebSocket
         readonly List<WebSocket> sockets = new List<WebSocket>();
 
         public bool Contains(string sessionURL) => sockets.Any(s => s.Address == sessionURL);
+        public WebSocket GetWebSocket(string sessionURL) => sockets.FirstOrDefault(s => s.Address == sessionURL);
         public void Add(WebSocket socket)
         {
             if (!Contains(socket.Address))

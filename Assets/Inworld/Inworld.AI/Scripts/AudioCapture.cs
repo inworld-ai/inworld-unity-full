@@ -4,12 +4,12 @@
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
-using Inworld.Interactions;
+
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
-using System.Linq;
 
 
 namespace Inworld
@@ -20,20 +20,24 @@ namespace Inworld
     /// </summary>
     public class AudioCapture : MonoBehaviour
     {
-        [SerializeField] protected bool m_AutoPush = true;
-        [SerializeField] protected float  m_UserSpeechThreshold = 0.01f;
+        [SerializeField] protected MicSampleMode m_SamplingMode;
+        [Range(1, 2)][SerializeField] protected float m_PlayerVolumeThreshold = 2f;
         [SerializeField] protected int m_BufferSeconds = 1;
         [SerializeField] protected string m_DeviceName;
 
         public UnityEvent OnRecordingStart;
         public UnityEvent OnRecordingEnd;
-        
+
+        public UnityEvent OnPlayerStartSpeaking;
+        public UnityEvent OnPlayerStopSpeaking;
+        protected MicSampleMode m_LastSampleMode;
         protected const int k_SizeofInt16 = sizeof(short);
         protected const int k_SampleRate = 16000;
         protected AudioClip m_Recording;
+        protected IEnumerator m_AudioCoroutine;
         protected bool m_IsPlayerSpeaking;
         protected bool m_IsCapturing;
-        protected float m_CDCounter;
+        protected float m_BackgroundNoise;
         // Last known position in AudioClip buffer.
         protected int m_LastPosition;
         // Size of audioclip used to collect information, need to be big enough to keep up with collect. 
@@ -55,13 +59,57 @@ namespace Inworld
         /// </summary>
         public bool AutoPush
         {
-            get => m_AutoPush;
-            set => m_AutoPush = value;
+            get => m_SamplingMode != MicSampleMode.NO_MIC && m_SamplingMode != MicSampleMode.PUSH_TO_TALK;
+            set
+            {
+                if (value)
+                {
+                    if (m_SamplingMode == MicSampleMode.PUSH_TO_TALK)
+                        m_SamplingMode = m_LastSampleMode;
+                }
+                else
+                {
+                    if (m_SamplingMode != MicSampleMode.PUSH_TO_TALK)
+                        m_LastSampleMode = m_SamplingMode;
+                    m_SamplingMode = MicSampleMode.PUSH_TO_TALK;
+                }
+            }
         }
+        /// <summary>
+        /// A flag to check if player is allowed to speak and without filtering
+        /// </summary>
+        public bool IsPlayerTurn => 
+            m_SamplingMode == MicSampleMode.NO_FILTER || 
+            m_SamplingMode == MicSampleMode.PUSH_TO_TALK ||
+            m_SamplingMode == MicSampleMode.TURN_BASED && !InworldController.CharacterHandler.IsAnyCharacterSpeaking;
+
+        /// <summary>
+        /// A flag to check if audio is available to send to server.
+        ///     (Either Enable AEC or it's Player's turn to speak)
+        /// </summary>
+        public bool IsAudioAvailable => m_SamplingMode == MicSampleMode.AEC || IsPlayerTurn;
+
         /// <summary>
         /// Signifies if user is speaking based on audio amplitude and threshold.
         /// </summary>
-        public bool IsPlayerSpeaking => m_IsPlayerSpeaking;
+        public bool IsPlayerSpeaking
+        {
+            get => m_IsPlayerSpeaking;
+            set
+            {
+                if (m_IsPlayerSpeaking == value)
+                    return;
+                m_IsPlayerSpeaking = value;
+                if (m_IsPlayerSpeaking)
+                    OnPlayerStartSpeaking.Invoke();
+                else
+                    OnPlayerStopSpeaking.Invoke();
+            }
+        }
+        /// <summary>
+        /// Get the background noises, including music.
+        /// </summary>
+        public float BackgroundNoise => m_BackgroundNoise;
         /// <summary>
         /// Get Audio Input Device Name for recording.
         /// </summary>
@@ -129,14 +177,23 @@ namespace Inworld
 #endif
         }
         /// <summary>
-        /// Virtual function for sampling environment audios for echo cancellation.
-        /// Would be implemented in the child class.
+        ///     Aync to Calculate the background noise (including bg music, etc)
+        ///     Please call it whenever audio environment changed in your game.
         /// </summary>
-        /// <param name="data">the current environment audio.</param>
-        /// <param name="channels">the channels of the environment audio.</param>
-        public virtual void SamplePlayingWavData(float[] data, int channels)
+        /// <returns></returns>
+        public IEnumerator Calibrate()
         {
-
+#if !UNITY_WEBGL
+            if (!Microphone.IsRecording(m_DeviceName))
+                StartMicrophone(m_DeviceName);
+            while (m_BackgroundNoise == 0)
+            {
+                GetAudioData();
+                yield return new WaitForSeconds(0.1f);
+                m_BackgroundNoise = CalculateAmplitude();
+            }
+#endif
+            yield break;
         }
 #endregion
 
@@ -148,29 +205,33 @@ namespace Inworld
         
         protected virtual void OnEnable()
         {
-            StartMicrophone(m_DeviceName);
+            m_AudioCoroutine = AudioCoroutine();
+            StartCoroutine(m_AudioCoroutine);
+            
+        }
+        protected virtual IEnumerator AudioCoroutine()
+        {
+#if !UNITY_WEBGL
+            while (true)
+            {
+                yield return Calibrate();
+                if (!m_IsCapturing || IsBlocked)
+                {
+                    yield return null;
+                    continue;
+                }
+                yield return Collect();
+            }
+#endif
         }
 
         protected virtual void OnDisable()
         {
+            StopCoroutine(m_AudioCoroutine);
             StopRecording();
             StopMicrophone(m_DeviceName);
         }
-#if !UNITY_WEBGL
-        protected void Update()
-        {
-            if (!m_IsCapturing || IsBlocked)
-                return;
-            if (!Microphone.IsRecording(m_DeviceName))
-                StartMicrophone(m_DeviceName);
-            if (m_CDCounter <= 0)
-            {
-                m_CDCounter = 0.1f;
-                Collect();
-            }
-            m_CDCounter -= Time.unscaledDeltaTime;
-        }
-#endif
+
         protected virtual void OnDestroy()
         {
             StopRecording();
@@ -185,22 +246,26 @@ namespace Inworld
             m_ByteBuffer = new byte[m_BufferSize * 1 * k_SizeofInt16];
             m_InputBuffer = new float[m_BufferSize * 1];
         }
-        protected virtual void Collect()
+
+        protected virtual IEnumerator Collect()
         {
 #if !UNITY_WEBGL
+            if (m_SamplingMode == MicSampleMode.NO_MIC)
+                yield break;
+            if (m_SamplingMode != MicSampleMode.PUSH_TO_TALK && m_BackgroundNoise == 0)
+                yield break;
             int nSize = GetAudioData();
             if (nSize <= 0)
-                return;
+                yield break;
+            IsPlayerSpeaking = CalculateAmplitude() > m_BackgroundNoise * m_PlayerVolumeThreshold;
             byte[] output = Output(nSize * m_Recording.channels);
             string audioData = Convert.ToBase64String(output);
-            if(m_AutoPush)
+            if(AutoPush)
                 InworldController.Instance.SendAudio(audioData);
             else
                 m_AudioToPush.Add(audioData);
-            // Check if player is speaking based on audio amplitude
-            float amplitude = CalculateAmplitude(m_InputBuffer);
-            m_IsPlayerSpeaking = amplitude > m_UserSpeechThreshold;
-#endif            
+            yield return new WaitForSeconds(0.1f);
+#endif
         }
         protected int GetAudioData()
         {
@@ -228,10 +293,19 @@ namespace Inworld
             return output;
         }
         // Helper method to calculate the amplitude of audio data
-        protected float CalculateAmplitude(float[] audioData)
+        protected float CalculateAmplitude()
         {
-            float sum = audioData.Sum(t => Mathf.Abs(t));
-            return sum / audioData.Length;
+            float fAvg = 0;
+            int nCount = 0;
+            foreach (float t in m_InputBuffer)
+            {
+                float tmp = Mathf.Abs(t);
+                if (tmp == 0)
+                    continue;
+                fAvg += tmp;
+                nCount++;
+            }
+            return nCount == 0 ? 0 : fAvg / nCount;
         }
         protected void StartMicrophone(string deviceName)
         {

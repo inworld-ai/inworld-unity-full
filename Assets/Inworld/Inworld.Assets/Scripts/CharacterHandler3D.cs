@@ -20,8 +20,10 @@ namespace Inworld.Sample
         readonly List<SightAngle> m_CharacterList = new List<SightAngle>();
 
         float m_CurrentTime;
-        
-        
+        /// <summary>
+        ///     Return if any character is speaking.
+        /// </summary>
+        public override bool IsAnyCharacterSpeaking => m_CharacterList.Any(s => s.Character.IsSpeaking);
         /// <summary>
         ///     Get the current Character Selecting Method.
         /// </summary>

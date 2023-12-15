@@ -280,10 +280,5 @@ namespace Inworld
         {
             // Won't process lip sync in pure text 2D conversation
         }
-        void OnAudioFilterRead(float[] data, int channels)
-        {
-            if (InworldController.Instance)
-                InworldController.Audio.SamplePlayingWavData(data, channels);
-        }
     }
 }

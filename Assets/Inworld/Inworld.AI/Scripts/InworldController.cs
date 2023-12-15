@@ -252,7 +252,7 @@ namespace Inworld
         /// <param name="base64">the base64 string of the wave data to send.</param>
         public virtual void SendAudio(string base64)
         {
-            if (string.IsNullOrEmpty(m_CurrentAudioID) || !m_CharacterHandler.IsRegistered(m_CurrentAudioID))
+            if (string.IsNullOrEmpty(m_CurrentAudioID) || !m_CharacterHandler.IsRegistered(m_CurrentAudioID) || !Audio.IsAudioAvailable)
                 return;
             m_Client.SendAudio(m_CurrentAudioID, base64);
         }

@@ -5,6 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -83,20 +84,14 @@ namespace Inworld.Sample
 #endif
     }
     
+
+    protected override IEnumerator Collect()
+    {
 #if !UNITY_WEBGL
-    protected new void Update()
-    {
-        if (!IsCapturing)
-            return;
-        if (!Microphone.IsRecording(m_DeviceName))
-            StartRecording();
-        Collect();
-    }
-#endif
-    protected override void Collect()
-    {
         int nSize = GetAudioData();
         m_Volume.fillAmount = m_InputBuffer.Max() * 5f;
+#endif
+        yield return new WaitForSeconds(0.1f);
     }
 }
 }

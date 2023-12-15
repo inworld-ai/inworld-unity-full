@@ -320,6 +320,7 @@ namespace Inworld.Editors
             }
             string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
             File.WriteAllBytes(newAssetPath, uwr.downloadHandler.data);
+            AssetDatabase.Refresh();
             charRef.characterOverloads[0].defaultCharacterAssets.avatarProgress = 1;
         }
         void _OnCharThumbnailDownloaded(string charFullName, AsyncOperation downloadContent)

@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Build;
@@ -35,13 +36,10 @@ namespace Inworld.Editors
         
         static InworldEditorUtil()
         {
-            AssetDatabase.importPackageCompleted += _ =>
+            AssetDatabase.importPackageCompleted += packageName =>
             {
-                DependencyImporter.InstallDependencies();
-                VersionChecker.CheckVersionUpdates();
-                if (VersionChecker.IsLegacyPackage)
-                    VersionChecker.NoticeLegacyPackage();
-                _SetDefaultUserName();
+                if (!packageName.StartsWith("InworldExtraAssets"))
+                    return;
                 _AddDebugMacro();
             };
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
@@ -52,13 +50,11 @@ namespace Inworld.Editors
             switch (state)
             {
                 case PlayModeStateChange.ExitingEditMode:
+                case PlayModeStateChange.EnteredEditMode:
                     if (InworldAI.IsDebugMode)
                         _AddDebugMacro();
                     else
                         _RemoveDebugMacro();
-                    break;
-                case PlayModeStateChange.EnteredEditMode:
-                    _AddDebugMacro();
                     break;
             }
         }

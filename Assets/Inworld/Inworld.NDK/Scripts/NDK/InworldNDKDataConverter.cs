@@ -40,7 +40,7 @@ namespace Inworld.NDK
                 sessionId = rhs.sessionId,
                 token = rhs.token,
                 type = "Bearer",
-                expirationTime = DateTime.UtcNow.AddHours(1).ToString("yyyy-MM-ddTHH:mm:ss.fffZ")
+                expirationTime = InworldDateTime.ToString(DateTime.UtcNow.AddHours(1))
             };
             /// <summary>
             /// Convert text packet from NDK to Unity
@@ -48,7 +48,7 @@ namespace Inworld.NDK
             /// <param name="rhs">the text packet from NDK</param>
             public static Inworld.Packet.TextPacket NDKTextPacket(NDKPacket rhs) => new Inworld.Packet.TextPacket
             {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                timestamp = InworldDateTime.UtcNow,
                 type = rhs.packetType,
                 packetId = NDKPacketId(rhs.packetInfo.packetId),
                 routing = NDKRouting(rhs.packetInfo.routing),
@@ -61,7 +61,7 @@ namespace Inworld.NDK
             /// <param name="rhs">the audio packet from NDK</param>
             public static Inworld.Packet.AudioPacket NDKAudioChunk(NDKPacket rhs) => new Inworld.Packet.AudioPacket
             {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                timestamp = InworldDateTime.UtcNow,
                 type = "AUDIO",
                 packetId = NDKPacketId(rhs.packetInfo.packetId),
                 routing = NDKRouting(rhs.packetInfo.routing),
@@ -78,7 +78,7 @@ namespace Inworld.NDK
             /// <param name="rhs">the control packets from NDK to convert.</param>
             public static Inworld.Packet.ControlPacket NDKControlPacket(NDKPacket rhs) => new Inworld.Packet.ControlPacket
             {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                timestamp = InworldDateTime.UtcNow,
                 type = "CONTROL",
                 packetId = NDKPacketId(rhs.packetInfo.packetId),
                 routing = NDKRouting(rhs.packetInfo.routing),
@@ -93,7 +93,7 @@ namespace Inworld.NDK
             /// <param name="rhs">the emotion packets from NDK to convert.</param>
             public static Inworld.Packet.EmotionPacket NDKEmotionPacket(NDKPacket rhs) => new Inworld.Packet.EmotionPacket
             {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                timestamp = InworldDateTime.UtcNow,
                 type = "EMOTION",
                 packetId = NDKPacketId(rhs.packetInfo.packetId),
                 routing = NDKRouting(rhs.packetInfo.routing),
@@ -109,7 +109,7 @@ namespace Inworld.NDK
             /// <param name="rhs">the NDK packets to convert.</param>
             public static MutationPacket NDKCancelResponse(NDKPacket rhs) => new MutationPacket
             {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                timestamp = InworldDateTime.UtcNow,
                 type = "CANCEL_RESPONSE",
                 packetId = NDKPacketId(rhs.packetInfo.packetId),
                 routing = NDKRouting(rhs.packetInfo.routing),
@@ -127,7 +127,7 @@ namespace Inworld.NDK
             /// <param name="rhs">the NDK packet to convert.</param>
             public static Inworld.Packet.CustomPacket NDKCustomPacket(NDKPacket rhs) => new Inworld.Packet.CustomPacket
             {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                timestamp = InworldDateTime.UtcNow,
                 type = "CUSTOM",
                 packetId = NDKPacketId(rhs.packetInfo.packetId),
                 routing = NDKRouting(rhs.packetInfo.routing),
@@ -142,7 +142,7 @@ namespace Inworld.NDK
             /// <param name="rhs">the relation packets to convert.</param>
             public static Inworld.Packet.RelationPacket NDKRelationPacket(NDKPacket rhs) => new Inworld.Packet.RelationPacket
             {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                timestamp = InworldDateTime.UtcNow,
                 type = "CUSTOM",
                 packetId = NDKPacketId(rhs.packetInfo.packetId),
                 routing = NDKRouting(rhs.packetInfo.routing),
@@ -175,7 +175,7 @@ namespace Inworld.NDK
             /// <param name="rhs">the packets from NDK to convert</param>
             public static Inworld.Packet.ActionPacket NDKActionPacket(NDKPacket rhs) => new Inworld.Packet.ActionPacket
             {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                timestamp = InworldDateTime.UtcNow,
                 type = "CUSTOM",
                 packetId = NDKPacketId(rhs.packetInfo.packetId),
                 routing = NDKRouting(rhs.packetInfo.routing),
@@ -194,7 +194,7 @@ namespace Inworld.NDK
             /// <param name="rhs">the packet from NDK to convert.</param>
             public static InworldPacket NDKUnknownPacket(NDKPacket rhs) => new InworldPacket
             {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                timestamp = InworldDateTime.UtcNow,
                 type = rhs.packetType,
                 packetId = NDKPacketId(rhs.packetInfo.packetId),
                 routing = NDKRouting(rhs.packetInfo.routing),
@@ -244,7 +244,7 @@ namespace Inworld.NDK
             /// <param name="textToSend">the message to send.</param>
             public static Inworld.Packet.TextPacket TextPacket(string characterID, string textToSend) => new Inworld.Packet.TextPacket
             {
-                timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffffffZ"),
+                timestamp = InworldDateTime.UtcNow,
                 type = "TEXT",
                 packetId = new Inworld.Packet.PacketId(),
                 routing = new Inworld.Packet.Routing(characterID),

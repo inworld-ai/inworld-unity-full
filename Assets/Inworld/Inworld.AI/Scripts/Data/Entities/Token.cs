@@ -24,17 +24,7 @@ namespace Inworld.Entities
                     return false;
                 if (string.IsNullOrEmpty(type))
                     return false;
-                string[] timeFormat = 
-                {
-                    "yyyy-MM-ddTHH:mm:ss.fffZ",
-                    "yyyy-MM-ddTHH:mm:ssZ"
-                };
-                if (DateTime.TryParseExact(expirationTime, timeFormat, 
-                                           System.Globalization.CultureInfo.InvariantCulture, 
-                                           System.Globalization.DateTimeStyles.RoundtripKind, 
-                                           out DateTime outTime))
-                    return DateTime.UtcNow < outTime;
-                return false;
+                return DateTime.UtcNow < InworldDateTime.ToDateTime(expirationTime);
             }
         }
     }

@@ -6,38 +6,49 @@
  *************************************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Linq;
+
 using UnityEngine;
 using Inworld.Packet;
+using System.Collections;
+using System.Linq;
+using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Inworld.Interactions
 {
     public class InworldInteraction : MonoBehaviour
     {
-        [SerializeField] bool m_Interruptable = true;
+        [SerializeField] KeyCode m_ContinueKey = KeyCode.Space;
+        [SerializeField] KeyCode m_SkipKey = KeyCode.LeftControl;
+        [SerializeField] GameObject m_ContinueButton;
+        [SerializeField] protected bool m_Interruptable = true;
+        [SerializeField] protected bool m_AutoProceed = true;
         [SerializeField] protected int m_MaxItemCount = 100;
-        [SerializeField] float m_TextSpeed = 1.0f;
-        float m_CurrentTime;
-        bool m_IsSpeaking;
-        protected int m_LastInteractionSequenceNumber;
-        protected int m_SequenceNumber;
-        protected List<Interaction> m_History = new List<Interaction>();
+        [SerializeField] protected float m_TextSpeedMultipler = 0.02f;
         protected Interaction m_CurrentInteraction;
-        protected Utterance m_CurrentUtterance;
+        protected IEnumerator m_CurrentCoroutine;
+        protected readonly IndexQueue<Interaction> m_Prepared = new IndexQueue<Interaction>();
+        protected readonly IndexQueue<Interaction> m_Processed = new IndexQueue<Interaction>();
+        protected readonly IndexQueue<Interaction> m_Cancelled = new IndexQueue<Interaction>();
+        protected bool m_IsSpeaking;
+        protected bool m_Proceed = true;
         public event Action<List<InworldPacket>> OnInteractionChanged;
         public event Action<bool> OnStartStopInteraction;
+
+        protected float m_AnimFactor;
+
+        protected bool m_IsContinueKeyPressed;
+        protected bool m_LastFromPlayer;
         /// <summary>
-        /// Gets the length of the playing audio.
+        /// Gets the factor for selecting animation clips.
+        /// If without Audio, it's a random value between 0 and 1.
         /// </summary>
-        public float AudioLength { get; set; }
-        /// <summary>
-        /// Gets/Sets if this character's message is interruptable.
-        /// </summary>
-        public bool Interruptable
+        public virtual float AnimFactor
         {
-            get => m_Interruptable;
-            set => m_Interruptable = value;
+            get => Random.Range(0, 1);
+            set => m_AnimFactor = value;
         }
+
         /// <summary>
         /// Gets/Sets if this character is speaking.
         /// If set, will trigger the event OnStartStopInteraction.
@@ -53,205 +64,182 @@ namespace Inworld.Interactions
                 OnStartStopInteraction?.Invoke(m_IsSpeaking);
             }
         }
+        
         /// <summary>
         /// Gets/Sets the live session ID of the character.
         /// </summary>
         public string LiveSessionID { get; set; }
-        /// <summary>
-        /// Gets the history items of the utterances.
-        /// </summary>
-        public Queue<Utterance> UtteranceQueue { get; } = new Queue<Utterance>();
-        /// <summary>
-        /// Gets an interaction by its ID.
-        /// </summary>
-        /// <param name="interactionID">the target interaction's ID</param>
-        /// <returns></returns>
-        public Interaction FindInteraction(string interactionID) => m_History.FirstOrDefault(i => i.InteractionID == interactionID);
+        
         /// <summary>
         /// If the target packet is sent or received by this character.
         /// </summary>
         /// <param name="packet">the target packet.</param>
-        public bool IsRelated(InworldPacket packet) => !string.IsNullOrEmpty(LiveSessionID) 
-            && (packet.routing.source.name == LiveSessionID || packet.routing.target.name == LiveSessionID);
+        public bool IsRelated(InworldPacket packet) => 
+            !string.IsNullOrEmpty(LiveSessionID) && 
+            (packet.routing.source.name == LiveSessionID || packet.routing.target.name == LiveSessionID);
         /// <summary>
         /// Interrupt this character by cancelling its incoming sentences.
+        /// Hard cancelling means even cancel and interrupt the current interaction.
+        /// Soft cancelling will only cancel the stored interactions.
         /// </summary>
-        public virtual void CancelResponse()
+        /// <param name="isHardCancelling">If it's hard cancelling. By default it's true.</param>
+        public virtual void CancelResponse(bool isHardCancelling = true)
         {
-            if (string.IsNullOrEmpty(LiveSessionID) || m_CurrentInteraction == null || !Interruptable)
+            if (string.IsNullOrEmpty(LiveSessionID) || !m_Interruptable)
                 return;
-            
-            InworldController.Instance.SendCancelEvent(LiveSessionID, m_CurrentInteraction.InteractionID);
-
-            m_CurrentInteraction.Cancel();
-            while (UtteranceQueue.Count > 0 && UtteranceQueue.Peek().Interaction == m_CurrentInteraction)
-                UtteranceQueue.Dequeue();
-            
-            m_CurrentUtterance = null;
+            if (isHardCancelling && m_CurrentInteraction != null)
+            {
+                m_CurrentInteraction.Cancel();
+                InworldController.Instance.SendCancelEvent(LiveSessionID, m_CurrentInteraction.ID);
+            }
+            m_Prepared.PourTo(m_Cancelled);
             m_CurrentInteraction = null;
-            m_CurrentTime = 0;
         }
         protected virtual void OnEnable()
         {
             InworldController.Client.OnPacketReceived += ReceivePacket;
+            m_CurrentCoroutine = InteractionCoroutine();
+            StartCoroutine(m_CurrentCoroutine);
         }
+
         protected virtual void OnDisable()
         {
+            StopCoroutine(m_CurrentCoroutine);
             if (InworldController.Instance)
                 InworldController.Client.OnPacketReceived -= ReceivePacket;
         }
-        protected void Update()
+        void Update()
         {
-            if (m_CurrentTime > 0)
-            {
-                m_CurrentTime -= Time.deltaTime;
-                return;
-            }
-                
-            PlayNextUtterance();
+            if (Input.GetKeyUp(m_SkipKey))
+                SkipCurrentUtterance();
+            if (Input.GetKeyDown(m_ContinueKey))
+                UnpauseUtterance();
+            if (Input.GetKeyUp(m_ContinueKey))
+                PauseUtterance();
+            m_Proceed = m_AutoProceed || m_LastFromPlayer || m_IsContinueKeyPressed || m_CurrentInteraction == null || m_CurrentInteraction.IsEmpty;
         }
-        protected void Dispatch(InworldPacket packet)
+        protected virtual void UnpauseUtterance()
         {
-            OnInteractionChanged?.Invoke
-            (
-                new List<InworldPacket>
+            m_IsContinueKeyPressed = true;
+        }
+        protected virtual void PauseUtterance()
+        {
+            m_IsContinueKeyPressed = false;
+        }
+        protected virtual void SkipCurrentUtterance()
+        {
+            if (m_CurrentInteraction != null && m_CurrentInteraction.CurrentUtterance != null)
+                m_CurrentInteraction.CurrentUtterance = null;
+        }
+        protected virtual IEnumerator InteractionCoroutine()
+        {
+            while (true)
+            {
+                yield return RemoveExceedItems();
+                yield return HandleNextUtterance();
+            }
+        }
+        protected IEnumerator HandleNextUtterance()
+        {
+            if (m_Proceed)
+            {
+                HideContinue();
+                if (m_CurrentInteraction == null)
                 {
-                    packet
+                    m_CurrentInteraction = GetNextInteraction();
                 }
-            );
-            packet.packetId.Status = PacketStatus.PROCESSED;
-        }
-        protected virtual void PlayNextUtterance()
-        {
-            if (m_CurrentUtterance != null)
-            {
-                m_CurrentUtterance.GetTextPacket().packetId.Status = PacketStatus.PLAYED;
-                UpdateHistory(m_CurrentUtterance.Interaction);
-                m_CurrentUtterance = null;
-            }
-            
-            if (UtteranceQueue.Count == 0)
-            {
-                IsSpeaking = false;
-                m_CurrentInteraction = null;
-                return;
-            }
-            
-            m_CurrentUtterance = UtteranceQueue.Dequeue();
-            TextPacket textPacket = m_CurrentUtterance.GetTextPacket();
-
-            const float timePerChar = 0.05f;
-            
-            m_CurrentTime = (textPacket.text.text.Length * timePerChar) / m_TextSpeed;
-            
-            m_CurrentInteraction = m_CurrentUtterance.Interaction;
-            m_LastInteractionSequenceNumber = m_CurrentInteraction.SequenceNumber;
-
-            if(m_CurrentInteraction.Status == InteractionStatus.CREATED)
-                m_CurrentInteraction.Status = InteractionStatus.STARTED;
-            
-            Dispatch(textPacket);
-            m_CurrentUtterance.Status = InteractionStatus.STARTED;
-        }
-
-        protected void RemoveHistoryItem()
-        {
-            Interaction toDelete = m_History.FirstOrDefault(i => i.Status != InteractionStatus.STARTED);
-            
-            if (toDelete != null)
-                m_History.Remove(toDelete);
-        }
-        
-        void ReceivePacket(InworldPacket incomingPacket)
-        {
-            try
-            {
-                if (!IsRelated(incomingPacket))
-                    return;
-                switch (incomingPacket?.routing?.source?.type.ToUpper())
+                if (m_CurrentInteraction != null && m_CurrentInteraction.CurrentUtterance == null)
                 {
-                    case "AGENT":
-                        HandleAgentPacket(incomingPacket);
-                        break;
-                    case "PLAYER":
-                        // Send Directly.
-                        Dispatch(incomingPacket);
-                        break;
+                    m_CurrentInteraction.CurrentUtterance = GetNextUtterance();
                 }
-            }
-            catch (Exception e)
-            {
-                InworldAI.LogException(e.Message);
-            }
-        }
-
-        protected virtual void HandleAgentPacket(InworldPacket inworldPacket)
-        {
-            Tuple<Interaction, Utterance> historyItem = AddToHistory(inworldPacket);
-            Interaction interaction = historyItem.Item1;
-
-            if (inworldPacket is ControlPacket)
-            {
-                historyItem.Item1.ReceivedInteractionEnd = true;
-                inworldPacket.packetId.Status = PacketStatus.PROCESSED;
-                UpdateHistory(historyItem.Item1);
-            }
-            else if (inworldPacket is AudioPacket)
-            {
-                inworldPacket.packetId.Status = PacketStatus.PROCESSED;
-            }
-            else if (inworldPacket is TextPacket)
-            {
-                if (interaction == m_CurrentInteraction ||
-                    interaction.SequenceNumber > m_LastInteractionSequenceNumber)
-                    QueueUtterance(historyItem.Item2);
+                if (m_CurrentInteraction != null && m_CurrentInteraction.CurrentUtterance != null)
+                {
+                    yield return PlayNextUtterance();
+                }
+                else
+                    IsSpeaking = false;
             }
             else
             {
-                Dispatch(inworldPacket);
+                ShowContinue();
+                yield return null;
             }
         }
-
-        protected virtual void QueueUtterance(Utterance utterance)
+        void HideContinue()
         {
-            UtteranceQueue.Enqueue(utterance);
+            if (m_ContinueButton)
+                m_ContinueButton.SetActive(false);
         }
-
-        protected void UpdateHistory(Interaction interaction)
+        void ShowContinue()
         {
-            if (!interaction.ReceivedInteractionEnd)
+            if (m_ContinueButton)
+                m_ContinueButton.SetActive(true);
+        }
+        void ReceivePacket(InworldPacket incomingPacket)
+        {
+            if (!IsRelated(incomingPacket))
                 return;
-            
-            interaction.UpdateStatus();
-
-            if (interaction.Status == InteractionStatus.COMPLETED && interaction == m_CurrentInteraction)
-                m_CurrentInteraction = null;
-        }
-        
-        protected Tuple<Interaction, Utterance> AddToHistory(InworldPacket packet)
-        {
-            if (packet.packetId == null || string.IsNullOrEmpty(packet.packetId.interactionId))
-                return null;
-
-            Interaction interaction = m_History.FirstOrDefault(i => i.InteractionID == packet.packetId.interactionId);
-            if (interaction == null)
+            switch (incomingPacket.routing?.source?.type.ToUpper())
             {
-                if (m_History.Count == m_MaxItemCount)
-                    RemoveHistoryItem();
-                interaction = new Interaction(packet.packetId.interactionId, ++m_SequenceNumber);
-                m_History.Add(interaction);
+                case "AGENT":
+                    m_LastFromPlayer = false;
+                    HandleAgentPackets(incomingPacket);
+                    break;
+                case "PLAYER":
+                    // Send Directly.
+                    if (!(incomingPacket is AudioPacket))
+                        m_LastFromPlayer = true;
+                    Dispatch(incomingPacket);
+                    break;
             }
-
-            Utterance utterance = interaction[packet.packetId.utteranceId] ?? CreateUtterance(interaction, packet.packetId.utteranceId);
-            utterance.Packets.Add(packet);
-            if (!interaction.Utterances.Contains(utterance))
-                interaction.Utterances.Add(utterance);
-            return new Tuple<Interaction, Utterance>(interaction, utterance);
         }
+        protected void Dispatch(List<InworldPacket> packets) => OnInteractionChanged?.Invoke(packets);
+        protected void Dispatch(InworldPacket packet) => OnInteractionChanged?.Invoke(new List<InworldPacket> {packet});
 
-        protected virtual Utterance CreateUtterance(Interaction interaction, string utteranceId)
+        protected void HandleAgentPackets(InworldPacket packet)
         {
-            return new Utterance(interaction, utteranceId);
+            if (m_Processed.IsOverDue(packet))
+                m_Processed.Add(packet);
+            else if (m_Cancelled.IsOverDue(packet))
+                m_Cancelled.Add(packet);
+            else if (m_CurrentInteraction != null && m_CurrentInteraction.Contains(packet))
+                m_CurrentInteraction.Add(packet);
+            else
+                m_Prepared.Add(packet);
+        }
+        protected IEnumerator RemoveExceedItems()
+        {
+            m_Cancelled.Clear();
+            if (m_Processed.Count > m_MaxItemCount)
+                m_Processed.Dequeue();
+            yield break;
+        }
+        protected Interaction GetNextInteraction()
+        {
+            if (m_CurrentInteraction != null)
+                return null;
+            m_CurrentInteraction = m_Prepared.Dequeue(true);
+            return m_CurrentInteraction;
+        }
+        protected Utterance GetNextUtterance()
+        {
+            if (m_CurrentInteraction.CurrentUtterance != null)
+                return null;
+            // YAN: At the moment of Dequeuing, the utterance is already in processed.
+            m_CurrentInteraction.CurrentUtterance = m_CurrentInteraction.Dequeue();
+            if (m_CurrentInteraction.CurrentUtterance != null)
+                return m_CurrentInteraction.CurrentUtterance;
+            // YAN: Else set the current interaction to null to get next dequeue interaction.
+            m_Processed.Enqueue(m_CurrentInteraction);
+            m_CurrentInteraction = null; 
+            return null;
+        }
+        protected virtual IEnumerator PlayNextUtterance()
+        {
+            Dispatch(m_CurrentInteraction.CurrentUtterance.Packets);
+            yield return new WaitForSeconds(m_CurrentInteraction.CurrentUtterance.GetTextSpeed() * m_TextSpeedMultipler);
+            if (m_CurrentInteraction != null)
+                m_CurrentInteraction.CurrentUtterance = null; // YAN: Processed.
         }
     }
 }

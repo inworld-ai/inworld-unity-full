@@ -6,12 +6,13 @@
  *************************************************************************************************/
 #if UNITY_EDITOR
 using Inworld.Entities;
+using System;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Inworld.Editors
+namespace Inworld
 {
     public static class VersionChecker
     {
@@ -29,13 +30,22 @@ namespace Inworld.Editors
         }
         public static void CheckVersionUpdates()
         {
-            InworldAI.Log("Check Version Updates...");
+            Debug.Log("Check Version Updates...");
             if (string.IsNullOrEmpty(InworldAI.Version))
-                InworldEditorUtil.SendWebGetRequest(k_VersionCheckURL, false, OnUpdateRequestComplete);
+                SendWebGetRequest(k_VersionCheckURL, OnUpdateRequestComplete);
         }
+        static void SendWebGetRequest(string url, Action<AsyncOperation> callback)
+        {
+            UnityWebRequest uwr = new UnityWebRequest(url, "GET");
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            uwr.timeout = 60;
+            UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
+            updateRequest.completed += callback;
+        }
+        static UnityWebRequest GetResponse(AsyncOperation op) => op is UnityWebRequestAsyncOperation webTask ? webTask.webRequest : null;
         static void OnUpdateRequestComplete(AsyncOperation obj)
         {
-            UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
+            UnityWebRequest uwr = GetResponse(obj);
             if (uwr.result != UnityWebRequest.Result.Success)
             {
                 InworldAI.LogError(k_VersionQuestFailed);
@@ -46,7 +56,7 @@ namespace Inworld.Editors
             if (date.package == null || date.package.Length <= 0)
                 return;
             InworldAI.Version = date.package[0]?.tag_name;
-            InworldAI.Log("Check Version Completed.");
+            Debug.Log("Check Version Completed.");
         }
     }
 }
