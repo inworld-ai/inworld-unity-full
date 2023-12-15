@@ -15,7 +15,7 @@
     buildForAllSupportedPlatforms:
       name: Build for ${{ matrix.targetPlatform }}
       runs-on: ubuntu-latest
-      
+
       strategy:
         fail-fast: false
         matrix:
@@ -53,7 +53,10 @@
               UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
             with:
               githubToken: ${{ secrets.GITHUB_TOKEN }}
-              projectPath: "../InworldBuildTest~"
+              projectPath: ${{ matrix.projectPath }}
+              testMode: ${{ matrix.testMode }}
+              artifactsPath: ${{ matrix.testMode }}-artifacts
+              checkName: ${{ matrix.testMode }} Test Results
            
           
 
