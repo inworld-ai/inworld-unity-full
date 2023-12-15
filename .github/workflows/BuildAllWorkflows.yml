@@ -1,5 +1,5 @@
 
-  name: UnitTest
+  name: BuildAllPlatforms
 
   on:
     workflow_dispatch:
@@ -13,7 +13,7 @@
 
   jobs:   
     buildForAllSupportedPlatforms:
-      name: Test for ${{ matrix.targetPlatform }}
+      name: Build for ${{ matrix.targetPlatform }}
       runs-on: ubuntu-latest
 
       strategy:
@@ -26,7 +26,11 @@
           testMode:
             - playmode
           targetPlatform:
-            - WebGL # YAN: In Linux, it seems audio sampling is prohibited. Use WebGL for now
+            - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+            - StandaloneWindows # Build a Windows standalone.
+            - StandaloneWindows64 # Build a Windows 64-bit standalone.
+            - iOS # Build an iOS player.
+            - Android # Build an Android .apk standalone app.
 
       steps:
           - name: Checkout Repo
