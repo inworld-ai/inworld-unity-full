@@ -116,7 +116,7 @@ namespace Inworld.Interactions
                 UnpauseUtterance();
             if (Input.GetKeyUp(m_ContinueKey))
                 PauseUtterance();
-            m_Proceed = m_AutoProceed || m_LastFromPlayer || m_IsContinueKeyPressed;
+            m_Proceed = m_AutoProceed || m_LastFromPlayer || m_IsContinueKeyPressed || m_CurrentInteraction == null || m_CurrentInteraction.IsEmpty;
         }
         protected virtual void UnpauseUtterance()
         {
@@ -172,7 +172,7 @@ namespace Inworld.Interactions
         }
         void ShowContinue()
         {
-            if (m_ContinueButton && m_CurrentInteraction != null && !m_CurrentInteraction.IsEmpty)
+            if (m_ContinueButton)
                 m_ContinueButton.SetActive(true);
         }
         void ReceivePacket(InworldPacket incomingPacket)
