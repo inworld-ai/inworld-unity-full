@@ -172,7 +172,7 @@ namespace Inworld.Interactions
         }
         void ShowContinue()
         {
-            if (m_ContinueButton)
+            if (m_ContinueButton && m_CurrentInteraction != null && !m_CurrentInteraction.IsEmpty)
                 m_ContinueButton.SetActive(true);
         }
         void ReceivePacket(InworldPacket incomingPacket)

@@ -59,6 +59,7 @@ namespace Inworld.Interactions
             m_Processed.Enqueue(nextUtterance);
             return nextUtterance;
         }
+        public bool IsEmpty => (m_Prepared == null || m_Prepared.IsEmpty) && (CurrentUtterance == null || CurrentUtterance.IsEmpty);
         public bool Contains(InworldPacket packet) => packet?.packetId?.interactionId == ID;
         
         public void Cancel(bool isHardCancelling = true)

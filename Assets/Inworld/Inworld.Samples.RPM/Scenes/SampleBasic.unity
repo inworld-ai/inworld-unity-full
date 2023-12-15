@@ -1865,11 +1865,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec0023079ae244cf88d8e53bebcd9542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PauseKey: 32
+  m_ContinueKey: 32
   m_SkipKey: 306
   m_ContinueButton: {fileID: 1689420212}
   m_Interruptable: 1
-  m_AutoProceed: 0
+  m_AutoProceed: 1
   m_MaxItemCount: 100
   m_TextSpeedMultipler: 0.02
   m_VolumeOnPlayerSpeaking: 1
@@ -1976,7 +1976,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1000.0001, y: -699.9998}
+  m_AnchoredPosition: {x: 1300, y: -699.9998}
   m_SizeDelta: {x: 1100, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &7118283049143331790

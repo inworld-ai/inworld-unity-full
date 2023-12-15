@@ -17,6 +17,7 @@ namespace Inworld.Interactions
     {
         public string ID { get; set; }
         public DateTime RecentTime { get; set; }
+        public bool IsEmpty { get; }
         public bool Contains(InworldPacket packet);
         public void Add(InworldPacket packet);
         public void Cancel(bool isHardCancelling = true);
@@ -29,6 +30,7 @@ namespace Inworld.Interactions
         public int Count => m_Elements.Count;
         public bool Contains(InworldPacket packet) => m_Elements.Any(i => i.Contains(packet));
         public bool IsOverDue(InworldPacket packet) => RecentTime > InworldDateTime.ToDateTime(packet?.timestamp);
+        public bool IsEmpty => m_Elements.Count == 0;
         public T this[int index] => index < m_Elements.Count ? m_Elements[index] : default;
 
         public void Add(InworldPacket packet)
