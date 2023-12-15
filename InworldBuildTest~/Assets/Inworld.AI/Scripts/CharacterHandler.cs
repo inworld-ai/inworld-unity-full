@@ -130,7 +130,8 @@ namespace Inworld
 
         protected virtual void OnDisable()
         {
-            InworldController.Client.OnStatusChanged -= OnStatusChanged;
+            //if (InworldController.Instance)
+                InworldController.Client.OnStatusChanged -= OnStatusChanged;
         }
 
         protected void _StartAudio()

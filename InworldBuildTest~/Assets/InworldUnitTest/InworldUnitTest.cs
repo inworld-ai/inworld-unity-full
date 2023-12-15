@@ -4,7 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class NewTestScript
+public class InworldUnitTest
 {
     // A Test behaves as an ordinary method
     [Test]
@@ -14,15 +14,22 @@ public class NewTestScript
         Assert.AreEqual(true, InworldController.Instance != null);
     }
 
-    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-    // `yield return null;` to skip a frame.
-    [UnityTest]
-    public IEnumerator CreateInworldControllerAsync()
+    [Test]
+    public void CreateInworldController2()
     {
         Object.Instantiate(InworldAI.ControllerPrefab2D);
-        // Use the Assert class to test conditions.
-        // Use yield to skip a frame.
-        yield return null;
         Assert.AreEqual(true, InworldController.Instance != null);
     }
+    // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
+    // `yield return null;` to skip a frame.
+    
+    // [UnityTest]
+    // public IEnumerator CreateInworldControllerAsync()
+    // {
+    //     Object.Instantiate(InworldAI.ControllerPrefab2D);
+    //     // Use the Assert class to test conditions.
+    //     // Use yield to skip a frame.
+    //     yield return null;
+    //     Assert.AreEqual(true, InworldController.Instance != null);
+    // }
 }
