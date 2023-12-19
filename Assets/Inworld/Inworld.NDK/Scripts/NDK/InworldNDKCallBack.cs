@@ -6,6 +6,7 @@
  *************************************************************************************************/
 using AOT;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace Inworld.NDK
 {
@@ -25,6 +26,13 @@ namespace Inworld.NDK
             InworldAI.Log("Get Session ID: " + sessionInfo.sessionId);
             InworldAI.Log("[NDK] Token Generated");
             InworldController.Client.Status = InworldConnectionStatus.Initialized;
+        }
+        [MonoPInvokeCallback(typeof(NDKCallback))]
+        static internal void OnSessionStateReceived()
+        {
+            SessionInfo sessionInfo = Marshal.PtrToStructure<SessionInfo>(NDKInterop.Unity_GetSessionInfo());
+            InworldController.Client.SessionHistory = sessionInfo.sessionSavedState;
+            InworldAI.Log($"[NDK] Session State {InworldController.Client.SessionHistory}");
         }
         [MonoPInvokeCallback(typeof(NDKCallback))]
         static internal void OnSceneLoaded()

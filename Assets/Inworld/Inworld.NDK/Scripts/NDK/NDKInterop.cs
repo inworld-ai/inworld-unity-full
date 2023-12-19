@@ -41,14 +41,22 @@ namespace Inworld.NDK
         /// <param name="callback">the callback method that triggers once finished</param>
         [DllImport(DLL_NAME)]
         public static extern void Unity_GetAccessToken(string serverURL, string apiKey, string apiSecret, NDKCallback callback);
-        
+
+        /// <summary>
+        /// Save the game. If successful, it'll send callback.
+        /// Then you can use GetSessionInfo to get the previous state.
+        /// </summary>
+        /// <param name="callback">the callback which will be triggered if it's successful</param>
+        [DllImport(DLL_NAME)]
+        public static extern void Unity_SaveSessionState(NDKCallback callback);
         /// <summary>
         /// Send load scene request to Inworld server via NDK
         /// </summary>
         /// <param name="sceneName">the full name of the Inworld scene to send.</param>
+        /// <param name="sessionState">the session state to load scene. </param>
         /// <param name="callback">the callback method that triggers once finished</param>
         [DllImport(DLL_NAME)]
-        public static extern void Unity_LoadScene(string sceneName, NDKCallback callback);
+        public static extern void Unity_LoadScene(string sceneName, string sessionState, NDKCallback callback);
         
         /// <summary>
         /// Start live session through NDK.
