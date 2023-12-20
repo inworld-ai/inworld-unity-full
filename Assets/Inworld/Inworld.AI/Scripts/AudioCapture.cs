@@ -223,6 +223,7 @@ namespace Inworld
                 yield return Collect();
             }
 #endif
+            yield break;
         }
 
         protected virtual void OnDisable()
@@ -266,6 +267,7 @@ namespace Inworld
                 m_AudioToPush.Add(audioData);
             yield return new WaitForSeconds(0.1f);
 #endif
+            yield break;
         }
         protected int GetAudioData()
         {
