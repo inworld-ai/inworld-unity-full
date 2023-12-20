@@ -4,8 +4,9 @@
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
-using UnityEngine.Device;
 using Inworld.Entities;
+using UnityEngine;
+using SystemInfo = UnityEngine.Device.SystemInfo;
 
 namespace Inworld.NDK
 {
@@ -24,6 +25,10 @@ namespace Inworld.NDK
         {
             NDKInterop.Unity_GetAccessToken(serverURL, apiKey, apiSecret, InworldNDKCallBack.OnTokenGenerated);
         }
+        public static void GetHistoryAsync()
+        {
+            NDKInterop.Unity_SaveSessionState(InworldNDKCallBack.OnSessionStateReceived);
+        }
         /// <summary>
         /// Set public workspace for the scope of access token
         /// </summary>
@@ -36,7 +41,8 @@ namespace Inworld.NDK
         /// Send load scene request to Inworld server via NDK.
         /// </summary>
         /// <param name="sceneFullName">the full name of the Inworld scene to load.</param>
-        public static void LoadScene(string sceneFullName)
+        /// <param name="history">the session state to load.</param>;
+        public static void LoadScene(string sceneFullName, string history)
         {
             Inworld.Entities.Capabilities capabilities = InworldAI.Capabilities;
             Capabilities cap = new Capabilities
@@ -59,7 +65,8 @@ namespace Inworld.NDK
                 NDKInterop.Unity_AddUserProfile(profile.fieldId, profile.fieldValue);
             }
             NDKInterop.Unity_SetClientRequest(InworldAI.UnitySDK.id, InworldAI.UnitySDK.version, InworldAI.UnitySDK.description);
-            NDKInterop.Unity_LoadScene(sceneFullName, InworldNDKCallBack.OnSceneLoaded);
+            history = string.IsNullOrEmpty(history) ? "" : history;
+            NDKInterop.Unity_LoadScene(sceneFullName, history, InworldNDKCallBack.OnSceneLoaded);
         }
         /// <summary>
         /// Init the NDK, establish all the callback.

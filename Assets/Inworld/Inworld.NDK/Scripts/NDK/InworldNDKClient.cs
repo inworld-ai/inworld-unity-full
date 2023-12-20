@@ -42,6 +42,7 @@ namespace Inworld.NDK
         public override void Disconnect()
         {
             NDKInterop.Unity_EndSession();
+            Status = InworldConnectionStatus.Idle;
         }
         /// <summary>
         /// Get the access token. The returned token data is through call back. 
@@ -66,13 +67,17 @@ namespace Inworld.NDK
                 InworldNDKAPI.SetPublicWorkspace(m_PublicWorkspace);
             InworldNDKAPI.GetAccessToken(m_ServerConfig.RuntimeServer, m_APIKey, m_APISecret);
         }
-       
+        /// <summary>
+        /// Get previous session state.
+        /// </summary>
+        /// <param name="sceneFullName">The scene full name to fetch the session state. Not used in NDK as NDK already saved the data.</param>
+        public override void GetHistoryAsync(string sceneFullName) => InworldNDKAPI.GetHistoryAsync();
         /// <summary>
         /// Send load scene request to Inworld server.
         /// </summary>
         /// <param name="sceneFullName">the full name of the Inworld scene to load.</param>
         /// <param name="history">the full string of the encrypted history content to send.</param>
-        public override void LoadScene(string sceneFullName, string history = "") => InworldNDKAPI.LoadScene(sceneFullName); //TODO(Yan): Update NDK Dll.
+        public override void LoadScene(string sceneFullName, string history = "") => InworldNDKAPI.LoadScene(sceneFullName, history);
 
         /// <summary>
         /// Gets the load scene response when load scene success is sent through call back.

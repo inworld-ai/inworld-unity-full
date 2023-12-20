@@ -82,7 +82,7 @@ namespace Inworld
                 InworldAI.LogError(m_Error);
             }
         }
-        public virtual void GetHistoryAsync(string sceneFullName) {}
+        public virtual void GetHistoryAsync(string sceneFullName) => Error = k_NotImplented;
         /// <summary>
         /// Gets the access token. Would be implemented by child class.
         /// </summary>

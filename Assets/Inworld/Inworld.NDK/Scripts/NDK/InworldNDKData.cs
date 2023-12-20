@@ -186,7 +186,7 @@ namespace Inworld.NDK
     
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void NDKCallback();
-    
+   
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void NDKPacketCallBack(NDKPacket packet);
     

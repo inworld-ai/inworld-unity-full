@@ -76,6 +76,7 @@ namespace UnityWebSocket
                 HandleError(new Exception("Socket is busy."));
                 return;
             }
+
             socket = new ClientWebSocket();
             if (SubProtocols != null)
             {
