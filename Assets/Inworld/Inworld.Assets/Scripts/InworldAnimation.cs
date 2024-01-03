@@ -50,7 +50,8 @@ namespace Inworld.Assets
             switch (incomingPacket)
             {
                 case AudioPacket audioPacket: // Already Played.
-                    HandleLipSync(audioPacket);
+                    if (audioPacket?.routing?.source?.name == m_Character.ID)
+                        HandleLipSync(audioPacket);
                     break;
                 case EmotionPacket emotionPacket:
                     HandleEmotion(emotionPacket);
