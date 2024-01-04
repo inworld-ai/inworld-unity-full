@@ -1,12 +1,14 @@
-﻿using UnityEngine;
+﻿/*************************************************************************************************
+* Copyright 2022 Theai, Inc. (DBA Inworld)
+*
+* Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+* that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+*************************************************************************************************/
+
+using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
-using System.Linq;
-using System;
 
-using Microphone = FrostweepGames.MicrophonePro.Microphone;
-
-namespace FrostweepGames.MicrophonePro.Examples
+namespace Inworld.Audio
 {
 	public class LeapSync_Example : MonoBehaviour
 	{
@@ -28,12 +30,12 @@ namespace FrostweepGames.MicrophonePro.Examples
 			startRecord.interactable = true;
 			stopRecord.interactable = false;
 
-            Microphone.PermissionChangedEvent += PermissionChangedEvent;
+            InworldMicrophone.PermissionChangedEvent += PermissionChangedEvent;
         }
 
         private void OnDestroy()
         {
-            Microphone.PermissionChangedEvent -= PermissionChangedEvent;
+            InworldMicrophone.PermissionChangedEvent -= PermissionChangedEvent;
         }
 
         private void PermissionChangedEvent(bool granted)
@@ -43,13 +45,13 @@ namespace FrostweepGames.MicrophonePro.Examples
 
         private void StartRecordHandler()
         {
-            if (Microphone.devices.Length == 0)
+            if (InworldMicrophone.devices.Length == 0)
                 return;
 #if UNITY_WEBGL && !UNITY_EDITOR
 			// for webgl we use native audio speaker instead unity audio source due to limitation of unity audio engine
-            Microphone.Start(Microphone.devices[0], true, _recordingTime, _sampleRate, true);
+            InworldMicrophone.Start(InworldMicrophone.devices[0], true, _recordingTime, _sampleRate, true);
 #else
-			_audioSource.clip = Microphone.Start(Microphone.devices[0], true, _recordingTime, _sampleRate);
+			_audioSource.clip = InworldMicrophone.Start(InworldMicrophone.devices[0], true, _recordingTime, _sampleRate);
             _audioSource.loop = true;
             _audioSource.Play();
 #endif
@@ -59,10 +61,10 @@ namespace FrostweepGames.MicrophonePro.Examples
 
 		private void StopRecordHandler()
 		{
-			if (Microphone.devices.Length == 0)
+			if (InworldMicrophone.devices.Length == 0)
 				return;
 
-            Microphone.End(Microphone.devices[0]);
+            InworldMicrophone.End(InworldMicrophone.devices[0]);
 #if !UNITY_WEBGL || UNITY_EDITOR
             _audioSource.Stop();
 #endif

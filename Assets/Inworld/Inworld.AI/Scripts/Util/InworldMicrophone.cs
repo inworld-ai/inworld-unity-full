@@ -1,25 +1,28 @@
-﻿//#define FORCE_WEBGL_MIC
-
-// C# 10 feature
-//global using Microphone = FrostweepGames.MicrophonePro.Microphone;
+﻿/*************************************************************************************************
+* Copyright 2022 Theai, Inc. (DBA Inworld)
+*
+* Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+* that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+*************************************************************************************************/
 
 #if (UNITY_WEBGL && !UNITY_EDITOR) || FORCE_WEBGL_MIC
 using System.Runtime.InteropServices;
-#endif
-using System;
 using System.Linq;
-using System.Globalization;
-using System.Collections.Generic;
-using UnityEngine;
 using AOT;
+#endif
+
+using System;
+using System.Collections.Generic;
+using System.Data;
+using UnityEngine;
 
 #if UNITY_ANDROID
 using UnityEngine.Android;
 #endif
 
-namespace FrostweepGames.MicrophonePro
+namespace Inworld.Audio
 {
-    public sealed class Microphone
+    public class InworldMicrophone
     {
         /// <summary>
         /// Uses for debugging native commands. Works only in WebGL
@@ -100,7 +103,7 @@ namespace FrostweepGames.MicrophonePro
             }
         }
 
-        static Microphone()
+        static InworldMicrophone()
         {
 #if (UNITY_WEBGL && !UNITY_EDITOR) || FORCE_WEBGL_MIC
             _devices = new List<Device>();

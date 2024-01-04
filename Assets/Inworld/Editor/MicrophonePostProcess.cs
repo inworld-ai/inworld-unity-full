@@ -6,7 +6,7 @@ namespace FrostweepGames.MicrophonePro
 {
 	public sealed class MicrophonePostProcess
     {
-        const string k_NativeJSPath = "Inworld/InworldMicrophone/Scripts/Native";
+        const string k_NativeJSPath = "Inworld/Editor/Native";
         
 		[PostProcessBuild(1)]
 		public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)

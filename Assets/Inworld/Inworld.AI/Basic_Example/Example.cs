@@ -1,8 +1,16 @@
-﻿using System.Collections.Generic;
+﻿/*************************************************************************************************
+* Copyright 2022 Theai, Inc. (DBA Inworld)
+*
+* Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
+* that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
+*************************************************************************************************/
+
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-namespace FrostweepGames.MicrophonePro.Examples
+
+namespace Inworld.Audio
 {
 	[RequireComponent(typeof(AudioSource))]
 	public class Example : MonoBehaviour
@@ -47,8 +55,8 @@ namespace FrostweepGames.MicrophonePro.Examples
 
 			selectedDevice = string.Empty;
 
-			Microphone.RecordStreamDataEvent += RecordStreamDataEventHandler;
-			Microphone.PermissionChangedEvent += PermissionChangedEvent;
+			InworldMicrophone.RecordStreamDataEvent += RecordStreamDataEventHandler;
+			InworldMicrophone.PermissionChangedEvent += PermissionChangedEvent;
 
 			// no need to request permission in webgl. it does automatically
 			requestPermissionButton.interactable = Application.platform != RuntimePlatform.WebGLPlayer;
@@ -57,20 +65,20 @@ namespace FrostweepGames.MicrophonePro.Examples
 		void Update()
 		{
 			permissionStatusText.text = $"Microphone permission for device: '{selectedDevice}' is '{(permissionGranted ? "<color=green>granted</color>" : "<color=red>denined</color>")}'";
-			recordingStatusText.text = $"Recording status is '{(Microphone.IsRecording(selectedDevice) ? "<color=green>recording</color>" : "<color=yellow>idle</color>")}'";
+			recordingStatusText.text = $"Recording status is '{(InworldMicrophone.IsRecording(selectedDevice) ? "<color=green>recording</color>" : "<color=yellow>idle</color>")}'";
 		}
 
 		void OnDestroy()
 		{
-			Microphone.RecordStreamDataEvent -= RecordStreamDataEventHandler;
-			Microphone.PermissionChangedEvent -= PermissionChangedEvent;
+			InworldMicrophone.RecordStreamDataEvent -= RecordStreamDataEventHandler;
+			InworldMicrophone.PermissionChangedEvent -= PermissionChangedEvent;
 		}
 
         /// <summary>
         ///     Works only in WebGL
         /// </summary>
         /// <param name="samples"></param>
-        void RecordStreamDataEventHandler(Microphone.StreamData streamData)
+        void RecordStreamDataEventHandler(InworldMicrophone.StreamData streamData)
 		{
 			// handle streaming recording data
 		}
@@ -90,23 +98,23 @@ namespace FrostweepGames.MicrophonePro.Examples
 		void RefreshMicrophoneDevicesButtonOnclickHandler()
 		{
 			devicesDropdown.ClearOptions();
-			devicesDropdown.AddOptions(Microphone.devices.ToList());
+			devicesDropdown.AddOptions(InworldMicrophone.devices.ToList());
 			DevicesDropdownValueChangedHandler(0);
 		}
 
 		void RequestPermission()
 		{
-			Microphone.RequestPermission();
+			InworldMicrophone.RequestPermission();
 		}
 
 		void StartRecord()
 		{
-			_workingClip = Microphone.Start(selectedDevice, false, recordingTime, frequency);
+			_workingClip = InworldMicrophone.Start(selectedDevice, false, recordingTime, frequency);
 		}
 
 		void StopRecord()
 		{
-			Microphone.End(selectedDevice);
+			InworldMicrophone.End(selectedDevice);
 
 			PlayRecordedAudio();
 		}
@@ -124,9 +132,9 @@ namespace FrostweepGames.MicrophonePro.Examples
 
 		void DevicesDropdownValueChangedHandler(int index)
 		{
-			if (index < Microphone.devices.Length)
+			if (index < InworldMicrophone.devices.Length)
 			{
-				selectedDevice = Microphone.devices[index];
+				selectedDevice = InworldMicrophone.devices[index];
 			}
 		}
 	}
