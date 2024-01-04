@@ -14,7 +14,8 @@ namespace UnityWebSocket
         {
             get
             {
-                if (!_instance) CreateInstance();
+                if (!_instance) 
+                    CreateInstance();
                 return _instance;
             }
         }
@@ -29,13 +30,14 @@ namespace UnityWebSocket
             GameObject go = GameObject.Find("/" + rootName);
             if (!go) go = new GameObject(rootName);
             _instance = go.GetComponent<WebSocketManager>();
-            if (!_instance) _instance = go.AddComponent<WebSocketManager>();
+            if (!_instance) 
+                _instance = go.AddComponent<WebSocketManager>();
         }
 
         readonly List<WebSocket> sockets = new List<WebSocket>();
 
         public bool Contains(string sessionURL) => sockets.Any(s => s.Address == sessionURL);
-        public WebSocket GetWebSocket(string sessionURL) => sockets.FirstOrDefault(s => s.Address == sessionURL);
+        public static WebSocket GetWebSocket(string sessionURL) => Instance.sockets.FirstOrDefault(s => s.Address == sessionURL);
         public void Add(WebSocket socket)
         {
             if (!Contains(socket.Address))

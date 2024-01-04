@@ -1,15 +1,16 @@
-#if !UNITY_EDITOR && UNITY_WEBGL
+#if !UNITY_EDITOR && UNITY_WEBGL 
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using AOT;
+using System.Linq;
 
 namespace UnityWebSocket
 {
     /// <summary>
     /// Class providing static access methods to work with JSLIB WebSocket
     /// </summary>
-    internal static class WebSocketManager
+    public static class WebSocketManager
     {
         /* Map of websocket instances */
         private static Dictionary<int, WebSocket> sockets = new Dictionary<int, WebSocket>();
@@ -20,6 +21,8 @@ namespace UnityWebSocket
         public delegate void OnMessageStrCallback(int instanceId, IntPtr msgStrPtr);
         public delegate void OnErrorCallback(int instanceId, IntPtr errorPtr);
         public delegate void OnCloseCallback(int instanceId, int closeCode, IntPtr reasonPtr);
+
+        public static WebSocket GetWebSocket(string sessionURL) => sockets.Values.FirstOrDefault(s => s.Address == sessionURL);
 
         /* WebSocket JSLIB functions */
         [DllImport("__Internal")]
