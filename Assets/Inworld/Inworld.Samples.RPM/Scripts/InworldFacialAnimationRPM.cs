@@ -183,10 +183,13 @@ namespace Inworld.Sample.RPM
         void _ProcessEmotion(string emotion)
         {
             FacialAnimation targetEmo = m_FacialEmotion.emotions.FirstOrDefault(emo => emo.emotion.ToUpper() == emotion);
-            if (targetEmo == null || m_CurrentFacial == targetEmo)
-                return;
-            _ResetLastEmo(m_LastFacial);
+            _ResetLastEmo(m_CurrentFacial);
             m_LastFacial = m_CurrentFacial;
+            m_CurrentFacial = null;
+            
+            if (targetEmo == null || m_LastFacial == targetEmo)
+                return;
+
             m_CurrentFacial = targetEmo;
             StartCoroutine(_MorphEmotion());
         }
