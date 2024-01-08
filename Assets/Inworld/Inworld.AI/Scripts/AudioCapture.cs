@@ -386,6 +386,7 @@ namespace Inworld
                 switch (command.command)
                 {
                     case "PermissionChanged":
+                        Debug.Log($"YAN {json}");
                         WebGLCommand<bool> boolCmd = JsonUtility.FromJson<WebGLCommandData<bool>>(json).command;
                         if (boolCmd.data) // Permitted.
                         {
@@ -396,7 +397,7 @@ namespace Inworld
                     case "StreamChunkReceived":
                         WebGLCommand<string> strCmd = JsonUtility.FromJson<WebGLCommandData<string>>(json).command;
                         string[] split = strCmd.data.Split(':');
-                        // Debug.Log(json);
+
                         int index = int.Parse(split[0]);
                         int length = int.Parse(split[1]);
                         int bufferLength = int.Parse(split[2]);
