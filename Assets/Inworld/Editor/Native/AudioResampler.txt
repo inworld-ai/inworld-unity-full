@@ -1,8 +1,8 @@
 class InworldAudioResampler extends AudioWorkletProcessor {
     static get parameterDescriptors() {
         return [
-            { name: "frequency", defaultValue: 44100, minValue: 16000, maxValue: 48000 },
-            { name: "channels", defaultValue: 2, minValue: 1, maxValue: 2 },
+            { name: "frequency", defaultValue: 16000, minValue: 16000, maxValue: 48000 },
+            { name: "channels", defaultValue: 1, minValue: 1, maxValue: 1 },
             { name: "recording", defaultValue: 0, minValue: 0, maxValue: 1 },
         ];
     }
@@ -15,7 +15,6 @@ class InworldAudioResampler extends AudioWorkletProcessor {
         if (parameters.recording[0] === 0) {
             return true;
         }
-
         var outputData = null;
 
         for (let inputIndex = 0; inputIndex < inputs.length; inputIndex++) {

@@ -3,14 +3,13 @@ class InworldMicrophone {
         this.record = false;
         this.position = 0;
         this.sampleRate = this.getDeviceCaps()[0];
-        this.channels = 2;
         this.duration = 0;
         this.initialized = false;
         this.permissionGranted = false;
         this.mediaAvailable = false;
         this.audioContext = null;
         this.requestingMedia = false;
-        this.leapSync = false;
+
         this.mediaStreamSource = null;
         this.audioWorkletNode = null;
         this.devicesList = [];
@@ -20,7 +19,6 @@ class InworldMicrophone {
             AudioOutput: "audioinput"
         };
         this.delayedInitialize(this);
-        this.check();
     }
 
     delayedInitialize(instance) {
@@ -31,6 +29,7 @@ class InworldMicrophone {
             canvas.removeEventListener("mousedown", handler);
             setTimeout(() => {
                 instance.initialize(instance);
+                instance.check();
             }, 100);
         };
         canvas.addEventListener("touchstart", handler);
@@ -46,7 +45,6 @@ class InworldMicrophone {
                 instance.nodeInputHandler(instance, event);
             };
             instance.initialized = true;
-            InworldMicrophone.log("initialized");
         }
     }
 
@@ -71,7 +69,9 @@ class InworldMicrophone {
     }
 
     start(deviceId, sampleRate, loop, duration) {
+        console.log("YAN Before Start");
         if (this.record === true || this.requestingMedia === true || this.initialized === false) {
+            console.log("YAN Record " + this.record + " requesting Media " + this.requestingMedia + " initialized " + this.initialized);
             return;
         }
         this.sampleRate = sampleRate;
@@ -81,9 +81,6 @@ class InworldMicrophone {
 
         let frequencyParam = this.audioWorkletNode.parameters.get("frequency");
         frequencyParam.setValueAtTime(this.sampleRate, this.audioContext.currentTime);
-
-        let channelsParam = this.audioWorkletNode.parameters.get("channels");
-        channelsParam.setValueAtTime(this.channels, this.audioContext.currentTime);
 
         this.requestingMedia = true;
 
@@ -118,9 +115,6 @@ class InworldMicrophone {
         this.mediaAvailable = false;
         this.mediaStreamSource.mediaStream.getTracks().forEach(track => track.stop());
 
-        if (this.leapSync) {
-            this.mediaStreamSource.disconnect(this.audioContext.destination);
-        }
         this.mediaStreamSource.disconnect(this.audioWorkletNode);
         InworldMicrophone.log("end");
     }
@@ -135,10 +129,6 @@ class InworldMicrophone {
         return permitted;
     }
 
-    setLeapSync(enabled) {
-        this.leapSync = enabled;
-    }
-
     mediaGranted(instance, stream) {
         let recordingParam = instance.audioWorkletNode.parameters.get("recording");
         recordingParam.setValueAtTime(1, instance.audioContext.currentTime);
@@ -148,9 +138,6 @@ class InworldMicrophone {
         instance.mediaStreamSource = instance.audioContext.createMediaStreamSource(stream);
         instance.mediaStreamSource.connect(instance.audioWorkletNode);
 
-        if (instance.leapSync) {
-            instance.mediaStreamSource.connect(instance.audioContext.destination);
-        }
         InworldMicrophone.log("start");
     }
 
@@ -194,22 +181,15 @@ class InworldMicrophone {
         let data = event.data;
         if (data === undefined || data.data[0] === undefined) {
             return;
-        }
-        let channelCount = Math.min(data.channels, this.channels);
+        }        
         let length = data.data[0].length;
         let audioData = data.data;
-        let bufferLength = document.microphoneNative.samplesMemoryDataLeftChannel.length;
+        let bufferLength = document.microphoneNative.samplesMemoryData.length;   
         let startPosition = instance.position;
         let count = 0;
-
-        for (let i = 0; i < length; i++) {
-            for (let channel = 0; channel < channelCount; channel++) {
-                if (channel === 0) {
-                    document.microphoneNative.samplesMemoryDataLeftChannel[instance.position] = audioData[channel][i];
-                } else {
-                    document.microphoneNative.samplesMemoryDataRightChannel[instance.position] = audioData[channel][i];
-                }
-            }
+        for (let i = 0; i < length; i++) 
+        {           
+            document.microphoneNative.samplesMemoryData[instance.position] = audioData[0][i];
             instance.position++;
             if (instance.position + 1 > bufferLength) {
                 if (instance.loop) {
@@ -221,7 +201,7 @@ class InworldMicrophone {
             }
             count++;
         }
-        document.microphoneNative.unityCommand("StreamChunkReceived", startPosition + ":" + count);
+        document.microphoneNative.unityCommand("StreamChunkReceived", startPosition + ":" + count + ":" + bufferLength);
     }
 
     async permissionStatusHandler(instance) {
