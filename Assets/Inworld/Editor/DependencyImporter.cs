@@ -12,7 +12,6 @@ using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
-
 namespace Inworld
 {
     public class DependencyImporter : AssetPostprocessor

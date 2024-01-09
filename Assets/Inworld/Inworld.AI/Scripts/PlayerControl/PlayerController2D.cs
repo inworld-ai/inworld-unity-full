@@ -41,14 +41,6 @@ namespace Inworld.Sample
             InworldController.CharacterHandler.OnCharacterRegistered -= OnCharacterRegistered;
         }
 
-        new void Update()
-        {
-            base.Update();
-            if (Input.GetKeyUp(KeyCode.Alpha6))
-                InworldController.Audio.StartMicrophone(InworldController.Audio.DeviceName);
-            if (Input.GetKeyUp(KeyCode.Alpha0))
-                SceneManager.LoadScene(0);
-        }
         protected virtual void OnCharacterRegistered(InworldCharacterData charData)
         {
 

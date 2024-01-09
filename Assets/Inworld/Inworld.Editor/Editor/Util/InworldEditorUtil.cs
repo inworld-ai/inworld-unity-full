@@ -73,7 +73,6 @@ namespace Inworld.Editors
         {
             InworldEditor.Instance.SaveData();
         }
-        
 
 #region Top Menu
         [MenuItem("Inworld/Inworld Studio Panel", false, 0)]
@@ -91,7 +90,6 @@ namespace Inworld.Editors
         [MenuItem("Inworld/Switch Protocol/Web socket")]
         public static void SwitchToWebSocket() => UpgradeProtocol<InworldWebSocketClient>();
 #endregion
-
 
 #region Asset Menu
         [MenuItem("Assets/Inworld/Studio Panel", false, 0)]

@@ -69,9 +69,7 @@ class InworldMicrophone {
     }
 
     start(deviceId, sampleRate, loop, duration) {
-        console.log("YAN Before Start");
         if (this.record === true || this.requestingMedia === true || this.initialized === false) {
-            console.log("YAN Record " + this.record + " requesting Media " + this.requestingMedia + " initialized " + this.initialized);
             return;
         }
         this.sampleRate = sampleRate;

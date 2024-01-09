@@ -18,7 +18,7 @@ class InworldAudioResampler extends AudioWorkletProcessor {
         var outputData = null;
 
         for (let inputIndex = 0; inputIndex < inputs.length; inputIndex++) {
-            var input = [...inputs[inputIndex]]; // 拷贝输入数组
+            var input = [...inputs[inputIndex]]; 
             outputData = { channels: input.length, data: [] };
 
             input = this.changeBitrate(input, sampleRate, parameters.frequency[0], parameters.channels[0]);
