@@ -270,7 +270,7 @@ namespace Inworld
                 yield break;
             yield return new WaitForEndOfFrame();
             string[] param = {m_Token.type, m_Token.token};
-            m_Socket = WebSocketManager.Instance.GetWebSocket(url);
+            m_Socket = WebSocketManager.GetWebSocket(url);
             if (m_Socket == null)
                 m_Socket = new WebSocket(url, param);
             m_Socket.OnOpen += OnSocketOpen;
