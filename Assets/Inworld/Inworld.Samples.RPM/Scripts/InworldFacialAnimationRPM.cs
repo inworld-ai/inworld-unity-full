@@ -182,14 +182,20 @@ namespace Inworld.Sample.RPM
 
         void _ProcessEmotion(string emotion)
         {
-            FacialAnimation targetEmo = m_FacialEmotion.emotions.FirstOrDefault(emo => emo.emotion.ToUpper() == emotion);
-            _ResetLastEmo(m_CurrentFacial);
-            m_LastFacial = m_CurrentFacial;
-            m_CurrentFacial = null;
-            
-            if (targetEmo == null || m_LastFacial == targetEmo)
+            EmotionMapData emoMapData = m_EmotionMap[emotion];
+            if (emoMapData == null)
+            {
+                InworldAI.LogError($"Unhandled emotion {emotion}");
                 return;
-
+            }
+            FacialAnimation targetEmo = m_FacialEmotion[emoMapData.facialEmotion.ToString()];
+            if (targetEmo == null)
+            {
+                InworldAI.LogError($"Unhandled emotion {emotion}");
+                return;
+            }
+            _ResetLastEmo(m_LastFacial);
+            m_LastFacial = m_CurrentFacial;
             m_CurrentFacial = targetEmo;
             StartCoroutine(_MorphEmotion());
         }

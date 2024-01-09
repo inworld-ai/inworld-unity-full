@@ -13,7 +13,6 @@ namespace Inworld.Assets
     public class InworldBodyAnimation : InworldAnimation
     {
         [SerializeField] Animator m_BodyAnimator;
-        [SerializeField] EmotionMap m_EmotionMap;
 
         Transform m_Transform;
         Vector3 m_vecInitPosition;

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FacialEmotionData
   m_EditorClassIdentifier: 
   emotions:
-  - emotion: Anger
+  - emotion: Angry
     icon: {fileID: 21300000, guid: 59824422081cbfc4f81f98468aff4b06, type: 3}
     morphStates:
     - morphName: eyesClosed
@@ -32,7 +32,7 @@ MonoBehaviour:
       morphWeight: 1
     - morphName: noseSneerRight
       morphWeight: 1
-  - emotion: Anticipation
+  - emotion: Affection
     icon: {fileID: 21300000, guid: fa616e1e217188845b77886279306ab7, type: 3}
     morphStates:
     - morphName: mouthSmile
@@ -98,7 +98,7 @@ MonoBehaviour:
       morphWeight: 0.6
     - morphName: cheekSquintRight
       morphWeight: 0.6
-  - emotion: Sadness
+  - emotion: Sad
     icon: {fileID: 21300000, guid: d1ea56bc9101ef34c8d2334fc1ef36bb, type: 3}
     morphStates:
     - morphName: eyesClosed
@@ -134,6 +134,21 @@ MonoBehaviour:
       morphWeight: 0.7
     - morphName: browOuterUpRight
       morphWeight: 0.7
+  - emotion: Humor
+    icon: {fileID: 21300000, guid: 8ed0e335117fdf142afc04276285a39d, type: 3}
+    morphStates:
+    - morphName: mouthSmile
+      morphWeight: 0.2
+    - morphName: eyeSquintLeft
+      morphWeight: 0.5
+    - morphName: eyeSquintRight
+      morphWeight: 0.5
+    - morphName: browInnerUp
+      morphWeight: 0.3
+    - morphName: cheekSquintLeft
+      morphWeight: 0.6
+    - morphName: cheekSquintRight
+      morphWeight: 0.6
   - emotion: Neutral
     icon: {fileID: 21300000, guid: 763c1d4efb0d6004f8e56e9c73afac82, type: 3}
     morphStates: []

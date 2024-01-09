@@ -14,7 +14,7 @@ namespace Inworld.Assets
     {
         protected InworldCharacter m_Character;
         protected InworldInteraction m_Interaction;
-        
+        [SerializeField] protected EmotionMap m_EmotionMap;
         protected virtual void Awake()
         {
             enabled = Init();

@@ -59,7 +59,9 @@ namespace Inworld.Assets
         Humor = 3,
         Fear = 4,
         Sad = 5,
-        Joy = 6
+        Joy = 6,
+        Surprise = 7,
+        Disgust = 8
     }
     
 }
