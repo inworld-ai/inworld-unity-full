@@ -497,6 +497,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AudioTestCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 3177197488962859756, guid: ea9330390fed552459a3cf1b021a84f1, type: 3}
+      propertyPath: m_SamplingMode
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3177197489179948340, guid: ea9330390fed552459a3cf1b021a84f1, type: 3}
       propertyPath: m_fontAsset
       value: 

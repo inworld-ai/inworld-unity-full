@@ -67,7 +67,8 @@ namespace Inworld.Sample
     }
     protected override void OnEnable()
     {
-        
+        m_AudioCoroutine = AudioCoroutine();
+        StartCoroutine(m_AudioCoroutine);
     }
     void _InitUI()
     {
