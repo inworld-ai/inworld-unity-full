@@ -347,11 +347,11 @@ namespace Inworld
                 return -1;
             }
             int nSize = m_nPosition - m_LastPosition;
-#if !UNITY_WEBGL
-            if (!m_Recording.GetData(m_InputBuffer, m_LastPosition))
+#if UNITY_WEBGL && !UNITY_EDITOR
+            if (!WebGLGetAudioData(m_LastPosition))
                 return -1;
 #else
-            if (!WebGLGetAudioData(m_LastPosition))
+            if (!m_Recording.GetData(m_InputBuffer, m_LastPosition))
                 return -1;
 #endif
             m_LastPosition = m_nPosition % m_BufferSize;
@@ -363,7 +363,7 @@ namespace Inworld
         {
             if (!WebGLPermission)
                 return;
-            InworldAI.Log($"YAN: Get Device {DeviceName}");
+            InworldAI.Log($"Audio Input Device {DeviceName}");
             m_AudioCoroutine = AudioCoroutine();
             StartCoroutine(m_AudioCoroutine);
         }
