@@ -15,7 +15,6 @@ namespace Inworld.Sample.Innequin
     public class InworldFaceAnimationInnequin : InworldFacialAnimation
     {
         [SerializeField] Animator m_EmoteAnimator;
-        [SerializeField] EmotionMap m_EmotionMap;
         [SerializeField] SkinnedMeshRenderer m_FaceMesh;
         [SerializeField] FaceTransformData m_FaceTransformData;
         [SerializeField] LipsyncMap m_FaceAnimData;

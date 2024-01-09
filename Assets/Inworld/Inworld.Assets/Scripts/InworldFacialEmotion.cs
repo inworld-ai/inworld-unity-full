@@ -6,6 +6,7 @@
  *************************************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Inworld.Assets
@@ -26,5 +27,6 @@ namespace Inworld.Assets
     public class InworldFacialEmotion : ScriptableObject
     {
         public List<FacialAnimation> emotions;
+        public FacialAnimation this[string emoName] => emotions.FirstOrDefault(e => e.emotion == emoName);
     }
 }
