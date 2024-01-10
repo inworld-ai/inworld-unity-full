@@ -835,7 +835,7 @@ PlayerSettings:
   scriptingDefineSymbols:
     Android: INWORLD_DEBUG
     Standalone: INWORLD_DEBUG
-    WebGL: 
+    WebGL: INWORLD_DEBUG
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}

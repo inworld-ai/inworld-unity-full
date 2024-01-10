@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18296637, g: 0.22865748, b: 0.30682936, a: 1}
+  m_IndirectSpecularColor: {r: 0.46488476, g: 0.5154878, b: 0.58985114, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -453,6 +453,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec0023079ae244cf88d8e53bebcd9542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ContinueKey: 32
+  m_SkipKey: 306
+  m_ContinueButton: {fileID: 0}
   m_Interruptable: 1
   m_AutoProceed: 1
   m_MaxItemCount: 100
@@ -1176,8 +1179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b28951a4e1a362741ac8288d7560535e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BodyAnimator: {fileID: 1921052527070687568}
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
+  m_BodyAnimator: {fileID: 1921052527070687568}
 --- !u!65 &2991375306069414090
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2267,8 +2270,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87294da2ba36448dbd537c4808c2263f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EmoteAnimator: {fileID: 5085467240365127113}
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
+  m_EmoteAnimator: {fileID: 5085467240365127113}
   m_FaceMesh: {fileID: 6617711757282660818}
   m_FaceTransformData: {fileID: 11400000, guid: cdb6717a81f76c54cbb32bcf5b87d6e5, type: 2}
   m_FaceAnimData: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
