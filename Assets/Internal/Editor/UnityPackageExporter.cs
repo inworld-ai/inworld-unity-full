@@ -1,5 +1,5 @@
 /*************************************************************************************************
- * Copyright 2022 Theai, Inc. (DBA Inworld)
+ * Copyright 2022-2024 Theai, Inc. dba Inworld AI
  *
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
@@ -17,11 +17,9 @@ namespace Inworld
     {
         // The name of the unitypackage to output.
         const string k_FullPackageName = "InworldAI.Full";
-        const string k_LitePackageName = "InworldAI.Lite";
 
         // The path to the package under the `Assets/` folder.
         const string k_FullPackagePath = "Assets/Inworld";
-        const string k_LitePackagePath = "Assets/Inworld/Inworld.AI";
         const string k_ExtraPackagePath = "Assets/Inworld/InworldExtraAssets.unitypackage";
 
         /// <summary>
@@ -33,14 +31,11 @@ namespace Inworld
             ExportExtraAssets();
             string[] assetPaths =
             {
-                "Assets/Inworld/Inworld.AI", 
                 "Assets/Inworld/Editor",
                 k_ExtraPackagePath
             }; 
             AssetDatabase.ExportPackage(assetPaths, $"{k_FullPackagePath}/{k_FullPackageName}.unitypackage", ExportPackageOptions.Recurse);
         }
-        [MenuItem("Inworld/Export Package/Lite")]
-        public static void ExportLite() => AssetDatabase.ExportPackage(k_LitePackagePath, $"Builds/{k_LitePackageName}.unitypackage", ExportPackageOptions.Recurse);
         
         [MenuItem("Inworld/Export Package/Extra Assets")]
         public static void ExportExtraAssets()
