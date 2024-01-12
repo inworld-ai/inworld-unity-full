@@ -129,6 +129,7 @@ namespace Inworld.Editors
                 InworldAI.User.Name = displayName;
             }
             EditorUtility.DisplayProgressBar("Inworld", "Getting Billing Account Completed!", 0.5f);
+            InworldAI.LogEvent("Login_Studio");
             _ListWorkspace();
         }
         void OnListWorkspaceCompleted(AsyncOperation obj)
