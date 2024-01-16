@@ -38,7 +38,6 @@ namespace Inworld.Editors
             InworldEditor.Instance.CurrentState.DrawTitle();
             InworldEditor.Instance.CurrentState.DrawContent();
             InworldEditor.Instance.CurrentState.DrawButtons();
-            
         }
         void Update()
         {

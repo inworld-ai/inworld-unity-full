@@ -80,7 +80,7 @@ namespace Inworld.Editors
         static void TopMenuConnectStudio() => InworldStudioPanel.Instance.ShowPanel();
 
         [MenuItem("Inworld/Inworld Settings", false, 1)]
-        static void TopMenuShowPanel() => Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
+        static void TopMenuShowPanel() => InworldAIEditor.Instance.ShowPanel();
         
         [MenuItem("Inworld/User Settings", false, 1)]
         static void TopMenuUserPanel() => Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
@@ -98,7 +98,7 @@ namespace Inworld.Editors
         static void ConnectStudio() => InworldStudioPanel.Instance.ShowPanel();
 
         [MenuItem("Assets/Inworld/Default Settings", false, 1)]
-        static void ShowPanel() => Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
+        static void ShowPanel() => InworldAIEditor.Instance.ShowPanel();
         
         [MenuItem("Assets/Inworld/User Settings", false, 1)]
         static void UserPanel() => Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
