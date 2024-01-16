@@ -51,6 +51,7 @@ namespace Inworld.AEC
             }
             else
                 m_SamplingMode = MicSampleMode.TURN_BASED;
+            m_LastSampleMode = m_SamplingMode;
             base.Init();
         }
 
