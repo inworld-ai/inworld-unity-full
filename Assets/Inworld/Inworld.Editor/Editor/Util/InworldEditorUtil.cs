@@ -1,5 +1,5 @@
 ﻿/*************************************************************************************************
- * Copyright 2022 Theai, Inc. (DBA Inworld)
+ * Copyright 2022-2024 Theai, Inc. dba Inworld AI
  *
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
@@ -80,7 +80,7 @@ namespace Inworld.Editors
         static void TopMenuConnectStudio() => InworldStudioPanel.Instance.ShowPanel();
 
         [MenuItem("Inworld/Inworld Settings", false, 1)]
-        static void TopMenuShowPanel() => Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
+        static void TopMenuShowPanel() => InworldAIEditor.Instance.ShowPanel();
         
         [MenuItem("Inworld/User Settings", false, 1)]
         static void TopMenuUserPanel() => Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
@@ -98,7 +98,7 @@ namespace Inworld.Editors
         static void ConnectStudio() => InworldStudioPanel.Instance.ShowPanel();
 
         [MenuItem("Assets/Inworld/Default Settings", false, 1)]
-        static void ShowPanel() => Selection.SetActiveObjectWithContext(InworldAI.Instance, InworldAI.Instance);
+        static void ShowPanel() => InworldAIEditor.Instance.ShowPanel();
         
         [MenuItem("Assets/Inworld/User Settings", false, 1)]
         static void UserPanel() => Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);

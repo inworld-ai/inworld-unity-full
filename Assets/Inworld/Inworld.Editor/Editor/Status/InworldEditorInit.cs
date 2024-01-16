@@ -1,5 +1,5 @@
 ﻿/*************************************************************************************************
- * Copyright 2022 Theai, Inc. (DBA Inworld)
+ * Copyright 2022-2024 Theai, Inc. dba Inworld AI
  *
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
@@ -129,6 +129,7 @@ namespace Inworld.Editors
                 InworldAI.User.Name = displayName;
             }
             EditorUtility.DisplayProgressBar("Inworld", "Getting Billing Account Completed!", 0.5f);
+            InworldAI.LogEvent("Login_Studio");
             _ListWorkspace();
         }
         void OnListWorkspaceCompleted(AsyncOperation obj)
