@@ -32,6 +32,7 @@ namespace Inworld.Sample.RPM
         Vector2 m_CurrViseme = Vector2.zero;
         Vector2 m_LastViseme = Vector2.zero;
 
+        float m_RandomOffset;
         float m_CurrentAudioTime;
 
         SkinnedMeshRenderer m_Skin;
@@ -68,6 +69,7 @@ namespace Inworld.Sample.RPM
                 m_Skin = m_Character.GetComponentInChildren<SkinnedMeshRenderer>();
             if (m_VisemeMap == null)
                 m_VisemeMap = new ConcurrentQueue<Vector2>();
+            m_RandomOffset = Random.Range(0, 6);
             m_VisemeMap.Clear();
             return _MappingBlendShape();
         }
@@ -95,7 +97,7 @@ namespace Inworld.Sample.RPM
         {
             if (!m_Skin)
                 return;
-            float blendshapeValue = Mathf.Sin(Time.time * 2f) * 100 - 99f;
+            float blendshapeValue = Mathf.Sin(Time.time * 2f + m_RandomOffset) * 100 - 99f;
             blendshapeValue = Mathf.Clamp(blendshapeValue, 0, 1);
             m_Skin.SetBlendShapeWeight(m_BlinkIndex, blendshapeValue);
         }
