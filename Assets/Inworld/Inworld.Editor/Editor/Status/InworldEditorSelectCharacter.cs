@@ -71,7 +71,9 @@ namespace Inworld.Editors
                 if (mainCamera)
                 {
                     if (EditorUtility.DisplayDialog("Note", "Adding player controller will delete current main camera. Continue?", "OK", "Cancel"))
-                        Object.DestroyImmediate(mainCamera.gameObject);
+                    {
+                        Undo.DestroyObjectImmediate(mainCamera.gameObject);
+                    }
                 }
                 if (!Object.FindObjectOfType<PlayerController>())
                     Object.Instantiate(InworldEditor.PlayerController);
