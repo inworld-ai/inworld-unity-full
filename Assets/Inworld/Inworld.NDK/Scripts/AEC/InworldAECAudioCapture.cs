@@ -51,6 +51,7 @@ namespace Inworld.AEC
             }
             else
                 m_SamplingMode = MicSampleMode.TURN_BASED;
+            m_LastSampleMode = m_SamplingMode;
             base.Init();
         }
 
@@ -89,7 +90,6 @@ namespace Inworld.AEC
             Buffer.BlockCopy(filterBuffer.ToArray(), 0, byteArray, 0, filterBuffer.Count * 2);
             return byteArray;
         }
-        
     }
 }
 

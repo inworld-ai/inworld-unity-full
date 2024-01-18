@@ -134,7 +134,7 @@ namespace Inworld.Editors
             InworldGameData gameData = _CreateGameDataAssets();
             InworldController controller = Object.FindObjectOfType<InworldController>();
             if (!controller)
-                controller = PrefabUtility.InstantiatePrefab(InworldAI.ControllerPrefab) as InworldController;
+                controller = PrefabUtility.InstantiatePrefab(InworldEditor.Instance.ControllerPrefab) as InworldController;
             if (!controller)
                 return;
             controller.GameData = gameData;

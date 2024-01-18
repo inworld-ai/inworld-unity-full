@@ -67,6 +67,14 @@ namespace Inworld.Editors
             EditorGUILayout.EndScrollView();
             if (GUILayout.Button("Add PlayerController to Scene", GUILayout.ExpandWidth(true)))
             {
+                Camera mainCamera = Camera.main;
+                if (mainCamera)
+                {
+                    if (EditorUtility.DisplayDialog("Note", "Adding player controller will delete current main camera. Continue?", "OK", "Cancel"))
+                    {
+                        Undo.DestroyObjectImmediate(mainCamera.gameObject);
+                    }
+                }
                 if (!Object.FindObjectOfType<PlayerController>())
                     Object.Instantiate(InworldEditor.PlayerController);
             }
