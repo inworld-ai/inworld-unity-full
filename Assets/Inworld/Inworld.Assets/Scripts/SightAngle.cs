@@ -6,6 +6,7 @@
  *************************************************************************************************/
 
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Inworld.Sample
 {
@@ -13,11 +14,13 @@ namespace Inworld.Sample
     {
         [SerializeField] Animator m_Animator;
         [SerializeField] InworldCharacter m_Character;
-        [SerializeField] float m_DistanceFactor = 10;
         [Range(1, 180)]
         [SerializeField] float m_SightAngle = 90f;
         [Range(1, 30)]
         [SerializeField] float m_SightDistance = 10f;
+        [Range(0, 100)]
+        [Tooltip("How much of an impact distance will make in the Priority calculation.")]
+        [SerializeField] float m_DistancePriorityFactor = 10;
         [Range(0.1f, 1f)]
         [SerializeField] float m_RefreshRate = 0.25f;
         
@@ -78,7 +81,7 @@ namespace Inworld.Sample
                 else
                 {
                     Vector3 vecPlayerDirection = -vecDirection;
-                    Priority = Vector3.Angle(vecPlayerDirection, m_CameraTransform.forward) + distance * m_DistanceFactor;
+                    Priority = Vector3.Angle(vecPlayerDirection, m_CameraTransform.forward) + distance * m_DistancePriorityFactor;
                 }
             }
         }
