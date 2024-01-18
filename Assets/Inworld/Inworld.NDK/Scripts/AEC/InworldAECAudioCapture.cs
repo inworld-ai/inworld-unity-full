@@ -1,5 +1,5 @@
 /*************************************************************************************************
- * Copyright 2022 Theai, Inc. (DBA Inworld)
+ * Copyright 2022-2024 Theai, Inc. dba Inworld AI
  *
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
@@ -27,7 +27,7 @@ namespace Inworld.AEC
         ///     Check Available, will add mac support in the next update.
         ///     For mobile device such as Android/iOS they naturally supported via hardware.
         /// </summary>
-        public bool IsAvailable => Application.platform == RuntimePlatform.WindowsPlayer;
+        public bool IsAvailable => Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor;
 
         protected override void OnDestroy()
         {

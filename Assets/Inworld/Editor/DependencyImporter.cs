@@ -1,10 +1,11 @@
 ﻿/*************************************************************************************************
- * Copyright 2022 Theai, Inc. (DBA Inworld)
+ * Copyright 2022-2024 Theai, Inc. dba Inworld AI
  *
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 #if UNITY_EDITOR
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEditor;
@@ -15,20 +16,23 @@ using UnityEngine;
 
 namespace Inworld
 {
+    [InitializeOnLoad]
     public class DependencyImporter : AssetPostprocessor
     {
-        // YAN: Add other dependencies here.
-        static readonly string[] s_DependencyPackages = 
+        static DependencyImporter()
         {
-            "com.unity.cloud.gltfast"
-        };
+            AssetDatabase.importPackageCompleted += async packageName =>
+            {
+                await InstallDependencies();
+            };
+        }
+
+        const string k_DependencyPackages = "https://github.com/inworld-ai/inworld-unity.git";
+
         public static async Task InstallDependencies()
         {
             Debug.Log("Import Dependency Packages...");
-            foreach (string dependency in s_DependencyPackages)
-            {
-                await _AddPackage(dependency);
-            }
+            await _AddPackage(k_DependencyPackages);
         }
 
 
@@ -63,6 +67,8 @@ namespace Inworld
                 return;
             }
             Debug.Log($"Import {packageFullName} Completed");
+            if (!Directory.Exists("Assets/Inworld/Inworld.Assets") && File.Exists("Assets/Inworld/InworldExtraAssets.unitypackage"))
+                AssetDatabase.ImportPackage("Assets/Inworld/InworldExtraAssets.unitypackage", false);
         }
     }
 }

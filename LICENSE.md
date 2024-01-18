@@ -1,3 +1,4 @@
+
 # Inworld.ai Software Development Kit License Agreement
 
 
@@ -224,7 +225,7 @@ If you have any questions about this Agreement, please contact us at
         partner or licensor with whom Inworld offered certain parts of
         the SDK (such as Third-Party Materials) to you has terminated
         its relationship with Inworld or ceased to offer or license
-        certain parts of the SDK to you; (d) Inworld decides to no
+        certain parts of the SDK to you; (d) Inworld decides to no
         longer provide the SDK or certain parts of the SDK to users in
         the country in which you are resident or from which you use the
         service, or the provision of the SDK or certain SDK services to
@@ -336,8 +337,8 @@ If you have any questions about this Agreement, please contact us at
         Inworld and attempt to resolve the claim informally by sending a
         written notice of your claim ("***Notice***") to Inworld by email at
         [legal\@inworld.ai](mailto:support@inworld.ai) or by certified mail
-        addressed to 800 W El Camino Real Suite 180, Mountain View,
-        CA 94040. The Notice must: (a) include your name, residence address,
+        addressed to 1975 W El Camino Real #300, Mountain View, CA 94040
+        . The Notice must: (a) include your name, residence address,
         email address, and telephone number; (b) describe the nature and
         basis of the Dispute; and (c) set forth the specific relief sought.
         Our notice to you will be similar in form to that described above.
@@ -494,3 +495,5 @@ If you have any questions about this Agreement, please contact us at
         approval of Inworld. Inworld may transfer, delegate, or
         otherwise assign this Agreement and all of its rights hereunder
         to any person without your consent.
+LICENSE.md
+Displaying LICENSE.md.
