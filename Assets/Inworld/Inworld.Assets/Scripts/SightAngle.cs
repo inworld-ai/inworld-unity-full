@@ -11,8 +11,8 @@ namespace Inworld.Sample
 {
     public class SightAngle : MonoBehaviour
     {
+        [SerializeField] Animator m_Animator;
         [SerializeField] InworldCharacter m_Character;
-        [SerializeField] Transform m_HeadTransform;
         [SerializeField] float m_DistanceFactor = 10;
         [Range(1, 180)]
         [SerializeField] float m_SightAngle = 90f;
@@ -21,6 +21,7 @@ namespace Inworld.Sample
         [Range(0.1f, 1f)]
         [SerializeField] float m_RefreshRate = 0.25f;
         
+        Transform m_HeadTransform;
         Transform m_CameraTransform;
         float m_CurrentTime = 0f;
         /// <summary>
@@ -38,6 +39,11 @@ namespace Inworld.Sample
                                && PlayerController.Instance 
                                && InworldController.CharacterHandler.SelectingMethod == CharSelectingMethod.SightAngle;
 
+        void Awake()
+        {
+            m_HeadTransform = m_Animator.GetBoneTransform(HumanBodyBones.Head);
+        }
+        
         void OnEnable()
         {
             if (!m_CameraTransform)

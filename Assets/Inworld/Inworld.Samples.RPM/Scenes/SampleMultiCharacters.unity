@@ -419,11 +419,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -3910990755373119420, guid: 5e501adac10d5474bb38901f0b5281bc, type: 3}
   m_PrefabInstance: {fileID: 559166932}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &559166934 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -787439503733261455, guid: 5e501adac10d5474bb38901f0b5281bc, type: 3}
-  m_PrefabInstance: {fileID: 559166932}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &894972297
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -965,11 +960,6 @@ PrefabInstance:
 --- !u!4 &1630794679 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -6769691430286951708, guid: 0ca1b8c7a532274468186843fc32a37f, type: 3}
-  m_PrefabInstance: {fileID: 1630794678}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1630794680 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -3512545981279201704, guid: 0ca1b8c7a532274468186843fc32a37f, type: 3}
   m_PrefabInstance: {fileID: 1630794678}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1659984625
@@ -3037,8 +3027,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Animator: {fileID: 6602395912622188134}
   m_Character: {fileID: 617440778307290826}
-  m_HeadTransform: {fileID: 559166934}
   m_DistanceFactor: 10
   m_SightAngle: 130
   m_SightDistance: 10
@@ -3151,8 +3141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Animator: {fileID: 6602395911574462498}
   m_Character: {fileID: 617440777243312270}
-  m_HeadTransform: {fileID: 1630794680}
   m_DistanceFactor: 10
   m_SightAngle: 150
   m_SightDistance: 10

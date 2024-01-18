@@ -1179,7 +1179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec0023079ae244cf88d8e53bebcd9542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PauseKey: 32
+  m_ContinueKey: 32
   m_SkipKey: 306
   m_ContinueButton: {fileID: 6103775307306153032}
   m_Interruptable: 1
@@ -1199,8 +1199,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87294da2ba36448dbd537c4808c2263f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EmoteAnimator: {fileID: 446267790183913776}
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
+  m_EmoteAnimator: {fileID: 446267790183913776}
   m_FaceMesh: {fileID: 1978371569747459371}
   m_FaceTransformData: {fileID: 11400000, guid: cdb6717a81f76c54cbb32bcf5b87d6e5, type: 2}
   m_FaceAnimData: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
@@ -1219,8 +1219,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b28951a4e1a362741ac8288d7560535e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BodyAnimator: {fileID: 6488192458725203369}
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
+  m_BodyAnimator: {fileID: 6488192458725203369}
 --- !u!114 &9143434658667413275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1233,7 +1233,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Animator: {fileID: 6488192458725203369}
   m_Character: {fileID: 2030273176201225856}
+  m_DistanceFactor: 10
   m_SightAngle: 150
   m_SightDistance: 10
   m_RefreshRate: 0.25
