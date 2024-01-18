@@ -69,7 +69,7 @@ namespace Inworld.Sample.RPM
                 m_Skin = m_Character.GetComponentInChildren<SkinnedMeshRenderer>();
             if (m_VisemeMap == null)
                 m_VisemeMap = new ConcurrentQueue<Vector2>();
-            m_RandomOffset = Random.Range(0, 6);
+            m_RandomOffset = Random.Range(0, 6f);
             m_VisemeMap.Clear();
             return _MappingBlendShape();
         }
