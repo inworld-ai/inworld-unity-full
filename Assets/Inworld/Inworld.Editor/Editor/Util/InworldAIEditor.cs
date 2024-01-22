@@ -55,7 +55,6 @@ namespace Inworld.Editors
             InworldAI.Capabilities.triggers = EditorGUILayout.Toggle("Triggers", InworldAI.Capabilities.triggers);
             InworldAI.Capabilities.interruptions = EditorGUILayout.Toggle("Interruptions", InworldAI.Capabilities.interruptions);
             InworldAI.Capabilities.relations = EditorGUILayout.Toggle("Relations", InworldAI.Capabilities.relations);
-            InworldAI.Capabilities.debugInfo = InworldAI.Capabilities.relations;
             InworldAI.Capabilities.narratedActions = EditorGUILayout.Toggle("Narrated Actions", InworldAI.Capabilities.narratedActions);
             InworldAI.Capabilities.phonemeInfo = EditorGUILayout.Toggle("Lipsync", InworldAI.Capabilities.phonemeInfo);
             GUILayout.Space(20);
