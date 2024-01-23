@@ -51,15 +51,15 @@ namespace Inworld
             AssetDatabase.ExportPackage(assetPaths, k_ExtraPackagePath, ExportPackageOptions.Recurse); 
         }
         
-        public static void BuildTestScene(BuildTarget targetPlatform)
+        public static void BuildTestScene()
         {
             string[] scenes = { "Assets/Inworld/Inworld.Samples.RPM/Scenes/SampleBasic.unity"};
 
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = scenes,
-                locationPathName = $"{targetPlatform}/InworldTest", // YAN: As a build test, we don't care the extension name
-                target = targetPlatform,
+                locationPathName = $"{EditorUserBuildSettings.activeBuildTarget}/BuildTest", // YAN: As a build test, we don't care the extension name
+                target = EditorUserBuildSettings.activeBuildTarget,
                 options = BuildOptions.None
             };
 
