@@ -56,15 +56,19 @@ namespace Inworld
         public static void BuildTestScene()
         {
             string[] args = Environment.GetCommandLineArgs();
+            foreach (var arg in args)
+            {
+                Debug.Log(arg);
+            }
             if (args.Length == 0)
             {
                 Debug.Log("Please specify platform!");
                 EditorApplication.Exit(102);
                 return;
             }
-            if (!Enum.TryParse(args[0], out BuildTarget buildTarget))
+            if (!Enum.TryParse(args[1], out BuildTarget buildTarget))
             {
-                Debug.Log($"Platform {args[0]} is not supported");
+                Debug.Log($"Platform {args[1]} is not supported");
                 EditorApplication.Exit(102);
                 return;
             }
