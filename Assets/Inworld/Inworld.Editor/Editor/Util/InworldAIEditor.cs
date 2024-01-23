@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace Inworld.Editors
 {
     public class InworldAIEditor : EditorWindow
@@ -68,4 +69,4 @@ namespace Inworld.Editors
 
     }
 }
-
+#endif
