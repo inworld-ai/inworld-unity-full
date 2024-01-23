@@ -1461,6 +1461,9 @@ MonoBehaviour:
   onRelationUpdated:
     m_PersistentCalls:
       m_Calls: []
+  onCharacterDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &617440778307290826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1506,6 +1509,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onRelationUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  onCharacterDestroyed:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &975543842054262504
@@ -3029,9 +3035,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 6602395912622188134}
   m_Character: {fileID: 617440778307290826}
-  m_DistanceFactor: 10
   m_SightAngle: 130
   m_SightDistance: 10
+  m_DistancePriorityFactor: 10
   m_RefreshRate: 0.25
 --- !u!82 &8996923506770352437
 AudioSource:
@@ -3143,9 +3149,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 6602395911574462498}
   m_Character: {fileID: 617440777243312270}
-  m_DistanceFactor: 10
   m_SightAngle: 150
   m_SightDistance: 10
+  m_DistancePriorityFactor: 10
   m_RefreshRate: 0.25
 --- !u!224 &9024173614111811653
 RectTransform:
