@@ -13,8 +13,8 @@ namespace Inworld.Assets
     public class InworldBodyAnimation : InworldAnimation
     {
         [SerializeField] Animator m_BodyAnimator;
-
-        Transform m_Transform;
+        
+        Transform m_HeadTransform;
         Vector3 m_vecInitPosition;
         Vector3 m_vecInitEuler;
         float m_LookAtWeight;
@@ -25,11 +25,16 @@ namespace Inworld.Assets
         static readonly int s_RemainSec = Animator.StringToHash("RemainSec");
         static readonly int s_Random = Animator.StringToHash("Random");
 
+        protected override void Awake()
+        {
+            base.Awake();
+            m_HeadTransform = m_BodyAnimator.GetBoneTransform(HumanBodyBones.Head);
+        }
+        
         protected override void OnEnable()
         {
-            m_Transform = transform;
-            m_vecInitEuler = m_Transform.localEulerAngles;
-            m_vecInitPosition = m_Transform.localPosition;
+            m_vecInitEuler = m_HeadTransform.localEulerAngles;
+            m_vecInitPosition = m_HeadTransform.localPosition;
             m_Interaction.OnStartStopInteraction += OnStartStopInteraction;
             InworldController.CharacterHandler.OnCharacterChanged += OnCharChanged;
             base.OnEnable();
@@ -94,15 +99,14 @@ namespace Inworld.Assets
         }
         void _StartLookAt(Vector3 lookPos)
         {
-            Transform tr = transform;
-            m_LookAtWeight = Mathf.Clamp(1 - Vector3.Angle(tr.forward, (lookPos - tr.position).normalized) * 0.01f, 0, 1);
+            m_LookAtWeight = Mathf.Clamp(1 - Vector3.Angle(transform.forward, (lookPos - m_HeadTransform.position).normalized) * 0.01f, 0, 1);
             m_BodyAnimator.SetLookAtWeight(m_LookAtWeight);
             m_BodyAnimator.SetLookAtPosition(lookPos);
         }
         void _StopLookAt()
         {
-            m_Transform.localPosition = m_vecInitPosition;
-            m_Transform.localEulerAngles = m_vecInitEuler;
+            m_HeadTransform.localPosition = m_vecInitPosition;
+            m_HeadTransform.localEulerAngles = m_vecInitEuler;
             m_LookAtWeight = Mathf.Clamp(m_LookAtWeight - 0.01f, 0, 1);
             m_BodyAnimator.SetLookAtWeight(m_LookAtWeight);
         }

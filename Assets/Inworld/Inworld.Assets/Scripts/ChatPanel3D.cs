@@ -32,12 +32,17 @@ namespace Inworld.Assets
                 return;
             base.OnInteraction(incomingPacket);
         }
-        protected override void HandleRelation(RelationPacket packet)
+        protected override void HandleRelation(CustomPacket packet)
         {
             if (!m_Relation)
                 return;
             string result = "";
-            RelationState currentRelation = packet.debugInfo.relation.relationUpdate;
+
+            RelationState currentRelation = new RelationState();
+            foreach (TriggerParameter param in packet.custom.parameters)
+            {
+                currentRelation.UpdateByTrigger(param);
+            }
             if (currentRelation.attraction != 0)
                 result += $"Attraction: {GetRelationIcon(currentRelation.attraction)}\n";
             if (currentRelation.familiar != 0)

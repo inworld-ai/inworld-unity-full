@@ -270,7 +270,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Animator: {fileID: 6602395911185632031}
   m_Character: {fileID: 617440776921082803}
+  m_DistanceFactor: 10
   m_SightAngle: 122
   m_SightDistance: 10
   m_RefreshRate: 0.25
