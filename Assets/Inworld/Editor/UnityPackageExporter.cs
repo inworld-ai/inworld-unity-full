@@ -4,6 +4,8 @@
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
+using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
@@ -17,11 +19,11 @@ namespace Inworld
     {
         // The name of the unitypackage to output.
         const string k_FullPackageName = "InworldAI.Full";
-
         // The path to the package under the `Assets/` folder.
         const string k_FullPackagePath = "Assets/Inworld";
         const string k_ExtraPackagePath = "Assets/Inworld/InworldExtraAssets.unitypackage";
 
+        static readonly string Eol = Environment.NewLine;
         /// <summary>
         ///     Call it via outside command line to export package.
         /// </summary>
@@ -50,28 +52,16 @@ namespace Inworld
             }; 
             AssetDatabase.ExportPackage(assetPaths, k_ExtraPackagePath, ExportPackageOptions.Recurse); 
         }
-
-        [MenuItem("Inworld/Build Test")]
+ 
         public static void BuildTestScene()
         {
-            string[] scenes = { "Assets/Inworld/Inworld.AI/Scenes/Sample2D.unity"};
-            BuildTarget[] platforms =
-            {
-                BuildTarget.Android, BuildTarget.iOS, BuildTarget.StandaloneWindows64, BuildTarget.WebGL, BuildTarget.StandaloneOSX
-            };
-            foreach (BuildTarget platform in platforms)
-            {
-                __BuildTestOnPlatform(scenes, platform);
-            }
-        }
+            string[] scenes = { "Assets/Inworld/Inworld.Samples.RPM/Scenes/SampleBasic.unity"};
 
-        static void __BuildTestOnPlatform(string[] scenes, BuildTarget targetPlatform)
-        {
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = scenes,
-                locationPathName = $"Builds/{targetPlatform}/InworldTest", // YAN: As a build test, we don't care the extension name
-                target = targetPlatform,
+                locationPathName = $"{EditorUserBuildSettings.activeBuildTarget}/BuildTest", // YAN: As a build test, we don't care the extension name
+                target = EditorUserBuildSettings.activeBuildTarget,
                 options = BuildOptions.None
             };
 
@@ -82,11 +72,23 @@ namespace Inworld
             {
                 case BuildResult.Succeeded:
                     Debug.Log("Build succeeded: " + summary.totalSize + " bytes");
+                    EditorApplication.Exit(0);
                     break;
                 case BuildResult.Failed:
                     Debug.LogError("Build failed");
+                    EditorApplication.Exit(101);
+                    break;
+                case BuildResult.Cancelled:
+                    Console.WriteLine("Build cancelled!");
+                    EditorApplication.Exit(102);
+                    break;
+                case BuildResult.Unknown:
+                default:
+                    Console.WriteLine("Build result is unknown!");
+                    EditorApplication.Exit(103);
                     break;
             }
         }
+        
     }
 }

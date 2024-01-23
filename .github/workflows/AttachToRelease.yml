@@ -1,4 +1,4 @@
-name: Attach Package on Release
+name: Generate Package on Release
 
 on:
   release:
@@ -10,7 +10,7 @@ env:
     UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
 
 jobs:
-  build:
+  build-assets:
       name: Build
       runs-on: ubuntu-20.04
       concurrency:
@@ -18,67 +18,52 @@ jobs:
         cancel-in-progress: true
       steps:
           - name: Checkout code
-            uses: actions/checkout@v3
+            uses: actions/checkout@v4
             with:
               lfs: true
-          - uses: actions/cache@v3
+
+          - name: Cache Library
+            uses: actions/cache@v4
             with:
               path: Library
               key: Library-build
               restore-keys: Library-build
-          - uses: game-ci/unity-builder@v2
+
+          - name: Prepare Assets
+            uses: game-ci/unity-builder@v4
             with:
-              unityVersion: 2022.3.4f1
-              buildMethod: Inworld.Editors.UnityPackageExporter.ExportFull
+              unityVersion: 2022.3.17f1
+              buildMethod: Inworld.UnityPackageExporter.ExportExtraAssets
+
+          - name: Build Package
+            uses: game-ci/unity-builder@v4
+            with:
+              unityVersion: 2022.3.17f1
+              buildMethod: Inworld.UnityPackageExporter.ExportFull
+
           - name: upload-artifact
-            uses: actions/upload-artifact@v3
+            uses: actions/upload-artifact@v4
             with:
               name: InworldAI.Full
-              path: Build/
-          - name: Discard changes
-            run: |
-              git restore --staged .
-              git checkout .
-              git clean -fd
-          - uses: game-ci/unity-builder@v2
-            with:
-              unityVersion: 2022.3.4f1
-              buildMethod: Inworld.Editors.UnityPackageExporter.Lite
-          - name: upload-artifact
-            uses: actions/upload-artifact@v3
-            with:
-              name: InworldAI.Lite
-              path: Build/              
-          - name: Discard changes
-            run: |
-              git restore --staged .
-              git checkout .
-              git clean -fd          
-              
+              path: Assets/Inworld/InworldAI.Full.unitypackage    
+  
   attach-to-release:
-    needs: [build]
+    needs: [build-assets]
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       
     - name: Download SDK Full
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: InworldAI.Full
-        path: Build/
-
-    - name: Download SDK Lite
-      uses: actions/download-artifact@v3
-      with:
-        name: InworldAI.Lite
         path: Build/
     
     - name: Rename packages with release tag
       run: |
         TAG_NAME=${GITHUB_REF/refs\/tags\//}
         mv Build/InworldAI.Full.unitypackage Build/InworldAI.Full.$TAG_NAME.unitypackage
-        mv Build/InworldAI.Lite.unitypackage Build/InworldAI.Lite$TAG_NAME.unitypackage
     
     - name: Attach Full package to release
       uses: softprops/action-gh-release@v1
@@ -86,9 +71,4 @@ jobs:
       with:
         files: Build/InworldAI.Full.${{ github.ref | replace('refs/tags/', '') }}.unitypackage
 
-    - name: Attach Lite package to release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: Build/InworldAI.Lite.${{ github.ref | replace('refs/tags/', '') }}.unitypackage
 
