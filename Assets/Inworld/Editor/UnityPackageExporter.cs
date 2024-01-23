@@ -55,9 +55,6 @@ namespace Inworld
  
         public static void BuildTestScene()
         {
-            Debug.Log("Current Build Target" + EditorUserBuildSettings.activeBuildTarget);
-            // string[] args = Environment.GetCommandLineArgs();
-
             string[] scenes = { "Assets/Inworld/Inworld.Samples.RPM/Scenes/SampleBasic.unity"};
 
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
