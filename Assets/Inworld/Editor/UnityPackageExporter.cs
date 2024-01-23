@@ -55,30 +55,16 @@ namespace Inworld
  
         public static void BuildTestScene()
         {
-            string[] args = Environment.GetCommandLineArgs();
-            foreach (var arg in args)
-            {
-                Debug.Log(arg);
-            }
-            if (args.Length == 0)
-            {
-                Debug.Log("Please specify platform!");
-                EditorApplication.Exit(102);
-                return;
-            }
-            if (!Enum.TryParse(args[1], out BuildTarget buildTarget))
-            {
-                Debug.Log($"Platform {args[1]} is not supported");
-                EditorApplication.Exit(102);
-                return;
-            }
+            Debug.Log("Current Build Target" + EditorUserBuildSettings.activeBuildTarget);
+            // string[] args = Environment.GetCommandLineArgs();
+
             string[] scenes = { "Assets/Inworld/Inworld.Samples.RPM/Scenes/SampleBasic.unity"};
 
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = scenes,
                 locationPathName = $"{EditorUserBuildSettings.activeBuildTarget}/BuildTest", // YAN: As a build test, we don't care the extension name
-                target = buildTarget,
+                target = EditorUserBuildSettings.activeBuildTarget,
                 options = BuildOptions.None
             };
 
@@ -106,5 +92,6 @@ namespace Inworld
                     break;
             }
         }
+        
     }
 }
