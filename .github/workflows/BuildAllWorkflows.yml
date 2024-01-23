@@ -43,6 +43,7 @@ jobs:
           with:
             buildMethod: Inworld.UnityPackageExporter.BuildTestScene            
             unityVersion: 2022.3.17f1
+            customParameters: ${{ matrix.targetPlatform }}
             targetPlatform: ${{ matrix.targetPlatform }}
 
 

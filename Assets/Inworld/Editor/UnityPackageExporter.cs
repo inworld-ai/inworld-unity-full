@@ -4,6 +4,8 @@
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
+using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
@@ -17,11 +19,11 @@ namespace Inworld
     {
         // The name of the unitypackage to output.
         const string k_FullPackageName = "InworldAI.Full";
-
         // The path to the package under the `Assets/` folder.
         const string k_FullPackagePath = "Assets/Inworld";
         const string k_ExtraPackagePath = "Assets/Inworld/InworldExtraAssets.unitypackage";
 
+        static readonly string Eol = Environment.NewLine;
         /// <summary>
         ///     Call it via outside command line to export package.
         /// </summary>
@@ -50,16 +52,29 @@ namespace Inworld
             }; 
             AssetDatabase.ExportPackage(assetPaths, k_ExtraPackagePath, ExportPackageOptions.Recurse); 
         }
-        
+ 
         public static void BuildTestScene()
         {
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length == 0)
+            {
+                Debug.Log("Please specify platform!");
+                EditorApplication.Exit(102);
+                return;
+            }
+            if (!Enum.TryParse(args[0], out BuildTarget buildTarget))
+            {
+                Debug.Log($"Platform {args[0]} is not supported");
+                EditorApplication.Exit(102);
+                return;
+            }
             string[] scenes = { "Assets/Inworld/Inworld.Samples.RPM/Scenes/SampleBasic.unity"};
 
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = scenes,
                 locationPathName = $"{EditorUserBuildSettings.activeBuildTarget}/BuildTest", // YAN: As a build test, we don't care the extension name
-                target = EditorUserBuildSettings.activeBuildTarget,
+                target = buildTarget,
                 options = BuildOptions.None
             };
 
@@ -70,9 +85,20 @@ namespace Inworld
             {
                 case BuildResult.Succeeded:
                     Debug.Log("Build succeeded: " + summary.totalSize + " bytes");
+                    EditorApplication.Exit(0);
                     break;
                 case BuildResult.Failed:
                     Debug.LogError("Build failed");
+                    EditorApplication.Exit(101);
+                    break;
+                case BuildResult.Cancelled:
+                    Console.WriteLine("Build cancelled!");
+                    EditorApplication.Exit(102);
+                    break;
+                case BuildResult.Unknown:
+                default:
+                    Console.WriteLine("Build result is unknown!");
+                    EditorApplication.Exit(103);
                     break;
             }
         }
