@@ -24,6 +24,7 @@ jobs:
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
           - iOS # Build an iOS player.
           - Android # Build an Android .apk standalone app.
+          - WebGL
     steps:
         - name: Checkout Repo
           uses: actions/checkout@v3
@@ -40,8 +41,8 @@ jobs:
         - name: Build Test
           uses: game-ci/unity-builder@v4
           with:
-            buildMethod: Inworld.UnityPackageExporter.BuildTestScene
-            customParameters: -targetPlatform ${{ matrix.targetPlatform }}
+            buildMethod: Inworld.UnityPackageExporter.BuildTestScene            
             unityVersion: 2022.3.17f1
+            targetPlatform: ${{ matrix.targetPlatform }}
 
 
