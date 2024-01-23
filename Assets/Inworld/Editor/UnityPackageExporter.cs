@@ -50,27 +50,15 @@ namespace Inworld
             }; 
             AssetDatabase.ExportPackage(assetPaths, k_ExtraPackagePath, ExportPackageOptions.Recurse); 
         }
-
-        [MenuItem("Inworld/Build Test")]
-        public static void BuildTestScene()
+        
+        public static void BuildTestScene(BuildTarget targetPlatform)
         {
-            string[] scenes = { "Assets/Inworld/Inworld.AI/Scenes/Sample2D.unity"};
-            BuildTarget[] platforms =
-            {
-                BuildTarget.Android, BuildTarget.iOS, BuildTarget.StandaloneWindows64, BuildTarget.WebGL, BuildTarget.StandaloneOSX
-            };
-            foreach (BuildTarget platform in platforms)
-            {
-                __BuildTestOnPlatform(scenes, platform);
-            }
-        }
+            string[] scenes = { "Assets/Inworld/Inworld.Samples.RPM/Scenes/SampleBasic.unity"};
 
-        static void __BuildTestOnPlatform(string[] scenes, BuildTarget targetPlatform)
-        {
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = scenes,
-                locationPathName = $"Builds/{targetPlatform}/InworldTest", // YAN: As a build test, we don't care the extension name
+                locationPathName = $"{targetPlatform}/InworldTest", // YAN: As a build test, we don't care the extension name
                 target = targetPlatform,
                 options = BuildOptions.None
             };
