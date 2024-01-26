@@ -5,6 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 #if UNITY_EDITOR
+using Inworld.Editors.Graph;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,11 +23,15 @@ namespace Inworld.Editors
     {
         const string k_DefaultWorkspace = "--- SELECT WORKSPACE ---";
         const string k_DefaultScene = "--- SELECT SCENE ---";
+        const string k_DefaultGraph = "--- SELECG GRAPH ---";
         const string k_DefaultKey = "--- SELECT KEY---";
         const string k_DataMissing = "Some data is missing.\nPlease make sure you have at least one scene and one key/secret in your workspace";
+        
         string m_CurrentWorkspace = "--- SELECT WORKSPACE ---";
         string m_CurrentScene = "--- SELECT SCENE ---";
+        string m_CurrentGraph = "--- SELECT GRAPH ---";
         string m_CurrentKey = "--- SELECT KEY---";
+        
         bool m_DisplayDataMissing = false;
         bool m_StartDownload = false;
 
@@ -52,7 +57,7 @@ namespace Inworld.Editors
         public void DrawContent()
         {
             _DrawWorkspaceDropDown();
-            _DrawSceneDropDown();
+            _DrawGraphDropDown();
             _DrawKeyDropDown();
             if (m_DisplayDataMissing)
                 EditorGUILayout.LabelField(k_DataMissing, InworldEditor.Instance.TitleStyle);
@@ -75,6 +80,14 @@ namespace Inworld.Editors
                     _SelectWorkspace(m_CurrentWorkspace);
                 }
             }
+            if (!string.IsNullOrEmpty(m_CurrentGraph) && m_CurrentGraph != k_DefaultGraph)
+            {
+                if (GUILayout.Button("Open Graph", InworldEditor.Instance.BtnStyle))
+                {
+                    _LoadCurrentGraph();
+                }
+            }
+
             if (m_CurrentKey != k_DefaultKey && !string.IsNullOrEmpty(m_CurrentKey) && m_CurrentScene != k_DefaultScene && !string.IsNullOrEmpty(m_CurrentScene))
             {
                 GUILayout.FlexibleSpace();
@@ -129,6 +142,32 @@ namespace Inworld.Editors
             }
         }
 
+        string CurrentGraph
+        {
+            get => m_CurrentGraph;
+            set
+            {
+                if (m_CurrentGraph == value)
+                    return;
+                m_CurrentGraph = value;
+                _LoadCurrentGraph();
+            }
+        }
+        void _LoadCurrentGraph()
+        {
+            InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
+            if (ws == null)
+                return;
+            if (!string.IsNullOrEmpty(m_CurrentGraph) && m_CurrentGraph != k_DefaultGraph)
+            {
+                InworldGraphData graphData = ws.graphs.FirstOrDefault(graph => graph.displayName == m_CurrentGraph);
+                if (graphData == null)
+                {
+                    Debug.LogError($"Graph NULL with {m_CurrentGraph} {ws.graphs.Count}!");
+                }
+                InworldGraph.OpenGraphWindow(m_CurrentGraph, graphData);
+            }
+        }
         void _SaveCurrentSettings()
         {
             InworldGameData gameData = _CreateGameDataAssets();
@@ -215,7 +254,23 @@ namespace Inworld.Editors
             InworldEditorUtil.DrawDropDown(m_CurrentScene, sceneList, _SelectScenes);
             m_CurrentScene = sceneList.Count == 1 ? sceneList[0] : m_CurrentScene;
         }
+        void _DrawGraphDropDown()
+        {
+            if (m_CurrentWorkspace == k_DefaultWorkspace || string.IsNullOrEmpty(m_CurrentWorkspace))
+                return;
+            InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
+            if (ws == null)
+                return;
+            List<string> graphList = ws.graphs.Select(graph => graph.displayName).ToList();
+            EditorGUILayout.LabelField("Choose Graph:", InworldEditor.Instance.TitleStyle);
+            InworldEditorUtil.DrawDropDown(m_CurrentGraph, graphList, _SelectGraph);
 
+            m_CurrentGraph = graphList.Count == 1 ? graphList[0] : m_CurrentGraph;
+
+
+            
+            InworldGraphData graphData = ws.graphs.FirstOrDefault(graph => graph.displayName == m_CurrentGraph);
+        }
         void _DrawKeyDropDown()
         {
             if (m_CurrentWorkspace == k_DefaultWorkspace || string.IsNullOrEmpty(m_CurrentWorkspace))
@@ -243,6 +298,13 @@ namespace Inworld.Editors
                 return;
             InworldEditorUtil.SendWebGetRequest(InworldEditor.ListScenesURL(wsFullName), true, _ListSceneCompleted);
         }
+        void _ListGraphs()
+        {
+            string wsFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspace);
+            if (string.IsNullOrEmpty(wsFullName))
+                return;
+            InworldEditorUtil.SendWebGetRequest(InworldEditor.ListGraphsURL(wsFullName), true, _ListGraphCompleted);
+        }
         void _ListSceneCompleted(AsyncOperation obj)
         {
             UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
@@ -262,6 +324,32 @@ namespace Inworld.Editors
                 ws.scenes = new List<InworldSceneData>();
             ws.scenes.Clear();
             ws.scenes.AddRange(resp.scenes); 
+        }
+        void _ListGraphCompleted(AsyncOperation obj)
+        {
+            UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
+            if (uwr.result != UnityWebRequest.Result.Success)
+            {
+                InworldEditor.Instance.Error = $"List Graph Failed: {InworldEditor.GetError(uwr.error)}";
+                EditorUtility.ClearProgressBar();
+                return;
+            }
+            ListGraphResponse resp = JsonUtility.FromJson<ListGraphResponse>(uwr.downloadHandler.text);
+            Debug.Log(uwr.downloadHandler.text);
+            if (resp.graphs.Count == 0)
+            {
+                m_DisplayDataMissing = true;
+            }
+            // YAN: Add default name for display as currently it's missing
+            foreach (InworldGraphData graph in resp.graphs.Where(graph => string.IsNullOrEmpty(graph.displayName)))
+            {
+                graph.displayName = graph.name.Split('/')[^1];
+            }
+            InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
+            if (ws.graphs == null)
+                ws.graphs = new List<InworldGraphData>();
+            ws.graphs.Clear();
+            ws.graphs.AddRange(resp.graphs);
         }
         void _ListKeyCompleted(AsyncOperation obj)
         {
@@ -288,17 +376,13 @@ namespace Inworld.Editors
             m_CurrentKey = k_DefaultKey; // YAN: Reset data.
             m_DisplayDataMissing = false;
             m_StartDownload = false;
+            _ListGraphs();
             _ListScenes();
             _ListKeys();
         }
-        void _SelectScenes(string sceneDisplayName)
-        {
-            m_CurrentScene = sceneDisplayName;
-        }
-        void _SelectKeys(string keyDisplayName)
-        {
-            m_CurrentKey = keyDisplayName;
-        }
+        void _SelectGraph(string graphDisplayName) => m_CurrentGraph = graphDisplayName;
+        void _SelectScenes(string sceneDisplayName) => m_CurrentScene = sceneDisplayName;
+        void _SelectKeys(string keyDisplayName) => m_CurrentKey = keyDisplayName;
         // Download Avatars and put under User name's folder.
         void _OnCharModelDownloaded(string charFullName, AsyncOperation downloadContent)
         {

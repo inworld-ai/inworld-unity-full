@@ -16,7 +16,6 @@ namespace Inworld.AEC
         const int k_NumSamples = 160;
         IntPtr m_AECHandle;
         protected float[] m_OutputBuffer;
-
         
         /// <summary>
         /// A flag for this component is using AEC (in this class always True)

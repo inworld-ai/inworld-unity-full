@@ -49,6 +49,7 @@ namespace Inworld.Editors
         [SerializeField] string m_WorkspaceURL;
         [SerializeField] string m_KeyURL;
         [SerializeField] string m_ScenesURL;
+        [SerializeField] string m_GraphsURL;
         
         const string k_GlobalDataPath = "InworldEditor";
         public const string k_TokenErrorInstruction = "Token Error or Expired.\nPlease login again";
@@ -268,6 +269,7 @@ namespace Inworld.Editors
         /// Gets the URL for listing workspaces
         /// </summary>
         public static string ListWorkspaceURL => $"https://{Instance.m_ServerConfig.web}/v1alpha/{Instance.m_WorkspaceURL}";
+        public static string ListGraphsURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/v1alpha/{wsFullName}/{Instance.m_GraphsURL}";
         /// <summary>
         /// Gets the url for listing Inworld scenes.
         /// </summary>

@@ -13,7 +13,7 @@ namespace Inworld.Assets
     public class InworldBodyAnimation : InworldAnimation
     {
         [SerializeField] Animator m_BodyAnimator;
-        
+        [SerializeField] float m_LookAtMultiplyer = 0;
         Transform m_HeadTransform;
         Vector3 m_vecInitPosition;
         Vector3 m_vecInitEuler;
@@ -99,7 +99,7 @@ namespace Inworld.Assets
         }
         void _StartLookAt(Vector3 lookPos)
         {
-            m_LookAtWeight = Mathf.Clamp(1 - Vector3.Angle(transform.forward, (lookPos - m_HeadTransform.position).normalized) * 0.01f, 0, 1);
+            m_LookAtWeight = Mathf.Clamp((1 - Vector3.Angle(transform.forward, (lookPos - m_HeadTransform.position).normalized)) * m_LookAtMultiplyer * 0.01f, 0, 1);
             m_BodyAnimator.SetLookAtWeight(m_LookAtWeight);
             m_BodyAnimator.SetLookAtPosition(lookPos);
         }
@@ -107,7 +107,7 @@ namespace Inworld.Assets
         {
             m_HeadTransform.localPosition = m_vecInitPosition;
             m_HeadTransform.localEulerAngles = m_vecInitEuler;
-            m_LookAtWeight = Mathf.Clamp(m_LookAtWeight - 0.01f, 0, 1);
+            m_LookAtWeight = Mathf.Clamp((m_LookAtWeight - 0.01f) * m_LookAtMultiplyer, 0, 1);
             m_BodyAnimator.SetLookAtWeight(m_LookAtWeight);
         }
     }

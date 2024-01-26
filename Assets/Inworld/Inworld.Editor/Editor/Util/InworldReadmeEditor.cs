@@ -49,7 +49,6 @@ namespace Inworld.Editors
 			    GUILayout.Label(inworldReadme.title, TitleStyle);
 		    }
 		    GUILayout.EndHorizontal();
-            
 	    }
 	    
 	    public override void OnInspectorGUI()
