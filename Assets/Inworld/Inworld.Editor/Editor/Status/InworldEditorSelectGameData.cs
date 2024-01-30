@@ -220,7 +220,7 @@ namespace Inworld.Editors
             {
                 InworldSceneData sceneData = ws.scenes.FirstOrDefault(scene => scene.displayName == m_CurrentScene);
                 InworldKeySecret keySecret = ws.keySecrets.FirstOrDefault(key => key.key == m_CurrentKey);
-                gameData.SetData(sceneData, keySecret);
+                gameData.SetData(ws.name, sceneData, keySecret);
             }
             gameData.capabilities = new Capabilities(InworldAI.Capabilities);
             if (string.IsNullOrEmpty(InworldEditorUtil.UserDataPath))
@@ -232,7 +232,7 @@ namespace Inworld.Editors
             {
                 Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.GameDataPath}");
             }
-            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.GameDataPath}/{gameData.SceneFileName}.asset";
+            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.GameDataPath}/{gameData.GameDataFileName}.asset";
             AssetDatabase.CreateAsset(gameData, newAssetPath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -266,13 +266,14 @@ namespace Inworld.Editors
             List<string> graphList = ws.graphs.Select(graph => graph.displayName).ToList();
             EditorGUILayout.LabelField("Choose Graph:", InworldEditor.Instance.TitleStyle);
             InworldEditorUtil.DrawDropDown(m_CurrentGraph, graphList, _SelectGraph);
-            m_CurrentGraph = graphList.Count == 1 ? graphList[0] : m_CurrentGraph;
-            InworldGraphData graphData = ws.graphs.FirstOrDefault(graph => graph.displayName == m_CurrentGraph);
+            CurrentGraph = graphList.Count == 1 ? graphList[0] : m_CurrentGraph;
         }
 
         void _DrawToggles()
         {
             if (m_CurrentWorkspace == k_DefaultWorkspace || string.IsNullOrEmpty(m_CurrentWorkspace))
+                return;
+            if (m_CurrentKey == k_DefaultKey || string.IsNullOrEmpty(m_CurrentKey))
                 return;
             InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
             if (ws == null)
@@ -307,7 +308,8 @@ namespace Inworld.Editors
                 case SelectingDataType.None:
                     break;
                 case SelectingDataType.Characters:
-                    _DrawKeyDropDown();
+                    _SaveCurrentSettings();
+                    InworldEditor.Instance.Status = EditorStatus.SelectCharacter;
                     break;
                 case SelectingDataType.Scenes:
                     _DrawSceneDropDown();
@@ -387,10 +389,6 @@ namespace Inworld.Editors
                 return;
             }
             ListSceneResponse resp = JsonUtility.FromJson<ListSceneResponse>(uwr.downloadHandler.text);
-            if (resp.scenes.Count == 0)
-            {
-                m_DisplayDataMissing = true;
-            }
             InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
             if (ws.scenes == null)
                 ws.scenes = new List<InworldSceneData>();
@@ -408,10 +406,7 @@ namespace Inworld.Editors
             }
             ListGraphResponse resp = JsonUtility.FromJson<ListGraphResponse>(uwr.downloadHandler.text);
             Debug.Log(uwr.downloadHandler.text);
-            if (resp.graphs.Count == 0)
-            {
-                m_DisplayDataMissing = true;
-            }
+
             // YAN: Add default name for display as currently it's missing
             foreach (InworldGraphData graph in resp.graphs.Where(graph => string.IsNullOrEmpty(graph.displayName)))
             {

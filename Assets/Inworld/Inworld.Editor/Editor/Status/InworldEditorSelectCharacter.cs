@@ -12,6 +12,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Inworld.Sample;
 using Inworld.Entities;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 namespace Inworld.Editors
 {
@@ -52,16 +54,29 @@ namespace Inworld.Editors
         {
             if (!InworldEditor.Is3D || !InworldController.Instance || !InworldController.Instance.GameData)
                 return;
-            // 1. Get the character prefab for character in current scene. (Default or Specific)
-            InworldSceneData sceneData = InworldAI.User.GetSceneByFullName(InworldController.Instance.GameData.sceneFullName);
-            if (sceneData == null)
-                return;
             m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition);
             EditorGUILayout.BeginHorizontal();
-            foreach (CharacterReference charRef in sceneData.characterReferences.Where(charRef => GUILayout.Button(charRef.characterOverloads[0].defaultCharacterDescription.givenName, InworldEditor.Instance.BtnCharStyle(_GetTexture2D(charRef)))))
+            // 1. Get the character prefab for character in current scene. (Default or Specific)
+            if (!string.IsNullOrEmpty(InworldController.Instance.GameData.sceneFullName))
             {
-                Selection.activeObject = _GetPrefab(charRef);
-                EditorGUIUtility.PingObject(Selection.activeObject);
+                InworldSceneData sceneData = InworldAI.User.GetSceneByFullName(InworldController.Instance.GameData.sceneFullName);
+                if (sceneData != null)
+                {
+                    foreach (CharacterReference charRef in sceneData.characterReferences.Where(charRef => GUILayout.Button(charRef.characterOverloads[0].defaultCharacterDescription.givenName, InworldEditor.Instance.BtnCharStyle(_GetTexture2D(charRef.CharacterFileName)))))
+                    {
+                        Selection.activeObject = _GetPrefab(charRef.CharacterFileName);
+                        EditorGUIUtility.PingObject(Selection.activeObject);
+                    }
+                }
+            }
+            else
+            {
+                var charList = InworldAI.User.ListCharacters(InworldController.Instance.GameData.workspaceFullName);
+                foreach (InworldCharacterData charData in charList.Where(charData => GUILayout.Button(charData.givenName, InworldEditor.Instance.BtnCharStyle(_GetTexture2D(charData.CharacterFileName)))))
+                {
+                    Selection.activeObject = _GetPrefab(charData.CharacterFileName);
+                    EditorGUIUtility.PingObject(Selection.activeObject);
+                } 
             }
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndScrollView();
@@ -132,12 +147,21 @@ namespace Inworld.Editors
         {
             // 1. Get the character prefab for character in current scene. (Default or Specific)
             InworldSceneData sceneData = InworldAI.User.GetSceneByFullName(InworldController.Instance.GameData.sceneFullName);
-            if (sceneData == null)
-                return;
-            foreach (CharacterReference charRef in sceneData.characterReferences)
+            if (sceneData != null)
             {
-                GameObject downloadedModel = _GetModel(charRef);
-                _CreateVariant(charRef, downloadedModel);
+                foreach (CharacterReference charRef in sceneData.characterReferences)
+                {
+                    GameObject downloadedModel = _GetModel(charRef.CharacterFileName);
+                    _CreateVariant(new InworldCharacterData(charRef), downloadedModel);
+                }
+            }
+            else
+            {
+                foreach (var charData in InworldAI.User.ListCharacters(InworldController.Instance.GameData.workspaceFullName))
+                {
+                    GameObject downloadedModel = _GetModel(charData.CharacterFileName);
+                    _CreateVariant(charData, downloadedModel);
+                }
             }
             // 2. Save the prefab variant as the new data.
         }
@@ -159,7 +183,7 @@ namespace Inworld.Editors
             }
             // Meanwhile, showcasing progress bar.
         }
-        static void _CreateVariant(CharacterReference charRef, GameObject customModel)
+        static void _CreateVariant(InworldCharacterData charData, GameObject customModel)
         { 
             // Use Current Model
             InworldCharacter avatar = customModel ?
@@ -167,7 +191,7 @@ namespace Inworld.Editors
                 Object.Instantiate(InworldEditor.Instance.InnequinPrefab);
 
             InworldCharacter iwChar = avatar.GetComponent<InworldCharacter>();
-            iwChar.Data = new InworldCharacterData(charRef);
+            iwChar.Data = charData;
             if (customModel)
             {
                 GameObject newModel = PrefabUtility.InstantiatePrefab(customModel) as GameObject;
@@ -185,21 +209,22 @@ namespace Inworld.Editors
             {
                 Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}");
             }
-            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{charRef.CharacterFileName}.prefab";
+            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{charData.CharacterFileName}.prefab";
             PrefabUtility.SaveAsPrefabAsset(avatar.gameObject, newAssetPath);
             AssetDatabase.SaveAssets();
             Object.DestroyImmediate(avatar.gameObject);
             AssetDatabase.Refresh();
         }
-        GameObject _GetModel(CharacterReference charRef)
+        
+        GameObject _GetModel(string charFileName)
         {
             AssetDatabase.Refresh();
-            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
+            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charFileName}.glb";
             return !File.Exists(filePath) ? null : AssetDatabase.LoadAssetAtPath<GameObject>(filePath);
         }
-        Texture2D _GetTexture2D(CharacterReference charRef)
+        Texture2D _GetTexture2D(string charFileName)
         {
-            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterFileName}.png";
+            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charFileName}.png";
             if (!File.Exists(filePath))
                 return InworldAI.DefaultThumbnail;
             byte[] imgBytes = File.ReadAllBytes(filePath);
@@ -207,15 +232,15 @@ namespace Inworld.Editors
             loadedTexture.LoadImage(imgBytes);
             return loadedTexture;
         }
-        GameObject _GetPrefab(CharacterReference charRef)
+        GameObject _GetPrefab(string charFileName)
         {
-            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{charRef.CharacterFileName}.prefab";
+            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{charFileName}.prefab";
             if (File.Exists(filePath))
                 return AssetDatabase.LoadAssetAtPath<GameObject>(filePath);
-            InworldAI.LogError($"Cannot find {charRef.CharacterFileName}.prefab");
+            InworldAI.LogError($"Cannot find {charFileName}.prefab");
             return null;
         }
-                // Download Avatars and put under User name's folder.
+        // Download Avatars and put under User name's folder.
         void _OnCharModelDownloaded(string charFullName, AsyncOperation downloadContent)
         {
             InworldCharacterData charRef = InworldController.Instance.GameData.characters.FirstOrDefault(c => c.brainName == charFullName);
