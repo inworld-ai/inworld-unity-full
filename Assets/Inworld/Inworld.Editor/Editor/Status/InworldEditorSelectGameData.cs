@@ -122,6 +122,12 @@ namespace Inworld.Editors
                 return;
             _SelectWorkspace(InworldAI.User.Workspace[0].displayName);
         }
+        public void ProcessData(string sceneName)
+        {
+            m_CurrentScene = InworldAI.User.GetSceneByFullName(sceneName)?.displayName;
+            _SaveCurrentSettings();
+            _DownloadRelatedAssets();
+        }
         InworldSceneData _GetCurrentScene()
         {
             InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
@@ -136,7 +142,9 @@ namespace Inworld.Editors
                 return;
             InworldSceneData sceneData = _GetCurrentScene();
             if (sceneData == null)
+            {
                 return;
+            }
             EditorUtility.DisplayProgressBar("Inworld", "Downloading Assets", sceneData.Progress);
             if (sceneData.Progress > 0.95f)
             {
@@ -405,7 +413,6 @@ namespace Inworld.Editors
                 return;
             }
             ListGraphResponse resp = JsonUtility.FromJson<ListGraphResponse>(uwr.downloadHandler.text);
-            Debug.Log(uwr.downloadHandler.text);
 
             // YAN: Add default name for display as currently it's missing
             foreach (InworldGraphData graph in resp.graphs.Where(graph => string.IsNullOrEmpty(graph.displayName)))

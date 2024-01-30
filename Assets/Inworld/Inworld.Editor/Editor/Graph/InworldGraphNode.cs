@@ -7,6 +7,9 @@
 
 using Inworld.Entities;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine;
+using UnityEngine.UIElements;
+
 namespace Inworld.Editors.Graph
 {
     public class InworldGraphNode : Node
@@ -15,5 +18,25 @@ namespace Inworld.Editors.Graph
         public InworldNode nodeData;
         public InworldGraphView holder;
         public bool isEntryPoint = false;
+
+        public InworldGraphNode ()
+        {
+            RegisterCallback<MouseDownEvent>(evt =>
+            {
+                if (evt.clickCount == 2) 
+                {
+                    OnDoubleClick();
+                }
+            });
+        }
+        
+        void OnDoubleClick()
+        {
+            if (InworldEditor.Instance.Status != EditorStatus.SelectGameData)
+                return;
+            InworldEditor.Instance.CurrentState.ProcessData(nodeData.scene);
+            InworldGraph.CloseWindow();
+        }
+
     }
 }

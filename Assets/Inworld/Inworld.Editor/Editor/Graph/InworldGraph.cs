@@ -26,6 +26,7 @@ namespace Inworld.Editors.Graph
             InworldGraph window = GetWindow<InworldGraph>();
             window.titleContent = new GUIContent("Inworld Graph");
         }
+        public static void CloseWindow() => GetWindow<InworldGraph>().Close();
 
         public static void OpenGraphWindow(string graphName, InworldGraphData graphData)
         {

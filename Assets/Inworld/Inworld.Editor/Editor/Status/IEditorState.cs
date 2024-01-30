@@ -36,6 +36,7 @@ namespace Inworld.Editors
         /// Triggers when this state enters.
         /// </summary>
         public void OnEnter();
+        public void ProcessData(string sceneName);
         /// <summary>
         /// Triggers when other general update logic has been finished.
         /// </summary>

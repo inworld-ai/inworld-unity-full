@@ -23,7 +23,6 @@ namespace Inworld.Editors.Graph
         public List<InworldGraphNode> m_Nodes = new List<InworldGraphNode>();
         public InworldGraphView(InworldGraphData graphData)
         {
-            Debug.Log($"Graph is null? {graphData == null}");
             SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
             this.AddManipulator(new ContentDragger());
             this.AddManipulator(new SelectionDragger());
@@ -42,7 +41,7 @@ namespace Inworld.Editors.Graph
         {
             return node.InstantiatePort(Orientation.Horizontal, direction, Port.Capacity.Multi, typeof(InworldGraphNode));
         }
-
+        
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
         {
             List<Port> compatiblePorts = new List<Port>();
@@ -66,11 +65,26 @@ namespace Inworld.Editors.Graph
                 guid = Guid.NewGuid().ToString(),
                 isEntryPoint = isEntry
             };
+            List<string> characters = new List<string>();
             foreach (InworldNodeQuote quote in nodeData.quotes)
             {
-                node.mainContainer.Add(new Label(quote.character));
+                string charDisplayName = InworldAI.User.GetCharacterByFullName(quote.character)?.givenName;
+                if (!characters.Contains(charDisplayName))
+                    characters.Add(charDisplayName);
             }
-            
+            foreach (string charDisplayName in characters)
+            {
+                node.mainContainer.Add(new Label(charDisplayName)               
+                { 
+                    style =
+                    {
+                        fontSize = 14,
+                        paddingTop = 10,
+                        paddingBottom = 10,
+                        paddingLeft = 20
+                    }
+                });
+            }
             Port input = GeneratePort(node, Direction.Input);
             input.portName = "Before";
             node.inputContainer.Add(input);

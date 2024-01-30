@@ -127,6 +127,10 @@ namespace Inworld.Editors
             EditorUtility.ClearProgressBar();
             _CreatePrefabVariants();
         }
+        public void ProcessData(string sceneName)
+        {
+            
+        }
         /// <summary>
         /// Triggers when other general update logic has been finished.
         /// </summary>

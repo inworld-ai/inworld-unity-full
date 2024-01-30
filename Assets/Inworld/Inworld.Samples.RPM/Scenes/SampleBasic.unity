@@ -239,7 +239,7 @@ MonoBehaviour:
   m_Client: {fileID: 359806128}
   m_AudioCapture: {fileID: 359806131}
   m_CharacterHandler: {fileID: 359806130}
-  m_GameData: {fileID: 11400000, guid: b2f3c9d1510d993428952c40818efbbf, type: 2}
+  m_GameData: {fileID: 11400000, guid: 1178456a32f3e4644922444d3099bccf, type: 2}
   m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
   m_AutoStart: 1
 --- !u!114 &359806128
@@ -1156,11 +1156,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -6769691430286951708, guid: 26d0188b718ab7c468f30ff748b3c75c, type: 3}
   m_PrefabInstance: {fileID: 2011490539}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &2011490541 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -3512545981279201704, guid: 26d0188b718ab7c468f30ff748b3c75c, type: 3}
-  m_PrefabInstance: {fileID: 2011490539}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &244301490517444489
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1505,6 +1500,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onRelationUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  onCharacterDestroyed:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &3307339664766132384
@@ -2122,8 +2120,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
-  m_HeadTransform: {fileID: 2011490541}
   m_BodyAnimator: {fileID: 8216417435497232059}
+  m_LookAtMultiplyer: 0
 --- !u!95 &8216417435497232059
 Animator:
   serializedVersion: 5

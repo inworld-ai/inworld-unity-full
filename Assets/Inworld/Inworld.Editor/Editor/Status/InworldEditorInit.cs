@@ -75,6 +75,10 @@ namespace Inworld.Editors
         {
             InworldEditor.TokenForExchange = "";
         }
+        public void ProcessData(string sceneName)
+        {
+            
+        }
         /// <summary>
         /// Triggers when other general update logic has been finished.
         /// </summary>

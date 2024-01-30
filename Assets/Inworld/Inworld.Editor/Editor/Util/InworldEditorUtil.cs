@@ -5,6 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 #if UNITY_EDITOR
+using Inworld.Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +14,9 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
+using UnityEditor.SceneManagement;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 
 namespace Inworld.Editors
@@ -186,6 +189,7 @@ namespace Inworld.Editors
 
             UnityEngine.Object.DestroyImmediate(currClient);
         }
+
         static void _SetDefaultUserName()
         {
             string userName = CloudProjectSettings.userName;
