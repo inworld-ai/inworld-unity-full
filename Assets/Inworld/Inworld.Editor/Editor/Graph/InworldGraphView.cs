@@ -64,9 +64,13 @@ namespace Inworld.Editors.Graph
                 title = nodeData.NodeName,
                 holder = this,
                 guid = Guid.NewGuid().ToString(),
-                debugText = nodeData.name,
                 isEntryPoint = isEntry
             };
+            foreach (InworldNodeQuote quote in nodeData.quotes)
+            {
+                node.mainContainer.Add(new Label(quote.character));
+            }
+            
             Port input = GeneratePort(node, Direction.Input);
             input.portName = "Before";
             node.inputContainer.Add(input);
@@ -87,7 +91,6 @@ namespace Inworld.Editors.Graph
             from.RefreshExpandedState();
             to.RefreshPorts();
             to.RefreshExpandedState();
-            AddElement(edge);
             return edge;
         }
         void GenerateGraph(InworldGraphData data)
@@ -106,7 +109,7 @@ namespace Inworld.Editors.Graph
                 InworldGraphNode toNode = m_Nodes.FirstOrDefault(n => n.nodeData.scene == edge.nodeTo);
                 if (fromNode != null && toNode != null)
                 {
-                    InstantiateEdge(fromNode, toNode);
+                    AddElement(InstantiateEdge(fromNode, toNode));
                 }
             }
         }

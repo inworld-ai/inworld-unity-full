@@ -14,7 +14,6 @@ namespace Inworld.Editors.Graph
         public string guid;
         public InworldNode nodeData;
         public InworldGraphView holder;
-        public string debugText;
         public bool isEntryPoint = false;
     }
 }

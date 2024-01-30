@@ -34,7 +34,7 @@ namespace Inworld.Editors
         
         bool m_DisplayDataMissing = false;
         bool m_StartDownload = false;
-
+        SelectingDataType m_CurrentSelecting = SelectingDataType.None;
         /// <summary>
         /// Triggers when open editor window.
         /// </summary>
@@ -57,8 +57,9 @@ namespace Inworld.Editors
         public void DrawContent()
         {
             _DrawWorkspaceDropDown();
-            _DrawGraphDropDown();
             _DrawKeyDropDown();
+            _DrawToggles();
+            _DrawDataDropDown();
             if (m_DisplayDataMissing)
                 EditorGUILayout.LabelField(k_DataMissing, InworldEditor.Instance.TitleStyle);
         }
@@ -80,7 +81,7 @@ namespace Inworld.Editors
                     _SelectWorkspace(m_CurrentWorkspace);
                 }
             }
-            if (!string.IsNullOrEmpty(m_CurrentGraph) && m_CurrentGraph != k_DefaultGraph)
+            if (m_CurrentSelecting == SelectingDataType.Graphs && !string.IsNullOrEmpty(m_CurrentGraph) && m_CurrentGraph != k_DefaultGraph)
             {
                 if (GUILayout.Button("Open Graph", InworldEditor.Instance.BtnStyle))
                 {
@@ -116,6 +117,7 @@ namespace Inworld.Editors
             m_CurrentKey = k_DefaultKey;
             m_CurrentScene = k_DefaultScene;
             m_CurrentWorkspace = k_DefaultWorkspace;
+            m_CurrentSelecting = SelectingDataType.None;
             if (InworldAI.User.Workspace.Count != 1)
                 return;
             _SelectWorkspace(InworldAI.User.Workspace[0].displayName);
@@ -264,12 +266,56 @@ namespace Inworld.Editors
             List<string> graphList = ws.graphs.Select(graph => graph.displayName).ToList();
             EditorGUILayout.LabelField("Choose Graph:", InworldEditor.Instance.TitleStyle);
             InworldEditorUtil.DrawDropDown(m_CurrentGraph, graphList, _SelectGraph);
-
             m_CurrentGraph = graphList.Count == 1 ? graphList[0] : m_CurrentGraph;
-
-
-            
             InworldGraphData graphData = ws.graphs.FirstOrDefault(graph => graph.displayName == m_CurrentGraph);
+        }
+
+        void _DrawToggles()
+        {
+            if (m_CurrentWorkspace == k_DefaultWorkspace || string.IsNullOrEmpty(m_CurrentWorkspace))
+                return;
+            InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
+            if (ws == null)
+                return;
+            EditorGUILayout.Space(10);
+            EditorGUILayout.LabelField("Choose Data Type:", InworldEditor.Instance.TitleStyle);
+
+            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Scenes"))
+            {
+                m_CurrentSelecting = SelectingDataType.Scenes;
+            }
+            EditorGUILayout.Space(10);
+            if (GUILayout.Button("Graphs"))
+            {
+                m_CurrentSelecting = SelectingDataType.Graphs;
+            }
+            EditorGUILayout.Space(10);
+            if (GUILayout.Button("Characters"))
+            {
+                m_CurrentSelecting = SelectingDataType.Characters;
+            }
+            EditorGUILayout.EndHorizontal();
+            EditorGUI.EndChangeCheck();
+        }
+        void _DrawDataDropDown()
+        {
+            EditorGUILayout.Space(10);
+            switch (m_CurrentSelecting)
+            {
+                case SelectingDataType.None:
+                    break;
+                case SelectingDataType.Characters:
+                    _DrawKeyDropDown();
+                    break;
+                case SelectingDataType.Scenes:
+                    _DrawSceneDropDown();
+                    break;
+                case SelectingDataType.Graphs:
+                    _DrawGraphDropDown();
+                    break;
+            }
         }
         void _DrawKeyDropDown()
         {
@@ -283,7 +329,13 @@ namespace Inworld.Editors
             InworldEditorUtil.DrawDropDown(m_CurrentKey, keyList, _SelectKeys);
             m_CurrentKey = keyList.Count == 1 ? keyList[0] : m_CurrentKey;
         }
-
+        void _ListCharacters()
+        {
+            string wsFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspace);
+            if (string.IsNullOrEmpty(wsFullName))
+                return;
+            InworldEditorUtil.SendWebGetRequest(InworldEditor.ListCharactersURL(wsFullName), true, _ListCharacterCompleted);
+        }
         void _ListKeys()
         {
             string wsFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspace);
@@ -304,6 +356,26 @@ namespace Inworld.Editors
             if (string.IsNullOrEmpty(wsFullName))
                 return;
             InworldEditorUtil.SendWebGetRequest(InworldEditor.ListGraphsURL(wsFullName), true, _ListGraphCompleted);
+        }
+        void _ListCharacterCompleted(AsyncOperation obj)
+        {
+            UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
+            if (uwr.result != UnityWebRequest.Result.Success)
+            {
+                InworldEditor.Instance.Error = $"List Characters Failed: {InworldEditor.GetError(uwr.error)}";
+                EditorUtility.ClearProgressBar();
+                return;
+            }
+            ListCharacterResponse resp = JsonUtility.FromJson<ListCharacterResponse>(uwr.downloadHandler.text);
+            if (resp.characters.Count == 0)
+            {
+                m_DisplayDataMissing = true;
+            }
+            InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
+            if (ws.characters == null)
+                ws.characters = new List<InworldCharacterData>();
+            ws.characters.Clear();
+            ws.characters.AddRange(resp.ToCharacterData()); 
         }
         void _ListSceneCompleted(AsyncOperation obj)
         {
@@ -376,8 +448,9 @@ namespace Inworld.Editors
             m_CurrentKey = k_DefaultKey; // YAN: Reset data.
             m_DisplayDataMissing = false;
             m_StartDownload = false;
-            _ListGraphs();
+            _ListCharacters();
             _ListScenes();
+            _ListGraphs();
             _ListKeys();
         }
         void _SelectGraph(string graphDisplayName) => m_CurrentGraph = graphDisplayName;

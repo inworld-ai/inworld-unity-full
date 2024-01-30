@@ -48,6 +48,7 @@ namespace Inworld.Editors
         [SerializeField] string m_BillingAccountURL;
         [SerializeField] string m_WorkspaceURL;
         [SerializeField] string m_KeyURL;
+        [SerializeField] string m_CharactersURL;
         [SerializeField] string m_ScenesURL;
         [SerializeField] string m_GraphsURL;
         
@@ -209,6 +210,12 @@ namespace Inworld.Editors
             fontStyle = FontStyle.Bold,
             padding = new RectOffset(10, 10, 0, 0)
         };
+        public GUIStyle ToggleStyle => new GUIStyle(GUI.skin.toggle)
+        {
+            alignment = TextAnchor.UpperLeft,
+            stretchHeight = false,
+            stretchWidth = false
+        };
         /// <summary>
         /// Gets the GUI style for the error text in Inworld Studio Panel.
         /// </summary>
@@ -275,6 +282,11 @@ namespace Inworld.Editors
         /// </summary>
         /// <param name="wsFullName">the full name of the target workspace</param>
         public static string ListScenesURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/v1alpha/{wsFullName}/{Instance.m_ScenesURL}";
+        /// <summary>
+        /// Gets the url for listing Inworld characters.
+        /// </summary>
+        /// <param name="wsFullName">the full name of the target workspace</param>
+        public static string ListCharactersURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/v1alpha/{wsFullName}/{Instance.m_CharactersURL}";
         /// <summary>
         /// Gets the url for listing keys.
         /// </summary>

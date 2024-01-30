@@ -23,6 +23,7 @@ MonoBehaviour:
     runtimeAccess: RUNTIME_ACCESS_PUBLIC
     graphs: []
     scenes: []
+    characters: []
     keySecrets: []
   - name: workspaces/got
     displayName: aaa_kylan_testing
@@ -32,6 +33,7 @@ MonoBehaviour:
     runtimeAccess: RUNTIME_ACCESS_PRIVATE
     graphs: []
     scenes: []
+    characters: []
     keySecrets: []
   - name: workspaces/another-test
     displayName: Another Test Workspace
@@ -41,6 +43,7 @@ MonoBehaviour:
     runtimeAccess: RUNTIME_ACCESS_PRIVATE
     graphs: []
     scenes: []
+    characters: []
     keySecrets: []
   - name: workspaces/brandnewws
     displayName: brandNewWS
@@ -50,6 +53,7 @@ MonoBehaviour:
     runtimeAccess: RUNTIME_ACCESS_PUBLIC
     graphs: []
     scenes: []
+    characters: []
     keySecrets: []
   - name: workspaces/cricko_adventure
     displayName: Cricko Adventure
@@ -59,6 +63,7 @@ MonoBehaviour:
     runtimeAccess: RUNTIME_ACCESS_PRIVATE
     graphs: []
     scenes: []
+    characters: []
     keySecrets: []
   - name: workspaces/spaceyan
     displayName: desc
@@ -68,6 +73,7 @@ MonoBehaviour:
     runtimeAccess: RUNTIME_ACCESS_PRIVATE
     graphs: []
     scenes: []
+    characters: []
     keySecrets: []
   - name: workspaces/goals_demo_chars
     displayName: goals_demo_chars
@@ -77,6 +83,7 @@ MonoBehaviour:
     runtimeAccess: RUNTIME_ACCESS_PRIVATE
     graphs: []
     scenes: []
+    characters: []
     keySecrets: []
   - name: workspaces/graph-14012023
     displayName: graph-14012023
@@ -86,6 +93,7 @@ MonoBehaviour:
     runtimeAccess: RUNTIME_ACCESS_PRIVATE
     graphs: []
     scenes: []
+    characters: []
     keySecrets: []
   - name: workspaces/knivesout
     displayName: Knives Out [MetaMuscle]
@@ -95,6 +103,7 @@ MonoBehaviour:
     runtimeAccess: RUNTIME_ACCESS_PRIVATE
     graphs: []
     scenes: []
+    characters: []
     keySecrets: []
   - name: workspaces/ilya-space
     displayName: My personal Space
@@ -104,6 +113,7 @@ MonoBehaviour:
     runtimeAccess: RUNTIME_ACCESS_PRIVATE
     graphs: []
     scenes: []
+    characters: []
     keySecrets: []
   - name: workspaces/origins
     displayName: Origins
@@ -113,6 +123,7 @@ MonoBehaviour:
     runtimeAccess: RUNTIME_ACCESS_PRIVATE
     graphs: []
     scenes: []
+    characters: []
     keySecrets: []
   - name: workspaces/rgusarov-inworld-workspace
     displayName: rgusarov-inworld-workspace
@@ -122,6 +133,7 @@ MonoBehaviour:
     runtimeAccess: RUNTIME_ACCESS_PRIVATE
     graphs: []
     scenes: []
+    characters: []
     keySecrets: []
   - name: workspaces/yanjin
     displayName: Yan Jin's Workspace
@@ -131,6 +143,7 @@ MonoBehaviour:
     runtimeAccess: RUNTIME_ACCESS_PUBLIC
     graphs: []
     scenes: []
+    characters: []
     keySecrets: []
   m_UserID: 
   m_BillingAccount: billing-accounts/00000000-0000-0000-0000-000000000001
