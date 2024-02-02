@@ -36,6 +36,8 @@ namespace Inworld.Sample
             if (m_SelectingMethod == CharSelectingMethod.Manual || m_SelectingMethod == CharSelectingMethod.KeyCode)
                 m_SelectingMethod = CharSelectingMethod.SightAngle;
             else if (m_SelectingMethod == CharSelectingMethod.SightAngle)
+                m_SelectingMethod = CharSelectingMethod.AutoChat;
+            else if (m_SelectingMethod == CharSelectingMethod.AutoChat)
                 m_SelectingMethod = CharSelectingMethod.KeyCode;
         }
         /// <summary>
@@ -82,8 +84,7 @@ namespace Inworld.Sample
                     targetCharacter = sight.Character;
                 }
             }
-            if (targetCharacter)
-                CurrentCharacter = targetCharacter;
+            CurrentCharacter = targetCharacter;
         }
         protected virtual void SelectCharacterByKey()
         {
@@ -95,6 +96,8 @@ namespace Inworld.Sample
                 CurrentCharacter = m_CharacterList[i];
                 return;
             }
+            if (Input.GetKeyUp(KeyCode.Alpha0))
+                CurrentCharacter = null;
         }
         protected override void OnCharacterDestroyed(InworldCharacter character)
         {
