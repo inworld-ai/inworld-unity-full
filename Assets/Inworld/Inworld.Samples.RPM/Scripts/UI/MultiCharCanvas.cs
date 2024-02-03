@@ -18,11 +18,11 @@ namespace Inworld.Sample.RPM
         const string k_SelectBySight = "Automatically select characters by sight and angle.\n";
         const string k_AutoChat = "The characters are chatting automatically";
         string m_CurrentMethod;
-        string m_CharacterName;
+        string m_CharacterIndicator = "Now <color=green>BroadCasting</color>";
 
         protected override void OnCharacterChanged(InworldCharacter oldCharacter, InworldCharacter newCharacter)
         {
-            m_CharacterName = newCharacter ? newCharacter.Name : "BroadCasting";
+            m_CharacterIndicator = newCharacter ? $"Now Talking to <color=green>{newCharacter.Name}</color>" : "Now <color=green>BroadCasting</color>";
         }
         protected override void OnEnable()
         {
@@ -31,7 +31,7 @@ namespace Inworld.Sample.RPM
         }
         void Update()
         {
-            m_Content.text = $"{k_Instruction}{m_CurrentMethod}Now Talking to <color=green>{m_CharacterName}</color>";
+            m_Content.text = $"{k_Instruction}{m_CurrentMethod}{m_CharacterIndicator}";
             if (!Input.GetKeyUp(KeyCode.Tab))
                 return;
             InworldController.CharacterHandler.ChangeSelectingMethod();
@@ -42,16 +42,21 @@ namespace Inworld.Sample.RPM
             switch (InworldController.CharacterHandler.SelectingMethod)
             {
                 case CharSelectingMethod.KeyCode:
-                    InworldController.Instance.AutoChat(false);
                     return k_SelectByKey;
                 case CharSelectingMethod.SightAngle:
-                    InworldController.Instance.AutoChat(false);
                     return k_SelectBySight;
                 case CharSelectingMethod.AutoChat:
-                    InworldController.Instance.AutoChat(true);
                     return k_AutoChat;
             }
             return "";
+        }
+        public void NextCharacterSpeaking(InworldCharacter character)
+        {
+            if (InworldController.CharacterHandler.SelectingMethod != CharSelectingMethod.AutoChat)
+                return;
+            if (string.IsNullOrEmpty(character.ID))
+                return;
+            InworldController.Instance.SendTrigger(InworldMessenger.NextTurn, character.ID);
         }
     }
 }

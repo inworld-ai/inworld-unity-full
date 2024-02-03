@@ -1717,7 +1717,19 @@ MonoBehaviour:
       m_Calls: []
   onEndSpeaking:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1131924869}
+        m_TargetAssemblyTypeName: Inworld.Sample.RPM.MultiCharCanvas, Inworld.RPM
+        m_MethodName: NextCharacterSpeaking
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 617440778307290826}
+          m_ObjectArgumentAssemblyTypeName: Inworld.InworldCharacter, Inworld.AI
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onPacketReceived:
     m_PersistentCalls:
       m_Calls: []
@@ -1767,7 +1779,19 @@ MonoBehaviour:
       m_Calls: []
   onEndSpeaking:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1131924869}
+        m_TargetAssemblyTypeName: Inworld.Sample.RPM.MultiCharCanvas, Inworld.RPM
+        m_MethodName: NextCharacterSpeaking
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 617440777243312270}
+          m_ObjectArgumentAssemblyTypeName: Inworld.InworldCharacter, Inworld.AI
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onPacketReceived:
     m_PersistentCalls:
       m_Calls: []
