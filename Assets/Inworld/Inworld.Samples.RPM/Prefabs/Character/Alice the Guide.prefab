@@ -490,6 +490,9 @@ MonoBehaviour:
   onRelationUpdated:
     m_PersistentCalls:
       m_Calls: []
+  onCharacterDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7677754776915542813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -503,7 +506,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
-  m_HeadTransform: {fileID: 3624553879139003962}
   m_BodyAnimator: {fileID: 8216417436946439030}
 --- !u!114 &3307339663917059437
 MonoBehaviour:
@@ -982,6 +984,7 @@ MonoBehaviour:
     relation: 1
     trigger: 0
     longBubbleMode: 0
+  m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
   m_Relation: {fileID: 4840593601303544719}
   m_EmoIcon: {fileID: 7575428023401961657}
@@ -1043,11 +1046,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: -4161369568681901532, guid: 26d0188b718ab7c468f30ff748b3c75c, type: 3}
---- !u!4 &3624553879139003962 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -3512545981279201704, guid: 26d0188b718ab7c468f30ff748b3c75c, type: 3}
-  m_PrefabInstance: {fileID: 9011120692824422498}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6845707845804343942 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -6769691430286951708, guid: 26d0188b718ab7c468f30ff748b3c75c, type: 3}

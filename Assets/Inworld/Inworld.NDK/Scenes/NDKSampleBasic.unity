@@ -1589,6 +1589,7 @@ MonoBehaviour:
     relation: 1
     trigger: 1
     longBubbleMode: 0
+  m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
   m_Relation: {fileID: 207251458}
   m_EmoIcon: {fileID: 5295392914518966894}
@@ -2161,6 +2162,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onRelationUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  onCharacterDestroyed:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &9047055560386739721

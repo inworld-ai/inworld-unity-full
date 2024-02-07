@@ -19,6 +19,11 @@ namespace Inworld
     [InitializeOnLoad]
     public class DependencyImporter : AssetPostprocessor
     {
+        const string k_Pathv2 = "Assets/Inworld.AI";
+        const string k_Pathv3 = "Assets/Inworld/Inworld.AI"; // YAN: These 2 folders are incompatible.
+        const string k_UpgradeTitle = "Legacy Inworld found";
+        const string k_UpgradeContent = "Unable to upgrade. Please delete the folder Assets/Inworld, and reimport this package";
+        const string k_DependencyPackages = "https://github.com/inworld-ai/inworld-unity.git";
         static DependencyImporter()
         {
             AssetDatabase.importPackageCompleted += async packageName =>
@@ -26,11 +31,13 @@ namespace Inworld
                 await InstallDependencies();
             };
         }
-
-        const string k_DependencyPackages = "https://github.com/inworld-ai/inworld-unity.git";
-
         public static async Task InstallDependencies()
         {
+            if (Directory.Exists(k_Pathv2) || Directory.Exists(k_Pathv3))
+            {
+                if (EditorUtility.DisplayDialog(k_UpgradeTitle, k_UpgradeContent, "OK"))
+                    return;
+            }   
             Debug.Log("Import Dependency Packages...");
             await _AddPackage(k_DependencyPackages);
         }
