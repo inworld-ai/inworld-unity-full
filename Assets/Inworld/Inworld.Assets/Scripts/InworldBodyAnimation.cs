@@ -69,11 +69,9 @@ namespace Inworld.Assets
             if (oldChar && oldChar.BrainName == m_Character.Data.brainName)
             {
                 HandleMainStatus(AnimMainStatus.Goodbye);
-                m_BodyAnimator.enabled = false;
             }
             if (newChar && newChar.BrainName == m_Character.Data.brainName)
             {
-                m_BodyAnimator.enabled = true;
                 HandleMainStatus(AnimMainStatus.Hello);
             }
         }
