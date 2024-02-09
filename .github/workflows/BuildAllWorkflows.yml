@@ -31,6 +31,11 @@ jobs:
           with:
             lfs: true        
 
+        - name: Cleanup before build
+          run: |
+            docker system prune -af
+            docker volume prune -f
+            
         - name: Cache Library          
           uses: actions/cache@v3
           with:
@@ -44,5 +49,6 @@ jobs:
             buildMethod: Inworld.UnityPackageExporter.BuildTestScene            
             unityVersion: 2022.3.17f1
             targetPlatform: ${{ matrix.targetPlatform }}
+
 
 
