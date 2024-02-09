@@ -20,7 +20,6 @@ jobs:
       matrix:
         targetPlatform:
           - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
-          - StandaloneWindows # Build a Windows standalone.
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
           - iOS # Build an iOS player.
           - Android # Build an Android .apk standalone app.
@@ -35,7 +34,7 @@ jobs:
           run: |
             docker system prune -af
             docker volume prune -f
-            
+
         - name: Cache Library          
           uses: actions/cache@v3
           with:
