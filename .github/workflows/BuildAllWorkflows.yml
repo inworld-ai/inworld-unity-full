@@ -23,13 +23,17 @@ jobs:
           - StandaloneWindows # Build a Windows standalone.
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
           - iOS # Build an iOS player.
-          - Android # Build an Android .apk standalone app.
           - WebGL
     steps:
         - name: Checkout Repo
           uses: actions/checkout@v3
           with:
             lfs: true        
+
+        - name: Cleanup before build
+          run: |
+            docker system prune -af
+            docker volume prune -f
 
         - name: Cache Library          
           uses: actions/cache@v3
@@ -44,5 +48,6 @@ jobs:
             buildMethod: Inworld.UnityPackageExporter.BuildTestScene            
             unityVersion: 2022.3.17f1
             targetPlatform: ${{ matrix.targetPlatform }}
+
 
 

@@ -132,6 +132,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 3753617578495587599}
     m_Modifications:
     - target: {fileID: 1000126265049968702, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_EmotionMap
+      value: 
+      objectReference: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
+    - target: {fileID: 1000126265049968702, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_ContentAnchor
       value: 
       objectReference: {fileID: 102165677}
