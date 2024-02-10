@@ -1167,6 +1167,9 @@ MonoBehaviour:
   onRelationUpdated:
     m_PersistentCalls:
       m_Calls: []
+  onCharacterDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &5081194231765261366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1235,9 +1238,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 6488192458725203369}
   m_Character: {fileID: 2030273176201225856}
-  m_DistanceFactor: 10
   m_SightAngle: 150
   m_SightDistance: 10
+  m_DistancePriorityFactor: 10
   m_RefreshRate: 0.25
 --- !u!1 &3804245501167605051
 GameObject:
@@ -2815,6 +2818,10 @@ PrefabInstance:
       propertyPath: m_Character
       value: 
       objectReference: {fileID: 2030273176201225856}
+    - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+      propertyPath: m_EmotionMap
+      value: 
+      objectReference: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
     - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
       propertyPath: m_ChatOptions.relation
       value: 1

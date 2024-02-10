@@ -17,6 +17,7 @@ namespace Inworld.Assets
 {
     public class ChatPanel3D : ChatPanel
     {
+        [SerializeField] EmotionMap m_EmotionMap;
         [SerializeField] InworldFacialEmotion m_Emotion;
         [SerializeField] TMP_Text m_Relation;
         [SerializeField] Image m_EmoIcon;
@@ -58,52 +59,23 @@ namespace Inworld.Assets
 
         protected override void HandleEmotion(EmotionPacket emotionPacket)
         {
-            switch (emotionPacket.emotion.behavior.ToUpper())
-            {
-                case "AFFECTION":
-                case "INTEREST":
-                    _ProcessEmotion("Anticipation");
-                    break;
-                case "HUMOR":
-                case "JOY":
-                    _ProcessEmotion("Joy");
-                    break;
-                case "CONTEMPT":
-                case "CRITICISM":
-                case "DISGUST":
-                    _ProcessEmotion("Disgust");
-                    break;
-                case "BELLIGERENCE":
-                case "DOMINEERING":
-                case "ANGER":
-                    _ProcessEmotion("Anger");
-                    break;
-                case "TENSION":
-                case "STONEWALLING":
-                case "TENSEHUMOR":
-                case "DEFENSIVENESS":
-                    _ProcessEmotion("Fear");
-                    break;
-                case "WHINING":
-                case "SADNESS":
-                    _ProcessEmotion("Sadness");
-                    break;
-                case "SURPRISE":
-                    _ProcessEmotion("Surprise");
-                    break;
-                default:
-                    _ProcessEmotion("Neutral");
-                    break;
-            }
+            _ProcessEmotion(emotionPacket.emotion.behavior.ToUpper());
         }
         void _ProcessEmotion(string emotion)
         {
-            FacialAnimation targetEmo = m_Emotion.emotions.FirstOrDefault(emo => emo.emotion == emotion);
-            
-            if (targetEmo != null)
+            EmotionMapData emoMapData = m_EmotionMap[emotion];
+            if (emoMapData == null)
             {
-                m_EmoIcon.sprite = targetEmo.icon;
+                InworldAI.LogError($"Unhandled emotion {emotion}");
+                return;
             }
+            FacialAnimation targetEmo = m_Emotion[emoMapData.facialEmotion.ToString()];
+            if (targetEmo == null)
+            {
+                InworldAI.LogError($"Unhandled emotion {emotion}");
+                return;
+            }
+            m_EmoIcon.sprite = targetEmo.icon;
         }
 
         string GetRelationIcon(int nRelationValue)
