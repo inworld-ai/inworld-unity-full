@@ -125,7 +125,6 @@ namespace Inworld.Sample.RPM
                     m_HasInit = true;
                     string history = m_IsLoad ? InworldController.Client.SessionHistory : "";
                     InworldAI.Log($"Load History: {history}");
-                    InworldController.Instance.LoadScene(InworldController.Instance.CurrentScene); // TODO(Yan): Implement Load Session in new method.
                     break;
                 case InworldConnectionStatus.Connecting:
                     _SessionButtonConnecting();

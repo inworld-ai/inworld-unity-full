@@ -213,7 +213,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2779047371885436891, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_VerboseLog
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3307339663917059437, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_EmotionMap
@@ -3311,6 +3311,11 @@ MonoBehaviour:
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
   m_CustomToken: 
   m_PublicWorkspace: 
+  m_Continuation:
+    continuationType: 0
+    dialogHistory:
+      history: []
+    externallySavedState: 
   m_PreviousDialog:
     phrases: []
 --- !u!4 &5095182497582714995
