@@ -121,11 +121,11 @@ namespace Inworld.Sample.RPM
                     m_IsConnecting = false;
                     _SessionButtonReadyToStart();
                     break;
-                case InworldConnectionStatus.Initialized:
+                case InworldConnectionStatus.Initialized: 
                     m_HasInit = true;
                     string history = m_IsLoad ? InworldController.Client.SessionHistory : "";
                     InworldAI.Log($"Load History: {history}");
-                    InworldController.Instance.LoadScene(InworldController.Instance.CurrentScene, history);
+                    InworldController.Instance.LoadScene(InworldController.Instance.CurrentScene); // TODO(Yan): Implement Load Session in new method.
                     break;
                 case InworldConnectionStatus.Connecting:
                     _SessionButtonConnecting();

@@ -41,8 +41,8 @@ namespace Inworld.NDK
         /// Send load scene request to Inworld server via NDK.
         /// </summary>
         /// <param name="sceneFullName">the full name of the Inworld scene to load.</param>
-        /// <param name="history">the session state to load.</param>;
-        public static void LoadScene(string sceneFullName, string history)
+        /// <param name="continuation">the session continuation to load.</param>;
+        public static void LoadScene(string sceneFullName, Continuation continuation)
         {
             Inworld.Entities.Capabilities capabilities = InworldAI.Capabilities;
             Capabilities cap = new Capabilities
@@ -65,6 +65,7 @@ namespace Inworld.NDK
                 NDKInterop.Unity_AddUserProfile(profile.fieldId, profile.fieldValue);
             }
             NDKInterop.Unity_SetClientRequest(InworldAI.UnitySDK.id, InworldAI.UnitySDK.version, InworldAI.UnitySDK.description);
+            string history = continuation.externallySavedState;
             history = string.IsNullOrEmpty(history) ? "" : history;
             NDKInterop.Unity_LoadScene(sceneFullName, history, InworldNDKCallBack.OnSceneLoaded);
         }

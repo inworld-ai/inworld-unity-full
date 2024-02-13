@@ -76,8 +76,7 @@ namespace Inworld.NDK
         /// Send load scene request to Inworld server.
         /// </summary>
         /// <param name="sceneFullName">the full name of the Inworld scene to load.</param>
-        /// <param name="history">the full string of the encrypted history content to send.</param>
-        public override void LoadScene(string sceneFullName, string history = "") => InworldNDKAPI.LoadScene(sceneFullName, history);
+        public override void LoadScene(string sceneFullName) => InworldNDKAPI.LoadScene(sceneFullName, m_Continuation);
 
         /// <summary>
         /// Gets the load scene response when load scene success is sent through call back.
