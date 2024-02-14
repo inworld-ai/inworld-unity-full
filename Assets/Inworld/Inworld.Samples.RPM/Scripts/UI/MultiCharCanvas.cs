@@ -14,9 +14,9 @@ namespace Inworld.Sample.RPM
     public class MultiCharCanvas : DemoCanvas
     {
         const string k_Instruction = "Press <color=green>\"Tab\"</color> to switch character selection method.\n";
-        const string k_SelectByKey = "Press <color=green>\"1\"</color> and <color=green>\"2\"</color> to switch interact characters.\nPress <color=green>\"0\"</color> to broadcast";
+        const string k_SelectByKey = "Press <color=green>\"1\"</color> and <color=green>\"2\"</color> to switch interact characters.\nPress <color=green>\"0\"</color> to broadcast.\n";
         const string k_SelectBySight = "Automatically select characters by sight and angle.\n";
-        const string k_AutoChat = "The characters are chatting automatically";
+        const string k_AutoChat = "The characters are chatting automatically.\n";
         string m_CurrentMethod;
         string m_CharacterIndicator = "Now <color=green>BroadCasting</color>";
 
