@@ -140,10 +140,6 @@ namespace Inworld.Sample.RPM
                     m_Indicator.color = m_ColorGraph.Evaluate(1f);
                     m_IsConnecting = false;
                     break;
-                case InworldConnectionStatus.InitFailed:
-                    m_Indicator.color = m_ColorGraph.Evaluate(1f);
-                    m_IsConnecting = false;
-                    break;
             }
 
         }
