@@ -17,7 +17,6 @@ namespace Inworld.Sample
         [SerializeField] protected CharSelectingMethod m_SelectingMethod = CharSelectingMethod.SightAngle;
         [Range(0.1f, 1f)]
         [SerializeField] float m_RefreshRate = 0.5f;
-        readonly List<SightAngle> m_SightAngles = new List<SightAngle>();
 
         float m_CurrentTime;
         /// <summary>
@@ -38,22 +37,7 @@ namespace Inworld.Sample
             else if (m_SelectingMethod == CharSelectingMethod.SightAngle)
                 m_SelectingMethod = CharSelectingMethod.KeyCode;
         }
-        /// <summary>
-        /// Get the live session ID for an Inworld character.
-        /// </summary>
-        /// <param name="character">The request Inworld character.</param>
-        public override string GetLiveSessionID(InworldCharacter character)
-        {
-            string sessionID = base.GetLiveSessionID(character);
-            if (string.IsNullOrEmpty(sessionID))
-                return sessionID;
-            SightAngle characterSightAngle = character.GetComponent<SightAngle>();
-            if (!characterSightAngle)
-                return sessionID;
-            if (!m_SightAngles.Contains(characterSightAngle))
-                m_SightAngles.Add(characterSightAngle);
-            return sessionID;
-        }
+
         void Update()
         {
             switch (m_SelectingMethod)
@@ -74,13 +58,10 @@ namespace Inworld.Sample
             m_CurrentTime = 0;
             float fPriority = float.MaxValue;
             InworldCharacter targetCharacter = null;
-            foreach (SightAngle sight in m_SightAngles)
+            foreach (InworldCharacter character in m_CharacterList.Where(character => character && character.Priority >= 0 && character.Priority < fPriority))
             {
-                if (sight && sight.Priority >= 0 && sight.Priority < fPriority)
-                {
-                    fPriority = sight.Priority;
-                    targetCharacter = sight.Character;
-                }
+                fPriority = character.Priority;
+                targetCharacter = character;
             }
             if (targetCharacter)
                 CurrentCharacter = targetCharacter;
@@ -95,16 +76,6 @@ namespace Inworld.Sample
                 CurrentCharacter = m_CharacterList[i];
                 return;
             }
-        }
-        protected override void OnCharacterDestroyed(InworldCharacter character)
-        {
-            if (character == null || !InworldController.Instance)
-                return;
-            
-            SightAngle sight = character.GetComponent<SightAngle>();
-            m_SightAngles.Remove(sight);
-            
-            base.OnCharacterDestroyed(character);
         }
     }
 }

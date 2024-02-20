@@ -32,11 +32,7 @@ namespace Inworld.Sample
         public virtual InworldCharacter Character { get; private set; }
 
 
-        /// <summary>
-        ///     Returns the priority of the character.
-        ///     the higher the Priority is, the character is more likely responding to player.
-        /// </summary>
-        public float Priority { get; private set; }
+
 
         protected virtual bool IsValid => InworldController.Instance && m_HeadTransform && m_CameraTransform
                                && InworldController.CharacterHandler.SelectingMethod == CharSelectingMethod.SightAngle;
@@ -44,6 +40,8 @@ namespace Inworld.Sample
         void Awake()
         {
             Character = gameObject.GetComponent<InworldCharacter>();
+            if (!Character)
+                enabled = false;
         }
         
         void OnEnable()
@@ -54,7 +52,6 @@ namespace Inworld.Sample
                 if (animator)
                     m_HeadTransform = animator.GetBoneTransform(HumanBodyBones.Head);
             }
-                
             if (!m_CameraTransform && PlayerController.Instance)
                 m_CameraTransform = PlayerController.Instance.transform;
         }
@@ -75,19 +72,19 @@ namespace Inworld.Sample
             
             float distance = Vector3.Distance(m_HeadTransform.position, m_CameraTransform.position);
             if (distance > m_SightDistance)
-                Priority = -1f;
+                Character.Priority = -1f;
             else
             {
                 Vector3 vecDirection = (m_CameraTransform.position - m_HeadTransform.position).normalized;
                 float fAngle = Vector3.Angle(vecDirection, transform.forward);
                 if (fAngle > m_SightAngle * 0.5f)
                 {
-                    Priority = -1f;
+                    Character.Priority = -1f;
                 }
                 else
                 {
                     Vector3 vecPlayerDirection = -vecDirection;
-                    Priority = Vector3.Angle(vecPlayerDirection, m_CameraTransform.forward) + distance * m_DistancePriorityFactor;
+                    Character.Priority = Vector3.Angle(vecPlayerDirection, m_CameraTransform.forward) + distance * m_DistancePriorityFactor;
                 }
             }
         }
