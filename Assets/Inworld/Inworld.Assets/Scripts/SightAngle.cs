@@ -12,8 +12,9 @@ namespace Inworld.Sample
 {
     public class SightAngle : MonoBehaviour
     {
-        [SerializeField] Animator m_Animator;
-        [SerializeField] InworldCharacter m_Character;
+        [SerializeField] Transform m_HeadTransform;
+        [SerializeField] Transform m_CameraTransform;
+
         [Range(1, 180)]
         [SerializeField] float m_SightAngle = 90f;
         [Range(1, 30)]
@@ -24,32 +25,37 @@ namespace Inworld.Sample
         [Range(0.1f, 1f)]
         [SerializeField] float m_RefreshRate = 0.25f;
         
-        Transform m_HeadTransform;
-        Transform m_CameraTransform;
         float m_CurrentTime = 0f;
         /// <summary>
         /// Get its character.
         /// </summary>
-        public virtual InworldCharacter Character => m_Character;
-        
+        public virtual InworldCharacter Character { get; private set; }
+
+
         /// <summary>
         ///     Returns the priority of the character.
         ///     the higher the Priority is, the character is more likely responding to player.
         /// </summary>
         public float Priority { get; private set; }
 
-        protected virtual bool IsValid => InworldController.Instance 
-                               && PlayerController.Instance 
+        protected virtual bool IsValid => InworldController.Instance && m_HeadTransform && m_CameraTransform
                                && InworldController.CharacterHandler.SelectingMethod == CharSelectingMethod.SightAngle;
 
         void Awake()
         {
-            m_HeadTransform = m_Animator.GetBoneTransform(HumanBodyBones.Head);
+            Character = gameObject.GetComponent<InworldCharacter>();
         }
         
         void OnEnable()
         {
-            if (!m_CameraTransform)
+            if (!m_HeadTransform)
+            {
+                Animator animator = gameObject.GetComponent<Animator>();
+                if (animator)
+                    m_HeadTransform = animator.GetBoneTransform(HumanBodyBones.Head);
+            }
+                
+            if (!m_CameraTransform && PlayerController.Instance)
                 m_CameraTransform = PlayerController.Instance.transform;
         }
 
@@ -98,9 +104,9 @@ namespace Inworld.Sample
             }
             Gizmos.color = Color.red;
 
-            if (!InworldController.Instance || !PlayerController.Instance)
+            if (!m_CameraTransform)
                 return;
-            Vector3 vecDirection = (PlayerController.Instance.transform.position - trPosition).normalized;
+            Vector3 vecDirection = (m_CameraTransform.position - trPosition).normalized;
             Gizmos.DrawLine(trPosition, trPosition + transform.forward * m_SightDistance);
             Gizmos.DrawLine(trPosition, trPosition + vecDirection * m_SightDistance);
         }
