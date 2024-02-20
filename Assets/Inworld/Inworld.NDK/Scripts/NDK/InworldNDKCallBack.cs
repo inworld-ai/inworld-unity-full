@@ -46,7 +46,7 @@ namespace Inworld.NDK
             {
                 ndkClient.AgentList.Add(Marshal.PtrToStructure<AgentInfo>(NDKInterop.Unity_GetAgentInfo(i)));
             }
-            InworldController.Client.Status = InworldConnectionStatus.LoadingSceneCompleted;
+            // InworldController.Client.Status = InworldConnectionStatus.LoadingSceneCompleted;
         }
         [MonoPInvokeCallback(typeof(NDKLogCallBack))]
         static internal void OnLogReceived(string log, int severity)
@@ -58,8 +58,8 @@ namespace Inworld.NDK
                     break;
                 case 2:
                     InworldAI.LogError($"[NDK]: {log}");
-                    if (log.Contains("inactivity"))
-                        InworldController.Client.Status = InworldConnectionStatus.LostConnect;
+                    // if (log.Contains("inactivity"))
+                    //     InworldController.Client.Status = InworldConnectionStatus.LostConnect;
                     break;
                 case 3:
                     InworldAI.LogException($"[NDK]: {log}");

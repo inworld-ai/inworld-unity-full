@@ -161,6 +161,7 @@ namespace Inworld.NDK
         /// </summary>
         /// <param name="charID">the ID of the character to send.</param>
         /// <param name="base64">the wave data to send.</param>
+        /// <param name="correlateID">the callback ID. Not used in NDK now.</param>
         public override void SendAudio(string charID, string base64)
         {
             if (string.IsNullOrEmpty(charID) || string.IsNullOrEmpty(base64))

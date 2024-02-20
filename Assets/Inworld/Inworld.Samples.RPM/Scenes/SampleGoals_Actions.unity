@@ -672,7 +672,7 @@ MonoBehaviour:
   m_LipAnimation: {fileID: 3025297061302042100}
   m_InitTrigger: initconvo
   m_CheckTrigger: turnback
-  m_CurrentCharacter: {fileID: 617440777708311051}
+  m_CurrentCharacter: {fileID: 8996923506161634225}
 --- !u!1001 &1318710383
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1365,8 +1365,8 @@ GameObject:
   - component: {fileID: 4693125701182696328}
   - component: {fileID: 6602395910966866599}
   - component: {fileID: 8996923506161634224}
+  - component: {fileID: 8996923506161634225}
   - component: {fileID: 2475915965789613538}
-  - component: {fileID: 617440777708311051}
   - component: {fileID: 2910922991999958440}
   - component: {fileID: 3025297061302042100}
   m_Layer: 0
@@ -1396,68 +1396,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 2.2}
   m_SizeDelta: {x: 2000, y: 1100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &617440777708311051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 24757742515360202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39f0a4db40e914b489ec8b9169ecb4e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Data:
-    agentId: 
-    brainName: workspaces/unitytest/characters/prince_stone
-    givenName: Prince Stone
-    characterAssets:
-      rpmModelUri: 
-      rpmImageUriPortrait: 
-      rpmImageUriPosture: 
-      avatarImg: 
-      avatarImgOriginal: 
-      thumbnailProgress: 0
-      avatarProgress: 0
-    thumbnail: {fileID: 0}
-  m_VerboseLog: 1
-  onBeginSpeaking:
-    m_PersistentCalls:
-      m_Calls: []
-  onEndSpeaking:
-    m_PersistentCalls:
-      m_Calls: []
-  onPacketReceived:
-    m_PersistentCalls:
-      m_Calls: []
-  onCharacterSpeaks:
-    m_PersistentCalls:
-      m_Calls: []
-  onEmotionChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onGoalCompleted:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1131924867}
-        m_TargetAssemblyTypeName: Inworld.Sample.TransformCanvas, Inworld.RPM
-        m_MethodName: OnGoalComplete
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
-  onRelationUpdated:
-    m_PersistentCalls:
-      m_Calls: []
-  onCharacterDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &975543841580784749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1903,6 +1841,11 @@ MonoBehaviour:
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
   m_CustomToken: 
   m_PublicWorkspace: 
+  m_Continuation:
+    continuationType: 0
+    dialogHistory:
+      history: []
+    externallySavedState: 
   m_PreviousDialog:
     phrases: []
 --- !u!114 &4920752726730454506
@@ -2056,7 +1999,7 @@ MonoBehaviour:
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
   m_Relation: {fileID: 642542326}
   m_EmoIcon: {fileID: 4527467879313149719}
-  m_Character: {fileID: 617440777708311051}
+  m_Character: {fileID: 8996923506161634225}
 --- !u!1 &6447768931961954343
 GameObject:
   m_ObjectHideFlags: 0
@@ -2318,6 +2261,83 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &8996923506161634225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24757742515360202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64744fd8922740478ac4edb57c452bfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Data:
+    agentId: 
+    brainName: workspaces/unitytest/characters/prince_stone
+    givenName: Prince Stone
+    characterAssets:
+      rpmModelUri: 
+      rpmImageUriPortrait: 
+      rpmImageUriPosture: 
+      avatarImg: 
+      avatarImgOriginal: 
+      thumbnailProgress: 0
+      avatarProgress: 0
+    thumbnail: {fileID: 0}
+  m_VerboseLog: 0
+  onCharacterRegistered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1131924867}
+        m_TargetAssemblyTypeName: Inworld.Sample.RPM.TransformCanvas, Inworld.RPM
+        m_MethodName: OnCharacterRegistered
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onBeginSpeaking:
+    m_PersistentCalls:
+      m_Calls: []
+  onEndSpeaking:
+    m_PersistentCalls:
+      m_Calls: []
+  onPacketReceived:
+    m_PersistentCalls:
+      m_Calls: []
+  onCharacterSpeaks:
+    m_PersistentCalls:
+      m_Calls: []
+  onEmotionChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onGoalCompleted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1131924867}
+        m_TargetAssemblyTypeName: Inworld.Sample.RPM.TransformCanvas, Inworld.RPM
+        m_MethodName: OnGoalComplete
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onRelationUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  onCharacterDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!224 &9024173614586313408
 RectTransform:
   m_ObjectHideFlags: 0

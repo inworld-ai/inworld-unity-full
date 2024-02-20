@@ -7,6 +7,7 @@
 
 using Inworld.Packet;
 using Inworld.Sample;
+using System;
 using System.Linq;
 using TMPro;
 using UnityEngine;

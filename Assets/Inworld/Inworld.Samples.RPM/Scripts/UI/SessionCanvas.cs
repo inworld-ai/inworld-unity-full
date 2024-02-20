@@ -104,7 +104,7 @@ namespace Inworld.Sample.RPM
             {
                 InworldController.Instance.Disconnect(); 
             }
-            while (InworldController.Status != InworldConnectionStatus.Idle && InworldController.Status != InworldConnectionStatus.LostConnect)
+            while (InworldController.Status != InworldConnectionStatus.Idle) // && InworldController.Status != InworldConnectionStatus.LostConnect)
             {
                 yield return new WaitForFixedUpdate();
             }
@@ -116,7 +116,7 @@ namespace Inworld.Sample.RPM
             switch (incomingStatus)
             {
                 case InworldConnectionStatus.Idle:
-                case InworldConnectionStatus.LostConnect:
+                // case InworldConnectionStatus.LostConnect:
                     m_Indicator.color = Color.white;
                     m_IsConnecting = false;
                     _SessionButtonReadyToStart();
