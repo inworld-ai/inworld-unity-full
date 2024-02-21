@@ -36,7 +36,7 @@ namespace Inworld.Sample
 
         void Awake()
         {
-            Character = gameObject.GetComponent<InworldCharacter>();
+            Character = GetComponent<InworldCharacter>();
             if (!Character)
                 enabled = false;
         }
@@ -45,7 +45,7 @@ namespace Inworld.Sample
         {
             if (!m_HeadTransform)
             {
-                Animator animator = gameObject.GetComponent<Animator>();
+                Animator animator = GetComponent<Animator>();
                 if (animator)
                     m_HeadTransform = animator.GetBoneTransform(HumanBodyBones.Head);
             }

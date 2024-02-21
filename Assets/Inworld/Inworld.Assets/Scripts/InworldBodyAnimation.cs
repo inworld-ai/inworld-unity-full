@@ -7,6 +7,7 @@
 using Inworld.Packet;
 using Inworld.Sample;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Inworld.Assets
 {
@@ -35,14 +36,14 @@ namespace Inworld.Assets
         {
             m_vecInitEuler = m_HeadTransform.localEulerAngles;
             m_vecInitPosition = m_HeadTransform.localPosition;
-            m_Interaction.OnStartStopInteraction += OnStartStopInteraction;
+            m_Character.Event.onBeginSpeaking.AddListener(OnCharacterStartSpeaking);
+            m_Character.Event.onEndSpeaking.AddListener(OnCharacterEndSpeaking);
             InworldController.CharacterHandler.OnCharacterChanged += OnCharChanged;
             base.OnEnable();
         }
 
         protected override void OnDisable()
         {
-            m_Interaction.OnStartStopInteraction -= OnStartStopInteraction;
             if (!InworldController.Instance)
                 return;
             InworldController.CharacterHandler.OnCharacterChanged -= OnCharChanged;
@@ -59,8 +60,10 @@ namespace Inworld.Assets
             }
             _StartLookAt(PlayerController.Instance.transform.position);
         }
+        protected virtual void OnCharacterStartSpeaking() => HandleMainStatus(AnimMainStatus.Talking);
 
-        protected virtual void OnStartStopInteraction(bool isStarting)
+        protected virtual void OnCharacterEndSpeaking() => HandleMainStatus(AnimMainStatus.Neutral);
+        public virtual void OnStartStopInteraction(bool isStarting)
         {
             HandleMainStatus(isStarting ? AnimMainStatus.Talking : AnimMainStatus.Neutral);
         }
@@ -69,11 +72,9 @@ namespace Inworld.Assets
             if (oldChar && oldChar.BrainName == m_Character.Data.brainName)
             {
                 HandleMainStatus(AnimMainStatus.Goodbye);
-                m_BodyAnimator.enabled = false;
             }
             if (newChar && newChar.BrainName == m_Character.Data.brainName)
             {
-                m_BodyAnimator.enabled = true;
                 HandleMainStatus(AnimMainStatus.Hello);
             }
         }

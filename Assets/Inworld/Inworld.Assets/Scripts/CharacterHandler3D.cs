@@ -19,10 +19,7 @@ namespace Inworld.Sample
         [SerializeField] float m_RefreshRate = 0.5f;
 
         float m_CurrentTime;
-        /// <summary>
-        ///     Return if any character is speaking.
-        /// </summary>
-        public override bool IsAnyCharacterSpeaking => m_CharacterList.Any(inworldCharacter => inworldCharacter.IsSpeaking);
+
         /// <summary>
         ///     Get the current Character Selecting Method.
         /// </summary>
@@ -35,6 +32,8 @@ namespace Inworld.Sample
             if (m_SelectingMethod == CharSelectingMethod.Manual || m_SelectingMethod == CharSelectingMethod.KeyCode)
                 m_SelectingMethod = CharSelectingMethod.SightAngle;
             else if (m_SelectingMethod == CharSelectingMethod.SightAngle)
+                m_SelectingMethod = CharSelectingMethod.AutoChat;
+            else if (m_SelectingMethod == CharSelectingMethod.AutoChat)
                 m_SelectingMethod = CharSelectingMethod.KeyCode;
         }
 
@@ -63,8 +62,7 @@ namespace Inworld.Sample
                 fPriority = character.Priority;
                 targetCharacter = character;
             }
-            if (targetCharacter)
-                CurrentCharacter = targetCharacter;
+            CurrentCharacter = targetCharacter;
         }
         protected virtual void SelectCharacterByKey()
         {
@@ -76,6 +74,8 @@ namespace Inworld.Sample
                 CurrentCharacter = m_CharacterList[i];
                 return;
             }
+            if (Input.GetKeyUp(KeyCode.Alpha0))
+                CurrentCharacter = null;
         }
     }
 }
