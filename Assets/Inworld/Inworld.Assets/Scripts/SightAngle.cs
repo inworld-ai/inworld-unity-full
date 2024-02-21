@@ -31,9 +31,6 @@ namespace Inworld.Sample
         /// </summary>
         public virtual InworldCharacter Character { get; private set; }
 
-
-
-
         protected virtual bool IsValid => InworldController.Instance && m_HeadTransform && m_CameraTransform
                                && InworldController.CharacterHandler.SelectingMethod == CharSelectingMethod.SightAngle;
 
