@@ -86,9 +86,8 @@ namespace Inworld.Sample.RPM
         /// Save game
         /// </summary>
         public void SaveGame() => InworldController.Client.GetHistoryAsync(InworldController.Instance.CurrentScene);
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
             if (string.IsNullOrEmpty(ipv4))
                 ipv4 = Dns.GetHostAddresses(InworldController.Client.Server.web)[0].ToString();
             _SessionButtonReadyToStart();

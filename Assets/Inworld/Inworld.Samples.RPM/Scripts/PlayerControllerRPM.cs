@@ -13,9 +13,8 @@ namespace Inworld.Sample.RPM
     {
         InworldCameraController m_CameraController;
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
             m_CameraController = GetComponent<InworldCameraController>();
         }
         

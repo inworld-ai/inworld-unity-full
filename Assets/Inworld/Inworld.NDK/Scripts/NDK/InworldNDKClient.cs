@@ -93,7 +93,7 @@ namespace Inworld.NDK
         /// </summary>
         /// <param name="characterID">the live session ID of the character to send.</param>
         /// <param name="textToSend">the message to send.</param>
-        public override void SendText(string characterID, string textToSend, List<string> characters = null)
+        public override void SendText(string characterID, string textToSend)
         {
             if (string.IsNullOrEmpty(characterID) || string.IsNullOrEmpty(textToSend))
                 return;
@@ -106,7 +106,7 @@ namespace Inworld.NDK
         /// </summary>
         /// <param name="characterID">the live session ID of the character to send.</param>
         /// <param name="interactionID">the ID of the incoming message from the character to cancel.</param>
-        public override void SendCancelEvent(string characterID, string interactionID, List<string> characters = null)
+        public override void SendCancelEvent(string characterID, string interactionID)
         {
             if (string.IsNullOrEmpty(characterID))
                 return;
@@ -119,7 +119,7 @@ namespace Inworld.NDK
         /// <param name="charID">the live session ID of the character to send.</param>
         /// <param name="triggerName">the name of the trigger to send.</param>
         /// <param name="parameters">the parameters and values of the trigger to send.</param>
-        public override void SendTrigger(string charID, string triggerName, Dictionary<string, string> parameters, List<string> characters = null)
+        public override void SendTrigger(string charID, string triggerName, Dictionary<string, string> parameters)
         {
             if (string.IsNullOrEmpty(charID))
                 return;
@@ -138,7 +138,7 @@ namespace Inworld.NDK
         /// Send AUDIO_SESSION_START control event to let the character enable receiving packets.
         /// </summary>
         /// <param name="charID">the ID of the character to send.</param>
-        public override void StartAudio(string charID, List<string> characters = null)
+        public override void StartAudio(string charID)
         {
             if (string.IsNullOrEmpty(charID))
                 return;
@@ -148,7 +148,7 @@ namespace Inworld.NDK
         /// Send AUDIO_SESSION_END control event to let the character disable receiving packets.
         /// </summary>
         /// <param name="charID">the ID of the character to send.</param>
-        public override void StopAudio(string charID, List<string> characters = null)
+        public override void StopAudio(string charID)
         {
             if (string.IsNullOrEmpty(charID))
                 return;
@@ -162,20 +162,22 @@ namespace Inworld.NDK
         /// <param name="charID">the ID of the character to send.</param>
         /// <param name="base64">the wave data to send.</param>
         /// <param name="correlateID">the callback ID. Not used in NDK now.</param>
-        public override void SendAudio(string charID, string base64, List<string> characters = null)
+        public override void SendAudio(string charID, string base64)
         {
             if (string.IsNullOrEmpty(charID) || string.IsNullOrEmpty(base64))
                 return;
             NDKInterop.Unity_SendAudio(charID, base64);
         }
         
-        /// <summary>
-        /// Put the received but not processed packet in queue.
-        /// </summary>
-        /// <param name="packet">the target packet to enqueue.</param>
-        public void Enqueue(InworldPacket packet)
+
+        public override void Enqueue(InworldPacket packet)
         {
             m_IncomingQueue.Enqueue(packet);
+        }
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            InworldNDKAPI.Init();
         }
         protected virtual void OnDisable() => NDKInterop.Unity_EndSession();
         
@@ -187,10 +189,8 @@ namespace Inworld.NDK
         
         protected virtual void OnDestroy() => NDKInterop.Unity_DestroyWrapper();
         
-        protected override void Init()
-        {
-            InworldNDKAPI.Init();
-        }
+
+
         protected IEnumerator _StartSession()
         {
             if (!IsTokenValid)

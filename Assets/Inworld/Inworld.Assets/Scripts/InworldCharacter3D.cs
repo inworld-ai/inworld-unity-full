@@ -6,6 +6,7 @@
  *************************************************************************************************/
 using UnityEngine;
 using Inworld.Interactions;
+using System;
 
 
 namespace Inworld.Sample.Innequin
@@ -13,6 +14,11 @@ namespace Inworld.Sample.Innequin
     [RequireComponent(typeof(InworldInteraction))]
     public class InworldCharacter3D : InworldCharacter
     {
-
+        [SerializeField] bool m_AutoStart = true;
+        void Start()
+        {
+            if (m_AutoStart)
+                RegisterLiveSession();
+        }
     }
 }
