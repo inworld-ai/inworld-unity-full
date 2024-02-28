@@ -19,9 +19,10 @@ namespace Inworld.Sample.RPM
         string m_CurrentMethod;
         string m_CharacterIndicator = "Now <color=green>BroadCasting</color>";
         
-        protected override void OnCharacterChanged(InworldCharacter oldCharacter, InworldCharacter newCharacter)
+        protected override void OnCharacterSelected(string newCharacter)
         {
-            m_CharacterIndicator = newCharacter ? $"Now Talking to <color=green>{newCharacter.Name}</color>" : "Now <color=green>BroadCasting</color>";
+            InworldCharacter character = InworldController.CharacterHandler.GetCharacterByBrainName(newCharacter);
+            m_CharacterIndicator = character ? $"Now Talking to <color=green>{character.name}</color>" : "Now <color=green>BroadCasting</color>";
         }
         protected override void OnEnable()
         {

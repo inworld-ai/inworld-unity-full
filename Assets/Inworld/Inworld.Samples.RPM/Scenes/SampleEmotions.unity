@@ -474,6 +474,7 @@ MonoBehaviour:
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
   m_StatusDropdown: {fileID: 1433391259}
   m_ServerEventDropDown: {fileID: 950237202}
+  m_Character: {fileID: 0}
 --- !u!1 &1351384361
 GameObject:
   m_ObjectHideFlags: 0
@@ -987,12 +988,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78696971f17345f8b3a604c50919e8f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Client: {fileID: 4881369807582071654}
-  m_AudioCapture: {fileID: 5556377779683873101}
-  m_CharacterHandler: {fileID: 5556377779683873100}
   m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
-  m_AutoStart: 1
 --- !u!114 &3458045423904060224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1160,10 +1157,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
   m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
   m_CustomToken: 
   m_PublicWorkspace: 
+  m_Continuation:
+    continuationType: 0
+    dialogHistory:
+      history: []
+    externallySavedState: 
+  m_MaxWaitingListSize: 100
   m_PreviousDialog:
     phrases: []
 --- !u!1 &5556377779683873099

@@ -27,12 +27,6 @@ namespace Inworld.Sample.RPM
             base.Start();
             StartCoroutine(ShowRealAnswer());
         }
-
-        protected override void OnCharacterChanged(InworldCharacter oldCharacter, InworldCharacter newCharacter)
-        {
-            if (!newCharacter && oldCharacter)
-                m_Title.text = $"{oldCharacter.transform.name} Disconnected!";
-        }
         
         IEnumerator ShowRealAnswer()
         {

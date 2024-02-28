@@ -1194,12 +1194,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78696971f17345f8b3a604c50919e8f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Client: {fileID: 4881369807155481902}
-  m_AudioCapture: {fileID: 5556377780305827589}
-  m_CharacterHandler: {fileID: 5556377780305827588}
   m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
-  m_AutoStart: 0
 --- !u!4 &3753617577125838873
 Transform:
   m_ObjectHideFlags: 0
@@ -2477,7 +2473,9 @@ MonoBehaviour:
   m_InputField: {fileID: 0}
   m_SendButton: {fileID: 0}
   m_RecordButton: {fileID: 0}
-  m_DisplaySplash: 0
+  onPlayerSpeaks:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &4881369807155481902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2491,10 +2489,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
   m_APIKey: 
   m_APISecret: 
   m_CustomToken: 
   m_PublicWorkspace: 
+  m_Continuation:
+    continuationType: 0
+    dialogHistory:
+      history: []
+    externallySavedState: 
+  m_MaxWaitingListSize: 100
   m_PreviousDialog:
     phrases: []
 --- !u!4 &5095182495930809314

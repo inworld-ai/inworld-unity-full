@@ -18,7 +18,7 @@ namespace Inworld.Sample.Innequin
         void Start()
         {
             if (m_AutoStart)
-                RegisterLiveSession();
+                InworldController.CharacterHandler.Register(this);
         }
     }
 }

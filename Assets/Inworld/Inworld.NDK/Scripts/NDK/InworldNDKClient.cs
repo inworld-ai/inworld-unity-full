@@ -97,7 +97,7 @@ namespace Inworld.NDK
         {
             if (string.IsNullOrEmpty(characterID) || string.IsNullOrEmpty(textToSend))
                 return;
-            Dispatch(InworldNDK.To.TextPacket(characterID, textToSend));
+            OnPacketReceived?.Invoke(InworldNDK.To.TextPacket(characterID, textToSend));
             NDKInterop.Unity_SendText(characterID, textToSend);
         }
         
@@ -105,8 +105,9 @@ namespace Inworld.NDK
         /// Send the cancel response event to interrupt character.
         /// </summary>
         /// <param name="characterID">the live session ID of the character to send.</param>
+        /// <param name="utteranceID">the current utterance that needs to be cancelled</param>
         /// <param name="interactionID">the ID of the incoming message from the character to cancel.</param>
-        public override void SendCancelEvent(string characterID, string interactionID)
+        public override void SendCancelEvent(string characterID, string interactionID, string utteranceID = "")
         {
             if (string.IsNullOrEmpty(characterID))
                 return;
@@ -215,7 +216,7 @@ namespace Inworld.NDK
             if (m_IncomingQueue.Count == 0)
                 return;
             if (m_IncomingQueue.TryDequeue(out InworldPacket packet))
-                Dispatch(packet);
+                OnPacketSent?.Invoke(packet);
         }
     }
 }

@@ -13,8 +13,8 @@ namespace Inworld.Sample.RPM
         [SerializeField] Transform m_Player;
         [SerializeField] InworldCharacter m_Model;
         [SerializeField] float m_Distance = 5f;
-        [SerializeField] string m_RuntimeInstructions;
         InworldCharacter m_CurrentCharacter;
+        const string k_Instruction = "Press <color=green>F</color> to Instantiate a Character";
 
         void Update()
         {
@@ -30,17 +30,16 @@ namespace Inworld.Sample.RPM
                 DestroyImmediate(m_CurrentCharacter.gameObject);
             m_CurrentCharacter = Instantiate(m_Model, m_Player.position + m_Player.rotation * Vector3.forward * m_Distance, Quaternion.identity);
             m_CurrentCharacter.RegisterLiveSession();
-            InworldController.CurrentCharacter = m_CurrentCharacter;
         }
 
-        protected override void OnStatusChanged(InworldConnectionStatus incomingStatus)
+        protected override void OnCharacterJoined(InworldCharacter character)
         {
-            base.OnStatusChanged(incomingStatus);
-            m_Content.text = "Press <color=green>F</color> to Instantiate a Character";
+            base.OnCharacterJoined(character);
+            m_Content.text = k_Instruction;
         }
-        protected override void OnCharacterChanged(InworldCharacter oldCharacter, InworldCharacter newCharacter)
+        protected override void OnCharacterDeselected(string charName)
         {
-            m_Content.text = m_RuntimeInstructions;
+            m_Content.text = k_Instruction;
         }
     }
 }

@@ -1543,12 +1543,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78696971f17345f8b3a604c50919e8f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Client: {fileID: 4881369807252966087}
-  m_AudioCapture: {fileID: 5556377779474272492}
-  m_CharacterHandler: {fileID: 5556377779474272491}
   m_GameData: {fileID: 11400000, guid: 8eceeb851e078cf4591f777ae712acb2, type: 2}
   m_SceneFullName: workspaces/unitytest/scenes/transform
-  m_AutoStart: 1
 --- !u!114 &2475915965789613538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1837,6 +1833,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_SceneFullName: workspaces/unitytest/scenes/transform
   m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
   m_CustomToken: 
@@ -1846,6 +1843,7 @@ MonoBehaviour:
     dialogHistory:
       history: []
     externallySavedState: 
+  m_MaxWaitingListSize: 100
   m_PreviousDialog:
     phrases: []
 --- !u!114 &4920752726730454506
@@ -2302,6 +2300,15 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    onCharacterSelected:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterDeselected:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterDestroyed:
+      m_PersistentCalls:
+        m_Calls: []
     onBeginSpeaking:
       m_PersistentCalls:
         m_Calls: []
@@ -2335,10 +2342,8 @@ MonoBehaviour:
     onRelationUpdated:
       m_PersistentCalls:
         m_Calls: []
-    onCharacterDestroyed:
-      m_PersistentCalls:
-        m_Calls: []
   m_VerboseLog: 0
+  m_AutoStart: 1
 --- !u!224 &9024173614586313408
 RectTransform:
   m_ObjectHideFlags: 0
