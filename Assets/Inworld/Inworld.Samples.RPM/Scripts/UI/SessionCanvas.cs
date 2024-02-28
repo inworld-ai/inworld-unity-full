@@ -17,6 +17,7 @@ namespace Inworld.Sample.RPM
 {
     public class SessionCanvas : DemoCanvas
     {
+        [SerializeField] InworldCharacter m_Character;
         [Header("UI")]
         [Header("Ping:")]
         [SerializeField] Gradient m_ColorGraph;
@@ -60,7 +61,12 @@ namespace Inworld.Sample.RPM
         /// </summary>
         public void MicrophoneControl(bool isOn) => InworldController.Audio.IsBlocked = isOn;
 
-        public void QuitGame() => InworldController.Instance.Disconnect();
+        /// <summary>
+        /// Clear the saved data
+        /// </summary>
+        public void NewGame(bool loadHistory) => InworldController.CharacterHandler.Register(m_Character);
+
+        public void QuitGame() => InworldController.CharacterHandler.Unregister(m_Character);
         
         /// <summary>
         /// Mute/Unmute the speaker.
@@ -71,17 +77,7 @@ namespace Inworld.Sample.RPM
                 return;
             m_Interaction.IsMute = isOn;
         }
-        /// <summary>
-        /// Clear the saved data
-        /// </summary>
-        public void NewGame(bool loadHistory)
-        {
-            m_IsLoad = loadHistory;
-            if (m_CurrentCoroutine != null)
-                StopCoroutine(m_CurrentCoroutine);
-            m_CurrentCoroutine = _RestartAsync();
-            StartCoroutine(m_CurrentCoroutine);
-        }
+
         /// <summary>
         /// Save game
         /// </summary>
