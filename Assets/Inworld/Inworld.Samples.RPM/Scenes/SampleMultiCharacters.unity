@@ -2654,6 +2654,7 @@ MonoBehaviour:
   OnPlayerStopSpeaking:
     m_PersistentCalls:
       m_Calls: []
+  m_DumpAudioHotKey: 48
 --- !u!114 &6044019945070198352
 MonoBehaviour:
   m_ObjectHideFlags: 0

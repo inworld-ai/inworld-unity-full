@@ -29,7 +29,6 @@ namespace Inworld.Sample.RPM
             if (m_CurrentCharacter)
                 DestroyImmediate(m_CurrentCharacter.gameObject);
             m_CurrentCharacter = Instantiate(m_Model, m_Player.position + m_Player.rotation * Vector3.forward * m_Distance, Quaternion.identity);
-            m_CurrentCharacter.RegisterLiveSession();
         }
 
         protected override void OnCharacterJoined(InworldCharacter character)
