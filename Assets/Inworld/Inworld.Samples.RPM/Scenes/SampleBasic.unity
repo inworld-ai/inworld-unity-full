@@ -365,7 +365,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4590294231651289280, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_VerboseLog
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
