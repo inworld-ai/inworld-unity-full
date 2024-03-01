@@ -18,6 +18,7 @@ namespace Inworld.Editors.Graph
         public InworldNode nodeData;
         public InworldGraphView holder;
         public bool isEntryPoint = false;
+        public Rect m_Position;
 
         public InworldGraphNode ()
         {
@@ -29,13 +30,22 @@ namespace Inworld.Editors.Graph
                 }
             });
         }
-        
+
         void OnDoubleClick()
         {
             if (InworldEditor.Instance.Status != EditorStatus.SelectGameData)
                 return;
             InworldEditor.Instance.CurrentState.ProcessData(nodeData.scene);
             InworldGraph.CloseWindow();
+        }
+        public float GetInitPosition(float width, float offset)
+        {
+            m_Position = GetPosition();
+            float height = Screen.height * 0.5f;
+            Vector2 newPosition = new Vector2(width, height);
+            float result= width + m_Position.size.x + offset;
+            SetPosition(new Rect(newPosition, m_Position.size));
+            return result;
         }
 
     }

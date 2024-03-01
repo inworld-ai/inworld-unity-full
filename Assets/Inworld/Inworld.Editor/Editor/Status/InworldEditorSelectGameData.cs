@@ -272,9 +272,9 @@ namespace Inworld.Editors
             if (ws == null)
                 return;
             List<string> graphList = ws.graphs.Select(graph => graph.displayName).ToList();
-            EditorGUILayout.LabelField("Choose Graph:", InworldEditor.Instance.TitleStyle);
-            InworldEditorUtil.DrawDropDown(m_CurrentGraph, graphList, _SelectGraph);
-            CurrentGraph = graphList.Count == 1 ? graphList[0] : m_CurrentGraph;
+            if (graphList.Count == 0)
+                return;
+            CurrentGraph = graphList.Count == 1 ? graphList[0] : m_CurrentGraph;;
         }
 
         void _DrawToggles()

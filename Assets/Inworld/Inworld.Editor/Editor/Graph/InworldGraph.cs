@@ -19,12 +19,15 @@ namespace Inworld.Editors.Graph
         static string s_CurrentGraphName = "Default Graph";
         static InworldGraphData s_GraphData;
         InworldGraphView m_GraphView;
+
         
         [MenuItem("Inworld/Open Graph")]
         public static void OpenGraphWindow()
         {
             InworldGraph window = GetWindow<InworldGraph>();
             window.titleContent = new GUIContent("Inworld Graph");
+            Vector2 screenSize = new Vector2(Screen.currentResolution.width, Screen.currentResolution.height);
+            window.position = new Rect(0, 0, screenSize.x, screenSize.y);
         }
         public static void CloseWindow() => GetWindow<InworldGraph>().Close();
 
@@ -34,6 +37,8 @@ namespace Inworld.Editors.Graph
             s_GraphData = graphData;
             InworldGraph window = GetWindow<InworldGraph>();
             window.titleContent = new GUIContent(graphName);
+            Vector2 screenSize = new Vector2(Screen.currentResolution.width, Screen.currentResolution.height);
+            window.position = new Rect(0, 0, screenSize.x, screenSize.y);
         }
         void OnEnable()
         {
@@ -41,6 +46,13 @@ namespace Inworld.Editors.Graph
             m_GraphView.name = s_CurrentGraphName;
             m_GraphView.StretchToParentSize();
             rootVisualElement.Add(m_GraphView);
+            m_GraphView.schedule.Execute
+            (
+                () =>
+                {
+                    m_GraphView.ArrangeNodes();
+                }
+            ).StartingIn(100); // YAN: UI Refresh Rate is 100ms.
         }
         void OnDisable()
         {

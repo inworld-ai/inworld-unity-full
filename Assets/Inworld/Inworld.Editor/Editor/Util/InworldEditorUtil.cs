@@ -94,8 +94,7 @@ namespace Inworld.Editors
         [MenuItem("Inworld/Switch Protocol/Web socket")]
         public static void SwitchToWebSocket() => UpgradeProtocol<InworldWebSocketClient>();
 #endregion
-
-
+        
 #region Asset Menu
         [MenuItem("Assets/Inworld/Studio Panel", false, 0)]
         static void ConnectStudio() => InworldStudioPanel.Instance.ShowPanel();
