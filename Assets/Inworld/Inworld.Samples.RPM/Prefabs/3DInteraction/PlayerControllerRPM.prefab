@@ -735,7 +735,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &118154764733052717
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1944,8 +1944,6 @@ MonoBehaviour:
   m_PushToTalk: 0
   m_PushToTalkKey: 99
   m_InputField: {fileID: 8145037987960637849}
-  m_SendButton: {fileID: 3289984425394843733}
-  m_RecordButton: {fileID: 7655747527687061930}
   onPlayerSpeaks:
     m_PersistentCalls:
       m_Calls: []
