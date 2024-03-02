@@ -55,16 +55,8 @@ namespace Inworld.Editors.Graph
             );
             return compatiblePorts;
         }
-        public InworldGraphNode InstantiateNode(InworldNode nodeData, bool isEntry, int nIndex)
+        VisualElement _CreateDescriptionContainer(InworldNode nodeData) 
         {
-            InworldGraphNode node = new InworldGraphNode()
-            {
-                nodeData = nodeData,
-                title = nodeData.NodeName,
-                holder = this,
-                guid = Guid.NewGuid().ToString(),
-                isEntryPoint = isEntry
-            };
             VisualElement descriptionContainer = new VisualElement();
             descriptionContainer.Add(new Label(_GetSceneDescription(nodeData))
             {
@@ -78,6 +70,74 @@ namespace Inworld.Editors.Graph
                     whiteSpace = WhiteSpace.Normal
                 }
             });
+            return descriptionContainer;
+        }
+        VisualElement _CreateThumbTextContainer(Texture2D texture, string text)
+        {
+            VisualElement thumbText = new VisualElement();
+            thumbText.style.flexDirection = FlexDirection.Row;
+
+            thumbText.Add(new Image
+            {
+                image = texture,
+                style =
+                {
+                    width = 50,
+                    height = 50,
+                    paddingLeft = 20,
+                }
+            });
+            thumbText.Add(new Label(text)               
+            { 
+                style =
+                {
+                    fontSize = 14,
+                    paddingTop = 20,
+                    justifyContent = Justify.FlexEnd
+                }
+            });
+            return thumbText;
+        }
+
+        VisualElement _CreateBulbContainer(string text)
+        {
+            VisualElement bulbText = new VisualElement();
+            bulbText.style.flexDirection = FlexDirection.Row;
+
+            bulbText.Add(new Image
+            {
+                image = InworldEditor.Bulb,
+                style =
+                {
+                    width = 50,
+                    height = 50,
+                    paddingTop = 10,
+                }
+            });
+            bulbText.Add(new Label(text)               
+            { 
+                style =
+                {
+                    fontSize = 14,
+                    paddingTop = 20,
+                    paddingLeft = -40,
+                    paddingRight = 20,
+                    justifyContent = Justify.FlexEnd
+                }
+            });
+            return bulbText;
+        }
+        public InworldGraphNode InstantiateNode(InworldNode nodeData, bool isEntry, int nIndex)
+        {
+            InworldGraphNode node = new InworldGraphNode()
+            {
+                nodeData = nodeData,
+                title = nodeData.NodeName,
+                holder = this,
+                guid = Guid.NewGuid().ToString(),
+                isEntryPoint = isEntry
+            };
+            var descriptionContainer = _CreateDescriptionContainer(nodeData);
             VisualElement charContainer = new VisualElement();
             VisualElement namesContainer = new VisualElement
             {
@@ -96,16 +156,7 @@ namespace Inworld.Editors.Graph
             }
             foreach (string charDisplayName in characters)
             {
-                namesContainer.Add(new Label(charDisplayName)               
-                { 
-                    style =
-                    {
-                        fontSize = 14,
-                        paddingTop = 10,
-                        paddingBottom = 10,
-                        paddingLeft = 20
-                    }
-                });
+                namesContainer.Add(_CreateThumbTextContainer(InworldEditor.DefaultThumbnail, charDisplayName));
             }
 
             VisualElement numberContainer = new VisualElement
@@ -117,14 +168,7 @@ namespace Inworld.Editors.Graph
                     justifyContent = Justify.FlexEnd
                 }
             };
-            numberContainer.Add(new Label(_GetCommonKnowledges(nodeData))
-            {
-                style =
-                {
-                    paddingBottom = 10,
-                    paddingRight = 10
-                }
-            });
+            numberContainer.Add(_CreateBulbContainer(_GetCommonKnowledges(nodeData)));
 
             charContainer.Add(namesContainer);
             charContainer.Add(numberContainer);
@@ -165,7 +209,7 @@ namespace Inworld.Editors.Graph
                     knowledges.Add(knowledge);
                 }
             }
-            return $"Knowledges: {knowledges.Count}";
+            return $": {knowledges.Count}";
         }
         public Edge InstantiateEdge(InworldGraphNode from, InworldGraphNode to)
         {

@@ -52,7 +52,9 @@ namespace Inworld.Editors
         [SerializeField] string m_ScenesURL;
         [SerializeField] string m_GraphsURL;
         [SerializeField] string m_CommonKnowledgeURL;
-        
+        [Header("Assets")]
+        [SerializeField] Texture2D m_DefaultThumbnail;
+        [SerializeField] Texture2D m_Bulb;
         const string k_GlobalDataPath = "InworldEditor";
         public const string k_TokenErrorInstruction = "Token Error or Expired.\nPlease login again";
         const float k_LuminanceRed = 0.2126f;
@@ -157,6 +159,8 @@ namespace Inworld.Editors
         /// Gets the current default prefab for Inworld character.
         /// </summary>
         public InworldCharacter DefaultPrefab => Is3D ? UseInnequin ? m_InnequinPrefab : m_RPMPrefab : m_Character2DPrefab;
+        public static Texture2D DefaultThumbnail => Instance.m_DefaultThumbnail;
+        public static Texture2D Bulb => Instance.m_Bulb;
         /// <summary>
         /// Gets the current prefab for Inworld Character with Ready Player Me implementation.
         /// </summary>
