@@ -51,6 +51,7 @@ namespace Inworld.Editors
         [SerializeField] string m_CharactersURL;
         [SerializeField] string m_ScenesURL;
         [SerializeField] string m_GraphsURL;
+        [SerializeField] string m_CommonKnowledgeURL;
         
         const string k_GlobalDataPath = "InworldEditor";
         public const string k_TokenErrorInstruction = "Token Error or Expired.\nPlease login again";
@@ -292,6 +293,11 @@ namespace Inworld.Editors
         /// </summary>
         /// <param name="wsFullName">the full name of the target workspace</param>
         public static string ListKeyURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/v1alpha/{wsFullName}/{Instance.m_KeyURL}";
+        /// <summary>
+        /// Gets the url for listing common knowledges.
+        /// </summary>
+        /// <param name="wsFullName">the full name of the target workspace</param>
+        public static string ListCommonKnowledgeURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/studio/v1/{wsFullName}/{Instance.m_CommonKnowledgeURL}";
         /// <summary>
         /// Gets/Sets the current Error message.
         /// If setting, also set the current status of InworldEditor.

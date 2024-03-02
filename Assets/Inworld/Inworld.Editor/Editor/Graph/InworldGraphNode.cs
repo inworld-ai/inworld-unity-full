@@ -38,10 +38,9 @@ namespace Inworld.Editors.Graph
             InworldEditor.Instance.CurrentState.ProcessData(nodeData.scene);
             InworldGraph.CloseWindow();
         }
-        public float GetInitPosition(float width, float offset)
+        public float GetInitPosition(float width, float offset, float height)
         {
             m_Position = GetPosition();
-            float height = Screen.height * 0.5f;
             Vector2 newPosition = new Vector2(width, height);
             float result= width + m_Position.size.x + offset;
             SetPosition(new Rect(newPosition, m_Position.size));

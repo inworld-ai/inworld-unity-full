@@ -353,6 +353,14 @@ namespace Inworld.Editors
                 return;
             InworldEditorUtil.SendWebGetRequest(InworldEditor.ListKeyURL(wsFullName), true, _ListKeyCompleted);
         }
+        void _ListCommonKnowledges()
+        {
+            string wsFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspace);
+            if (string.IsNullOrEmpty(wsFullName))
+                return;
+            InworldEditorUtil.SendWebGetRequest(InworldEditor.ListCommonKnowledgeURL(wsFullName), true, _ListCommonKnowledgeCompleted);
+        }
+
         void _ListScenes()
         {
             string wsFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspace);
@@ -376,6 +384,7 @@ namespace Inworld.Editors
                 EditorUtility.ClearProgressBar();
                 return;
             }
+
             ListCharacterResponse resp = JsonUtility.FromJson<ListCharacterResponse>(uwr.downloadHandler.text);
             if (resp.characters.Count == 0)
             {
@@ -396,6 +405,7 @@ namespace Inworld.Editors
                 EditorUtility.ClearProgressBar();
                 return;
             }
+            
             ListSceneResponse resp = JsonUtility.FromJson<ListSceneResponse>(uwr.downloadHandler.text);
             InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
             if (ws.scenes == null)
@@ -443,6 +453,24 @@ namespace Inworld.Editors
             ws.keySecrets.Clear();
             ws.keySecrets.AddRange(resp.apiKeys); 
         }
+        void _ListCommonKnowledgeCompleted(AsyncOperation obj)
+        {
+            UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
+            if (uwr.result != UnityWebRequest.Result.Success)
+            {
+                InworldEditor.Instance.Error = $"List Knowledge Failed: {InworldEditor.GetError(uwr.error)}";
+                EditorUtility.ClearProgressBar();
+                return;
+            }
+            ListCommonKnowledgeResponse resp = JsonUtility.FromJson<ListCommonKnowledgeResponse>(uwr.downloadHandler.text);
+            if (resp.commonKnowledge.Count == 0)
+                m_DisplayDataMissing = true;
+            InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
+            if (ws.commonKnowledges == null)
+                ws.commonKnowledges = new List<InworldCommonKnowledge>();
+            ws.commonKnowledges.Clear();
+            ws.commonKnowledges.AddRange(resp.commonKnowledge); 
+        }
         void _SelectWorkspace(string workspaceDisplayName)
         {
             m_CurrentWorkspace = workspaceDisplayName;
@@ -451,10 +479,12 @@ namespace Inworld.Editors
             m_DisplayDataMissing = false;
             m_StartDownload = false;
             _ListCharacters();
+            _ListCommonKnowledges();
             _ListScenes();
             _ListGraphs();
             _ListKeys();
         }
+
         void _SelectGraph(string graphDisplayName) => m_CurrentGraph = graphDisplayName;
         void _SelectScenes(string sceneDisplayName) => m_CurrentScene = sceneDisplayName;
         void _SelectKeys(string keyDisplayName) => m_CurrentKey = keyDisplayName;

@@ -65,6 +65,28 @@ namespace Inworld.Editors.Graph
                 guid = Guid.NewGuid().ToString(),
                 isEntryPoint = isEntry
             };
+            VisualElement descriptionContainer = new VisualElement();
+            descriptionContainer.Add(new Label(_GetSceneDescription(nodeData))
+            {
+                style =
+                {
+                    paddingTop = 10,
+                    paddingBottom = 10,
+                    paddingLeft = 20,
+                    paddingRight = 20,
+                    maxWidth = 250,
+                    whiteSpace = WhiteSpace.Normal
+                }
+            });
+            VisualElement charContainer = new VisualElement();
+            VisualElement namesContainer = new VisualElement
+            {
+                style =
+                {
+                    flexGrow = 1,
+                }
+            };
+
             List<string> characters = new List<string>();
             foreach (InworldNodeQuote quote in nodeData.quotes)
             {
@@ -74,7 +96,7 @@ namespace Inworld.Editors.Graph
             }
             foreach (string charDisplayName in characters)
             {
-                node.mainContainer.Add(new Label(charDisplayName)               
+                namesContainer.Add(new Label(charDisplayName)               
                 { 
                     style =
                     {
@@ -86,6 +108,31 @@ namespace Inworld.Editors.Graph
                 });
             }
 
+            VisualElement numberContainer = new VisualElement
+            {
+                style =
+                {
+                    flexGrow = 1,
+                    alignItems = Align.FlexEnd,
+                    justifyContent = Justify.FlexEnd
+                }
+            };
+            numberContainer.Add(new Label(_GetCommonKnowledges(nodeData))
+            {
+                style =
+                {
+                    paddingBottom = 10,
+                    paddingRight = 10
+                }
+            });
+
+            charContainer.Add(namesContainer);
+            charContainer.Add(numberContainer);
+            charContainer.style.flexDirection = FlexDirection.Row;
+            
+            node.mainContainer.Add(descriptionContainer);
+            node.mainContainer.Add(charContainer);
+            
             Port input = GeneratePort(node, Direction.Input);
             input.portName = "Before";
             node.inputContainer.Add(input);
@@ -94,6 +141,31 @@ namespace Inworld.Editors.Graph
             output.portName = "Next";
             node.outputContainer.Add(output);
             return node;
+        }
+        string _GetSceneDescription(InworldNode nodeData) => InworldAI.User.GetSceneByFullName(nodeData.scene)?.description;
+
+        string _GetCommonKnowledges(InworldNode nodeData)
+        {
+            HashSet<string> knowledges = new HashSet<string>();
+            InworldSceneData scene = InworldAI.User.GetSceneByFullName(nodeData.scene);
+            if (scene != null && scene.commonKnowledges.Count != 0)
+            {
+                foreach (string knowledge in scene.commonKnowledges)
+                {
+                    knowledges.Add(knowledge);
+                }
+            }
+            foreach (InworldNodeQuote quote in nodeData.quotes)
+            {
+                InworldCharacterData charData = InworldAI.User.GetCharacterByFullName(quote.character);
+                if (charData == null)
+                    continue;
+                foreach (string knowledge in charData.commonKnowledges)
+                {
+                    knowledges.Add(knowledge);
+                }
+            }
+            return $"Knowledges: {knowledges.Count}";
         }
         public Edge InstantiateEdge(InworldGraphNode from, InworldGraphNode to)
         {
@@ -133,10 +205,12 @@ namespace Inworld.Editors.Graph
         }
         public void ArrangeNodes()
         {
-            float initWidth = 0;
+            float initWidth = 0, initHeight = 0;
+            if (m_Nodes.Count > 0)
+                initHeight = (Screen.height - m_Nodes[0].GetPosition().size.y) * 0.5f;
             foreach (var node in m_Nodes)
             {
-                initWidth = node.GetInitPosition(initWidth, m_OffSet.x);
+                initWidth = node.GetInitPosition(initWidth, m_OffSet.x, initHeight);
             }
         }
     }
