@@ -148,7 +148,8 @@ namespace Inworld.Editors.Graph
             };
 
             List<string> characters = new List<string>();
-            foreach (InworldNodeQuote quote in nodeData.quotes)
+            InworldSceneData scene = InworldAI.User.GetSceneByFullName(nodeData.scene);
+            foreach (CharacterReference quote in scene.characterReferences)
             {
                 string charDisplayName = InworldAI.User.GetCharacterByFullName(quote.character)?.givenName;
                 if (!characters.Contains(charDisplayName))
