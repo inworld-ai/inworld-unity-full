@@ -55,12 +55,12 @@ namespace Inworld.NDK
                 return;
             if (string.IsNullOrEmpty(m_APIKey))
             {
-                Error = "Please fill API Key!";
+                ErrorMessage = "Please fill API Key!";
                 return;
             }
             if (string.IsNullOrEmpty(m_APISecret))
             {
-                Error = "Please fill API Secret!";
+                ErrorMessage = "Please fill API Secret!";
                 return;
             }
             if (!string.IsNullOrEmpty(m_PublicWorkspace))
