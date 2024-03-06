@@ -4,12 +4,15 @@
 * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
+using System;
 using UnityEngine;
 namespace Inworld.Sample
 {
     // YAN: Basic camera controller. Based on Unity's default SimpleCameraController.
     public class InworldCameraController : MonoBehaviour
     {
+        [SerializeField] protected GameObject m_ConnectionPanel;
+        [SerializeField] protected GameObject m_StatusPanel;
         [Header("Movement Settings")]
         [Range(0, 5)]
         [Tooltip("Exponential boost factor on translation, controllable by mouse wheel.")]
@@ -30,7 +33,7 @@ namespace Inworld.Sample
         readonly CameraState m_InterpolatingCameraState = new CameraState();
 
         readonly CameraState m_TargetCameraState = new CameraState();
-
+        
         void Update()
         {
             // Exit Sample  
@@ -38,18 +41,21 @@ namespace Inworld.Sample
             {
                 Application.Quit();
             }
-            // Hide and lock cursor when right mouse button pressed
-            if (Input.GetMouseButtonDown(0))
+            if (!m_ConnectionPanel.activeSelf && !m_StatusPanel.activeSelf)
             {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
+                // Hide and lock cursor when right mouse button pressed
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                }
 
-            // Unlock and show cursor when right mouse button released
-            if (Input.GetMouseButtonUp(0))
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
+                // Unlock and show cursor when right mouse button released
+                if (Input.GetMouseButtonUp(0))
+                {
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                }
             }
 
             // Rotation

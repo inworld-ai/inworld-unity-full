@@ -2178,6 +2178,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0615f2d2d4e87ff45bee8f68924a511a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ConnectionPanel: {fileID: 933114256894992333}
+  m_StatusPanel: {fileID: 2767796687439207646}
   boost: 3.5
   positionLerpTime: 0.2
   mouseSensitivityCurve:
