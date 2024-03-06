@@ -27,7 +27,6 @@ namespace Inworld.NDK
             /// <returns></returns>
             public static LoadSceneResponse NDKLoadSceneResponse(List<AgentInfo> rhs) => new LoadSceneResponse
             {
-                key = "",
                 agents = rhs.Select(_GenerateAgent).ToList()
             };
             /// <summary>

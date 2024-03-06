@@ -27,28 +27,19 @@ namespace Inworld.Sample.RPM
             base.Start();
             StartCoroutine(ShowRealAnswer());
         }
-
-        protected override void OnStatusChanged(InworldConnectionStatus incomingStatus)
-        {
-            if (incomingStatus == InworldConnectionStatus.Connected && m_CurrentCharacter && !m_InitTriggerSent)
-            {
-                m_CurrentCharacter.SendTrigger(m_InitTrigger);
-                m_InitTriggerSent = true;
-            }
-        }
-
-        protected override void OnCharacterChanged(InworldCharacter oldCharacter, InworldCharacter newCharacter)
-        {
-            if (!newCharacter && oldCharacter)
-                m_Title.text = $"{oldCharacter.transform.name} Disconnected!";
-        }
         
         IEnumerator ShowRealAnswer()
         {
             yield return new WaitForSeconds(60f);
             m_Content.text = "The answer for the spell is <color=green>WWW</color>\nTry say that!";
         }
-
+        public void OnCharacterRegistered()
+        {
+            if (m_InitTriggerSent)
+                return;
+            m_CurrentCharacter.SendTrigger(m_InitTrigger);
+            m_InitTriggerSent = true;
+        }
         /// <summary>
         /// Callback function registered in the UnityEvent of InworldCharacter.
         /// </summary>

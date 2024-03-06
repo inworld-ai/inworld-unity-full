@@ -17,10 +17,10 @@ namespace Inworld.Sample.RPM
         [SerializeField] EmotionMap m_EmotionMap;
         [SerializeField] TMP_Dropdown m_StatusDropdown;
         [SerializeField] TMP_Dropdown m_ServerEventDropDown;
+        [SerializeField] InworldCharacter m_Character;
         static readonly int s_Emotion = Animator.StringToHash("Emotion");
         static readonly int s_Gesture = Animator.StringToHash("Gesture");
         static readonly int s_Motion = Animator.StringToHash("MainStatus");
-        Animator m_Animator;
 
         string m_CurrentSpaff = "";
         string m_LastSpaff = "";
@@ -42,9 +42,9 @@ namespace Inworld.Sample.RPM
         /// <param name="emotion">the enum of the emotion to send.</param>
         public void SendEmotion(int emotion)
         {
-            if (!m_CharacterHandler.CurrentCharacter || !m_Animator)
+            if (!m_Character || !m_Character.Animator)
                 return;
-            m_Animator.SetInteger(s_Emotion, emotion);
+            m_Character.Animator.SetInteger(s_Emotion, emotion);
             m_Title.text = $"Set Emotion {(Emotion)emotion}";
         }
         /// <summary>
@@ -53,9 +53,9 @@ namespace Inworld.Sample.RPM
         /// <param name="gesture">the enum of the gesture to send.</param>
         public void SendGesture(int gesture)
         {
-            if (!m_CharacterHandler.CurrentCharacter || !m_Animator)
+            if (!m_Character || !m_Character.Animator)
                 return;
-            m_Animator.SetInteger(s_Gesture, gesture);
+            m_Character.Animator.SetInteger(s_Gesture, gesture);
             m_Title.text = $"Set Gesture {(Gesture)gesture}";
         }
         /// <summary>
@@ -64,9 +64,9 @@ namespace Inworld.Sample.RPM
         /// <param name="mainStatus">the enum of the main status to send.</param>
         public void SetMainStatus(int mainStatus)
         {
-            if (!m_CharacterHandler.CurrentCharacter || !m_Animator)
+            if (!m_Character || !m_Character.Animator)
                 return;
-            m_Animator.SetInteger(s_Motion, mainStatus);
+            m_Character.Animator.SetInteger(s_Motion, mainStatus);
             m_Title.text = $"Set Main {(AnimMainStatus)mainStatus}";
         }
         /// <summary>
@@ -75,20 +75,20 @@ namespace Inworld.Sample.RPM
         /// <param name="nSpaffCode">the spaffcode of the emotion.</param>
         public void MockServerEmoEvents(int nSpaffCode)
         {
-            if (!m_CharacterHandler.CurrentCharacter)
+            if (!m_Character || string.IsNullOrEmpty(m_Character.ID))
             {
                 InworldAI.LogError("Please wait until character initialized!");
                 return;
             }
             EmotionPacket evt = new EmotionPacket
             {
-                routing = new Routing(m_CharacterHandler.CurrentCharacter.ID),
+                routing = new Routing(m_Character.ID),
                 emotion = new EmotionEvent
                 {
                     behavior = m_EmotionMap.data[nSpaffCode].name
                 }
             };
-            InworldController.Instance.CharacterInteract(evt);
+            m_Character.Event.onPacketReceived.Invoke(evt);
         }
         string _ServerState
         {
@@ -103,11 +103,11 @@ namespace Inworld.Sample.RPM
         {
             get
             {
-                if (!m_Animator)
+                if (!m_Character || !m_Character.Animator)
                     return "";
-                Emotion emotion = (Emotion)m_Animator.GetInteger(s_Emotion);
-                Gesture gesture = (Gesture)m_Animator.GetInteger(s_Gesture);
-                AnimMainStatus animMainStatus = (AnimMainStatus)m_Animator.GetInteger(s_Motion);
+                Emotion emotion = (Emotion)m_Character.Animator.GetInteger(s_Emotion);
+                Gesture gesture = (Gesture)m_Character.Animator.GetInteger(s_Gesture);
+                AnimMainStatus animMainStatus = (AnimMainStatus)m_Character.Animator.GetInteger(s_Motion);
                 return $"Client:\nEmotion: <color=green>{emotion}</color>\tGesture: <color=green>{gesture}</color>\nMain Status: <color=green>{animMainStatus}</color>";
             }
         }
@@ -116,42 +116,31 @@ namespace Inworld.Sample.RPM
         protected override void OnEnable()
         {
             base.OnEnable();
-            InworldController.Instance.OnCharacterInteraction += OnPacketEvents;
+            m_Character.Event.onPacketReceived.AddListener(OnPacketEvents);
             Debug.Log("EmotionCanvas Start");
         }
         void Update()
         {
-            if (!m_Animator)
+            if (!m_Character || !m_Character.Animator)
                 return;
             m_Content.text = $"{_ServerState}\n{_ClientState}";
             if (m_StatusDropdown) 
             {
-                m_StatusDropdown.value = m_Animator.GetInteger(s_Motion); 
+                m_StatusDropdown.value = m_Character.Animator.GetInteger(s_Motion); 
             }
             
         }
         protected override void OnDisable()
         {
             base.OnDisable();
-            if (!InworldController.Instance)
-                return;
-            InworldController.Instance.OnCharacterInteraction -= OnPacketEvents;
+            m_Character.Event.onPacketReceived.RemoveListener(OnPacketEvents);
         }
 
-        protected override void OnCharacterChanged(InworldCharacter oldCharacter, InworldCharacter newCharacter)
-        {
-            if (!newCharacter && oldCharacter)
-                m_Title.text = $"{oldCharacter.transform.name} Disconnected!";
-            else
-            {
-                m_Title.text = $"{newCharacter.transform.name} connected!";
-                m_Animator = newCharacter.GetComponent<Animator>();
-            }
-        }
         void OnPacketEvents(InworldPacket packet)
         {
-            string charID = m_CharacterHandler.CurrentCharacter.ID;
-            if (packet.routing.target.name != charID && packet.routing.source.name != charID)
+            if (string.IsNullOrEmpty(m_Character.ID))
+                return;
+            if (packet.routing.target.name != m_Character.ID && packet.routing.source.name != m_Character.ID)
             {            
                 return;
             }

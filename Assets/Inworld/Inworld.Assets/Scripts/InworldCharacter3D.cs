@@ -6,17 +6,19 @@
  *************************************************************************************************/
 using UnityEngine;
 using Inworld.Interactions;
-using Inworld.Entities;
+using System;
+
 
 namespace Inworld.Sample.Innequin
 {
     [RequireComponent(typeof(InworldInteraction))]
     public class InworldCharacter3D : InworldCharacter
     {
-        protected override void OnCharRegistered(InworldCharacterData charData)
+        [SerializeField] bool m_AutoStart = true;
+        void Start()
         {
-            if (charData.brainName == Data.brainName)
-                RegisterLiveSession();
+            if (m_AutoStart)
+                InworldController.CharacterHandler.Register(this);
         }
     }
 }

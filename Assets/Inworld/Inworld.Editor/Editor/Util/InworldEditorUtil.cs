@@ -81,9 +81,9 @@ namespace Inworld.Editors
 
         [MenuItem("Inworld/Inworld Settings", false, 1)]
         static void TopMenuShowPanel() => InworldAIEditor.Instance.ShowPanel();
-        
+
         [MenuItem("Inworld/User Settings", false, 1)]
-        static void TopMenuUserPanel() => Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
+        static void TopMenuUserPanel() => _OpenUserPanel();
         
         [MenuItem("Inworld/Editor Settings", false, 1)]
         static void TopMenuEditorPanel() => Selection.SetActiveObjectWithContext(InworldEditor.Instance, InworldEditor.Instance);
@@ -99,9 +99,9 @@ namespace Inworld.Editors
 
         [MenuItem("Assets/Inworld/Default Settings", false, 1)]
         static void ShowPanel() => InworldAIEditor.Instance.ShowPanel();
-        
+
         [MenuItem("Assets/Inworld/User Settings", false, 1)]
-        static void UserPanel() => Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
+        static void UserPanel() => _OpenUserPanel();
         
         [MenuItem("Assets/Inworld/Editor Settings", false, 1)]
         static void EditorPanel() => Selection.SetActiveObjectWithContext(InworldEditor.Instance, InworldEditor.Instance);
@@ -185,6 +185,16 @@ namespace Inworld.Editors
             newClient.CopyFrom(currClient);
 
             UnityEngine.Object.DestroyImmediate(currClient);
+        }
+        static void _OpenUserPanel()
+        {
+            if (!Directory.Exists(InworldEditor.UserDataPath))
+            {
+                if (EditorUtility.DisplayDialog("Loading User Data failed", "Cannot find User Data. Please login first.", "OK", "Cancel"))
+                    ConnectStudio();
+            }
+            else
+                Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
         }
         static void _SetDefaultUserName()
         {

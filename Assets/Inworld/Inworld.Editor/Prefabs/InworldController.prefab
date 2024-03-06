@@ -47,12 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78696971f17345f8b3a604c50919e8f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Client: {fileID: 4881369806813467986}
-  m_AudioCapture: {fileID: 3331053244747017235}
-  m_CharacterHandler: {fileID: 2995019885456371670}
   m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/transform
-  m_AutoStart: 1
 --- !u!114 &4881369806813467986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,6 +66,11 @@ MonoBehaviour:
   m_APISecret: 
   m_CustomToken: 
   m_PublicWorkspace: 
+  m_Continuation:
+    continuationType: 0
+    dialogHistory:
+      history: []
+    externallySavedState: 
   m_PreviousDialog:
     phrases: []
 --- !u!114 &2995019885456371670

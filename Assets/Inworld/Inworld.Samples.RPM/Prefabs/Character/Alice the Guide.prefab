@@ -278,8 +278,8 @@ GameObject:
   - component: {fileID: 1248472700497137816}
   - component: {fileID: 8216417436946439030}
   - component: {fileID: 4017878519879080433}
+  - component: {fileID: 4590294231651289280}
   - component: {fileID: 5611356199224546472}
-  - component: {fileID: 2779047371885436891}
   - component: {fileID: 7677754776915542813}
   - component: {fileID: 3307339663917059437}
   m_Layer: 0
@@ -423,7 +423,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5611356199224546472
+--- !u!114 &4590294231651289280
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -432,27 +432,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2717743084740492485}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec0023079ae244cf88d8e53bebcd9542, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ContinueKey: 32
-  m_SkipKey: 306
-  m_ContinueButton: {fileID: 0}
-  m_Interruptable: 1
-  m_AutoProceed: 1
-  m_MaxItemCount: 100
-  m_TextSpeedMultipler: 0.02
-  m_VolumeOnPlayerSpeaking: 1
---- !u!114 &2779047371885436891
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2717743084740492485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39f0a4db40e914b489ec8b9169ecb4e5, type: 3}
+  m_Script: {fileID: 11500000, guid: 64744fd8922740478ac4edb57c452bfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Data:
@@ -493,6 +473,26 @@ MonoBehaviour:
   onCharacterDestroyed:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5611356199224546472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2717743084740492485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec0023079ae244cf88d8e53bebcd9542, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ContinueKey: 32
+  m_SkipKey: 306
+  m_ContinueButton: {fileID: 0}
+  m_Interruptable: 1
+  m_AutoProceed: 1
+  m_MaxItemCount: 100
+  m_TextSpeedMultipler: 0.02
+  m_VolumeOnPlayerSpeaking: 1
 --- !u!114 &7677754776915542813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -988,7 +988,7 @@ MonoBehaviour:
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
   m_Relation: {fileID: 4840593601303544719}
   m_EmoIcon: {fileID: 7575428023401961657}
-  m_Character: {fileID: 2779047371885436891}
+  m_Character: {fileID: 4590294231651289280}
 --- !u!1001 &9011120692824422498
 PrefabInstance:
   m_ObjectHideFlags: 0

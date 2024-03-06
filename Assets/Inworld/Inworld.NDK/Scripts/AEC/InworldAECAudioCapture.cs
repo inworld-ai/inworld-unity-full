@@ -13,10 +13,17 @@ namespace Inworld.AEC
 {
     public class InworldAECAudioCapture : AudioCapture
     {
+        [SerializeField] KeyCode m_DumpAudioHotKey = KeyCode.Alpha0;
+        bool m_IsAudioDebugging = false;
         const int k_NumSamples = 160;
         IntPtr m_AECHandle;
         protected float[] m_OutputBuffer;
-
+        
+#region Debug Dump Audio
+        List<short> m_DebugOutput = new List<short>();
+        List<short> m_DebugInput = new List<short>();
+        List<short> m_DebugFilter = new List<short>();
+#endregion
         
         /// <summary>
         /// A flag for this component is using AEC (in this class always True)
@@ -29,6 +36,14 @@ namespace Inworld.AEC
         /// </summary>
         public bool IsAvailable => Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor;
 
+        void Update()
+        {
+            m_IsAudioDebugging = Input.GetKey(m_DumpAudioHotKey);
+            if (!m_IsAudioDebugging)
+            {
+                _DumpAudioFiles();
+            }
+        }
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -54,7 +69,17 @@ namespace Inworld.AEC
             m_LastSampleMode = m_SamplingMode;
             base.Init();
         }
-
+        void _DumpAudioFiles()
+        {
+            if (m_DebugFilter.Count == 0 || m_DebugInput.Count == 0 || m_DebugOutput.Count == 0)
+                return;
+            WavUtility.ShortArrayToWavFile(m_DebugInput.ToArray(), "DebugInput.wav");
+            WavUtility.ShortArrayToWavFile(m_DebugOutput.ToArray(), "DebugOutput.wav");
+            WavUtility.ShortArrayToWavFile(m_DebugFilter.ToArray(), "DebugFilter.wav");
+            m_DebugFilter.Clear();
+            m_DebugInput.Clear();
+            m_DebugOutput.Clear();
+        }
         protected override byte[] Output(int nSize)
         {
             short[] inputBuffer = WavUtility.ConvertAudioClipDataToInt16Array(m_InputBuffer, nSize * m_Recording.channels);
@@ -86,8 +111,16 @@ namespace Inworld.AEC
                     filterBuffer.AddRange(filterTmp);
                 }
             }
+
             byte[] byteArray = new byte[filterBuffer.Count * 2]; // Each short is 2 bytes
             Buffer.BlockCopy(filterBuffer.ToArray(), 0, byteArray, 0, filterBuffer.Count * 2);
+            if (m_IsAudioDebugging)
+            {
+                m_DebugInput.AddRange(inputData);
+                m_DebugFilter.AddRange(filterBuffer);
+                if (outputData != null)
+                    m_DebugOutput.AddRange(outputData);
+            }
             return byteArray;
         }
     }

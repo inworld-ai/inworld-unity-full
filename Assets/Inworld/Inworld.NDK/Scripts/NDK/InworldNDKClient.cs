@@ -55,12 +55,12 @@ namespace Inworld.NDK
                 return;
             if (string.IsNullOrEmpty(m_APIKey))
             {
-                Error = "Please fill API Key!";
+                ErrorMessage = "Please fill API Key!";
                 return;
             }
             if (string.IsNullOrEmpty(m_APISecret))
             {
-                Error = "Please fill API Secret!";
+                ErrorMessage = "Please fill API Secret!";
                 return;
             }
             if (!string.IsNullOrEmpty(m_PublicWorkspace))
@@ -76,8 +76,7 @@ namespace Inworld.NDK
         /// Send load scene request to Inworld server.
         /// </summary>
         /// <param name="sceneFullName">the full name of the Inworld scene to load.</param>
-        /// <param name="history">the full string of the encrypted history content to send.</param>
-        public override void LoadScene(string sceneFullName, string history = "") => InworldNDKAPI.LoadScene(sceneFullName, history);
+        public override void LoadScene(string sceneFullName) => InworldNDKAPI.LoadScene(sceneFullName, m_Continuation);
 
         /// <summary>
         /// Gets the load scene response when load scene success is sent through call back.
@@ -98,7 +97,7 @@ namespace Inworld.NDK
         {
             if (string.IsNullOrEmpty(characterID) || string.IsNullOrEmpty(textToSend))
                 return;
-            Dispatch(InworldNDK.To.TextPacket(characterID, textToSend));
+            OnPacketReceived?.Invoke(InworldNDK.To.TextPacket(characterID, textToSend));
             NDKInterop.Unity_SendText(characterID, textToSend);
         }
         
@@ -106,8 +105,9 @@ namespace Inworld.NDK
         /// Send the cancel response event to interrupt character.
         /// </summary>
         /// <param name="characterID">the live session ID of the character to send.</param>
+        /// <param name="utteranceID">the current utterance that needs to be cancelled</param>
         /// <param name="interactionID">the ID of the incoming message from the character to cancel.</param>
-        public override void SendCancelEvent(string characterID, string interactionID)
+        public override void SendCancelEvent(string characterID, string interactionID, string utteranceID = "")
         {
             if (string.IsNullOrEmpty(characterID))
                 return;
@@ -162,6 +162,7 @@ namespace Inworld.NDK
         /// </summary>
         /// <param name="charID">the ID of the character to send.</param>
         /// <param name="base64">the wave data to send.</param>
+        /// <param name="correlateID">the callback ID. Not used in NDK now.</param>
         public override void SendAudio(string charID, string base64)
         {
             if (string.IsNullOrEmpty(charID) || string.IsNullOrEmpty(base64))
@@ -169,13 +170,15 @@ namespace Inworld.NDK
             NDKInterop.Unity_SendAudio(charID, base64);
         }
         
-        /// <summary>
-        /// Put the received but not processed packet in queue.
-        /// </summary>
-        /// <param name="packet">the target packet to enqueue.</param>
-        public void Enqueue(InworldPacket packet)
+
+        public override void Enqueue(InworldPacket packet)
         {
             m_IncomingQueue.Enqueue(packet);
+        }
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            InworldNDKAPI.Init();
         }
         protected virtual void OnDisable() => NDKInterop.Unity_EndSession();
         
@@ -187,10 +190,8 @@ namespace Inworld.NDK
         
         protected virtual void OnDestroy() => NDKInterop.Unity_DestroyWrapper();
         
-        protected override void Init()
-        {
-            InworldNDKAPI.Init();
-        }
+
+
         protected IEnumerator _StartSession()
         {
             if (!IsTokenValid)
@@ -215,7 +216,7 @@ namespace Inworld.NDK
             if (m_IncomingQueue.Count == 0)
                 return;
             if (m_IncomingQueue.TryDequeue(out InworldPacket packet))
-                Dispatch(packet);
+                OnPacketSent?.Invoke(packet);
         }
     }
 }

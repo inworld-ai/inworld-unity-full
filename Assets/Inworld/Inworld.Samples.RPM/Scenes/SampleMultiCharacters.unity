@@ -1607,8 +1607,8 @@ GameObject:
   - component: {fileID: 4693125701783058701}
   - component: {fileID: 6602395911574462498}
   - component: {fileID: 8996923506770352437}
+  - component: {fileID: 8996923506770352439}
   - component: {fileID: 2475915965323509607}
-  - component: {fileID: 617440777243312270}
   - component: {fileID: 2910922992607588141}
   - component: {fileID: 3025297061768081265}
   - component: {fileID: 8996923506770352438}
@@ -1630,8 +1630,8 @@ GameObject:
   - component: {fileID: 4693125700704403273}
   - component: {fileID: 6602395912622188134}
   - component: {fileID: 8996923505721057137}
+  - component: {fileID: 8996923505721057139}
   - component: {fileID: 2475915964259399971}
-  - component: {fileID: 617440778307290826}
   - component: {fileID: 2910922991540988265}
   - component: {fileID: 3025297062847392053}
   - component: {fileID: 8996923505721057138}
@@ -1682,106 +1682,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 2.2}
   m_SizeDelta: {x: 2000, y: 1100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &617440777243312270
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 24757742050296655}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39f0a4db40e914b489ec8b9169ecb4e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Data:
-    agentId: 
-    brainName: workspaces/unitytest/characters/amy_the_amish
-    givenName: Amy Amish
-    characterAssets:
-      rpmModelUri: 
-      rpmImageUriPortrait: 
-      rpmImageUriPosture: 
-      avatarImg: 
-      avatarImgOriginal: 
-      thumbnailProgress: 0
-      avatarProgress: 0
-    thumbnail: {fileID: 2800000, guid: 2eebae04a0d4ad1459e909926d6a8a08, type: 3}
-  m_VerboseLog: 0
-  onBeginSpeaking:
-    m_PersistentCalls:
-      m_Calls: []
-  onEndSpeaking:
-    m_PersistentCalls:
-      m_Calls: []
-  onPacketReceived:
-    m_PersistentCalls:
-      m_Calls: []
-  onCharacterSpeaks:
-    m_PersistentCalls:
-      m_Calls: []
-  onEmotionChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onGoalCompleted:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelationUpdated:
-    m_PersistentCalls:
-      m_Calls: []
-  onCharacterDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &617440778307290826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 24757743150449931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39f0a4db40e914b489ec8b9169ecb4e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Data:
-    agentId: 
-    brainName: workspaces/unitytest/characters/wizard_dotcom
-    givenName: Dotcom
-    characterAssets:
-      rpmModelUri: 
-      rpmImageUriPortrait: 
-      rpmImageUriPosture: 
-      avatarImg: 
-      avatarImgOriginal: 
-      thumbnailProgress: 0
-      avatarProgress: 0
-    thumbnail: {fileID: 2800000, guid: 4b3504a45b1964e4eab4a0e815c90e2a, type: 3}
-  m_VerboseLog: 0
-  onBeginSpeaking:
-    m_PersistentCalls:
-      m_Calls: []
-  onEndSpeaking:
-    m_PersistentCalls:
-      m_Calls: []
-  onPacketReceived:
-    m_PersistentCalls:
-      m_Calls: []
-  onCharacterSpeaks:
-    m_PersistentCalls:
-      m_Calls: []
-  onEmotionChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onGoalCompleted:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelationUpdated:
-    m_PersistentCalls:
-      m_Calls: []
-  onCharacterDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &975543842054262504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2064,12 +1964,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78696971f17345f8b3a604c50919e8f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Client: {fileID: 4881369806898590790}
-  m_AudioCapture: {fileID: 5556377780025863789}
-  m_CharacterHandler: {fileID: 5556377780025863788}
   m_GameData: {fileID: 11400000, guid: 72f159df248065e429cb09854147ed42, type: 2}
   m_SceneFullName: workspaces/unitytest/scenes/browserblooper
-  m_AutoStart: 1
 --- !u!114 &2475915964259399971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2616,10 +2512,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_SceneFullName: workspaces/unitytest/scenes/browserblooper
   m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
   m_CustomToken: 
   m_PublicWorkspace: 
+  m_Continuation:
+    continuationType: 0
+    dialogHistory:
+      history: []
+    externallySavedState: 
+  m_MaxWaitingListSize: 100
   m_PreviousDialog:
     phrases: []
 --- !u!114 &4920752726255953775
@@ -2735,7 +2638,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37c7724d7f1e0394c9a79e9ff4fbd818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SamplingMode: 3
+  m_SamplingMode: 4
   m_PlayerVolumeThreshold: 2
   m_BufferSeconds: 1
   m_DeviceName: 
@@ -2751,6 +2654,7 @@ MonoBehaviour:
   OnPlayerStopSpeaking:
     m_PersistentCalls:
       m_Calls: []
+  m_DumpAudioHotKey: 48
 --- !u!114 &6044019945070198352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2838,7 +2742,7 @@ MonoBehaviour:
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
   m_Relation: {fileID: 1833198341}
   m_EmoIcon: {fileID: 4527467878705487250}
-  m_Character: {fileID: 617440777243312270}
+  m_Character: {fileID: 8996923506770352439}
 --- !u!114 &6083858738291675900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2866,7 +2770,7 @@ MonoBehaviour:
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
   m_Relation: {fileID: 1648201342}
   m_EmoIcon: {fileID: 4527467877653961686}
-  m_Character: {fileID: 617440778307290826}
+  m_Character: {fileID: 8996923505721057139}
 --- !u!1 &6447768932428067490
 GameObject:
   m_ObjectHideFlags: 0
@@ -3305,12 +3209,85 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Animator: {fileID: 6602395912622188134}
-  m_Character: {fileID: 617440778307290826}
+  m_HeadTransform: {fileID: 0}
+  m_CameraTransform: {fileID: 0}
   m_SightAngle: 130
   m_SightDistance: 10
   m_DistancePriorityFactor: 10
   m_RefreshRate: 0.25
+--- !u!114 &8996923505721057139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24757743150449931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64744fd8922740478ac4edb57c452bfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Data:
+    agentId: 
+    brainName: workspaces/unitytest/characters/wizard_dotcom
+    givenName: Dotcom
+    characterAssets:
+      rpmModelUri: 
+      rpmImageUriPortrait: 
+      rpmImageUriPosture: 
+      avatarImg: 
+      avatarImgOriginal: 
+      thumbnailProgress: 0
+      avatarProgress: 0
+    thumbnail: {fileID: 0}
+  m_CharacterEvents:
+    onCharacterRegistered:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterSelected:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterDeselected:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterDestroyed:
+      m_PersistentCalls:
+        m_Calls: []
+    onBeginSpeaking:
+      m_PersistentCalls:
+        m_Calls: []
+    onEndSpeaking:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1131924869}
+          m_TargetAssemblyTypeName: Inworld.Sample.RPM.MultiCharCanvas, Inworld.RPM
+          m_MethodName: NextCharacterSpeaking
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8996923506770352439}
+            m_ObjectArgumentAssemblyTypeName: Inworld.InworldCharacter, Inworld.AI
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    onPacketReceived:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterSpeaks:
+      m_PersistentCalls:
+        m_Calls: []
+    onEmotionChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    onGoalCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+    onRelationUpdated:
+      m_PersistentCalls:
+        m_Calls: []
+  m_VerboseLog: 0
+  m_AutoStart: 1
 --- !u!82 &8996923506770352437
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3419,12 +3396,85 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Animator: {fileID: 6602395911574462498}
-  m_Character: {fileID: 617440777243312270}
+  m_HeadTransform: {fileID: 0}
+  m_CameraTransform: {fileID: 0}
   m_SightAngle: 150
   m_SightDistance: 10
   m_DistancePriorityFactor: 10
   m_RefreshRate: 0.25
+--- !u!114 &8996923506770352439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24757742050296655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64744fd8922740478ac4edb57c452bfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Data:
+    agentId: 
+    brainName: workspaces/unitytest/characters/amy_the_amish
+    givenName: Amy Amish
+    characterAssets:
+      rpmModelUri: 
+      rpmImageUriPortrait: 
+      rpmImageUriPosture: 
+      avatarImg: 
+      avatarImgOriginal: 
+      thumbnailProgress: 0
+      avatarProgress: 0
+    thumbnail: {fileID: 0}
+  m_CharacterEvents:
+    onCharacterRegistered:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterSelected:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterDeselected:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterDestroyed:
+      m_PersistentCalls:
+        m_Calls: []
+    onBeginSpeaking:
+      m_PersistentCalls:
+        m_Calls: []
+    onEndSpeaking:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1131924869}
+          m_TargetAssemblyTypeName: Inworld.Sample.RPM.MultiCharCanvas, Inworld.RPM
+          m_MethodName: NextCharacterSpeaking
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 8996923505721057139}
+            m_ObjectArgumentAssemblyTypeName: Inworld.InworldCharacter, Inworld.AI
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    onPacketReceived:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterSpeaks:
+      m_PersistentCalls:
+        m_Calls: []
+    onEmotionChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    onGoalCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+    onRelationUpdated:
+      m_PersistentCalls:
+        m_Calls: []
+  m_VerboseLog: 0
+  m_AutoStart: 1
 --- !u!224 &9024173614111811653
 RectTransform:
   m_ObjectHideFlags: 0

@@ -213,12 +213,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2779047371885436891, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_VerboseLog
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3307339663917059437, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_EmotionMap
       value: 
       objectReference: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
+    - target: {fileID: 4590294231651289280, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_AutoStart
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5611356199224546472, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_ContinueButton
       value: 
@@ -1652,6 +1656,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Title: {fileID: 1682479522}
   m_Content: {fileID: 833884218}
+  m_Character: {fileID: 1260302159}
   m_ColorGraph:
     serializedVersion: 2
     key0: {r: 0, g: 1, b: 0, a: 1}
@@ -2118,6 +2123,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ec0023079ae244cf88d8e53bebcd9542, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1260302159 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4590294231651289280, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+  m_PrefabInstance: {fileID: 102165675}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64744fd8922740478ac4edb57c452bfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1297199399
@@ -3178,7 +3194,9 @@ MonoBehaviour:
   m_InputField: {fileID: 0}
   m_SendButton: {fileID: 0}
   m_RecordButton: {fileID: 0}
-  m_DisplaySplash: 1
+  onPlayerSpeaks:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1752403840574755136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3272,12 +3290,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78696971f17345f8b3a604c50919e8f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Client: {fileID: 4881369807930947640}
-  m_AudioCapture: {fileID: 5556377779061858839}
-  m_CharacterHandler: {fileID: 5556377779061858838}
   m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
-  m_AutoStart: 0
 --- !u!4 &3753617578495587599
 Transform:
   m_ObjectHideFlags: 0
@@ -3307,10 +3321,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
   m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
   m_CustomToken: 
   m_PublicWorkspace: 
+  m_Continuation:
+    continuationType: 0
+    dialogHistory:
+      history: []
+    externallySavedState: 
+  m_MaxWaitingListSize: 100
   m_PreviousDialog:
     phrases: []
 --- !u!4 &5095182497582714995
