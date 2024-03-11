@@ -35,7 +35,6 @@ namespace Inworld.Sample.RPM
         string ipv4;
         float m_CurrentDuration;
         bool m_IsConnecting;
-        bool m_HasInit;
         bool m_IsLoad;
         IEnumerator m_CurrentCoroutine;
         readonly Queue<float> m_LagQueue = new Queue<float>(12);
@@ -47,13 +46,10 @@ namespace Inworld.Sample.RPM
         {
             if (m_PlayPause.isOn)
             {
-                if (!m_HasInit)
-                    InworldController.Instance.Init();
-                else
-                    InworldController.Instance.Reconnect();
+                InworldController.CharacterHandler.Register(m_Character);
             }
             else
-                InworldController.Instance.Disconnect();
+                InworldController.CharacterHandler.Unregister(m_Character);
         }
 
         /// <summary>
@@ -99,7 +95,7 @@ namespace Inworld.Sample.RPM
             {
                 InworldController.Instance.Disconnect(); 
             }
-            while (InworldController.Status != InworldConnectionStatus.Idle) // && InworldController.Status != InworldConnectionStatus.LostConnect)
+            while (InworldController.Status != InworldConnectionStatus.Idle) 
             {
                 yield return new WaitForFixedUpdate();
             }
@@ -111,15 +107,9 @@ namespace Inworld.Sample.RPM
             switch (incomingStatus)
             {
                 case InworldConnectionStatus.Idle:
-                // case InworldConnectionStatus.LostConnect:
                     m_Indicator.color = Color.white;
                     m_IsConnecting = false;
                     _SessionButtonReadyToStart();
-                    break;
-                case InworldConnectionStatus.Initialized: 
-                    m_HasInit = true;
-                    string history = m_IsLoad ? InworldController.Client.SessionHistory : "";
-                    InworldAI.Log($"Load History: {history}");
                     break;
                 case InworldConnectionStatus.Connecting:
                     _SessionButtonConnecting();
@@ -136,8 +126,19 @@ namespace Inworld.Sample.RPM
                     m_IsConnecting = false;
                     break;
             }
-
         }
+        protected override void OnCharacterJoined(InworldCharacter character)
+        {
+            base.OnCharacterJoined(character);
+            m_Title.text = $"{character.Name} joined";
+        }
+        
+        protected override void OnCharacterLeft(InworldCharacter character)
+        {
+            base.OnCharacterLeft(character);
+            m_Title.text = $"{character.Name} left";
+        }
+
         void _SessionButtonReadyToStart()
         {
             m_NewGame.interactable = true;

@@ -48,7 +48,6 @@ namespace Inworld.Sample.RPM
             character.Event.onCharacterSelected.AddListener(OnCharacterSelected);
             character.Event.onCharacterDeselected.AddListener(OnCharacterDeselected);
         }
-        
         protected virtual void OnCharacterLeft(InworldCharacter character)
         {
             m_Content.text = $"{character.Name} left";

@@ -1838,6 +1838,7 @@ MonoBehaviour:
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
   m_CustomToken: 
   m_PublicWorkspace: 
+  m_AutoScene: 0
   m_Continuation:
     continuationType: 0
     dialogHistory:
@@ -1940,6 +1941,7 @@ MonoBehaviour:
   OnPlayerStopSpeaking:
     m_PersistentCalls:
       m_Calls: []
+  m_DumpAudioHotKey: 48
 --- !u!114 &6044019946738231953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2285,13 +2287,13 @@ MonoBehaviour:
       avatarProgress: 0
     thumbnail: {fileID: 0}
   m_CharacterEvents:
-    onCharacterRegistered:
+    onCharacterSelected:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1131924867}
           m_TargetAssemblyTypeName: Inworld.Sample.RPM.TransformCanvas, Inworld.RPM
-          m_MethodName: OnCharacterRegistered
-          m_Mode: 1
+          m_MethodName: OnCharacterSelected
+          m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2300,9 +2302,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-    onCharacterSelected:
-      m_PersistentCalls:
-        m_Calls: []
     onCharacterDeselected:
       m_PersistentCalls:
         m_Calls: []

@@ -16,6 +16,11 @@ namespace Inworld.Sample.RPM
         InworldCharacter m_CurrentCharacter;
         const string k_Instruction = "Press <color=green>F</color> to Instantiate a Character";
 
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            m_Content.text = k_Instruction;
+        }
         void Update()
         {
             if (Input.GetKeyUp(KeyCode.F))
@@ -34,7 +39,7 @@ namespace Inworld.Sample.RPM
         protected override void OnCharacterJoined(InworldCharacter character)
         {
             base.OnCharacterJoined(character);
-            m_Content.text = k_Instruction;
+            m_Content.text = $"Now talking to {character.Name}";
         }
         protected override void OnCharacterDeselected(string charName)
         {

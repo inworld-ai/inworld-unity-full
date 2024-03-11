@@ -16,6 +16,7 @@ namespace Inworld.Sample.RPM
         const string k_SelectByKey = "Press <color=green>\"1\"</color> and <color=green>\"2\"</color> to switch interact characters.\nPress <color=green>\"0\"</color> to broadcast.\n";
         const string k_SelectBySight = "Automatically select characters by sight and angle.\n";
         const string k_AutoChat = "The characters are chatting automatically.\n";
+        const string k_SelectCharacter = "Please select characters\n";
         string m_CurrentMethod;
         string m_CharacterIndicator = "Now <color=green>BroadCasting</color>";
         
@@ -23,6 +24,10 @@ namespace Inworld.Sample.RPM
         {
             InworldCharacter character = InworldController.CharacterHandler.GetCharacterByBrainName(newCharacter);
             m_CharacterIndicator = character ? $"Now Talking to <color=green>{character.name}</color>" : "Now <color=green>BroadCasting</color>";
+        }
+        protected override void OnCharacterDeselected(string newCharacter)
+        {
+            m_CharacterIndicator = k_SelectCharacter;
         }
         protected override void OnEnable()
         {
