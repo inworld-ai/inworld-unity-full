@@ -13,18 +13,18 @@ namespace Inworld.Assets
 {
     public class InworldBodyAnimation : InworldAnimation
     {
-        [SerializeField] Animator m_BodyAnimator;
+        [SerializeField] protected Animator m_BodyAnimator;
         
         Transform m_HeadTransform;
         Vector3 m_vecInitPosition;
         Vector3 m_vecInitEuler;
         float m_LookAtWeight;
         
-        static readonly int s_Emotion = Animator.StringToHash("Emotion");
-        static readonly int s_Gesture = Animator.StringToHash("Gesture");
-        static readonly int s_Motion = Animator.StringToHash("MainStatus");
-        static readonly int s_RemainSec = Animator.StringToHash("RemainSec");
-        static readonly int s_Random = Animator.StringToHash("Random");
+        protected static readonly int s_Emotion = Animator.StringToHash("Emotion");
+        protected static readonly int s_Gesture = Animator.StringToHash("Gesture");
+        protected static readonly int s_Motion = Animator.StringToHash("MainStatus");
+        protected static readonly int s_RemainSec = Animator.StringToHash("RemainSec");
+        protected static readonly int s_Random = Animator.StringToHash("Random");
 
         protected override void Awake()
         {
@@ -71,9 +71,11 @@ namespace Inworld.Assets
         {
             HandleMainStatus(isStarting ? AnimMainStatus.Talking : AnimMainStatus.Neutral);
         }
+
         protected virtual void OnCharacterSelected(string brainName) => HandleMainStatus(AnimMainStatus.Hello);
         
         protected virtual void OnCharacterDeselected(string brainName) => HandleMainStatus(AnimMainStatus.Goodbye);
+
 
         protected virtual void HandleMainStatus(AnimMainStatus status) => m_BodyAnimator.SetInteger(s_Motion, (int)status);
         
