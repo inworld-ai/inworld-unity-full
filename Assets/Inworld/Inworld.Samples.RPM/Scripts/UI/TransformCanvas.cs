@@ -35,7 +35,7 @@ namespace Inworld.Sample.RPM
         /// Callback function when the character is selected.
         /// </summary>
         /// <param name="brainName">the character's brain Name who received the goal.</param>
-        public void OnCharacterSelected(string brainName)
+        protected override void OnCharacterSelected(string brainName)
         {
             if (m_CurrentCharacter.BrainName == brainName)
                 m_CurrentCharacter.SendTrigger(m_InitTrigger);
