@@ -5,12 +5,14 @@
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
 
+
 using UnityEngine.UI;
 
 namespace Inworld.Runtime.RPM
 {
     public class SwitchButton : Toggle
     {
+
         protected override void Start()
         {
             base.Start();

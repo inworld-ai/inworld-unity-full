@@ -38,6 +38,8 @@ namespace Inworld.Sample
             {
                 Application.Quit();
             }
+            var canvas = transform.GetComponentInChildren<Canvas>();
+
             // Hide and lock cursor when right mouse button pressed
             if (Input.GetMouseButtonDown(0))
             {
@@ -51,7 +53,6 @@ namespace Inworld.Sample
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
-
             // Rotation
             if (Cursor.lockState != CursorLockMode.None)
             {
