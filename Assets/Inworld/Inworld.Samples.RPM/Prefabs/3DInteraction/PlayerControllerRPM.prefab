@@ -7949,13 +7949,15 @@ MonoBehaviour:
   m_PushToTalkKey: 99
   m_InputField: {fileID: 8145037987960637849}
   m_Dropdown: {fileID: 2865764881867811247}
+  m_SendButton: {fileID: 3289984425394843733}
+  m_RecordButton: {fileID: 7655747527687061930}
   onPlayerSpeaks:
     m_PersistentCalls:
       m_Calls: []
   m_ChatCanvas: {fileID: 933114256894992333}
   m_StatusCanvas: {fileID: 2767796687439207646}
   m_FeedbackCanvas: {fileID: 666104848631790534}
-  m_BubblePanel: {fileID: 0}
+  m_BubblePanel: {fileID: 4454345176880031466}
 --- !u!114 &4454345176880031466
 MonoBehaviour:
   m_ObjectHideFlags: 0
