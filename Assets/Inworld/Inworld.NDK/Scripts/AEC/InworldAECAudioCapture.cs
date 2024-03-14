@@ -13,7 +13,7 @@ namespace Inworld.AEC
 {
     public class InworldAECAudioCapture : AudioCapture
     {
-        [SerializeField] KeyCode m_DumpAudioHotKey = KeyCode.Alpha0;
+        [SerializeField] KeyCode m_DumpAudioHotKey = KeyCode.None;
         bool m_IsAudioDebugging = false;
         const int k_NumSamples = 160;
         IntPtr m_AECHandle;
