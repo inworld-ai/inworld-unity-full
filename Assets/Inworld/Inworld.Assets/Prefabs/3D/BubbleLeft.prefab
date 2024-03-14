@@ -280,7 +280,7 @@ GameObject:
   - component: {fileID: 5294213021699228196}
   - component: {fileID: 3878018020206659507}
   - component: {fileID: 4154503047572259549}
-  - component: {fileID: -5829000521551651004}
+  - component: {fileID: 4509999281063372584}
   m_Layer: 5
   m_Name: BubbleLeft
   m_TagString: Untagged
@@ -373,7 +373,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
---- !u!114 &-5829000521551651004
+--- !u!114 &4509999281063372584
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -382,7 +382,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9080357487733415636}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f4aeb0eb710ee14e960f139393b2719, type: 3}
+  m_Script: {fileID: 11500000, guid: 35ce6d532ad94790a56e9ac0b0088adc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Icon: {fileID: 0}

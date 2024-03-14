@@ -23,7 +23,11 @@ namespace Inworld.Sample
         /// <summary>
         ///     Get the current Character Selecting Method.
         /// </summary>
-        public override CharSelectingMethod SelectingMethod  => m_SelectingMethod;
+        public override CharSelectingMethod SelectingMethod
+        {
+            get => m_SelectingMethod;
+            set => m_SelectingMethod = value;
+        }
         /// <summary>
         ///     Change the method of how to select character.
         /// </summary>

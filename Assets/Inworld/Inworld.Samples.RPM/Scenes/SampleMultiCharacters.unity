@@ -2517,14 +2517,13 @@ MonoBehaviour:
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
   m_CustomToken: 
   m_PublicWorkspace: 
+  m_AutoScene: 0
   m_Continuation:
     continuationType: 0
     dialogHistory:
       history: []
     externallySavedState: 
   m_MaxWaitingListSize: 100
-  m_PreviousDialog:
-    phrases: []
 --- !u!114 &4920752726255953775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2728,8 +2727,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ContentAnchor: {fileID: 9024173614111811653}
-  m_BubbleLeft: {fileID: -5829000521551651004, guid: 6e31716df34c4f04a8a382ad03c5790d, type: 3}
-  m_BubbleRight: {fileID: 7032387963612836835, guid: ce19183024b657340b5e830b1549618e, type: 3}
+  m_BubbleLeft: {fileID: 4509999281063372584, guid: 6e31716df34c4f04a8a382ad03c5790d, type: 3}
+  m_BubbleRight: {fileID: 3731111879171280928, guid: ce19183024b657340b5e830b1549618e, type: 3}
   m_ChatOptions:
     audio: 0
     text: 1
@@ -2756,8 +2755,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ContentAnchor: {fileID: 9024173615194795521}
-  m_BubbleLeft: {fileID: -5829000521551651004, guid: 6e31716df34c4f04a8a382ad03c5790d, type: 3}
-  m_BubbleRight: {fileID: 7032387963612836835, guid: ce19183024b657340b5e830b1549618e, type: 3}
+  m_BubbleLeft: {fileID: 4509999281063372584, guid: 6e31716df34c4f04a8a382ad03c5790d, type: 3}
+  m_BubbleRight: {fileID: 3731111879171280928, guid: ce19183024b657340b5e830b1549618e, type: 3}
   m_ChatOptions:
     audio: 0
     text: 1
@@ -3230,7 +3229,7 @@ MonoBehaviour:
   m_Data:
     agentId: 
     brainName: workspaces/unitytest/characters/wizard_dotcom
-    givenName: Dotcom
+    givenName: Wizard Dotcom
     characterAssets:
       rpmModelUri: 
       rpmImageUriPortrait: 
@@ -3241,9 +3240,6 @@ MonoBehaviour:
       avatarProgress: 0
     thumbnail: {fileID: 0}
   m_CharacterEvents:
-    onCharacterRegistered:
-      m_PersistentCalls:
-        m_Calls: []
     onCharacterSelected:
       m_PersistentCalls:
         m_Calls: []
@@ -3428,9 +3424,6 @@ MonoBehaviour:
       avatarProgress: 0
     thumbnail: {fileID: 0}
   m_CharacterEvents:
-    onCharacterRegistered:
-      m_PersistentCalls:
-        m_Calls: []
     onCharacterSelected:
       m_PersistentCalls:
         m_Calls: []

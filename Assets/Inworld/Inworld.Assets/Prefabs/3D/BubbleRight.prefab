@@ -280,7 +280,7 @@ GameObject:
   - component: {fileID: 5523333942329247445}
   - component: {fileID: 3224489394336836261}
   - component: {fileID: 9182534407493377204}
-  - component: {fileID: 7032387963612836835}
+  - component: {fileID: 3731111879171280928}
   m_Layer: 5
   m_Name: BubbleRight
   m_TagString: Untagged
@@ -373,7 +373,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
---- !u!114 &7032387963612836835
+--- !u!114 &3731111879171280928
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -382,7 +382,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9147764492347251927}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f4aeb0eb710ee14e960f139393b2719, type: 3}
+  m_Script: {fileID: 11500000, guid: 35ce6d532ad94790a56e9ac0b0088adc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Icon: {fileID: 0}
