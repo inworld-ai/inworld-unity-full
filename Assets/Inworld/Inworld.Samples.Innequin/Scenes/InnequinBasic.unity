@@ -135,6 +135,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerControllerInnequin
       objectReference: {fileID: 0}
+    - target: {fileID: 2311024790950539498, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5395921512146893128, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1821,6 +1825,7 @@ MonoBehaviour:
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
   m_CustomToken: 
   m_PublicWorkspace: 
+  m_AutoScene: 0
   m_Continuation:
     continuationType: 0
     dialogHistory:
@@ -2033,6 +2038,7 @@ MonoBehaviour:
   OnPlayerStopSpeaking:
     m_PersistentCalls:
       m_Calls: []
+  m_DumpAudioHotKey: 48
 --- !u!4 &5566405438834257203
 Transform:
   m_ObjectHideFlags: 0
@@ -2528,9 +2534,6 @@ MonoBehaviour:
       avatarProgress: 0
     thumbnail: {fileID: 0}
   m_CharacterEvents:
-    onCharacterRegistered:
-      m_PersistentCalls:
-        m_Calls: []
     onCharacterSelected:
       m_PersistentCalls:
         m_Calls: []
