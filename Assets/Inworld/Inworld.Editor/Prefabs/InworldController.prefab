@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3753617577465698405}
   - component: {fileID: 2395919966041133306}
-  - component: {fileID: 4881369806813467986}
+  - component: {fileID: 5563578907791798683}
   - component: {fileID: 2995019885456371670}
   - component: {fileID: 3331053244747017235}
   m_Layer: 0
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/transform
---- !u!114 &4881369806813467986
+--- !u!114 &5563578907791798683
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58,21 +58,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 5556377780116934527}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5db5b813fe746f9a9ce5602a5521235, type: 3}
+  m_Script: {fileID: 11500000, guid: 6a83291b474642d697cd7963c55a608e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_SceneFullName: 
   m_APIKey: 
   m_APISecret: 
   m_CustomToken: 
   m_PublicWorkspace: 
+  m_AutoScene: 0
   m_Continuation:
     continuationType: 0
     dialogHistory:
       history: []
     externallySavedState: 
-  m_PreviousDialog:
-    phrases: []
+  m_MaxWaitingListSize: 100
 --- !u!114 &2995019885456371670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,3 +117,4 @@ MonoBehaviour:
   OnPlayerStopSpeaking:
     m_PersistentCalls:
       m_Calls: []
+  m_DumpAudioHotKey: 48

@@ -87,9 +87,6 @@ namespace Inworld.Editors
         
         [MenuItem("Inworld/Editor Settings", false, 1)]
         static void TopMenuEditorPanel() => Selection.SetActiveObjectWithContext(InworldEditor.Instance, InworldEditor.Instance);
-                
-        [MenuItem("Inworld/Switch Protocol/Web socket")]
-        public static void SwitchToWebSocket() => UpgradeProtocol<InworldWebSocketClient>();
 #endregion
 
 
@@ -168,23 +165,6 @@ namespace Inworld.Editors
                 menu.AddItem(new GUIContent(value), false, () => callback(value));
             }
             menu.ShowAsContext();
-        }
-        /// <summary>
-        /// Switch protocol: (Websocket or NDK)
-        /// </summary>
-        /// <typeparam name="T">the InworldClient which uses the target protocol.</typeparam>
-        public static void UpgradeProtocol<T>() where T : InworldClient
-        {
-            if (!InworldController.Instance)
-                return;
-            InworldClient currClient = InworldController.Instance.GetComponent<InworldClient>();
-            if (!currClient)
-                return;
-            
-            T newClient = InworldController.Instance.gameObject.AddComponent<T>();
-            newClient.CopyFrom(currClient);
-
-            UnityEngine.Object.DestroyImmediate(currClient);
         }
         static void _OpenUserPanel()
         {
