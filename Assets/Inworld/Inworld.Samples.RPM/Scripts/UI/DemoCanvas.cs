@@ -15,27 +15,25 @@ namespace Inworld.Sample.RPM
         [SerializeField] protected TMP_Text m_Content;
         // Start is called before the first frame update
         protected string m_ServerStatus;
-        protected CharacterHandler m_CharacterHandler;
 
-        protected virtual void Awake()
-        {
-            m_CharacterHandler = InworldController.CharacterHandler;
-        }
         protected virtual void Start()
         {
             
         }
         protected virtual void OnEnable()
-        { 
+        {
+            m_Title.text = $"Inworld {InworldController.Client.Status}";
             InworldController.Client.OnStatusChanged += OnStatusChanged;
-            m_CharacterHandler.OnCharacterChanged += OnCharacterChanged;
+            InworldController.CharacterHandler.OnCharacterListJoined += OnCharacterJoined;
+            InworldController.CharacterHandler.OnCharacterListLeft += OnCharacterLeft;
         }
         protected virtual void OnDisable()
         {
             if (!InworldController.Instance)
                 return;
             InworldController.Client.OnStatusChanged -= OnStatusChanged;
-            m_CharacterHandler.OnCharacterChanged -= OnCharacterChanged;
+            InworldController.CharacterHandler.OnCharacterListJoined -= OnCharacterJoined;
+            InworldController.CharacterHandler.OnCharacterListLeft -= OnCharacterLeft;
         }
         protected virtual void OnStatusChanged(InworldConnectionStatus incomingStatus)
         {
@@ -44,14 +42,25 @@ namespace Inworld.Sample.RPM
             m_ServerStatus = incomingStatus.ToString();
             m_Title.text = $"Inworld {incomingStatus}";
         }
-        protected virtual void OnCharacterChanged(InworldCharacter oldCharacter, InworldCharacter newCharacter)
+        protected virtual void OnCharacterJoined(InworldCharacter character)
         {
-            if (!m_Title)
-                return;
-            if (!newCharacter && oldCharacter)
-                m_Title.text = $"Inworld Disconnected!";
-            else if (newCharacter && !oldCharacter)
-                m_Title.text = $"Inworld Connected!";
+            m_Content.text = $"{character.Name} joined";
+            character.Event.onCharacterSelected.AddListener(OnCharacterSelected);
+            character.Event.onCharacterDeselected.AddListener(OnCharacterDeselected);
+        }
+        protected virtual void OnCharacterLeft(InworldCharacter character)
+        {
+            m_Content.text = $"{character.Name} left";
+            character.Event.onCharacterSelected.RemoveListener(OnCharacterSelected);
+            character.Event.onCharacterDeselected.RemoveListener(OnCharacterDeselected);
+        }
+        protected virtual void OnCharacterSelected(string charName)
+        {
+            
+        }
+        protected virtual void OnCharacterDeselected(string charName)
+        {
+            
         }
     }
 }

@@ -101,7 +101,7 @@ namespace Inworld.Sample.Innequin
         }
         protected override void ProcessLipSync()
         {
-            if (!m_Interaction.IsSpeaking)
+            if (!m_Character.IsSpeaking)
             {
                 Reset();
                 return;

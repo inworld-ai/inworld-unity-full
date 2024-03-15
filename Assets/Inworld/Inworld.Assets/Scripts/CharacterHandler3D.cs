@@ -17,17 +17,17 @@ namespace Inworld.Sample
         [SerializeField] protected CharSelectingMethod m_SelectingMethod = CharSelectingMethod.SightAngle;
         [Range(0.1f, 1f)]
         [SerializeField] float m_RefreshRate = 0.5f;
-        readonly List<SightAngle> m_SightAngles = new List<SightAngle>();
 
         float m_CurrentTime;
-        /// <summary>
-        ///     Return if any character is speaking.
-        /// </summary>
-        public override bool IsAnyCharacterSpeaking => m_CharacterList.Any(inworldCharacter => inworldCharacter.IsSpeaking);
+
         /// <summary>
         ///     Get the current Character Selecting Method.
         /// </summary>
-        public override CharSelectingMethod SelectingMethod  => m_SelectingMethod;
+        public override CharSelectingMethod SelectingMethod
+        {
+            get => m_SelectingMethod;
+            set => m_SelectingMethod = value;
+        }
         /// <summary>
         ///     Change the method of how to select character.
         /// </summary>
@@ -36,24 +36,11 @@ namespace Inworld.Sample
             if (m_SelectingMethod == CharSelectingMethod.Manual || m_SelectingMethod == CharSelectingMethod.KeyCode)
                 m_SelectingMethod = CharSelectingMethod.SightAngle;
             else if (m_SelectingMethod == CharSelectingMethod.SightAngle)
+                m_SelectingMethod = CharSelectingMethod.AutoChat;
+            else if (m_SelectingMethod == CharSelectingMethod.AutoChat)
                 m_SelectingMethod = CharSelectingMethod.KeyCode;
         }
-        /// <summary>
-        /// Get the live session ID for an Inworld character.
-        /// </summary>
-        /// <param name="character">The request Inworld character.</param>
-        public override string GetLiveSessionID(InworldCharacter character)
-        {
-            string sessionID = base.GetLiveSessionID(character);
-            if (string.IsNullOrEmpty(sessionID))
-                return sessionID;
-            SightAngle characterSightAngle = character.GetComponent<SightAngle>();
-            if (!characterSightAngle)
-                return sessionID;
-            if (!m_SightAngles.Contains(characterSightAngle))
-                m_SightAngles.Add(characterSightAngle);
-            return sessionID;
-        }
+
         void Update()
         {
             switch (m_SelectingMethod)
@@ -74,16 +61,12 @@ namespace Inworld.Sample
             m_CurrentTime = 0;
             float fPriority = float.MaxValue;
             InworldCharacter targetCharacter = null;
-            foreach (SightAngle sight in m_SightAngles)
+            foreach (InworldCharacter character in m_CharacterList.Where(character => character && character.Priority >= 0 && character.Priority < fPriority))
             {
-                if (sight && sight.Priority >= 0 && sight.Priority < fPriority)
-                {
-                    fPriority = sight.Priority;
-                    targetCharacter = sight.Character;
-                }
+                fPriority = character.Priority;
+                targetCharacter = character;
             }
-            if (targetCharacter)
-                CurrentCharacter = targetCharacter;
+            CurrentCharacter = targetCharacter;
         }
         protected virtual void SelectCharacterByKey()
         {
@@ -95,16 +78,8 @@ namespace Inworld.Sample
                 CurrentCharacter = m_CharacterList[i];
                 return;
             }
-        }
-        protected override void OnCharacterDestroyed(InworldCharacter character)
-        {
-            if (character == null || !InworldController.Instance)
-                return;
-            
-            SightAngle sight = character.GetComponent<SightAngle>();
-            m_SightAngles.Remove(sight);
-            
-            base.OnCharacterDestroyed(character);
+            if (Input.GetKeyUp(KeyCode.Alpha0))
+                CurrentCharacter = null;
         }
     }
 }

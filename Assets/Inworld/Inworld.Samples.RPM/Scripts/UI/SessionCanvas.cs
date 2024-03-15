@@ -17,6 +17,7 @@ namespace Inworld.Sample.RPM
 {
     public class SessionCanvas : DemoCanvas
     {
+        [SerializeField] InworldCharacter m_Character;
         [Header("UI")]
         [Header("Ping:")]
         [SerializeField] Gradient m_ColorGraph;
@@ -34,7 +35,6 @@ namespace Inworld.Sample.RPM
         string ipv4;
         float m_CurrentDuration;
         bool m_IsConnecting;
-        bool m_HasInit;
         bool m_IsLoad;
         IEnumerator m_CurrentCoroutine;
         readonly Queue<float> m_LagQueue = new Queue<float>(12);
@@ -46,13 +46,10 @@ namespace Inworld.Sample.RPM
         {
             if (m_PlayPause.isOn)
             {
-                if (!m_HasInit)
-                    InworldController.Instance.Init();
-                else
-                    InworldController.Instance.Reconnect();
+                InworldController.CharacterHandler.Register(m_Character);
             }
             else
-                InworldController.Instance.Disconnect();
+                InworldController.CharacterHandler.Unregister(m_Character);
         }
 
         /// <summary>
@@ -60,7 +57,12 @@ namespace Inworld.Sample.RPM
         /// </summary>
         public void MicrophoneControl(bool isOn) => InworldController.Audio.IsBlocked = isOn;
 
-        public void QuitGame() => InworldController.Instance.Disconnect();
+        /// <summary>
+        /// Clear the saved data
+        /// </summary>
+        public void NewGame(bool loadHistory) => InworldController.CharacterHandler.Register(m_Character);
+
+        public void QuitGame() => InworldController.CharacterHandler.Unregister(m_Character);
         
         /// <summary>
         /// Mute/Unmute the speaker.
@@ -71,24 +73,13 @@ namespace Inworld.Sample.RPM
                 return;
             m_Interaction.IsMute = isOn;
         }
-        /// <summary>
-        /// Clear the saved data
-        /// </summary>
-        public void NewGame(bool loadHistory)
-        {
-            m_IsLoad = loadHistory;
-            if (m_CurrentCoroutine != null)
-                StopCoroutine(m_CurrentCoroutine);
-            m_CurrentCoroutine = _RestartAsync();
-            StartCoroutine(m_CurrentCoroutine);
-        }
+
         /// <summary>
         /// Save game
         /// </summary>
         public void SaveGame() => InworldController.Client.GetHistoryAsync(InworldController.Instance.CurrentScene);
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
             if (string.IsNullOrEmpty(ipv4))
                 ipv4 = Dns.GetHostAddresses(InworldController.Client.Server.web)[0].ToString();
             _SessionButtonReadyToStart();
@@ -104,7 +95,7 @@ namespace Inworld.Sample.RPM
             {
                 InworldController.Instance.Disconnect(); 
             }
-            while (InworldController.Status != InworldConnectionStatus.Idle && InworldController.Status != InworldConnectionStatus.LostConnect)
+            while (InworldController.Status != InworldConnectionStatus.Idle) 
             {
                 yield return new WaitForFixedUpdate();
             }
@@ -116,16 +107,9 @@ namespace Inworld.Sample.RPM
             switch (incomingStatus)
             {
                 case InworldConnectionStatus.Idle:
-                case InworldConnectionStatus.LostConnect:
                     m_Indicator.color = Color.white;
                     m_IsConnecting = false;
                     _SessionButtonReadyToStart();
-                    break;
-                case InworldConnectionStatus.Initialized:
-                    m_HasInit = true;
-                    string history = m_IsLoad ? InworldController.Client.SessionHistory : "";
-                    InworldAI.Log($"Load History: {history}");
-                    InworldController.Instance.LoadScene(InworldController.Instance.CurrentScene, history);
                     break;
                 case InworldConnectionStatus.Connecting:
                     _SessionButtonConnecting();
@@ -141,13 +125,20 @@ namespace Inworld.Sample.RPM
                     m_Indicator.color = m_ColorGraph.Evaluate(1f);
                     m_IsConnecting = false;
                     break;
-                case InworldConnectionStatus.InitFailed:
-                    m_Indicator.color = m_ColorGraph.Evaluate(1f);
-                    m_IsConnecting = false;
-                    break;
             }
-
         }
+        protected override void OnCharacterJoined(InworldCharacter character)
+        {
+            base.OnCharacterJoined(character);
+            m_Title.text = $"{character.Name} joined";
+        }
+        
+        protected override void OnCharacterLeft(InworldCharacter character)
+        {
+            base.OnCharacterLeft(character);
+            m_Title.text = $"{character.Name} left";
+        }
+
         void _SessionButtonReadyToStart()
         {
             m_NewGame.interactable = true;

@@ -81,15 +81,12 @@ namespace Inworld.Editors
 
         [MenuItem("Inworld/Inworld Settings", false, 1)]
         static void TopMenuShowPanel() => InworldAIEditor.Instance.ShowPanel();
-        
+
         [MenuItem("Inworld/User Settings", false, 1)]
-        static void TopMenuUserPanel() => Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
+        static void TopMenuUserPanel() => _OpenUserPanel();
         
         [MenuItem("Inworld/Editor Settings", false, 1)]
         static void TopMenuEditorPanel() => Selection.SetActiveObjectWithContext(InworldEditor.Instance, InworldEditor.Instance);
-                
-        [MenuItem("Inworld/Switch Protocol/Web socket")]
-        public static void SwitchToWebSocket() => UpgradeProtocol<InworldWebSocketClient>();
 #endregion
 
 
@@ -99,9 +96,9 @@ namespace Inworld.Editors
 
         [MenuItem("Assets/Inworld/Default Settings", false, 1)]
         static void ShowPanel() => InworldAIEditor.Instance.ShowPanel();
-        
+
         [MenuItem("Assets/Inworld/User Settings", false, 1)]
-        static void UserPanel() => Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
+        static void UserPanel() => _OpenUserPanel();
         
         [MenuItem("Assets/Inworld/Editor Settings", false, 1)]
         static void EditorPanel() => Selection.SetActiveObjectWithContext(InworldEditor.Instance, InworldEditor.Instance);
@@ -169,22 +166,15 @@ namespace Inworld.Editors
             }
             menu.ShowAsContext();
         }
-        /// <summary>
-        /// Switch protocol: (Websocket or NDK)
-        /// </summary>
-        /// <typeparam name="T">the InworldClient which uses the target protocol.</typeparam>
-        public static void UpgradeProtocol<T>() where T : InworldClient
+        static void _OpenUserPanel()
         {
-            if (!InworldController.Instance)
-                return;
-            InworldClient currClient = InworldController.Instance.GetComponent<InworldClient>();
-            if (!currClient)
-                return;
-            
-            T newClient = InworldController.Instance.gameObject.AddComponent<T>();
-            newClient.CopyFrom(currClient);
-
-            UnityEngine.Object.DestroyImmediate(currClient);
+            if (!Directory.Exists(InworldEditor.UserDataPath))
+            {
+                if (EditorUtility.DisplayDialog("Loading User Data failed", "Cannot find User Data. Please login first.", "OK", "Cancel"))
+                    ConnectStudio();
+            }
+            else
+                Selection.SetActiveObjectWithContext(InworldAI.User, InworldAI.User);
         }
         static void _SetDefaultUserName()
         {

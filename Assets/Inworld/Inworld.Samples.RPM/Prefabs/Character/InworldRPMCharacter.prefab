@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4693125702006723120}
   - component: {fileID: 6602395911185632031}
   - component: {fileID: 8996923506482328072}
+  - component: {fileID: 4560116734280050820}
   - component: {fileID: 2475915964966130778}
-  - component: {fileID: 617440776921082803}
   - component: {fileID: 2910922992251913232}
   - component: {fileID: 3025297062090310732}
   - component: {fileID: 307824841924961996}
@@ -157,6 +157,64 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4560116734280050820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24757742296918130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64744fd8922740478ac4edb57c452bfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Data:
+    agentId: 
+    brainName: 
+    givenName: 
+    characterAssets:
+      rpmModelUri: 
+      rpmImageUriPortrait: 
+      rpmImageUriPosture: 
+      avatarImg: 
+      avatarImgOriginal: 
+      thumbnailProgress: 0
+      avatarProgress: 0
+    thumbnail: {fileID: 0}
+  m_CharacterEvents:
+    onCharacterSelected:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterDeselected:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterDestroyed:
+      m_PersistentCalls:
+        m_Calls: []
+    onBeginSpeaking:
+      m_PersistentCalls:
+        m_Calls: []
+    onEndSpeaking:
+      m_PersistentCalls:
+        m_Calls: []
+    onPacketReceived:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterSpeaks:
+      m_PersistentCalls:
+        m_Calls: []
+    onEmotionChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    onGoalCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+    onRelationUpdated:
+      m_PersistentCalls:
+        m_Calls: []
+  m_VerboseLog: 0
+  m_AutoStart: 1
 --- !u!114 &2475915964966130778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,56 +235,6 @@ MonoBehaviour:
   m_MaxItemCount: 100
   m_TextSpeedMultipler: 0.02
   m_VolumeOnPlayerSpeaking: 1
---- !u!114 &617440776921082803
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 24757742296918130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39f0a4db40e914b489ec8b9169ecb4e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Data:
-    agentId: 
-    brainName: workspaces/unitytest/characters/alice_the_guide
-    givenName: Alice the Guide
-    characterAssets:
-      rpmModelUri: 
-      rpmImageUriPortrait: 
-      rpmImageUriPosture: 
-      avatarImg: 
-      avatarImgOriginal: 
-      thumbnailProgress: 0
-      avatarProgress: 0
-    thumbnail: {fileID: 0}
-  m_VerboseLog: 0
-  onBeginSpeaking:
-    m_PersistentCalls:
-      m_Calls: []
-  onEndSpeaking:
-    m_PersistentCalls:
-      m_Calls: []
-  onPacketReceived:
-    m_PersistentCalls:
-      m_Calls: []
-  onCharacterSpeaks:
-    m_PersistentCalls:
-      m_Calls: []
-  onEmotionChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onGoalCompleted:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelationUpdated:
-    m_PersistentCalls:
-      m_Calls: []
-  onCharacterDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &2910922992251913232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,8 +281,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Animator: {fileID: 6602395911185632031}
-  m_Character: {fileID: 617440776921082803}
+  m_HeadTransform: {fileID: 0}
+  m_CameraTransform: {fileID: 0}
   m_SightAngle: 122
   m_SightDistance: 10
   m_DistancePriorityFactor: 10
@@ -551,11 +559,19 @@ PrefabInstance:
     - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
       propertyPath: m_Character
       value: 
-      objectReference: {fileID: 617440776921082803}
+      objectReference: {fileID: 4560116734280050820}
+    - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+      propertyPath: m_BubbleLeft
+      value: 
+      objectReference: {fileID: 4509999281063372584, guid: 6e31716df34c4f04a8a382ad03c5790d, type: 3}
     - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
       propertyPath: m_EmotionMap
       value: 
       objectReference: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
+    - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+      propertyPath: m_BubbleRight
+      value: 
+      objectReference: {fileID: 3731111879171280928, guid: ce19183024b657340b5e830b1549618e, type: 3}
     - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
       propertyPath: m_ContentAnchor
       value: 

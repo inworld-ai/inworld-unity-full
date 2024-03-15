@@ -7,6 +7,7 @@
 using Inworld.Packet;
 using Inworld.Sample;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Inworld.Assets
 {
@@ -35,17 +36,21 @@ namespace Inworld.Assets
         {
             m_vecInitEuler = m_HeadTransform.localEulerAngles;
             m_vecInitPosition = m_HeadTransform.localPosition;
-            m_Interaction.OnStartStopInteraction += OnStartStopInteraction;
-            InworldController.CharacterHandler.OnCharacterChanged += OnCharChanged;
+            m_Character.Event.onBeginSpeaking.AddListener(OnCharacterStartSpeaking);
+            m_Character.Event.onEndSpeaking.AddListener(OnCharacterEndSpeaking);
+            m_Character.Event.onCharacterSelected.AddListener(OnCharacterSelected);
+            m_Character.Event.onCharacterDeselected.AddListener(OnCharacterDeselected);
             base.OnEnable();
         }
 
         protected override void OnDisable()
         {
-            m_Interaction.OnStartStopInteraction -= OnStartStopInteraction;
             if (!InworldController.Instance)
                 return;
-            InworldController.CharacterHandler.OnCharacterChanged -= OnCharChanged;
+            m_Character.Event.onBeginSpeaking.RemoveListener(OnCharacterStartSpeaking);
+            m_Character.Event.onEndSpeaking.RemoveListener(OnCharacterEndSpeaking);
+            m_Character.Event.onCharacterSelected.RemoveListener(OnCharacterSelected);
+            m_Character.Event.onCharacterDeselected.RemoveListener(OnCharacterDeselected);
             base.OnDisable();
         }
         void OnAnimatorIK(int layerIndex)
@@ -59,22 +64,19 @@ namespace Inworld.Assets
             }
             _StartLookAt(PlayerController.Instance.transform.position);
         }
+        protected virtual void OnCharacterStartSpeaking(string brainName) => HandleMainStatus(AnimMainStatus.Talking);
 
-        protected virtual void OnStartStopInteraction(bool isStarting)
+        protected virtual void OnCharacterEndSpeaking(string brainName) => HandleMainStatus(AnimMainStatus.Neutral);
+        public virtual void OnStartStopInteraction(bool isStarting)
         {
             HandleMainStatus(isStarting ? AnimMainStatus.Talking : AnimMainStatus.Neutral);
         }
-        protected virtual void OnCharChanged(InworldCharacter oldChar, InworldCharacter newChar)
-        {
-            if (oldChar && oldChar.BrainName == m_Character.Data.brainName)
-            {
-                HandleMainStatus(AnimMainStatus.Goodbye);
-            }
-            if (newChar && newChar.BrainName == m_Character.Data.brainName)
-            {
-                HandleMainStatus(AnimMainStatus.Hello);
-            }
-        }
+
+        protected virtual void OnCharacterSelected(string brainName) => HandleMainStatus(AnimMainStatus.Hello);
+        
+        protected virtual void OnCharacterDeselected(string brainName) => HandleMainStatus(AnimMainStatus.Goodbye);
+
+
         protected virtual void HandleMainStatus(AnimMainStatus status) => m_BodyAnimator.SetInteger(s_Motion, (int)status);
         
         protected override void HandleEmotion(EmotionPacket packet)

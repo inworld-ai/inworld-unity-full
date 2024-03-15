@@ -474,6 +474,7 @@ MonoBehaviour:
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
   m_StatusDropdown: {fileID: 1433391259}
   m_ServerEventDropDown: {fileID: 950237202}
+  m_Character: {fileID: 4693125702157270766}
 --- !u!1 &1351384361
 GameObject:
   m_ObjectHideFlags: 0
@@ -987,12 +988,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78696971f17345f8b3a604c50919e8f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Client: {fileID: 4881369807582071654}
-  m_AudioCapture: {fileID: 5556377779683873101}
-  m_CharacterHandler: {fileID: 5556377779683873100}
   m_GameData: {fileID: 0}
   m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
-  m_AutoStart: 1
 --- !u!114 &3458045423904060224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1147,6 +1144,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
   m_PrefabInstance: {fileID: 4586461771039016647}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4693125702157270766 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4590294231651289280, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+  m_PrefabInstance: {fileID: 4586461771039016647}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64744fd8922740478ac4edb57c452bfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4881369807582071654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1160,10 +1168,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
   m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
   m_CustomToken: 
   m_PublicWorkspace: 
+  m_AutoScene: 0
+  m_Continuation:
+    continuationType: 0
+    dialogHistory:
+      history: []
+    externallySavedState: 
+  m_MaxWaitingListSize: 100
   m_PreviousDialog:
     phrases: []
 --- !u!1 &5556377779683873099
@@ -1227,6 +1243,7 @@ MonoBehaviour:
   OnPlayerStopSpeaking:
     m_PersistentCalls:
       m_Calls: []
+  m_DumpAudioHotKey: 48
 --- !u!1001 &7345352663998763942
 PrefabInstance:
   m_ObjectHideFlags: 0

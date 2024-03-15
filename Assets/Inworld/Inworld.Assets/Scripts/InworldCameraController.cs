@@ -51,7 +51,6 @@ namespace Inworld.Sample
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
-
             // Rotation
             if (Cursor.lockState != CursorLockMode.None)
             {

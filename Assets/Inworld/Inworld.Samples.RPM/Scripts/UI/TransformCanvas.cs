@@ -19,28 +19,11 @@ namespace Inworld.Sample.RPM
         [SerializeField] string m_CheckTrigger;
         [SerializeField] InworldCharacter m_CurrentCharacter;
 
-        bool m_InitTriggerSent;
-
         // Start is called before the first frame update
         protected override void Start()
         {
             base.Start();
             StartCoroutine(ShowRealAnswer());
-        }
-
-        protected override void OnStatusChanged(InworldConnectionStatus incomingStatus)
-        {
-            if (incomingStatus == InworldConnectionStatus.Connected && m_CurrentCharacter && !m_InitTriggerSent)
-            {
-                m_CurrentCharacter.SendTrigger(m_InitTrigger);
-                m_InitTriggerSent = true;
-            }
-        }
-
-        protected override void OnCharacterChanged(InworldCharacter oldCharacter, InworldCharacter newCharacter)
-        {
-            if (!newCharacter && oldCharacter)
-                m_Title.text = $"{oldCharacter.transform.name} Disconnected!";
         }
         
         IEnumerator ShowRealAnswer()
@@ -48,16 +31,25 @@ namespace Inworld.Sample.RPM
             yield return new WaitForSeconds(60f);
             m_Content.text = "The answer for the spell is <color=green>WWW</color>\nTry say that!";
         }
-
+        /// <summary>
+        /// Callback function when the character is selected.
+        /// </summary>
+        /// <param name="brainName">the character's brain Name who received the goal.</param>
+        protected override void OnCharacterSelected(string brainName)
+        {
+            if (m_CurrentCharacter.BrainName == brainName)
+                m_CurrentCharacter.SendTrigger(m_InitTrigger);
+        }
         /// <summary>
         /// Callback function registered in the UnityEvent of InworldCharacter.
         /// </summary>
+        /// <param name="brainName">the character's brain Name who received the goal.</param>
         /// <param name="trigger">the callback trigger to process.</param>
-        public void OnGoalComplete(string trigger)
+        public void OnGoalComplete(string brainName, string trigger)
         {
             if (trigger != m_CheckTrigger)
                 return;
-            if (!m_CurrentCharacter)
+            if (m_CurrentCharacter.BrainName != brainName)
                 return;
             m_Stone.SetActive(false);
             m_Avatar.SetActive(true);

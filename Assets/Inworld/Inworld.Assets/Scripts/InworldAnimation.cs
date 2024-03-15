@@ -22,14 +22,12 @@ namespace Inworld.Assets
         }
         protected virtual void OnEnable()
         {
-            InworldController.Instance.OnCharacterInteraction += OnInteractionChanged;
+            m_Character.Event.onPacketReceived.AddListener(ProcessPacket);
         }
         
         protected virtual void OnDisable()
         {
-            if (!InworldController.Instance)
-                return;
-            InworldController.Instance.OnCharacterInteraction -= OnInteractionChanged;
+            m_Character.Event.onPacketReceived.RemoveListener(ProcessPacket);
         }
         protected virtual bool Init()
         {
@@ -38,13 +36,6 @@ namespace Inworld.Assets
             if (!m_Interaction)
                 m_Interaction = GetComponent<InworldInteraction>();
             return m_Character && m_Interaction;
-        }
-            
-        protected virtual void OnInteractionChanged(InworldPacket packet)
-        {
-            if (m_Character && !string.IsNullOrEmpty(m_Character.ID) && 
-                packet?.routing?.source?.name == m_Character.ID || packet?.routing?.target?.name == m_Character.ID)
-                ProcessPacket(packet);
         }
         protected virtual void ProcessPacket(InworldPacket incomingPacket)
         {
