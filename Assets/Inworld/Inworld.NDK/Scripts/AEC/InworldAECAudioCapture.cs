@@ -37,7 +37,10 @@ namespace Inworld.AEC
         ///     Check Available, will add mac support in the next update.
         ///     For mobile device such as Android/iOS they naturally supported via hardware.
         /// </summary>
-        public bool IsAvailable => Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor;
+        public bool IsAvailable => Application.platform == RuntimePlatform.WindowsPlayer 
+                                   || Application.platform == RuntimePlatform.WindowsEditor
+                                   || Application.platform == RuntimePlatform.OSXEditor
+                                   || Application.platform == RuntimePlatform.OSXPlayer;
 
         void Update()
         {
