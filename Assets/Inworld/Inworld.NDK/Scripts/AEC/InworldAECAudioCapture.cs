@@ -13,10 +13,13 @@ namespace Inworld.AEC
 {
     public class InworldAECAudioCapture : AudioCapture
     {
-        [SerializeField] KeyCode m_DumpAudioHotKey = KeyCode.None;
+        [Tooltip("Hold the key to sample, release the key to save to local files")]
+        [SerializeField] KeyCode m_DumpAudioHotKey = KeyCode.None; 
         bool m_IsAudioDebugging = false;
         const int k_NumSamples = 160;
         IntPtr m_AECHandle;
+        int m_OutputSampleRate = k_SampleRate;
+        int m_OutputChannels = k_Channel;
         protected float[] m_OutputBuffer;
         
 #region Debug Dump Audio
@@ -59,9 +62,8 @@ namespace Inworld.AEC
             if (IsAvailable)
             {
                 AudioConfiguration audioSetting = AudioSettings.GetConfiguration();
-                audioSetting.speakerMode = AudioSpeakerMode.Mono;
-                audioSetting.sampleRate = k_SampleRate;
-                AudioSettings.Reset(audioSetting);
+                m_OutputSampleRate = audioSetting.sampleRate;
+                m_OutputChannels = audioSetting.speakerMode == AudioSpeakerMode.Stereo ? 2 : 1;
                 m_AECHandle = AECInterop.WebRtcAec3_Create(k_SampleRate);
             }
             else
@@ -80,14 +82,31 @@ namespace Inworld.AEC
             m_DebugInput.Clear();
             m_DebugOutput.Clear();
         }
+        float[] Resample(float[] inputSamples) 
+        {
+            int nResampleRatio = m_OutputSampleRate / k_SampleRate;
+            if (nResampleRatio == 1)
+                return inputSamples;
+            int nTargetLength = inputSamples.Length / nResampleRatio;
+
+            float[] resamples = new float[nTargetLength];
+
+            for (int i = 0; i < nTargetLength; i++)
+            {
+                int index = i * nResampleRatio;
+                resamples[i] = inputSamples[index];
+            }
+
+            return resamples;
+        }
         protected override byte[] Output(int nSize)
         {
             short[] inputBuffer = WavUtility.ConvertAudioClipDataToInt16Array(m_InputBuffer, nSize * m_Recording.channels);
-              
-            m_OutputBuffer = new float[nSize];
-            AudioListener.GetOutputData(m_OutputBuffer, 0);
-
-            short[] outputBuffer = WavUtility.ConvertAudioClipDataToInt16Array(m_OutputBuffer, nSize * m_Recording.channels);
+            int nOutputSize = nSize * m_OutputSampleRate / k_SampleRate; // YAN: For output, only samples 1 channel for efficiency. 
+            m_OutputBuffer = new float[nOutputSize];
+            AudioListener.GetOutputData(m_OutputBuffer, 0); 
+            float[] resampledBuffer = Resample(m_OutputBuffer);
+            short[] outputBuffer = WavUtility.ConvertAudioClipDataToInt16Array(resampledBuffer, nSize * m_Recording.channels); 
             return FilterAudio(inputBuffer, outputBuffer, m_AECHandle);
         }
         protected byte[] FilterAudio(short[] inputData, short[] outputData, IntPtr aecHandle)
