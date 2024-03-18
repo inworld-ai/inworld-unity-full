@@ -74,7 +74,7 @@ namespace Inworld.Sample
             {
                 Vector3 vecDirection = (m_CameraTransform.position - m_HeadTransform.position).normalized;
                 float fAngle = Vector3.Angle(vecDirection, transform.forward);
-                if (fAngle > m_SightAngle * 0.5f)
+                if (fAngle > m_SightAngle)
                 {
                     Character.Priority = -1f;
                 }
@@ -92,7 +92,7 @@ namespace Inworld.Sample
             
             Gizmos.color = Color.cyan;
             Vector3 trPosition = m_HeadTransform.position;
-            for (float angle = m_SightAngle * -0.5f; angle < m_SightAngle * 0.5f; angle += m_SightAngle * 0.05f)
+            for (float angle = -m_SightAngle; angle < m_SightAngle; angle += m_SightAngle * 0.05f)
             {
                 Gizmos.DrawLine(trPosition, trPosition + Quaternion.AngleAxis(angle, transform.up) * transform.forward * m_SightDistance);
             }

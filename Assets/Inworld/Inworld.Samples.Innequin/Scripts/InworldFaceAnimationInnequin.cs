@@ -68,7 +68,7 @@ namespace Inworld.Sample.Innequin
             FaceTransform facialData = m_FaceTransformData[emotion.ToString()];
             if (facialData == null)
                 return;
-            m_matEyeBlow.mainTexture = facialData.eyeBlow;
+            m_matEyeBlow.mainTexture = facialData.eyeBrow;
             m_CurrentEyeOpen = facialData.eye;
             m_CurrentEyeClosed = facialData.eyeClosed;
             m_matNose.mainTexture = facialData.nose;
