@@ -1,3 +1,8 @@
+# 3.2.0
+New Features:
+1. Reorganize package structures. Put core package as reference.
+2. Updated animation and character assets.
+
 # 3.1.0
 New Features:
 1. Procedually loading packages for avoiding import errors.
