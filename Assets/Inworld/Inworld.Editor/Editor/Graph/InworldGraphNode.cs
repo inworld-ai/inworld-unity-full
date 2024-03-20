@@ -22,6 +22,16 @@ namespace Inworld.Editors.Graph
 
         public InworldGraphNode ()
         {
+            string btnName = "collapse-button";
+            VisualElement foldout = this.Q(btnName);
+            if (foldout != null)
+            {
+                foldout.RemoveFromHierarchy();
+            }
+            else
+            {
+                Debug.LogError($"Cannot Find {btnName}!!!");
+            }
             RegisterCallback<MouseDownEvent>(evt =>
             {
                 if (evt.clickCount == 2) 

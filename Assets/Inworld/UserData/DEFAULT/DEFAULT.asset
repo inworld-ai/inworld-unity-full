@@ -1,0 +1,184 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 146eba7038a14426a7d95a5b80da5291, type: 3}
+  m_Name: DEFAULT
+  m_EditorClassIdentifier: 
+  m_PlayerName: DEFAULT
+  m_PlayerData: []
+  m_Workspaces:
+  - name: workspaces/aa001
+    displayName: aa001
+    experimentalFeatures: []
+    billingAccount: billing-accounts/00000000-0000-0000-0000-000000000001
+    meta: 
+    runtimeAccess: RUNTIME_ACCESS_PUBLIC
+    graphs: []
+    scenes: []
+    characters: []
+    keySecrets: []
+    commonKnowledges: []
+  - name: workspaces/got
+    displayName: aaa_kylan_testing
+    experimentalFeatures: []
+    billingAccount: billing-accounts/00000000-0000-0000-0000-000000000001
+    meta: 
+    runtimeAccess: RUNTIME_ACCESS_PRIVATE
+    graphs: []
+    scenes: []
+    characters: []
+    keySecrets: []
+    commonKnowledges: []
+  - name: workspaces/another-test
+    displayName: Another Test Workspace
+    experimentalFeatures: []
+    billingAccount: billing-accounts/00000000-0000-0000-0000-000000000001
+    meta: 
+    runtimeAccess: RUNTIME_ACCESS_PRIVATE
+    graphs: []
+    scenes: []
+    characters: []
+    keySecrets: []
+    commonKnowledges: []
+  - name: workspaces/brandnewws
+    displayName: brandNewWS
+    experimentalFeatures: []
+    billingAccount: billing-accounts/00000000-0000-0000-0000-000000000001
+    meta: 
+    runtimeAccess: RUNTIME_ACCESS_PUBLIC
+    graphs: []
+    scenes: []
+    characters: []
+    keySecrets: []
+    commonKnowledges: []
+  - name: workspaces/cricko_adventure
+    displayName: Cricko Adventure
+    experimentalFeatures: []
+    billingAccount: billing-accounts/00000000-0000-0000-0000-000000000001
+    meta: 
+    runtimeAccess: RUNTIME_ACCESS_PRIVATE
+    graphs: []
+    scenes: []
+    characters: []
+    keySecrets: []
+    commonKnowledges: []
+  - name: workspaces/spaceyan
+    displayName: desc
+    experimentalFeatures: []
+    billingAccount: billing-accounts/00000000-0000-0000-0000-000000000001
+    meta: 
+    runtimeAccess: RUNTIME_ACCESS_PRIVATE
+    graphs: []
+    scenes: []
+    characters: []
+    keySecrets: []
+    commonKnowledges: []
+  - name: workspaces/goals_demo_chars
+    displayName: goals_demo_chars
+    experimentalFeatures: []
+    billingAccount: billing-accounts/00000000-0000-0000-0000-000000000001
+    meta: 
+    runtimeAccess: RUNTIME_ACCESS_PRIVATE
+    graphs: []
+    scenes: []
+    characters: []
+    keySecrets: []
+    commonKnowledges: []
+  - name: workspaces/graph-14012023
+    displayName: graph-14012023
+    experimentalFeatures: []
+    billingAccount: billing-accounts/1e980ab7-d444-4407-a020-8471ecef3ae5
+    meta: 
+    runtimeAccess: RUNTIME_ACCESS_PRIVATE
+    graphs: []
+    scenes: []
+    characters: []
+    keySecrets: []
+    commonKnowledges: []
+  - name: workspaces/knivesout
+    displayName: Knives Out [MetaMuscle]
+    experimentalFeatures: []
+    billingAccount: billing-accounts/00000000-0000-0000-0000-000000000001
+    meta: 
+    runtimeAccess: RUNTIME_ACCESS_PRIVATE
+    graphs: []
+    scenes: []
+    characters: []
+    keySecrets: []
+    commonKnowledges: []
+  - name: workspaces/mists_game
+    displayName: Mists_Game
+    experimentalFeatures: []
+    billingAccount: billing-accounts/00000000-0000-0000-0000-000000000001
+    meta: 
+    runtimeAccess: RUNTIME_ACCESS_PRIVATE
+    graphs: []
+    scenes: []
+    characters: []
+    keySecrets: []
+    commonKnowledges: []
+  - name: workspaces/ilya-space
+    displayName: My personal Space
+    experimentalFeatures: []
+    billingAccount: billing-accounts/00000000-0000-0000-0000-000000000001
+    meta: 
+    runtimeAccess: RUNTIME_ACCESS_PRIVATE
+    graphs: []
+    scenes: []
+    characters: []
+    keySecrets: []
+    commonKnowledges: []
+  - name: workspaces/narrative_graph_sdk_testing
+    displayName: Narrative_Graph_SDK_Testing
+    experimentalFeatures: []
+    billingAccount: billing-accounts/00000000-0000-0000-0000-000000000001
+    meta: 
+    runtimeAccess: RUNTIME_ACCESS_PRIVATE
+    graphs: []
+    scenes: []
+    characters: []
+    keySecrets: []
+    commonKnowledges: []
+  - name: workspaces/origins
+    displayName: Origins
+    experimentalFeatures: []
+    billingAccount: billing-accounts/00000000-0000-0000-0000-000000000001
+    meta: 
+    runtimeAccess: RUNTIME_ACCESS_PRIVATE
+    graphs: []
+    scenes: []
+    characters: []
+    keySecrets: []
+    commonKnowledges: []
+  - name: workspaces/rgusarov-inworld-workspace
+    displayName: rgusarov-inworld-workspace
+    experimentalFeatures: []
+    billingAccount: billing-accounts/00000000-0000-0000-0000-000000000001
+    meta: 
+    runtimeAccess: RUNTIME_ACCESS_PRIVATE
+    graphs: []
+    scenes: []
+    characters: []
+    keySecrets: []
+    commonKnowledges: []
+  - name: workspaces/yanjin
+    displayName: Yan Jin's Workspace
+    experimentalFeatures: []
+    billingAccount: billing-accounts/00000000-0000-0000-0000-000000000001
+    meta: 
+    runtimeAccess: RUNTIME_ACCESS_PUBLIC
+    graphs: []
+    scenes: []
+    characters: []
+    keySecrets: []
+    commonKnowledges: []
+  m_UserID: 
+  m_BillingAccount: billing-accounts/00000000-0000-0000-0000-000000000001

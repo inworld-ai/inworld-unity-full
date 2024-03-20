@@ -423,7 +423,8 @@ namespace Inworld.Editors
                 return;
             }
             ListGraphResponse resp = JsonUtility.FromJson<ListGraphResponse>(uwr.downloadHandler.text);
-
+            File.WriteAllText("aaa.json", uwr.downloadHandler.text);
+            Debug.Log("YAN: Write to json completed!");
             // YAN: Add default name for display as currently it's missing
             foreach (InworldGraphData graph in resp.graphs.Where(graph => string.IsNullOrEmpty(graph.displayName)))
             {

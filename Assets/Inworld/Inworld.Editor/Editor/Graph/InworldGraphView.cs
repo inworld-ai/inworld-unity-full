@@ -252,11 +252,8 @@ namespace Inworld.Editors.Graph
         {
             float initWidth = 0, initHeight = 0;
             if (m_Nodes.Count > 0)
-                initHeight = (Screen.height - m_Nodes[0].GetPosition().size.y) * 0.5f;
-            foreach (var node in m_Nodes)
-            {
-                initWidth = node.GetInitPosition(initWidth, m_OffSet.x, initHeight);
-            }
+                initHeight = (Screen.currentResolution.height - m_Nodes[0].GetPosition().size.y) * 0.25f;
+            m_Nodes.Aggregate(initWidth, (current, node) => node.GetInitPosition(current, m_OffSet.x, initHeight));
         }
     }
 }
