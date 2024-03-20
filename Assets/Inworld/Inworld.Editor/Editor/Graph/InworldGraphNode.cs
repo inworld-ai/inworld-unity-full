@@ -6,6 +6,7 @@
  *************************************************************************************************/
 
 using Inworld.Entities;
+using System;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -34,13 +35,16 @@ namespace Inworld.Editors.Graph
             }
             RegisterCallback<MouseDownEvent>(evt =>
             {
-                if (evt.clickCount == 2) 
+                if (evt.button == 0 && evt.clickCount == 2) 
                 {
                     OnDoubleClick();
                 }
             });
         }
-
+        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+        {
+            // Forbid right click menu.
+        }
         void OnDoubleClick()
         {
             if (InworldEditor.Instance.Status != EditorStatus.SelectGameData)

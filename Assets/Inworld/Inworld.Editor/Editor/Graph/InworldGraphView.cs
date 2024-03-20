@@ -7,7 +7,7 @@
 
 using Inworld.Entities;
 using System;
-using System.Collections;
+
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Experimental.GraphView;
@@ -28,7 +28,10 @@ namespace Inworld.Editors.Graph
             ClearAllNodes();
             GenerateGraph(graphData);
         }
-
+        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+        {
+            // Forbid right click menu.
+        }
         void ClearAllNodes()
         {
             foreach (InworldGraphNode node in m_Nodes)
@@ -235,7 +238,6 @@ namespace Inworld.Editors.Graph
                 InworldGraphNode node = InstantiateNode(data.nodes[i], i == 0, i);
                 m_Nodes.Add(node);
                 AddElement(node);
-
             }
             // 2. Render Edges
             foreach (InworldEdge edge in data.connections)
