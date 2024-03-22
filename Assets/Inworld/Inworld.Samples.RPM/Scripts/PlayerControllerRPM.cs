@@ -23,7 +23,8 @@ namespace Inworld.Sample.RPM
         {
             bool anyCanvasOpen = m_ChatCanvas && m_ChatCanvas.activeSelf || 
                                  m_StatusCanvas && m_StatusCanvas.activeSelf || 
-                                 m_FeedbackCanvas && m_FeedbackCanvas.activeSelf;
+                                 m_FeedbackCanvas && m_FeedbackCanvas.activeSelf ||
+                                 m_OptionCanvas && m_OptionCanvas.activeSelf;
             m_CameraController.enabled = !anyCanvasOpen;
         }
         public override void OpenFeedback(string interactionID, string correlationID)
