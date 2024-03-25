@@ -206,7 +206,8 @@ namespace Inworld.Editors
         {
             fontSize = 14,
             fontStyle = FontStyle.Bold,
-            padding = new RectOffset(10, 10, 0, 0)
+            padding = new RectOffset(10, 10, 0, 0),
+            wordWrap = true
         };
         /// <summary>
         /// Gets the GUI style for the error text in Inworld Studio Panel.
