@@ -19,9 +19,15 @@ namespace Inworld.Sample
         [SerializeField] float m_SightAngle = 90f;
         [Range(1, 30)]
         [SerializeField] float m_SightDistance = 10f;
-        [Range(0, 100)]
-        [Tooltip("How much of an impact distance will make in the Priority calculation.")]
-        [SerializeField] float m_DistancePriorityFactor = 10;
+        [Range(0, 10)]
+        [Tooltip("How much of an impact the Player's forward direction will have in the Priority calculation.")]
+        [SerializeField] float m_PlayerAngleWeight = 1;
+        [Range(0, 10)]
+        [Tooltip("How much of an impact distance will have in the Priority calculation.")]
+        [SerializeField] float m_DistanceWeight = 0.5f;
+        [Range(0, 10)]
+        [Tooltip("How much of an impact the character's forward direction will have in the Priority calculation.")]
+        [SerializeField] float m_CharacterAngleWeight = 0.15f;
         [Range(0.1f, 1f)]
         [SerializeField] float m_RefreshRate = 0.25f;
         
@@ -80,8 +86,9 @@ namespace Inworld.Sample
                 }
                 else
                 {
-                    Vector3 vecPlayerDirection = -vecDirection;
-                    Character.Priority = Vector3.Angle(vecPlayerDirection, m_CameraTransform.forward) + distance * m_DistancePriorityFactor;
+                    Character.Priority = (Vector3.Angle(-vecDirection, m_CameraTransform.forward) / 180f) * m_PlayerAngleWeight;
+                    Character.Priority += (distance / m_SightDistance) * m_DistanceWeight; 
+                    Character.Priority += (Vector3.Angle(m_HeadTransform.forward, vecDirection) / m_SightAngle) * m_CharacterAngleWeight;
                 }
             }
         }
