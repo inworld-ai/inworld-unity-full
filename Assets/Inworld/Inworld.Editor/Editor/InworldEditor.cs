@@ -170,13 +170,6 @@ namespace Inworld.Editors
             get => m_InnequinPrefab;
             set => m_InnequinPrefab = value;
         }
-        void OnEnable()
-        {
-            m_InworldEditorStates[EditorStatus.Init] = new InworldEditorInit();
-            m_InworldEditorStates[EditorStatus.SelectGameData] = new InworldEditorSelectGameData();
-            m_InworldEditorStates[EditorStatus.SelectCharacter] = new InworldEditorSelectCharacter();
-            m_InworldEditorStates[EditorStatus.Error] = new InworldEditorError();
-        }
         /// <summary>
         /// Gets/Sets the token used for login Inworld Studio.
         /// </summary>
@@ -189,16 +182,7 @@ namespace Inworld.Editors
         /// Gets the actual token part.
         /// </summary>
         public static string Token => $"Bearer {TokenForExchange.Split(':')[0]}";
-        /// <summary>
-        /// Get the error messages, if it's related to `Unauthorized`, rename it with a better explanation.
-        /// </summary>
-        /// <param name="strErrorFromWeb">the received error message.</param>
-        public static string GetError(string strErrorFromWeb) => strErrorFromWeb.Contains("Unauthorized") ? k_TokenErrorInstruction : strErrorFromWeb;
-        /// <summary>
-        /// Get the picture's luminance. Used to display the opposite color of the text.
-        /// </summary>
-        /// <param name="color">the color of a pixel.</param>
-        float GetLuminance(Color color) => k_LuminanceRed * color.r + k_LuminanceGreen * color.g + k_LuminanceBlue * color.b;
+
         /// <summary>
         /// Gets the GUI style for the title in Inworld Studio Panel.
         /// </summary>
@@ -233,6 +217,45 @@ namespace Inworld.Editors
             margin = new RectOffset(10, 10, 10, 10),
         };
         /// <summary>
+        /// Gets the GUI style for the drop down fields in Inworld Studio Panel.
+        /// </summary>
+        public GUIStyle DropDownStyle => new GUIStyle("MiniPullDown")
+        {
+            margin = new RectOffset(10, 10, 0, 0)
+        };
+        /// <summary>
+        /// Gets the URL for fetching billing account.
+        /// </summary>
+        public static string BillingAccountURL => $"https://{Instance.m_ServerConfig.web}/v1alpha/{Instance.m_BillingAccountURL}";
+        /// <summary>
+        /// Gets the URL for listing workspaces
+        /// </summary>
+        public static string ListWorkspaceURL => $"https://{Instance.m_ServerConfig.web}/v1alpha/{Instance.m_WorkspaceURL}";
+        /// <summary>
+        /// Gets/Sets the current Error message.
+        /// If setting, also set the current status of InworldEditor.
+        /// </summary>
+        public string Error
+        {
+            get => m_ErrorMsg;
+            set
+            {
+                Debug.LogError(value);
+                Status = EditorStatus.Error;
+                m_ErrorMsg = value;
+            }
+        }
+        /// <summary>
+        /// Get the error messages, if it's related to `Unauthorized`, rename it with a better explanation.
+        /// </summary>
+        /// <param name="strErrorFromWeb">the received error message.</param>
+        public static string GetError(string strErrorFromWeb) => strErrorFromWeb.Contains("Unauthorized") ? k_TokenErrorInstruction : strErrorFromWeb;
+        /// <summary>
+        /// Get the picture's luminance. Used to display the opposite color of the text.
+        /// </summary>
+        /// <param name="color">the color of a pixel.</param>
+        float GetLuminance(Color color) => k_LuminanceRed * color.r + k_LuminanceGreen * color.g + k_LuminanceBlue * color.b;
+        /// <summary>
         /// Gets the GUI style for the text floating on the thumbnails.
         /// </summary>
         /// <param name="bg">The character's thumbnail</param>
@@ -255,21 +278,6 @@ namespace Inworld.Editors
             };
         }
         /// <summary>
-        /// Gets the GUI style for the drop down fields in Inworld Studio Panel.
-        /// </summary>
-        public GUIStyle DropDownStyle => new GUIStyle("MiniPullDown")
-        {
-            margin = new RectOffset(10, 10, 0, 0)
-        };
-        /// <summary>
-        /// Gets the URL for fetching billing account.
-        /// </summary>
-        public static string BillingAccountURL => $"https://{Instance.m_ServerConfig.web}/v1alpha/{Instance.m_BillingAccountURL}";
-        /// <summary>
-        /// Gets the URL for listing workspaces
-        /// </summary>
-        public static string ListWorkspaceURL => $"https://{Instance.m_ServerConfig.web}/v1alpha/{Instance.m_WorkspaceURL}";
-        /// <summary>
         /// Gets the url for listing Inworld scenes.
         /// </summary>
         /// <param name="wsFullName">the full name of the target workspace</param>
@@ -279,20 +287,7 @@ namespace Inworld.Editors
         /// </summary>
         /// <param name="wsFullName">the full name of the target workspace</param>
         public static string ListKeyURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/v1alpha/{wsFullName}/{Instance.m_KeyURL}";
-        /// <summary>
-        /// Gets/Sets the current Error message.
-        /// If setting, also set the current status of InworldEditor.
-        /// </summary>
-        public string Error
-        {
-            get => m_ErrorMsg;
-            set
-            {
-                Debug.LogError(value);
-                Status = EditorStatus.Error;
-                m_ErrorMsg = value;
-            }
-        }
+
         /// <summary>
         /// Save all the current scriptable objects.
         /// </summary>
@@ -303,6 +298,13 @@ namespace Inworld.Editors
             EditorUtility.SetDirty(Instance);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+        }
+        void OnEnable()
+        {
+            m_InworldEditorStates[EditorStatus.Init] = new InworldEditorInit();
+            m_InworldEditorStates[EditorStatus.SelectGameData] = new InworldEditorSelectGameData();
+            m_InworldEditorStates[EditorStatus.SelectCharacter] = new InworldEditorSelectCharacter();
+            m_InworldEditorStates[EditorStatus.Error] = new InworldEditorError();
         }
     }
 }
