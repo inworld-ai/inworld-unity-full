@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Inworld.Sample.Innequin
 {
@@ -17,7 +18,7 @@ namespace Inworld.Sample.Innequin
         public string name;
         public int animIndex;
         public float imgHeight;
-        public Texture eyeBlow;
+        [FormerlySerializedAs("eyeBlow")] public Texture eyeBrow;
         public Texture eye;
         public Texture eyeClosed;
         public Texture nose;
