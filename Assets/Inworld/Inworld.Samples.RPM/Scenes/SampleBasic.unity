@@ -199,8 +199,8 @@ GameObject:
   - component: {fileID: 359806124}
   - component: {fileID: 359806126}
   - component: {fileID: 359806128}
-  - component: {fileID: 359806130}
   - component: {fileID: 359806131}
+  - component: {fileID: 359806132}
   m_Layer: 0
   m_Name: Inworld Controller
   m_TagString: Untagged
@@ -263,19 +263,6 @@ MonoBehaviour:
       history: []
     externallySavedState: 
   m_MaxWaitingListSize: 100
---- !u!114 &359806130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 359806122}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4f92db331c103a4aa88a10e82275245, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ManualAudioHandling: 0
 --- !u!114 &359806131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,6 +292,21 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_DumpAudioHotKey: 48
+--- !u!114 &359806132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359806122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3241affa9c0462fa7193839038c32c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ManualAudioHandling: 0
+  m_SelectingMethod: 2
+  m_RefreshRate: 0.5
 --- !u!1001 &367072178
 PrefabInstance:
   m_ObjectHideFlags: 0
