@@ -1,3 +1,14 @@
+# 3.3.1
+1. Implemented feedback
+2. Added character selecting in global panel.
+3. Added config canvas in global panel.
+4. Bug fixes.
+
+# 3.3.0
+New Features:
+1. Updated auto reconnection. Optimized connection time.
+2. Use tarball to replace github ref.
+
 # 3.2.0
 New Features:
 1. Reorganize package structures. Put core package as reference.
