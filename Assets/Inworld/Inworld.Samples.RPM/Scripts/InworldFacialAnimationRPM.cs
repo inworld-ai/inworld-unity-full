@@ -16,14 +16,14 @@ namespace Inworld.Sample.RPM
     public class InworldFacialAnimationRPM : InworldFacialAnimation
     {
         const int k_VisemeLength = 15;
-        [SerializeField] LipsyncMap m_LipsyncMap;
+        [SerializeField] protected LipsyncMap m_LipsyncMap;
         [SerializeField] InworldFacialEmotion m_FacialEmotion;
 
         [Range(0, 1)][SerializeField] float m_LipExpression = 0.7f;
         [Range(0, 1)][SerializeField] float m_MorphTime = 0.5f;
         [Header("For custom models:")]
         [Tooltip("Find the first viseme in the blendshape of your model. NOTE: Your viseme variables should be continuous and starting from Sil to U")]
-        [SerializeField] string m_VisemeSil = "viseme_sil";
+        [SerializeField] protected string m_VisemeSil = "viseme_sil";
         [SerializeField] string m_BlinkBlendShape = "eyesClosed";
         [Tooltip("If your custom model is not working, try toggle this on/off")]
         [SerializeField] bool m_CustomModel;
@@ -35,9 +35,9 @@ namespace Inworld.Sample.RPM
         float m_RandomOffset;
         float m_CurrentAudioTime;
 
-        SkinnedMeshRenderer m_Skin;
-        int m_VisemeIndex;
-        int m_BlinkIndex;
+        protected SkinnedMeshRenderer m_Skin;
+        protected int m_VisemeIndex;
+        protected int m_BlinkIndex;
         /// <summary>
         ///     YAN: We use Vector2 to store viseme data.
         ///     Vector2.x ==> Viseme Index (-1 = continue, add to next viseme)

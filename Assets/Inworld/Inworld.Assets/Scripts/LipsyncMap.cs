@@ -6,6 +6,7 @@
 *************************************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Inworld.Assets
@@ -15,10 +16,12 @@ namespace Inworld.Assets
     {
         public string phoneme;
         public int visemeIndex;
+        public int tensorIndex;
     }
     public class LipsyncMap : ScriptableObject
     {
         public List<PhonemeToViseme> p2vMap;
+        public int TensorIndexOf(string targetPhoneme) => p2vMap.FirstOrDefault(p => p.phoneme == targetPhoneme)?.tensorIndex ?? -1;
     }
 
 }

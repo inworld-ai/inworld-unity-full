@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!137 &44108336 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6961629721945140764, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+  m_PrefabInstance: {fileID: 367072178}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &153768926
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,13 +372,17 @@ PrefabInstance:
       propertyPath: m_VerboseLog
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3307339663917059437, guid: 809fb4511befe9142893b7b016bea809, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2717743084740492485, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       insertIndex: -1
       addedObject: {fileID: 891453311}
+    - targetCorrespondingSourceObject: {fileID: 2717743084740492485, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 891453318}
   m_SourcePrefab: {fileID: 100100000, guid: 809fb4511befe9142893b7b016bea809, type: 3}
 --- !u!4 &367072179 stripped
 Transform:
@@ -495,8 +504,28 @@ MonoBehaviour:
   m_CameraTransform: {fileID: 0}
   m_SightAngle: 90
   m_SightDistance: 10
-  m_DistancePriorityFactor: 10
+  m_PlayerAngleWeight: 1
+  m_DistanceWeight: 0.5
+  m_CharacterAngleWeight: 0.15
   m_RefreshRate: 0.25
+--- !u!114 &891453318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891453304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25dc85d9b459dc448a334ef050884bba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
+  m_LipsyncMap: {fileID: 11400000, guid: 0e4837ff3c714034a885f361813776b2, type: 2}
+  m_Model: {fileID: 5022602860645237092, guid: 4aee363799549e645a6d1091640b0dc3, type: 3}
+  m_Skin: {fileID: 44108336}
+  m_VisemeSil: viseme_sil
+  m_BlinkBlendShape: eyesClosed
 --- !u!1001 &934002599
 PrefabInstance:
   m_ObjectHideFlags: 0
