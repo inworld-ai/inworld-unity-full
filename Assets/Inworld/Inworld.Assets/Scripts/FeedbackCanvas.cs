@@ -64,6 +64,13 @@ namespace Inworld.Assets
             m_Feedback.comment = m_InputField.text;
             m_InputField.text = "";
             InworldController.Client.SendFeedbackAsync(m_InteractionID, m_CorrelationID, m_Feedback);
+            if (!m_Feedback.isLike)
+            {
+                InworldController.CharacterHandler.CurrentCharacter.CancelResponse();
+                // TODO(Yan): Replace bubble to contain more info.
+                InworldController.Client.SendRegenerateEvent(InworldController.CharacterHandler.CurrentCharacter.ID,m_InteractionID); 
+            }
+                
             m_Result.SetActive(true);
         }
 
