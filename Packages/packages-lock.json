@@ -1,9 +1,9 @@
 {
   "dependencies": {
     "com.inworld.unity.core": {
-      "version": "file:../../inworld-unity-core",
+      "version": "file:../Assets/Inworld/com.inworld.unity.core-3.3.1.tgz",
       "depth": 0,
-      "source": "local",
+      "source": "local-tarball",
       "dependencies": {
         "com.unity.cloud.gltfast": "6.0.1",
         "com.unity.textmeshpro": "3.0.6"
