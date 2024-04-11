@@ -8,7 +8,11 @@ using Inworld.Assets;
 using Inworld.Packet;
 using System.Collections;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
+#if UNITY_2022_3_OR_NEWER
+using Unity.Sentis;
+#endif
 using UnityEngine;
 
 namespace Inworld.Sample.RPM
@@ -16,28 +20,36 @@ namespace Inworld.Sample.RPM
     public class InworldFacialAnimationRPM : InworldFacialAnimation
     {
         const int k_VisemeLength = 15;
-        [SerializeField] LipsyncMap m_LipsyncMap;
+        [SerializeField] protected LipsyncMap m_LipsyncMap;
         [SerializeField] InworldFacialEmotion m_FacialEmotion;
 
         [Range(0, 1)][SerializeField] float m_LipExpression = 0.7f;
         [Range(0, 1)][SerializeField] float m_MorphTime = 0.5f;
         [Header("For custom models:")]
         [Tooltip("Find the first viseme in the blendshape of your model. NOTE: Your viseme variables should be continuous and starting from Sil to U")]
-        [SerializeField] string m_VisemeSil = "viseme_sil";
+        [SerializeField] protected string m_VisemeSil = "viseme_sil";
         [SerializeField] string m_BlinkBlendShape = "eyesClosed";
         [Tooltip("If your custom model is not working, try toggle this on/off")]
         [SerializeField] bool m_CustomModel;
+#if UNITY_2022_3_OR_NEWER        
+        [SerializeField] ModelAsset m_Model;
+        Model m_RuntimeModel;
+        IWorker m_CurrWorker;
+#endif
+        List<VisemeData> m_VisemeList = new List<VisemeData>();
+        List<int> m_InputArray = new List<int>();
         FacialAnimation m_LastFacial;
         FacialAnimation m_CurrentFacial;
         Vector2 m_CurrViseme = Vector2.zero;
         Vector2 m_LastViseme = Vector2.zero;
-
+        int m_CurrFrame;
         float m_RandomOffset;
         float m_CurrentAudioTime;
 
-        SkinnedMeshRenderer m_Skin;
-        int m_VisemeIndex;
-        int m_BlinkIndex;
+        protected SkinnedMeshRenderer m_Skin;
+        protected int m_CurrentPhonemeIndex;
+        protected int m_VisemeIndex;
+        protected int m_BlinkIndex;
         /// <summary>
         ///     YAN: We use Vector2 to store viseme data.
         ///     Vector2.x ==> Viseme Index (-1 = continue, add to next viseme)
@@ -61,6 +73,39 @@ namespace Inworld.Sample.RPM
         /// </summary>
         public void InitLipSync() => enabled = Init();
         
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            if (IsSentisSupported())
+                LoadSentis();
+        }
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            if (IsSentisSupported())
+                UnloadSentis();
+        }
+        protected virtual void LoadSentis()
+        {
+            #if UNITY_2022_3_OR_NEWER
+            m_RuntimeModel = ModelLoader.Load(m_Model);
+            m_CurrWorker = WorkerFactory.CreateWorker(BackendType.GPUCompute, m_RuntimeModel);
+            #endif
+        }
+        protected virtual void UnloadSentis()
+        {
+            #if UNITY_2022_3_OR_NEWER
+            m_CurrWorker.Dispose();
+            #endif
+        }
+        protected virtual void ResetVisemeMap()
+        {
+            #if UNITY_2022_3_OR_NEWER
+            m_VisemeMap.Clear();
+            #else
+            m_VisemeMap = new ConcurrentQueue<Vector2>();
+            #endif
+        }
         protected override bool Init()
         {
             if (!base.Init())
@@ -69,11 +114,18 @@ namespace Inworld.Sample.RPM
                 m_Skin = m_Character.GetComponentInChildren<SkinnedMeshRenderer>();
             if (m_VisemeMap == null)
                 m_VisemeMap = new ConcurrentQueue<Vector2>();
-            m_RandomOffset = Random.Range(0, 6f);
-            m_VisemeMap.Clear();
+            m_RandomOffset = UnityEngine.Random.Range(0, 6f);
+            ResetVisemeMap();
             return _MappingBlendShape();
         }
-
+        protected virtual bool IsSentisSupported()
+        {
+#if UNITY_2022_3_OR_NEWER
+            return m_Model;
+#else
+            return false;
+#endif
+        }
         bool _MappingBlendShape()
         {
             if (!m_Skin)
@@ -101,10 +153,86 @@ namespace Inworld.Sample.RPM
             blendshapeValue = Mathf.Clamp(blendshapeValue, 0, 1);
             m_Skin.SetBlendShapeWeight(m_BlinkIndex, blendshapeValue);
         }
-        protected override void ProcessLipSync()
+        protected virtual void SentisLipsync()
         {
-            if (!m_Skin)
+            #if UNITY_2022_3_OR_NEWER
+            if (m_CurrFrame >= m_VisemeList.Count) // Finished
+            {
+                Reset();
                 return;
+            }
+            ApplyMesh(m_VisemeList[m_CurrFrame]);
+            m_CurrFrame++;
+            #endif
+        }
+        protected virtual void SentisSamplePhoneme(AudioPacket audioPacket)
+        {
+            #if UNITY_2022_3_OR_NEWER
+            LoadPhonemeInfo(audioPacket);
+            if (m_InputArray.Count == 0)
+                return;
+            TensorInt inputTensor = new TensorInt(new TensorShape(1, m_InputArray.Count), m_InputArray.ToArray());
+            m_CurrWorker.Execute(inputTensor);
+            TensorFloat outputTensor = m_CurrWorker.PeekOutput() as TensorFloat;
+            if (outputTensor == null)
+            {
+                Debug.LogError("No Output!");
+                return;
+            }
+            outputTensor.MakeReadable();
+            float[] array = outputTensor.ToReadOnlyArray();
+            VisemeData data = new VisemeData();
+            for (int i = 0; i < array.Length; i+=15)
+            {
+                for (int j = 0; j < 15; j++)
+                {
+                    data.visemeVal.Add(array[i + j]);
+                }
+                m_VisemeList.Add(data);
+                data = new VisemeData();
+            }
+            inputTensor.Dispose();
+            outputTensor.Dispose();
+            #endif
+        }
+        void LoadPhonemeInfo(AudioPacket audioPacket)
+        {
+            #if UNITY_2022_3_OR_NEWER
+            AudioClip clip = audioPacket.Clip;
+            if (!clip)
+                return;
+            float audioLength = clip.length;
+            
+            // Handled by children.
+            List<PhonemeInfo> phonemes = audioPacket.dataChunk.additionalPhonemeInfo;
+            m_CurrentPhonemeIndex = 0; 
+            m_InputArray = new List<int>();
+            for (float fTime = 0; fTime < audioLength; fTime += Time.fixedDeltaTime)
+            {
+                if (m_CurrentPhonemeIndex >= phonemes.Count)
+                    break;
+                int nTensorIndex = m_LipsyncMap.TensorIndexOf(phonemes[m_CurrentPhonemeIndex].phoneme);
+                if (nTensorIndex == -1)
+                    nTensorIndex = m_InputArray.Count > 0 ? m_InputArray[^1] : 0;
+                m_InputArray.Add(nTensorIndex);
+                if (fTime > phonemes[m_CurrentPhonemeIndex].startOffset)
+                {
+                    m_CurrentPhonemeIndex++;
+                }
+            }
+            #endif
+        }
+        protected virtual void MorphSamplePhoneme(AudioPacket audioPacket)
+        {
+            foreach (PhonemeInfo phoneme in audioPacket.dataChunk.additionalPhonemeInfo)
+            {
+                PhonemeToViseme p2vRes = m_LipsyncMap.p2vMap.FirstOrDefault(p2v => p2v.phoneme == phoneme.phoneme);
+                int visemeIndex = p2vRes?.visemeIndex ?? -1;
+                m_VisemeMap.Enqueue(new Vector2(visemeIndex, phoneme.startOffset));
+            }
+        }
+        protected virtual void MorphLipsync()
+        {
             // 1. Move Out-dated Viseme to Last Viseme.
             if (m_CurrentAudioTime >= m_CurrViseme.y)
             {
@@ -127,13 +255,30 @@ namespace Inworld.Sample.RPM
             if (m_CurrViseme.y > 0 && m_CurrViseme.x >= 0)
                 _MorphViseme(m_CurrViseme);
         }
-
+        protected override void ProcessLipSync()
+        {
+            if (!m_Skin)
+                return;
+            if (IsSentisSupported())
+                SentisLipsync();
+            else
+                MorphLipsync();
+        }
+        protected void ApplyMesh(VisemeData visemeData)
+        {
+            for (int i = 0; i < visemeData.visemeVal.Count; i++)
+            {
+                m_Skin.SetBlendShapeWeight(m_VisemeIndex + i, visemeData.visemeVal[i]);
+            }
+        }
         protected override void Reset()
         {
-            m_VisemeMap.Clear();
+            ResetVisemeMap();
+            m_VisemeList.Clear();
             m_CurrViseme = Vector2.zero;
             m_LastViseme = Vector2.zero;
             m_CurrentAudioTime = 0;
+            m_CurrFrame = 0;
             _ShutMouth();
         }
         void _MorphViseme(Vector2 viseme, bool isIncreasing = true)
@@ -168,14 +313,14 @@ namespace Inworld.Sample.RPM
         protected override void HandleLipSync(AudioPacket audioPacket)
         {
             Reset();
+            if (audioPacket.Source == SourceType.PLAYER)
+                return;
             if (audioPacket.dataChunk?.additionalPhonemeInfo == null)
                 return;
-            foreach (PhonemeInfo phoneme in audioPacket.dataChunk.additionalPhonemeInfo)
-            {
-                PhonemeToViseme p2vRes = m_LipsyncMap.p2vMap.FirstOrDefault(p2v => p2v.phoneme == phoneme.phoneme);
-                int visemeIndex = p2vRes?.visemeIndex ?? -1;
-                m_VisemeMap.Enqueue(new Vector2(visemeIndex, phoneme.startOffset));
-            }
+            if (IsSentisSupported())
+                SentisSamplePhoneme(audioPacket);
+            else
+                MorphSamplePhoneme(audioPacket);
         }
         protected override void HandleEmotion(EmotionPacket packet)
         {

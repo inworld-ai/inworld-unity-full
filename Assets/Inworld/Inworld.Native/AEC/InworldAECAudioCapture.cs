@@ -42,14 +42,6 @@ namespace Inworld.AEC
                                    || Application.platform == RuntimePlatform.OSXEditor
                                    || Application.platform == RuntimePlatform.OSXPlayer;
 
-        void Update()
-        {
-            m_IsAudioDebugging = Input.GetKey(m_DumpAudioHotKey);
-            if (!m_IsAudioDebugging)
-            {
-                _DumpAudioFiles();
-            }
-        }
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -57,6 +49,15 @@ namespace Inworld.AEC
                 return;
             AECInterop.WebRtcAec3_Free(m_AECHandle);
             m_AECHandle = IntPtr.Zero;
+        }
+        protected override void HandlePTT()
+        {
+            base.HandlePTT();
+            m_IsAudioDebugging = Input.GetKey(m_DumpAudioHotKey);
+            if (!m_IsAudioDebugging)
+            {
+                _DumpAudioFiles();
+            }
         }
         // YAN: Currently if you'd like to use AEC. The Audio Setting for output has to be 16000 sample rate, and mono.
         //      We'll add resampling features in the next update.
@@ -71,7 +72,7 @@ namespace Inworld.AEC
             }
             else
                 m_SamplingMode = MicSampleMode.TURN_BASED;
-            m_LastSampleMode = m_SamplingMode;
+            m_InitSampleMode = m_SamplingMode;
             base.Init();
         }
         void _DumpAudioFiles()

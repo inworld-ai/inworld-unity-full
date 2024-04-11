@@ -81,7 +81,7 @@ namespace Inworld
             {
                 $"{k_FullPackagePath}/Inworld.Assets", 
                 $"{k_FullPackagePath}/Inworld.Editor",
-                $"{k_FullPackagePath}/Inworld.NDK",
+                $"{k_FullPackagePath}/Inworld.Native",
                 $"{k_FullPackagePath}/Inworld.Samples.Innequin",
                 $"{k_FullPackagePath}/Inworld.Samples.RPM"
             }; 
