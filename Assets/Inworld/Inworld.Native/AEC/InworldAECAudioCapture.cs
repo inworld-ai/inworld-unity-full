@@ -72,7 +72,7 @@ namespace Inworld.AEC
             }
             else
                 m_SamplingMode = MicSampleMode.TURN_BASED;
-            m_LastSampleMode = m_SamplingMode;
+            m_InitSampleMode = m_SamplingMode;
             base.Init();
         }
         void _DumpAudioFiles()
