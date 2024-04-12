@@ -37,6 +37,30 @@ namespace Inworld.Sample
         /// </summary>
         public virtual InworldCharacter Character { get; private set; }
 
+        public virtual Transform Head
+        {
+            get
+            {
+                if (m_HeadTransform)
+                    return m_HeadTransform;
+                Animator animator = GetComponent<Animator>();
+                if (animator)
+                    m_HeadTransform = animator.GetBoneTransform(HumanBodyBones.Head);
+                return m_HeadTransform;
+            }
+        }
+        public virtual Transform Camera
+        {
+            get
+            {
+                if (m_CameraTransform)
+                    return m_CameraTransform;
+                if (PlayerController.Instance)
+                    m_CameraTransform = PlayerController.Instance.transform;
+                return m_CameraTransform;
+            }
+        }
+
         protected virtual bool IsValid => InworldController.Instance && m_HeadTransform && m_CameraTransform
                                && InworldController.CharacterHandler.SelectingMethod == CharSelectingMethod.SightAngle;
 
@@ -94,7 +118,7 @@ namespace Inworld.Sample
         }
         void OnDrawGizmosSelected()
         {
-            if (!m_HeadTransform)
+            if (!Head || !Camera)
                 return;
             
             Gizmos.color = Color.cyan;
