@@ -214,7 +214,6 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   m_VerboseLog: 0
-  m_AutoStart: 1
 --- !u!114 &2475915964966130778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,10 +263,11 @@ MonoBehaviour:
   m_HeadTransform: {fileID: 0}
   m_CameraTransform: {fileID: 0}
   m_SightAngle: 122
-  m_SightDistance: 10
+  m_SightDistance: 16
   m_PlayerAngleWeight: 1
   m_DistanceWeight: 0.5
   m_CharacterAngleWeight: 0.15
+  m_JoinThreshold: 1
   m_RefreshRate: 0.25
 --- !u!114 &627985259930196537
 MonoBehaviour:

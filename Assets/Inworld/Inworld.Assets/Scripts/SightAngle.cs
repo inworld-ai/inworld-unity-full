@@ -5,6 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -28,9 +29,11 @@ namespace Inworld.Sample
         [Range(0, 10)]
         [Tooltip("How much of an impact the character's forward direction will have in the Priority calculation.")]
         [SerializeField] float m_CharacterAngleWeight = 0.15f;
+        [Range(0.1f, 2f)]
+        [SerializeField] float m_JoinThreshold = 1f;
         [Range(0.1f, 1f)]
         [SerializeField] float m_RefreshRate = 0.25f;
-        
+
         float m_CurrentTime = 0f;
         /// <summary>
         /// Get its character.
@@ -96,25 +99,28 @@ namespace Inworld.Sample
             if (m_CurrentTime < m_RefreshRate)
                 return;
             m_CurrentTime = 0;
-            
+            float fPriority = 0f;
             float distance = Vector3.Distance(m_HeadTransform.position, m_CameraTransform.position);
             if (distance > m_SightDistance)
-                Character.Priority = -1f;
+                fPriority = -1f;
             else
             {
                 Vector3 vecDirection = (m_CameraTransform.position - m_HeadTransform.position).normalized;
                 float fAngle = Vector3.Angle(vecDirection, transform.forward);
                 if (fAngle > m_SightAngle)
-                {
-                    Character.Priority = -1f;
-                }
+                    fPriority = -1f;
                 else
                 {
-                    Character.Priority = (Vector3.Angle(-vecDirection, m_CameraTransform.forward) / 180f) * m_PlayerAngleWeight;
-                    Character.Priority += (distance / m_SightDistance) * m_DistanceWeight; 
-                    Character.Priority += (Vector3.Angle(m_HeadTransform.forward, vecDirection) / m_SightAngle) * m_CharacterAngleWeight;
+                    fPriority = Vector3.Angle(-vecDirection, m_CameraTransform.forward) / 180f * m_PlayerAngleWeight;
+                    fPriority += distance / m_SightDistance * m_DistanceWeight; 
+                    fPriority += Vector3.Angle(m_HeadTransform.forward, vecDirection) / m_SightAngle * m_CharacterAngleWeight;
                 }
             }
+            Character.Priority = fPriority;
+            if (fPriority < m_JoinThreshold && fPriority > 0)
+                InworldController.CharacterHandler.Register(Character);
+            else
+                InworldController.CharacterHandler.Unregister(Character);
         }
         void OnDrawGizmosSelected()
         {
@@ -127,6 +133,12 @@ namespace Inworld.Sample
             {
                 Gizmos.DrawLine(trPosition, trPosition + Quaternion.AngleAxis(angle, transform.up) * transform.forward * m_SightDistance);
             }
+#if UNITY_EDITOR
+            GUIStyle style = new GUIStyle();
+            style.fontSize = 16;
+            style.normal.textColor = Color.green;
+            Handles.Label(Head.position + new Vector3(0.5f, 0.5f, 0f), Character?.Priority.ToString(), style);
+#endif
             Gizmos.color = Color.red;
 
             if (!m_CameraTransform)

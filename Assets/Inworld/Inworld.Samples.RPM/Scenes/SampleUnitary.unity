@@ -277,6 +277,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SamplingMode: 3
+  m_PushToTalkKey: 99
   m_PlayerVolumeThreshold: 2
   m_BufferSeconds: 1
   m_DeviceName: 
@@ -307,6 +308,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ManualAudioHandling: 0
   m_SelectingMethod: 2
+  m_SelectingThreshold: 0.5
   m_RefreshRate: 0.5
 --- !u!1001 &367072178
 PrefabInstance:
@@ -371,10 +373,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2717743084740492485, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 891453311}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 809fb4511befe9142893b7b016bea809, type: 3}
 --- !u!4 &367072179 stripped
 Transform:
@@ -857,29 +856,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -6769691430286951708, guid: 0ca1b8c7a532274468186843fc32a37f, type: 3}
   m_PrefabInstance: {fileID: 679630986}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &891453304 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2717743084740492485, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-  m_PrefabInstance: {fileID: 367072178}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &891453311
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 891453304}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HeadTransform: {fileID: 0}
-  m_CameraTransform: {fileID: 0}
-  m_SightAngle: 90
-  m_SightDistance: 10
-  m_DistancePriorityFactor: 10
-  m_RefreshRate: 0.25
 --- !u!1001 &934002599
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1289,7 +1265,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   m_VerboseLog: 0
-  m_AutoStart: 1
+  m_AutoStart: 0
 --- !u!114 &1147359319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1305,8 +1281,11 @@ MonoBehaviour:
   m_HeadTransform: {fileID: 0}
   m_CameraTransform: {fileID: 0}
   m_SightAngle: 150
-  m_SightDistance: 10
-  m_DistancePriorityFactor: 10
+  m_SightDistance: 16
+  m_PlayerAngleWeight: 1
+  m_DistanceWeight: 0.5
+  m_CharacterAngleWeight: 0.15
+  m_JoinThreshold: 1
   m_RefreshRate: 0.25
 --- !u!114 &1147359320
 MonoBehaviour:
@@ -1328,6 +1307,7 @@ MonoBehaviour:
   m_VisemeSil: viseme_sil
   m_BlinkBlendShape: eyesClosed
   m_CustomModel: 0
+  m_Model: {fileID: 0}
 --- !u!114 &1147359321
 MonoBehaviour:
   m_ObjectHideFlags: 0

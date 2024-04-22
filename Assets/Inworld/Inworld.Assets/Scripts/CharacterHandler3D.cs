@@ -5,7 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
-using System.Collections.Generic;
+
 using System.Linq;
 using UnityEngine;
 
@@ -16,7 +16,9 @@ namespace Inworld.Sample
     {
         [SerializeField] protected CharSelectingMethod m_SelectingMethod = CharSelectingMethod.SightAngle;
         [Range(0.1f, 1f)]
-        [SerializeField] float m_RefreshRate = 0.5f;
+        [SerializeField] protected float m_SelectingThreshold = 0.5f;
+        [Range(0.1f, 1f)]
+        [SerializeField] protected float m_RefreshRate = 0.5f;
 
         float m_CurrentTime;
 
@@ -59,7 +61,7 @@ namespace Inworld.Sample
             if (m_CurrentTime < m_RefreshRate)
                 return;
             m_CurrentTime = 0;
-            float fPriority = float.MaxValue;
+            float fPriority = m_SelectingThreshold;
             InworldCharacter targetCharacter = null;
             foreach (InworldCharacter character in m_CharacterList.Where(character => character && character.Priority >= 0 && character.Priority < fPriority))
             {

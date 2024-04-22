@@ -1369,6 +1369,7 @@ GameObject:
   - component: {fileID: 2475915965789613538}
   - component: {fileID: 2910922991999958440}
   - component: {fileID: 3025297061302042100}
+  - component: {fileID: 8996923506161634226}
   m_Layer: 0
   m_Name: Prince Stone
   m_TagString: Untagged
@@ -1912,6 +1913,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SamplingMode: 3
+  m_PushToTalkKey: 99
   m_PlayerVolumeThreshold: 2
   m_BufferSeconds: 1
   m_DeviceName: 
@@ -1942,6 +1944,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ManualAudioHandling: 0
   m_SelectingMethod: 2
+  m_SelectingThreshold: 0.5
   m_RefreshRate: 0.5
 --- !u!114 &6044019946738231953
 MonoBehaviour:
@@ -2330,8 +2333,29 @@ MonoBehaviour:
     onRelationUpdated:
       m_PersistentCalls:
         m_Calls: []
-  m_VerboseLog: 0
-  m_AutoStart: 1
+  m_VerboseLog: 1
+  m_AutoStart: 0
+--- !u!114 &8996923506161634226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24757742515360202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HeadTransform: {fileID: 0}
+  m_CameraTransform: {fileID: 0}
+  m_SightAngle: 90
+  m_SightDistance: 16
+  m_PlayerAngleWeight: 1
+  m_DistanceWeight: 0.5
+  m_CharacterAngleWeight: 0.15
+  m_JoinThreshold: 1
+  m_RefreshRate: 0.25
 --- !u!224 &9024173614586313408
 RectTransform:
   m_ObjectHideFlags: 0
