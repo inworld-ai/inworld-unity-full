@@ -28,11 +28,7 @@ namespace Inworld
         const string k_DependencyPackage = "com.inworld.unity.core";
         const string k_InworldAssetsPath = "Assets/Inworld/Inworld.Assets";
         const string k_ExtraPackagePath = "Assets/Inworld/InworldExtraAssets.unitypackage";
-
-        // static string[] k_DependentOfficialPackages = 
-        // {
-        //     "com.unity.sentis"
-        // };
+        
         static DependencyImporter()
         {
             AssetDatabase.importPackageCompleted += _ =>
@@ -51,12 +47,6 @@ namespace Inworld
             } 
             Debug.Log("Import Dependency Packages...");
             await _AddPackage(); 
-            // #if UNITY_2022_3_OR_NEWER
-            // foreach (string official in k_DependentOfficialPackages)
-            // {
-            //     await _AddUnityPackage(official);
-            // }
-            // #endif
         }
 
         static string _GetTgzFileName()
