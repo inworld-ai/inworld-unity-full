@@ -18,6 +18,7 @@ namespace Inworld.Assets
         public int visemeIndex;
         public int tensorIndex;
     }
+
     public class LipsyncMap : ScriptableObject
     {
         public List<PhonemeToViseme> p2vMap;
