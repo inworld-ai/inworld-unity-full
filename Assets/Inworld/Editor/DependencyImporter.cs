@@ -28,11 +28,7 @@ namespace Inworld
         const string k_DependencyPackage = "com.inworld.unity.core";
         const string k_InworldAssetsPath = "Assets/Inworld/Inworld.Assets";
         const string k_ExtraPackagePath = "Assets/Inworld/InworldExtraAssets.unitypackage";
-
-        static string[] k_DependentOfficialPackages = 
-        {
-            "com.unity.sentis"
-        };
+        
         static DependencyImporter()
         {
             AssetDatabase.importPackageCompleted += _ =>
@@ -51,12 +47,6 @@ namespace Inworld
             } 
             Debug.Log("Import Dependency Packages...");
             await _AddPackage(); 
-            #if UNITY_2022_3_OR_NEWER
-            foreach (string official in k_DependentOfficialPackages)
-            {
-                await _AddUnityPackage(official);
-            }
-            #endif
         }
 
         static string _GetTgzFileName()
@@ -100,40 +90,6 @@ namespace Inworld
         static async Task _AddPackage()
         {
             await _AddUnityPackage(k_DependencyPackage, _GetTgzFileName());
-            // ListRequest listRequest = Client.List();
-            //
-            // while (!listRequest.IsCompleted)
-            // {
-            //     await Task.Yield();
-            // }
-            // if (listRequest.Status != StatusCode.Success)
-            // {
-            //     Debug.LogError(listRequest.Error.ToString());
-            //     return;
-            // }
-            // if (listRequest.Result.Any(x => x.name == k_DependencyPackage))
-            // {
-            //     Debug.Log($"{k_DependencyPackage} Found.");
-            //     return;
-            // }
-            // string tgzFile = _GetTgzFileName();
-            // if (string.IsNullOrEmpty(tgzFile))
-            // {
-            //     Debug.LogError("Cannot Find core package.");
-            //     return;
-            // }
-            // AddRequest addRequest = Client.Add(tgzFile);
-            // while (!addRequest.IsCompleted)
-            // {
-            //     await Task.Yield();
-            // }
-            //
-            // if (addRequest.Status != StatusCode.Success)
-            // {
-            //     Debug.LogError($"Failed to add {tgzFile}.");
-            //     return;
-            // }
-            // Debug.Log($"Import {k_DependencyPackage} Completed");
             if (!Directory.Exists(k_InworldAssetsPath) && File.Exists(k_ExtraPackagePath))
                 AssetDatabase.ImportPackage(k_ExtraPackagePath, false);
             if (!File.Exists("Assets/TextMesh Pro/Resources/TMP Settings.asset"))

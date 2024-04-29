@@ -324,7 +324,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 367072179}
-  - {fileID: 392235808}
+  - {fileID: 1248472700339788679}
   - {fileID: 78970695}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -380,8 +380,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SamplingMode: 3
+  m_PushToTalkKey: 0
   m_PlayerVolumeThreshold: 2
   m_BufferSeconds: 1
+  m_AudioToPushCapacity: 100
   m_DeviceName: 
   OnRecordingStart:
     m_PersistentCalls:
@@ -476,76 +478,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
   m_PrefabInstance: {fileID: 367072178}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &392235807
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 359806124}
-    m_Modifications:
-    - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2181744917861107564, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2717743084740492485, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-      propertyPath: m_Name
-      value: Alice the Guide (Sentis)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3307339663917059437, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-      propertyPath: m_Model
-      value: 
-      objectReference: {fileID: 5022602860645237092, guid: 4aee363799549e645a6d1091640b0dc3, type: 3}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 809fb4511befe9142893b7b016bea809, type: 3}
---- !u!4 &392235808 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
-  m_PrefabInstance: {fileID: 392235807}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &444891039
 GameObject:
@@ -1398,6 +1330,76 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1934973844}
   m_CullTransparentMesh: 1
+--- !u!4 &1248472700339788679 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2983387242264831311, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
+  m_PrefabInstance: {fileID: 2926573898585158306}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2926573898585158306
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 359806124}
+    m_Modifications:
+    - target: {fileID: 2983387242264831311, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2983387242264831311, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2983387242264831311, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2983387242264831311, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2983387242264831311, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2983387242264831311, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2983387242264831311, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2983387242264831311, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2983387242264831311, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2983387242264831311, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3938724776858899985, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
+      propertyPath: m_LipsyncMap
+      value: 
+      objectReference: {fileID: 11400000, guid: cca44e840d1508140b5c4a75fb1c5638, type: 2}
+    - target: {fileID: 6676796664425444336, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7852016522523525632, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
+      propertyPath: m_Name
+      value: Alice the Guide (Sentis)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
 --- !u!1001 &4551171349568899441
 PrefabInstance:
   m_ObjectHideFlags: 0
