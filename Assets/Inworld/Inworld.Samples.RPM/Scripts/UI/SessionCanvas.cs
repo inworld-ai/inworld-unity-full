@@ -55,7 +55,10 @@ namespace Inworld.Sample.RPM
         /// <summary>
         /// Mute/Unmute the microphone.
         /// </summary>
-        public void MicrophoneControl(bool isOn) => InworldController.Audio.IsBlocked = isOn;
+        public void MicrophoneControl(bool isOn)
+        {
+            InworldController.Audio.DetectPlayerSpeaking = !isOn;
+        }
 
         /// <summary>
         /// Clear the saved data
