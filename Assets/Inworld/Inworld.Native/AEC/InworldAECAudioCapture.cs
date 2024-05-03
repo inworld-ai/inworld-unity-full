@@ -126,6 +126,8 @@ namespace Inworld.AEC
             {
                 for (int i = 0; i < inputData.Length * m_Recording.channels; i += k_NumSamples)
                 {
+                    if (i + k_NumSamples > inputData.Length) 
+                        break; 
                     short[] inputTmp = new short[k_NumSamples];
                     short[] outputTmp = new short[k_NumSamples];
                     short[] filterTmp = new short[k_NumSamples];
