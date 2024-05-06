@@ -281,6 +281,7 @@ MonoBehaviour:
   m_BufferSeconds: 1
   m_AudioToPushCapacity: 100
   m_DeviceName: 
+  m_DetectPlayerSpeaking: 1
   OnRecordingStart:
     m_PersistentCalls:
       m_Calls: []
@@ -365,6 +366,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Alice the Guide (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4590294231651289280, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_Data.thumbnail
+      value: 
+      objectReference: {fileID: 2800000, guid: f60c1361288ccab43b3739a0c086b2e1, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

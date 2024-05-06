@@ -447,7 +447,7 @@ MonoBehaviour:
       avatarImgOriginal: 
       thumbnailProgress: 0
       avatarProgress: 0
-    thumbnail: {fileID: 0}
+    thumbnail: {fileID: 2800000, guid: f60c1361288ccab43b3739a0c086b2e1, type: 3}
   m_CharacterEvents:
     onCharacterSelected:
       m_PersistentCalls:
@@ -535,7 +535,6 @@ MonoBehaviour:
   m_VisemeSil: viseme_sil
   m_BlinkBlendShape: eyesClosed
   m_CustomModel: 0
-  m_Model: {fileID: 0}
 --- !u!1 &4162607404096159169
 GameObject:
   m_ObjectHideFlags: 0

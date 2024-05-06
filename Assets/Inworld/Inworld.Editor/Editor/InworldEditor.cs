@@ -51,6 +51,7 @@ namespace Inworld.Editors
         [SerializeField] string m_ScenesURL;
         
         const string k_GlobalDataPath = "InworldEditor";
+        const string k_InstancePath = "Assets/Inworld/Inworld.Editor/Data/InworldEditor.asset";
         public const string k_TokenErrorInstruction = "Token Error or Expired.\nPlease login again";
         const float k_LuminanceRed = 0.2126f;
         const float k_LuminanceGreen = 0.7152f;
@@ -63,7 +64,7 @@ namespace Inworld.Editors
 
         /// <summary>
         /// Gets an instance of InworldEditor.
-        /// By default, it is at `Assets/Inworld/Inworld.Editor/Resources/InworldEditor.asset`.
+        /// By default, it is at `Assets/Inworld/Inworld.Editor/Data/InworldEditor.asset`.
         /// Please do not modify it.
         /// </summary>
         public static InworldEditor Instance
@@ -72,7 +73,7 @@ namespace Inworld.Editors
             {
                 if (__inst)
                     return __inst;
-                __inst = Resources.Load<InworldEditor>(k_GlobalDataPath);
+                __inst = AssetDatabase.LoadAssetAtPath<InworldEditor>(k_InstancePath);
                 return __inst;
             }
         }

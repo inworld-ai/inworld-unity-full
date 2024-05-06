@@ -1213,9 +1213,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SamplingMode: 3
+  m_PushToTalkKey: 0
   m_PlayerVolumeThreshold: 2
   m_BufferSeconds: 1
+  m_AudioToPushCapacity: 100
   m_DeviceName: 
+  m_DetectPlayerSpeaking: 1
   OnRecordingStart:
     m_PersistentCalls:
       m_Calls: []
@@ -1286,6 +1289,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4624287931213198828, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7365615600221086446, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_Options.m_Options.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7365615600221086446, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
