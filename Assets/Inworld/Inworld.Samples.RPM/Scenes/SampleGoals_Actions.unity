@@ -1637,7 +1637,6 @@ MonoBehaviour:
   m_VisemeSil: viseme_sil
   m_BlinkBlendShape: eyesClosed
   m_CustomModel: 0
-  m_Model: {fileID: 0}
 --- !u!224 &3150450691047687921
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1912,9 +1911,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SamplingMode: 3
-  m_PlayerVolumeThreshold: 2
+  m_PushToTalkKey: 0
+  m_PlayerVolumeThreshold: 10
   m_BufferSeconds: 1
+  m_AudioToPushCapacity: 100
   m_DeviceName: 
+  m_DetectPlayerSpeaking: 1
   OnRecordingStart:
     m_PersistentCalls:
       m_Calls: []

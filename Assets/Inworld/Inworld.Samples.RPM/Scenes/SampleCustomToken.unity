@@ -685,6 +685,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Title: {fileID: 1682479522}
   m_Content: {fileID: 833884218}
+  m_Character: {fileID: 0}
   m_ColorGraph:
     serializedVersion: 2
     key0: {r: 0, g: 1, b: 0, a: 1}
@@ -2468,9 +2469,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f9cad20127be08429e8cdae6687b742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PushToTalk: 0
-  m_PushToTalkKey: 99
+  uiKey: 96
+  optionKey: 27
+  skipKey: 0
+  continueKey: 0
   m_InputField: {fileID: 0}
+  m_Dropdown: {fileID: 0}
   m_SendButton: {fileID: 0}
   m_RecordButton: {fileID: 0}
   onPlayerSpeaks:
@@ -2494,14 +2498,13 @@ MonoBehaviour:
   m_APISecret: 
   m_CustomToken: 
   m_PublicWorkspace: 
+  m_AutoScene: 0
   m_Continuation:
     continuationType: 0
     dialogHistory:
       history: []
     externallySavedState: 
   m_MaxWaitingListSize: 100
-  m_PreviousDialog:
-    phrases: []
 --- !u!4 &5095182495930809314
 Transform:
   m_ObjectHideFlags: 0
@@ -2581,9 +2584,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SamplingMode: 3
-  m_PlayerVolumeThreshold: 2
+  m_PushToTalkKey: 0
+  m_PlayerVolumeThreshold: 10
   m_BufferSeconds: 1
+  m_AudioToPushCapacity: 100
   m_DeviceName: 
+  m_DetectPlayerSpeaking: 1
   OnRecordingStart:
     m_PersistentCalls:
       m_Calls: []
@@ -2596,6 +2602,7 @@ MonoBehaviour:
   OnPlayerStopSpeaking:
     m_PersistentCalls:
       m_Calls: []
+  m_DumpAudioHotKey: 0
 --- !u!4 &6526292729113425018
 Transform:
   m_ObjectHideFlags: 0

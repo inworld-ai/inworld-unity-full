@@ -3193,8 +3193,6 @@ MonoBehaviour:
   optionKey: 27
   skipKey: 0
   continueKey: 0
-  m_PushToTalk: 0
-  m_PushToTalkKey: 99
   m_InputField: {fileID: 0}
   m_Dropdown: {fileID: 0}
   m_SendButton: {fileID: 0}
@@ -3404,9 +3402,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SamplingMode: 3
-  m_PlayerVolumeThreshold: 2
+  m_PushToTalkKey: 0
+  m_PlayerVolumeThreshold: 10
   m_BufferSeconds: 1
+  m_AudioToPushCapacity: 100
   m_DeviceName: 
+  m_DetectPlayerSpeaking: 1
   OnRecordingStart:
     m_PersistentCalls:
       m_Calls: []
