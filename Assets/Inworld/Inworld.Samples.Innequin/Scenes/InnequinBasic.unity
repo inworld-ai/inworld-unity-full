@@ -2009,7 +2009,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SamplingMode: 3
   m_PushToTalkKey: 0
-  m_PlayerVolumeThreshold: 10
+  m_PlayerVolumeThreshold: 6
   m_BufferSeconds: 1
   m_AudioToPushCapacity: 100
   m_DeviceName: 
@@ -2567,7 +2567,7 @@ MonoBehaviour:
     onRelationUpdated:
       m_PersistentCalls:
         m_Calls: []
-  m_VerboseLog: 0
+  m_VerboseLog: 1
   m_AutoStart: 1
 --- !u!23 &6672274919278091076
 MeshRenderer:
