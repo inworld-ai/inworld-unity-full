@@ -250,7 +250,7 @@ namespace Inworld.Sample.RPM
                     string currIterName = m_Skin.sharedMesh.GetBlendShapeName(i);
                     float fCurrShapeWeight = m_Skin.GetBlendShapeWeight(i);
                     MorphState lastState = m_LastFacial?.morphStates.FirstOrDefault(morph => morph.morphName == currIterName);
-                    MorphState currState = m_CurrentFacial?.morphStates.FirstOrDefault(morph => morph.morphName == currIterName) ;
+                    MorphState currState = m_CurrentFacial?.morphStates.FirstOrDefault(morph => morph.morphName == currIterName);
                     // 1. Reset Old
                     if (lastState != null && currState == null)
                         m_Skin.SetBlendShapeWeight(i, Mathf.Lerp(fCurrShapeWeight, 0, 0.15f));
