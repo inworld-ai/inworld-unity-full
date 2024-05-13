@@ -19,7 +19,8 @@ namespace Inworld.Sample
         [SerializeField] TMP_Dropdown m_Dropdown;
         [SerializeField] TMP_Text m_Text;
         [SerializeField] Image m_Volume;
-        [SerializeField] Button m_Button;
+        [SerializeField] Button m_MicButton;
+        [SerializeField] Button m_CalibButton;
         [SerializeField] Sprite m_MicOn;
         [SerializeField] Sprite m_MicOff;
         
@@ -37,8 +38,10 @@ namespace Inworld.Sample
                 return;
             }
             ChangeInputDevice(Microphone.devices[nDeviceIndex]);
-            m_Button.interactable = true;
-            m_Button.image.sprite = m_MicOff;
+            m_MicButton.interactable = true;
+            m_CalibButton.interactable = true;
+            IsRecording = true;
+            m_MicButton.image.sprite = m_MicOff;
     #endif
         }
         /// <summary>
@@ -46,12 +49,18 @@ namespace Inworld.Sample
         /// </summary>
         public void SwitchMicrophone()
         {
-            if (!m_Button.interactable)
+            if (!m_MicButton.interactable)
                 return;
-            if (m_Button.image.sprite == m_MicOff)
-                m_Button.image.sprite = m_MicOn;
+            if (m_MicButton.image.sprite == m_MicOff)
+            {
+                m_MicButton.image.sprite = m_MicOn;
+                IsRecording = false;
+            }
             else
-                m_Button.image.sprite = m_MicOff;
+            {
+                m_MicButton.image.sprite = m_MicOff;
+                IsRecording = true;
+            }
         }
         protected override void Awake()
         {
@@ -77,13 +86,18 @@ namespace Inworld.Sample
             }
     #endif
         }
-        
 
+        public override void Calibrate()
+        {
+            Debug.Log("HIT");
+            base.Calibrate();
+        }
         protected override IEnumerator Collect()
         {
     #if !UNITY_WEBGL
             int nSize = GetAudioData();
-            m_Volume.fillAmount = m_InputBuffer.Max() * 5f;
+            var snr = CalculateSNR();
+            m_Volume.fillAmount = IsRecording ? snr * 0.1f : 0f;
     #endif
             yield return new WaitForSeconds(0.1f);
         }
