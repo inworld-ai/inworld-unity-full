@@ -86,18 +86,11 @@ namespace Inworld.Sample
             }
     #endif
         }
-
-        public override void Calibrate()
-        {
-            Debug.Log("HIT");
-            base.Calibrate();
-        }
         protected override IEnumerator Collect()
         {
     #if !UNITY_WEBGL
             int nSize = GetAudioData();
-            var snr = CalculateSNR();
-            m_Volume.fillAmount = IsRecording ? snr * 0.1f : 0f;
+            m_Volume.fillAmount = IsRecording ? CalculateSNR() * 0.1f : 0f;
     #endif
             yield return new WaitForSeconds(0.1f);
         }
