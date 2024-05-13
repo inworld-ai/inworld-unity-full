@@ -259,15 +259,16 @@ MonoBehaviour:
   m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
   m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
-  m_CustomToken: 
-  m_PublicWorkspace: 
   m_AutoScene: 0
+  m_MaxWaitingListSize: 100
   m_Continuation:
     continuationType: 0
     dialogHistory:
       history: []
     externallySavedState: 
-  m_MaxWaitingListSize: 100
+  m_CustomToken: 
+  m_PublicWorkspace: 
+  m_GameSessionID: 
 --- !u!114 &359806131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1129,6 +1130,10 @@ PrefabInstance:
       propertyPath: m_NoMic
       value: 
       objectReference: {fileID: 7366975}
+    - target: {fileID: 3407697002864970920, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.00024414062
+      objectReference: {fileID: 0}
     - target: {fileID: 4136739465161379550, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -126,6 +126,7 @@ namespace Inworld.Editors
                     InworldAI.User = newUser;
                 }
                 InworldAI.User.BillingAccount = date.billingAccounts[0].name;
+                InworldAI.User.ID = InworldAI.User.BillingAccount;
                 InworldAI.User.Name = displayName;
             }
             EditorUtility.DisplayProgressBar("Inworld", "Getting Billing Account Completed!", 0.5f);
