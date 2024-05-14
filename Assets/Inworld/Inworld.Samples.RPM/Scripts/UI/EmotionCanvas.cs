@@ -77,8 +77,6 @@ namespace Inworld.Sample.RPM
         /// <param name="nSpaffCode">the spaffcode of the emotion.</param>
         public void MockServerEmoEvents(int nSpaffCode)
         {
-            if (InworldController.Client.Status == InworldConnectionStatus.Connected)
-                return;
             EmotionPacket evt = new EmotionPacket
             {
                 routing = new Routing(m_Character.ID),

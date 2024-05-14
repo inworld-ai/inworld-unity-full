@@ -52,8 +52,12 @@ namespace Inworld.Sample.RPM
         /// </summary>
         public void NewGame(bool loadHistory) => InworldController.CharacterHandler.Register(m_Character);
 
-        public void QuitGame() => InworldController.CharacterHandler.Unregister(m_Character);
-        
+        public void QuitGame()
+        {
+            InworldController.CharacterHandler.Unregister(m_Character);
+            InworldController.Instance.Disconnect();
+        }
+
         /// <summary>
         /// Mute/Unmute the speaker.
         /// </summary>
