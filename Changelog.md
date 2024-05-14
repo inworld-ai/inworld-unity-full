@@ -1,3 +1,9 @@
+# 3.3.2
+1. Updated audio capturing.
+2. Updated auto reconnection.
+3. Simplified APIs for the incoming multiagent features.
+4. Bug fixes.
+
 # 3.3.1
 1. Implemented feedback
 2. Added character selecting in global panel.

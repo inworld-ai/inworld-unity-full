@@ -73,7 +73,24 @@ namespace Inworld
             }; 
             AssetDatabase.ExportPackage(assetPaths, $"{k_FullPackagePath}/{k_FullPackageName}.unitypackage", ExportPackageOptions.Recurse);
         }
-        
+        /// <summary>
+        ///     Call it via outside command line to export package.
+        /// </summary>
+        [MenuItem("Inworld/Export Package/Unity Asset Store")]
+        public static void ExportUAS()
+        {
+            string corePath = _GetTgzFileName();
+            if (string.IsNullOrEmpty(corePath))
+            {
+                Debug.LogError("Please extract core package first!");
+                return;
+            }
+            string[] assetPaths =
+            {
+                k_FullPackagePath
+            }; 
+            AssetDatabase.ExportPackage(assetPaths, $"{k_FullPackagePath}/{k_FullPackageName}.unitypackage", ExportPackageOptions.Recurse);
+        }
         [MenuItem("Inworld/Export Package/Extra Assets")]
         public static void ExportExtraAssets()
         {
