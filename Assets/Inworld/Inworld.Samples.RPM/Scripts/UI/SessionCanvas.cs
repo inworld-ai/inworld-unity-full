@@ -50,7 +50,12 @@ namespace Inworld.Sample.RPM
         /// <summary>
         /// Clear the saved data
         /// </summary>
-        public void NewGame(bool loadHistory) => InworldController.CharacterHandler.Register(m_Character);
+        public void NewGame(bool loadHistory)
+        {
+            if (!loadHistory)
+                InworldController.Client.SessionHistory = "";
+            InworldController.CharacterHandler.Register(m_Character);
+        }
 
         public void QuitGame()
         {
