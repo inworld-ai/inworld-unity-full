@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &7366975 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2614038783438186305, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
+  m_PrefabInstance: {fileID: 4551171349568899441}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &153768926
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,15 +259,16 @@ MonoBehaviour:
   m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
   m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
-  m_CustomToken: 
-  m_PublicWorkspace: 
   m_AutoScene: 0
+  m_MaxWaitingListSize: 100
   m_Continuation:
     continuationType: 0
     dialogHistory:
       history: []
     externallySavedState: 
-  m_MaxWaitingListSize: 100
+  m_CustomToken: 
+  m_PublicWorkspace: 
+  m_GameSessionID: 
 --- !u!114 &359806131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,9 +282,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SamplingMode: 3
-  m_PlayerVolumeThreshold: 2
+  m_PushToTalkKey: 0
+  m_PlayerVolumeThreshold: 6
   m_BufferSeconds: 1
+  m_AudioToPushCapacity: 100
   m_DeviceName: 
+  m_DetectPlayerSpeaking: 1
+  OnStartCalibrating:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStopCalibrating:
+    m_PersistentCalls:
+      m_Calls: []
   OnRecordingStart:
     m_PersistentCalls:
       m_Calls: []
@@ -355,10 +370,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2181744917861107564, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2717743084740492485, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_Name
       value: Alice the Guide (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4590294231651289280, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_Data.thumbnail
+      value: 
+      objectReference: {fileID: 2800000, guid: f60c1361288ccab43b3739a0c086b2e1, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -875,6 +898,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1624441890}
   m_CullTransparentMesh: 1
+--- !u!1 &1896911007 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6858307644099848377, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
+  m_PrefabInstance: {fileID: 4551171349568899441}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1928130906
 GameObject:
   m_ObjectHideFlags: 0
@@ -1094,6 +1122,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1207303152402782509, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
+      propertyPath: m_Board
+      value: 
+      objectReference: {fileID: 1896911007}
+    - target: {fileID: 1207303152402782509, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
+      propertyPath: m_NoMic
+      value: 
+      objectReference: {fileID: 7366975}
+    - target: {fileID: 3407697002864970920, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.00024414062
+      objectReference: {fileID: 0}
     - target: {fileID: 4136739465161379550, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

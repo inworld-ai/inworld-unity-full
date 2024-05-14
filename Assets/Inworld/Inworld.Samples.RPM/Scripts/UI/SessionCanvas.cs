@@ -24,7 +24,7 @@ namespace Inworld.Sample.RPM
         [SerializeField] Image m_Indicator;
         [SerializeField] float m_PingDuration = 1f;
         [Header("Toggles")]
-        [SerializeField] SwitchButton m_PlayPause;
+        [SerializeField] Button m_CalibrateAudio;
         [SerializeField] SwitchButton m_SwitchMic;
         [SerializeField] SwitchButton m_Speaker;
         [Header("Session")]
@@ -40,30 +40,29 @@ namespace Inworld.Sample.RPM
         readonly Queue<float> m_LagQueue = new Queue<float>(12);
         
         /// <summary>
-        /// Pause/Continue the current live session.
-        /// </summary>
-        public void PlayPause()
-        {
-            if (m_PlayPause.isOn)
-            {
-                InworldController.CharacterHandler.Register(m_Character);
-            }
-            else
-                InworldController.CharacterHandler.Unregister(m_Character);
-        }
-
-        /// <summary>
         /// Mute/Unmute the microphone.
         /// </summary>
-        public void MicrophoneControl(bool isOn) => InworldController.Audio.IsBlocked = isOn;
+        public void MicrophoneControl(bool isOn)
+        {
+            InworldController.Audio.AutoDetectPlayerSpeaking = !isOn;
+        }
 
         /// <summary>
         /// Clear the saved data
         /// </summary>
-        public void NewGame(bool loadHistory) => InworldController.CharacterHandler.Register(m_Character);
+        public void NewGame(bool loadHistory)
+        {
+            if (!loadHistory)
+                InworldController.Client.SessionHistory = "";
+            InworldController.CharacterHandler.Register(m_Character);
+        }
 
-        public void QuitGame() => InworldController.CharacterHandler.Unregister(m_Character);
-        
+        public void QuitGame()
+        {
+            InworldController.CharacterHandler.Unregister(m_Character);
+            InworldController.Instance.Disconnect();
+        }
+
         /// <summary>
         /// Mute/Unmute the speaker.
         /// </summary>
@@ -144,8 +143,7 @@ namespace Inworld.Sample.RPM
             m_NewGame.interactable = true;
             m_LoadGame.interactable = true;
             m_SaveGame.interactable = false;
-            m_PlayPause.interactable = true;
-            m_PlayPause.isOn = false;
+            m_CalibrateAudio.interactable = false;
             m_SwitchMic.interactable = false;
             m_Speaker.interactable = false;
         }
@@ -154,7 +152,7 @@ namespace Inworld.Sample.RPM
             m_NewGame.interactable = false;
             m_LoadGame.interactable = false;
             m_SaveGame.interactable = false;
-            m_PlayPause.interactable = false;
+            m_CalibrateAudio.interactable = false;
             m_SwitchMic.interactable = false;
             m_Speaker.interactable = false;
         }
@@ -163,8 +161,7 @@ namespace Inworld.Sample.RPM
             m_NewGame.interactable = true;
             m_LoadGame.interactable = true;
             m_SaveGame.interactable = true;
-            m_PlayPause.interactable = true;
-            m_PlayPause.isOn = true;
+            m_CalibrateAudio.interactable = true;
             m_SwitchMic.interactable = true;
             m_Speaker.interactable = true;
         }

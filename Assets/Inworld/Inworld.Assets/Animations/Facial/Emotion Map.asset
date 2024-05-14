@@ -13,97 +13,97 @@ MonoBehaviour:
   m_Name: Emotion Map
   m_EditorClassIdentifier: 
   data:
-  - name: NEUTRAL
+  - name: 0
     bodyEmotion: 0
     bodyGesture: 0
     emoteAnimation: 0
     facialEmotion: 0
-  - name: AFFECTION
+  - name: 15
     bodyEmotion: 3
     bodyGesture: 5
     emoteAnimation: 1
     facialEmotion: 1
-  - name: INTEREST
+  - name: 13
     bodyEmotion: 0
     bodyGesture: 15
     emoteAnimation: 0
     facialEmotion: 6
-  - name: HUMOR
+  - name: 16
     bodyEmotion: 3
     bodyGesture: 5
     emoteAnimation: 3
     facialEmotion: 3
-  - name: JOY
+  - name: 18
     bodyEmotion: 3
     bodyGesture: 14
     emoteAnimation: 3
     facialEmotion: 6
-  - name: CONTEMPT
+  - name: 2
     bodyEmotion: 1
     bodyGesture: 9
     emoteAnimation: 2
     facialEmotion: 2
-  - name: BELLIGERENCE
+  - name: 3
     bodyEmotion: 1
     bodyGesture: 12
     emoteAnimation: 2
     facialEmotion: 2
-  - name: DOMINEERING
+  - name: 4
     bodyEmotion: 1
     bodyGesture: 14
     emoteAnimation: 2
     facialEmotion: 0
-  - name: CRITICISM
+  - name: 5
     bodyEmotion: 0
     bodyGesture: 22
     emoteAnimation: 0
     facialEmotion: 0
-  - name: ANGER
+  - name: 6
     bodyEmotion: 1
     bodyGesture: 3
     emoteAnimation: 2
     facialEmotion: 2
-  - name: DEFENSIVENESS
+  - name: 9
     bodyEmotion: 2
     bodyGesture: 20
     emoteAnimation: 4
     facialEmotion: 4
-  - name: TENSION
+  - name: 7
     bodyEmotion: 2
     bodyGesture: 0
     emoteAnimation: 4
     facialEmotion: 4
-  - name: STONEWALLING
+  - name: 12
     bodyEmotion: 4
     bodyGesture: 8
     emoteAnimation: 2
     facialEmotion: 5
-  - name: TENSE_HUMOR
+  - name: 8
     bodyEmotion: 2
     bodyGesture: 10
     emoteAnimation: 4
     facialEmotion: 6
-  - name: WHINING
+  - name: 10
     bodyEmotion: 4
     bodyGesture: 7
     emoteAnimation: 5
     facialEmotion: 2
-  - name: SADNESS
+  - name: 11
     bodyEmotion: 4
     bodyGesture: 18
     emoteAnimation: 5
     facialEmotion: 5
-  - name: VALIDATION
+  - name: 14
     bodyEmotion: 0
     bodyGesture: 2
     emoteAnimation: 0
     facialEmotion: 0
-  - name: DISGUST
+  - name: 1
     bodyEmotion: 0
     bodyGesture: 8
     emoteAnimation: 5
     facialEmotion: 8
-  - name: SURPRISE
+  - name: 17
     bodyEmotion: 0
     bodyGesture: 19
     emoteAnimation: 2

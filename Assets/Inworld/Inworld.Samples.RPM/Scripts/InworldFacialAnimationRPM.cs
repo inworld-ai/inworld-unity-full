@@ -122,6 +122,11 @@ namespace Inworld.Sample.RPM
         }
         protected virtual void MorphLipsync()
         {
+            if (!m_Character.IsSpeaking)
+            {
+                Reset();
+                return;
+            }
             // 1. Move Out-dated Viseme to Last Viseme.
             if (m_CurrentAudioTime >= m_CurrViseme.y)
             {

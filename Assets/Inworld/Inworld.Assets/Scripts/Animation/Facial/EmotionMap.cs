@@ -14,7 +14,7 @@ namespace Inworld.Assets
     [Serializable]
     public class EmotionMapData
     {
-        public string name;
+        public SpaffCode name;
         public Emotion bodyEmotion;
         public Gesture bodyGesture;
         public FacialEmotion emoteAnimation;
@@ -23,6 +23,6 @@ namespace Inworld.Assets
     public class EmotionMap : ScriptableObject
     {
         public List<EmotionMapData> data;
-        public EmotionMapData this[string emoName] => data.FirstOrDefault(e => e.name == emoName);
+        public EmotionMapData this[string emoName] => data.FirstOrDefault(e => e.name.ToString() == emoName);
     }
 }

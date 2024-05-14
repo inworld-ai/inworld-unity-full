@@ -55,8 +55,8 @@ namespace Inworld.Sample
                 if (animator)
                     m_HeadTransform = animator.GetBoneTransform(HumanBodyBones.Head);
             }
-            if (!m_CameraTransform && PlayerController.Instance)
-                m_CameraTransform = PlayerController.Instance.transform;
+            if (!m_CameraTransform && Camera.main)
+                m_CameraTransform = Camera.main.transform;
         }
 
         void Update()

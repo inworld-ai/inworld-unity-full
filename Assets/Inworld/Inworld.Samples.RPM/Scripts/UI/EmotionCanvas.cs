@@ -8,6 +8,8 @@ using Inworld.Assets;
 using UnityEngine;
 using Inworld.Packet;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 
 namespace Inworld.Sample.RPM
@@ -75,17 +77,12 @@ namespace Inworld.Sample.RPM
         /// <param name="nSpaffCode">the spaffcode of the emotion.</param>
         public void MockServerEmoEvents(int nSpaffCode)
         {
-            if (!m_Character || string.IsNullOrEmpty(m_Character.ID))
-            {
-                InworldAI.LogError("Please wait until character initialized!");
-                return;
-            }
             EmotionPacket evt = new EmotionPacket
             {
                 routing = new Routing(m_Character.ID),
                 emotion = new EmotionEvent
                 {
-                    behavior = m_EmotionMap.data[nSpaffCode].name
+                    behavior = m_EmotionMap.data[nSpaffCode].name.ToString()
                 }
             };
             m_Character.Event.onPacketReceived.Invoke(evt);
@@ -111,7 +108,18 @@ namespace Inworld.Sample.RPM
                 return $"Client:\nEmotion: <color=green>{emotion}</color>\tGesture: <color=green>{gesture}</color>\nMain Status: <color=green>{animMainStatus}</color>";
             }
         }
-
+        void Awake()
+        {
+            m_ServerEventDropDown.options = new List<TMP_Dropdown.OptionData>();
+            foreach (var emoData in m_EmotionMap.data)
+            {
+                m_ServerEventDropDown.options.Add(new TMP_Dropdown.OptionData
+                {
+                    image = null,
+                    text = emoData.name.ToString()
+                });
+            }
+        }
         // Start is called before the first frame update
         protected override void OnEnable()
         {

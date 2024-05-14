@@ -277,9 +277,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SamplingMode: 3
-  m_PlayerVolumeThreshold: 2
+  m_PushToTalkKey: 0
+  m_PlayerVolumeThreshold: 6
   m_BufferSeconds: 1
+  m_AudioToPushCapacity: 100
   m_DeviceName: 
+  m_DetectPlayerSpeaking: 1
   OnRecordingStart:
     m_PersistentCalls:
       m_Calls: []
@@ -878,7 +881,9 @@ MonoBehaviour:
   m_CameraTransform: {fileID: 0}
   m_SightAngle: 90
   m_SightDistance: 10
-  m_DistancePriorityFactor: 10
+  m_PlayerAngleWeight: 1
+  m_DistanceWeight: 0.5
+  m_CharacterAngleWeight: 0.15
   m_RefreshRate: 0.25
 --- !u!1001 &934002599
 PrefabInstance:
@@ -1306,7 +1311,9 @@ MonoBehaviour:
   m_CameraTransform: {fileID: 0}
   m_SightAngle: 150
   m_SightDistance: 10
-  m_DistancePriorityFactor: 10
+  m_PlayerAngleWeight: 1
+  m_DistanceWeight: 0.5
+  m_CharacterAngleWeight: 0.15
   m_RefreshRate: 0.25
 --- !u!114 &1147359320
 MonoBehaviour:

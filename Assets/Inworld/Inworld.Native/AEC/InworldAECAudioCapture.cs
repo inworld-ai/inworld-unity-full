@@ -5,6 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
+using Inworld.Entities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,7 +42,7 @@ namespace Inworld.AEC
                                    || Application.platform == RuntimePlatform.WindowsEditor
                                    || Application.platform == RuntimePlatform.OSXEditor
                                    || Application.platform == RuntimePlatform.OSXPlayer;
-
+        
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -50,14 +51,15 @@ namespace Inworld.AEC
             AECInterop.WebRtcAec3_Free(m_AECHandle);
             m_AECHandle = IntPtr.Zero;
         }
-        protected override void HandlePTT()
+        protected new void Update()
         {
-            base.HandlePTT();
             m_IsAudioDebugging = Input.GetKey(m_DumpAudioHotKey);
             if (!m_IsAudioDebugging)
             {
                 _DumpAudioFiles();
             }
+            if (m_AudioToPush.Count > m_AudioToPushCapacity)
+                m_AudioToPush.TryDequeue(out AudioChunk chunk);
         }
         // YAN: Currently if you'd like to use AEC. The Audio Setting for output has to be 16000 sample rate, and mono.
         //      We'll add resampling features in the next update.
@@ -122,7 +124,7 @@ namespace Inworld.AEC
             }
             else
             {
-                for (int i = 0; i < inputData.Length * m_Recording.channels; i += k_NumSamples)
+                for (int i = 0; i <= inputData.Length - k_NumSamples; i += k_NumSamples)
                 {
                     short[] inputTmp = new short[k_NumSamples];
                     short[] outputTmp = new short[k_NumSamples];
