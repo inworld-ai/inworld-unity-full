@@ -7,6 +7,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using UnityEngine;
 
 
@@ -15,8 +16,10 @@ namespace Inworld.Sample
     public class CharacterHandler3D : CharacterHandler
     {
         [SerializeField] protected CharSelectingMethod m_SelectingMethod = CharSelectingMethod.SightAngle;
-        [Range(0.1f, 1f)]
-        [SerializeField] float m_RefreshRate = 0.5f;
+        [Tooltip("Only the priority lower that threshold would be selected.")][Range(0.1f, 1f)]
+        [SerializeField] protected float m_SelectingThreshold = 0.5f;
+        [Tooltip("How often do we calculate the priority:")][Range(0.1f, 1f)]
+        [SerializeField] protected float m_RefreshRate = 0.5f;
 
         float m_CurrentTime;
 
@@ -59,7 +62,7 @@ namespace Inworld.Sample
             if (m_CurrentTime < m_RefreshRate)
                 return;
             m_CurrentTime = 0;
-            float fPriority = float.MaxValue;
+            float fPriority = m_SelectingThreshold;
             InworldCharacter targetCharacter = null;
             foreach (InworldCharacter character in m_CharacterList.Where(character => character && character.Priority >= 0 && character.Priority < fPriority))
             {
