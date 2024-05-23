@@ -75,7 +75,7 @@ namespace Inworld.Sample.Innequin
             m_DefaultMouth = facialData.mouthDefault;
             m_LipsyncTextures = facialData.mouth;
         }
-        void _ProcessEmotion(string emotionBehavior)
+        void _ProcessEmotion(SpaffCode emotionBehavior)
         {
             EmotionMapData emoMapData = m_EmotionMap[emotionBehavior];
             if (emoMapData == null)
@@ -107,7 +107,7 @@ namespace Inworld.Sample.Innequin
                 return;
             }
             m_CurrentAudioTime += Time.fixedDeltaTime;
-            PhonemeInfo data = m_CurrentPhoneme?.LastOrDefault(p => p.startOffset < m_CurrentAudioTime);
+            PhonemeInfo data = m_CurrentPhoneme?.LastOrDefault(p => p.StartOffset < m_CurrentAudioTime);
             if (data == null || string.IsNullOrEmpty(data.phoneme))
             {
                 Reset();
@@ -130,7 +130,7 @@ namespace Inworld.Sample.Innequin
         }
         protected override void HandleEmotion(EmotionPacket packet)
         {
-            _ProcessEmotion(packet.emotion.behavior.ToUpper());
+            _ProcessEmotion(packet.emotion.behavior);
         }
     }
 }

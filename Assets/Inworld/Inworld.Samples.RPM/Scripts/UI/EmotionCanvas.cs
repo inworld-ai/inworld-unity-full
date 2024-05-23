@@ -24,12 +24,12 @@ namespace Inworld.Sample.RPM
         static readonly int s_Gesture = Animator.StringToHash("Gesture");
         static readonly int s_Motion = Animator.StringToHash("MainStatus");
 
-        string m_CurrentSpaff = "";
-        string m_LastSpaff = "";
+        SpaffCode m_CurrentSpaff = SpaffCode.NEUTRAL;
+        SpaffCode m_LastSpaff = SpaffCode.NEUTRAL;
         /// <summary>
         /// Get the current spaffcode of emotion.
         /// </summary>
-        public string Emotion
+        public SpaffCode Emotion
         {
             get => m_CurrentSpaff;
             private set
@@ -82,7 +82,7 @@ namespace Inworld.Sample.RPM
                 routing = new Routing(m_Character.ID),
                 emotion = new EmotionEvent
                 {
-                    behavior = m_EmotionMap.data[nSpaffCode].name.ToString()
+                    behavior = m_EmotionMap.data[nSpaffCode].name
                 }
             };
             m_Character.Event.onPacketReceived.Invoke(evt);
@@ -159,13 +159,13 @@ namespace Inworld.Sample.RPM
                     break;
             }
         }
-        void HandleEmotion(string incomingSpaff)
+        void HandleEmotion(SpaffCode incomingSpaff)
         {
             Emotion = incomingSpaff;
             m_Title.text = $"Get Emotion {incomingSpaff}";
             for (int i = 0; i < m_ServerEventDropDown.options.Count; i++)
             {
-                if (!string.Equals(m_ServerEventDropDown.options[i].text, incomingSpaff, StringComparison.CurrentCultureIgnoreCase))
+                if (!string.Equals(m_ServerEventDropDown.options[i].text, incomingSpaff.ToString(), StringComparison.CurrentCultureIgnoreCase))
                 {
                     continue;
                 }

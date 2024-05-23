@@ -54,12 +54,12 @@ namespace Inworld.Sample
                 return;
             if (!(packet is TextPacket playerPacket))
                 return;
-            switch (packet.routing.source.type.ToUpper())
+            switch (packet.Source)
             {
-                case "PLAYER":
+                case SourceType.PLAYER:
                     m_Subtitle.text = $"{InworldAI.User.Name}: {playerPacket.text.text}";
                     break;
-                case "AGENT":
+                case SourceType.AGENT:
                     InworldCharacterData charData = InworldController.Client.GetCharacterDataByID(packet.routing.source.name);
                     if (charData != null)
                         m_Subtitle.text = $"{charData.givenName}: {playerPacket.text.text}";

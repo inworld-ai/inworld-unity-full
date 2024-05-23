@@ -60,9 +60,9 @@ namespace Inworld.Assets
 
         protected override void HandleEmotion(EmotionPacket emotionPacket)
         {
-            _ProcessEmotion(emotionPacket.emotion.behavior.ToUpper());
+            _ProcessEmotion(emotionPacket.emotion.behavior);
         }
-        void _ProcessEmotion(string emotion)
+        void _ProcessEmotion(SpaffCode emotion)
         {
             EmotionMapData emoMapData = m_EmotionMap[emotion];
             if (emoMapData == null)
