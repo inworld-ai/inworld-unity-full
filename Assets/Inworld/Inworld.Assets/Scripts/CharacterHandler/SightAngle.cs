@@ -6,7 +6,7 @@
  *************************************************************************************************/
 
 using UnityEngine;
-using UnityEngine.Serialization;
+
 
 namespace Inworld.Sample
 {

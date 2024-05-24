@@ -6,8 +6,6 @@
  *************************************************************************************************/
 using UnityEngine;
 using Inworld.Interactions;
-using System;
-
 
 namespace Inworld.Sample.Innequin
 {

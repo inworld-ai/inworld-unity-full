@@ -7,8 +7,7 @@
 
 using UnityEngine;
 using Inworld.UI;
-using System.Linq;
-using TMPro;
+
 
 namespace Inworld.Sample
 {
