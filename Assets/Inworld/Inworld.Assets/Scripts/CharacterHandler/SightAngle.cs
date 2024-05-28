@@ -40,23 +40,34 @@ namespace Inworld.Sample
         protected virtual bool IsValid => InworldController.Instance && m_HeadTransform && m_CameraTransform
                                && InworldController.CharacterHandler.SelectingMethod == CharSelectingMethod.SightAngle;
 
+        public Transform HeadTransform
+        {
+            get
+            {
+                if (m_HeadTransform)
+                    return m_HeadTransform;
+                Animator animator = GetComponent<Animator>();
+                if (animator)
+                    m_HeadTransform = animator.GetBoneTransform(HumanBodyBones.Head);
+                return m_HeadTransform;
+            }
+        }
+        public Transform CameraTransform
+        {
+            get
+            {
+                if (!m_CameraTransform && Camera.main)
+                    m_CameraTransform = Camera.main.transform;
+                return m_CameraTransform;
+            }
+
+        }
+
         void Awake()
         {
             Character = GetComponent<InworldCharacter>();
             if (!Character)
                 enabled = false;
-        }
-        
-        void OnEnable()
-        {
-            if (!m_HeadTransform)
-            {
-                Animator animator = GetComponent<Animator>();
-                if (animator)
-                    m_HeadTransform = animator.GetBoneTransform(HumanBodyBones.Head);
-            }
-            if (!m_CameraTransform && Camera.main)
-                m_CameraTransform = Camera.main.transform;
         }
 
         void Update()
@@ -68,17 +79,19 @@ namespace Inworld.Sample
 
         void CheckPriority()
         {
+            if (!HeadTransform || !CameraTransform)
+                return;
             m_CurrentTime += Time.deltaTime;
             if (m_CurrentTime < m_RefreshRate)
                 return;
             m_CurrentTime = 0;
             
-            float distance = Vector3.Distance(m_HeadTransform.position, m_CameraTransform.position);
+            float distance = Vector3.Distance(HeadTransform.position, CameraTransform.position);
             if (distance > m_SightDistance)
                 Character.Priority = -1f;
             else
             {
-                Vector3 vecDirection = (m_CameraTransform.position - m_HeadTransform.position).normalized;
+                Vector3 vecDirection = (CameraTransform.position - HeadTransform.position).normalized;
                 float fAngle = Vector3.Angle(vecDirection, transform.forward);
                 if (fAngle > m_SightAngle)
                 {
@@ -86,15 +99,15 @@ namespace Inworld.Sample
                 }
                 else
                 {
-                    Character.Priority = (Vector3.Angle(-vecDirection, m_CameraTransform.forward) / 180f) * m_PlayerAngleWeight;
+                    Character.Priority = (Vector3.Angle(-vecDirection, CameraTransform.forward) / 180f) * m_PlayerAngleWeight;
                     Character.Priority += (distance / m_SightDistance) * m_DistanceWeight; 
-                    Character.Priority += (Vector3.Angle(m_HeadTransform.forward, vecDirection) / m_SightAngle) * m_CharacterAngleWeight;
+                    Character.Priority += (Vector3.Angle(HeadTransform.forward, vecDirection) / m_SightAngle) * m_CharacterAngleWeight;
                 }
             }
         }
         void OnDrawGizmosSelected()
         {
-            if (!m_HeadTransform)
+            if (!HeadTransform)
                 return;
             
             Gizmos.color = Color.cyan;
