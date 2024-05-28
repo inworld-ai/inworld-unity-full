@@ -277,7 +277,7 @@ MonoBehaviour:
     onPlayerStopSpeaking:
       m_PersistentCalls:
         m_Calls: []
-  m_DumpAudioHotKey: 48
+  m_DumpAudioHotKey: 0
 --- !u!114 &359806132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,6 +391,11 @@ PrefabInstance:
 --- !u!4 &367072179 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+  m_PrefabInstance: {fileID: 367072178}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &367072180 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3624553879139003962, guid: 809fb4511befe9142893b7b016bea809, type: 3}
   m_PrefabInstance: {fileID: 367072178}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &437510712
@@ -869,6 +874,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -6769691430286951708, guid: 0ca1b8c7a532274468186843fc32a37f, type: 3}
   m_PrefabInstance: {fileID: 679630986}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &679630988 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -3512545981279201704, guid: 0ca1b8c7a532274468186843fc32a37f, type: 3}
+  m_PrefabInstance: {fileID: 679630986}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &891453304 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2717743084740492485, guid: 809fb4511befe9142893b7b016bea809, type: 3}
@@ -886,7 +896,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HeadTransform: {fileID: 0}
+  m_HeadTransform: {fileID: 367072180}
   m_CameraTransform: {fileID: 0}
   m_SightAngle: 90
   m_SightDistance: 10
@@ -1316,7 +1326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HeadTransform: {fileID: 0}
+  m_HeadTransform: {fileID: 679630988}
   m_CameraTransform: {fileID: 0}
   m_SightAngle: 150
   m_SightDistance: 10

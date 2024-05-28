@@ -263,6 +263,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &376378988 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -3512545981279201704, guid: 0ca1b8c7a532274468186843fc32a37f, type: 3}
+  m_PrefabInstance: {fileID: 1630794678}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &444891039
 GameObject:
   m_ObjectHideFlags: 0
@@ -672,6 +677,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Title: {fileID: 1934973846}
   m_Content: {fileID: 1624441892}
+--- !u!4 &1284640081 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -787439503733261455, guid: 5e501adac10d5474bb38901f0b5281bc, type: 3}
+  m_PrefabInstance: {fileID: 559166932}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1351384361
 GameObject:
   m_ObjectHideFlags: 0
@@ -2634,7 +2644,7 @@ MonoBehaviour:
     onPlayerStopSpeaking:
       m_PersistentCalls:
         m_Calls: []
-  m_DumpAudioHotKey: 48
+  m_DumpAudioHotKey: 0
 --- !u!114 &5556377780025863790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3216,7 +3226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HeadTransform: {fileID: 0}
+  m_HeadTransform: {fileID: 1284640081}
   m_CameraTransform: {fileID: 0}
   m_SightAngle: 130
   m_SightDistance: 10
@@ -3402,7 +3412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HeadTransform: {fileID: 0}
+  m_HeadTransform: {fileID: 376378988}
   m_CameraTransform: {fileID: 0}
   m_SightAngle: 150
   m_SightDistance: 10
