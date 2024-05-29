@@ -37,7 +37,7 @@ namespace Inworld.Sample
         /// </summary>
         public virtual InworldCharacter Character { get; private set; }
 
-        protected virtual bool IsValid => InworldController.Instance && m_HeadTransform && m_CameraTransform
+        protected virtual bool IsValid => InworldController.Instance && HeadTransform && CameraTransform
                                && InworldController.CharacterHandler.SelectingMethod == CharSelectingMethod.SightAngle;
 
         public Transform HeadTransform
@@ -56,7 +56,9 @@ namespace Inworld.Sample
         {
             get
             {
-                if (!m_CameraTransform && Camera.main)
+                if (m_CameraTransform)
+                    return m_CameraTransform;
+                if (Camera.main)
                     m_CameraTransform = Camera.main.transform;
                 return m_CameraTransform;
             }
