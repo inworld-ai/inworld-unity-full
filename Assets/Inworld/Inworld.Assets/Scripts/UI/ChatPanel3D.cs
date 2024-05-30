@@ -26,11 +26,8 @@ namespace Inworld.Assets
         protected override void OnInteraction(InworldPacket incomingPacket)
         {
             // YAN: Filter unrelated interactions, but not too related. (Only if you're sending/receiving)
-            if (m_Character && 
-                (incomingPacket.Source == SourceType.PLAYER && incomingPacket.IsBroadCast
-                 || incomingPacket.IsSource(m_Character.ID) 
-                 || incomingPacket.IsTarget(m_Character.ID)))
-            base.OnInteraction(incomingPacket);
+            if (m_Character && incomingPacket.IsRelated(m_Character.ID))
+                base.OnInteraction(incomingPacket);
         }
         protected override void HandleRelation(CustomPacket packet)
         {

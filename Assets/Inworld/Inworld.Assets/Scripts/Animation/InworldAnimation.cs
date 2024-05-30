@@ -39,11 +39,12 @@ namespace Inworld.Assets
         }
         protected virtual void ProcessPacket(InworldPacket incomingPacket)
         {
+            if (!incomingPacket.IsRelated(m_Character.ID))
+                return;
             switch (incomingPacket)
             {
                 case AudioPacket audioPacket: // Already Played.
-                    if (audioPacket?.routing?.source?.name == m_Character.ID)
-                        HandleLipSync(audioPacket);
+                    HandleLipSync(audioPacket);
                     break;
                 case EmotionPacket emotionPacket:
                     HandleEmotion(emotionPacket);
