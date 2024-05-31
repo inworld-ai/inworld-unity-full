@@ -200,6 +200,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Amy
       objectReference: {fileID: 0}
+    - target: {fileID: 5114465013947108567, guid: ddb9540567195fc4e8fce1c7b05b361f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5251892443967694460, guid: ddb9540567195fc4e8fce1c7b05b361f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.8025002
@@ -313,7 +317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37c7724d7f1e0394c9a79e9ff4fbd818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SamplingMode: 3
+  m_SamplingMode: 4
   m_PushToTalkKey: 0
   m_PlayerVolumeThreshold: 6
   m_BufferSeconds: 1
