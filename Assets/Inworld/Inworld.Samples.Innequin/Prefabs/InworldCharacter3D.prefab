@@ -1145,31 +1145,42 @@ MonoBehaviour:
       thumbnailProgress: 0
       avatarProgress: 0
     thumbnail: {fileID: 0}
+  m_CharacterEvents:
+    onCharacterSelected:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterDeselected:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterDestroyed:
+      m_PersistentCalls:
+        m_Calls: []
+    onBeginSpeaking:
+      m_PersistentCalls:
+        m_Calls: []
+    onEndSpeaking:
+      m_PersistentCalls:
+        m_Calls: []
+    onInteractionEnd:
+      m_PersistentCalls:
+        m_Calls: []
+    onPacketReceived:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterSpeaks:
+      m_PersistentCalls:
+        m_Calls: []
+    onEmotionChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    onGoalCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+    onRelationUpdated:
+      m_PersistentCalls:
+        m_Calls: []
   m_VerboseLog: 0
-  onBeginSpeaking:
-    m_PersistentCalls:
-      m_Calls: []
-  onEndSpeaking:
-    m_PersistentCalls:
-      m_Calls: []
-  onPacketReceived:
-    m_PersistentCalls:
-      m_Calls: []
-  onCharacterSpeaks:
-    m_PersistentCalls:
-      m_Calls: []
-  onEmotionChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onGoalCompleted:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelationUpdated:
-    m_PersistentCalls:
-      m_Calls: []
-  onCharacterDestroyed:
-    m_PersistentCalls:
-      m_Calls: []
+  m_AutoStart: 1
 --- !u!114 &5081194231765261366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1236,11 +1247,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Animator: {fileID: 6488192458725203369}
-  m_Character: {fileID: 2030273176201225856}
+  m_HeadTransform: {fileID: 0}
+  m_PlayerTransform: {fileID: 0}
   m_SightAngle: 150
   m_SightDistance: 10
-  m_DistancePriorityFactor: 10
+  m_PlayerAngleWeight: 1
+  m_DistanceWeight: 0.5
+  m_CharacterAngleWeight: 0.15
   m_RefreshRate: 0.25
 --- !u!1 &3804245501167605051
 GameObject:
@@ -2815,6 +2828,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+      propertyPath: m_Dots
+      value: 
+      objectReference: {fileID: 4258198779179739924}
+    - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
       propertyPath: m_Character
       value: 
       objectReference: {fileID: 2030273176201225856}
@@ -2838,6 +2855,11 @@ PrefabInstance:
       addedObject: {fileID: 970305799235368617}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+--- !u!1 &4258198779179739924 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6881666557475305475, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+  m_PrefabInstance: {fileID: 7248753054751822615}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &8258061020562800747 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1585892423272747900, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}

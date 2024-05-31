@@ -27,7 +27,13 @@ namespace Inworld.Sample
         public override CharSelectingMethod SelectingMethod
         {
             get => m_SelectingMethod;
-            set => m_SelectingMethod = value;
+            set
+            {
+                if (m_SelectingMethod == value)
+                    return;
+                m_SelectingMethod = value;
+                Event.onCharacterSelectingModeUpdated?.Invoke(m_SelectingMethod);
+            }
         }
         /// <summary>
         ///     Change the method of how to select character.

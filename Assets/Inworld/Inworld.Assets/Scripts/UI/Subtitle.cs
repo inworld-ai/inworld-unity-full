@@ -25,8 +25,8 @@ namespace Inworld.Sample
         {
             base.OnEnable();
             InworldController.Client.OnPacketSent += OnInteraction;
-            InworldController.CharacterHandler.OnCharacterListJoined += OnCharacterJoined;
-            InworldController.CharacterHandler.OnCharacterListLeft += OnCharacterLeft;
+            InworldController.CharacterHandler.Event.onCharacterListJoined.AddListener(OnCharacterJoined);
+            InworldController.CharacterHandler.Event.onCharacterListLeft.AddListener(OnCharacterLeft);
         }
         protected override void OnDisable()
         {
@@ -34,8 +34,8 @@ namespace Inworld.Sample
             if (!InworldController.Instance)
                 return;
             InworldController.Client.OnPacketSent -= OnInteraction;
-            InworldController.CharacterHandler.OnCharacterListJoined -= OnCharacterJoined;
-            InworldController.CharacterHandler.OnCharacterListLeft -= OnCharacterLeft;
+            InworldController.CharacterHandler.Event.onCharacterListJoined.RemoveListener(OnCharacterJoined);
+            InworldController.CharacterHandler.Event.onCharacterListLeft.RemoveListener(OnCharacterLeft);
         }
         protected virtual void OnCharacterJoined(InworldCharacter character)
         {

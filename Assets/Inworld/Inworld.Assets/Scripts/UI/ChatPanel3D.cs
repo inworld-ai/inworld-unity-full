@@ -7,6 +7,7 @@
 
 using Inworld.Packet;
 using Inworld.Sample;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,12 +21,16 @@ namespace Inworld.Assets
         [SerializeField] InworldFacialEmotion m_Emotion;
         [SerializeField] TMP_Text m_Relation;
         [SerializeField] Image m_EmoIcon;
-        
+        [SerializeField] GameObject m_Dots;
         [SerializeField] InworldCharacter m_Character;
 
+        void Start()
+        {
+            if (m_Dots)
+                m_Dots.SetActive(false);
+        }
         protected override void OnInteraction(InworldPacket incomingPacket)
         {
-            // YAN: Filter unrelated interactions, but not too related. (Only if you're sending/receiving)
             if (m_Character && incomingPacket.IsRelated(m_Character.ID))
                 base.OnInteraction(incomingPacket);
         }
@@ -53,6 +58,17 @@ namespace Inworld.Assets
             m_Relation.text = result;
         }
 
+        protected override void HandleText(TextPacket textPacket)
+        {
+            if (m_Dots)
+                m_Dots.SetActive(true);
+            base.HandleText(textPacket);
+        }
+        protected override void HandleControl(ControlPacket packet)
+        {
+            if (m_Dots && packet.Action == ControlType.INTERACTION_END)
+                m_Dots.SetActive(false);
+        }
         protected override void HandleEmotion(EmotionPacket emotionPacket)
         {
             _ProcessEmotion(emotionPacket.emotion.behavior);

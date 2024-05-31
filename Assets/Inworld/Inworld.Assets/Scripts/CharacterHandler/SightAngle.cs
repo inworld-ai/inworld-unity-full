@@ -13,7 +13,7 @@ namespace Inworld.Sample
     public class SightAngle : MonoBehaviour
     {
         [SerializeField] Transform m_HeadTransform;
-        [SerializeField] Transform m_CameraTransform;
+        [SerializeField] Transform m_PlayerTransform;
 
         [Range(1, 180)]
         [SerializeField] float m_SightAngle = 90f;
@@ -37,7 +37,7 @@ namespace Inworld.Sample
         /// </summary>
         public virtual InworldCharacter Character { get; private set; }
 
-        protected virtual bool IsValid => InworldController.Instance && HeadTransform && CameraTransform
+        protected virtual bool IsValid => InworldController.Instance && HeadTransform && PlayerTransform
                                && InworldController.CharacterHandler.SelectingMethod == CharSelectingMethod.SightAngle;
 
         public Transform HeadTransform
@@ -52,15 +52,15 @@ namespace Inworld.Sample
                 return m_HeadTransform;
             }
         }
-        public Transform CameraTransform
+        public Transform PlayerTransform
         {
             get
             {
-                if (m_CameraTransform)
-                    return m_CameraTransform;
-                if (Camera.main)
-                    m_CameraTransform = Camera.main.transform;
-                return m_CameraTransform;
+                if (m_PlayerTransform)
+                    return m_PlayerTransform;
+                if (PlayerController.Instance)
+                    m_PlayerTransform = PlayerController.Instance.transform;
+                return m_PlayerTransform;
             }
 
         }
@@ -81,19 +81,19 @@ namespace Inworld.Sample
 
         void CheckPriority()
         {
-            if (!HeadTransform || !CameraTransform)
+            if (!HeadTransform || !PlayerTransform)
                 return;
             m_CurrentTime += Time.deltaTime;
             if (m_CurrentTime < m_RefreshRate)
                 return;
             m_CurrentTime = 0;
             
-            float distance = Vector3.Distance(HeadTransform.position, CameraTransform.position);
+            float distance = Vector3.Distance(HeadTransform.position, PlayerTransform.position);
             if (distance > m_SightDistance)
                 Character.Priority = -1f;
             else
             {
-                Vector3 vecDirection = (CameraTransform.position - HeadTransform.position).normalized;
+                Vector3 vecDirection = (PlayerTransform.position - HeadTransform.position).normalized;
                 float fAngle = Vector3.Angle(vecDirection, transform.forward);
                 if (fAngle > m_SightAngle)
                 {
@@ -101,7 +101,7 @@ namespace Inworld.Sample
                 }
                 else
                 {
-                    Character.Priority = (Vector3.Angle(-vecDirection, CameraTransform.forward) / 180f) * m_PlayerAngleWeight;
+                    Character.Priority = (Vector3.Angle(-vecDirection, PlayerTransform.forward) / 180f) * m_PlayerAngleWeight;
                     Character.Priority += (distance / m_SightDistance) * m_DistanceWeight; 
                     Character.Priority += (Vector3.Angle(HeadTransform.forward, vecDirection) / m_SightAngle) * m_CharacterAngleWeight;
                 }
@@ -120,9 +120,9 @@ namespace Inworld.Sample
             }
             Gizmos.color = Color.red;
 
-            if (!m_CameraTransform)
+            if (!m_PlayerTransform)
                 return;
-            Vector3 vecDirection = (m_CameraTransform.position - trPosition).normalized;
+            Vector3 vecDirection = (m_PlayerTransform.position - trPosition).normalized;
             Gizmos.DrawLine(trPosition, trPosition + transform.forward * m_SightDistance);
             Gizmos.DrawLine(trPosition, trPosition + vecDirection * m_SightDistance);
         }

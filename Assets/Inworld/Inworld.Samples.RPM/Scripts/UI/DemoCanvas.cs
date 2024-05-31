@@ -24,16 +24,16 @@ namespace Inworld.Sample.RPM
         {
             m_Title.text = $"Inworld {InworldController.Client.Status}";
             InworldController.Client.OnStatusChanged += OnStatusChanged;
-            InworldController.CharacterHandler.OnCharacterListJoined += OnCharacterJoined;
-            InworldController.CharacterHandler.OnCharacterListLeft += OnCharacterLeft;
+            InworldController.CharacterHandler.Event.onCharacterListJoined.AddListener(OnCharacterJoined);
+            InworldController.CharacterHandler.Event.onCharacterListLeft.AddListener(OnCharacterLeft);
         }
         protected virtual void OnDisable()
         {
             if (!InworldController.Instance)
                 return;
             InworldController.Client.OnStatusChanged -= OnStatusChanged;
-            InworldController.CharacterHandler.OnCharacterListJoined -= OnCharacterJoined;
-            InworldController.CharacterHandler.OnCharacterListLeft -= OnCharacterLeft;
+            InworldController.CharacterHandler.Event.onCharacterListJoined.RemoveListener(OnCharacterJoined);
+            InworldController.CharacterHandler.Event.onCharacterListLeft.RemoveListener(OnCharacterLeft);
         }
         protected virtual void OnStatusChanged(InworldConnectionStatus incomingStatus)
         {
