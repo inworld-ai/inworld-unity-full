@@ -58,7 +58,9 @@ namespace Inworld.Sample.RPM
         }
         public void NextCharacterSpeaking(InworldCharacter character) 
         {
-            if (InworldController.CharacterHandler.SelectingMethod != CharSelectingMethod.AutoChat)
+            // TODO(YAN): When opening chat panel, it'll set to manual.
+            //            Let's figure out a better way to handle both situations.
+            if (InworldController.CharacterHandler.SelectingMethod != CharSelectingMethod.AutoChat && InworldController.CharacterHandler.SelectingMethod != CharSelectingMethod.Manual)
                 return;
             if (string.IsNullOrEmpty(character.ID))
                 return;
