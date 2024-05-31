@@ -1125,6 +1125,10 @@ PrefabInstance:
       value: Dotcom
       objectReference: {fileID: 0}
     - target: {fileID: 6329374199901625135, guid: 45210386c16e25040a80180d7008a479, type: 3}
+      propertyPath: m_VerboseLog
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6329374199901625135, guid: 45210386c16e25040a80180d7008a479, type: 3}
       propertyPath: m_CharacterEvents.onEndSpeaking.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1131924869}
@@ -1332,6 +1336,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5251892443967694460, guid: ddb9540567195fc4e8fce1c7b05b361f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9024378369211073086, guid: ddb9540567195fc4e8fce1c7b05b361f, type: 3}
+      propertyPath: m_VerboseLog
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9024378369211073086, guid: ddb9540567195fc4e8fce1c7b05b361f, type: 3}

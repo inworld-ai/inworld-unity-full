@@ -21,6 +21,11 @@ namespace Inworld.Sample.RPM
         string m_CurrentMethod;
         string m_CharacterIndicator = k_GroupChat;
         
+        protected override void OnSelectingModeUpdated(CharSelectingMethod method)
+        {
+            if (method == CharSelectingMethod.AutoChat)
+                InworldController.Instance.SendTrigger(InworldMessenger.NextTurn); 
+        }
         protected override void OnCharacterSelected(string newCharacter)
         {
             InworldCharacter character = InworldController.CharacterHandler.GetCharacterByBrainName(newCharacter);

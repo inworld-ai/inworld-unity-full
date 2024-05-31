@@ -40,12 +40,12 @@ namespace Inworld.Sample
         /// </summary>
         public override void ChangeSelectingMethod()
         {
-            if (m_SelectingMethod == CharSelectingMethod.Manual || m_SelectingMethod == CharSelectingMethod.KeyCode)
-                m_SelectingMethod = CharSelectingMethod.SightAngle;
-            else if (m_SelectingMethod == CharSelectingMethod.SightAngle)
-                m_SelectingMethod = CharSelectingMethod.AutoChat;
-            else if (m_SelectingMethod == CharSelectingMethod.AutoChat)
-                m_SelectingMethod = CharSelectingMethod.KeyCode;
+            if (SelectingMethod == CharSelectingMethod.Manual || SelectingMethod == CharSelectingMethod.KeyCode)
+                SelectingMethod = CharSelectingMethod.SightAngle;
+            else if (SelectingMethod == CharSelectingMethod.SightAngle)
+                SelectingMethod = CharSelectingMethod.AutoChat;
+            else if (SelectingMethod == CharSelectingMethod.AutoChat)
+                SelectingMethod = CharSelectingMethod.KeyCode;
         }
 
         void Update()
