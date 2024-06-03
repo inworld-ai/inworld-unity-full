@@ -7,7 +7,7 @@
 using Inworld.Packet;
 using Inworld.Sample;
 using UnityEngine;
-using UnityEngine.Events;
+
 
 namespace Inworld.Assets
 {
@@ -83,10 +83,10 @@ namespace Inworld.Assets
         {
             m_BodyAnimator.SetFloat(s_Random, Random.Range(0, 1) > 0.5f ? 1 : 0);
             m_BodyAnimator.SetFloat(s_RemainSec, m_Interaction.AnimFactor);
-            _ProcessEmotion(packet.emotion.behavior.ToUpper());
+            _ProcessEmotion(packet.emotion.behavior);
         }
 
-        void _ProcessEmotion(string emotionBehavior)
+        void _ProcessEmotion(SpaffCode emotionBehavior)
         {
             EmotionMapData emoMapData = m_EmotionMap[emotionBehavior];
             if (emoMapData == null)

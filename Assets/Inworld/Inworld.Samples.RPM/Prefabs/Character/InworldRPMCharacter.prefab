@@ -198,6 +198,9 @@ MonoBehaviour:
     onEndSpeaking:
       m_PersistentCalls:
         m_Calls: []
+    onInteractionEnd:
+      m_PersistentCalls:
+        m_Calls: []
     onPacketReceived:
       m_PersistentCalls:
         m_Calls: []
@@ -262,7 +265,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HeadTransform: {fileID: 0}
-  m_CameraTransform: {fileID: 0}
+  m_PlayerTransform: {fileID: 0}
   m_SightAngle: 122
   m_SightDistance: 10
   m_PlayerAngleWeight: 1
@@ -289,7 +292,6 @@ MonoBehaviour:
   m_VisemeSil: viseme_sil
   m_BlinkBlendShape: eyesClosed
   m_CustomModel: 0
-  m_Model: {fileID: 0}
 --- !u!1 &3768078368984134795
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,6 +562,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+      propertyPath: m_Dots
+      value: 
+      objectReference: {fileID: 6447768932718320031}
+    - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
       propertyPath: m_Character
       value: 
       objectReference: {fileID: 4560116734280050820}
@@ -614,6 +620,11 @@ PrefabInstance:
 --- !u!224 &1223215666348061408 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1585892423272747900, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+  m_PrefabInstance: {fileID: 503141929332613532}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6447768932718320031 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6881666557475305475, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
   m_PrefabInstance: {fileID: 503141929332613532}
   m_PrefabAsset: {fileID: 0}
 --- !u!224 &9024173614366409592 stripped

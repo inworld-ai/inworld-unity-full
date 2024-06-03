@@ -809,31 +809,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64744fd8922740478ac4edb57c452bfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4881369807582071654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5556377779683873099}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5db5b813fe746f9a9ce5602a5521235, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
-  m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
-  m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
-  m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
-  m_CustomToken: 
-  m_PublicWorkspace: 
-  m_AutoScene: 0
-  m_Continuation:
-    continuationType: 0
-    dialogHistory:
-      history: []
-    externallySavedState: 
-  m_MaxWaitingListSize: 100
 --- !u!1 &5556377779683873099
 GameObject:
   m_ObjectHideFlags: 0
@@ -844,7 +819,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3753617577772926545}
   - component: {fileID: 2395919966348365518}
-  - component: {fileID: 4881369807582071654}
+  - component: {fileID: 5556377779683873103}
   - component: {fileID: 5556377779683873101}
   - component: {fileID: 5556377779683873102}
   m_Layer: 0
@@ -873,25 +848,26 @@ MonoBehaviour:
   m_AudioToPushCapacity: 100
   m_DeviceName: 
   m_DetectPlayerSpeaking: 1
-  OnStartCalibrating:
-    m_PersistentCalls:
-      m_Calls: []
-  OnStopCalibrating:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRecordingStart:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRecordingEnd:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPlayerStartSpeaking:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPlayerStopSpeaking:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DumpAudioHotKey: 48
+  m_AudioEvent:
+    onStartCalibrating:
+      m_PersistentCalls:
+        m_Calls: []
+    onStopCalibrating:
+      m_PersistentCalls:
+        m_Calls: []
+    onRecordingStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onRecordingEnd:
+      m_PersistentCalls:
+        m_Calls: []
+    onPlayerStartSpeaking:
+      m_PersistentCalls:
+        m_Calls: []
+    onPlayerStopSpeaking:
+      m_PersistentCalls:
+        m_Calls: []
+  m_DumpAudioHotKey: 0
 --- !u!114 &5556377779683873102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -904,9 +880,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3241affa9c0462fa7193839038c32c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ManualAudioHandling: 0
   m_SelectingMethod: 2
+  m_SelectingThreshold: 0.5
   m_RefreshRate: 0.5
+--- !u!114 &5556377779683873103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5556377779683873099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a83291b474642d697cd7963c55a608e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
+  m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
+  m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
+  m_AutoScene: 0
+  m_MaxWaitingListSize: 100
+  m_Continuation:
+    continuationType: 0
+    dialogHistory:
+      history: []
+    externallySavedState: 
+  m_EnableGroupChat: 1
+  m_CustomToken: 
+  m_PublicWorkspace: 
+  m_GameSessionID: 
 --- !u!1001 &7345352663998763942
 PrefabInstance:
   m_ObjectHideFlags: 0

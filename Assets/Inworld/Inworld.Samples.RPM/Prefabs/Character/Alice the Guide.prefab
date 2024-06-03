@@ -282,6 +282,7 @@ GameObject:
   - component: {fileID: 5611356199224546472}
   - component: {fileID: 7677754776915542813}
   - component: {fileID: 3307339663917059437}
+  - component: {fileID: 7079616633953659760}
   m_Layer: 0
   m_Name: Alice the Guide
   m_TagString: Untagged
@@ -464,6 +465,9 @@ MonoBehaviour:
     onEndSpeaking:
       m_PersistentCalls:
         m_Calls: []
+    onInteractionEnd:
+      m_PersistentCalls:
+        m_Calls: []
     onPacketReceived:
       m_PersistentCalls:
         m_Calls: []
@@ -535,6 +539,26 @@ MonoBehaviour:
   m_VisemeSil: viseme_sil
   m_BlinkBlendShape: eyesClosed
   m_CustomModel: 0
+--- !u!114 &7079616633953659760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2717743084740492485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HeadTransform: {fileID: 3624553879139003962}
+  m_PlayerTransform: {fileID: 0}
+  m_SightAngle: 90
+  m_SightDistance: 10
+  m_PlayerAngleWeight: 1
+  m_DistanceWeight: 0.5
+  m_CharacterAngleWeight: 0.15
+  m_RefreshRate: 0.25
 --- !u!1 &4162607404096159169
 GameObject:
   m_ObjectHideFlags: 0
@@ -996,6 +1020,7 @@ MonoBehaviour:
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
   m_Relation: {fileID: 4840593601303544719}
   m_EmoIcon: {fileID: 7575428023401961657}
+  m_Dots: {fileID: 1488135493140826217}
   m_Character: {fileID: 4590294231651289280}
 --- !u!1001 &9011120692824422498
 PrefabInstance:
@@ -1054,6 +1079,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: -4161369568681901532, guid: 26d0188b718ab7c468f30ff748b3c75c, type: 3}
+--- !u!4 &3624553879139003962 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -3512545981279201704, guid: 26d0188b718ab7c468f30ff748b3c75c, type: 3}
+  m_PrefabInstance: {fileID: 9011120692824422498}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6845707845804343942 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -6769691430286951708, guid: 26d0188b718ab7c468f30ff748b3c75c, type: 3}

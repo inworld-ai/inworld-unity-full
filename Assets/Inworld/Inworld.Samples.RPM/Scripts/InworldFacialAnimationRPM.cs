@@ -117,7 +117,7 @@ namespace Inworld.Sample.RPM
             {
                 PhonemeToViseme p2vRes = m_LipsyncMap.p2vMap.FirstOrDefault(p2v => p2v.phoneme == phoneme.phoneme);
                 int visemeIndex = p2vRes?.visemeIndex ?? -1;
-                m_VisemeMap.Enqueue(new Vector2(visemeIndex, phoneme.startOffset));
+                m_VisemeMap.Enqueue(new Vector2(visemeIndex, phoneme.StartOffset));
             }
         }
         protected virtual void MorphLipsync()
@@ -204,10 +204,10 @@ namespace Inworld.Sample.RPM
         }
         protected override void HandleEmotion(EmotionPacket packet)
         {
-            _ProcessEmotion(packet.emotion.behavior.ToUpper());
+            _ProcessEmotion(packet.emotion.behavior);
         }
 
-        void _ProcessEmotion(string emotion)
+        void _ProcessEmotion(SpaffCode emotion)
         {
             EmotionMapData emoMapData = m_EmotionMap[emotion];
             if (emoMapData == null)

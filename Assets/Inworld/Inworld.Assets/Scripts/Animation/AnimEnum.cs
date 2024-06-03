@@ -4,32 +4,9 @@
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
-using System;
+
 namespace Inworld.Assets
 {
-    [Serializable]
-    public enum SpaffCode
-    {
-        NEUTRAL,
-        DISGUST,
-        CONTEMPT,
-        BELLIGERENCE,
-        DOMINEERING,
-        CRITICISM,
-        ANGER,
-        TENSION,
-        TENSE_HUMOR,
-        DEFENSIVENESS,
-        WHINING,
-        SADNESS ,
-        STONEWALLING,
-        INTEREST,
-        VALIDATION,
-        AFFECTION,
-        HUMOR,
-        SURPRISE,
-        JOY
-    }
     public enum AnimMainStatus
     {
         Neutral = 0,

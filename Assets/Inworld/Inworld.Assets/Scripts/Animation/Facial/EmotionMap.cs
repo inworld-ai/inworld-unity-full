@@ -23,6 +23,6 @@ namespace Inworld.Assets
     public class EmotionMap : ScriptableObject
     {
         public List<EmotionMapData> data;
-        public EmotionMapData this[string emoName] => data.FirstOrDefault(e => e.name.ToString() == emoName);
+        public EmotionMapData this[SpaffCode emoName] => data.FirstOrDefault(e => e.name == emoName);
     }
 }

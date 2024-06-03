@@ -7,7 +7,6 @@
 
 using Inworld.Entities;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
@@ -69,7 +68,7 @@ namespace Inworld.Assets
             if (m_CurrentPlayerName == m_PlayerNameField.text)
                 return;
             InworldAI.User.Name = m_PlayerNameField.text;
-            InworldController.Client.SendUserConfig();
+            InworldController.Client.SendSessionConfig();
             m_CurrentPlayerName = InworldAI.User.Name;
         }
         void _SendSceneChangeRequest()
@@ -91,7 +90,7 @@ namespace Inworld.Assets
             if (m_Lipsync)
                 m_Capabilities.phonemeInfo = m_Lipsync.isOn;
             InworldAI.Capabilities = m_Capabilities;
-            InworldController.Client.SendCapabilities();
+            InworldController.Client.SendSessionConfig();
         }
     }
 }

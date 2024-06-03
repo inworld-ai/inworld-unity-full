@@ -179,6 +179,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8702126128709526844, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8702126128709526844, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8702126128709526844, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1600
+      objectReference: {fileID: 0}
+    - target: {fileID: 8702126128709526844, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 900
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1807,31 +1823,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &4881369808059828751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5556377779205328930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5db5b813fe746f9a9ce5602a5521235, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
-  m_SceneFullName: workspaces/unitytest/scenes/innequin_gallery
-  m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
-  m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
-  m_CustomToken: 
-  m_PublicWorkspace: 
-  m_AutoScene: 0
-  m_Continuation:
-    continuationType: 0
-    dialogHistory:
-      history: []
-    externallySavedState: 
-  m_MaxWaitingListSize: 100
 --- !u!1 &4888374971491053796
 GameObject:
   m_ObjectHideFlags: 0
@@ -1985,7 +1976,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3753617578368911160}
   - component: {fileID: 2395919964813119399}
-  - component: {fileID: 4881369808059828751}
+  - component: {fileID: 5556377779205328934}
   - component: {fileID: 5556377779205328932}
   - component: {fileID: 5556377779205328933}
   m_Layer: 0
@@ -2014,18 +2005,25 @@ MonoBehaviour:
   m_AudioToPushCapacity: 100
   m_DeviceName: 
   m_DetectPlayerSpeaking: 1
-  OnRecordingStart:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRecordingEnd:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPlayerStartSpeaking:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPlayerStopSpeaking:
-    m_PersistentCalls:
-      m_Calls: []
+  m_AudioEvent:
+    onStartCalibrating:
+      m_PersistentCalls:
+        m_Calls: []
+    onStopCalibrating:
+      m_PersistentCalls:
+        m_Calls: []
+    onRecordingStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onRecordingEnd:
+      m_PersistentCalls:
+        m_Calls: []
+    onPlayerStartSpeaking:
+      m_PersistentCalls:
+        m_Calls: []
+    onPlayerStopSpeaking:
+      m_PersistentCalls:
+        m_Calls: []
   m_DumpAudioHotKey: 48
 --- !u!114 &5556377779205328933
 MonoBehaviour:
@@ -2039,9 +2037,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3241affa9c0462fa7193839038c32c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ManualAudioHandling: 0
+  m_Events:
+    onCharacterSelectingModeUpdated:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterListJoined:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterListLeft:
+      m_PersistentCalls:
+        m_Calls: []
+    onConversationUpdated:
+      m_PersistentCalls:
+        m_Calls: []
   m_SelectingMethod: 2
+  m_SelectingThreshold: 0.5
   m_RefreshRate: 0.5
+--- !u!114 &5556377779205328934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5556377779205328930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a83291b474642d697cd7963c55a608e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_SceneFullName: workspaces/unitytest/scenes/innequin_gallery
+  m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
+  m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
+  m_AutoScene: 0
+  m_MaxWaitingListSize: 100
+  m_Continuation:
+    continuationType: 0
+    dialogHistory:
+      history: []
+    externallySavedState: 
+  m_EnableGroupChat: 1
+  m_CustomToken: 
+  m_PublicWorkspace: 
+  m_GameSessionID: 
 --- !u!4 &5566405438834257203
 Transform:
   m_ObjectHideFlags: 0
@@ -2552,6 +2590,9 @@ MonoBehaviour:
     onEndSpeaking:
       m_PersistentCalls:
         m_Calls: []
+    onInteractionEnd:
+      m_PersistentCalls:
+        m_Calls: []
     onPacketReceived:
       m_PersistentCalls:
         m_Calls: []
@@ -2567,7 +2608,7 @@ MonoBehaviour:
     onRelationUpdated:
       m_PersistentCalls:
         m_Calls: []
-  m_VerboseLog: 1
+  m_VerboseLog: 0
   m_AutoStart: 1
 --- !u!23 &6672274919278091076
 MeshRenderer:

@@ -25,8 +25,8 @@ namespace Inworld.Sample
         {
             base.OnEnable();
             InworldController.Client.OnPacketSent += OnInteraction;
-            InworldController.CharacterHandler.OnCharacterListJoined += OnCharacterJoined;
-            InworldController.CharacterHandler.OnCharacterListLeft += OnCharacterLeft;
+            InworldController.CharacterHandler.Event.onCharacterListJoined.AddListener(OnCharacterJoined);
+            InworldController.CharacterHandler.Event.onCharacterListLeft.AddListener(OnCharacterLeft);
         }
         protected override void OnDisable()
         {
@@ -34,8 +34,8 @@ namespace Inworld.Sample
             if (!InworldController.Instance)
                 return;
             InworldController.Client.OnPacketSent -= OnInteraction;
-            InworldController.CharacterHandler.OnCharacterListJoined -= OnCharacterJoined;
-            InworldController.CharacterHandler.OnCharacterListLeft -= OnCharacterLeft;
+            InworldController.CharacterHandler.Event.onCharacterListJoined.RemoveListener(OnCharacterJoined);
+            InworldController.CharacterHandler.Event.onCharacterListLeft.RemoveListener(OnCharacterLeft);
         }
         protected virtual void OnCharacterJoined(InworldCharacter character)
         {
@@ -54,12 +54,12 @@ namespace Inworld.Sample
                 return;
             if (!(packet is TextPacket playerPacket))
                 return;
-            switch (packet.routing.source.type.ToUpper())
+            switch (packet.Source)
             {
-                case "PLAYER":
+                case SourceType.PLAYER:
                     m_Subtitle.text = $"{InworldAI.User.Name}: {playerPacket.text.text}";
                     break;
-                case "AGENT":
+                case SourceType.AGENT:
                     InworldCharacterData charData = InworldController.Client.GetCharacterDataByID(packet.routing.source.name);
                     if (charData != null)
                         m_Subtitle.text = $"{charData.givenName}: {playerPacket.text.text}";

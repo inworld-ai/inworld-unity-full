@@ -7,15 +7,14 @@
 
 using UnityEngine;
 using Inworld.UI;
-using System.Linq;
-using TMPro;
+
 
 namespace Inworld.Sample
 {
     public class PlayerController3D : PlayerController
     {
         [SerializeField] protected GameObject m_ChatCanvas;
-        [SerializeField] protected GameObject m_StatusCanvas;
+        [SerializeField] protected GameObject m_ErrorCanvas;
         [SerializeField] protected GameObject m_FeedbackCanvas;
         [SerializeField] protected GameObject m_OptionCanvas;
         [SerializeField] protected BubblePanel m_BubblePanel;
@@ -24,6 +23,7 @@ namespace Inworld.Sample
         /// Get if any canvas (except Status Canvas) is open.
         /// </summary>
         public override bool IsAnyCanvasOpen => m_ChatCanvas && m_ChatCanvas.activeSelf || 
+                                                m_ErrorCanvas && m_ErrorCanvas.activeSelf ||
                                                 m_FeedbackCanvas && m_FeedbackCanvas.activeSelf ||
                                                 m_OptionCanvas && m_OptionCanvas.activeSelf;
         

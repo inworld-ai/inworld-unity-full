@@ -5,9 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mail;
 using UnityEngine;
 
 
@@ -29,19 +27,25 @@ namespace Inworld.Sample
         public override CharSelectingMethod SelectingMethod
         {
             get => m_SelectingMethod;
-            set => m_SelectingMethod = value;
+            set
+            {
+                if (m_SelectingMethod == value)
+                    return;
+                m_SelectingMethod = value;
+                Event.onCharacterSelectingModeUpdated?.Invoke(m_SelectingMethod);
+            }
         }
         /// <summary>
         ///     Change the method of how to select character.
         /// </summary>
         public override void ChangeSelectingMethod()
         {
-            if (m_SelectingMethod == CharSelectingMethod.Manual || m_SelectingMethod == CharSelectingMethod.KeyCode)
-                m_SelectingMethod = CharSelectingMethod.SightAngle;
-            else if (m_SelectingMethod == CharSelectingMethod.SightAngle)
-                m_SelectingMethod = CharSelectingMethod.AutoChat;
-            else if (m_SelectingMethod == CharSelectingMethod.AutoChat)
-                m_SelectingMethod = CharSelectingMethod.KeyCode;
+            if (SelectingMethod == CharSelectingMethod.Manual || SelectingMethod == CharSelectingMethod.KeyCode)
+                SelectingMethod = CharSelectingMethod.SightAngle;
+            else if (SelectingMethod == CharSelectingMethod.SightAngle)
+                SelectingMethod = CharSelectingMethod.AutoChat;
+            else if (SelectingMethod == CharSelectingMethod.AutoChat)
+                SelectingMethod = CharSelectingMethod.KeyCode;
         }
 
         void Update()

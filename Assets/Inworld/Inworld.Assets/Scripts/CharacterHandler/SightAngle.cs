@@ -6,14 +6,14 @@
  *************************************************************************************************/
 
 using UnityEngine;
-using UnityEngine.Serialization;
+
 
 namespace Inworld.Sample
 {
     public class SightAngle : MonoBehaviour
     {
         [SerializeField] Transform m_HeadTransform;
-        [SerializeField] Transform m_CameraTransform;
+        [SerializeField] Transform m_PlayerTransform;
 
         [Range(1, 180)]
         [SerializeField] float m_SightAngle = 90f;
@@ -37,26 +37,39 @@ namespace Inworld.Sample
         /// </summary>
         public virtual InworldCharacter Character { get; private set; }
 
-        protected virtual bool IsValid => InworldController.Instance && m_HeadTransform && m_CameraTransform
+        protected virtual bool IsValid => InworldController.Instance && HeadTransform && PlayerTransform
                                && InworldController.CharacterHandler.SelectingMethod == CharSelectingMethod.SightAngle;
+
+        public Transform HeadTransform
+        {
+            get
+            {
+                if (m_HeadTransform)
+                    return m_HeadTransform;
+                Animator animator = GetComponent<Animator>();
+                if (animator)
+                    m_HeadTransform = animator.GetBoneTransform(HumanBodyBones.Head);
+                return m_HeadTransform;
+            }
+        }
+        public Transform PlayerTransform
+        {
+            get
+            {
+                if (m_PlayerTransform)
+                    return m_PlayerTransform;
+                if (PlayerController.Instance)
+                    m_PlayerTransform = PlayerController.Instance.transform;
+                return m_PlayerTransform;
+            }
+
+        }
 
         void Awake()
         {
             Character = GetComponent<InworldCharacter>();
             if (!Character)
                 enabled = false;
-        }
-        
-        void OnEnable()
-        {
-            if (!m_HeadTransform)
-            {
-                Animator animator = GetComponent<Animator>();
-                if (animator)
-                    m_HeadTransform = animator.GetBoneTransform(HumanBodyBones.Head);
-            }
-            if (!m_CameraTransform && Camera.main)
-                m_CameraTransform = Camera.main.transform;
         }
 
         void Update()
@@ -68,17 +81,19 @@ namespace Inworld.Sample
 
         void CheckPriority()
         {
+            if (!HeadTransform || !PlayerTransform)
+                return;
             m_CurrentTime += Time.deltaTime;
             if (m_CurrentTime < m_RefreshRate)
                 return;
             m_CurrentTime = 0;
             
-            float distance = Vector3.Distance(m_HeadTransform.position, m_CameraTransform.position);
+            float distance = Vector3.Distance(HeadTransform.position, PlayerTransform.position);
             if (distance > m_SightDistance)
                 Character.Priority = -1f;
             else
             {
-                Vector3 vecDirection = (m_CameraTransform.position - m_HeadTransform.position).normalized;
+                Vector3 vecDirection = (PlayerTransform.position - HeadTransform.position).normalized;
                 float fAngle = Vector3.Angle(vecDirection, transform.forward);
                 if (fAngle > m_SightAngle)
                 {
@@ -86,15 +101,15 @@ namespace Inworld.Sample
                 }
                 else
                 {
-                    Character.Priority = (Vector3.Angle(-vecDirection, m_CameraTransform.forward) / 180f) * m_PlayerAngleWeight;
+                    Character.Priority = (Vector3.Angle(-vecDirection, PlayerTransform.forward) / 180f) * m_PlayerAngleWeight;
                     Character.Priority += (distance / m_SightDistance) * m_DistanceWeight; 
-                    Character.Priority += (Vector3.Angle(m_HeadTransform.forward, vecDirection) / m_SightAngle) * m_CharacterAngleWeight;
+                    Character.Priority += (Vector3.Angle(HeadTransform.forward, vecDirection) / m_SightAngle) * m_CharacterAngleWeight;
                 }
             }
         }
         void OnDrawGizmosSelected()
         {
-            if (!m_HeadTransform)
+            if (!HeadTransform)
                 return;
             
             Gizmos.color = Color.cyan;
@@ -105,9 +120,9 @@ namespace Inworld.Sample
             }
             Gizmos.color = Color.red;
 
-            if (!m_CameraTransform)
+            if (!m_PlayerTransform)
                 return;
-            Vector3 vecDirection = (m_CameraTransform.position - trPosition).normalized;
+            Vector3 vecDirection = (m_PlayerTransform.position - trPosition).normalized;
             Gizmos.DrawLine(trPosition, trPosition + transform.forward * m_SightDistance);
             Gizmos.DrawLine(trPosition, trPosition + vecDirection * m_SightDistance);
         }

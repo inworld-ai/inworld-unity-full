@@ -1,3 +1,8 @@
+# 3.4.0
+1. Supported multiagent system.
+2. Updated data serializer.
+3. Bug fixes.
+
 # 3.3.2
 1. Updated audio capturing.
 2. Updated auto reconnection.

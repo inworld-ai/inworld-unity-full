@@ -17,17 +17,23 @@ namespace Inworld.Sample.RPM
         const string k_SelectBySight = "Automatically select characters by sight and angle.\n";
         const string k_AutoChat = "The characters are chatting automatically.\n";
         const string k_SelectCharacter = "Please select characters\n";
+        const string k_GroupChat = "Now <color=green>BroadCasting</color>";
         string m_CurrentMethod;
-        string m_CharacterIndicator = "Now <color=green>BroadCasting</color>";
+        string m_CharacterIndicator = k_GroupChat;
         
+        protected override void OnSelectingModeUpdated(CharSelectingMethod method)
+        {
+            if (method == CharSelectingMethod.AutoChat)
+                InworldController.Instance.SendTrigger(InworldMessenger.NextTurn); 
+        }
         protected override void OnCharacterSelected(string newCharacter)
         {
             InworldCharacter character = InworldController.CharacterHandler.GetCharacterByBrainName(newCharacter);
-            m_CharacterIndicator = character ? $"Now Talking to <color=green>{character.name}</color>" : "Now <color=green>BroadCasting</color>";
+            m_CharacterIndicator = character ? $"Now Talking to <color=green>{character.name}</color>" : k_GroupChat;
         }
         protected override void OnCharacterDeselected(string newCharacter)
         {
-            m_CharacterIndicator = k_SelectCharacter;
+            m_CharacterIndicator = InworldController.Client.EnableGroupChat && InworldController.CharacterHandler.CurrentCharacters.Count > 0 ? k_GroupChat : k_SelectCharacter;
         }
         protected override void OnEnable()
         {
@@ -55,13 +61,16 @@ namespace Inworld.Sample.RPM
             }
             return "";
         }
-        public void NextCharacterSpeaking(InworldCharacter character)
+        public void NextCharacterSpeaking(InworldCharacter character) 
         {
-            if (InworldController.CharacterHandler.SelectingMethod != CharSelectingMethod.AutoChat)
+            // TODO(YAN): When opening chat panel, it'll set to manual.
+            //            Let's figure out a better way to handle both situations.
+            if (InworldController.CharacterHandler.SelectingMethod != CharSelectingMethod.AutoChat && InworldController.CharacterHandler.SelectingMethod != CharSelectingMethod.Manual)
                 return;
             if (string.IsNullOrEmpty(character.ID))
                 return;
-            InworldController.Instance.SendTrigger(InworldMessenger.NextTurn, character.ID);
+            // YAN: We may support nominate the next character in future, but now only automatically selecting is supported.
+            InworldController.Instance.SendTrigger(InworldMessenger.NextTurn); 
         }
     }
 }
