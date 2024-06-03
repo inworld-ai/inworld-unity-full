@@ -765,6 +765,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1456532024249108080, guid: 0829ba6093fdd4b418c4b7c1b7fc4e71, type: 3}
+      propertyPath: m_text
+      value: REGISTER
+      objectReference: {fileID: 0}
     - target: {fileID: 2054876280075044299, guid: 0829ba6093fdd4b418c4b7c1b7fc4e71, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -941,6 +945,10 @@ PrefabInstance:
       propertyPath: m_Interaction
       value: 
       objectReference: {fileID: 1260302158}
+    - target: {fileID: 8506577112861918208, guid: 0829ba6093fdd4b418c4b7c1b7fc4e71, type: 3}
+      propertyPath: m_text
+      value: UNREGISTER
+      objectReference: {fileID: 0}
     - target: {fileID: 8930994141947721267, guid: 0829ba6093fdd4b418c4b7c1b7fc4e71, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1082,6 +1090,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3241affa9c0462fa7193839038c32c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Events:
+    onCharacterSelectingModeUpdated:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterListJoined:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterListLeft:
+      m_PersistentCalls:
+        m_Calls: []
+    onConversationUpdated:
+      m_PersistentCalls:
+        m_Calls: []
   m_SelectingMethod: 2
   m_SelectingThreshold: 0.5
   m_RefreshRate: 0.5
