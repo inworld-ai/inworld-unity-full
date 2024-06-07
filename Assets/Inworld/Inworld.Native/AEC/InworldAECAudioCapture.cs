@@ -61,8 +61,6 @@ namespace Inworld.AEC
             if (m_AudioToPush.Count > m_AudioToPushCapacity)
                 m_AudioToPush.TryDequeue(out AudioChunk chunk);
         }
-        // YAN: Currently if you'd like to use AEC. The Audio Setting for output has to be 16000 sample rate, and mono.
-        //      We'll add resampling features in the next update.
         protected override void Init()
         {
             if (IsAvailable)

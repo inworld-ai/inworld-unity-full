@@ -257,7 +257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SamplingMode: 3
   m_PushToTalkKey: 0
-  m_PlayerVolumeThreshold: 6
+  m_PlayerVolumeThreshold: 0
   m_BufferSeconds: 1
   m_AudioToPushCapacity: 100
   m_DeviceName: 
@@ -281,7 +281,7 @@ MonoBehaviour:
     onPlayerStopSpeaking:
       m_PersistentCalls:
         m_Calls: []
-  m_DumpAudioHotKey: 0
+  m_DumpAudioHotKey: 48
 --- !u!114 &359806132
 MonoBehaviour:
   m_ObjectHideFlags: 0
