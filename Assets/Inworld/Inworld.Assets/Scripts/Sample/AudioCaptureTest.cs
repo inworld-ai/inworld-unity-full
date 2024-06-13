@@ -86,17 +86,16 @@ namespace Inworld.Sample
             }
     #endif
         }
-        protected override IEnumerator Collect()
+        protected override void Collect()
         {
     #if !UNITY_WEBGL
             int nSize = GetAudioData();
             m_Volume.fillAmount = IsRecording ? CalculateSNR() * 0.1f : 0f;
     #endif
-            yield return new WaitForSeconds(0.1f);
         }
-        protected override IEnumerator OutputData()
+        protected override void OutputData()
         {
-            yield break;
+
         }
     }
 }

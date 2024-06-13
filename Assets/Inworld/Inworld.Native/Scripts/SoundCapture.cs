@@ -14,6 +14,7 @@ using System.Linq;
 
 public class SoundCapture : MonoBehaviour
 {
+    protected const int k_NumSamples = 160;
     WasapiCapture inputCapture;
     WasapiCapture outputCapture;
     WaveWriter inputWriter;
@@ -128,7 +129,7 @@ public class SoundCapture : MonoBehaviour
         }
         return shortArray;
     }
-    const int k_NumSamples = 160;
+
     
     protected byte[] FilterAudio(short[] inputData, short[] outputData, IntPtr aecHandle)
     {

@@ -33,20 +33,19 @@ namespace Inworld.Editors
             GameObject audioGameObject = InworldController.Audio.gameObject;
             if (!audioGameObject)
                 return;
-            AudioCapture[] existingCaptures = audioGameObject.GetComponents<AudioCapture>();
-            foreach (AudioCapture audioCapture in existingCaptures)
-            {
-                Object.DestroyImmediate(audioCapture);
-            }
+            AudioCapture existingCapture = audioGameObject.GetComponent<AudioCapture>();
+            Object.DestroyImmediate(existingCapture);
             switch (EditorUserBuildSettings.activeBuildTarget)
             {
                 case BuildTarget.StandaloneWindows:
                 case BuildTarget.StandaloneWindows64:
                     audioGameObject.AddComponent<WinAudioInputCapture>();
-                    audioGameObject.AddComponent<WinAudioOutputCapture>();
                     break;
                 case BuildTarget.WebGL:
                     audioGameObject.AddComponent<WebGLAudioCapture>();
+                    break;
+                default:
+                    audioGameObject.AddComponent<AudioCapture>();
                     break;
             }
         }
