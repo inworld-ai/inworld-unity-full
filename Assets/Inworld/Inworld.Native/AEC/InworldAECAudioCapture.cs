@@ -9,8 +9,9 @@ using Inworld.Entities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Inworld.AEC;
 
-namespace Inworld.AEC
+namespace Inworld.Audio
 {
     public class InworldAECAudioCapture : AudioCapture
     {

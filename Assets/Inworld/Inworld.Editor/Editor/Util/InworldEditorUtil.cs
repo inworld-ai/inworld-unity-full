@@ -8,13 +8,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using TMPro;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine.Networking;
-
+using Object = UnityEngine.Object;
+using Inworld.Audio;
 
 namespace Inworld.Editors
 {
@@ -22,13 +22,35 @@ namespace Inworld.Editors
     ///     This class would be called when package is imported, or Unity Editor is opened.
     /// </summary>
     [InitializeOnLoad]
-    public class InworldEditorUtil : IPreprocessBuildWithReport
+    public class InworldEditorUtil : IPreprocessBuildWithReport, IActiveBuildTargetChanged
     {
         /// <summary>
         /// Interface property. 
         /// </summary>
         public int callbackOrder { get; }
-        
+        public void OnActiveBuildTargetChanged(BuildTarget previousTarget, BuildTarget newTarget)
+        {
+            GameObject audioGameObject = InworldController.Audio.gameObject;
+            if (!audioGameObject)
+                return;
+            AudioCapture[] existingCaptures = audioGameObject.GetComponents<AudioCapture>();
+            foreach (AudioCapture audioCapture in existingCaptures)
+            {
+                Object.DestroyImmediate(audioCapture);
+            }
+            switch (EditorUserBuildSettings.activeBuildTarget)
+            {
+                case BuildTarget.StandaloneWindows:
+                case BuildTarget.StandaloneWindows64:
+                    audioGameObject.AddComponent<WinAudioInputCapture>();
+                    audioGameObject.AddComponent<WinAudioOutputCapture>();
+                    break;
+                case BuildTarget.WebGL:
+                    audioGameObject.AddComponent<WebGLAudioCapture>();
+                    break;
+            }
+        }
+
         /// <summary>
         /// Get the path for UserData.
         /// </summary>
