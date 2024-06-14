@@ -436,9 +436,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4371969427565420013, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1356297002}
-    - targetCorrespondingSourceObject: {fileID: 4371969427565420013, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1356297001}
   m_SourcePrefab: {fileID: 100100000, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
 --- !u!1001 &934002599
 PrefabInstance:
@@ -717,44 +714,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4371969427565420013, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
   m_PrefabInstance: {fileID: 683096040}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1356297001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1356297000}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c804a079adf84647a8e45c3cfac4ee6f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SamplingMode: 1
-  m_PushToTalkKey: 0
-  m_PlayerVolumeThreshold: 10
-  m_BufferSeconds: 1
-  m_AudioToPushCapacity: 100
-  m_DeviceName: 
-  m_DetectPlayerSpeaking: 1
-  m_AudioEvent:
-    onStartCalibrating:
-      m_PersistentCalls:
-        m_Calls: []
-    onStopCalibrating:
-      m_PersistentCalls:
-        m_Calls: []
-    onRecordingStart:
-      m_PersistentCalls:
-        m_Calls: []
-    onRecordingEnd:
-      m_PersistentCalls:
-        m_Calls: []
-    onPlayerStartSpeaking:
-      m_PersistentCalls:
-        m_Calls: []
-    onPlayerStopSpeaking:
-      m_PersistentCalls:
-        m_Calls: []
 --- !u!114 &1356297002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -767,7 +726,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d012ff385104131b25ac279b0eeebe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SamplingMode: 4
+  m_SamplingMode: 3
   m_PushToTalkKey: 0
   m_PlayerVolumeThreshold: 10
   m_BufferSeconds: 1
@@ -793,6 +752,7 @@ MonoBehaviour:
     onPlayerStopSpeaking:
       m_PersistentCalls:
         m_Calls: []
+  m_DumpAudioHotKey: 48
 --- !u!1 &1624441890
 GameObject:
   m_ObjectHideFlags: 0

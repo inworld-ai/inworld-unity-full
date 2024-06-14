@@ -17,7 +17,6 @@ namespace Inworld.Audio
     {
         [Tooltip("Hold the key to sample, release the key to save to local files")]
         [SerializeField] KeyCode m_DumpAudioHotKey = KeyCode.None; 
-        bool m_IsAudioDebugging = false;
         const int k_NumSamples = 160;
         IntPtr m_AECHandle;
         int m_OutputSampleRate = k_SampleRate;
