@@ -9,13 +9,14 @@ using Inworld.Entities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Inworld.AEC
 {
     public class InworldAECAudioCapture : AudioCapture
     {
         [Tooltip("Hold the key to sample, release the key to save to local files")]
-        [SerializeField] KeyCode m_DumpAudioHotKey = KeyCode.None; 
+        [SerializeField] InputActionReference m_DumpAudioAction; 
         bool m_IsAudioDebugging = false;
         const int k_NumSamples = 160;
         IntPtr m_AECHandle;
@@ -53,7 +54,7 @@ namespace Inworld.AEC
         }
         protected new void Update()
         {
-            m_IsAudioDebugging = Input.GetKey(m_DumpAudioHotKey);
+            m_IsAudioDebugging = m_DumpAudioAction.action.IsPressed();
             if (!m_IsAudioDebugging)
             {
                 _DumpAudioFiles();

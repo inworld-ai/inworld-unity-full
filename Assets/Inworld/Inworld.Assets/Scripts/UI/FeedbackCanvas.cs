@@ -10,12 +10,14 @@ using System.Collections.Generic;
 
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 
 namespace Inworld.Assets
 {
     public class FeedbackCanvas : MonoBehaviour
     {
+        [SerializeField] InputActionReference m_SubmitInputAction;
         [SerializeField] TMP_InputField m_InputField;
         [SerializeField] GameObject m_Result;
         string m_InteractionID;
@@ -27,7 +29,7 @@ namespace Inworld.Assets
         {
             if (!m_InputField)
                 return;
-            if (Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(KeyCode.KeypadEnter))
+            if (m_SubmitInputAction.action.WasReleasedThisFrame())
             {
                 Submit();
             }

@@ -473,8 +473,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec0023079ae244cf88d8e53bebcd9542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ContinueKey: 32
-  m_SkipKey: 306
+  m_ContinueAction: {fileID: -8567187480080548906, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
+  m_SkipAction: {fileID: -5531208147956364949, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
   m_ContinueButton: {fileID: 0}
   m_Interruptable: 1
   m_AutoProceed: 1
@@ -1999,7 +1999,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SamplingMode: 3
-  m_PushToTalkKey: 0
+  m_PushToTalkInputAction: {fileID: -1023122988726202136, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
   m_PlayerVolumeThreshold: 6
   m_BufferSeconds: 1
   m_AudioToPushCapacity: 100
@@ -2024,7 +2024,7 @@ MonoBehaviour:
     onPlayerStopSpeaking:
       m_PersistentCalls:
         m_Calls: []
-  m_DumpAudioHotKey: 48
+  m_DumpAudioAction: {fileID: -8420471429186771691, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
 --- !u!114 &5556377779205328933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2050,6 +2050,7 @@ MonoBehaviour:
     onConversationUpdated:
       m_PersistentCalls:
         m_Calls: []
+  m_CharacterSelectInputAction: {fileID: -1157065061365583398, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
   m_SelectingMethod: 2
   m_SelectingThreshold: 0.5
   m_RefreshRate: 0.5

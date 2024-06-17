@@ -616,6 +616,7 @@ GameObject:
   - component: {fileID: 7365399475508524621}
   - component: {fileID: 7545006411209502295}
   - component: {fileID: 730931117579850477}
+  - component: {fileID: 7545006411209502296}
   m_Layer: 0
   m_Name: PlayerController
   m_TagString: MainCamera
@@ -635,10 +636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce9dce1e431f53e4db0037f46907bc2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiKey: 96
-  optionKey: 27
-  skipKey: 0
-  continueKey: 0
+  m_PlayerInput: {fileID: 7545006411209502296}
   m_InputField: {fileID: 0}
   m_Dropdown: {fileID: 0}
   m_SendButton: {fileID: 0}
@@ -1052,7 +1050,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SamplingMode: 3
-  m_PushToTalkKey: 0
+  m_PushToTalkInputAction: {fileID: -1023122988726202136, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
   m_PlayerVolumeThreshold: 10
   m_BufferSeconds: 1
   m_AudioToPushCapacity: 100
@@ -1077,7 +1075,7 @@ MonoBehaviour:
     onPlayerStopSpeaking:
       m_PersistentCalls:
         m_Calls: []
-  m_DumpAudioHotKey: 0
+  m_DumpAudioAction: {fileID: -8420471429186771691, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
 --- !u!114 &5556377779061858840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1103,6 +1101,7 @@ MonoBehaviour:
     onConversationUpdated:
       m_PersistentCalls:
         m_Calls: []
+  m_CharacterSelectInputAction: {fileID: -1157065061365583398, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
   m_SelectingMethod: 2
   m_SelectingThreshold: 0.5
   m_RefreshRate: 0.5
@@ -1207,6 +1206,36 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 401423953611440462}
   m_Enabled: 1
+--- !u!114 &7545006411209502296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401423953611440462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Inworld
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!114 &8853715024288918937
 MonoBehaviour:
   m_ObjectHideFlags: 0

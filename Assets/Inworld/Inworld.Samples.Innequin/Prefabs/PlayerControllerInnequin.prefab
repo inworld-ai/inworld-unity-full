@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 365248474568820437}
   - component: {fileID: 8695700088679634501}
   - component: {fileID: 6806559504290695270}
+  - component: {fileID: -4394225785009840233}
   m_Layer: 0
   m_Name: PlayerControllerInnequin
   m_TagString: MainCamera
@@ -109,10 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 445d631026be4dff9ea5c295e0e0cb9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiKey: 96
-  optionKey: 27
-  skipKey: 0
-  continueKey: 0
+  m_PlayerInput: {fileID: -4394225785009840233}
   m_InputField: {fileID: 6142353158197196822}
   m_Dropdown: {fileID: 0}
   m_SendButton: {fileID: 2255605029174697231}
@@ -121,7 +119,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_ChatCanvas: {fileID: 8964929325927956365}
-  m_StatusCanvas: {fileID: 7407168045419547241}
+  m_ErrorCanvas: {fileID: 0}
   m_FeedbackCanvas: {fileID: 0}
   m_OptionCanvas: {fileID: 0}
   m_BubblePanel: {fileID: 0}
@@ -153,9 +151,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Board: {fileID: 5233282652788380785}
+  m_ErrorBoard: {fileID: 0}
   m_Indicator: {fileID: 1957878372463033090}
   m_Error: {fileID: 2311024790950539498}
+  m_NoMic: {fileID: 0}
   m_Subtitle: {fileID: 928350430333564137}
+--- !u!114 &-4394225785009840233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2310237008755668363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Inworld
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1001 &5078171621582090894
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -298,11 +328,6 @@ RectTransform:
 --- !u!1 &5233282652788380785 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1069905040668681983, guid: 8158db3ddc0bbad428de34f54ae5b5a2, type: 3}
-  m_PrefabInstance: {fileID: 5078171621582090894}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7407168045419547241 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2356163501405632743, guid: 8158db3ddc0bbad428de34f54ae5b5a2, type: 3}
   m_PrefabInstance: {fileID: 5078171621582090894}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5943247934989898408

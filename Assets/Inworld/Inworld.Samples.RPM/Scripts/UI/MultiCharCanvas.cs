@@ -7,20 +7,38 @@
 
 using UnityEngine;
 using Inworld.Entities;
+using System;
+using UnityEngine.InputSystem;
 
 namespace Inworld.Sample.RPM
 {
     public class MultiCharCanvas : DemoCanvas
     {
-        const string k_Instruction = "Press <color=green>\"Tab\"</color> to switch character selection method.\n";
-        const string k_SelectByKey = "Press <color=green>\"1\"</color> and <color=green>\"2\"</color> to switch interact characters.\nPress <color=green>\"0\"</color> to broadcast.\n";
+        [SerializeField] protected InputAction m_SwitchSelectionMethodInputAction;
+        [SerializeField] protected InputActionReference m_CharacterSelectInputAction;
         const string k_SelectBySight = "Automatically select characters by sight and angle.\n";
         const string k_AutoChat = "The characters are chatting automatically.\n";
         const string k_SelectCharacter = "Please select characters\n";
         const string k_GroupChat = "Now <color=green>BroadCasting</color>";
+        string k_Instruction = "Press <color=green>\"Tab\"</color> to switch character selection method.\n";
+        string k_SelectByKey = "Press <color=green>\"1\"</color> and <color=green>\"2\"</color> to switch interact characters.\nPress <color=green>\"0\"</color> to broadcast.\n";
         string m_CurrentMethod;
         string m_CharacterIndicator = k_GroupChat;
-        
+
+        protected virtual void Awake()
+        {
+            string switchSelectionMethodActionPath = m_SwitchSelectionMethodInputAction.bindings[0].path;
+            string bindingName = switchSelectionMethodActionPath.Substring(switchSelectionMethodActionPath.IndexOf('/') + 1);
+            k_Instruction = $"Press <color=green>\"{bindingName[0].ToString().ToUpper() + bindingName.Substring(1)}\"</color> to switch character selection method.\n";
+
+            string bindingPath0 = m_CharacterSelectInputAction.action.bindings[0].path;
+            string bindingPath1 = m_CharacterSelectInputAction.action.bindings[1].path;
+            string bindingPath2 = m_CharacterSelectInputAction.action.bindings[2].path;
+            k_SelectByKey = $"Press <color=green>\"{bindingPath1.Substring(bindingPath1.IndexOf('/') + 1)}\"</color> " +
+                            $"and <color=green>\"{bindingPath2.Substring(bindingPath2.IndexOf('/') + 1)}\"</color> to " +
+                            $"switch interact characters.\nPress <color=green>\"{bindingPath0.Substring(bindingPath0.IndexOf('/') + 1)}\"</color> to broadcast.\n";
+        }
+
         protected override void OnSelectingModeUpdated(CharSelectingMethod method)
         {
             if (method == CharSelectingMethod.AutoChat)
@@ -38,15 +56,22 @@ namespace Inworld.Sample.RPM
         protected override void OnEnable()
         {
             base.OnEnable();
+            m_SwitchSelectionMethodInputAction.Enable();
             m_CurrentMethod = _GetCurrentInstruction();
+        }
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            m_SwitchSelectionMethodInputAction.Disable();
         }
         void Update()
         {
             m_Content.text = $"{k_Instruction}{m_CurrentMethod}{m_CharacterIndicator}";
-            if (!Input.GetKeyUp(KeyCode.Tab))
-                return;
-            InworldController.CharacterHandler.ChangeSelectingMethod();
-            m_CurrentMethod = _GetCurrentInstruction();
+            if (m_SwitchSelectionMethodInputAction.WasReleasedThisFrame())
+            {
+                InworldController.CharacterHandler.ChangeSelectingMethod();
+                m_CurrentMethod = _GetCurrentInstruction();
+            }
         }
         string _GetCurrentInstruction()
         {

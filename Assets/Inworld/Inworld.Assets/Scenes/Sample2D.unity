@@ -289,6 +289,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3989058389384028254, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
+      propertyPath: m_PushToTalkInputAction
+      value: 
+      objectReference: {fileID: -1023122988726202136, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
     - target: {fileID: 4881369806813467986, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
       propertyPath: m_SceneFullName
       value: 
@@ -547,6 +551,10 @@ PrefabInstance:
     - target: {fileID: 7202406319522675144, guid: 41177cdca0cf65d4b88318d5107c053c, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7202406319522675144, guid: 41177cdca0cf65d4b88318d5107c053c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -820.3554
       objectReference: {fileID: 0}
     - target: {fileID: 7216582453331693882, guid: 41177cdca0cf65d4b88318d5107c053c, type: 3}
       propertyPath: m_Name

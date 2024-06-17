@@ -83,6 +83,7 @@ GameObject:
   - component: {fileID: 1786583365417058187}
   - component: {fileID: 4454345176880031466}
   - component: {fileID: 1207303152402782509}
+  - component: {fileID: 2794876650468950806}
   m_Layer: 0
   m_Name: PlayerControllerRPM
   m_TagString: MainCamera
@@ -182,6 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0615f2d2d4e87ff45bee8f68924a511a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInput: {fileID: 2794876650468950806}
   boost: 3.5
   positionLerpTime: 0.2
   mouseSensitivityCurve:
@@ -222,10 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fd6acdecc1c0114eb2a4d8357b2c289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiKey: 96
-  optionKey: 27
-  skipKey: 0
-  continueKey: 0
+  m_PlayerInput: {fileID: 2794876650468950806}
   m_InputField: {fileID: 8145037987960637849}
   m_Dropdown: {fileID: 2865764881867811247}
   m_SendButton: {fileID: 3289984425394843733}
@@ -278,6 +277,36 @@ MonoBehaviour:
   m_Indicator: {fileID: 5416209086242167708}
   m_Error: {fileID: 7379610157674441789}
   m_NoMic: {fileID: 2614038783438186305}
+--- !u!114 &2794876650468950806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7802538726591345284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Game
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1001 &1513644408359223677
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -766,6 +795,10 @@ PrefabInstance:
     - target: {fileID: 6528066575165031143, guid: f2b02dcb56cd8d84cb484314d75ba96f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8390503566154987874, guid: f2b02dcb56cd8d84cb484314d75ba96f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.00024414062
       objectReference: {fileID: 0}
     - target: {fileID: 9030470123398359316, guid: f2b02dcb56cd8d84cb484314d75ba96f, type: 3}
       propertyPath: m_Name
