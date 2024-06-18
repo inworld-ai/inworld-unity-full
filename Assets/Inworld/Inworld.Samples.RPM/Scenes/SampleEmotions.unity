@@ -534,7 +534,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_GameData: {fileID: 0}
-  m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
 --- !u!1001 &3098274173977442164
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -968,6 +967,10 @@ PrefabInstance:
     - target: {fileID: 4624287931213198828, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6650820311777700242, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
+      propertyPath: m_text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7365615600221086446, guid: 8aea35773561678408f0c29a22b5be80, type: 3}
       propertyPath: m_Options.m_Options.Array.size

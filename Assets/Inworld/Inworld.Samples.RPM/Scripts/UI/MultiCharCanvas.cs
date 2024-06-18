@@ -7,7 +7,6 @@
 
 using UnityEngine;
 using Inworld.Entities;
-using System;
 using UnityEngine.InputSystem;
 
 namespace Inworld.Sample.RPM
