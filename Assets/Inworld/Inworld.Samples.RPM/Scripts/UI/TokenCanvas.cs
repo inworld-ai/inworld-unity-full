@@ -24,7 +24,7 @@ namespace Inworld.Sample.RPM
         // Update is called once per frame
         void Update()
         {
-            if (m_SubmitInputAction.WasReleasedThisFrame())
+            if (m_SubmitInputAction != null && m_SubmitInputAction.WasReleasedThisFrame())
             {
                 SendToken();
                 gameObject.SetActive(false);

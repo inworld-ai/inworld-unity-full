@@ -34,7 +34,7 @@ namespace Inworld.Assets
         {
             if (!m_InputField)
                 return;
-            if (m_SubmitInputAction.WasReleasedThisFrame())
+            if (m_SubmitInputAction != null && m_SubmitInputAction.WasReleasedThisFrame())
             {
                 Submit();
             }

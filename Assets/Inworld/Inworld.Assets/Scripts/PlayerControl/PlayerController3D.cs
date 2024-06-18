@@ -98,7 +98,7 @@ namespace Inworld.Sample
         }
         protected void _HandleOptionCanvas()
         {
-            if (!m_OptionsInputAction.WasReleasedThisFrame())
+            if (m_OptionsInputAction == null || !m_OptionsInputAction.WasReleasedThisFrame())
                 return;
             m_OptionCanvas.SetActive(!m_OptionCanvas.activeSelf);
         }
@@ -107,7 +107,7 @@ namespace Inworld.Sample
             if (m_ChatCanvas.activeSelf)
                 base.HandleInput();
             
-            if (!m_TextChatInputAction.WasReleasedThisFrame())
+            if (m_TextChatInputAction == null || !m_TextChatInputAction.WasReleasedThisFrame())
                 return;
             
             m_ChatCanvas.SetActive(!m_ChatCanvas.activeSelf);

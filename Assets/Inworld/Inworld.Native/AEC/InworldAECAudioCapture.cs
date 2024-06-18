@@ -58,7 +58,7 @@ namespace Inworld.AEC
         }
         protected new void Update()
         {
-            m_IsAudioDebugging = m_DumpAudioAction.IsPressed();
+            m_IsAudioDebugging = m_DumpAudioAction != null && m_DumpAudioAction.IsPressed();
             if (!m_IsAudioDebugging)
             {
                 _DumpAudioFiles();
