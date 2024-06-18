@@ -5,6 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,14 +15,14 @@ namespace Inworld.Sample
 {
     public class CharacterHandler3D : CharacterHandler
     {
-        [SerializeField] protected InputActionReference m_CharacterSelectInputAction;
         [SerializeField] protected CharSelectingMethod m_SelectingMethod = CharSelectingMethod.SightAngle;
         [Tooltip("Only the priority lower that threshold would be selected.")][Range(0.1f, 1f)]
         [SerializeField] protected float m_SelectingThreshold = 0.5f;
         [Tooltip("How often do we calculate the priority:")][Range(0.1f, 1f)]
         [SerializeField] protected float m_RefreshRate = 0.5f;
-
-        float m_CurrentTime;
+        
+        protected InputAction m_CharacterSelectInputAction;
+        protected float m_CurrentTime;
 
         /// <summary>
         ///     Get the current Character Selecting Method.
@@ -48,6 +49,11 @@ namespace Inworld.Sample
                 SelectingMethod = CharSelectingMethod.AutoChat;
             else if (SelectingMethod == CharSelectingMethod.AutoChat)
                 SelectingMethod = CharSelectingMethod.KeyCode;
+        }
+
+        protected virtual void Awake()
+        {
+            m_CharacterSelectInputAction = InworldAI.InputActions["CharacterSelect"];
         }
 
         void Update()
@@ -79,10 +85,10 @@ namespace Inworld.Sample
         }
         protected virtual void SelectCharacterByKey()
         {
-            if (!m_CharacterSelectInputAction.action.WasPressedThisFrame())
+            if (!m_CharacterSelectInputAction.WasPressedThisFrame())
                 return;
             
-            int characterSelectValue = (int)m_CharacterSelectInputAction.action.ReadValue<float>();
+            int characterSelectValue = (int)m_CharacterSelectInputAction.ReadValue<float>();
             if (characterSelectValue == 0)
                 CurrentCharacter = null;
             else if (characterSelectValue <= m_CharacterList.Count)

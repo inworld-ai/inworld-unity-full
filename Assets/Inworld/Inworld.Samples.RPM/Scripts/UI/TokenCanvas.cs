@@ -13,13 +13,18 @@ namespace Inworld.Sample.RPM
 {
     public class TokenCanvas : MonoBehaviour
     {
-        [SerializeField] InputActionReference m_SubmitInputAction;
         [SerializeField] TMP_InputField m_TokenInput;
+        InputAction m_SubmitInputAction;
+
+        void Awake()
+        {
+            m_SubmitInputAction = InworldAI.InputActions["Submit"];
+        }
 
         // Update is called once per frame
         void Update()
         {
-            if (m_SubmitInputAction.action.WasReleasedThisFrame())
+            if (m_SubmitInputAction.WasReleasedThisFrame())
             {
                 SendToken();
                 gameObject.SetActive(false);

@@ -7,7 +7,8 @@
       "dependencies": {
         "com.unity.cloud.gltfast": "6.0.1",
         "com.unity.nuget.newtonsoft-json": "3.2.1",
-        "com.unity.textmeshpro": "3.0.6"
+        "com.unity.textmeshpro": "3.0.6",
+        "com.unity.inputsystem": "1.7.0"
       }
     },
     "com.unity.burst": {
@@ -93,7 +94,7 @@
     },
     "com.unity.inputsystem": {
       "version": "1.7.0",
-      "depth": 0,
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.modules.uielements": "1.0.0"

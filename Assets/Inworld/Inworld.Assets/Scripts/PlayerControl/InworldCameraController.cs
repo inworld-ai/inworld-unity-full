@@ -11,8 +11,6 @@ namespace Inworld.Sample
     // YAN: Basic camera controller. Based on Unity's default SimpleCameraController.
     public class InworldCameraController : MonoBehaviour
     {
-        public PlayerInput playerInput;
-        
         [Header("Movement Settings")]
         [Range(0, 5)]
         [Tooltip("Exponential boost factor on translation, controllable by mouse wheel.")]
@@ -35,17 +33,32 @@ namespace Inworld.Sample
 
         readonly CameraState m_TargetCameraState = new CameraState();
 
+        InputAction m_LeftClickInputAction;
+        InputAction m_MouseDeltaInputAction;
+        InputAction m_SpeedUpInputAction;
+        InputAction m_SpeedInputAction;
+        InputAction m_MoveInputAction;
+
+        void Awake()
+        {
+            m_LeftClickInputAction = InworldAI.InputActions["LeftClick"];
+            m_MouseDeltaInputAction = InworldAI.InputActions["MouseDelta"];
+            m_SpeedUpInputAction = InworldAI.InputActions["SpeedUp"];
+            m_SpeedInputAction = InworldAI.InputActions["Speed"];
+            m_MoveInputAction = InworldAI.InputActions["Move"];
+        }
+
         void Update()
         {
             // Hide and lock cursor when right mouse button pressed
-            if (playerInput.actions["LeftClick"].WasPressedThisFrame())
+            if (m_LeftClickInputAction.WasPressedThisFrame())
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
             }
 
             // Unlock and show cursor when right mouse button released
-            if (playerInput.actions["LeftClick"].WasReleasedThisFrame())
+            if (m_LeftClickInputAction.WasReleasedThisFrame())
             {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
@@ -53,7 +66,7 @@ namespace Inworld.Sample
             // Rotation
             if (Cursor.lockState != CursorLockMode.None)
             {
-                Vector2 mouseMovement = playerInput.actions["MouseDelta"].ReadValue<Vector2>() * 0.1f;
+                Vector2 mouseMovement = m_MouseDeltaInputAction.ReadValue<Vector2>() * 0.1f;
                 mouseMovement.y *= (invertY ? 1 : -1);
                 float mouseSensitivityFactor = mouseSensitivityCurve.Evaluate(mouseMovement.magnitude);
                 m_TargetCameraState.yaw += mouseMovement.x * mouseSensitivityFactor;
@@ -63,13 +76,13 @@ namespace Inworld.Sample
             Vector3 translation = GetInputTranslationDirection() * Time.deltaTime;
 
             // Speed up movement when shift key held
-            if (playerInput.actions["SpeedUp"].IsPressed())
+            if (m_SpeedUpInputAction.IsPressed())
             {
                 translation *= 10.0f;
             }
 
             // Modify movement by a boost factor (defined in Inspector and modified in play mode through the mouse scroll wheel)
-            boost += playerInput.actions["Speed"].ReadValue<float>() * 0.001f;
+            boost += m_SpeedInputAction.ReadValue<float>() * 0.001f;
             boost = Mathf.Clamp(boost, 0, 5);
             translation *= Mathf.Pow(2.0f, boost);
             m_TargetCameraState.Translate(translation);
@@ -96,7 +109,7 @@ namespace Inworld.Sample
 
         Vector3 GetInputTranslationDirection()
         {
-            return playerInput.actions["Move"].ReadValue<Vector3>();
+            return m_MoveInputAction.ReadValue<Vector3>();
         }
         class CameraState
         {

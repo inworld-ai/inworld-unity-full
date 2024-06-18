@@ -17,19 +17,24 @@ namespace Inworld.Assets
 {
     public class FeedbackCanvas : MonoBehaviour
     {
-        [SerializeField] InputActionReference m_SubmitInputAction;
         [SerializeField] TMP_InputField m_InputField;
         [SerializeField] GameObject m_Result;
         string m_InteractionID;
         string m_CorrelationID;
+        InputAction m_SubmitInputAction;
         
         Feedback m_Feedback = new Feedback();
+
+        void Awake()
+        {
+            m_SubmitInputAction = InworldAI.InputActions["Submit"];
+        }
 
         void Update()
         {
             if (!m_InputField)
                 return;
-            if (m_SubmitInputAction.action.WasReleasedThisFrame())
+            if (m_SubmitInputAction.WasReleasedThisFrame())
             {
                 Submit();
             }

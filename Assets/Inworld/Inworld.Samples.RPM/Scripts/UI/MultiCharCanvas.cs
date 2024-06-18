@@ -14,7 +14,6 @@ namespace Inworld.Sample.RPM
     public class MultiCharCanvas : DemoCanvas
     {
         [SerializeField] protected InputAction m_SwitchSelectionMethodInputAction;
-        [SerializeField] protected InputActionReference m_CharacterSelectInputAction;
         const string k_SelectBySight = "Automatically select characters by sight and angle.\n";
         const string k_AutoChat = "The characters are chatting automatically.\n";
         const string k_SelectCharacter = "Please select characters\n";
@@ -30,9 +29,10 @@ namespace Inworld.Sample.RPM
             string bindingName = switchSelectionMethodActionPath.Substring(switchSelectionMethodActionPath.IndexOf('/') + 1);
             k_Instruction = $"Press <color=green>\"{bindingName[0].ToString().ToUpper() + bindingName.Substring(1)}\"</color> to switch character selection method.\n";
 
-            string bindingPath0 = m_CharacterSelectInputAction.action.bindings[0].path;
-            string bindingPath1 = m_CharacterSelectInputAction.action.bindings[1].path;
-            string bindingPath2 = m_CharacterSelectInputAction.action.bindings[2].path;
+            InputAction characterSelectionInputAction = InworldAI.InputActions["CharacterSelect"];
+            string bindingPath0 = characterSelectionInputAction.bindings[0].path;
+            string bindingPath1 = characterSelectionInputAction.bindings[1].path;
+            string bindingPath2 = characterSelectionInputAction.bindings[2].path;
             k_SelectByKey = $"Press <color=green>\"{bindingPath1.Substring(bindingPath1.IndexOf('/') + 1)}\"</color> " +
                             $"and <color=green>\"{bindingPath2.Substring(bindingPath2.IndexOf('/') + 1)}\"</color> to " +
                             $"switch interact characters.\nPress <color=green>\"{bindingPath0.Substring(bindingPath0.IndexOf('/') + 1)}\"</color> to broadcast.\n";
