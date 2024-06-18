@@ -18,8 +18,8 @@ namespace Inworld.Sample.RPM
         const string k_AutoChat = "The characters are chatting automatically.\n";
         const string k_SelectCharacter = "Please select characters\n";
         const string k_GroupChat = "Now <color=green>BroadCasting</color>";
+        const string k_SelectByKey = "Press <color=green>\"1\"</color> and <color=green>\"2\"</color> to switch interact characters.\nPress <color=green>\"0\"</color> to broadcast.\n";
         string k_Instruction = "Press <color=green>\"Tab\"</color> to switch character selection method.\n";
-        string k_SelectByKey = "Press <color=green>\"1\"</color> and <color=green>\"2\"</color> to switch interact characters.\nPress <color=green>\"0\"</color> to broadcast.\n";
         string m_CurrentMethod;
         string m_CharacterIndicator = k_GroupChat;
 
@@ -28,14 +28,6 @@ namespace Inworld.Sample.RPM
             string switchSelectionMethodActionPath = m_SwitchSelectionMethodInputAction.bindings[0].path;
             string bindingName = switchSelectionMethodActionPath.Substring(switchSelectionMethodActionPath.IndexOf('/') + 1);
             k_Instruction = $"Press <color=green>\"{bindingName[0].ToString().ToUpper() + bindingName.Substring(1)}\"</color> to switch character selection method.\n";
-
-            InputAction characterSelectionInputAction = InworldAI.InputActions["CharacterSelect"];
-            string bindingPath0 = characterSelectionInputAction.bindings[0].path;
-            string bindingPath1 = characterSelectionInputAction.bindings[1].path;
-            string bindingPath2 = characterSelectionInputAction.bindings[2].path;
-            k_SelectByKey = $"Press <color=green>\"{bindingPath1.Substring(bindingPath1.IndexOf('/') + 1)}\"</color> " +
-                            $"and <color=green>\"{bindingPath2.Substring(bindingPath2.IndexOf('/') + 1)}\"</color> to " +
-                            $"switch interact characters.\nPress <color=green>\"{bindingPath0.Substring(bindingPath0.IndexOf('/') + 1)}\"</color> to broadcast.\n";
         }
 
         protected override void OnSelectingModeUpdated(CharSelectingMethod method)
