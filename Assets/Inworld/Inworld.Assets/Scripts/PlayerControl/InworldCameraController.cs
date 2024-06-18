@@ -5,6 +5,7 @@
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
 using UnityEngine;
+using UnityEngine.InputSystem;
 namespace Inworld.Sample
 {
     // YAN: Basic camera controller. Based on Unity's default SimpleCameraController.
@@ -27,26 +28,37 @@ namespace Inworld.Sample
 
         [Tooltip("Whether or not to invert our Y axis for mouse input to rotation.")]
         public bool invertY;
+        
         readonly CameraState m_InterpolatingCameraState = new CameraState();
 
         readonly CameraState m_TargetCameraState = new CameraState();
 
+        InputAction m_LeftClickInputAction;
+        InputAction m_MouseDeltaInputAction;
+        InputAction m_SpeedUpInputAction;
+        InputAction m_SpeedInputAction;
+        InputAction m_MoveInputAction;
+
+        void Awake()
+        {
+            m_LeftClickInputAction = InworldAI.InputActions["LeftClick"];
+            m_MouseDeltaInputAction = InworldAI.InputActions["MouseDelta"];
+            m_SpeedUpInputAction = InworldAI.InputActions["SpeedUp"];
+            m_SpeedInputAction = InworldAI.InputActions["Speed"];
+            m_MoveInputAction = InworldAI.InputActions["Move"];
+        }
+
         void Update()
         {
-            // Exit Sample  
-            if (Input.GetKey(KeyCode.Escape))
-            {
-                Application.Quit();
-            }
             // Hide and lock cursor when right mouse button pressed
-            if (Input.GetMouseButtonDown(0))
+            if (m_LeftClickInputAction.WasPressedThisFrame())
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
             }
 
             // Unlock and show cursor when right mouse button released
-            if (Input.GetMouseButtonUp(0))
+            if (m_LeftClickInputAction.WasReleasedThisFrame())
             {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
@@ -54,7 +66,8 @@ namespace Inworld.Sample
             // Rotation
             if (Cursor.lockState != CursorLockMode.None)
             {
-                Vector2 mouseMovement = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y") * (invertY ? 1 : -1));
+                Vector2 mouseMovement = m_MouseDeltaInputAction.ReadValue<Vector2>() * 0.1f;
+                mouseMovement.y *= (invertY ? 1 : -1);
                 float mouseSensitivityFactor = mouseSensitivityCurve.Evaluate(mouseMovement.magnitude);
                 m_TargetCameraState.yaw += mouseMovement.x * mouseSensitivityFactor;
                 m_TargetCameraState.pitch += mouseMovement.y * mouseSensitivityFactor;
@@ -63,13 +76,14 @@ namespace Inworld.Sample
             Vector3 translation = GetInputTranslationDirection() * Time.deltaTime;
 
             // Speed up movement when shift key held
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (m_SpeedUpInputAction.IsPressed())
             {
                 translation *= 10.0f;
             }
 
             // Modify movement by a boost factor (defined in Inspector and modified in play mode through the mouse scroll wheel)
-            boost += Input.mouseScrollDelta.y * 0.2f;
+            boost += m_SpeedInputAction.ReadValue<float>() * 0.001f;
+            boost = Mathf.Clamp(boost, 0, 5);
             translation *= Mathf.Pow(2.0f, boost);
             m_TargetCameraState.Translate(translation);
 
@@ -95,32 +109,7 @@ namespace Inworld.Sample
 
         Vector3 GetInputTranslationDirection()
         {
-            Vector3 direction = new Vector3();
-            if (Input.GetKey(KeyCode.W))
-            {
-                direction += Vector3.forward;
-            }
-            if (Input.GetKey(KeyCode.S))
-            {
-                direction += Vector3.back;
-            }
-            if (Input.GetKey(KeyCode.A))
-            {
-                direction += Vector3.left;
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                direction += Vector3.right;
-            }
-            if (Input.GetKey(KeyCode.Q))
-            {
-                direction += Vector3.down;
-            }
-            if (Input.GetKey(KeyCode.E))
-            {
-                direction += Vector3.up;
-            }
-            return direction;
+            return m_MoveInputAction.ReadValue<Vector3>();
         }
         class CameraState
         {

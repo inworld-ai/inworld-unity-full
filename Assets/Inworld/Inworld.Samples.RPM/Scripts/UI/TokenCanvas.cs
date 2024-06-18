@@ -6,6 +6,7 @@
 *************************************************************************************************/
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 
 namespace Inworld.Sample.RPM
@@ -13,11 +14,17 @@ namespace Inworld.Sample.RPM
     public class TokenCanvas : MonoBehaviour
     {
         [SerializeField] TMP_InputField m_TokenInput;
+        InputAction m_SubmitInputAction;
+
+        void Awake()
+        {
+            m_SubmitInputAction = InworldAI.InputActions["Submit"];
+        }
 
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(KeyCode.KeypadEnter))
+            if (m_SubmitInputAction != null && m_SubmitInputAction.WasReleasedThisFrame())
             {
                 SendToken();
                 gameObject.SetActive(false);

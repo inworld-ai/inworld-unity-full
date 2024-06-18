@@ -14,8 +14,9 @@ namespace Inworld.Sample.RPM
     {
         FeedbackCanvas m_FeedbackDlg;
         InworldCameraController m_CameraController;
-        protected void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             m_CameraController = GetComponent<InworldCameraController>();
             m_FeedbackDlg = m_FeedbackCanvas.GetComponent<FeedbackCanvas>();
         }

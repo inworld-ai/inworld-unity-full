@@ -462,6 +462,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Title: {fileID: 669719839364933735}
   m_Content: {fileID: 3209274414385920941}
+  m_CreateCharacterInputAction:
+    m_Name: Create Character Input
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 420e3a48-a2a6-4c64-8d25-ab4fbd74381c
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: df51f66a-755a-4c79-bf51-812d87bc09c7
+      m_Path: <Keyboard>/f
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Create Character Input
+      m_Flags: 0
+    m_Flags: 0
   m_Player: {fileID: 0}
   m_Model: {fileID: 4590294231651289280, guid: 809fb4511befe9142893b7b016bea809, type: 3}
   m_Distance: 5

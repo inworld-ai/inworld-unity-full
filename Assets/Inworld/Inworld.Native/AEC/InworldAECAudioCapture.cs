@@ -9,19 +9,19 @@ using Inworld.Entities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Inworld.AEC
 {
     public class InworldAECAudioCapture : AudioCapture
     {
-        [Tooltip("Hold the key to sample, release the key to save to local files")]
-        [SerializeField] KeyCode m_DumpAudioHotKey = KeyCode.None; 
         bool m_IsAudioDebugging = false;
         const int k_NumSamples = 160;
         IntPtr m_AECHandle;
         int m_OutputSampleRate = k_SampleRate;
         int m_OutputChannels = k_Channel;
         protected float[] m_OutputBuffer;
+        protected InputAction m_DumpAudioAction;
         
 #region Debug Dump Audio
         List<short> m_DebugOutput = new List<short>();
@@ -42,7 +42,12 @@ namespace Inworld.AEC
                                    || Application.platform == RuntimePlatform.WindowsEditor
                                    || Application.platform == RuntimePlatform.OSXEditor
                                    || Application.platform == RuntimePlatform.OSXPlayer;
-        
+
+        protected override void Awake()
+        {
+            base.Awake();
+            m_DumpAudioAction = InworldAI.InputActions["DumpAudio"];
+        }
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -53,7 +58,7 @@ namespace Inworld.AEC
         }
         protected new void Update()
         {
-            m_IsAudioDebugging = Input.GetKey(m_DumpAudioHotKey);
+            m_IsAudioDebugging = m_DumpAudioAction != null && m_DumpAudioAction.IsPressed();
             if (!m_IsAudioDebugging)
             {
                 _DumpAudioFiles();

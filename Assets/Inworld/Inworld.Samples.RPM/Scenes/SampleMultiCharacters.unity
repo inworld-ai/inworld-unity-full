@@ -460,6 +460,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Title: {fileID: 1934973846}
   m_Content: {fileID: 1624441892}
+  m_SwitchSelectionMethodInputAction:
+    m_Name: Switch Selection Method Input
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 7ae33099-fe68-4d0f-9317-9bdaaaafbd86
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: cbadae68-708e-48ba-8774-5ab69764a397
+      m_Path: <Keyboard>/tab
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Switch Selection Method Input
+      m_Flags: 0
+    m_Flags: 0
+  m_CharacterSelectInputAction: {fileID: -1157065061365583398, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
 --- !u!1 &1351384361
 GameObject:
   m_ObjectHideFlags: 0
@@ -1001,10 +1019,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3407697002864970920, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.00024414062
-      objectReference: {fileID: 0}
     - target: {fileID: 4136739465161379550, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1213,6 +1227,7 @@ MonoBehaviour:
     onConversationUpdated:
       m_PersistentCalls:
         m_Calls: []
+  m_CharacterSelectInputAction: {fileID: -1157065061365583398, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
   m_SelectingMethod: 2
   m_SelectingThreshold: 0.5
   m_RefreshRate: 0.5
@@ -1229,7 +1244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SamplingMode: 4
-  m_PushToTalkKey: 0
+  m_PushToTalkInputAction: {fileID: -1023122988726202136, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
   m_PlayerVolumeThreshold: 6
   m_BufferSeconds: 1
   m_AudioToPushCapacity: 100
@@ -1254,7 +1269,7 @@ MonoBehaviour:
     onPlayerStopSpeaking:
       m_PersistentCalls:
         m_Calls: []
-  m_DumpAudioHotKey: 0
+  m_DumpAudioAction: {fileID: -8420471429186771691, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
 --- !u!114 &5556377780025863790
 MonoBehaviour:
   m_ObjectHideFlags: 0
