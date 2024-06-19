@@ -8,6 +8,7 @@
 using Inworld.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Inworld.AEC
@@ -20,14 +21,14 @@ namespace Inworld.AEC
         bool m_IsAudioDebugging = false;
         const int k_NumSamples = 160;
         IntPtr m_AECHandle;
-        int m_OutputSampleRate = k_SampleRate;
-        int m_OutputChannels = k_Channel;
-        protected float[] m_OutputBuffer;
+
+        protected List<short> m_OutputBuffer = new List<short>();
         
 #region Debug Dump Audio
         List<short> m_DebugOutput = new List<short>();
         List<short> m_DebugInput = new List<short>();
         List<short> m_DebugFilter = new List<short>();
+        List<short> m_DebugFinal = new List<short>();
 #endregion
         
         public AECProbe Probe
@@ -70,7 +71,24 @@ namespace Inworld.AEC
         /// <param name="channels">the channels</param>
         public override void GetOutputData(float[] data, int channels)
         {
-            Debug.Log($"Data Count: {data.Length} Channels: {channels}");
+            PreProcessAudioData(ref m_OutputBuffer, data, channels, false);
+        }
+        protected override byte[] Output(int nSize)
+        {
+            m_DebugFinal.AddRange(m_ProcessedWaveData);
+            return base.Output(nSize);
+        }
+        protected override void ProcessAudio()
+        {
+            while (m_InputBuffer.Count > k_NumSamples && m_OutputBuffer.Count > k_NumSamples)
+            {
+                FilterAudio(m_InputBuffer.Take(k_NumSamples).ToArray(), m_OutputBuffer.Take(k_NumSamples).ToArray());
+                m_InputBuffer.RemoveRange(0, k_NumSamples);
+                m_OutputBuffer.RemoveRange(0, k_NumSamples);
+            }
+            RemoveOverDueData(ref m_InputBuffer);
+            RemoveOverDueData(ref m_OutputBuffer);
+            RemoveOverDueData(ref m_ProcessedWaveData);
         }
         /// <summary>
         /// Call it when you switch AudioListener(mostly Main Camera)
@@ -104,9 +122,6 @@ namespace Inworld.AEC
             SendProbeToAudioListener();
             if (IsAvailable)
             {
-                AudioConfiguration audioSetting = AudioSettings.GetConfiguration();
-                m_OutputSampleRate = audioSetting.sampleRate;
-                m_OutputChannels = audioSetting.speakerMode == AudioSpeakerMode.Stereo ? 2 : 1;
                 m_AECHandle = AECInterop.WebRtcAec3_Create(k_SampleRate);
             }
             else
@@ -121,69 +136,34 @@ namespace Inworld.AEC
             WavUtility.ShortArrayToWavFile(m_DebugInput.ToArray(), "DebugInput.wav");
             WavUtility.ShortArrayToWavFile(m_DebugOutput.ToArray(), "DebugOutput.wav");
             WavUtility.ShortArrayToWavFile(m_DebugFilter.ToArray(), "DebugFilter.wav");
+            WavUtility.ShortArrayToWavFile(m_DebugFinal.ToArray(), "DebugFinal.wav");
             m_DebugFilter.Clear();
             m_DebugInput.Clear();
             m_DebugOutput.Clear();
+            m_DebugFinal.Clear();
         }
-        float[] Resample(float[] inputSamples) 
-        {
-            int nResampleRatio = m_OutputSampleRate / k_SampleRate;
-            if (nResampleRatio == 1)
-                return inputSamples;
-            int nTargetLength = inputSamples.Length / nResampleRatio;
 
-            float[] resamples = new float[nTargetLength];
-
-            for (int i = 0; i < nTargetLength; i++)
-            {
-                int index = i * nResampleRatio;
-                resamples[i] = inputSamples[index];
-            }
-
-            return resamples;
-        }
-        protected override byte[] Output(int nSize)
+        protected void FilterAudio(short[] inputData, short[] outputData)
         {
-            short[] inputBuffer = WavUtility.ConvertAudioClipDataToInt16Array(m_InputBuffer, nSize * Recording.clip.channels);
-            int nOutputSize = nSize * m_OutputSampleRate / k_SampleRate; // YAN: For output, only samples 1 channel for efficiency. 
-            m_OutputBuffer = new float[nOutputSize];
-            AudioListener.GetOutputData(m_OutputBuffer, 0); 
-            float[] resampledBuffer = Resample(m_OutputBuffer);
-            short[] outputBuffer = WavUtility.ConvertAudioClipDataToInt16Array(resampledBuffer, nSize * Recording.clip.channels); 
-            return FilterAudio(inputBuffer, outputBuffer);
-        }
-        protected byte[] FilterAudio(short[] inputData, short[] outputData)
-        {
-            List<short> filterBuffer = new List<short>();
+            short[] filterTmp = new short[k_NumSamples];
             if (outputData == null || outputData.Length == 0 || !EnableAEC)
             {
-                filterBuffer.AddRange(inputData);
+                m_ProcessedWaveData.AddRange(inputData);
             }
             else
             {
-                for (int i = 0; i <= inputData.Length - k_NumSamples; i += k_NumSamples)
-                {
-                    short[] inputTmp = new short[k_NumSamples];
-                    short[] outputTmp = new short[k_NumSamples];
-                    short[] filterTmp = new short[k_NumSamples];
-                    Array.Copy(inputData, i, inputTmp, 0, k_NumSamples);
-                    Array.Copy(outputData, i, outputTmp, 0, k_NumSamples);
-                    AECInterop.WebRtcAec3_BufferFarend(m_AECHandle, outputTmp);
-                    AECInterop.WebRtcAec3_Process(m_AECHandle, inputTmp, filterTmp);
-                    filterBuffer.AddRange(filterTmp);
-                }
+                
+                AECInterop.WebRtcAec3_BufferFarend(m_AECHandle, outputData);
+                AECInterop.WebRtcAec3_Process(m_AECHandle, inputData, filterTmp);
+                m_ProcessedWaveData.AddRange(filterTmp);
             }
-
-            byte[] byteArray = new byte[filterBuffer.Count * 2]; // Each short is 2 bytes
-            Buffer.BlockCopy(filterBuffer.ToArray(), 0, byteArray, 0, filterBuffer.Count * 2);
             if (m_IsAudioDebugging)
             {
                 m_DebugInput.AddRange(inputData);
-                m_DebugFilter.AddRange(filterBuffer);
+                m_DebugFilter.AddRange(filterTmp);
                 if (outputData != null)
                     m_DebugOutput.AddRange(outputData);
             }
-            return byteArray;
         }
     }
 }

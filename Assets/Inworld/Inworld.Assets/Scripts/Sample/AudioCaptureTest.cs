@@ -85,7 +85,7 @@ namespace Inworld.Sample
             }
     #endif
         }
-        protected override IEnumerator Collect()
+        protected override IEnumerator _Calibrate()
         {
     #if !UNITY_WEBGL
             int nSize = GetAudioData();
