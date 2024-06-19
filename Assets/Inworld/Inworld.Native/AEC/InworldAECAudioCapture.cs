@@ -16,6 +16,7 @@ namespace Inworld.AEC
     {
         [Tooltip("Hold the key to sample, release the key to save to local files")]
         [SerializeField] KeyCode m_DumpAudioHotKey = KeyCode.None; 
+        AECProbe m_Probe;
         bool m_IsAudioDebugging = false;
         const int k_NumSamples = 160;
         IntPtr m_AECHandle;
@@ -28,6 +29,25 @@ namespace Inworld.AEC
         List<short> m_DebugInput = new List<short>();
         List<short> m_DebugFilter = new List<short>();
 #endregion
+        
+        public AECProbe Probe
+        {
+            get
+            {
+                if (m_Probe)
+                    return m_Probe;
+                AudioListener listener = FindObjectOfType<AudioListener>();
+                if (!listener)
+                {
+                    InworldAI.LogError("Cannot Find Audio Listener!");
+                    return m_Probe;
+                }
+                m_Probe = listener.gameObject.GetComponent<AECProbe>();
+                if (!m_Probe)
+                    m_Probe = listener.gameObject.AddComponent<AECProbe>();
+                return m_Probe;
+            }
+        }
         
         /// <summary>
         /// A flag for this component is using AEC (in this class always True)
@@ -42,7 +62,23 @@ namespace Inworld.AEC
                                    || Application.platform == RuntimePlatform.WindowsEditor
                                    || Application.platform == RuntimePlatform.OSXEditor
                                    || Application.platform == RuntimePlatform.OSXPlayer;
-        
+        /// <summary>
+        /// Get the audio data from the AudioListener.
+        /// Need AECProbe attached to the AudioListener first.
+        /// </summary>
+        /// <param name="data">the output data</param>
+        /// <param name="channels">the channels</param>
+        public override void GetOutputData(float[] data, int channels)
+        {
+            Debug.Log($"Data Count: {data.Length} Channels: {channels}");
+        }
+        /// <summary>
+        /// Call it when you switch AudioListener(mostly Main Camera)
+        /// </summary>
+        public void SendProbeToAudioListener()
+        {
+            Probe.Init(this);
+        }
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -65,6 +101,7 @@ namespace Inworld.AEC
         //      We'll add resampling features in the next update.
         protected override void Init()
         {
+            SendProbeToAudioListener();
             if (IsAvailable)
             {
                 AudioConfiguration audioSetting = AudioSettings.GetConfiguration();
@@ -107,12 +144,12 @@ namespace Inworld.AEC
         }
         protected override byte[] Output(int nSize)
         {
-            short[] inputBuffer = WavUtility.ConvertAudioClipDataToInt16Array(m_InputBuffer, nSize * m_Recording.channels);
+            short[] inputBuffer = WavUtility.ConvertAudioClipDataToInt16Array(m_InputBuffer, nSize * Recording.clip.channels);
             int nOutputSize = nSize * m_OutputSampleRate / k_SampleRate; // YAN: For output, only samples 1 channel for efficiency. 
             m_OutputBuffer = new float[nOutputSize];
             AudioListener.GetOutputData(m_OutputBuffer, 0); 
             float[] resampledBuffer = Resample(m_OutputBuffer);
-            short[] outputBuffer = WavUtility.ConvertAudioClipDataToInt16Array(resampledBuffer, nSize * m_Recording.channels); 
+            short[] outputBuffer = WavUtility.ConvertAudioClipDataToInt16Array(resampledBuffer, nSize * Recording.clip.channels); 
             return FilterAudio(inputBuffer, outputBuffer);
         }
         protected byte[] FilterAudio(short[] inputData, short[] outputData)
