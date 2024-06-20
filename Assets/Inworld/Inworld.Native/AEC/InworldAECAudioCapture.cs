@@ -28,7 +28,6 @@ namespace Inworld.AEC
         List<short> m_DebugOutput = new List<short>();
         List<short> m_DebugInput = new List<short>();
         List<short> m_DebugFilter = new List<short>();
-        List<short> m_DebugFinal = new List<short>();
 #endregion
         
         public AECProbe Probe
@@ -72,11 +71,6 @@ namespace Inworld.AEC
         public override void GetOutputData(float[] data, int channels)
         {
             PreProcessAudioData(ref m_OutputBuffer, data, channels, false);
-        }
-        protected override byte[] Output(int nSize)
-        {
-            m_DebugFinal.AddRange(m_ProcessedWaveData);
-            return base.Output(nSize);
         }
         protected override void ProcessAudio()
         {
@@ -136,11 +130,9 @@ namespace Inworld.AEC
             WavUtility.ShortArrayToWavFile(m_DebugInput.ToArray(), "DebugInput.wav");
             WavUtility.ShortArrayToWavFile(m_DebugOutput.ToArray(), "DebugOutput.wav");
             WavUtility.ShortArrayToWavFile(m_DebugFilter.ToArray(), "DebugFilter.wav");
-            WavUtility.ShortArrayToWavFile(m_DebugFinal.ToArray(), "DebugFinal.wav");
             m_DebugFilter.Clear();
             m_DebugInput.Clear();
             m_DebugOutput.Clear();
-            m_DebugFinal.Clear();
         }
 
         protected void FilterAudio(short[] inputData, short[] outputData)
