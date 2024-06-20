@@ -46,7 +46,7 @@ jobs:
           uses: game-ci/unity-builder@v4
           with:
             buildMethod: Inworld.UnityPackageExporter.BuildTestScene            
-            unityVersion: 2022.3.17f1
+            unityVersion: 2022.3.34f1
             targetPlatform: ${{ matrix.targetPlatform }}
 
 
