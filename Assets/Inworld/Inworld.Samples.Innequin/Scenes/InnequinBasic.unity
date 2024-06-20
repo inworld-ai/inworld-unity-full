@@ -268,6 +268,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: InworldController
       objectReference: {fileID: 0}
+    - target: {fileID: 5993930513270221524, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_DumpAudioHotKey
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5993930513270221524, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_PlayerVolumeThreshold
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
