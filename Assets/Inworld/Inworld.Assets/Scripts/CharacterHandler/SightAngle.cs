@@ -1,4 +1,4 @@
-﻿/*************************************************************************************************
+/*************************************************************************************************
  * Copyright 2022-2024 Theai, Inc. dba Inworld AI
  *
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
@@ -12,26 +12,26 @@ namespace Inworld.Sample
 {
     public class SightAngle : MonoBehaviour
     {
-        [SerializeField] Transform m_HeadTransform;
-        [SerializeField] Transform m_PlayerTransform;
+        [SerializeField] protected Transform m_HeadTransform;
+        [SerializeField] protected Transform m_PlayerTransform;
 
         [Range(1, 180)]
-        [SerializeField] float m_SightAngle = 90f;
+        [SerializeField] protected float m_SightAngle = 90f;
         [Range(1, 30)]
-        [SerializeField] float m_SightDistance = 10f;
+        [SerializeField] protected float m_SightDistance = 10f;
         [Range(0, 10)]
         [Tooltip("How much of an impact the Player's forward direction will have in the Priority calculation.")]
-        [SerializeField] float m_PlayerAngleWeight = 1;
+        [SerializeField] protected float m_PlayerAngleWeight = 1;
         [Range(0, 10)]
         [Tooltip("How much of an impact distance will have in the Priority calculation.")]
-        [SerializeField] float m_DistanceWeight = 0.5f;
+        [SerializeField] protected float m_DistanceWeight = 0.5f;
         [Range(0, 10)]
         [Tooltip("How much of an impact the character's forward direction will have in the Priority calculation.")]
-        [SerializeField] float m_CharacterAngleWeight = 0.15f;
+        [SerializeField] protected float m_CharacterAngleWeight = 0.15f;
         [Range(0.1f, 1f)]
-        [SerializeField] float m_RefreshRate = 0.25f;
+        [SerializeField] protected float m_RefreshRate = 0.25f;
         
-        float m_CurrentTime = 0f;
+        protected float m_CurrentTime = 0f;
         /// <summary>
         /// Get its character.
         /// </summary>
@@ -40,7 +40,7 @@ namespace Inworld.Sample
         protected virtual bool IsValid => InworldController.Instance && HeadTransform && PlayerTransform
                                && InworldController.CharacterHandler.SelectingMethod == CharSelectingMethod.SightAngle;
 
-        public Transform HeadTransform
+        public virtual Transform HeadTransform
         {
             get
             {
@@ -52,7 +52,7 @@ namespace Inworld.Sample
                 return m_HeadTransform;
             }
         }
-        public Transform PlayerTransform
+        public virtual Transform PlayerTransform
         {
             get
             {
@@ -62,24 +62,23 @@ namespace Inworld.Sample
                     m_PlayerTransform = PlayerController.Instance.transform;
                 return m_PlayerTransform;
             }
-
         }
 
-        void Awake()
+        protected virtual void Awake()
         {
             Character = GetComponent<InworldCharacter>();
             if (!Character)
                 enabled = false;
         }
 
-        void Update()
+        private void Update()
         {
             if (!IsValid)
                 return;
             CheckPriority();
         }
 
-        void CheckPriority()
+        protected virtual void CheckPriority()
         {
             if (!HeadTransform || !PlayerTransform)
                 return;
@@ -107,7 +106,7 @@ namespace Inworld.Sample
                 }
             }
         }
-        void OnDrawGizmosSelected()
+        protected virtual void OnDrawGizmosSelected()
         {
             if (!HeadTransform)
                 return;
