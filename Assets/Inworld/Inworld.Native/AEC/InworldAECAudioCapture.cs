@@ -6,6 +6,7 @@
  *************************************************************************************************/
 
 using Inworld.Entities;
+using Inworld.Inworld.Native.VAD;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace Inworld.AEC
         AECProbe m_Probe;
         bool m_IsAudioDebugging = false;
         const int k_NumSamples = 160;
+        const string k_VADDataPath = "Inworld/Inworld.Native/VAD/Plugins/silero_vad.onnx";
         IntPtr m_AECHandle;
 
         protected List<short> m_OutputBuffer = new List<short>();
@@ -53,7 +55,11 @@ namespace Inworld.AEC
         /// A flag for this component is using AEC (in this class always True)
         /// </summary>
         public override bool EnableAEC => IsAvailable && !IsPlayerTurn;
-
+        /// <summary>
+        /// A flag for this component is using VAD
+        /// Currently we only support Windows, will support all platforms when Sentis is ready.
+        /// </summary>
+        public override bool EnableVAD => Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor;
         /// <summary>
         ///     Check Available, will add mac support in the next update.
         ///     For mobile device such as Android/iOS they naturally supported via hardware.
@@ -96,6 +102,10 @@ namespace Inworld.AEC
             base.OnDestroy();
             if (m_AECHandle == IntPtr.Zero)
                 return;
+            if (EnableVAD)
+            {
+                VADInterop.VAD_Terminate();
+            }
             AECInterop.WebRtcAec3_Free(m_AECHandle);
             m_AECHandle = IntPtr.Zero;
         }
@@ -115,13 +125,18 @@ namespace Inworld.AEC
         {
             SendProbeToAudioListener();
             if (IsAvailable)
-            {
                 m_AECHandle = AECInterop.WebRtcAec3_Create(k_SampleRate);
-            }
             else
                 m_SamplingMode = MicSampleMode.TURN_BASED;
+            if (EnableVAD)
+                VADInterop.VAD_Initialize($"{Application.dataPath}/{k_VADDataPath}");
             m_InitSampleMode = m_SamplingMode;
             base.Init();
+        }
+        protected override bool DetectPlayerSpeaking()
+        {
+            // YAN: Normalize the value for threshold because SNR Checking range from 0 to 30. 
+            return AutoDetectPlayerSpeaking && VADInterop.VAD_Process(m_RawInput, m_RawInput.Length) * 30 > m_PlayerVolumeThreshold;
         }
         void _DumpAudioFiles()
         {
