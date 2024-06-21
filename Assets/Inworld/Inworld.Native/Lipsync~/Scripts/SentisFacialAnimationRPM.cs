@@ -26,6 +26,10 @@ namespace Inworld.Native
         {
             m_RuntimeModel = ModelLoader.Load(m_Model);
             m_CurrWorker = WorkerFactory.CreateWorker(BackendType.GPUCompute, m_RuntimeModel);
+            TensorInt dummyTensor = new TensorInt(new TensorShape(1, 14), new int[14]);
+            m_CurrWorker.Execute(dummyTensor);
+            m_CurrWorker.PeekOutput().CompleteOperationsAndDownload();
+            dummyTensor.Dispose();
         }
         protected virtual void LoadPhonemeInfo(AudioPacket audioPacket)
         {
@@ -46,7 +50,7 @@ namespace Inworld.Native
                 if (nTensorIndex == -1)
                     nTensorIndex = m_InputArray.Count > 0 ? m_InputArray[^1] : 0;
                 m_InputArray.Add(nTensorIndex);
-                if (fTime > phonemes[m_CurrentPhonemeIndex].startOffset)
+                if (fTime > phonemes[m_CurrentPhonemeIndex].StartOffset)
                 {
                     m_CurrentPhonemeIndex++;
                 }
@@ -71,6 +75,7 @@ namespace Inworld.Native
             LoadPhonemeInfo(audioPacket);
             if (m_InputArray.Count == 0)
                 return;
+            Debug.Log($"Input Array Count: {m_InputArray.Count}");
             TensorInt inputTensor = new TensorInt(new TensorShape(1, m_InputArray.Count), m_InputArray.ToArray());
             m_CurrWorker.Execute(inputTensor);
             TensorFloat outputTensor = m_CurrWorker.PeekOutput() as TensorFloat;
@@ -79,7 +84,7 @@ namespace Inworld.Native
                 Debug.LogError("No Output!");
                 return;
             }
-            outputTensor.MakeReadable();
+            outputTensor.CompleteOperationsAndDownload();
             float[] array = outputTensor.ToReadOnlyArray();
             VisemeData data = new VisemeData();
             for (int i = 0; i < array.Length; i+=15)

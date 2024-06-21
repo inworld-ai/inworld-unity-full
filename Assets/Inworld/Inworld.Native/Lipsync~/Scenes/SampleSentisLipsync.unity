@@ -341,7 +341,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_GameData: {fileID: 11400000, guid: b2f3c9d1510d993428952c40818efbbf, type: 2}
-  m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
 --- !u!114 &359806128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,15 +357,17 @@ MonoBehaviour:
   m_SceneFullName: workspaces/unitytest/scenes/unity_gallery
   m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
-  m_CustomToken: 
-  m_PublicWorkspace: 
   m_AutoScene: 0
+  m_MaxWaitingListSize: 100
   m_Continuation:
     continuationType: 0
     dialogHistory:
       history: []
     externallySavedState: 
-  m_MaxWaitingListSize: 100
+  m_EnableGroupChat: 1
+  m_CustomToken: 
+  m_PublicWorkspace: 
+  m_GameSessionID: 
 --- !u!114 &359806131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,18 +386,26 @@ MonoBehaviour:
   m_BufferSeconds: 1
   m_AudioToPushCapacity: 100
   m_DeviceName: 
-  OnRecordingStart:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRecordingEnd:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPlayerStartSpeaking:
-    m_PersistentCalls:
-      m_Calls: []
-  OnPlayerStopSpeaking:
-    m_PersistentCalls:
-      m_Calls: []
+  m_DetectPlayerSpeaking: 1
+  m_AudioEvent:
+    onStartCalibrating:
+      m_PersistentCalls:
+        m_Calls: []
+    onStopCalibrating:
+      m_PersistentCalls:
+        m_Calls: []
+    onRecordingStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onRecordingEnd:
+      m_PersistentCalls:
+        m_Calls: []
+    onPlayerStartSpeaking:
+      m_PersistentCalls:
+        m_Calls: []
+    onPlayerStopSpeaking:
+      m_PersistentCalls:
+        m_Calls: []
   m_DumpAudioHotKey: 48
 --- !u!114 &359806132
 MonoBehaviour:
@@ -410,8 +419,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3241affa9c0462fa7193839038c32c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ManualAudioHandling: 0
+  m_Events:
+    onCharacterSelectingModeUpdated:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterListJoined:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterListLeft:
+      m_PersistentCalls:
+        m_Calls: []
+    onConversationUpdated:
+      m_PersistentCalls:
+        m_Calls: []
   m_SelectingMethod: 2
+  m_SelectingThreshold: 0.5
   m_RefreshRate: 0.5
 --- !u!1001 &367072178
 PrefabInstance:
@@ -423,7 +445,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1248472700497137816, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1345,7 +1367,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2983387242264831311, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.2
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 2983387242264831311, guid: 8f6b53d6b201dbc4ea71e8f5ce66de41, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1408,6 +1430,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3407697002864970920, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.00024414062
+      objectReference: {fileID: 0}
     - target: {fileID: 4136739465161379550, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
