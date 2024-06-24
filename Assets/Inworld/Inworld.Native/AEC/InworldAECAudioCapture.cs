@@ -80,6 +80,11 @@ namespace Inworld.AEC
         }
         protected override void ProcessAudio()
         {
+            if (!Probe || !Probe.enabled)
+            {
+                base.ProcessAudio();
+                return;
+            }
             while (m_InputBuffer.Count > k_NumSamples && m_OutputBuffer.Count > k_NumSamples)
             {
                 FilterAudio(m_InputBuffer.Take(k_NumSamples).ToArray(), m_OutputBuffer.Take(k_NumSamples).ToArray());
