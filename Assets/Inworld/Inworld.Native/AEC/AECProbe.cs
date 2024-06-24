@@ -14,7 +14,7 @@ namespace Inworld.AEC
     public class AECProbe : MonoBehaviour
     {
         AudioCapture m_AudioCapture;
-        protected void Awake()
+        protected virtual void Awake()
         {
             m_AudioCapture = InworldController.Audio;
         }
