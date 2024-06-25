@@ -4,6 +4,7 @@
 * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
+using Inworld.Grpc;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -25,7 +26,7 @@ namespace Inworld.Sample.UI
         {
 	        if (!InworldController.Instance)
 		        return;
-	        InworldController.Instance.StartAudioCapture();
+	        InworldController.Instance.StartAudioCapture("", AudioSessionStartPayload.Types.MicrophoneMode.ExpectAudioEnd);
         }
 
         public void OnPointerUp(PointerEventData eventData)
