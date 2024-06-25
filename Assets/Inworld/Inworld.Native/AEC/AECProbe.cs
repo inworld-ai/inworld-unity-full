@@ -6,6 +6,7 @@
  *************************************************************************************************/
 
 
+using System;
 using UnityEngine;
 
 namespace Inworld.AEC
@@ -13,7 +14,10 @@ namespace Inworld.AEC
     public class AECProbe : MonoBehaviour
     {
         AudioCapture m_AudioCapture;
-        
+        protected virtual void Awake()
+        {
+            m_AudioCapture = InworldController.Audio;
+        }
         public virtual void Init(AudioCapture audioCapture)
         {
             m_AudioCapture = audioCapture;
