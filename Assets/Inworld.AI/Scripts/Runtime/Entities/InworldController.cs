@@ -291,12 +291,12 @@ namespace Inworld
             if (targetCharacter)
                 CurrentCharacter = targetCharacter;
         }
-        void _StartAudioCapture(string characterID)
+        void _StartAudioCapture(string characterID, AudioSessionStartPayload.Types.MicrophoneMode mode = AudioSessionStartPayload.Types.MicrophoneMode.OpenMic)
         {
             if (m_CurrentRecordingID == characterID)
                 return;
             m_CurrentRecordingID = characterID;
-            m_Client.StartAudio(Routing.FromPlayerToAgent(characterID));
+            m_Client.StartAudio(Routing.FromPlayerToAgent(characterID), mode);
             m_Capture.StartRecording(); 
             InworldAI.Log("Capture started.");
         }
@@ -385,7 +385,7 @@ namespace Inworld
                 CurrentCharacter ??= m_Characters[0];
             StartCoroutine(InteractionCoroutine());
         }
-        IEnumerator SwitchAudioCapture()
+        IEnumerator SwitchAudioCapture(AudioSessionStartPayload.Types.MicrophoneMode mode = AudioSessionStartPayload.Types.MicrophoneMode.OpenMic)
         {
             if (m_LastCharacter)
             {
@@ -396,10 +396,10 @@ namespace Inworld
             if (m_CurrentCharacter)
             {
                 InworldAI.Log($"Start Audio Capture {m_CurrentCharacter.CharacterName}: {m_CurrentCharacter.ID}");
-                _StartAudioCapture(m_CurrentCharacter.ID);
+                _StartAudioCapture(m_CurrentCharacter.ID, mode);
             }
         }
-        IEnumerator SwitchAudioCapture(string incomingID)
+        IEnumerator SwitchAudioCapture(string incomingID, AudioSessionStartPayload.Types.MicrophoneMode mode = AudioSessionStartPayload.Types.MicrophoneMode.OpenMic)
         {
             if (m_CurrentCharacter && m_CurrentCharacter.ID != incomingID)
             {
@@ -410,7 +410,7 @@ namespace Inworld
             if (m_CurrentCharacter)
             {
                 InworldAI.Log($"Start Audio Capture {incomingID}");
-                _StartAudioCapture(incomingID);
+                _StartAudioCapture(incomingID, mode);
             }
         }
         internal void SendAudio(ByteString incomingChunk)
@@ -573,17 +573,17 @@ namespace Inworld
         ///     string of Character ID, would be generated only after InworldScene is loaded and session is
         ///     started. If it's null, start the current character.
         /// </param>
-        public void StartAudioCapture(string characterID = "")
+        public void StartAudioCapture(string characterID = "", AudioSessionStartPayload.Types.MicrophoneMode mode = AudioSessionStartPayload.Types.MicrophoneMode.OpenMic)
         {
 	        if (string.IsNullOrEmpty(characterID))
 	        {
 		        if (CurrentCharacter != null)
 		        {
-			        StartCoroutine(SwitchAudioCapture(CurrentCharacter.ID));
+			        StartCoroutine(SwitchAudioCapture(CurrentCharacter.ID, mode));
 		        }
 	        }
 	        else
-		        StartCoroutine(SwitchAudioCapture(characterID));
+		        StartCoroutine(SwitchAudioCapture(characterID, mode));
         }
         /// <summary>
         ///     Push captured audio to server.

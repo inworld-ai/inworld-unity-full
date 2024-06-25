@@ -176,7 +176,7 @@ namespace Inworld
 			}
 		}
 		// Marks audio session start.
-		internal void StartAudio(Routing routing)
+		internal void StartAudio(Routing routing, AudioSessionStartPayload.Types.MicrophoneMode mode = AudioSessionStartPayload.Types.MicrophoneMode.OpenMic)
 		{
 			InworldAI.Log("Start Audio Event");
 			if (SessionStarted)
@@ -188,7 +188,11 @@ namespace Inworld
 						Routing = routing.ToGrpc(),
 						Control = new ControlEvent
 						{
-							Action = ControlEvent.Types.Action.AudioSessionStart
+							Action = ControlEvent.Types.Action.AudioSessionStart,
+                            AudioSessionStart = new AudioSessionStartPayload
+                            {
+                                Mode = mode
+                            }
 						}
 					}
 				);
