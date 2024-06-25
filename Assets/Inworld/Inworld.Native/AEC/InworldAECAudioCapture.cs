@@ -6,8 +6,10 @@
  *************************************************************************************************/
 
 using Inworld.Entities;
+using Inworld.Inworld.Native.VAD;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Inworld.AEC
@@ -16,12 +18,13 @@ namespace Inworld.AEC
     {
         [Tooltip("Hold the key to sample, release the key to save to local files")]
         [SerializeField] KeyCode m_DumpAudioHotKey = KeyCode.None; 
+        AECProbe m_Probe;
         bool m_IsAudioDebugging = false;
         const int k_NumSamples = 160;
+        const string k_VADDataPath = "Inworld/Inworld.Native/VAD/Plugins/silero_vad.onnx";
         IntPtr m_AECHandle;
-        int m_OutputSampleRate = k_SampleRate;
-        int m_OutputChannels = k_Channel;
-        protected float[] m_OutputBuffer;
+
+        protected List<short> m_OutputBuffer = new List<short>();
         
 #region Debug Dump Audio
         List<short> m_DebugOutput = new List<short>();
@@ -29,11 +32,34 @@ namespace Inworld.AEC
         List<short> m_DebugFilter = new List<short>();
 #endregion
         
+        public AECProbe Probe
+        {
+            get
+            {
+                if (m_Probe)
+                    return m_Probe;
+                AudioListener listener = FindObjectOfType<AudioListener>();
+                if (!listener)
+                {
+                    InworldAI.LogError("Cannot Find Audio Listener!");
+                    return m_Probe;
+                }
+                m_Probe = listener.gameObject.GetComponent<AECProbe>();
+                if (!m_Probe)
+                    m_Probe = listener.gameObject.AddComponent<AECProbe>();
+                return m_Probe;
+            }
+        }
+        
         /// <summary>
         /// A flag for this component is using AEC (in this class always True)
         /// </summary>
         public override bool EnableAEC => IsAvailable && !IsPlayerTurn;
-
+        /// <summary>
+        /// A flag for this component is using VAD
+        /// Currently we only support Windows, will support all platforms when Sentis is ready.
+        /// </summary>
+        public override bool EnableVAD => Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor;
         /// <summary>
         ///     Check Available, will add mac support in the next update.
         ///     For mobile device such as Android/iOS they naturally supported via hardware.
@@ -42,12 +68,49 @@ namespace Inworld.AEC
                                    || Application.platform == RuntimePlatform.WindowsEditor
                                    || Application.platform == RuntimePlatform.OSXEditor
                                    || Application.platform == RuntimePlatform.OSXPlayer;
-        
+        /// <summary>
+        /// Get the audio data from the AudioListener.
+        /// Need AECProbe attached to the AudioListener first.
+        /// </summary>
+        /// <param name="data">the output data</param>
+        /// <param name="channels">the channels</param>
+        public override void GetOutputData(float[] data, int channels)
+        {
+            PreProcessAudioData(ref m_OutputBuffer, data, channels, false);
+        }
+        protected override void ProcessAudio()
+        {
+            if (!Probe || !Probe.enabled)
+            {
+                base.ProcessAudio();
+                return;
+            }
+            while (m_InputBuffer.Count > k_NumSamples && m_OutputBuffer.Count > k_NumSamples)
+            {
+                FilterAudio(m_InputBuffer.Take(k_NumSamples).ToArray(), m_OutputBuffer.Take(k_NumSamples).ToArray());
+                m_InputBuffer.RemoveRange(0, k_NumSamples);
+                m_OutputBuffer.RemoveRange(0, k_NumSamples);
+            }
+            RemoveOverDueData(ref m_InputBuffer);
+            RemoveOverDueData(ref m_OutputBuffer);
+            RemoveOverDueData(ref m_ProcessedWaveData);
+        }
+        /// <summary>
+        /// Call it when you switch AudioListener(mostly Main Camera)
+        /// </summary>
+        public void SendProbeToAudioListener()
+        {
+            Probe.Init(this);
+        }
         protected override void OnDestroy()
         {
             base.OnDestroy();
             if (m_AECHandle == IntPtr.Zero)
                 return;
+            if (EnableVAD)
+            {
+                VADInterop.VAD_Terminate();
+            }
             AECInterop.WebRtcAec3_Free(m_AECHandle);
             m_AECHandle = IntPtr.Zero;
         }
@@ -65,17 +128,20 @@ namespace Inworld.AEC
         //      We'll add resampling features in the next update.
         protected override void Init()
         {
+            SendProbeToAudioListener();
             if (IsAvailable)
-            {
-                AudioConfiguration audioSetting = AudioSettings.GetConfiguration();
-                m_OutputSampleRate = audioSetting.sampleRate;
-                m_OutputChannels = audioSetting.speakerMode == AudioSpeakerMode.Stereo ? 2 : 1;
                 m_AECHandle = AECInterop.WebRtcAec3_Create(k_SampleRate);
-            }
             else
                 m_SamplingMode = MicSampleMode.TURN_BASED;
+            if (EnableVAD)
+                VADInterop.VAD_Initialize($"{Application.dataPath}/{k_VADDataPath}");
             m_InitSampleMode = m_SamplingMode;
             base.Init();
+        }
+        protected override bool DetectPlayerSpeaking()
+        {
+            // YAN: Normalize the value for threshold because SNR Checking range from 0 to 30. 
+            return AutoDetectPlayerSpeaking && VADInterop.VAD_Process(m_RawInput, m_RawInput.Length) * 30 > m_PlayerVolumeThreshold;
         }
         void _DumpAudioFiles()
         {
@@ -88,65 +154,28 @@ namespace Inworld.AEC
             m_DebugInput.Clear();
             m_DebugOutput.Clear();
         }
-        float[] Resample(float[] inputSamples) 
-        {
-            int nResampleRatio = m_OutputSampleRate / k_SampleRate;
-            if (nResampleRatio == 1)
-                return inputSamples;
-            int nTargetLength = inputSamples.Length / nResampleRatio;
 
-            float[] resamples = new float[nTargetLength];
-
-            for (int i = 0; i < nTargetLength; i++)
-            {
-                int index = i * nResampleRatio;
-                resamples[i] = inputSamples[index];
-            }
-
-            return resamples;
-        }
-        protected override byte[] Output(int nSize)
+        protected void FilterAudio(short[] inputData, short[] outputData)
         {
-            short[] inputBuffer = WavUtility.ConvertAudioClipDataToInt16Array(m_InputBuffer, nSize * m_Recording.channels);
-            int nOutputSize = nSize * m_OutputSampleRate / k_SampleRate; // YAN: For output, only samples 1 channel for efficiency. 
-            m_OutputBuffer = new float[nOutputSize];
-            AudioListener.GetOutputData(m_OutputBuffer, 0); 
-            float[] resampledBuffer = Resample(m_OutputBuffer);
-            short[] outputBuffer = WavUtility.ConvertAudioClipDataToInt16Array(resampledBuffer, nSize * m_Recording.channels); 
-            return FilterAudio(inputBuffer, outputBuffer);
-        }
-        protected byte[] FilterAudio(short[] inputData, short[] outputData)
-        {
-            List<short> filterBuffer = new List<short>();
+            short[] filterTmp = new short[k_NumSamples];
             if (outputData == null || outputData.Length == 0 || !EnableAEC)
             {
-                filterBuffer.AddRange(inputData);
+                m_ProcessedWaveData.AddRange(inputData);
             }
             else
             {
-                for (int i = 0; i <= inputData.Length - k_NumSamples; i += k_NumSamples)
-                {
-                    short[] inputTmp = new short[k_NumSamples];
-                    short[] outputTmp = new short[k_NumSamples];
-                    short[] filterTmp = new short[k_NumSamples];
-                    Array.Copy(inputData, i, inputTmp, 0, k_NumSamples);
-                    Array.Copy(outputData, i, outputTmp, 0, k_NumSamples);
-                    AECInterop.WebRtcAec3_BufferFarend(m_AECHandle, outputTmp);
-                    AECInterop.WebRtcAec3_Process(m_AECHandle, inputTmp, filterTmp);
-                    filterBuffer.AddRange(filterTmp);
-                }
+                
+                AECInterop.WebRtcAec3_BufferFarend(m_AECHandle, outputData);
+                AECInterop.WebRtcAec3_Process(m_AECHandle, inputData, filterTmp);
+                m_ProcessedWaveData.AddRange(filterTmp);
             }
-
-            byte[] byteArray = new byte[filterBuffer.Count * 2]; // Each short is 2 bytes
-            Buffer.BlockCopy(filterBuffer.ToArray(), 0, byteArray, 0, filterBuffer.Count * 2);
             if (m_IsAudioDebugging)
             {
                 m_DebugInput.AddRange(inputData);
-                m_DebugFilter.AddRange(filterBuffer);
+                m_DebugFilter.AddRange(filterTmp);
                 if (outputData != null)
                     m_DebugOutput.AddRange(outputData);
             }
-            return byteArray;
         }
     }
 }
