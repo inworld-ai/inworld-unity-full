@@ -17,7 +17,8 @@ namespace Inworld.AEC
     public class InworldAECAudioCapture : AudioCapture
     {
         [Tooltip("Hold the key to sample, release the key to save to local files")]
-        [SerializeField] KeyCode m_DumpAudioHotKey = KeyCode.None; 
+        [SerializeField] KeyCode m_DumpAudioHotKey = KeyCode.None;
+        [Range(0.1f, 1f)][SerializeField] float m_AECResetDuration = 0.5f;
         AECProbe m_Probe;
         bool m_IsAudioDebugging = false;
         const int k_NumSamples = 160;
@@ -25,6 +26,7 @@ namespace Inworld.AEC
         IntPtr m_AECHandle;
 
         protected List<short> m_OutputBuffer = new List<short>();
+        float m_CurrentAECTimer = 0;
         
 #region Debug Dump Audio
         List<short> m_DebugOutput = new List<short>();
@@ -52,7 +54,7 @@ namespace Inworld.AEC
         }
         
         /// <summary>
-        /// A flag for this component is using AEC (in this class always True)
+        /// A flag for this component is using AEC
         /// </summary>
         public override bool EnableAEC => IsAvailable && !IsPlayerTurn;
         /// <summary>
@@ -114,8 +116,15 @@ namespace Inworld.AEC
             AECInterop.WebRtcAec3_Free(m_AECHandle);
             m_AECHandle = IntPtr.Zero;
         }
+        protected override void TimerCountDown()
+        {
+            base.TimerCountDown();
+            m_CurrentAECTimer -= Time.deltaTime;
+            m_CurrentAECTimer = m_CurrentAECTimer < 0 ? 0 : m_CurrentAECTimer;
+        }
         protected new void Update()
         {
+            TimerCountDown();
             m_IsAudioDebugging = Input.GetKey(m_DumpAudioHotKey);
             if (!m_IsAudioDebugging)
             {
@@ -136,12 +145,15 @@ namespace Inworld.AEC
             if (EnableVAD)
                 VADInterop.VAD_Initialize($"{Application.dataPath}/{k_VADDataPath}");
             m_InitSampleMode = m_SamplingMode;
+            m_CurrentAECTimer = m_AECResetDuration;
             base.Init();
         }
         protected override bool DetectPlayerSpeaking()
         {
+            var detectedPlayerSpeacking = VADInterop.VAD_Process(m_RawInput, m_RawInput.Length) * 30 > m_PlayerVolumeThreshold;
+            Debug.Log(detectedPlayerSpeacking);
             // YAN: Normalize the value for threshold because SNR Checking range from 0 to 30. 
-            return AutoDetectPlayerSpeaking && VADInterop.VAD_Process(m_RawInput, m_RawInput.Length) * 30 > m_PlayerVolumeThreshold;
+            return AutoDetectPlayerSpeaking && detectedPlayerSpeacking;
         }
         void _DumpAudioFiles()
         {
@@ -164,9 +176,19 @@ namespace Inworld.AEC
             }
             else
             {
-                
+                if (m_AECHandle == IntPtr.Zero)
+                {
+                    m_AECHandle = AECInterop.WebRtcAec3_Create(k_SampleRate);
+                    m_CurrentAECTimer = m_AECResetDuration;
+                }
+                    
                 AECInterop.WebRtcAec3_BufferFarend(m_AECHandle, outputData);
                 AECInterop.WebRtcAec3_Process(m_AECHandle, inputData, filterTmp);
+                if (m_CurrentAECTimer == 0)
+                {
+                    AECInterop.WebRtcAec3_Free(m_AECHandle);
+                    m_AECHandle = IntPtr.Zero;
+                }
                 m_ProcessedWaveData.AddRange(filterTmp);
             }
             if (m_IsAudioDebugging)
