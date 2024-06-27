@@ -150,10 +150,8 @@ namespace Inworld.AEC
         }
         protected override bool DetectPlayerSpeaking()
         {
-            var detectedPlayerSpeacking = VADInterop.VAD_Process(m_RawInput, m_RawInput.Length) * 30 > m_PlayerVolumeThreshold;
-            Debug.Log(detectedPlayerSpeacking);
             // YAN: Normalize the value for threshold because SNR Checking range from 0 to 30. 
-            return AutoDetectPlayerSpeaking && detectedPlayerSpeacking;
+            return AutoDetectPlayerSpeaking && VADInterop.VAD_Process(m_RawInput, m_RawInput.Length) * 30 > m_PlayerVolumeThreshold;;
         }
         void _DumpAudioFiles()
         {
