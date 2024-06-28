@@ -10,6 +10,7 @@ using System.Collections.Generic;
 
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 
 namespace Inworld.Assets
@@ -20,14 +21,20 @@ namespace Inworld.Assets
         [SerializeField] GameObject m_Result;
         string m_InteractionID;
         string m_CorrelationID;
+        InputAction m_SubmitInputAction;
         
         Feedback m_Feedback = new Feedback();
+
+        void Awake()
+        {
+            m_SubmitInputAction = InworldAI.InputActions["Submit"];
+        }
 
         void Update()
         {
             if (!m_InputField)
                 return;
-            if (Input.GetKeyUp(KeyCode.Return) || Input.GetKeyUp(KeyCode.KeypadEnter))
+            if (m_SubmitInputAction != null && m_SubmitInputAction.WasReleasedThisFrame())
             {
                 Submit();
             }

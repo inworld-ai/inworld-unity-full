@@ -5,11 +5,13 @@
 * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
 *************************************************************************************************/
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Inworld.Sample.RPM
 {
     public class DynamicCharCanvas : DemoCanvas
     {
+        [SerializeField] protected InputAction m_CreateCharacterInputAction;
         [SerializeField] Transform m_Player;
         [SerializeField] InworldCharacter m_Model;
         [SerializeField] float m_Distance = 5f;
@@ -19,11 +21,17 @@ namespace Inworld.Sample.RPM
         protected override void OnEnable()
         {
             base.OnEnable();
+            m_CreateCharacterInputAction.Enable();
             m_Content.text = k_Instruction;
+        }
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            m_CreateCharacterInputAction.Disable();
         }
         void Update()
         {
-            if (Input.GetKeyUp(KeyCode.F))
+            if (m_CreateCharacterInputAction.WasReleasedThisFrame())
             {
                 _CreateCharacter();
             }

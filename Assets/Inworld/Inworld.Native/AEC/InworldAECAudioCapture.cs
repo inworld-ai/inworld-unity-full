@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Inworld.AEC
 {
@@ -20,12 +21,13 @@ namespace Inworld.AEC
         [SerializeField] KeyCode m_DumpAudioHotKey = KeyCode.None;
         [Range(0.1f, 1f)][SerializeField] float m_AECResetDuration = 0.5f;
         AECProbe m_Probe;
+
         bool m_IsAudioDebugging = false;
         const int k_NumSamples = 160;
         const string k_VADDataPath = "Inworld/Inworld.Native/VAD/Plugins/silero_vad.onnx";
         IntPtr m_AECHandle;
-
         protected List<short> m_OutputBuffer = new List<short>();
+        protected InputAction m_DumpAudioAction;
         float m_CurrentAECTimer = 0;
         
 #region Debug Dump Audio
@@ -70,6 +72,7 @@ namespace Inworld.AEC
                                    || Application.platform == RuntimePlatform.WindowsEditor
                                    || Application.platform == RuntimePlatform.OSXEditor
                                    || Application.platform == RuntimePlatform.OSXPlayer;
+
         /// <summary>
         /// Get the audio data from the AudioListener.
         /// Need AECProbe attached to the AudioListener first.
@@ -104,6 +107,7 @@ namespace Inworld.AEC
         {
             Probe.Init(this);
         }
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -125,7 +129,8 @@ namespace Inworld.AEC
         protected new void Update()
         {
             TimerCountDown();
-            m_IsAudioDebugging = Input.GetKey(m_DumpAudioHotKey);
+            m_IsAudioDebugging = m_DumpAudioAction != null && m_DumpAudioAction.IsPressed();
+
             if (!m_IsAudioDebugging)
             {
                 _DumpAudioFiles();
@@ -146,6 +151,7 @@ namespace Inworld.AEC
                 VADInterop.VAD_Initialize($"{Application.dataPath}/{k_VADDataPath}");
             m_InitSampleMode = m_SamplingMode;
             m_CurrentAECTimer = m_AECResetDuration;
+            m_DumpAudioAction = InworldAI.InputActions["DumpAudio"];
             base.Init();
         }
         protected override bool DetectPlayerSpeaking()
