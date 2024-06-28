@@ -460,6 +460,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Title: {fileID: 1934973846}
   m_Content: {fileID: 1624441892}
+  m_SwitchSelectionMethodInputAction:
+    m_Name: Switch Selection Method Input
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 7ae33099-fe68-4d0f-9317-9bdaaaafbd86
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: cbadae68-708e-48ba-8774-5ab69764a397
+      m_Path: <Keyboard>/tab
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Switch Selection Method Input
+      m_Flags: 0
+    m_Flags: 0
+  m_CharacterSelectInputAction: {fileID: -1157065061365583398, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
 --- !u!1 &1351384361
 GameObject:
   m_ObjectHideFlags: 0
@@ -1078,10 +1096,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3407697002864970920, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.00024414062
-      objectReference: {fileID: 0}
     - target: {fileID: 4136739465161379550, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1204,6 +1218,148 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45210386c16e25040a80180d7008a479, type: 3}
+--- !u!4 &3753617577380657521
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5556377780025863787}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4693125700704403273}
+  - {fileID: 4693125701783058701}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4693125700704403273 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4592039219309335929, guid: 45210386c16e25040a80180d7008a479, type: 3}
+  m_PrefabInstance: {fileID: 3709626071462293800}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4693125701783058701 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5251892443967694460, guid: ddb9540567195fc4e8fce1c7b05b361f, type: 3}
+  m_PrefabInstance: {fileID: 6455311369820056614}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5556377780025863787
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3753617577380657521}
+  - component: {fileID: 2395919966001639918}
+  - component: {fileID: 5556377780025863790}
+  - component: {fileID: 5556377780025863788}
+  - component: {fileID: 5556377780025863789}
+  m_Layer: 0
+  m_Name: InworldController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &5556377780025863788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5556377780025863787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3241affa9c0462fa7193839038c32c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    onCharacterSelectingModeUpdated:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterListJoined:
+      m_PersistentCalls:
+        m_Calls: []
+    onCharacterListLeft:
+      m_PersistentCalls:
+        m_Calls: []
+    onConversationUpdated:
+      m_PersistentCalls:
+        m_Calls: []
+  m_CharacterSelectInputAction: {fileID: -1157065061365583398, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
+  m_SelectingMethod: 2
+  m_SelectingThreshold: 0.5
+  m_RefreshRate: 0.5
+--- !u!114 &5556377780025863789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5556377780025863787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37c7724d7f1e0394c9a79e9ff4fbd818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SamplingMode: 4
+  m_PushToTalkInputAction: {fileID: -1023122988726202136, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
+  m_PlayerVolumeThreshold: 6
+  m_BufferSeconds: 1
+  m_AudioToPushCapacity: 100
+  m_DeviceName: 
+  m_DetectPlayerSpeaking: 1
+  m_AudioEvent:
+    onStartCalibrating:
+      m_PersistentCalls:
+        m_Calls: []
+    onStopCalibrating:
+      m_PersistentCalls:
+        m_Calls: []
+    onRecordingStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onRecordingEnd:
+      m_PersistentCalls:
+        m_Calls: []
+    onPlayerStartSpeaking:
+      m_PersistentCalls:
+        m_Calls: []
+    onPlayerStopSpeaking:
+      m_PersistentCalls:
+        m_Calls: []
+  m_DumpAudioAction: {fileID: -8420471429186771691, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
+--- !u!114 &5556377780025863790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5556377780025863787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a83291b474642d697cd7963c55a608e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_SceneFullName: workspaces/unitytest/scenes/browserblooper
+  m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
+  m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
+  m_AutoScene: 0
+  m_MaxWaitingListSize: 100
+  m_Continuation:
+    continuationType: 0
+    dialogHistory:
+      history: []
+    externallySavedState: 
+  m_EnableGroupChat: 1
+  m_CustomToken: 
+  m_PublicWorkspace: 
+  m_GameSessionID: 
 --- !u!1001 &6455311369820056614
 PrefabInstance:
   m_ObjectHideFlags: 0

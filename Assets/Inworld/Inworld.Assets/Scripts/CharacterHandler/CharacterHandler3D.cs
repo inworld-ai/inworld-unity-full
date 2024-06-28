@@ -5,8 +5,10 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
+using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 
 namespace Inworld.Sample
@@ -18,8 +20,9 @@ namespace Inworld.Sample
         [SerializeField] protected float m_SelectingThreshold = 0.5f;
         [Tooltip("How often do we calculate the priority:")][Range(0.1f, 1f)]
         [SerializeField] protected float m_RefreshRate = 0.5f;
-
-        float m_CurrentTime;
+        
+        protected InputAction m_CharacterSelectInputAction;
+        protected float m_CurrentTime;
 
         /// <summary>
         ///     Get the current Character Selecting Method.
@@ -46,6 +49,11 @@ namespace Inworld.Sample
                 SelectingMethod = CharSelectingMethod.AutoChat;
             else if (SelectingMethod == CharSelectingMethod.AutoChat)
                 SelectingMethod = CharSelectingMethod.KeyCode;
+        }
+
+        protected virtual void Awake()
+        {
+            m_CharacterSelectInputAction = InworldAI.InputActions["CharacterSelect"];
         }
 
         void Update()
@@ -77,16 +85,15 @@ namespace Inworld.Sample
         }
         protected virtual void SelectCharacterByKey()
         {
-            int minIndex = Mathf.Min(9, m_CharacterList.Count);
-            for (int i = 0; i < minIndex; i++)
-            {
-                if (!Input.GetKeyUp(KeyCode.Alpha1 + i))
-                    continue;
-                CurrentCharacter = m_CharacterList[i];
+            if (!m_CharacterSelectInputAction.WasPressedThisFrame())
                 return;
-            }
-            if (Input.GetKeyUp(KeyCode.Alpha0))
+            
+            int characterSelectValue = (int)m_CharacterSelectInputAction.ReadValue<float>();
+            if (characterSelectValue == 0)
                 CurrentCharacter = null;
+            else if (characterSelectValue <= m_CharacterList.Count)
+                CurrentCharacter = m_CharacterList[characterSelectValue - 1];
         }
+
     }
 }

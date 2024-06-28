@@ -1,13 +1,14 @@
 {
   "dependencies": {
     "com.inworld.unity.core": {
-      "version": "file:../Assets/Inworld/com.inworld.unity.core-3.4.0.tgz",
+      "version": "file:../Assets/Inworld/com.inworld.unity.core-3.4.2.tgz",
       "depth": 0,
       "source": "local-tarball",
       "dependencies": {
         "com.unity.cloud.gltfast": "6.0.1",
         "com.unity.nuget.newtonsoft-json": "3.2.1",
-        "com.unity.textmeshpro": "3.0.6"
+        "com.unity.textmeshpro": "3.0.6",
+        "com.unity.inputsystem": "1.7.0"
       }
     },
     "com.unity.burst": {
@@ -100,6 +101,15 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.inputsystem": {
+      "version": "1.7.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.uielements": "1.0.0"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.mathematics": {

@@ -706,8 +706,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec0023079ae244cf88d8e53bebcd9542, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ContinueKey: 32
-  m_SkipKey: 306
+  m_ContinueAction: {fileID: -8567187480080548906, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
+  m_SkipAction: {fileID: -5531208147956364949, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
   m_ContinueButton: {fileID: 7286065230466744711}
   m_Interruptable: 1
   m_AutoProceed: 1

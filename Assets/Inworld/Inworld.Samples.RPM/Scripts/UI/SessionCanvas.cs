@@ -59,6 +59,7 @@ namespace Inworld.Sample.RPM
 
         public void QuitGame()
         {
+            m_Character.CancelResponse();
             InworldController.CharacterHandler.Unregister(m_Character);
             InworldController.Instance.Disconnect();
         }
