@@ -211,6 +211,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Alice the Guide
       objectReference: {fileID: 0}
+    - target: {fileID: 2717743084740492485, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2779047371885436891, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_VerboseLog
       value: 0
@@ -408,6 +412,79 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 131.568, y: 0, z: 0}
+--- !u!1001 &805812563
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2030273176201225856, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_Data.brainName
+      value: workspaces/unitytest/characters/alice_the_guide
+      objectReference: {fileID: 0}
+    - target: {fileID: 2030273176201225856, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_Data.givenName
+      value: Alice the guide
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260653645021868531, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3449554643801487130, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3449554643801487130, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3449554643801487130, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3449554643801487130, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3449554643801487130, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3449554643801487130, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3449554643801487130, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3449554643801487130, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3449554643801487130, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3449554643801487130, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694925250822063550, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_Name
+      value: InworldCharacter3D
+      objectReference: {fileID: 0}
+    - target: {fileID: 3694925250822063550, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
 --- !u!1 &995227280
 GameObject:
   m_ObjectHideFlags: 0
@@ -1167,3 +1244,4 @@ SceneRoots:
   - {fileID: 6526292729113425018}
   - {fileID: 102165675}
   - {fileID: 1947643042}
+  - {fileID: 805812563}

@@ -46,7 +46,7 @@ namespace Inworld.Sample
         {
             if (!m_Dropdown)
                 return;
-            string givenName = InworldController.CharacterHandler.GetCharacterByBrainName(newCharBrainName)?.Name;
+            string givenName = InworldController.CharacterHandler[newCharBrainName]?.Name;
             if (string.IsNullOrEmpty(givenName))
             {
                 m_Dropdown.value = 0;

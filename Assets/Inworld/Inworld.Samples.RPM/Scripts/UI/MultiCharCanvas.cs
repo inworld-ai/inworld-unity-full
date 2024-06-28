@@ -28,7 +28,7 @@ namespace Inworld.Sample.RPM
         }
         protected override void OnCharacterSelected(string newCharacter)
         {
-            InworldCharacter character = InworldController.CharacterHandler.GetCharacterByBrainName(newCharacter);
+            InworldCharacter character = InworldController.CharacterHandler[newCharacter];
             m_CharacterIndicator = character ? $"Now Talking to <color=green>{character.name}</color>" : k_GroupChat;
         }
         protected override void OnCharacterDeselected(string newCharacter)
