@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Inworld/Inworld.Samples.RPM/Scenes/SampleBasic.unity
-    guid: fa499c9c2cecc3247929d6a92f08b3cd
+    path: Assets/MultiDemo/SampleNetwork.unity
+    guid: 99c600d0629ecac48b6f92d20137b310
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: b7a24c9e1236bd24f958e0927d4d4eee, type: 2}
