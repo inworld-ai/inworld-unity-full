@@ -117,13 +117,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4136739465161379550}
   - component: {fileID: 288256263606170122}
-  - component: {fileID: 4581147788555802335}
-  - component: {fileID: 3458045423039308029}
-  - component: {fileID: 1786583365417058187}
   - component: {fileID: 4454345176880031466}
   - component: {fileID: 1207303152402782509}
   - component: {fileID: 7068238518726006149}
   - component: {fileID: 6669598781544372472}
+  - component: {fileID: 4727217537481240637}
+  - component: {fileID: -5162684938936003343}
   m_Layer: 0
   m_Name: PlayerControllerNetwork
   m_TagString: MainCamera
@@ -203,78 +202,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &4581147788555802335
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7802538726591345284}
-  m_Enabled: 1
---- !u!114 &3458045423039308029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7802538726591345284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0615f2d2d4e87ff45bee8f68924a511a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boost: 3.5
-  positionLerpTime: 0.2
-  mouseSensitivityCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.5
-      inSlope: 0
-      outSlope: 5
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 2.5
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  rotationLerpTime: 0.01
-  invertY: 0
---- !u!114 &1786583365417058187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7802538726591345284}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fd6acdecc1c0114eb2a4d8357b2c289, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_InputField: {fileID: 8145037987960637849}
-  m_Dropdown: {fileID: 2865764881867811247}
-  m_SendButton: {fileID: 3289984425394843733}
-  m_RecordButton: {fileID: 7655747527687061930}
-  onPlayerSpeaks:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ChatCanvas: {fileID: 933114256894992333}
-  m_ErrorCanvas: {fileID: 1546420073389469328}
-  m_FeedbackCanvas: {fileID: 666104848631790534}
-  m_OptionCanvas: {fileID: 2266461203068058082}
-  m_BubblePanel: {fileID: 4454345176880031466}
 --- !u!114 &4454345176880031466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,7 +254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2752868540
+  GlobalObjectIdHash: 3188481484
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -343,7 +270,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7802538726591345284}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
   m_Name: 
@@ -367,6 +294,78 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &4727217537481240637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7802538726591345284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff8ddc52c54c3ea4397d693e1167e3d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nwEulerAngles:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  nwPosition:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  boost: 3.5
+  positionLerpTime: 0.2
+  mouseSensitivityCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.5
+      inSlope: 0
+      outSlope: 5
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 2.5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rotationLerpTime: 0.01
+  invertY: 0
+--- !u!114 &-5162684938936003343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7802538726591345284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9622c1bfee344db4b7d5d9ffbdf1e531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiKey: 96
+  optionKey: 27
+  skipKey: 0
+  continueKey: 0
+  m_InputField: {fileID: 8145037987960637849}
+  m_Dropdown: {fileID: 2865764881867811247}
+  m_SendButton: {fileID: 3289984425394843733}
+  m_RecordButton: {fileID: 7655747527687061930}
+  onPlayerSpeaks:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ChatCanvas: {fileID: 933114256894992333}
+  m_ErrorCanvas: {fileID: 1546420073389469328}
+  m_FeedbackCanvas: {fileID: 666104848631790534}
+  m_OptionCanvas: {fileID: 2266461203068058082}
+  m_BubblePanel: {fileID: 4454345176880031466}
 --- !u!1001 &1513644408359223677
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -379,14 +378,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: InputCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 3658249371717675218, guid: b6468cc686a77ef498e2a680690082f8, type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1786583365417058187}
-    - target: {fileID: 4083028693381296424, guid: b6468cc686a77ef498e2a680690082f8, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1786583365417058187}
     - target: {fileID: 7028622523064093573, guid: b6468cc686a77ef498e2a680690082f8, type: 3}
       propertyPath: m_Camera
       value: 
