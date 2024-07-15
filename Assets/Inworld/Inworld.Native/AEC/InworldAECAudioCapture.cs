@@ -9,6 +9,7 @@ using Inworld.Entities;
 using Inworld.Inworld.Native.VAD;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -21,7 +22,9 @@ namespace Inworld.AEC
         AECProbe m_Probe;
         bool m_IsAudioDebugging = false;
         const int k_NumSamples = 160;
-        const string k_VADDataPath = "Inworld/Inworld.Native/VAD/Plugins/silero_vad.onnx";
+        //TODO(Yan): Replace directly with Sentis when it supports IF condition.
+        const string k_SourceFilePath = "Inworld/Inworld.Native/VAD/Plugins";
+        const string k_TargetFileName =  "silero_vad.onnx";
         IntPtr m_AECHandle;
 
         protected List<short> m_OutputBuffer = new List<short>();
@@ -134,7 +137,11 @@ namespace Inworld.AEC
             else
                 m_SamplingMode = MicSampleMode.TURN_BASED;
             if (EnableVAD)
-                VADInterop.VAD_Initialize($"{Application.dataPath}/{k_VADDataPath}");
+#if UNITY_EDITOR
+                VADInterop.VAD_Initialize($"{Application.dataPath}/{k_SourceFilePath}/{k_TargetFileName}");
+#else
+                VADInterop.VAD_Initialize($"{Application.streamingAssetsPath}/{k_TargetFileName}");
+#endif
             m_InitSampleMode = m_SamplingMode;
             base.Init();
         }
@@ -160,11 +167,12 @@ namespace Inworld.AEC
             short[] filterTmp = new short[k_NumSamples];
             if (outputData == null || outputData.Length == 0 || !EnableAEC)
             {
+                if (EnableAEC)
+                    InworldAI.LogWarning("AEC Disabled");
                 m_ProcessedWaveData.AddRange(inputData);
             }
             else
             {
-                
                 AECInterop.WebRtcAec3_BufferFarend(m_AECHandle, outputData);
                 AECInterop.WebRtcAec3_Process(m_AECHandle, inputData, filterTmp);
                 m_ProcessedWaveData.AddRange(filterTmp);
