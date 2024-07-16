@@ -157,7 +157,7 @@ namespace Inworld.AEC
         protected override bool DetectPlayerSpeaking()
         {
             // YAN: Normalize the value for threshold because SNR Checking range from 0 to 30. 
-            return AutoDetectPlayerSpeaking && (!EnableVAD || VADInterop.VAD_Process(m_RawInput, m_RawInput.Length) * 30 > m_PlayerVolumeThreshold);
+            return !IsMute && AutoDetectPlayerSpeaking && (!EnableVAD || VADInterop.VAD_Process(m_RawInput, m_RawInput.Length) * 30 > m_PlayerVolumeThreshold);
         }
         void _DumpAudioFiles()
         {
