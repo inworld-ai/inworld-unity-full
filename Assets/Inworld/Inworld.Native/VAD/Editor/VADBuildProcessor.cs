@@ -5,7 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
-#if UNITY_EDITOR
+#if !UNITY_WEBGL && UNITY_EDITOR
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -36,17 +36,18 @@ namespace Inworld.Native
             }
             string sourceName = $"{Application.dataPath}/{k_SourceFilePath}/{k_TargetFileName}";
             string targetName = $"{Application.streamingAssetsPath}/{k_TargetFileName}";
-        
-            if (File.Exists(targetName))
-                return;
-            if (File.Exists(sourceName))
+
+            if (!File.Exists(targetName))
             {
-                File.Copy(sourceName, targetName, true);
-                Debug.Log($"Copied {sourceName} to {targetName}");
-            }
-            else
-            {
-                Debug.LogError($"Source file not found: {targetName}");
+                if (File.Exists(sourceName))
+                {
+                    File.Copy(sourceName, targetName, true);
+                    Debug.Log($"Copied {sourceName} to {targetName}");
+                }
+                else
+                {
+                    Debug.LogError($"Source file not found: {targetName}");
+                }
             }
             BuildPipeline.BuildPlayer(options);
         }

@@ -34,11 +34,15 @@ namespace Inworld.AEC
         List<short> m_DebugInput = new List<short>();
         List<short> m_DebugFilter = new List<short>();
 #endregion
-        
+
+
         public AECProbe Probe
         {
             get
             {
+#if UNITY_WEBGL
+                        return null;
+#endif
                 if (m_Probe)
                     return m_Probe;
                 AudioListener listener = FindObjectOfType<AudioListener>();
@@ -53,7 +57,7 @@ namespace Inworld.AEC
                 return m_Probe;
             }
         }
-        
+
         /// <summary>
         /// A flag for this component is using AEC (in this class always True)
         /// </summary>
@@ -79,7 +83,10 @@ namespace Inworld.AEC
         /// <param name="channels">the channels</param>
         public override void GetOutputData(float[] data, int channels)
         {
+#if !UNITY_WEBGL
             PreProcessAudioData(ref m_OutputBuffer, data, channels, false);
+#endif
+            
         }
         protected override void ProcessAudio()
         {
@@ -103,7 +110,9 @@ namespace Inworld.AEC
         /// </summary>
         public void SendProbeToAudioListener()
         {
+            #if !UNITY_WEBGL
             Probe.Init(this);
+            #endif
         }
         protected override void OnDestroy()
         {
@@ -148,7 +157,7 @@ namespace Inworld.AEC
         protected override bool DetectPlayerSpeaking()
         {
             // YAN: Normalize the value for threshold because SNR Checking range from 0 to 30. 
-            return AutoDetectPlayerSpeaking && VADInterop.VAD_Process(m_RawInput, m_RawInput.Length) * 30 > m_PlayerVolumeThreshold;
+            return AutoDetectPlayerSpeaking && (!EnableVAD || VADInterop.VAD_Process(m_RawInput, m_RawInput.Length) * 30 > m_PlayerVolumeThreshold);
         }
         void _DumpAudioFiles()
         {
