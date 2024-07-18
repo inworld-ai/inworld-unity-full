@@ -29,7 +29,7 @@ namespace Inworld.Inworld.Native.VAD
         public static extern void VAD_Terminate();
 
         /// <summary>
-        /// Sample the far end data. Far end audio is the current ambisonic environment of the audio data.
+        /// Sample the microphone data.
         /// </summary>
         /// <param name="audioData">the float array of the audio data we're sending.</param>
         /// <param name="size">the size of the audio data.</param>
@@ -37,12 +37,8 @@ namespace Inworld.Inworld.Native.VAD
         [DllImport(DLL_NAME)]
         public static extern float VAD_Process(float[] audioData, int size);
         /// <summary>
-        /// Process the actual echo removal.
+        /// Clear the history input and reset the state.
         /// </summary>
-        /// <param name="handle">>the current pointer AECHandle to use.</param>
-        /// <param name="nearend">the near end (microphone) data that needs to process.</param>
-        /// <param name="output">the near end data will substract the far end data, to keep the microphone voice only.</param>
-        /// <returns></returns>
         [DllImport(DLL_NAME)]
         public static extern void VAD_ResetState();
     }

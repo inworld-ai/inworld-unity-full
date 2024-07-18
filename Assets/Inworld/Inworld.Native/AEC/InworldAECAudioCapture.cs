@@ -36,6 +36,10 @@ namespace Inworld.AEC
 #endregion
 
 
+        /// <summary>
+        /// Get the AECProbe.
+        /// Will create one and attach to AudioListener if not existed.
+        /// </summary>
         public AECProbe Probe
         {
             get
