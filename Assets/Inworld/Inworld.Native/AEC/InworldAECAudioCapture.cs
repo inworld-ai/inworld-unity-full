@@ -17,8 +17,6 @@ namespace Inworld.AEC
 {
     public class InworldAECAudioCapture : AudioCapture
     {
-        [Tooltip("Hold the key to sample, release the key to save to local files")]
-        [SerializeField] KeyCode m_DumpAudioHotKey = KeyCode.None;
         [Range(0.1f, 1f)][SerializeField] float m_AECResetDuration = 0.5f;
         AECProbe m_Probe;
 
@@ -123,7 +121,7 @@ namespace Inworld.AEC
         protected override void TimerCountDown()
         {
             base.TimerCountDown();
-            m_CurrentAECTimer -= Time.deltaTime;
+            m_CurrentAECTimer -= Time.unscaledDeltaTime;
             m_CurrentAECTimer = m_CurrentAECTimer < 0 ? 0 : m_CurrentAECTimer;
         }
         protected new void Update()
