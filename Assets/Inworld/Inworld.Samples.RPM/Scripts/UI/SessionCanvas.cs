@@ -34,7 +34,6 @@ namespace Inworld.Sample.RPM
         [SerializeField] InworldAudioInteraction m_Interaction;
         string ipv4;
         float m_CurrentDuration;
-        bool m_IsConnecting;
         bool m_IsLoad;
         IEnumerator m_CurrentCoroutine;
         readonly Queue<float> m_LagQueue = new Queue<float>(12);
@@ -108,7 +107,6 @@ namespace Inworld.Sample.RPM
             {
                 case InworldConnectionStatus.Idle:
                     m_Indicator.color = Color.white;
-                    m_IsConnecting = false;
                     _SessionButtonReadyToStart();
                     break;
                 case InworldConnectionStatus.Connecting:
@@ -119,11 +117,9 @@ namespace Inworld.Sample.RPM
                     break;
                 case InworldConnectionStatus.Initializing:
                     m_Indicator.color = m_ColorGraph.Evaluate(0.5f);
-                    m_IsConnecting = true;
                     break;
                 case InworldConnectionStatus.Error:
                     m_Indicator.color = m_ColorGraph.Evaluate(1f);
-                    m_IsConnecting = false;
                     break;
             }
         }
