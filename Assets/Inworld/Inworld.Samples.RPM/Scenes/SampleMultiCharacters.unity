@@ -460,6 +460,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Title: {fileID: 1934973846}
   m_Content: {fileID: 1624441892}
+  m_SwitchSelectionMethodInputAction:
+    m_Name: Switch Selection Method Input
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 7ae33099-fe68-4d0f-9317-9bdaaaafbd86
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: cbadae68-708e-48ba-8774-5ab69764a397
+      m_Path: <Keyboard>/tab
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Switch Selection Method Input
+      m_Flags: 0
+    m_Flags: 0
 --- !u!1 &1351384361
 GameObject:
   m_ObjectHideFlags: 0
@@ -757,6 +774,10 @@ PrefabInstance:
       value: InworldController
       objectReference: {fileID: 0}
     - target: {fileID: 5993930513270221524, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_SamplingMode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7934926759504941807, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_SamplingMode
       value: 4
       objectReference: {fileID: 0}
@@ -1078,10 +1099,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3407697002864970920, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.00024414062
-      objectReference: {fileID: 0}
     - target: {fileID: 4136739465161379550, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -36,6 +36,7 @@ namespace Inworld.Inworld.Native.VAD
         /// <returns></returns>
         [DllImport(DLL_NAME)]
         public static extern float VAD_Process(float[] audioData, int size);
+        
         /// <summary>
         /// Clear the history input and reset the state.
         /// </summary>

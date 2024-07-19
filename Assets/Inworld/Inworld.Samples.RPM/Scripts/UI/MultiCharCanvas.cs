@@ -7,20 +7,29 @@
 
 using UnityEngine;
 using Inworld.Entities;
+using UnityEngine.InputSystem;
 
 namespace Inworld.Sample.RPM
 {
     public class MultiCharCanvas : DemoCanvas
     {
-        const string k_Instruction = "Press <color=green>\"Tab\"</color> to switch character selection method.\n";
-        const string k_SelectByKey = "Press <color=green>\"1\"</color> and <color=green>\"2\"</color> to switch interact characters.\nPress <color=green>\"0\"</color> to broadcast.\n";
+        [SerializeField] protected InputAction m_SwitchSelectionMethodInputAction;
         const string k_SelectBySight = "Automatically select characters by sight and angle.\n";
         const string k_AutoChat = "The characters are chatting automatically.\n";
         const string k_SelectCharacter = "Please select characters\n";
         const string k_GroupChat = "Now <color=green>BroadCasting</color>";
+        const string k_SelectByKey = "Press <color=green>\"1\"</color> and <color=green>\"2\"</color> to switch interact characters.\nPress <color=green>\"0\"</color> to broadcast.\n";
+        string k_Instruction = "Press <color=green>\"Tab\"</color> to switch character selection method.\n";
         string m_CurrentMethod;
         string m_CharacterIndicator = k_GroupChat;
-        
+
+        protected virtual void Awake()
+        {
+            string switchSelectionMethodActionPath = m_SwitchSelectionMethodInputAction.bindings[0].path;
+            string bindingName = switchSelectionMethodActionPath.Substring(switchSelectionMethodActionPath.IndexOf('/') + 1);
+            k_Instruction = $"Press <color=green>\"{bindingName[0].ToString().ToUpper() + bindingName.Substring(1)}\"</color> to switch character selection method.\n";
+        }
+
         protected override void OnSelectingModeUpdated(CharSelectingMethod method)
         {
             if (method == CharSelectingMethod.AutoChat)
@@ -28,7 +37,7 @@ namespace Inworld.Sample.RPM
         }
         protected override void OnCharacterSelected(string newCharacter)
         {
-            InworldCharacter character = InworldController.CharacterHandler.GetCharacterByBrainName(newCharacter);
+            InworldCharacter character = InworldController.CharacterHandler[newCharacter];
             m_CharacterIndicator = character ? $"Now Talking to <color=green>{character.name}</color>" : k_GroupChat;
         }
         protected override void OnCharacterDeselected(string newCharacter)
@@ -38,15 +47,22 @@ namespace Inworld.Sample.RPM
         protected override void OnEnable()
         {
             base.OnEnable();
+            m_SwitchSelectionMethodInputAction.Enable();
             m_CurrentMethod = _GetCurrentInstruction();
+        }
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            m_SwitchSelectionMethodInputAction.Disable();
         }
         void Update()
         {
             m_Content.text = $"{k_Instruction}{m_CurrentMethod}{m_CharacterIndicator}";
-            if (!Input.GetKeyUp(KeyCode.Tab))
-                return;
-            InworldController.CharacterHandler.ChangeSelectingMethod();
-            m_CurrentMethod = _GetCurrentInstruction();
+            if (m_SwitchSelectionMethodInputAction.WasReleasedThisFrame())
+            {
+                InworldController.CharacterHandler.ChangeSelectingMethod();
+                m_CurrentMethod = _GetCurrentInstruction();
+            }
         }
         string _GetCurrentInstruction()
         {

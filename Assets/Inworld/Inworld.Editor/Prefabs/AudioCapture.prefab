@@ -148,6 +148,7 @@ MonoBehaviour:
   m_AudioToPushCapacity: 100
   m_DeviceName: 
   m_DetectPlayerSpeaking: 1
+  m_SwitchingAudioTimer: 0.5
   m_AudioEvent:
     onStartCalibrating:
       m_PersistentCalls:
@@ -168,3 +169,4 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   m_DumpAudioHotKey: 0
+  m_AECResetDuration: 0.5

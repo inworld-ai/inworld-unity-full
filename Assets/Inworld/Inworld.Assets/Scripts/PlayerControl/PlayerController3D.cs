@@ -7,6 +7,7 @@
 
 using UnityEngine;
 using Inworld.UI;
+using UnityEngine.InputSystem;
 
 
 namespace Inworld.Sample
@@ -18,6 +19,9 @@ namespace Inworld.Sample
         [SerializeField] protected GameObject m_FeedbackCanvas;
         [SerializeField] protected GameObject m_OptionCanvas;
         [SerializeField] protected BubblePanel m_BubblePanel;
+
+        protected InputAction m_OptionsInputAction;
+        protected InputAction m_TextChatInputAction;
         
         /// <summary>
         /// Get if any canvas (except Status Canvas) is open.
@@ -28,7 +32,14 @@ namespace Inworld.Sample
                                                 m_OptionCanvas && m_OptionCanvas.activeSelf;
         
         CharSelectingMethod m_PrevSelectingMethod;
-        
+
+        protected override void Awake()
+        {
+            base.Awake();
+            m_OptionsInputAction = InworldAI.InputActions["Options"];
+            m_TextChatInputAction = InworldAI.InputActions["TextChat"];
+        }
+
         protected override void OnCharacterJoined(InworldCharacter newChar)
         {
             base.OnCharacterJoined(newChar);
@@ -46,7 +57,7 @@ namespace Inworld.Sample
         {
             if (!m_Dropdown)
                 return;
-            string givenName = InworldController.CharacterHandler.GetCharacterByBrainName(newCharBrainName)?.Name;
+            string givenName = InworldController.CharacterHandler[newCharBrainName]?.Name;
             if (string.IsNullOrEmpty(givenName))
             {
                 m_Dropdown.value = 0;
@@ -87,7 +98,7 @@ namespace Inworld.Sample
         }
         protected void _HandleOptionCanvas()
         {
-            if (!Input.GetKeyUp(optionKey))
+            if (m_OptionsInputAction == null || !m_OptionsInputAction.WasReleasedThisFrame())
                 return;
             m_OptionCanvas.SetActive(!m_OptionCanvas.activeSelf);
         }
@@ -96,7 +107,7 @@ namespace Inworld.Sample
             if (m_ChatCanvas.activeSelf)
                 base.HandleInput();
             
-            if (!Input.GetKeyUp(uiKey))
+            if (m_TextChatInputAction == null || !m_TextChatInputAction.WasReleasedThisFrame())
                 return;
             
             m_ChatCanvas.SetActive(!m_ChatCanvas.activeSelf);
