@@ -1,3 +1,13 @@
+# 3.4.2
+1. Upgrade with Unity's Input system for better customized key mapping.
+2. Simplify Editor extension workflow.
+
+# 3.4.1
+1. Updated AEC logic to better sample the sound from microphone.
+2. Add client side voice recognition (Windows only).
+3. Solve conflict with WebSockets with other packages.
+4. Bug fixes.
+
 # 3.4.0
 1. Supported multiagent system.
 2. Updated data serializer.
