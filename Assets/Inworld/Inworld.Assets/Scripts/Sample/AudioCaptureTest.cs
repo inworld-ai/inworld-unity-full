@@ -87,9 +87,10 @@ namespace Inworld.Sample
         }
         protected override void Collect()
         {
+#if !UNITY_WEBGL
             if (!Microphone.IsRecording(m_DeviceName))
                 StartMicrophone(m_DeviceName);
-#if !UNITY_WEBGL
+
             int nSize = GetAudioData();
             m_Volume.fillAmount = IsRecording ? CalculateSNR() * 0.05f : 0f;
 #endif

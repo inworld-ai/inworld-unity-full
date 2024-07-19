@@ -29,7 +29,7 @@ namespace Inworld.Inworld.Native.VAD
         public static extern void VAD_Terminate();
 
         /// <summary>
-        /// Sample the far end data. Far end audio is the current ambisonic environment of the audio data.
+        /// Sample the microphone data.
         /// </summary>
         /// <param name="audioData">the float array of the audio data we're sending.</param>
         /// <param name="size">the size of the audio data.</param>
@@ -38,7 +38,7 @@ namespace Inworld.Inworld.Native.VAD
         public static extern float VAD_Process(float[] audioData, int size);
         
         /// <summary>
-        /// Recalibrate.
+        /// Clear the history input and reset the state.
         /// </summary>
         [DllImport(DLL_NAME)]
         public static extern void VAD_ResetState();
