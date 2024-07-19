@@ -35,6 +35,7 @@ namespace Inworld.Sample.RPM
         string ipv4;
         float m_CurrentDuration;
         bool m_IsLoad;
+        bool m_IsConnecting;
         IEnumerator m_CurrentCoroutine;
         readonly Queue<float> m_LagQueue = new Queue<float>(12);
         
@@ -108,9 +109,11 @@ namespace Inworld.Sample.RPM
                 case InworldConnectionStatus.Idle:
                     m_Indicator.color = Color.white;
                     _SessionButtonReadyToStart();
+                    m_IsConnecting = false;
                     break;
                 case InworldConnectionStatus.Connecting:
                     _SessionButtonConnecting();
+                    m_IsConnecting = true;
                     break;
                 case InworldConnectionStatus.Connected:
                     _SessionButtonConnected();
@@ -120,6 +123,7 @@ namespace Inworld.Sample.RPM
                     break;
                 case InworldConnectionStatus.Error:
                     m_Indicator.color = m_ColorGraph.Evaluate(1f);
+                    m_IsConnecting = false;
                     break;
             }
         }
