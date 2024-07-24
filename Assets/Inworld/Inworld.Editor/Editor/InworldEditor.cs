@@ -18,6 +18,8 @@ namespace Inworld.Editors
     public enum EditorStatus
     {
         Init,
+        SelectMode,
+        LLM,
         SelectGameData,
         SelectCharacter,
         Error
@@ -218,6 +220,14 @@ namespace Inworld.Editors
             margin = new RectOffset(10, 10, 10, 10),
         };
         /// <summary>
+        /// Gets the GUI style for the button in the content field of the Inworld Studio Panel.
+        /// </summary>
+        public GUIStyle ContentBtnStyle => new GUIStyle(GUI.skin.button)
+        {
+            fontSize = 12,
+            margin = new RectOffset(10, 10, 10, 10),
+        };
+        /// <summary>
         /// Gets the GUI style for the drop down fields in Inworld Studio Panel.
         /// </summary>
         public GUIStyle DropDownStyle => new GUIStyle("MiniPullDown")
@@ -303,6 +313,8 @@ namespace Inworld.Editors
         void OnEnable()
         {
             m_InworldEditorStates[EditorStatus.Init] = new InworldEditorInit();
+            m_InworldEditorStates[EditorStatus.SelectMode] = new InworldEditorSelectMode();
+            m_InworldEditorStates[EditorStatus.LLM] = new InworldEditorLLM();
             m_InworldEditorStates[EditorStatus.SelectGameData] = new InworldEditorSelectGameData();
             m_InworldEditorStates[EditorStatus.SelectCharacter] = new InworldEditorSelectCharacter();
             m_InworldEditorStates[EditorStatus.Error] = new InworldEditorError();

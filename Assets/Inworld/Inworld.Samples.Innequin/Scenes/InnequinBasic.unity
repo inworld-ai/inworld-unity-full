@@ -269,6 +269,10 @@ PrefabInstance:
       value: InworldController
       objectReference: {fileID: 0}
     - target: {fileID: 5993930513270221524, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_PushToTalkKey
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5993930513270221524, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_DumpAudioHotKey
       value: 0
       objectReference: {fileID: 0}

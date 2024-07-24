@@ -150,7 +150,7 @@ namespace Inworld.Editors
             EditorUtility.SetDirty(InworldAI.User);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            InworldEditor.Instance.Status = EditorStatus.SelectGameData;
+            InworldEditor.Instance.Status = EditorStatus.SelectMode;//EditorStatus.SelectGameData;
             
         }
     }

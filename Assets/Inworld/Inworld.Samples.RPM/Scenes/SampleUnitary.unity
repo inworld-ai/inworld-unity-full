@@ -145,7 +145,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1109287189565502095, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_EnableGroupChat
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3753617577465698405, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -190,6 +190,10 @@ PrefabInstance:
     - target: {fileID: 5556377780116934527, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_Name
       value: InworldController
+      objectReference: {fileID: 0}
+    - target: {fileID: 5993930513270221524, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_SamplingMode
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

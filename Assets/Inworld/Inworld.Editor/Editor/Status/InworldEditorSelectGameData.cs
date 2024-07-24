@@ -66,7 +66,7 @@ namespace Inworld.Editors
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Back", InworldEditor.Instance.BtnStyle))
             {
-                InworldEditor.Instance.Status = EditorStatus.Init;
+                InworldEditor.Instance.Status = EditorStatus.SelectMode;
             }
             if (m_CurrentWorkspace != k_DefaultWorkspace && !string.IsNullOrEmpty(m_CurrentWorkspace))
             {
