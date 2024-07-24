@@ -66,7 +66,7 @@ namespace Inworld.Editors
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Back", InworldEditor.Instance.BtnStyle))
             {
-                InworldEditor.Instance.Status = EditorStatus.SelectMode;
+                InworldEditor.Instance.Status = EditorStatus.Init;
             }
             if (m_CurrentWorkspace != k_DefaultWorkspace && !string.IsNullOrEmpty(m_CurrentWorkspace))
             {
@@ -125,22 +125,14 @@ namespace Inworld.Editors
             EditorUtility.DisplayProgressBar("Inworld", "Downloading Assets", sceneData.Progress);
             if (sceneData.Progress > 0.95f)
             {
-                InworldEditor.Instance.Status = EditorStatus.SelectCharacter;
+                InworldEditor.Instance.Status = EditorStatus.SelectMode;
             }
         }
 
         void _SaveCurrentSettings()
         {
-            InworldGameData gameData = _CreateGameDataAssets();
-            InworldController controller = Object.FindObjectOfType<InworldController>();
-            if (!controller)
-                controller = PrefabUtility.InstantiatePrefab(InworldEditor.Instance.ControllerPrefab) as InworldController;
-            if (!controller)
-                return;
-            controller.GameData = gameData;
-            controller.transform.position = Vector3.zero; // YAN: Reset position for RPM Animation.
-            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
-            EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
+            //InworldGameData gameData = _CreateGameDataAssets();
+            InworldEditor.Instance.GameData = _CreateGameDataAssets();
         }
         void _DownloadRelatedAssets()
         {

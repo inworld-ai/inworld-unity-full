@@ -26,13 +26,13 @@ namespace Inworld.Editors
         }
         public void DrawContent()
         {
-            if (GUILayout.Button("Chat in Editor", InworldEditor.Instance.ContentBtnStyle))
+            if (GUILayout.Button("Generate dialog in Editor", InworldEditor.Instance.ContentBtnStyle))
             {
                 InworldEditor.Instance.Status = EditorStatus.LLM;
             }
-            if (GUILayout.Button("Setup in Runtime", InworldEditor.Instance.ContentBtnStyle))
+            if (GUILayout.Button("Setup character in Runtime", InworldEditor.Instance.ContentBtnStyle))
             {
-                InworldEditor.Instance.Status = EditorStatus.SelectGameData;
+                InworldEditor.Instance.Status = EditorStatus.SelectCharacter;
             }
         }
         public void DrawButtons()
@@ -41,7 +41,7 @@ namespace Inworld.Editors
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Back", InworldEditor.Instance.BtnStyle))
             {
-                InworldEditor.Instance.Status = EditorStatus.Init;
+                InworldEditor.Instance.Status = EditorStatus.SelectGameData;
             }
             GUILayout.EndHorizontal();
         }

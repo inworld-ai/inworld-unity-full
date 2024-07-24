@@ -12,6 +12,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Inworld.Sample;
 using Inworld.Entities;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 namespace Inworld.Editors
 {
@@ -110,7 +112,7 @@ namespace Inworld.Editors
         {
             m_StartDownload = false;
             EditorUtility.ClearProgressBar();
-            _CreatePrefabVariants();
+            _CreateInworldController();
         }
         /// <summary>
         /// Triggers when other general update logic has been finished.
@@ -128,10 +130,24 @@ namespace Inworld.Editors
                 _CreatePrefabVariants();
             }
         }
+        void _CreateInworldController()
+        {
+            InworldController controller = Object.FindObjectOfType<InworldController>();
+            if (!controller)
+                controller = PrefabUtility.InstantiatePrefab(InworldEditor.Instance.ControllerPrefab) as InworldController;
+            if (!controller)
+                return;
+            controller.GameData = InworldEditor.Instance.GameData;
+            controller.transform.position = Vector3.zero; // YAN: Reset position for RPM Animation.
+            _CreatePrefabVariants();
+            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+            EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
+        }
         void _CreatePrefabVariants()
         {
+
             // 1. Get the character prefab for character in current scene. (Default or Specific)
-            InworldSceneData sceneData = InworldAI.User.GetSceneByFullName(InworldController.Instance.GameData.sceneFullName);
+            InworldSceneData sceneData = InworldAI.User.GetSceneByFullName(InworldEditor.Instance.GameData.sceneFullName);
             if (sceneData == null)
                 return;
             foreach (CharacterReference charRef in sceneData.characterReferences)

@@ -21,6 +21,7 @@ MonoBehaviour:
   m_InnequinPrefab: {fileID: 2030273176201225856, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
   m_PlayerController: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
   m_CurrentStatus: 0
+  m_CurrentGameData: {fileID: 11400000, guid: 1690b99ca47651944b9fb042b08c9d8d, type: 2}
   m_UserDataPath: UserData
   m_GameDataPath: GameData
   m_ThumbnailPath: Thumbnail
@@ -31,3 +32,5 @@ MonoBehaviour:
   m_WorkspaceURL: workspaces
   m_KeyURL: apikeys
   m_ScenesURL: scenes
+  m_CompleteTextURL: completeText
+  m_CompleteChatURL: completeChat

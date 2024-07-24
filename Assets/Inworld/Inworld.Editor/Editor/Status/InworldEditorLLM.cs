@@ -4,9 +4,11 @@
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
+using Inworld.Entities;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Networking;
                                                                                                                                                                                                                                                                                                                                                                                                                                                                        #if UNITY_EDITOR
 namespace Inworld.Editors
 {
@@ -30,7 +32,7 @@ namespace Inworld.Editors
         {
             wordWrap = true,
             padding = new RectOffset(10, 10, 0, 0),
-            normal = new GUIStyleState()
+            normal = new GUIStyleState
             {
                 textColor = Color.white
             },
@@ -66,10 +68,14 @@ namespace Inworld.Editors
             GUILayout.BeginHorizontal();
             GUI.SetNextControlName("TextInput");
             m_TextInput = GUILayout.TextArea(m_TextInput);
-            if (Event.current.isKey && Event.current.keyCode == KeyCode.Return)
+            Event e = Event.current;
+            if (e.type == EventType.KeyUp && e.keyCode == KeyCode.Return)
             {
-                _SendText();
-                Event.current.Use(); // Mark the event as used to prevent further processing
+                if (e.shift)
+                    m_TextInput += "\n";
+                else
+                    _SendText();
+                e.Use(); 
             }
             if (GUILayout.Button("Send", SendBtnStyle))
             {
@@ -93,8 +99,21 @@ namespace Inworld.Editors
             if (string.IsNullOrEmpty(m_TextInput)) 
                 return;
             m_ChatHistory.Add($"You: {m_TextInput}"); 
-            m_ChatHistory.Add("Bot: Hi"); 
             m_TextInput = "";
+            Debug.Log($"YAN: {InworldEditor.CompleteChatURL}");
+            InworldEditorUtil.SendWebGetRequest(InworldEditor.CompleteChatURL, true, OnChatCompleted);
+        }
+        void OnChatCompleted(AsyncOperation obj)
+        {
+            UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
+            if (uwr.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError(InworldEditor.GetError(uwr.error));
+                Debug.Log(uwr.downloadHandler.text);
+                return;
+            }
+            Debug.Log(uwr.downloadHandler.text);
+            m_ChatHistory.Add("Bot: Hi"); 
             GUI.FocusControl("TextInput");
         }
         public void OnExit()

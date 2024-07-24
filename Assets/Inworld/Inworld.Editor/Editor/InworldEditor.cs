@@ -38,6 +38,7 @@ namespace Inworld.Editors
         [SerializeField] PlayerController m_PlayerController;
         [Space(10)][Header("Status")]
         [SerializeField] EditorStatus m_CurrentStatus;
+        [SerializeField] InworldGameData m_CurrentGameData;
         EditorStatus m_LastStatus;
         [Header("Paths:")]
         [SerializeField] string m_UserDataPath;
@@ -51,6 +52,8 @@ namespace Inworld.Editors
         [SerializeField] string m_WorkspaceURL;
         [SerializeField] string m_KeyURL;
         [SerializeField] string m_ScenesURL;
+        [SerializeField] string m_CompleteTextURL;
+        [SerializeField] string m_CompleteChatURL;
         
         const string k_GlobalDataPath = "InworldEditor";
         const string k_InstancePath = "Assets/Inworld/Inworld.Editor/Data/InworldEditor.asset";
@@ -95,6 +98,15 @@ namespace Inworld.Editors
         /// Gets the default Readme asset.
         /// </summary>
         public static InworldReadme ReadMe => Instance.m_InworldReadme;
+        
+        /// <summary>
+        /// Gets/Sets the current game data.
+        /// </summary>
+        public InworldGameData GameData
+        {
+            get => m_CurrentGameData;
+            set => m_CurrentGameData = value;
+        }
         /// <summary>
         /// Gets/Sets the current status of Inworld Editor.
         /// </summary>
@@ -234,6 +246,14 @@ namespace Inworld.Editors
         {
             margin = new RectOffset(10, 10, 0, 0)
         };
+        /// <summary>
+        /// Gets the URL for complete Chat.
+        /// </summary>
+        public static string CompleteChatURL => $"https://{Instance.m_ServerConfig.web}/llm/v1alpha/completions:{Instance.m_CompleteChatURL}";
+        /// <summary>
+        /// Gets the URL for complete Text.
+        /// </summary>
+        public static string CompleteTextURL => $"https://{Instance.m_ServerConfig.web}/llm/v1alpha/completions:{Instance.m_CompleteTextURL}";
         /// <summary>
         /// Gets the URL for fetching billing account.
         /// </summary>
