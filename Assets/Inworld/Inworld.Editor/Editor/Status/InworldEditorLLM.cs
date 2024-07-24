@@ -64,11 +64,18 @@ namespace Inworld.Editors
         {
             GUILayout.FlexibleSpace();
             GUILayout.BeginHorizontal();
+            GUI.SetNextControlName("TextInput");
             m_TextInput = GUILayout.TextArea(m_TextInput);
+            if (Event.current.isKey && Event.current.keyCode == KeyCode.Return)
+            {
+                _SendText();
+                Event.current.Use(); // Mark the event as used to prevent further processing
+            }
             if (GUILayout.Button("Send", SendBtnStyle))
             {
                 _SendText();
             }
+            GUI.FocusControl("TextInput");
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Back", InworldEditor.Instance.BtnStyle))
@@ -88,6 +95,7 @@ namespace Inworld.Editors
             m_ChatHistory.Add($"You: {m_TextInput}"); 
             m_ChatHistory.Add("Bot: Hi"); 
             m_TextInput = "";
+            GUI.FocusControl("TextInput");
         }
         public void OnExit()
         {
