@@ -6,7 +6,8 @@ using UnityEngine;
 public class ResetState : StateMachineBehaviour
 {
     public string m_EmotionName;
-    int m_HashIndex; 
+    int m_HashIndex;
+
     void Awake()
     {
         m_HashIndex = Animator.StringToHash(m_EmotionName);

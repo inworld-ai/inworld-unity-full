@@ -3,26 +3,26 @@ using UnityEngine;
 public class TestAnim : MonoBehaviour
 {
     [SerializeField] Animator m_Animator;
-    int m_AckIndex = 1;
+    float m_AckIndex = 0;
     int m_MoveStatus = 1;
     int m_InteractionStatus = 1;
     bool m_IsAngry;
-    static readonly int s_AckIndex = Animator.StringToHash("AckIndex");
+    static readonly int s_AckIndex = Animator.StringToHash("Acknowledge");
     static readonly int s_MoveStatus = Animator.StringToHash("MoveStatus");
     static readonly int s_InteractionStatus = Animator.StringToHash("InteractionStatus");
     static readonly int s_IsAngry = Animator.StringToHash("IsAngry");
 
-    void _ApplyAnimation(int hashName, int currentVal, int minVal, int maxVal)
+    void _ApplyAnimation(int hashName, float currentVal, int minVal, int maxVal)
     {
         currentVal = Mathf.Clamp(currentVal, minVal, maxVal);
-        m_Animator.SetInteger(hashName, currentVal);
+        m_Animator.SetFloat(hashName, currentVal);
     }
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyUp(KeyCode.UpArrow))
         {
-            m_AckIndex++;
+            m_AckIndex = Random.Range(0, 5);
             _ApplyAnimation(s_AckIndex,  m_AckIndex, 1, 10);
         }
         if (Input.GetKeyUp(KeyCode.DownArrow))
@@ -32,7 +32,7 @@ public class TestAnim : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.Alpha2))
         {
-            m_MoveStatus++;
+            m_AckIndex = Random.Range(0, 5);
             _ApplyAnimation(s_MoveStatus,  m_MoveStatus, 1, 2);
         }
         if (Input.GetKeyUp(KeyCode.Alpha1))
