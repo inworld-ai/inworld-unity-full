@@ -6,7 +6,6 @@
  *************************************************************************************************/
 
 using Inworld.Packet;
-using System;
 using UnityEngine;
 namespace Inworld.Sample
 {
