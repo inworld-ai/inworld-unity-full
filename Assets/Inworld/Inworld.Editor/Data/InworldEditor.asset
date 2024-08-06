@@ -20,14 +20,16 @@ MonoBehaviour:
   m_RPMPrefab: {fileID: 4560116734280050820, guid: 4f93a187a84c6b14da4a4bac1375b751, type: 3}
   m_InnequinPrefab: {fileID: 2030273176201225856, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
   m_PlayerController: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
-  m_CurrentStatus: 0
-  m_CurrentGameData: {fileID: 11400000, guid: 1690b99ca47651944b9fb042b08c9d8d, type: 2}
+  m_CurrentStatus: 2
+  m_CurrentGameData: {fileID: 11400000, guid: 8b24a80ef05c323419e8acbcefecf11a, type: 2}
+  m_LLMService: {fileID: 11400000, guid: ae1904446d1abb849aab564407a21b5d, type: 2}
   m_UserDataPath: UserData
   m_GameDataPath: GameData
   m_ThumbnailPath: Thumbnail
   m_AvatarPath: Avatar
   m_PrefabPath: Prefabs
-  m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_LLMDataPath: LLMData
+  m_ServerConfig: {fileID: 11400000, guid: 49b1239d1bfc5de4f8026ca1902448af, type: 2}
   m_BillingAccountURL: billing-accounts:meListBillingAccounts
   m_WorkspaceURL: workspaces
   m_KeyURL: apikeys

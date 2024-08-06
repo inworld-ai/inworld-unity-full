@@ -56,7 +56,9 @@ namespace Inworld.Editors
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Connect", InworldEditor.Instance.BtnStyle))
             {
-                _GetBillingAccount();
+                //_GetBillingAccount();
+                InworldAI.LogEvent("Login_Studio");
+                _ListWorkspace();
             }
             GUILayout.EndHorizontal();
 

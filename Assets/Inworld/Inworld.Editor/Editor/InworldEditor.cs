@@ -5,12 +5,15 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 #if UNITY_EDITOR
+using Inworld.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using Inworld.Sample;
 using Inworld.UI;
+using System.Text;
+using UnityEngine.Networking;
 using UnityEngine.Serialization;
 
 namespace Inworld.Editors
@@ -39,6 +42,7 @@ namespace Inworld.Editors
         [Space(10)][Header("Status")]
         [SerializeField] EditorStatus m_CurrentStatus;
         [SerializeField] InworldGameData m_CurrentGameData;
+        [SerializeField] InworldLLMService m_LLMService;
         EditorStatus m_LastStatus;
         [Header("Paths:")]
         [SerializeField] string m_UserDataPath;
@@ -46,6 +50,7 @@ namespace Inworld.Editors
         [SerializeField] string m_ThumbnailPath;
         [SerializeField] string m_AvatarPath;
         [SerializeField] string m_PrefabPath;
+        [SerializeField] string m_LLMDataPath;
         [Header("URLs:")]
         [SerializeField] InworldServerConfig m_ServerConfig;
         [SerializeField] string m_BillingAccountURL;
@@ -66,7 +71,8 @@ namespace Inworld.Editors
         Dictionary<EditorStatus, IEditorState> m_InworldEditorStates = new Dictionary<EditorStatus, IEditorState>();
         string m_StudioTokenForExchange;
         string m_ErrorMsg;
-
+        Token m_Token;
+        
         /// <summary>
         /// Gets an instance of InworldEditor.
         /// By default, it is at `Assets/Inworld/Inworld.Editor/Data/InworldEditor.asset`.
@@ -107,6 +113,11 @@ namespace Inworld.Editors
             get => m_CurrentGameData;
             set => m_CurrentGameData = value;
         }
+        public InworldLLMService LLMService
+        {
+            get => m_LLMService;
+            set => m_LLMService = value;
+        }
         /// <summary>
         /// Gets/Sets the current status of Inworld Editor.
         /// </summary>
@@ -133,6 +144,7 @@ namespace Inworld.Editors
         /// Gets the location for generating and storing user data.
         /// </summary>
         public static string UserDataPath => $"{InworldAI.InworldPath}/{Instance.m_UserDataPath}";
+        public static string LLMDataPath => Instance.m_LLMDataPath;
         /// <summary>
         /// Gets the location for generating and storing game data.
         /// </summary>
@@ -185,6 +197,11 @@ namespace Inworld.Editors
             get => m_InnequinPrefab;
             set => m_InnequinPrefab = value;
         }
+        public static string RuntimeToken => $"Bearer {Instance.m_Token.token}"; 
+        /// <summary>
+        /// Gets if the runtime token is valid.
+        /// </summary>
+        public static bool IsRuntimeTokenValid => Instance.m_Token?.IsValid ?? false;
         /// <summary>
         /// Gets/Sets the token used for login Inworld Studio.
         /// </summary>
@@ -196,7 +213,14 @@ namespace Inworld.Editors
         /// <summary>
         /// Gets the actual token part.
         /// </summary>
-        public static string Token => $"Bearer {TokenForExchange.Split(':')[0]}";
+        public static string Token
+        {
+            get
+            {
+                string[] tokenData = TokenForExchange.Split(':');
+                return tokenData.Length > 1 ? $"Bearer {tokenData[0]}" : $"Basic {TokenForExchange}";
+            }
+        }
 
         /// <summary>
         /// Gets the GUI style for the title in Inworld Studio Panel.
@@ -261,6 +285,7 @@ namespace Inworld.Editors
         /// <summary>
         /// Gets the URL for listing workspaces
         /// </summary>
+        // public static string ListWorkspaceURL => $"https://{Instance.m_ServerConfig.web}/studio/v1/{Instance.m_WorkspaceURL}";
         public static string ListWorkspaceURL => $"https://{Instance.m_ServerConfig.web}/v1alpha/{Instance.m_WorkspaceURL}";
         /// <summary>
         /// Gets/Sets the current Error message.
@@ -319,6 +344,39 @@ namespace Inworld.Editors
         /// <param name="wsFullName">the full name of the target workspace</param>
         public static string ListKeyURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/v1alpha/{wsFullName}/{Instance.m_KeyURL}";
 
+        public void GetRuntimeAccessTokenAsync()
+        {
+            string header = InworldAuth.GetHeader(m_ServerConfig.runtime, m_CurrentGameData.apiKey, m_CurrentGameData.apiSecret);
+            Dictionary<string, string> headers = new Dictionary<string, string>()
+            {
+                ["Authorization"] = header,
+                ["Content-Type"] = "application/json"
+            };
+            AccessTokenRequest req = new AccessTokenRequest
+            {
+                api_key = m_CurrentGameData.apiKey
+            };
+            string json = JsonUtility.ToJson(req);
+            InworldEditorUtil.SendWebPostRequest(m_ServerConfig.TokenServer, headers, json, OnRuntimeTokenFetched);
+        }
+        void OnRuntimeTokenFetched(AsyncOperation obj)
+        {
+            UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
+            if (uwr == null)
+            {
+                Instance.Error = "Cannot get Runtime WebRequest";
+                return;
+            }
+            uwr.uploadHandler?.Dispose();
+            if (uwr.result != UnityWebRequest.Result.Success)
+            {
+                EditorUtility.ClearProgressBar();
+                Debug.LogError($"YAN: {uwr.downloadHandler.text}");
+                Instance.Error = $"Fetch Runtime Token Failed: {GetError(uwr.error)}";
+                return;
+            }
+            m_Token = JsonUtility.FromJson<Token>(uwr.downloadHandler.text);
+        }
         /// <summary>
         /// Save all the current scriptable objects.
         /// </summary>

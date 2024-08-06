@@ -5,6 +5,8 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 using Inworld.Entities;
+using Inworld.Entities.LLM;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -15,8 +17,7 @@ namespace Inworld.Editors
     public class InworldEditorLLM : IEditorState
     {
         string m_TextInput;
-        List<string> m_ChatHistory = new List<string>();
-        bool m_IsFromPlayer;
+        List<Message> m_ChatHistory = new List<Message>();
         Vector2 m_ScrollPos;
         GUIStyle PlayerLabel => new GUIStyle
         {
@@ -55,10 +56,9 @@ namespace Inworld.Editors
         public void DrawContent()
         {
             m_ScrollPos = EditorGUILayout.BeginScrollView(m_ScrollPos, GUILayout.ExpandHeight(true));
-            foreach (string item in m_ChatHistory)
+            foreach (Message item in m_ChatHistory)
             {
-                GUILayout.Box(item, m_IsFromPlayer ? PlayerLabel : BotLabel);
-                m_IsFromPlayer = !m_IsFromPlayer;
+                GUILayout.Box(item.ToMessage, item.IsPlayer ? PlayerLabel : BotLabel);
             }
             EditorGUILayout.EndScrollView();
         }
@@ -98,10 +98,16 @@ namespace Inworld.Editors
         {
             if (string.IsNullOrEmpty(m_TextInput)) 
                 return;
-            m_ChatHistory.Add($"You: {m_TextInput}"); 
+            m_ChatHistory.Add(MessageFactory.Create(m_TextInput)); 
             m_TextInput = "";
-            Debug.Log($"YAN: {InworldEditor.CompleteChatURL}");
-            InworldEditorUtil.SendWebGetRequest(InworldEditor.CompleteChatURL, true, OnChatCompleted);
+            string token = $"Basic UHlDWENQOTRCTnZ0THp5OHJBSUFWTHdObnNWd0lKSXU6V09OcmNiNGFBN0lnVDJkaE85NHlVTTlWeHp3RzFCa0c3azJ5VWx6enQzSEpLVTdxZHBBM3lJdkx1QUE3dFNwNg==";
+            Dictionary<string, string> headers = new Dictionary<string, string>()
+            {
+                ["Authorization"] = InworldEditor.RuntimeToken
+            };
+            string jsonData = new CompleteChatRequest(new Serving(), m_ChatHistory, InworldEditor.Instance.LLMService.config).ToJson;
+            Debug.Log($"YAN SEND {jsonData}");
+            InworldEditorUtil.SendWebPostRequest(InworldEditor.CompleteChatURL, headers,  jsonData, OnChatCompleted);
         }
         void OnChatCompleted(AsyncOperation obj)
         {
@@ -112,8 +118,13 @@ namespace Inworld.Editors
                 Debug.Log(uwr.downloadHandler.text);
                 return;
             }
-            Debug.Log(uwr.downloadHandler.text);
-            m_ChatHistory.Add("Bot: Hi"); 
+            NetworkCompleteChatResponse response = JsonConvert.DeserializeObject<NetworkCompleteChatResponse>(uwr.downloadHandler.text);
+            foreach (var choice in response.result.choices)
+            {
+                Debug.Log(choice.message);
+                m_ChatHistory.Add(MessageFactory.CreateFromAgent(choice.message.content)); 
+            }
+            
             GUI.FocusControl("TextInput");
         }
         public void OnExit()
@@ -122,7 +133,8 @@ namespace Inworld.Editors
         }
         public void OnEnter()
         {
-            
+            //if (!InworldEditor.IsRuntimeTokenValid)
+                InworldEditor.Instance.GetRuntimeAccessTokenAsync();
         }
         public void PostUpdate()
         {

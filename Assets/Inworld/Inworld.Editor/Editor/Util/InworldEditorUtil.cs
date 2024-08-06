@@ -5,9 +5,11 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 #if UNITY_EDITOR
+using Inworld.Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEditor;
@@ -108,7 +110,27 @@ namespace Inworld.Editors
         [MenuItem("GameObject/Inworld/Upgrade Material", false, 0)]
         static void UpgradeMaterial() => InworldRenderPipelineConverter.UpgradeMaterial();
 #endregion
-        
+        /// <summary>
+        /// Editor based send web request.
+        /// </summary>
+        /// <param name="url">the url to send web request</param>
+        /// <param name="headers">the headers added to the request</param>
+        /// <param name="jsonData">the data for posting.</param>
+        /// <param name="callback">the callback function after web request finished or failed.</param>
+        public static void SendWebPostRequest(string url, Dictionary<string, string> headers, string jsonData, Action<AsyncOperation> callback)
+        {
+            UnityWebRequest uwr = new UnityWebRequest(url, "POST");
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
+            uwr.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            uwr.downloadHandler = new DownloadHandlerBuffer();
+            uwr.timeout = 60;
+            foreach (KeyValuePair<string, string> header in headers)
+            {
+                uwr.SetRequestHeader(header.Key, header.Value);
+            }
+            UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
+            updateRequest.completed += callback;
+        }
         /// <summary>
         /// Editor based send web request.
         /// </summary>

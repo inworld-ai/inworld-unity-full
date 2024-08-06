@@ -121,14 +121,13 @@ namespace Inworld.Editors
         {
             if (!m_StartDownload || !InworldController.Instance.GameData)
                 return;
-            var sceneData = InworldController.Instance.GameData;
+            InworldGameData sceneData = InworldController.Instance.GameData;
             EditorUtility.DisplayProgressBar("Inworld", "Downloading Assets", sceneData.Progress);
-            if (sceneData.Progress > 0.95f)
-            {
-                m_StartDownload = false;
-                EditorUtility.ClearProgressBar();
-                _CreatePrefabVariants();
-            }
+            if (sceneData.Progress < 0.95f)
+                return;
+            m_StartDownload = false;
+            EditorUtility.ClearProgressBar();
+            _CreatePrefabVariants();
         }
         void _CreateInworldController()
         {

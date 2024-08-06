@@ -30,7 +30,7 @@ namespace Inworld.Editors
             {
                 InworldEditor.Instance.Status = EditorStatus.LLM;
             }
-            if (GUILayout.Button("Setup character in Runtime", InworldEditor.Instance.ContentBtnStyle))
+            if (GUILayout.Button("Setup characters for Runtime", InworldEditor.Instance.ContentBtnStyle))
             {
                 InworldEditor.Instance.Status = EditorStatus.SelectCharacter;
             }
@@ -51,7 +51,7 @@ namespace Inworld.Editors
         }
         public void OnEnter()
         {
-            
+            EditorUtility.ClearProgressBar();
         }
         public void PostUpdate()
         {

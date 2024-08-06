@@ -133,6 +133,22 @@ namespace Inworld.Editors
         {
             //InworldGameData gameData = _CreateGameDataAssets();
             InworldEditor.Instance.GameData = _CreateGameDataAssets();
+            InworldEditor.Instance.LLMService = _CreateLLMDataAssets();
+        }
+        InworldLLMService _CreateLLMDataAssets()
+        {
+            // Create a new SO.
+            InworldLLMService llmService = ScriptableObject.CreateInstance<InworldLLMService>();
+
+            if (!Directory.Exists($"{InworldEditorUtil.UserDataPath}/{InworldEditor.LLMDataPath}"))
+            {
+                Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.LLMDataPath}");
+            }
+            string newAssetPath = $"{InworldEditor.UserDataPath}/{InworldEditor.LLMDataPath}/{InworldAI.User.Name}_LLM.asset";
+            AssetDatabase.CreateAsset(llmService, newAssetPath);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            return llmService;
         }
         void _DownloadRelatedAssets()
         {
