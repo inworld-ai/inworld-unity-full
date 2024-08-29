@@ -9,7 +9,7 @@ using Inworld.Entities;
 using Inworld.Inworld.Native.VAD;
 using System;
 using System.Collections.Generic;
-using System.IO;
+
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -47,7 +47,7 @@ namespace Inworld.AEC
             get
             {
 #if UNITY_WEBGL
-                        return null;
+                return null;
 #endif
                 if (m_Probe)
                     return m_Probe;
@@ -91,9 +91,8 @@ namespace Inworld.AEC
         public override void GetOutputData(float[] data, int channels)
         {
 #if !UNITY_WEBGL
-            PreProcessAudioData(ref m_OutputBuffer, data, channels, false);
+            WavUtility.ConvertAudioClipDataToInt16Array(ref m_OutputBuffer, data, m_OutputSampleRate, channels);
 #endif
-            
         }
         protected override void ProcessAudio()
         {
@@ -175,7 +174,9 @@ namespace Inworld.AEC
         protected override bool DetectPlayerSpeaking()
         {
             // YAN: Normalize the value for threshold because SNR Checking range from 0 to 30. 
-            return !IsMute && AutoDetectPlayerSpeaking && (!EnableVAD || VADInterop.VAD_Process(m_RawInput, m_RawInput.Length) * 30 > m_PlayerVolumeThreshold);
+            float[] processedWave = WavUtility.ConvertInt16ArrayToFloatArray(m_ProcessedWaveData.ToArray());
+            float vadResult = VADInterop.VAD_Process(processedWave, processedWave.Length);
+            return !IsMute && AutoDetectPlayerSpeaking && (!EnableVAD || vadResult * 30 > m_PlayerVolumeThreshold);
         }
         void _DumpAudioFiles()
         {
