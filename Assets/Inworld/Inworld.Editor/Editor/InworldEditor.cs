@@ -11,7 +11,8 @@ using UnityEditor;
 using UnityEngine;
 using Inworld.Sample;
 using Inworld.UI;
-using UnityEngine.Serialization;
+using TMPro;
+
 
 namespace Inworld.Editors
 {
@@ -26,7 +27,7 @@ namespace Inworld.Editors
     {
         [Header("Assets")]
         [SerializeField] Texture2D m_Banner;
-        [FormerlySerializedAs("m_Readme")][SerializeField] InworldReadme m_InworldReadme;
+        [SerializeField] InworldReadme m_InworldReadme;
         [SerializeField] bool m_DisplayReadmeOnLoad;
         [SerializeField] InworldController m_ControllerPrefab;
         [SerializeField] InworldCharacter m_Character2DPrefab;
@@ -45,12 +46,11 @@ namespace Inworld.Editors
         [SerializeField] string m_PrefabPath;
         [Header("URLs:")]
         [SerializeField] InworldServerConfig m_ServerConfig;
-        [SerializeField] string m_BillingAccountURL;
         [SerializeField] string m_WorkspaceURL;
         [SerializeField] string m_KeyURL;
         [SerializeField] string m_ScenesURL;
         
-        const string k_GlobalDataPath = "InworldEditor";
+        const string k_DefaultPlayerName = "player";
         const string k_InstancePath = "Assets/Inworld/Inworld.Editor/Data/InworldEditor.asset";
         public const string k_TokenErrorInstruction = "Token Error or Expired.\nPlease login again";
         const float k_LuminanceRed = 0.2126f;
@@ -60,6 +60,7 @@ namespace Inworld.Editors
         
         Dictionary<EditorStatus, IEditorState> m_InworldEditorStates = new Dictionary<EditorStatus, IEditorState>();
         string m_StudioTokenForExchange;
+        string m_InputUserName;
         string m_ErrorMsg;
 
         /// <summary>
@@ -172,6 +173,24 @@ namespace Inworld.Editors
             set => m_InnequinPrefab = value;
         }
         /// <summary>
+        /// Gets/Sets the input user name.
+        /// </summary>
+        public static string InputUserName
+        {
+            get
+            {
+                if (InworldAI.User.Name.ToLower() != k_DefaultPlayerName)
+                    return InworldAI.User.Name;
+                return Instance.m_InputUserName;
+            }
+            set
+            {
+                if (Instance && value == Instance.m_InputUserName)
+                    return;
+                Instance.m_InputUserName = value;
+            }
+        }
+        /// <summary>
         /// Gets/Sets the token used for login Inworld Studio.
         /// </summary>
         public static string TokenForExchange
@@ -224,10 +243,6 @@ namespace Inworld.Editors
         {
             margin = new RectOffset(10, 10, 0, 0)
         };
-        /// <summary>
-        /// Gets the URL for fetching billing account.
-        /// </summary>
-        public static string BillingAccountURL => $"https://{Instance.m_ServerConfig.web}/v1alpha/{Instance.m_BillingAccountURL}";
         /// <summary>
         /// Gets the URL for listing workspaces
         /// </summary>
