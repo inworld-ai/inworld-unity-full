@@ -6,6 +6,7 @@
  *************************************************************************************************/
 #if UNITY_EDITOR
 using Inworld.Entities;
+using Newtonsoft.Json;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -119,7 +120,7 @@ namespace Inworld.Editors
             AssetDatabase.Refresh();
             InworldAI.User = newUser;
             InworldAI.User.Name = InworldEditor.InputUserName;
-            EditorUtility.DisplayProgressBar("Inworld", "Getting Billing Account Completed!", 0.5f);
+            EditorUtility.DisplayProgressBar("Inworld", "Create User Profile Completed!", 0.5f);
             InworldAI.LogEvent("Login_Studio");
             _ListWorkspace();
         }
@@ -133,7 +134,7 @@ namespace Inworld.Editors
                 return;
             }
             EditorUtility.DisplayProgressBar("Inworld", "Getting Workspace data Completed", 1f);
-            ListWorkspaceResponse response = JsonUtility.FromJson<ListWorkspaceResponse>(uwr.downloadHandler.text);
+            ListWorkspaceResponse response = JsonConvert.DeserializeObject<ListWorkspaceResponse>(uwr.downloadHandler.text);
             InworldAI.User.Workspace.Clear();
             InworldAI.User.Workspace.AddRange(response.workspaces);
             EditorUtility.ClearProgressBar();

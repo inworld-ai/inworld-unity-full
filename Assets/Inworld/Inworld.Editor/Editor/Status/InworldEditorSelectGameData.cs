@@ -243,6 +243,24 @@ namespace Inworld.Editors
                 return;
             InworldEditorUtil.SendWebGetRequest(InworldEditor.ListScenesURL(wsFullName), true, _ListSceneCompleted);
         }
+        void _ListCharacters()
+        {
+            string wsFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspace);
+            if (string.IsNullOrEmpty(wsFullName))
+                return;
+            InworldEditorUtil.SendWebGetRequest(InworldEditor.ListCharactersURL(wsFullName), true, _ListCharactersCompleted);
+        }
+        void _ListCharactersCompleted(AsyncOperation obj)
+        {
+            UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
+            if (uwr.result != UnityWebRequest.Result.Success)
+            {
+                InworldEditor.Instance.Error = $"List Characters Failed: {InworldEditor.GetError(uwr.error)}";
+                EditorUtility.ClearProgressBar();
+                return;
+            }            
+            // TODO(Yan): Separate the listing character method. 
+        }
         void _ListSceneCompleted(AsyncOperation obj)
         {
             UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
@@ -252,6 +270,7 @@ namespace Inworld.Editors
                 EditorUtility.ClearProgressBar();
                 return;
             }
+
             ListSceneResponse resp = JsonUtility.FromJson<ListSceneResponse>(uwr.downloadHandler.text);
             if (resp.scenes.Count == 0)
             {
@@ -272,6 +291,7 @@ namespace Inworld.Editors
                 EditorUtility.ClearProgressBar();
                 return;
             }
+            
             ListKeyResponse resp = JsonUtility.FromJson<ListKeyResponse>(uwr.downloadHandler.text);
             if (resp.apiKeys.Count == 0)
                 m_DisplayDataMissing = true;
@@ -288,6 +308,7 @@ namespace Inworld.Editors
             m_CurrentKey = k_DefaultKey; // YAN: Reset data.
             m_DisplayDataMissing = false;
             m_StartDownload = false;
+            _ListCharacters();
             _ListScenes();
             _ListKeys();
         }

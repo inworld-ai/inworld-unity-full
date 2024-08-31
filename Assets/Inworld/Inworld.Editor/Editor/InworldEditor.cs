@@ -49,7 +49,10 @@ namespace Inworld.Editors
         [SerializeField] string m_WorkspaceURL;
         [SerializeField] string m_KeyURL;
         [SerializeField] string m_ScenesURL;
-        
+        [SerializeField] string m_CharactersURL;
+
+        const string k_EntryV1Alpha = "v1alpha";
+        const string k_EntryV1 = "studio/v1";
         const string k_DefaultPlayerName = "player";
         const string k_InstancePath = "Assets/Inworld/Inworld.Editor/Data/InworldEditor.asset";
         public const string k_TokenErrorInstruction = "Token Error or Expired.\nPlease login again";
@@ -136,6 +139,11 @@ namespace Inworld.Editors
         /// Gets the location for generating and storing the prefabs for the Inworld character.
         /// </summary>
         public static string PrefabPath => Instance.m_PrefabPath;
+        public static string Entry => 
+            Instance && !string.IsNullOrEmpty(Instance.m_StudioTokenForExchange) && 
+            Instance.m_StudioTokenForExchange.Split(':').Length >= 2 
+                ? k_EntryV1Alpha 
+                : k_EntryV1;
         /// <summary>
         /// Gets if the current Inworld Character prefab is 3D.
         /// </summary>
@@ -179,8 +187,11 @@ namespace Inworld.Editors
         {
             get
             {
-                if (InworldAI.User.Name.ToLower() != k_DefaultPlayerName)
-                    return InworldAI.User.Name;
+                if (Instance.m_InputUserName == null)
+                {
+                    if (InworldAI.User.Name.ToLower() != k_DefaultPlayerName)
+                        return InworldAI.User.Name;
+                }
                 return Instance.m_InputUserName;
             }
             set
@@ -201,8 +212,9 @@ namespace Inworld.Editors
         /// <summary>
         /// Gets the actual token part.
         /// </summary>
-        public static string Token => $"Bearer {TokenForExchange.Split(':')[0]}";
+        public static string Token => TokenForExchange.Split(':').Length >= 2 ? $"Bearer {TokenForExchange.Split(':')[0]}" : $"Basic {TokenForExchange}";
 
+        public static bool IsLegacyEntry => Entry == k_EntryV1Alpha;
         /// <summary>
         /// Gets the GUI style for the title in Inworld Studio Panel.
         /// </summary>
@@ -246,7 +258,7 @@ namespace Inworld.Editors
         /// <summary>
         /// Gets the URL for listing workspaces
         /// </summary>
-        public static string ListWorkspaceURL => $"https://{Instance.m_ServerConfig.web}/v1alpha/{Instance.m_WorkspaceURL}";
+        public static string ListWorkspaceURL => $"https://{Instance.m_ServerConfig.web}/{Entry}/{Instance.m_WorkspaceURL}";
         /// <summary>
         /// Gets/Sets the current Error message.
         /// If setting, also set the current status of InworldEditor.
@@ -297,12 +309,18 @@ namespace Inworld.Editors
         /// Gets the url for listing Inworld scenes.
         /// </summary>
         /// <param name="wsFullName">the full name of the target workspace</param>
-        public static string ListScenesURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/v1alpha/{wsFullName}/{Instance.m_ScenesURL}";
+        public static string ListScenesURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/{Entry}/{wsFullName}/{Instance.m_ScenesURL}";
+        
+        /// <summary>
+        /// Gets the url for listing Inworld characters.
+        /// </summary>
+        /// <param name="wsFullName">the full name of the target workspace</param>
+        public static string ListCharactersURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/{Entry}/{wsFullName}/{Instance.m_CharactersURL}";
         /// <summary>
         /// Gets the url for listing keys.
         /// </summary>
         /// <param name="wsFullName">the full name of the target workspace</param>
-        public static string ListKeyURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/v1alpha/{wsFullName}/{Instance.m_KeyURL}";
+        public static string ListKeyURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/{Entry}/{wsFullName}/{Instance.m_KeyURL}";
 
         /// <summary>
         /// Save all the current scriptable objects.
