@@ -20,6 +20,7 @@ namespace Inworld.Editors
     {
         Init,
         SelectGameData,
+        SelectGameMode,
         SelectCharacter,
         Error
     }
@@ -337,6 +338,7 @@ namespace Inworld.Editors
         {
             m_InworldEditorStates[EditorStatus.Init] = new InworldEditorInit();
             m_InworldEditorStates[EditorStatus.SelectGameData] = new InworldEditorSelectGameData();
+            m_InworldEditorStates[EditorStatus.SelectGameMode] = new InworldEditorSelectGameMode();
             m_InworldEditorStates[EditorStatus.SelectCharacter] = new InworldEditorSelectCharacter();
             m_InworldEditorStates[EditorStatus.Error] = new InworldEditorError();
         }

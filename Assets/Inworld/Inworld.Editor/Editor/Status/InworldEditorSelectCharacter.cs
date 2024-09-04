@@ -12,14 +12,20 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Inworld.Sample;
 using Inworld.Entities;
+using System.Collections.Generic;
 
 namespace Inworld.Editors
 {
     public class InworldEditorSelectCharacter: IEditorState
     {
+        const string k_DefaultScene = "All Characters";
+        string m_CurrentSceneName = "All Characters";
+        List<string> m_SceneNames;
+        InworldWorkspaceData m_CurrentWorkspace;
+        InworldGameData m_CurrentGameData;
         bool m_StartDownload = false;
         Vector2 m_ScrollPosition;
-        
+
         /// <summary>
         /// Triggers when open editor window.
         /// </summary>
@@ -36,13 +42,7 @@ namespace Inworld.Editors
         public void DrawTitle()
         {
             EditorGUILayout.Space();
-            if (InworldEditor.Is3D)
-                EditorGUILayout.LabelField("Please select characters and drag to the scene.", InworldEditor.Instance.TitleStyle);
-            else
-            {
-                EditorGUILayout.LabelField("Done!", InworldEditor.Instance.TitleStyle);
-                EditorGUILayout.LabelField("You can close the tab now.", InworldEditor.Instance.TitleStyle);
-            }
+            EditorGUILayout.LabelField("Please select characters and drag to the scene.", InworldEditor.Instance.TitleStyle);
             EditorGUILayout.Space();
         }
         /// <summary>
@@ -50,34 +50,11 @@ namespace Inworld.Editors
         /// </summary>
         public void DrawContent()
         {
-            if (!InworldEditor.Is3D || !InworldController.Instance || !InworldController.Instance.GameData)
+            if (!InworldEditor.Is3D || m_CurrentWorkspace == null || !m_CurrentGameData)
                 return;
-            // 1. Get the character prefab for character in current scene. (Default or Specific)
-            InworldSceneData sceneData = InworldAI.User.GetSceneByFullName(InworldController.Instance.GameData.sceneFullName);
-            if (sceneData == null)
-                return;
-            m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition);
-            EditorGUILayout.BeginHorizontal();
-            foreach (CharacterReference charRef in sceneData.characterReferences.Where(charRef => GUILayout.Button(charRef.characterOverloads[0].defaultCharacterDescription.givenName, InworldEditor.Instance.BtnCharStyle(_GetTexture2D(charRef)))))
-            {
-                Selection.activeObject = _GetPrefab(charRef);
-                EditorGUIUtility.PingObject(Selection.activeObject);
-            }
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndScrollView();
-            if (GUILayout.Button("Add PlayerController to Scene", GUILayout.ExpandWidth(true)))
-            {
-                Camera mainCamera = Camera.main;
-                if (mainCamera)
-                {
-                    if (EditorUtility.DisplayDialog("Note", "Adding player controller will delete current main camera. Continue?", "OK", "Cancel"))
-                    {
-                        Undo.DestroyObjectImmediate(mainCamera.gameObject);
-                    }
-                }
-                if (!Object.FindObjectOfType<PlayerController>())
-                    Object.Instantiate(InworldEditor.PlayerController);
-            }
+            _DrawSceneSelectionDropDown();
+            _DrawCharacterSelection();
+            
         }
         /// <summary>
         /// Triggers when drawing the buttons at the bottom of the editor panel page.
@@ -110,6 +87,17 @@ namespace Inworld.Editors
         {
             m_StartDownload = false;
             EditorUtility.ClearProgressBar();
+            m_SceneNames = new List<string>
+            {
+                k_DefaultScene
+            };
+            if (InworldController.Instance)
+            {
+                m_CurrentGameData = InworldController.Instance.GameData;
+                if (InworldAI.User && InworldAI.User.Workspace != null && InworldAI.User.Workspace.Count != 0)
+                    m_CurrentWorkspace = InworldAI.User.Workspace.FirstOrDefault(ws => ws.name == m_CurrentGameData.workspaceFullName);
+                m_CurrentWorkspace?.scenes.ForEach(s => m_SceneNames.Add(s.displayName));
+            }
             _CreatePrefabVariants();
         }
         /// <summary>
@@ -130,16 +118,80 @@ namespace Inworld.Editors
         }
         void _CreatePrefabVariants()
         {
-            // 1. Get the character prefab for character in current scene. (Default or Specific)
-            InworldSceneData sceneData = InworldAI.User.GetSceneByFullName(InworldController.Instance.GameData.sceneFullName);
-            if (sceneData == null)
+            // 1. Get the character prefab for character in current workspace. (Default or Specific)
+            if (m_CurrentWorkspace == null)
                 return;
-            foreach (CharacterReference charRef in sceneData.characterReferences)
+            foreach (InworldCharacterData charRef in m_CurrentWorkspace.characters)
             {
                 GameObject downloadedModel = _GetModel(charRef);
                 _CreateVariant(charRef, downloadedModel);
             }
             // 2. Save the prefab variant as the new data.
+        }
+        void _DrawSceneSelectionDropDown()
+        {
+            if (m_CurrentWorkspace == null)
+                return;
+            EditorGUILayout.LabelField("Choose Scenes:", InworldEditor.Instance.TitleStyle);
+            InworldEditorUtil.DrawDropDown(m_CurrentSceneName, m_SceneNames, _SelectScenes);
+            m_CurrentSceneName = m_SceneNames.Count == 1 ? m_SceneNames[0] : m_CurrentSceneName;
+        }
+
+        void _DrawCharacterSelection()
+        {
+            // 1. Get the character prefab for character in current scene. (Default or Specific)
+            InworldSceneData sceneData = InworldAI.User.GetSceneByFullName(InworldController.Instance.GameData.sceneFullName);
+            if (sceneData == null)
+                return;
+            m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition);
+            EditorGUILayout.BeginHorizontal();
+            if (m_CurrentSceneName == k_DefaultScene)
+                _ListAllCharacters();
+            else
+                _ListCharactersInScene(m_CurrentSceneName);
+
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndScrollView();
+            if (GUILayout.Button("Add PlayerController to Scene", GUILayout.ExpandWidth(true)))
+            {
+                Camera mainCamera = Camera.main;
+                if (mainCamera)
+                {
+                    if (EditorUtility.DisplayDialog("Note", "Adding player controller will delete current main camera. Continue?", "OK", "Cancel"))
+                    {
+                        Undo.DestroyObjectImmediate(mainCamera.gameObject);
+                    }
+                }
+                if (!Object.FindObjectOfType<PlayerController>())
+                    Object.Instantiate(InworldEditor.PlayerController);
+            }
+        }
+        void _ListCharactersInScene(string currentSceneName)
+        {
+            InworldSceneData sceneData = m_CurrentWorkspace.scenes.FirstOrDefault(s => s.displayName == currentSceneName);
+            if (sceneData == null)
+                return;
+            List<InworldCharacterData> charDataList = sceneData.GetCharacterDataByReference(m_CurrentWorkspace);
+            foreach (InworldCharacterData charData in charDataList.Where
+                (charData => GUILayout.Button(charData.description.givenName, InworldEditor.Instance.BtnCharStyle(_GetTexture2D(charData)))))
+            {
+                Selection.activeObject = _GetPrefab(charData);
+                EditorGUIUtility.PingObject(Selection.activeObject);
+            }
+        }
+        void _ListAllCharacters()
+        {
+            foreach (InworldCharacterData charData in m_CurrentWorkspace.characters.Where
+                (charData => GUILayout.Button(charData.description.givenName, InworldEditor.Instance.BtnCharStyle(_GetTexture2D(charData)))))
+            {
+                Selection.activeObject = _GetPrefab(charData);
+                EditorGUIUtility.PingObject(Selection.activeObject);
+            }
+        }
+        void _SelectScenes(string sceneDisplayName)
+        {
+            m_CurrentSceneName = sceneDisplayName;
+            // TODO(Yan): Refresh Characters.
         }
         void _DownloadRelatedAssets()
         {
@@ -147,8 +199,8 @@ namespace Inworld.Editors
                 return;
             // Download Thumbnails and put under User name's folder.
             m_StartDownload = true;
-            InworldGameData sceneData = InworldController.Instance.GameData;
-            foreach (InworldCharacterData character in sceneData.characters)
+            InworldGameData gameData = InworldController.Instance.GameData;
+            foreach (InworldCharacterData character in gameData.characters)
             {
                 string thumbURL = character.characterAssets.ThumbnailURL;
                 string modelURL = character.characterAssets.rpmModelUri;
@@ -159,7 +211,7 @@ namespace Inworld.Editors
             }
             // Meanwhile, showcasing progress bar.
         }
-        static void _CreateVariant(CharacterReference charRef, GameObject customModel)
+        static void _CreateVariant(InworldCharacterData charRef, GameObject customModel)
         { 
             // Use Current Model
             InworldCharacter avatar = customModel ?
@@ -167,7 +219,7 @@ namespace Inworld.Editors
                 Object.Instantiate(InworldEditor.Instance.InnequinPrefab);
 
             InworldCharacter iwChar = avatar.GetComponent<InworldCharacter>();
-            iwChar.Data = new InworldCharacterData(charRef);
+            iwChar.Data = charRef;
             if (customModel)
             {
                 GameObject newModel = PrefabUtility.InstantiatePrefab(customModel) as GameObject;
@@ -191,13 +243,13 @@ namespace Inworld.Editors
             Object.DestroyImmediate(avatar.gameObject);
             AssetDatabase.Refresh();
         }
-        GameObject _GetModel(CharacterReference charRef)
+        GameObject _GetModel(InworldCharacterData charRef)
         {
             AssetDatabase.Refresh();
             string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
             return !File.Exists(filePath) ? null : AssetDatabase.LoadAssetAtPath<GameObject>(filePath);
         }
-        Texture2D _GetTexture2D(CharacterReference charRef)
+        Texture2D _GetTexture2D(InworldCharacterData charRef)
         {
             string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterFileName}.png";
             if (!File.Exists(filePath))
@@ -207,7 +259,7 @@ namespace Inworld.Editors
             loadedTexture.LoadImage(imgBytes);
             return loadedTexture;
         }
-        GameObject _GetPrefab(CharacterReference charRef)
+        GameObject _GetPrefab(InworldCharacterData charRef)
         {
             string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{charRef.CharacterFileName}.prefab";
             if (File.Exists(filePath))

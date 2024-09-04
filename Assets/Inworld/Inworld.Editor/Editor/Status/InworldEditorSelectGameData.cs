@@ -14,6 +14,7 @@ using UnityEngine.SceneManagement;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using Inworld.Entities;
+using Newtonsoft.Json;
 
 namespace Inworld.Editors
 {
@@ -21,15 +22,18 @@ namespace Inworld.Editors
     public class InworldEditorSelectGameData : IEditorState
     {
         const string k_DefaultWorkspace = "--- SELECT WORKSPACE ---";
-        const string k_DefaultScene = "--- SELECT SCENE ---";
         const string k_DefaultKey = "--- SELECT KEY---";
         const string k_DataMissing = "Some data is missing.\nPlease make sure you have at least one scene and one key/secret in your workspace";
-        string m_CurrentWorkspace = "--- SELECT WORKSPACE ---";
-        string m_CurrentScene = "--- SELECT SCENE ---";
+        string m_CurrentWorkspaceName = "--- SELECT WORKSPACE ---";
         string m_CurrentKey = "--- SELECT KEY---";
-        bool m_DisplayDataMissing = false;
-        bool m_StartDownload = false;
 
+        bool m_IsCharIntegration = true;
+        bool m_DisplayDataMissing;
+        bool m_StartDownload;
+       
+        InworldWorkspaceData CurrentWorkspace => InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspaceName);
+        // InworldSceneData CurrentScene => CurrentWorkspace?.scenes.FirstOrDefault(scene => scene.displayName == m_CurrentSceneName);
+        InworldKeySecret CurrentKey  => CurrentWorkspace?.keySecrets.FirstOrDefault(key => key.key == m_CurrentKey);
         /// <summary>
         /// Triggers when open editor window.
         /// </summary>
@@ -52,8 +56,8 @@ namespace Inworld.Editors
         public void DrawContent()
         {
             _DrawWorkspaceDropDown();
-            _DrawSceneDropDown();
             _DrawKeyDropDown();
+            _DrawGameModedDropDown();
             if (m_DisplayDataMissing)
                 EditorGUILayout.LabelField(k_DataMissing, InworldEditor.Instance.TitleStyle);
         }
@@ -68,20 +72,23 @@ namespace Inworld.Editors
             {
                 InworldEditor.Instance.Status = EditorStatus.Init;
             }
-            if (m_CurrentWorkspace != k_DefaultWorkspace && !string.IsNullOrEmpty(m_CurrentWorkspace))
+            if (m_CurrentWorkspaceName != k_DefaultWorkspace && !string.IsNullOrEmpty(m_CurrentWorkspaceName))
             {
                 if (GUILayout.Button("Refresh", InworldEditor.Instance.BtnStyle))
                 {
-                    _SelectWorkspace(m_CurrentWorkspace);
+                    _SelectWorkspace(m_CurrentWorkspaceName);
                 }
             }
-            if (m_CurrentKey != k_DefaultKey && !string.IsNullOrEmpty(m_CurrentKey) && m_CurrentScene != k_DefaultScene && !string.IsNullOrEmpty(m_CurrentScene))
+            if (m_CurrentKey != k_DefaultKey && !string.IsNullOrEmpty(m_CurrentKey))
             {
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button("Next", InworldEditor.Instance.BtnStyle))
                 {
                     _SaveCurrentSettings();
-                    _DownloadRelatedAssets();
+                    if (m_IsCharIntegration)
+                        _DownloadRelatedAssets();
+                    else
+                        InworldEditor.Instance.Status = EditorStatus.SelectGameMode;
                 }
             }
             GUILayout.EndHorizontal();
@@ -101,17 +108,12 @@ namespace Inworld.Editors
             m_DisplayDataMissing = false;
             m_StartDownload = false;
             m_CurrentKey = k_DefaultKey;
-            m_CurrentScene = k_DefaultScene;
-            m_CurrentWorkspace = k_DefaultWorkspace;
+            m_CurrentWorkspaceName = k_DefaultWorkspace;
             if (InworldAI.User.Workspace.Count != 1)
                 return;
             _SelectWorkspace(InworldAI.User.Workspace[0].displayName);
         }
-        InworldSceneData _GetCurrentScene()
-        {
-            InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
-            return ws?.scenes.FirstOrDefault(scene => scene.displayName == m_CurrentScene);
-        }
+
         /// <summary>
         /// Triggers when other general update logic has been finished.
         /// </summary>
@@ -119,11 +121,12 @@ namespace Inworld.Editors
         {
             if (!m_StartDownload)
                 return;
-            InworldSceneData sceneData = _GetCurrentScene();
-            if (sceneData == null)
+            //TODO(Yan): Use Workspace to download characters.
+            InworldWorkspaceData wsData = CurrentWorkspace;
+            if (wsData == null)
                 return;
-            EditorUtility.DisplayProgressBar("Inworld", "Downloading Assets", sceneData.Progress);
-            if (sceneData.Progress > 0.95f)
+            EditorUtility.DisplayProgressBar("Inworld", "Downloading Assets", CurrentWorkspace.Progress);
+            if (CurrentWorkspace.Progress > 0.95f)
             {
                 InworldEditor.Instance.Status = EditorStatus.SelectCharacter;
             }
@@ -144,28 +147,24 @@ namespace Inworld.Editors
         }
         void _DownloadRelatedAssets()
         {
-            InworldSceneData sceneData = _GetCurrentScene();
-            if (sceneData == null)
+            InworldWorkspaceData wsData = CurrentWorkspace;
+            if (wsData == null)
                 return;
-            // Download Thumbnails and put under User name's folder.
             m_StartDownload = true;
-            foreach (CharacterReference charRef in sceneData.characterReferences)
+            foreach (InworldCharacterData charRef in wsData.characters)
             {
-                if (charRef.characterOverloads.Count != 1)
-                    continue;
-                
-                string thumbURL = charRef.characterOverloads[0].defaultCharacterAssets.ThumbnailURL;
+                string thumbURL = charRef.characterAssets.ThumbnailURL;
                 string thumbFileName = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterFileName}.png";
-                string modelURL = charRef.characterOverloads[0].defaultCharacterAssets.rpmModelUri;
+                string modelURL = charRef.characterAssets.rpmModelUri;
                 string modelFileName = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
                 if (File.Exists(thumbFileName))
-                    charRef.characterOverloads[0].defaultCharacterAssets.thumbnailProgress = 1;
+                    charRef.characterAssets.thumbnailProgress = 1;
                 else if (!string.IsNullOrEmpty(thumbURL))
-                    InworldEditorUtil.DownloadCharacterAsset(charRef.character, thumbURL, _OnCharThumbnailDownloaded);
+                    InworldEditorUtil.DownloadCharacterAsset(charRef.brainName, thumbURL, _OnCharThumbnailDownloaded);
                 if (File.Exists(modelFileName))
-                    charRef.characterOverloads[0].defaultCharacterAssets.avatarProgress = 1;
+                    charRef.characterAssets.avatarProgress = 1;
                 else if (!string.IsNullOrEmpty(modelURL))
-                    InworldEditorUtil.DownloadCharacterAsset(charRef.character, modelURL, _OnCharModelDownloaded);
+                    InworldEditorUtil.DownloadCharacterAsset(charRef.brainName, modelURL, _OnCharModelDownloaded);
             }
             // Meanwhile, showcasing progress bar.
         }
@@ -174,12 +173,10 @@ namespace Inworld.Editors
         {
             // Create a new SO.
             InworldGameData gameData = ScriptableObject.CreateInstance<InworldGameData>();
-            InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
+            InworldWorkspaceData ws = CurrentWorkspace;
             if (ws != null)
             {
-                InworldSceneData sceneData = ws.scenes.FirstOrDefault(scene => scene.displayName == m_CurrentScene);
-                InworldKeySecret keySecret = ws.keySecrets.FirstOrDefault(key => key.key == m_CurrentKey);
-                gameData.SetData(sceneData, keySecret);
+                gameData.Init(m_CurrentWorkspaceName, CurrentKey);
             }
             gameData.capabilities = new Capabilities(InworldAI.Capabilities);
             if (string.IsNullOrEmpty(InworldEditorUtil.UserDataPath))
@@ -201,26 +198,23 @@ namespace Inworld.Editors
         {
             EditorGUILayout.LabelField("Choose Workspace:", InworldEditor.Instance.TitleStyle);
             List<string> wsList = InworldAI.User.Workspace.Select(ws => ws.displayName).ToList();
-            InworldEditorUtil.DrawDropDown(m_CurrentWorkspace, wsList, _SelectWorkspace);
-        }
-        void _DrawSceneDropDown()
-        {
-            if (m_CurrentWorkspace == k_DefaultWorkspace || string.IsNullOrEmpty(m_CurrentWorkspace))
-                return;
-            InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
-            if (ws == null)
-                return;
-            List<string> sceneList = ws.scenes.Select(scene => scene.displayName).ToList();
-            EditorGUILayout.LabelField("Choose Scene:", InworldEditor.Instance.TitleStyle);
-            InworldEditorUtil.DrawDropDown(m_CurrentScene, sceneList, _SelectScenes);
-            m_CurrentScene = sceneList.Count == 1 ? sceneList[0] : m_CurrentScene;
+            InworldEditorUtil.DrawDropDown(m_CurrentWorkspaceName, wsList, _SelectWorkspace);
         }
 
+        void _DrawGameModedDropDown()
+        {
+            if (m_CurrentWorkspaceName == k_DefaultWorkspace || string.IsNullOrEmpty(m_CurrentWorkspaceName))
+                return;
+            if (m_CurrentKey == k_DefaultKey || string.IsNullOrEmpty(m_CurrentKey))
+                return;
+            // TODO(Yan): Support LLM Service (InworldEditorUtil.DrawDropDown).
+            return;
+        }
         void _DrawKeyDropDown()
         {
-            if (m_CurrentWorkspace == k_DefaultWorkspace || string.IsNullOrEmpty(m_CurrentWorkspace))
+            if (m_CurrentWorkspaceName == k_DefaultWorkspace || string.IsNullOrEmpty(m_CurrentWorkspaceName))
                 return;
-            InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
+            InworldWorkspaceData ws = CurrentWorkspace;
             if (ws == null)
                 return;
             List<string> keyList = ws.keySecrets.Where(key => key.state == "ACTIVE").Select(key => key.key).ToList();
@@ -231,21 +225,21 @@ namespace Inworld.Editors
 
         void _ListKeys()
         {
-            string wsFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspace);
+            string wsFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspaceName);
             if (string.IsNullOrEmpty(wsFullName))
                 return;
             InworldEditorUtil.SendWebGetRequest(InworldEditor.ListKeyURL(wsFullName), true, _ListKeyCompleted);
         }
         void _ListScenes()
         {
-            string wsFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspace);
+            string wsFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspaceName);
             if (string.IsNullOrEmpty(wsFullName))
                 return;
             InworldEditorUtil.SendWebGetRequest(InworldEditor.ListScenesURL(wsFullName), true, _ListSceneCompleted);
         }
         void _ListCharacters()
         {
-            string wsFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspace);
+            string wsFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspaceName);
             if (string.IsNullOrEmpty(wsFullName))
                 return;
             InworldEditorUtil.SendWebGetRequest(InworldEditor.ListCharactersURL(wsFullName), true, _ListCharactersCompleted);
@@ -259,7 +253,16 @@ namespace Inworld.Editors
                 EditorUtility.ClearProgressBar();
                 return;
             }            
-            // TODO(Yan): Separate the listing character method. 
+            ListCharacterResponse resp = JsonConvert.DeserializeObject<ListCharacterResponse>(uwr.downloadHandler.text);
+            if (resp.characters.Count == 0)
+            {
+                m_DisplayDataMissing = true;
+            }
+            InworldWorkspaceData ws = CurrentWorkspace;
+            if (ws.characters == null)
+                ws.characters = new List<InworldCharacterData>();
+            ws.characters.Clear();
+            resp.characters.ForEach(charOverLoad => ws.characters.Add(new InworldCharacterData(charOverLoad)));
         }
         void _ListSceneCompleted(AsyncOperation obj)
         {
@@ -270,13 +273,8 @@ namespace Inworld.Editors
                 EditorUtility.ClearProgressBar();
                 return;
             }
-
-            ListSceneResponse resp = JsonUtility.FromJson<ListSceneResponse>(uwr.downloadHandler.text);
-            if (resp.scenes.Count == 0)
-            {
-                m_DisplayDataMissing = true;
-            }
-            InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
+            ListSceneResponse resp = JsonConvert.DeserializeObject<ListSceneResponse>(uwr.downloadHandler.text);
+            InworldWorkspaceData ws = CurrentWorkspace;
             if (ws.scenes == null)
                 ws.scenes = new List<InworldSceneData>();
             ws.scenes.Clear();
@@ -295,7 +293,7 @@ namespace Inworld.Editors
             ListKeyResponse resp = JsonUtility.FromJson<ListKeyResponse>(uwr.downloadHandler.text);
             if (resp.apiKeys.Count == 0)
                 m_DisplayDataMissing = true;
-            InworldWorkspaceData ws = InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspace);
+            InworldWorkspaceData ws = CurrentWorkspace;
             if (ws.keySecrets == null)
                 ws.keySecrets = new List<InworldKeySecret>();
             ws.keySecrets.Clear();
@@ -303,18 +301,13 @@ namespace Inworld.Editors
         }
         void _SelectWorkspace(string workspaceDisplayName)
         {
-            m_CurrentWorkspace = workspaceDisplayName;
-            m_CurrentScene = k_DefaultScene;
+            m_CurrentWorkspaceName = workspaceDisplayName;
             m_CurrentKey = k_DefaultKey; // YAN: Reset data.
             m_DisplayDataMissing = false;
             m_StartDownload = false;
             _ListCharacters();
             _ListScenes();
             _ListKeys();
-        }
-        void _SelectScenes(string sceneDisplayName)
-        {
-            m_CurrentScene = sceneDisplayName;
         }
         void _SelectKeys(string keyDisplayName)
         {
@@ -323,15 +316,15 @@ namespace Inworld.Editors
         // Download Avatars and put under User name's folder.
         void _OnCharModelDownloaded(string charFullName, AsyncOperation downloadContent)
         {
-            CharacterReference charRef = _GetCurrentScene()?.characterReferences.FirstOrDefault(c => c.character == charFullName);
-            if (charRef == null || charRef.characterOverloads.Count != 1)
+            InworldCharacterData charRef = CurrentWorkspace?.characters.FirstOrDefault(c => c.brainName == charFullName);
+            if (charRef == null)
                 return;
             UnityWebRequest uwr = InworldEditorUtil.GetResponse(downloadContent);
             
             if (string.IsNullOrEmpty(InworldEditorUtil.UserDataPath) || uwr.result != UnityWebRequest.Result.Success)
             {
                 InworldAI.LogError($"Failed to download model: {charFullName} with {uwr.url}");
-                charRef.characterOverloads[0].defaultCharacterAssets.avatarProgress = 1;
+                charRef.characterAssets.avatarProgress = 1;
                 return;
             }
             // YAN: Currently we only download .glb files.
@@ -342,19 +335,19 @@ namespace Inworld.Editors
             string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
             File.WriteAllBytes(newAssetPath, uwr.downloadHandler.data);
             AssetDatabase.Refresh();
-            charRef.characterOverloads[0].defaultCharacterAssets.avatarProgress = 1;
+            charRef.characterAssets.avatarProgress = 1;
         }
         void _OnCharThumbnailDownloaded(string charFullName, AsyncOperation downloadContent)
         {
-            CharacterReference charRef = _GetCurrentScene()?.characterReferences.FirstOrDefault(c => c.character == charFullName);
-            if (charRef == null || charRef.characterOverloads.Count != 1)
+            InworldCharacterData charRef = CurrentWorkspace?.characters.FirstOrDefault(c => c.brainName == charFullName);
+            if (charRef == null)
                 return;
             UnityWebRequest uwr = InworldEditorUtil.GetResponse(downloadContent);
             
             if (string.IsNullOrEmpty(InworldEditorUtil.UserDataPath) || uwr.result != UnityWebRequest.Result.Success)
             {
                 InworldAI.LogError($"Failed to download Thumbnail: {charFullName} with {uwr.url}");
-                charRef.characterOverloads[0].defaultCharacterAssets.thumbnailProgress = 1;
+                charRef.characterAssets.thumbnailProgress = 1;
                 return;
             }
             if (!Directory.Exists($"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}"))
@@ -363,7 +356,7 @@ namespace Inworld.Editors
             }
             string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterFileName}.png";
             File.WriteAllBytes(newAssetPath, uwr.downloadHandler.data);
-            charRef.characterOverloads[0].defaultCharacterAssets.thumbnailProgress = 1;
+            charRef.characterAssets.thumbnailProgress = 1;
         }
     }
 }
