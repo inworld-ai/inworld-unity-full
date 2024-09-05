@@ -442,15 +442,28 @@ MonoBehaviour:
     agentId: 
     brainName: workspaces/unitytest/characters/alice_the_guide
     givenName: Alice the guide
-    description: 
+    description:
+      givenName: 
+      description: 
+      pronoun: 0
+      nickNames: []
+      motivation: 
+      personalityAdjectives: []
+      lifeStage: 0
+      hobbyOrInterests: []
+      characterRole: 
+      flaws: 
     characterAssets:
       rpmModelUri: 
-      rpmImageUriPortrait: 
-      rpmImageUriPosture: 
+      rpmImageUri: 
       avatarImg: 
       avatarImgOriginal: 
+      rpmAvatar:
+        rpmModelUri: 
+        rpmImageUri: 
       thumbnailProgress: 0
       avatarProgress: 0
+    language: 
     thumbnail: {fileID: 2800000, guid: f60c1361288ccab43b3739a0c086b2e1, type: 3}
   m_CharacterEvents:
     onCharacterSelected:
@@ -583,7 +596,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!54 &2830172767831720487
 Rigidbody:
   m_ObjectHideFlags: 0
