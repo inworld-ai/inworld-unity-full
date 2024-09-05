@@ -107,9 +107,9 @@ namespace Inworld.Editors
         {
             if (!m_StartDownload || !InworldController.Instance.GameData)
                 return;
-            var sceneData = InworldController.Instance.GameData;
-            EditorUtility.DisplayProgressBar("Inworld", "Downloading Assets", sceneData.Progress);
-            if (sceneData.Progress > 0.95f)
+            InworldGameData gameData = InworldController.Instance.GameData;
+            EditorUtility.DisplayProgressBar("Inworld", "Downloading Assets", gameData.Progress);
+            if (gameData.Progress > 0.95f)
             {
                 m_StartDownload = false;
                 EditorUtility.ClearProgressBar();
