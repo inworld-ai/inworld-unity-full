@@ -32,7 +32,6 @@ namespace Inworld.Editors
         bool m_StartDownload;
        
         InworldWorkspaceData CurrentWorkspace => InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspaceName);
-        // InworldSceneData CurrentScene => CurrentWorkspace?.scenes.FirstOrDefault(scene => scene.displayName == m_CurrentSceneName);
         InworldKeySecret CurrentKey  => CurrentWorkspace?.keySecrets.FirstOrDefault(key => key.key == m_CurrentKey);
 
         bool _IsReadyToProceed => !m_IsCharIntegration || CurrentWorkspace.Progress > 0.95f;
@@ -87,8 +86,9 @@ namespace Inworld.Editors
                 if (GUILayout.Button("Next", InworldEditor.Instance.BtnStyle))
                 {
                     _SaveCurrentSettings();
+                    _CreatePrefabVariants();
                     if (m_IsCharIntegration)
-                        InworldEditor.Instance.Status = EditorStatus.SelectCharacter; //_DownloadRelatedAssets();
+                        InworldEditor.Instance.Status = EditorStatus.SelectCharacter; 
                     else
                         InworldEditor.Instance.Status = EditorStatus.SelectGameMode;
                 }
@@ -127,11 +127,11 @@ namespace Inworld.Editors
             InworldWorkspaceData wsData = CurrentWorkspace;
             if (wsData == null)
                 return;
-            EditorUtility.DisplayCancelableProgressBar("Inworld", "Downloading Assets", CurrentWorkspace.Progress);
-            if (CurrentWorkspace.Progress > 0.95f)
+            bool isCancelled = EditorUtility.DisplayCancelableProgressBar("Inworld", "Downloading Assets", CurrentWorkspace.Progress);
+            if (isCancelled || CurrentWorkspace.Progress > 0.95f)
             {
                 EditorUtility.ClearProgressBar();
-                //InworldEditor.Instance.Status = EditorStatus.SelectCharacter;
+                m_StartDownload = false;
             }
         }
 
@@ -163,25 +163,18 @@ namespace Inworld.Editors
                 string modelURL = charRef.characterAssets.rpmModelUri;
                 string modelFileName = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
 
-                if (!string.IsNullOrEmpty(thumbURL))
+                if (!string.IsNullOrEmpty(thumbURL) && !File.Exists(thumbFileName))
                 {
-                    if (!File.Exists(thumbFileName))
-                    {
-                        InworldEditorUtil.DownloadCharacterAsset(charRef.brainName, thumbURL, _OnCharThumbnailDownloaded);
-                        charRef.characterAssets.thumbnailProgress = 0.1f;
-                        Debug.Log($"YAN PRG {CurrentWorkspace.Progress}");
-                    }
+                    InworldEditorUtil.DownloadCharacterAsset(charRef.brainName, thumbURL, _OnCharThumbnailDownloaded);
+                    charRef.characterAssets.thumbnailProgress = 0.1f;
+                    Debug.Log($"YAN PRG {CurrentWorkspace.Progress}");
                 }
                 else
                     charRef.characterAssets.thumbnailProgress = 1f;
-                if (!string.IsNullOrEmpty(modelURL))
+                if (!string.IsNullOrEmpty(modelURL) && !File.Exists(modelFileName))
                 {
-                    if (!File.Exists(modelFileName))
-                    {
-                        InworldEditorUtil.DownloadCharacterAsset(charRef.brainName, modelURL, _OnCharModelDownloaded);
-                        charRef.characterAssets.thumbnailProgress = 0.1f;
-                        Debug.Log($"YAN PRG {CurrentWorkspace.Progress}");
-                    }
+                    InworldEditorUtil.DownloadCharacterAsset(charRef.brainName, modelURL, _OnCharModelDownloaded);
+                    charRef.characterAssets.avatarProgress = 0.1f;
                 }
                 else
                     charRef.characterAssets.avatarProgress = 1;

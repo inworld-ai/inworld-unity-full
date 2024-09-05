@@ -13,6 +13,8 @@ using UnityEngine.Networking;
 using Inworld.Sample;
 using Inworld.Entities;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 namespace Inworld.Editors
 {
@@ -26,6 +28,8 @@ namespace Inworld.Editors
         bool m_StartDownload = false;
         Vector2 m_ScrollPosition;
 
+        InworldSceneData CurrentScene => m_CurrentWorkspace?.scenes.FirstOrDefault(scene => scene.displayName == m_CurrentSceneName);
+        
         /// <summary>
         /// Triggers when open editor window.
         /// </summary>
@@ -35,6 +39,8 @@ namespace Inworld.Editors
             {
                 InworldEditor.Instance.Status = EditorStatus.SelectGameData; // YAN: Fall back.
             }
+            else
+                _InitDataSelection();
         }
         /// <summary>
         /// Triggers when drawing the title of the editor panel page.
@@ -87,18 +93,7 @@ namespace Inworld.Editors
         {
             m_StartDownload = false;
             EditorUtility.ClearProgressBar();
-            m_SceneNames = new List<string>
-            {
-                k_DefaultScene
-            };
-            if (InworldController.Instance)
-            {
-                m_CurrentGameData = InworldController.Instance.GameData;
-                if (InworldAI.User && InworldAI.User.Workspace != null && InworldAI.User.Workspace.Count != 0)
-                    m_CurrentWorkspace = InworldAI.User.Workspace.FirstOrDefault(ws => ws.name == m_CurrentGameData.workspaceFullName);
-                m_CurrentWorkspace?.scenes.ForEach(s => m_SceneNames.Add(s.displayName));
-            }
-            _CreatePrefabVariants();
+            _InitDataSelection();
         }
         /// <summary>
         /// Triggers when other general update logic has been finished.
@@ -115,6 +110,19 @@ namespace Inworld.Editors
                 EditorUtility.ClearProgressBar();
                 _CreatePrefabVariants();
             }
+        }
+        void _InitDataSelection()
+        {
+            m_SceneNames = new List<string>
+            {
+                k_DefaultScene
+            };
+            if (!InworldController.Instance)
+                return;
+            m_CurrentGameData = InworldController.Instance.GameData;
+            if (InworldAI.User && InworldAI.User.Workspace != null && InworldAI.User.Workspace.Count != 0)
+                m_CurrentWorkspace = InworldAI.User.Workspace.FirstOrDefault(ws => ws.name == m_CurrentGameData.workspaceFullName);
+            m_CurrentWorkspace?.scenes.ForEach(s => m_SceneNames.Add(s.displayName));
         }
         void _CreatePrefabVariants()
         {
@@ -140,9 +148,6 @@ namespace Inworld.Editors
         void _DrawCharacterSelection()
         {
             // 1. Get the character prefab for character in current scene. (Default or Specific)
-            InworldSceneData sceneData = InworldAI.User.GetSceneByFullName(InworldController.Instance.GameData.sceneFullName);
-            if (sceneData == null)
-                return;
             m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition);
             EditorGUILayout.BeginHorizontal();
             if (m_CurrentSceneName == k_DefaultScene)
@@ -191,7 +196,11 @@ namespace Inworld.Editors
         void _SelectScenes(string sceneDisplayName)
         {
             m_CurrentSceneName = sceneDisplayName;
-            // TODO(Yan): Refresh Characters.
+            m_CurrentGameData.sceneFullName = CurrentScene?.name ?? "";
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+            EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
         }
         void _DownloadRelatedAssets()
         {
