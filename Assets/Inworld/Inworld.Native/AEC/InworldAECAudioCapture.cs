@@ -46,9 +46,8 @@ namespace Inworld.AEC
         {
             get
             {
-#if UNITY_WEBGL
-                        return null;
-#endif
+                if (!IsAvailable)
+                    return null;
                 if (m_Probe)
                     return m_Probe;
                 AudioListener listener = FindObjectOfType<AudioListener>();
