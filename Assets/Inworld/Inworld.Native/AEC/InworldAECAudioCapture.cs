@@ -116,9 +116,8 @@ namespace Inworld.AEC
         /// </summary>
         public void SendProbeToAudioListener()
         {
-            #if !UNITY_WEBGL
-            Probe.Init(this);
-            #endif
+            if (IsAvailable)
+                Probe.Init(this);
         }
 
         protected override void OnDestroy()
