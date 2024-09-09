@@ -33,7 +33,6 @@ namespace Inworld.Sample.Innequin
         Material m_matMouth;
         
         bool m_IsBlinking;
-        float m_CurrentAudioTime;
         static readonly int s_Emotion = Animator.StringToHash("Emotion");
         const int k_VisemeSil = 0;
         const int k_VisemeCount = 15;
@@ -106,8 +105,7 @@ namespace Inworld.Sample.Innequin
                 Reset();
                 return;
             }
-            m_CurrentAudioTime += Time.fixedDeltaTime;
-            PhonemeInfo data = m_CurrentPhoneme?.LastOrDefault(p => p.StartOffset < m_CurrentAudioTime);
+            PhonemeInfo data = m_CurrentPhoneme?.LastOrDefault(p => p.StartOffset < m_Interaction.AnimFactor);
             if (data == null || string.IsNullOrEmpty(data.phoneme))
             {
                 Reset();
@@ -125,7 +123,6 @@ namespace Inworld.Sample.Innequin
 
         protected override void HandleLipSync(AudioPacket audioPacket)
         {
-            m_CurrentAudioTime = 0;
             m_CurrentPhoneme = audioPacket.dataChunk.additionalPhonemeInfo;
         }
         protected override void HandleEmotion(EmotionPacket packet)

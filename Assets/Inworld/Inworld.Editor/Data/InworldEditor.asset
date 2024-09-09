@@ -27,7 +27,7 @@ MonoBehaviour:
   m_AvatarPath: Avatar
   m_PrefabPath: Prefabs
   m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
-  m_BillingAccountURL: billing-accounts:meListBillingAccounts
   m_WorkspaceURL: workspaces
   m_KeyURL: apikeys
   m_ScenesURL: scenes
+  m_CharactersURL: characters

@@ -33,10 +33,8 @@ namespace Inworld.Sample.RPM
         Vector2 m_CurrViseme = Vector2.zero;
         Vector2 m_LastViseme = Vector2.zero;
         float m_RandomOffset;
-        float m_CurrentAudioTime;
 
         protected SkinnedMeshRenderer m_Skin;
-        protected int m_CurrentPhonemeIndex;
         protected int m_VisemeIndex;
         protected int m_BlinkIndex;
         /// <summary>
@@ -128,14 +126,13 @@ namespace Inworld.Sample.RPM
                 return;
             }
             // 1. Move Out-dated Viseme to Last Viseme.
-            if (m_CurrentAudioTime >= m_CurrViseme.y)
+            if (m_Interaction.AnimFactor >= m_CurrViseme.y)
             {
                 if (m_LastViseme != Vector2.zero)
                     m_Skin.SetBlendShapeWeight(m_VisemeIndex + (int)m_LastViseme.x, 0);
                 m_LastViseme = m_CurrViseme;
                 m_CurrViseme = Vector2.zero;
             }
-            m_CurrentAudioTime += Time.fixedDeltaTime;
             // 2. Get New Viseme if Current Viseme is illegal.
             while (m_VisemeMap.Count > 0 && (m_CurrViseme.y == 0 || m_CurrViseme.x < 0))
             {
@@ -161,7 +158,6 @@ namespace Inworld.Sample.RPM
             ResetVisemeMap();
             m_CurrViseme = Vector2.zero;
             m_LastViseme = Vector2.zero;
-            m_CurrentAudioTime = 0;
             _ShutMouth();
         }
         void _MorphViseme(Vector2 viseme, bool isIncreasing = true)
