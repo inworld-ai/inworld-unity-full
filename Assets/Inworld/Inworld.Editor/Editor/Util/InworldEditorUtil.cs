@@ -128,6 +128,8 @@ namespace Inworld.Editors
                     return;
                 }
                 uwr.SetRequestHeader("Authorization", InworldEditor.Token);
+                if (!InworldEditor.IsLegacyEntry)
+                    uwr.SetRequestHeader("Grpc-Metadata-X-Authorization-Bearer-Type", "studio_api");
             }
             UnityWebRequestAsyncOperation updateRequest = uwr.SendWebRequest();
             updateRequest.completed += callback;

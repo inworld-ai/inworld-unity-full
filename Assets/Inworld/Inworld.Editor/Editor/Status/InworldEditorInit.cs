@@ -6,6 +6,7 @@
  *************************************************************************************************/
 #if UNITY_EDITOR
 using Inworld.Entities;
+using Newtonsoft.Json;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
@@ -14,8 +15,14 @@ namespace Inworld.Editors
 {
     public class InworldEditorInit : IEditorState
     {
-        const string k_DefaultTitle = "Please paste Auth token here:";
+        const string k_InputUserName = "Please input your name (Required)";
+        const string k_DefaultTitle = "Please paste Studio API Key or Auth token here:";
+        const string k_TitleLegacyToken = "Legacy Token Detected";
+        const string k_ContentLegacyToken = "You're using legacy token. It would be deprecated by Aug 2025. Please use Studio API Key instead";
+        const string k_DefaultPlayerName = "player";
+        const string k_EmptyUserName = "Please input your name.";
 
+        bool m_IsUserNameEmpty = false;
         Vector2 m_ScrollPosition = Vector2.zero;
         
         /// <summary>
@@ -23,6 +30,7 @@ namespace Inworld.Editors
         /// </summary>
         public void OnOpenWindow()
         {
+            m_IsUserNameEmpty = false;
             InworldEditor.TokenForExchange = "";
         }
         /// <summary>
@@ -30,13 +38,17 @@ namespace Inworld.Editors
         /// </summary>
         public void DrawTitle()
         {
-            GUILayout.Label(k_DefaultTitle, EditorStyles.boldLabel);
+            if (m_IsUserNameEmpty)
+                EditorGUILayout.LabelField(k_EmptyUserName, InworldEditor.Instance.ErrorStyle);
         }
         /// <summary>
         /// Triggers when drawing the content of the editor panel page.
         /// </summary>
         public void DrawContent()
         {
+            GUILayout.Label(k_InputUserName, EditorStyles.boldLabel);
+            InworldEditor.InputUserName = GUILayout.TextArea(InworldEditor.InputUserName);
+            GUILayout.Label(k_DefaultTitle, EditorStyles.boldLabel);
             GUIStyle customStyle = new GUIStyle(GUI.skin.textArea)
             {
                 padding = new RectOffset(10, 10, 10, 200),
@@ -56,7 +68,12 @@ namespace Inworld.Editors
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Connect", InworldEditor.Instance.BtnStyle))
             {
-                _GetBillingAccount();
+                if (InworldEditor.IsLegacyEntry)
+                    EditorUtility.DisplayDialog(k_TitleLegacyToken, k_ContentLegacyToken, "OK");
+                if (!string.IsNullOrEmpty(InworldEditor.InputUserName) && InworldEditor.InputUserName.ToLower() != k_DefaultPlayerName)
+                    _CreateUserDirectory();
+                else
+                    m_IsUserNameEmpty = true;
             }
             GUILayout.EndHorizontal();
 
@@ -82,54 +99,32 @@ namespace Inworld.Editors
         {
             
         }
-        void _GetBillingAccount()
-        {
-            InworldEditorUtil.SendWebGetRequest(InworldEditor.BillingAccountURL, true, OnBillingAccountCompleted);
-            EditorUtility.DisplayProgressBar("Inworld", "Getting Billing Account...", 0.25f);
-        }
 
         void _ListWorkspace()
         {
             InworldEditorUtil.SendWebGetRequest(InworldEditor.ListWorkspaceURL, true, OnListWorkspaceCompleted);
             EditorUtility.DisplayProgressBar("Inworld", "Getting Workspace data...", 0.75f);
         }
-        void OnBillingAccountCompleted(AsyncOperation obj)
+        void _CreateUserDirectory()
         {
-            UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
-            if (uwr.result != UnityWebRequest.Result.Success)
+            // Create a new SO.
+            InworldUserSetting newUser = ScriptableObject.CreateInstance<InworldUserSetting>();
+            
+            if (!Directory.Exists(InworldEditor.UserDataPath))
             {
-                InworldEditor.Instance.Error = $"Get User Failed: {InworldEditor.GetError(uwr.error)}";
-                EditorUtility.ClearProgressBar();
-                return;
+                Directory.CreateDirectory(InworldEditor.UserDataPath);
             }
-            BillingAccountRespone date = JsonUtility.FromJson<BillingAccountRespone>(uwr.downloadHandler.text);
-            if (date.billingAccounts.Count == 1)
+            if (!Directory.Exists($"{InworldEditor.UserDataPath}/{InworldEditor.InputUserName}"))
             {
-                string displayName = date.billingAccounts[0].displayName.Split('@')[0];
-                if (!InworldAI.User || date.billingAccounts[0].name != InworldAI.User.BillingAccount)
-                {
-                    // Create a new SO.
-                    InworldUserSetting newUser = ScriptableObject.CreateInstance<InworldUserSetting>();
-                    
-                    if (!Directory.Exists(InworldEditor.UserDataPath))
-                    {
-                        Directory.CreateDirectory(InworldEditor.UserDataPath);
-                    }
-                    if (!Directory.Exists($"{InworldEditor.UserDataPath}/{displayName}"))
-                    {
-                        Directory.CreateDirectory($"{InworldEditor.UserDataPath}/{displayName}");
-                    }
-                    string fileName = $"{InworldEditor.UserDataPath}/{displayName}/{displayName}.asset";
-                    AssetDatabase.CreateAsset(newUser, fileName);
-                    AssetDatabase.SaveAssets();
-                    AssetDatabase.Refresh();
-                    InworldAI.User = newUser;
-                }
-                InworldAI.User.BillingAccount = date.billingAccounts[0].name;
-                InworldAI.User.ID = InworldAI.User.BillingAccount;
-                InworldAI.User.Name = displayName;
+                Directory.CreateDirectory($"{InworldEditor.UserDataPath}/{InworldEditor.InputUserName}");
             }
-            EditorUtility.DisplayProgressBar("Inworld", "Getting Billing Account Completed!", 0.5f);
+            string fileName = $"{InworldEditor.UserDataPath}/{InworldEditor.InputUserName}/{InworldEditor.InputUserName}.asset";
+            AssetDatabase.CreateAsset(newUser, fileName);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            InworldAI.User = newUser;
+            InworldAI.User.Name = InworldEditor.InputUserName;
+            EditorUtility.DisplayProgressBar("Inworld", "Create User Profile Completed!", 0.5f);
             InworldAI.LogEvent("Login_Studio");
             _ListWorkspace();
         }
@@ -143,7 +138,7 @@ namespace Inworld.Editors
                 return;
             }
             EditorUtility.DisplayProgressBar("Inworld", "Getting Workspace data Completed", 1f);
-            ListWorkspaceResponse response = JsonUtility.FromJson<ListWorkspaceResponse>(uwr.downloadHandler.text);
+            ListWorkspaceResponse response = JsonConvert.DeserializeObject<ListWorkspaceResponse>(uwr.downloadHandler.text);
             InworldAI.User.Workspace.Clear();
             InworldAI.User.Workspace.AddRange(response.workspaces);
             EditorUtility.ClearProgressBar();
