@@ -24,8 +24,11 @@ namespace Inworld.Editors
         const string k_DefaultWorkspace = "--- SELECT WORKSPACE ---";
         const string k_DefaultKey = "--- SELECT KEY---";
         const string k_DataMissing = "Some data is missing.\nPlease make sure you have at least one scene and one key/secret in your workspace";
+        const string k_CharacterIntegration = "Character Integration";
+        const string k_LLMService = "LLM Service";
         string m_CurrentWorkspaceName = "--- SELECT WORKSPACE ---";
         string m_CurrentKey = "--- SELECT KEY---";
+        string m_CurrentGameMode;
 
         bool m_IsCharIntegration = true;
         bool m_DisplayDataMissing;
@@ -86,9 +89,11 @@ namespace Inworld.Editors
                 if (GUILayout.Button("Next", InworldEditor.Instance.BtnStyle))
                 {
                     _SaveCurrentSettings();
-                    _CreatePrefabVariants();
                     if (m_IsCharIntegration)
+                    {
+                        _CreatePrefabVariants();
                         InworldEditor.Instance.Status = EditorStatus.SelectCharacter; 
+                    }
                     else
                         InworldEditor.Instance.Status = EditorStatus.SelectGameMode;
                 }
@@ -167,7 +172,6 @@ namespace Inworld.Editors
                 {
                     InworldEditorUtil.DownloadCharacterAsset(charRef.brainName, thumbURL, _OnCharThumbnailDownloaded);
                     charRef.characterAssets.thumbnailProgress = 0.1f;
-                    Debug.Log($"YAN PRG {CurrentWorkspace.Progress}");
                 }
                 else
                     charRef.characterAssets.thumbnailProgress = 1f;
@@ -220,8 +224,13 @@ namespace Inworld.Editors
                 return;
             if (m_CurrentKey == k_DefaultKey || string.IsNullOrEmpty(m_CurrentKey))
                 return;
-            // TODO(Yan): Support LLM Service (InworldEditorUtil.DrawDropDown).
-            return;
+            List<string> gameModes = new List<string>
+            {
+                k_CharacterIntegration,
+                k_LLMService
+            };
+            EditorGUILayout.LabelField("Choose Game Mode:", InworldEditor.Instance.TitleStyle);
+            InworldEditorUtil.DrawDropDown(m_CurrentGameMode, gameModes, _SelectGameMode);
         }
         void _DrawKeyDropDown()
         {
@@ -373,6 +382,11 @@ namespace Inworld.Editors
             _ListCharacters();
             _ListScenes();
             _ListKeys();
+        }
+        void _SelectGameMode(string gameMode)
+        {
+            m_CurrentGameMode = gameMode;
+            m_IsCharIntegration = m_CurrentGameMode == k_CharacterIntegration;
         }
         void _SelectKeys(string keyDisplayName)
         {
