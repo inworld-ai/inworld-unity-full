@@ -45,9 +45,8 @@ namespace Inworld.AEC
         {
             get
             {
-#if UNITY_WEBGL
-                return null;
-#endif
+                if (!IsAvailable)
+                    return null;
                 if (m_Probe)
                     return m_Probe;
                 AudioListener listener = FindObjectOfType<AudioListener>();
@@ -123,9 +122,8 @@ namespace Inworld.AEC
         /// </summary>
         public void SendProbeToAudioListener()
         {
-            #if !UNITY_WEBGL
-            Probe.Init(this);
-            #endif
+            if (IsAvailable)
+                Probe.Init(this);
         }
 
         protected override void OnDestroy()

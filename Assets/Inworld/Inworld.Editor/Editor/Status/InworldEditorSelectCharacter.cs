@@ -204,19 +204,35 @@ namespace Inworld.Editors
         }
         void _DownloadRelatedAssets()
         {
-            if (!InworldController.Instance.GameData)
+            if (!InworldController.Instance || !m_CurrentGameData)
                 return;
-            // Download Thumbnails and put under User name's folder.
+            Debug.Log("Download Related Assets...");
+            InworldWorkspaceData wsData = InworldAI.User.Workspace.FirstOrDefault(ws => ws.name == m_CurrentGameData.workspaceFullName);
+            if (wsData == null)
+                return;
             m_StartDownload = true;
-            InworldGameData gameData = InworldController.Instance.GameData;
-            foreach (InworldCharacterData character in gameData.characters)
+            foreach (InworldCharacterData charRef in wsData.characters)
             {
-                string thumbURL = character.characterAssets.ThumbnailURL;
-                string modelURL = character.characterAssets.rpmModelUri;
-                if (!string.IsNullOrEmpty(thumbURL))
-                    InworldEditorUtil.DownloadCharacterAsset(character.brainName, thumbURL, _OnCharThumbnailDownloaded);
-                if (!string.IsNullOrEmpty(modelURL))
-                    InworldEditorUtil.DownloadCharacterAsset(character.brainName, modelURL, _OnCharModelDownloaded);
+                string thumbURL = charRef.characterAssets.ThumbnailURL;
+                string thumbFileName = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterFileName}.png";
+                
+                string modelURL = charRef.characterAssets.rpmModelUri;
+                string modelFileName = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
+
+                if (!string.IsNullOrEmpty(thumbURL) && !File.Exists(thumbFileName))
+                {
+                    InworldEditorUtil.DownloadCharacterAsset(charRef.brainName, thumbURL, _OnCharThumbnailDownloaded);
+                    charRef.characterAssets.thumbnailProgress = 0.1f;
+                }
+                else
+                    charRef.characterAssets.thumbnailProgress = 1f;
+                if (!string.IsNullOrEmpty(modelURL) && !File.Exists(modelFileName))
+                {
+                    InworldEditorUtil.DownloadCharacterAsset(charRef.brainName, modelURL, _OnCharModelDownloaded);
+                    charRef.characterAssets.avatarProgress = 0.1f;
+                }
+                else
+                    charRef.characterAssets.avatarProgress = 1;
             }
             // Meanwhile, showcasing progress bar.
         }

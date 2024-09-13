@@ -18,7 +18,7 @@ namespace Inworld.Editors
         const string k_InputUserName = "Please input your name (Required)";
         const string k_DefaultTitle = "Please paste Studio API Key or Auth token here:";
         const string k_TitleLegacyToken = "Legacy Token Detected";
-        const string k_ContentLegacyToken = "You're using legacy token. It would be deprecated by 2025. Please use Studio API Key instead";
+        const string k_ContentLegacyToken = "You're using legacy token. It would be deprecated by Aug 2025. Please use Studio API Key instead";
         const string k_DefaultPlayerName = "player";
         const string k_EmptyUserName = "Please input your name.";
 

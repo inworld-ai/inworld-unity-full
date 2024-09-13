@@ -167,7 +167,6 @@ namespace Inworld.Editors
                 {
                     InworldEditorUtil.DownloadCharacterAsset(charRef.brainName, thumbURL, _OnCharThumbnailDownloaded);
                     charRef.characterAssets.thumbnailProgress = 0.1f;
-                    Debug.Log($"YAN PRG {CurrentWorkspace.Progress}");
                 }
                 else
                     charRef.characterAssets.thumbnailProgress = 1f;
