@@ -106,6 +106,14 @@ namespace Inworld.AEC
                 m_InputBuffer.RemoveRange(0, k_NumSamples);
                 m_OutputBuffer.RemoveRange(0, k_NumSamples);
             }
+            if (!IsCapturing)
+            {
+                if (m_AECHandle != IntPtr.Zero)
+                {
+                    AECInterop.WebRtcAec3_Free(m_AECHandle);
+                    m_AECHandle = IntPtr.Zero;
+                }
+            }
             RemoveOverDueData(ref m_InputBuffer);
             RemoveOverDueData(ref m_OutputBuffer);
             RemoveOverDueData(ref m_ProcessedWaveData);
@@ -164,10 +172,11 @@ namespace Inworld.AEC
         }
         protected override bool DetectPlayerSpeaking()
         {
-            // YAN: Normalize the value for threshold because SNR Checking range from 0 to 30. 
+            if (!EnableVAD)
+                return base.DetectPlayerSpeaking();
             float[] processedWave = WavUtility.ConvertInt16ArrayToFloatArray(m_ProcessedWaveData.ToArray());
             float vadResult = VADInterop.VAD_Process(processedWave, processedWave.Length);
-            return !IsMute && AutoDetectPlayerSpeaking && (!EnableVAD || vadResult * 30 > m_PlayerVolumeThreshold);
+            return !IsMute && AutoDetectPlayerSpeaking && vadResult * 30 > m_PlayerVolumeThreshold;
         }
         void _DumpAudioFiles()
         {
@@ -196,7 +205,6 @@ namespace Inworld.AEC
                 {
                     m_AECHandle = AECInterop.WebRtcAec3_Create(k_SampleRate);
                 }
-                    
                 AECInterop.WebRtcAec3_BufferFarend(m_AECHandle, outputData);
                 AECInterop.WebRtcAec3_Process(m_AECHandle, inputData, filterTmp);
                 m_ProcessedWaveData.AddRange(filterTmp);
