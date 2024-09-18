@@ -25,11 +25,12 @@ namespace Inworld.AEC
         
         AECProbe m_Probe;
         bool m_IsAudioDebugging = false;
-
         IntPtr m_AECHandle;
         protected List<short> m_OutputBuffer = new List<short>();
         protected List<short> m_CurrentVADCheckBuffer = new List<short>();
         protected InputAction m_DumpAudioAction;
+        protected float m_AECTimer = 5;
+        [Range(1, 10)][SerializeField] float m_AECResetCountDown = 5f;
         
 #region Debug Dump Audio
         List<short> m_DebugOutput = new List<short>();
@@ -107,13 +108,18 @@ namespace Inworld.AEC
                 m_InputBuffer.RemoveRange(0, k_NumSamples);
                 m_OutputBuffer.RemoveRange(0, k_NumSamples);
             }
-            if (!IsPlayerSpeaking)
+            if (EnableAEC)
             {
-                if (m_AECHandle != IntPtr.Zero)
+                if (!IsPlayerSpeaking && m_AECTimer < 0)
                 {
-                    AECInterop.WebRtcAec3_Free(m_AECHandle);
-                    m_AECHandle = IntPtr.Zero;
+                    if (m_AECHandle != IntPtr.Zero)
+                    {
+                        AECInterop.WebRtcAec3_Free(m_AECHandle);
+                        m_AECHandle = IntPtr.Zero;
+                    }
+                    m_AECTimer = m_AECResetCountDown;
                 }
+                m_AECTimer -= 0.1f;
             }
             RemoveOverDueData(ref m_InputBuffer);
             RemoveOverDueData(ref m_OutputBuffer);

@@ -256,6 +256,10 @@ PrefabInstance:
       propertyPath: m_Data.thumbnail
       value: 
       objectReference: {fileID: 2800000, guid: f60c1361288ccab43b3739a0c086b2e1, type: 3}
+    - target: {fileID: 5611356199224546472, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_VolumeOnPlayerSpeaking
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -434,6 +438,14 @@ PrefabInstance:
     - target: {fileID: 5993930513270221524, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_PlayerVolumeThreshold
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7934926759504941807, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_PlayerVolumeThreshold
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7934926759504941807, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_CaptureCheckingDuration
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
