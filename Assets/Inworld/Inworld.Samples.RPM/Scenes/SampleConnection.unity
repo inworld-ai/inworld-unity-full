@@ -231,6 +231,10 @@ PrefabInstance:
       propertyPath: m_ContinueButton
       value: 
       objectReference: {fileID: 995227280}
+    - target: {fileID: 5611356199224546472, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_VolumeOnPlayerSpeaking
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7098386277872726651, guid: 809fb4511befe9142893b7b016bea809, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 1300

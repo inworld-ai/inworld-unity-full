@@ -25,10 +25,12 @@ namespace Inworld.AEC
         
         AECProbe m_Probe;
         bool m_IsAudioDebugging = false;
-
         IntPtr m_AECHandle;
         protected List<short> m_OutputBuffer = new List<short>();
+        protected List<short> m_CurrentVADCheckBuffer = new List<short>();
         protected InputAction m_DumpAudioAction;
+        protected float m_AECTimer = 5;
+        [Range(1, 10)][SerializeField] float m_AECResetCountDown = 5f;
         
 #region Debug Dump Audio
         List<short> m_DebugOutput = new List<short>();
@@ -99,11 +101,25 @@ namespace Inworld.AEC
                 base.ProcessAudio();
                 return;
             }
+            m_CurrentVADCheckBuffer.Clear();
             while (m_InputBuffer.Count > k_NumSamples && m_OutputBuffer.Count > k_NumSamples)
             {
                 FilterAudio(m_InputBuffer.Take(k_NumSamples).ToArray(), m_OutputBuffer.Take(k_NumSamples).ToArray());
                 m_InputBuffer.RemoveRange(0, k_NumSamples);
                 m_OutputBuffer.RemoveRange(0, k_NumSamples);
+            }
+            if (EnableAEC)
+            {
+                if (!IsPlayerSpeaking && m_AECTimer < 0)
+                {
+                    if (m_AECHandle != IntPtr.Zero)
+                    {
+                        AECInterop.WebRtcAec3_Free(m_AECHandle);
+                        m_AECHandle = IntPtr.Zero;
+                    }
+                    m_AECTimer = m_AECResetCountDown;
+                }
+                m_AECTimer -= 0.1f;
             }
             RemoveOverDueData(ref m_InputBuffer);
             RemoveOverDueData(ref m_OutputBuffer);
@@ -162,10 +178,11 @@ namespace Inworld.AEC
         }
         protected override bool DetectPlayerSpeaking()
         {
-            // YAN: Normalize the value for threshold because SNR Checking range from 0 to 30. 
-            float[] processedWave = WavUtility.ConvertInt16ArrayToFloatArray(m_ProcessedWaveData.ToArray());
+            if (!EnableVAD)
+                return base.DetectPlayerSpeaking();
+            float[] processedWave = WavUtility.ConvertInt16ArrayToFloatArray(m_CurrentVADCheckBuffer.ToArray());
             float vadResult = VADInterop.VAD_Process(processedWave, processedWave.Length);
-            return !IsMute && AutoDetectPlayerSpeaking && (!EnableVAD || vadResult * 30 > m_PlayerVolumeThreshold);
+            return !IsMute && AutoDetectPlayerSpeaking && vadResult * 30 > m_PlayerVolumeThreshold;
         }
         void _DumpAudioFiles()
         {
@@ -186,6 +203,7 @@ namespace Inworld.AEC
             {
                 if (EnableAEC)
                     InworldAI.LogWarning("AEC Disabled");
+                m_CurrentVADCheckBuffer.AddRange(inputData);
                 m_ProcessedWaveData.AddRange(inputData);
             }
             else
@@ -194,9 +212,9 @@ namespace Inworld.AEC
                 {
                     m_AECHandle = AECInterop.WebRtcAec3_Create(k_SampleRate);
                 }
-                    
                 AECInterop.WebRtcAec3_BufferFarend(m_AECHandle, outputData);
                 AECInterop.WebRtcAec3_Process(m_AECHandle, inputData, filterTmp);
+                m_CurrentVADCheckBuffer.AddRange(filterTmp);
                 m_ProcessedWaveData.AddRange(filterTmp);
             }
             if (m_IsAudioDebugging)
