@@ -20,10 +20,6 @@ namespace Inworld.Sample.RPM
             m_CameraController = GetComponent<InworldCameraController>();
             m_FeedbackDlg = m_FeedbackCanvas.GetComponent<FeedbackCanvas>();
         }
-        protected override void HandleCanvas()
-        {
-            m_CameraController.enabled = !IsAnyCanvasOpen;
-        }
         public override void OpenFeedback(string interactionID, string correlationID)
         {
             m_FeedbackDlg.Open(interactionID, correlationID);

@@ -6,39 +6,18 @@
  *************************************************************************************************/
 
 using UnityEngine;
-using Inworld.UI;
-using UnityEngine.InputSystem;
-
 
 namespace Inworld.Sample
 {
     public class PlayerController3D : PlayerController
     {
-        [SerializeField] protected GameObject m_ChatCanvas;
-        [SerializeField] protected GameObject m_ErrorCanvas;
-        [SerializeField] protected GameObject m_FeedbackCanvas;
-        [SerializeField] protected GameObject m_OptionCanvas;
-        [SerializeField] protected BubblePanel m_BubblePanel;
 
-        protected InputAction m_OptionsInputAction;
-        protected InputAction m_TextChatInputAction;
-        
-        /// <summary>
-        /// Get if any canvas (except Status Canvas) is open.
-        /// </summary>
-        public override bool IsAnyCanvasOpen => m_ChatCanvas && m_ChatCanvas.activeSelf || 
-                                                m_ErrorCanvas && m_ErrorCanvas.activeSelf ||
-                                                m_FeedbackCanvas && m_FeedbackCanvas.activeSelf ||
-                                                m_OptionCanvas && m_OptionCanvas.activeSelf;
+        [SerializeField] protected GameObject m_FeedbackCanvas;
+
+
         
         CharSelectingMethod m_PrevSelectingMethod;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            m_OptionsInputAction = InworldAI.InputActions["Options"];
-            m_TextChatInputAction = InworldAI.InputActions["TextChat"];
-        }
 
         protected override void OnCharacterJoined(InworldCharacter newChar)
         {
@@ -89,39 +68,6 @@ namespace Inworld.Sample
                 m_SendButton.interactable = isON;
             if (m_RecordButton)
                 m_RecordButton.interactable = isON;
-        }
-        protected override void HandleInput()
-        {
-            _HandleChatCanvas();
-            _HandleOptionCanvas();
-            InworldController.Audio.AutoDetectPlayerSpeaking = !IsAnyCanvasOpen;
-        }
-        protected void _HandleOptionCanvas()
-        {
-            if (m_OptionsInputAction == null || !m_OptionsInputAction.WasReleasedThisFrame())
-                return;
-            m_OptionCanvas.SetActive(!m_OptionCanvas.activeSelf);
-        }
-        protected void _HandleChatCanvas()
-        {
-            if (m_ChatCanvas.activeSelf)
-                base.HandleInput();
-            
-            if (m_TextChatInputAction == null || !m_TextChatInputAction.WasReleasedThisFrame())
-                return;
-            
-            m_ChatCanvas.SetActive(!m_ChatCanvas.activeSelf);
-            if (m_ChatCanvas.activeSelf)
-            {
-                m_PrevSelectingMethod = InworldController.CharacterHandler.SelectingMethod;
-                InworldController.CharacterHandler.SelectingMethod = CharSelectingMethod.Manual;
-            }
-            else
-            {
-                InworldController.CharacterHandler.SelectingMethod = m_PrevSelectingMethod;
-            }
-            if (m_BubblePanel)
-                m_BubblePanel.UpdateContent();
         }
     }
 }

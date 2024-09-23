@@ -92,9 +92,10 @@ GameObject:
   - component: {fileID: 3458045423039308029}
   - component: {fileID: 1786583365417058187}
   - component: {fileID: 4454345176880031466}
-  - component: {fileID: 1207303152402782509}
+  - component: {fileID: 8347850658182716545}
+  - component: {fileID: 6400349204029515548}
   m_Layer: 0
-  m_Name: PlayerControllerRPM
+  m_Name: PlayerController3D
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -192,7 +193,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0615f2d2d4e87ff45bee8f68924a511a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInput: {fileID: 0}
   boost: 3.5
   positionLerpTime: 0.2
   mouseSensitivityCurve:
@@ -240,6 +240,12 @@ MonoBehaviour:
   onPlayerSpeaks:
     m_PersistentCalls:
       m_Calls: []
+  onCanvasOpen:
+    m_PersistentCalls:
+      m_Calls: []
+  onCanvasClosed:
+    m_PersistentCalls:
+      m_Calls: []
   m_ChatCanvas: {fileID: 933114256894992333}
   m_ErrorCanvas: {fileID: 1546420073389469328}
   m_FeedbackCanvas: {fileID: 666104848631790534}
@@ -268,7 +274,8 @@ MonoBehaviour:
     relation: 0
     trigger: 1
     longBubbleMode: 1
---- !u!114 &1207303152402782509
+    task: 0
+--- !u!114 &8347850658182716545
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -277,14 +284,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 7802538726591345284}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c9e33ce301947ed8b47185bfed4ee47, type: 3}
+  m_Script: {fileID: 11500000, guid: 5c7852f669f38f34a98d110bcdd840a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Board: {fileID: 6858307644099848377}
-  m_ErrorBoard: {fileID: 1546420073389469328}
-  m_Indicator: {fileID: 5416209086242167708}
-  m_Error: {fileID: 7379610157674441789}
-  m_NoMic: {fileID: 2614038783438186305}
+  m_ActionName: Options
+  m_FallbackKey: 27
+  m_CanvasObj: {fileID: 2266461203068058082}
+--- !u!114 &6400349204029515548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7802538726591345284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: defb3eacefba4da4a71bb5e81ce13cd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ActionName: TextChat
+  m_FallbackKey: 96
+  m_CanvasObj: {fileID: 933114256894992333}
+  m_BubblePanel: {fileID: 4454345176880031466}
 --- !u!1001 &1513644408359223677
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -785,7 +806,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9030470123398359316, guid: f2b02dcb56cd8d84cb484314d75ba96f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8595800801991052365}
   m_SourcePrefab: {fileID: 100100000, guid: f2b02dcb56cd8d84cb484314d75ba96f, type: 3}
 --- !u!224 &118154764733052717 stripped
 RectTransform:
@@ -797,6 +821,28 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 9186624962747929227, guid: f2b02dcb56cd8d84cb484314d75ba96f, type: 3}
   m_PrefabInstance: {fileID: 6574020530167281098}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2767796687439207646 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9030470123398359316, guid: f2b02dcb56cd8d84cb484314d75ba96f, type: 3}
+  m_PrefabInstance: {fileID: 6574020530167281098}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8595800801991052365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2767796687439207646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c9e33ce301947ed8b47185bfed4ee47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Board: {fileID: 6858307644099848377}
+  m_ErrorBoard: {fileID: 1546420073389469328}
+  m_Indicator: {fileID: 5416209086242167708}
+  m_Error: {fileID: 7379610157674441789}
+  m_NoMic: {fileID: 2614038783438186305}
 --- !u!114 &5416209086242167708 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1157884291402427990, guid: f2b02dcb56cd8d84cb484314d75ba96f, type: 3}
