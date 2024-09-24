@@ -172,7 +172,7 @@ namespace Inworld.AEC
 #else
                 VADInterop.VAD_Initialize($"{Application.streamingAssetsPath}/{k_TargetFileName}");
 #endif
-            m_InitSampleMode = m_SamplingMode;
+            m_PrevSampleMode = m_SamplingMode;
             m_DumpAudioAction = InworldAI.InputActions["DumpAudio"];
             base.Init();
         }

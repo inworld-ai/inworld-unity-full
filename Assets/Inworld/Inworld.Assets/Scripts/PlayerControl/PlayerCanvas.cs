@@ -13,22 +13,11 @@ namespace Inworld.Sample
     public class PlayerCanvas : MonoBehaviour
     {
         [SerializeField] protected string m_ActionName;
-        [SerializeField] protected KeyCode m_FallbackKey;
         [SerializeField] protected GameObject m_CanvasObj;
         
         protected InputAction m_InputAction;
-        public bool KeyReleased
-        {
-            get
-            {
-                if (m_InputAction != null)
-                    return m_InputAction.WasReleasedThisFrame();
-                if (m_FallbackKey != KeyCode.None)
-                    return Input.GetKeyUp(m_FallbackKey);
-                return false;
-            }
-        }
-    
+        public bool KeyReleased => m_InputAction != null && m_InputAction.WasReleasedThisFrame();
+
         public void Open()
         {
             if (m_CanvasObj.activeSelf)
@@ -56,15 +45,13 @@ namespace Inworld.Sample
         {
             
         }
-        void Awake()
+        protected virtual void Awake()
         {
             if (string.IsNullOrEmpty(m_ActionName))
                 return;
             m_InputAction = InworldAI.InputActions[m_ActionName];
         }
-    
-        // Update is called once per frame
-        void Update()
+        protected virtual void HandleInput()
         {
             if (!KeyReleased)
                 return;
@@ -72,6 +59,12 @@ namespace Inworld.Sample
                 Close();
             else
                 Open();
+        }
+    
+        // Update is called once per frame
+        void Update()
+        {
+            HandleInput();
         }
     }
 
