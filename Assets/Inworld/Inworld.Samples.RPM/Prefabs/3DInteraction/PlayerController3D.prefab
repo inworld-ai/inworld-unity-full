@@ -233,24 +233,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fd6acdecc1c0114eb2a4d8357b2c289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_InputField: {fileID: 8145037987960637849}
-  m_Dropdown: {fileID: 2865764881867811247}
-  m_SendButton: {fileID: 3289984425394843733}
-  m_RecordButton: {fileID: 7655747527687061930}
   onPlayerSpeaks:
     m_PersistentCalls:
       m_Calls: []
   onCanvasOpen:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3458045423039308029}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onCanvasClosed:
     m_PersistentCalls:
-      m_Calls: []
-  m_ChatCanvas: {fileID: 933114256894992333}
-  m_ErrorCanvas: {fileID: 1546420073389469328}
+      m_Calls:
+      - m_Target: {fileID: 3458045423039308029}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   m_FeedbackCanvas: {fileID: 666104848631790534}
-  m_OptionCanvas: {fileID: 2266461203068058082}
-  m_BubblePanel: {fileID: 4454345176880031466}
 --- !u!114 &4454345176880031466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,7 +304,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ActionName: Options
-  m_FallbackKey: 27
   m_CanvasObj: {fileID: 2266461203068058082}
 --- !u!114 &6400349204029515548
 MonoBehaviour:
@@ -303,9 +318,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ActionName: TextChat
-  m_FallbackKey: 96
   m_CanvasObj: {fileID: 933114256894992333}
+  m_InputField: {fileID: 8145037987960637849}
+  m_Dropdown: {fileID: 2865764881867811247}
+  m_SendButton: {fileID: 3289984425394843733}
+  m_RecordButton: {fileID: 7655747527687061930}
   m_BubblePanel: {fileID: 4454345176880031466}
+  m_SubmitName: Submit
 --- !u!1001 &1513644408359223677
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -321,11 +340,27 @@ PrefabInstance:
     - target: {fileID: 3658249371717675218, guid: b6468cc686a77ef498e2a680690082f8, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1786583365417058187}
+      objectReference: {fileID: 6400349204029515548}
+    - target: {fileID: 3658249371717675218, guid: b6468cc686a77ef498e2a680690082f8, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Inworld.Sample.ChatCanvas, Inworld.Assets
+      objectReference: {fileID: 0}
+    - target: {fileID: 4083028693381296424, guid: b6468cc686a77ef498e2a680690082f8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4083028693381296424, guid: b6468cc686a77ef498e2a680690082f8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1786583365417058187}
+      objectReference: {fileID: 6400349204029515548}
+    - target: {fileID: 4083028693381296424, guid: b6468cc686a77ef498e2a680690082f8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Submit
+      objectReference: {fileID: 0}
+    - target: {fileID: 4083028693381296424, guid: b6468cc686a77ef498e2a680690082f8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Inworld.Sample.ChatCanvas, Inworld.Assets
+      objectReference: {fileID: 0}
     - target: {fileID: 7028622523064093573, guid: b6468cc686a77ef498e2a680690082f8, type: 3}
       propertyPath: m_Camera
       value: 

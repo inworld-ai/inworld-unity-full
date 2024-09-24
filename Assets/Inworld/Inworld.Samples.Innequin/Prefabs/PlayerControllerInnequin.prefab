@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 365248474568820437}
   - component: {fileID: 8695700088679634501}
   - component: {fileID: 6806559504290695270}
+  - component: {fileID: 2668844136298939283}
   m_Layer: 0
   m_Name: PlayerControllerInnequin
   m_TagString: MainCamera
@@ -109,18 +110,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 445d631026be4dff9ea5c295e0e0cb9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_InputField: {fileID: 6142353158197196822}
-  m_Dropdown: {fileID: 0}
-  m_SendButton: {fileID: 2255605029174697231}
-  m_RecordButton: {fileID: 4422169585796817090}
   onPlayerSpeaks:
     m_PersistentCalls:
       m_Calls: []
-  m_ChatCanvas: {fileID: 8964929325927956365}
-  m_ErrorCanvas: {fileID: 0}
+  onCanvasOpen:
+    m_PersistentCalls:
+      m_Calls: []
+  onCanvasClosed:
+    m_PersistentCalls:
+      m_Calls: []
   m_FeedbackCanvas: {fileID: 0}
-  m_OptionCanvas: {fileID: 0}
-  m_BubblePanel: {fileID: 0}
 --- !u!114 &8695700088679634501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,6 +153,26 @@ MonoBehaviour:
   m_Error: {fileID: 2311024790950539498}
   m_NoMic: {fileID: 0}
   m_Subtitle: {fileID: 928350430333564137}
+--- !u!114 &2668844136298939283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2310237008755668363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: defb3eacefba4da4a71bb5e81ce13cd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ActionName: TextChat
+  m_CanvasObj: {fileID: 8964929325927956365}
+  m_InputField: {fileID: 6142353158197196822}
+  m_Dropdown: {fileID: 0}
+  m_SendButton: {fileID: 2255605029174697231}
+  m_RecordButton: {fileID: 4422169585796817090}
+  m_BubblePanel: {fileID: 0}
+  m_SubmitName: Submit
 --- !u!1001 &5078171621582090894
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -393,6 +412,18 @@ PrefabInstance:
     - target: {fileID: 3320132845200960805, guid: 3a0a309bc60202742b83c17ac22ca669, type: 3}
       propertyPath: m_Name
       value: ChatCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 5563964590451019687, guid: 3a0a309bc60202742b83c17ac22ca669, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2668844136298939283}
+    - target: {fileID: 5563964590451019687, guid: 3a0a309bc60202742b83c17ac22ca669, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Submit
+      objectReference: {fileID: 0}
+    - target: {fileID: 5563964590451019687, guid: 3a0a309bc60202742b83c17ac22ca669, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Inworld.Sample.ChatCanvas, Inworld.Assets
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

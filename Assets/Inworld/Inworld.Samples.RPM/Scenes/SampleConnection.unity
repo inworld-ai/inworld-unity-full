@@ -416,6 +416,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 131.568, y: 0, z: 0}
+--- !u!1 &837782583
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 837782585}
+  - component: {fileID: 837782584}
+  m_Layer: 0
+  m_Name: LatencyReport
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &837782584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837782583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f21ebe20281149b5af3916a834d90391, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AutoAttached: 1
+--- !u!4 &837782585
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837782583}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &995227280
 GameObject:
   m_ObjectHideFlags: 0
@@ -720,11 +765,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce9dce1e431f53e4db0037f46907bc2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_InputField: {fileID: 0}
-  m_Dropdown: {fileID: 0}
-  m_SendButton: {fileID: 0}
-  m_RecordButton: {fileID: 0}
   onPlayerSpeaks:
+    m_PersistentCalls:
+      m_Calls: []
+  onCanvasOpen:
+    m_PersistentCalls:
+      m_Calls: []
+  onCanvasClosed:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1001 &2287690362095020954
@@ -1212,3 +1259,4 @@ SceneRoots:
   - {fileID: 6526292729113425018}
   - {fileID: 102165675}
   - {fileID: 1947643042}
+  - {fileID: 837782585}
