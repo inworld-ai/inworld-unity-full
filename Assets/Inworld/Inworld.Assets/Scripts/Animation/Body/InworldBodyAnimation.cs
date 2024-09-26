@@ -15,10 +15,10 @@ namespace Inworld.Assets
     {
         [SerializeField] protected Animator m_BodyAnimator;
         
-        Transform m_HeadTransform;
-        Vector3 m_vecInitPosition;
-        Vector3 m_vecInitEuler;
-        float m_LookAtWeight;
+        protected Transform m_HeadTransform;
+        protected Vector3 m_vecInitPosition;
+        protected Vector3 m_vecInitEuler;
+        protected float m_LookAtWeight;
         
         protected static readonly int s_Emotion = Animator.StringToHash("Emotion");
         protected static readonly int s_Gesture = Animator.StringToHash("Gesture");
@@ -53,16 +53,16 @@ namespace Inworld.Assets
             m_Character.Event.onCharacterDeselected.RemoveListener(OnCharacterDeselected);
             base.OnDisable();
         }
-        void OnAnimatorIK(int layerIndex)
+        protected void OnAnimatorIK(int layerIndex)
         {
             if (!m_BodyAnimator)
                 return;
             if (!PlayerController.Instance)
             {
-                _StopLookAt();
+                StopLookAt();
                 return;
             }
-            _StartLookAt(PlayerController.Instance.transform.position);
+            StartLookAt(PlayerController.Instance.transform.position);
         }
         protected virtual void OnCharacterStartSpeaking(string brainName) => HandleMainStatus(AnimMainStatus.Talking);
 
@@ -83,10 +83,10 @@ namespace Inworld.Assets
         {
             m_BodyAnimator.SetFloat(s_Random, Random.Range(0, 1) > 0.5f ? 1 : 0);
             m_BodyAnimator.SetFloat(s_RemainSec, m_Interaction.AnimFactor);
-            _ProcessEmotion(packet.emotion.behavior);
+            ProcessEmotion(packet.emotion.behavior);
         }
 
-        void _ProcessEmotion(SpaffCode emotionBehavior)
+        protected virtual void ProcessEmotion(SpaffCode emotionBehavior)
         {
             EmotionMapData emoMapData = m_EmotionMap[emotionBehavior];
             if (emoMapData == null)
@@ -97,13 +97,13 @@ namespace Inworld.Assets
             m_BodyAnimator.SetInteger(s_Emotion, (int)emoMapData.bodyEmotion);
             m_BodyAnimator.SetInteger(s_Gesture, (int)emoMapData.bodyGesture);
         }
-        void _StartLookAt(Vector3 lookPos)
+        protected virtual void StartLookAt(Vector3 lookPos)
         {
             m_LookAtWeight = Mathf.Clamp(1 - Vector3.Angle(transform.forward, (lookPos - m_HeadTransform.position).normalized) * 0.01f, 0, 1);
             m_BodyAnimator.SetLookAtWeight(m_LookAtWeight);
             m_BodyAnimator.SetLookAtPosition(lookPos);
         }
-        void _StopLookAt()
+        protected virtual void StopLookAt()
         {
             m_HeadTransform.localPosition = m_vecInitPosition;
             m_HeadTransform.localEulerAngles = m_vecInitEuler;
