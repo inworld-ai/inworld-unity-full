@@ -101,6 +101,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7149944113521181875, guid: 897c70b9b015fa24598240162321b053, type: 3}
+      propertyPath: m_AECResetCountDown
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7149944113521181875, guid: 897c70b9b015fa24598240162321b053, type: 3}
       propertyPath: m_PlayerVolumeThreshold
       value: 15
       objectReference: {fileID: 0}
