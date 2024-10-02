@@ -31,7 +31,7 @@ namespace Inworld
         [MenuItem("Inworld/Export Package/Core")]
         public static async void ExportCore()
         {
-            PackRequest req = Client.Pack(k_CorePackagePath, k_FullPackagePath);
+            PackRequest req = UnityEditor.PackageManager.Client.Pack(k_CorePackagePath, k_FullPackagePath);
             while (!req.IsCompleted)
             {
                 await Task.Yield();

@@ -57,7 +57,7 @@ namespace Inworld
         }
         static async Task _AddUnityPackage(string package, string detail = "")
         {
-            ListRequest listRequest = Client.List();
+            ListRequest listRequest = UnityEditor.PackageManager.Client.List();
 
             while (!listRequest.IsCompleted)
             {
@@ -74,7 +74,7 @@ namespace Inworld
                 return;
             }
             string pkgToLoad = string.IsNullOrEmpty(detail) ? package : detail;
-            AddRequest addRequest = Client.Add(pkgToLoad);
+            AddRequest addRequest = UnityEditor.PackageManager.Client.Add(pkgToLoad);
             while (!addRequest.IsCompleted)
             {
                 await Task.Yield();

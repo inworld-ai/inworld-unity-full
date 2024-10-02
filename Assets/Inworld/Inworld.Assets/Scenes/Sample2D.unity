@@ -230,9 +230,21 @@ PrefabInstance:
       value: workspaces/unitytest/scenes/innequin_gallery
       objectReference: {fileID: 0}
     - target: {fileID: 2395919966041133306, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
+      propertyPath: m_APIKey
+      value: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
+      objectReference: {fileID: 0}
+    - target: {fileID: 2395919966041133306, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
+      propertyPath: m_APISecret
+      value: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2395919966041133306, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
       propertyPath: m_AutoStart
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2395919966041133306, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
+      propertyPath: m_ServerConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
     - target: {fileID: 3753617577465698405, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -281,9 +293,6 @@ PrefabInstance:
       propertyPath: m_DetectPlayerSpeaking
       value: 0
       objectReference: {fileID: 0}
-      propertyPath: m_PushToTalkInputAction
-      value: 
-      objectReference: {fileID: -1023122988726202136, guid: abe0a4de8c40e60499a52c6fd7a641c7, type: 3}
     - target: {fileID: 4881369806813467986, guid: 3a0885e96397c414f80c73ab7dc0c72d, type: 3}
       propertyPath: m_SceneFullName
       value: 
@@ -545,7 +554,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7202406319522675144, guid: 41177cdca0cf65d4b88318d5107c053c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -566.6198
+      value: -655.32153
       objectReference: {fileID: 0}
     - target: {fileID: 7216582453331693882, guid: 41177cdca0cf65d4b88318d5107c053c, type: 3}
       propertyPath: m_Name
