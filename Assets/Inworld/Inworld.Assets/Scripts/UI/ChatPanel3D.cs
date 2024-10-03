@@ -34,6 +34,10 @@ namespace Inworld.Assets
             if (m_Character && incomingPacket.IsRelated(m_Character.ID))
                 base.OnInteraction(incomingPacket);
         }
+        protected override void OnChatUpdated()
+        {
+            // YAN: 3D Character does not need to process LLM data.
+        }
         protected override bool HandleRelation(CustomPacket packet)
         {
             if (!m_Relation)

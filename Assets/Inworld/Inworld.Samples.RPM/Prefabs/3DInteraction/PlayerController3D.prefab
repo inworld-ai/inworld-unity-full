@@ -338,6 +338,18 @@ PrefabInstance:
       value: InputCanvas
       objectReference: {fileID: 0}
     - target: {fileID: 3658249371717675218, guid: b6468cc686a77ef498e2a680690082f8, type: 3}
+      propertyPath: m_Options.m_Options.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3658249371717675218, guid: b6468cc686a77ef498e2a680690082f8, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[0].m_Text
+      value: LLMService
+      objectReference: {fileID: 0}
+    - target: {fileID: 3658249371717675218, guid: b6468cc686a77ef498e2a680690082f8, type: 3}
+      propertyPath: m_Options.m_Options.Array.data[1].m_Text
+      value: Broadcasting
+      objectReference: {fileID: 0}
+    - target: {fileID: 3658249371717675218, guid: b6468cc686a77ef498e2a680690082f8, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 6400349204029515548}
