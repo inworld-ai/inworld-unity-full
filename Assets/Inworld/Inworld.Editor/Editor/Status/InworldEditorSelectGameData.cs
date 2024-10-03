@@ -23,9 +23,11 @@ namespace Inworld.Editors
     {
         const string k_DefaultWorkspace = "--- SELECT WORKSPACE ---";
         const string k_DefaultKey = "--- SELECT KEY---";
+        const string k_DefaultGameMode = "--- SELECT GAMEMODE ---";
         const string k_DataMissing = "Some data is missing.\nPlease make sure you have at least one scene and one key/secret in your workspace";
         string m_CurrentWorkspaceName = "--- SELECT WORKSPACE ---";
         string m_CurrentKey = "--- SELECT KEY---";
+        string m_CurrentGameMode = "--- SELECT GAMEMODE ---";
 
         bool m_IsCharIntegration = true;
         bool m_DisplayDataMissing;
@@ -34,7 +36,7 @@ namespace Inworld.Editors
         InworldWorkspaceData CurrentWorkspace => InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspaceName);
         InworldKeySecret CurrentKey  => CurrentWorkspace?.keySecrets.FirstOrDefault(key => key.key == m_CurrentKey);
 
-        bool _IsReadyToProceed => !m_IsCharIntegration || CurrentWorkspace.Progress > 0.95f;
+        bool _IsReadyToProceed => CurrentWorkspace.Progress > 0.95f;
         /// <summary>
         /// Triggers when open editor window.
         /// </summary>
@@ -80,7 +82,7 @@ namespace Inworld.Editors
                     _SelectWorkspace(m_CurrentWorkspaceName);
                 }
             }
-            if (m_CurrentKey != k_DefaultKey && !string.IsNullOrEmpty(m_CurrentKey) && _IsReadyToProceed)
+            if (m_CurrentKey != k_DefaultKey && m_CurrentGameMode != k_DefaultGameMode && !string.IsNullOrEmpty(m_CurrentKey) && _IsReadyToProceed)
             {
                 GUILayout.FlexibleSpace();
                 if (GUILayout.Button("Next", InworldEditor.Instance.BtnStyle))
@@ -219,8 +221,9 @@ namespace Inworld.Editors
                 return;
             if (m_CurrentKey == k_DefaultKey || string.IsNullOrEmpty(m_CurrentKey))
                 return;
-            // TODO(Yan): Support LLM Service (InworldEditorUtil.DrawDropDown).
-            return;
+            EditorGUILayout.LabelField("Choose Game mode:", InworldEditor.Instance.TitleStyle);
+            List<string> wsList = new List<string>{EditorGameMode.LLMService.ToString(), EditorGameMode.CharacterIntegration.ToString()};
+            InworldEditorUtil.DrawDropDown(m_CurrentGameMode, wsList, _SelectGameMode);
         }
         void _DrawKeyDropDown()
         {
@@ -376,6 +379,11 @@ namespace Inworld.Editors
         void _SelectKeys(string keyDisplayName)
         {
             m_CurrentKey = keyDisplayName;
+        }
+        void _SelectGameMode(string gameMode)
+        {
+            m_CurrentGameMode = gameMode;
+            m_IsCharIntegration = gameMode == EditorGameMode.CharacterIntegration.ToString();
         }
         // Download Avatars and put under User name's folder.
         void _OnCharModelDownloaded(string charFullName, AsyncOperation downloadContent)

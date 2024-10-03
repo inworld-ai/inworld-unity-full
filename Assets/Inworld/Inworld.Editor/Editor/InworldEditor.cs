@@ -16,14 +16,7 @@ using TMPro;
 
 namespace Inworld.Editors
 {
-    public enum EditorStatus
-    {
-        Init,
-        SelectGameData,
-        SelectGameMode,
-        SelectCharacter,
-        Error
-    }
+
     public class InworldEditor : ScriptableObject
     {
         [Header("Assets")]
