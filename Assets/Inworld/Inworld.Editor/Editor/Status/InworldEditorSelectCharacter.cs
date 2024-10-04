@@ -10,7 +10,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
-using Inworld.Sample;
+
 using Inworld.Entities;
 using System.Collections.Generic;
 using UnityEditor.SceneManagement;
