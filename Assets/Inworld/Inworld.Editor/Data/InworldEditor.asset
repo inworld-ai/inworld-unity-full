@@ -19,7 +19,9 @@ MonoBehaviour:
   m_Character2DPrefab: {fileID: 6956750892874934237, guid: 5841ee4822a3dae49bc57f6d3c851e6e, type: 3}
   m_RPMPrefab: {fileID: 4560116734280050820, guid: 4f93a187a84c6b14da4a4bac1375b751, type: 3}
   m_InnequinPrefab: {fileID: 2030273176201225856, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
-  m_PlayerController: {fileID: 1786583365417058187, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
+  m_PlayerController: {fileID: 7802538726591345284, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
+  m_PlayerController2D: {fileID: 7216582453331693882, guid: 41177cdca0cf65d4b88318d5107c053c, type: 3}
+  m_PlayerControllerLLM: {fileID: 3952073688223741148, guid: 4d0ceebff7c50a74e9999a4c34d89e47, type: 3}
   m_CurrentStatus: 0
   m_UserDataPath: UserData
   m_GameDataPath: GameData

@@ -15,9 +15,4 @@ namespace Inworld.Editors
         SelectCharacter,
         Error
     }
-    public enum EditorGameMode
-    {
-        LLMService,
-        CharacterIntegration
-    }
 }

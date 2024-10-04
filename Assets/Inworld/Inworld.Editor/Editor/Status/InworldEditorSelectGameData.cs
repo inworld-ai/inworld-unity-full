@@ -25,6 +25,8 @@ namespace Inworld.Editors
         const string k_DefaultKey = "--- SELECT KEY---";
         const string k_DefaultGameMode = "--- SELECT GAMEMODE ---";
         const string k_DataMissing = "Some data is missing.\nPlease make sure you have at least one scene and one key/secret in your workspace";
+        const string k_LLMService = "LLM Service";
+        const string k_CharacterIntegration = "Character Integration";
         string m_CurrentWorkspaceName = "--- SELECT WORKSPACE ---";
         string m_CurrentKey = "--- SELECT KEY---";
         string m_CurrentGameMode = "--- SELECT GAMEMODE ---";
@@ -136,6 +138,10 @@ namespace Inworld.Editors
                 m_StartDownload = false;
             }
         }
+        public void OnClose()
+        {
+            
+        }
 
         void _SaveCurrentSettings()
         {
@@ -222,7 +228,7 @@ namespace Inworld.Editors
             if (m_CurrentKey == k_DefaultKey || string.IsNullOrEmpty(m_CurrentKey))
                 return;
             EditorGUILayout.LabelField("Choose Game mode:", InworldEditor.Instance.TitleStyle);
-            List<string> wsList = new List<string>{EditorGameMode.LLMService.ToString(), EditorGameMode.CharacterIntegration.ToString()};
+            List<string> wsList = new List<string>{k_LLMService, k_CharacterIntegration};
             InworldEditorUtil.DrawDropDown(m_CurrentGameMode, wsList, _SelectGameMode);
         }
         void _DrawKeyDropDown()
@@ -383,7 +389,7 @@ namespace Inworld.Editors
         void _SelectGameMode(string gameMode)
         {
             m_CurrentGameMode = gameMode;
-            m_IsCharIntegration = gameMode == EditorGameMode.CharacterIntegration.ToString();
+            m_IsCharIntegration = gameMode == k_CharacterIntegration;
         }
         // Download Avatars and put under User name's folder.
         void _OnCharModelDownloaded(string charFullName, AsyncOperation downloadContent)

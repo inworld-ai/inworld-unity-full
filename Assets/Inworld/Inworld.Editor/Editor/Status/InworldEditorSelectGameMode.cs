@@ -6,9 +6,11 @@
  *************************************************************************************************/
 using Inworld.LLM;
 using Inworld.LLM.ModelConfig;
-using System.Collections.Generic;
+
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
                                                                                                                                                                                                                                                                                                                                                                                                                                                                        #if UNITY_EDITOR
 
 namespace Inworld.Editors
@@ -17,11 +19,18 @@ namespace Inworld.Editors
     {
         ModelName m_ModelName;
         TextGenerationConfig m_TextGenerationConfig;
+        SerializedObject m_SerializedObject;
         int m_MaxChatHistorySize = 100;
         
         public void OnOpenWindow()
         {
-
+            if (!InworldController.Instance)
+            {
+                return;
+            }
+            m_ModelName = InworldController.LLM.Model;
+            m_TextGenerationConfig = InworldController.LLM.Config;
+            m_MaxChatHistorySize = InworldController.LLM.HistorySize;
         }
         public void DrawTitle()
         {
@@ -43,6 +52,8 @@ namespace Inworld.Editors
             GUILayout.Space(10);
 
             GUILayout.Label("Text Generation Configuration", EditorStyles.boldLabel);
+            if (m_TextGenerationConfig == null)
+                return;
 
             // Frequency penalty
             m_TextGenerationConfig.frequency_penalty = EditorGUILayout.FloatField(new GUIContent("Frequency Penalty",
@@ -65,6 +76,10 @@ namespace Inworld.Editors
                 "Controls randomness in the output."), m_TextGenerationConfig.temperature, 0, 2);
             m_TextGenerationConfig.top_p = EditorGUILayout.Slider(new GUIContent("Top P",
                 "Nucleus sampling threshold."), m_TextGenerationConfig.top_p, 0, 1);
+            if (GUILayout.Button("Add PlayerController to Scene", GUILayout.ExpandWidth(true)))
+            {
+                InworldEditorUtil.AddPlayerController(InworldEditor.PlayerControllerLLM);
+            }
         }
         public void DrawButtons()
         {
@@ -97,7 +112,11 @@ namespace Inworld.Editors
         {
 
         }
-        void _Apply()
+        public void OnClose()
+        {
+            _Apply(false);
+        }
+        void _Apply(bool needDialog = true)
         {
             if (!InworldController.Instance)
             {
@@ -107,7 +126,11 @@ namespace Inworld.Editors
             InworldController.LLM.Model = m_ModelName;
             InworldController.LLM.Config = m_TextGenerationConfig;
             InworldController.LLM.HistorySize = m_MaxChatHistorySize;
-            EditorUtility.DisplayDialog("Inworld", "LLM Config updated!", "OK");
+            if (needDialog && !EditorUtility.DisplayDialog("Inworld", "LLM Config updated!", "OK"))
+                return;
+            PrefabUtility.RecordPrefabInstancePropertyModifications(InworldController.LLM);
+            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+            EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
         }
         void _Refresh()
         {
@@ -119,6 +142,7 @@ namespace Inworld.Editors
             m_ModelName = InworldController.LLM.Model;
             m_TextGenerationConfig = InworldController.LLM.Config;
             m_MaxChatHistorySize = InworldController.LLM.HistorySize;
+            m_SerializedObject = new SerializedObject(InworldController.Instance);  
         }
     }
 }

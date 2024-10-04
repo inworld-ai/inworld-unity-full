@@ -28,7 +28,9 @@ namespace Inworld.Editors
         // TODO(Yan): Let other package's editor script to Upload those characters.
         [SerializeField] InworldCharacter m_RPMPrefab;
         [SerializeField] InworldCharacter m_InnequinPrefab;
-        [SerializeField] PlayerController m_PlayerController;
+        [SerializeField] GameObject m_PlayerController;
+        [SerializeField] GameObject m_PlayerController2D;
+        [SerializeField] GameObject m_PlayerControllerLLM;
         [Space(10)][Header("Status")]
         [SerializeField] EditorStatus m_CurrentStatus;
         EditorStatus m_LastStatus;
@@ -141,11 +143,20 @@ namespace Inworld.Editors
         /// <summary>
         /// Gets if the current Inworld Character prefab is 3D.
         /// </summary>
-        public static bool Is3D => Instance.m_RPMPrefab != null || Instance.m_InnequinPrefab != null;
+        public static bool Is3D { get; set; } = true;
         /// <summary>
         /// Gets the current Player Controller prefab.
         /// </summary>
-        public static PlayerController PlayerController => Instance.m_PlayerController;
+        public static GameObject PlayerController => Instance.m_PlayerController;
+        /// <summary>
+        /// Gets the current Player Controller prefab.
+        /// </summary>
+        public static GameObject PlayerController2D => Instance.m_PlayerController2D;
+        /// <summary>
+        /// Gets the current Player Controller prefab.
+        /// </summary>
+        public static GameObject PlayerControllerLLM => Instance.m_PlayerControllerLLM;
+        
         /// <summary>
         /// Gets if it's using Innequin model.
         /// </summary>
