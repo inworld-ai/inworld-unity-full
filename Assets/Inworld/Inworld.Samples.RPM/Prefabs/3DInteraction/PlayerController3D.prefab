@@ -325,6 +325,7 @@ MonoBehaviour:
   m_RecordButton: {fileID: 7655747527687061930}
   m_BubblePanel: {fileID: 4454345176880031466}
   m_SubmitName: Submit
+  m_IsCharacterInteraction: 1
 --- !u!1001 &1513644408359223677
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -857,6 +858,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9030470123398359316, guid: f2b02dcb56cd8d84cb484314d75ba96f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8595800801991052365}
+    - targetCorrespondingSourceObject: {fileID: 9030470123398359316, guid: f2b02dcb56cd8d84cb484314d75ba96f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8019965327725698932}
   m_SourcePrefab: {fileID: 100100000, guid: f2b02dcb56cd8d84cb484314d75ba96f, type: 3}
 --- !u!224 &118154764733052717 stripped
 RectTransform:
@@ -886,10 +890,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Board: {fileID: 6858307644099848377}
-  m_ErrorBoard: {fileID: 1546420073389469328}
+  m_ErrorBoard: {fileID: 8019965327725698932}
   m_Indicator: {fileID: 5416209086242167708}
   m_Error: {fileID: 7379610157674441789}
   m_NoMic: {fileID: 2614038783438186305}
+--- !u!114 &8019965327725698932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2767796687439207646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c7852f669f38f34a98d110bcdd840a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ActionName: 
+  m_CanvasObj: {fileID: 1546420073389469328}
 --- !u!114 &5416209086242167708 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1157884291402427990, guid: f2b02dcb56cd8d84cb484314d75ba96f, type: 3}
