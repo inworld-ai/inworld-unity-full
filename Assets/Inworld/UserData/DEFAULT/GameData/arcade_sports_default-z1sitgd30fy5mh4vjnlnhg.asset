@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5abd9eaac9cc3e4585d7e8574c2511c, type: 3}
+  m_Name: arcade_sports_default-z1sitgd30fy5mh4vjnlnhg
+  m_EditorClassIdentifier: 
+  sceneFullName: workspaces/default-z1sitgd30fy5mh4vjnlnhg/scenes/arcade_sports
+  apiKey: luDmj9OzQ9Ys4EvbabLWUUCrkhZJliDq
+  apiSecret: zS3zrbKUCZfPSf7YWghrzTFKObH9fkAQNOP9HRaapEzzH05FcClI3brhnt5y4XiX
+  characters:
+  - agentId: 
+    brainName: workspaces/default-z1sitgd30fy5mh4vjnlnhg/characters/bob
+    givenName: Ji
+    characterAssets:
+      rpmModelUri: 
+      rpmImageUriPortrait: 
+      rpmImageUriPosture: 
+      avatarImg: https://storage.googleapis.com/inworld-ai-usercontent-prod/2d_image/2309784b-e4ed-4dbf-b87b-520540903c46.jpg
+      avatarImgOriginal: https://storage.googleapis.com/inworld-ai-usercontent-prod/2d_image/2309784b-e4ed-4dbf-b87b-520540903c46-original.jpg
+      thumbnailProgress: 0
+      avatarProgress: 0
+    thumbnail: {fileID: 0}
+  - agentId: 
+    brainName: workspaces/default-z1sitgd30fy5mh4vjnlnhg/characters/janus
+    givenName: Janus
+    characterAssets:
+      rpmModelUri: 
+      rpmImageUriPortrait: 
+      rpmImageUriPosture: 
+      avatarImg: https://storage.googleapis.com/inworld-ai-usercontent-prod/2d_image/3c5de245-0de9-4d78-99a9-c7742b6da3a0.jpg
+      avatarImgOriginal: https://storage.googleapis.com/inworld-ai-usercontent-prod/2d_image/3c5de245-0de9-4d78-99a9-c7742b6da3a0-original.jpg
+      thumbnailProgress: 0
+      avatarProgress: 0
+    thumbnail: {fileID: 0}
+  - agentId: 
+    brainName: workspaces/default-z1sitgd30fy5mh4vjnlnhg/characters/lara_light
+    givenName: Lara Light
+    characterAssets:
+      rpmModelUri: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_model/51f40943-f65b-4b3c-a823-47c5cf06a54b.glb
+      rpmImageUriPortrait: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_image/51f40943-f65b-4b3c-a823-47c5cf06a54b_portrait.jpg
+      rpmImageUriPosture: https://storage.googleapis.com/inworld-ai-usercontent-prod/rpm_image/51f40943-f65b-4b3c-a823-47c5cf06a54b_posture.jpg
+      avatarImg: https://storage.googleapis.com/inworld-ai-usercontent-prod/2d_image/4ee9a9ee-f280-4a02-891c-41cea313e17e.jpg
+      avatarImgOriginal: https://storage.googleapis.com/inworld-ai-usercontent-prod/2d_image/4ee9a9ee-f280-4a02-891c-41cea313e17e-original.jpg
+      thumbnailProgress: 0
+      avatarProgress: 0
+    thumbnail: {fileID: 0}
+  - agentId: 
+    brainName: workspaces/default-z1sitgd30fy5mh4vjnlnhg/characters/morgana
+    givenName: Morgana
+    characterAssets:
+      rpmModelUri: 
+      rpmImageUriPortrait: 
+      rpmImageUriPosture: 
+      avatarImg: https://storage.googleapis.com/inworld-ai-usercontent-prod/2d_image/8157e3a2-4121-4632-8f04-ec1d1dfde9d8.jpg
+      avatarImgOriginal: https://storage.googleapis.com/inworld-ai-usercontent-prod/2d_image/8157e3a2-4121-4632-8f04-ec1d1dfde9d8-original.jpg
+      thumbnailProgress: 0
+      avatarProgress: 0
+    thumbnail: {fileID: 0}
+  - agentId: 
+    brainName: workspaces/default-z1sitgd30fy5mh4vjnlnhg/characters/tiki_king
+    givenName: Tiki King
+    characterAssets:
+      rpmModelUri: 
+      rpmImageUriPortrait: 
+      rpmImageUriPosture: 
+      avatarImg: https://storage.googleapis.com/inworld-ai-usercontent-prod/2d_image/023a6636-188b-40f8-a2cf-305302892d25.jpg
+      avatarImgOriginal: https://storage.googleapis.com/inworld-ai-usercontent-prod/2d_image/023a6636-188b-40f8-a2cf-305302892d25-original.jpg
+      thumbnailProgress: 0
+      avatarProgress: 0
+    thumbnail: {fileID: 0}
+  capabilities:
+    audio: 1
+    emotions: 1
+    interruptions: 1
+    narratedActions: 0
+    regenerateResponse: 1
+    text: 1
+    triggers: 1
+    phonemeInfo: 1
+    relations: 1
+    debugInfo: 0
+    multiAgent: 1

@@ -76,16 +76,18 @@ namespace Inworld.Editors
         
 
 #region Top Menu
-        [MenuItem("Inworld/Inworld Studio Panel", false, 0)]
+        [MenuItem("Inworld/Additional packages...", false, 0)]
+        static void TopShowWizard() => InworldWizard.Instance.ShowPanel();
+        [MenuItem("Inworld/Inworld Studio Panel", false, 10)]
         static void TopMenuConnectStudio() => InworldStudioPanel.Instance.ShowPanel();
 
-        [MenuItem("Inworld/Inworld Settings", false, 1)]
+        [MenuItem("Inworld/Inworld Settings", false, 11)]
         static void TopMenuShowPanel() => InworldAIEditor.Instance.ShowPanel();
 
-        [MenuItem("Inworld/User Settings", false, 1)]
+        [MenuItem("Inworld/User Settings", false, 11)]
         static void TopMenuUserPanel() => _OpenUserPanel();
         
-        [MenuItem("Inworld/Editor Settings", false, 1)]
+        [MenuItem("Inworld/Editor Settings", false, 11)]
         static void TopMenuEditorPanel() => Selection.SetActiveObjectWithContext(InworldEditor.Instance, InworldEditor.Instance);
 #endregion
 

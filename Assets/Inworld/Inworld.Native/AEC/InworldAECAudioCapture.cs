@@ -24,7 +24,7 @@ namespace Inworld.AEC
 
         bool m_IsAudioDebugging = false;
         const int k_NumSamples = 160;
-        const string k_VADDataPath = "Inworld/Inworld.Native/VAD/Plugins/silero_vad.onnx";
+        const string k_VADDataPath = "silero_vad.onnx";
         IntPtr m_AECHandle;
         protected List<short> m_OutputBuffer = new List<short>();
         protected InputAction m_DumpAudioAction;
@@ -148,7 +148,7 @@ namespace Inworld.AEC
             else
                 m_SamplingMode = MicSampleMode.TURN_BASED;
             if (EnableVAD)
-                VADInterop.VAD_Initialize($"{Application.dataPath}/{k_VADDataPath}");
+                VADInterop.VAD_Initialize($"{Application.streamingAssetsPath}/{k_VADDataPath}");
             m_InitSampleMode = m_SamplingMode;
             m_CurrentAECTimer = m_AECResetDuration;
             m_DumpAudioAction = InworldAI.InputActions["DumpAudio"];
