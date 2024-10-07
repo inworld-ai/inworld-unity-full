@@ -101,6 +101,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7149944113521181875, guid: 897c70b9b015fa24598240162321b053, type: 3}
+      propertyPath: m_AECResetCountDown
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7149944113521181875, guid: 897c70b9b015fa24598240162321b053, type: 3}
       propertyPath: m_PlayerVolumeThreshold
       value: 15
       objectReference: {fileID: 0}
@@ -169,6 +173,10 @@ PrefabInstance:
     - target: {fileID: 2635911920446476283, guid: 1b3c4559946e9be4c84d93ed7c99dd03, type: 3}
       propertyPath: m_Name
       value: InworldClient
+      objectReference: {fileID: 0}
+    - target: {fileID: 2966927859966215950, guid: 1b3c4559946e9be4c84d93ed7c99dd03, type: 3}
+      propertyPath: m_EnableGroupChat
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

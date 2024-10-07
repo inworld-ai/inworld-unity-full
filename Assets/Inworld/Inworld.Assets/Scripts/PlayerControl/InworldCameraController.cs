@@ -47,7 +47,16 @@ namespace Inworld.Sample
             m_SpeedInputAction = InworldAI.InputActions["Speed"];
             m_MoveInputAction = InworldAI.InputActions["Move"];
         }
-
+        void OnEnable()
+        {
+            m_TargetCameraState.SetFromTransform(transform);
+            m_InterpolatingCameraState.SetFromTransform(transform);
+        }
+        void OnDisable()
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
         void Update()
         {
             // Hide and lock cursor when right mouse button pressed
@@ -96,16 +105,7 @@ namespace Inworld.Sample
             m_InterpolatingCameraState.UpdateTransform(transform);
         }
 
-        void OnEnable()
-        {
-            m_TargetCameraState.SetFromTransform(transform);
-            m_InterpolatingCameraState.SetFromTransform(transform);
-        }
-        void OnDisable()
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
+
 
         Vector3 GetInputTranslationDirection()
         {

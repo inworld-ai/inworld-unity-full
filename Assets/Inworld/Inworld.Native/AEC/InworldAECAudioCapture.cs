@@ -27,7 +27,6 @@ namespace Inworld.AEC
         bool m_IsAudioDebugging = false;
         IntPtr m_AECHandle;
         protected List<short> m_OutputBuffer = new List<short>();
-        protected List<short> m_CurrentVADCheckBuffer = new List<short>();
         protected InputAction m_DumpAudioAction;
         protected float m_AECTimer = 5;
         [Range(1, 10)][SerializeField] float m_AECResetCountDown = 5f;
@@ -101,7 +100,7 @@ namespace Inworld.AEC
                 base.ProcessAudio();
                 return;
             }
-            m_CurrentVADCheckBuffer.Clear();
+            m_PlayerVolumeCheckBuffer.Clear();
             while (m_InputBuffer.Count > k_NumSamples && m_OutputBuffer.Count > k_NumSamples)
             {
                 FilterAudio(m_InputBuffer.Take(k_NumSamples).ToArray(), m_OutputBuffer.Take(k_NumSamples).ToArray());
@@ -172,7 +171,7 @@ namespace Inworld.AEC
 #else
                 VADInterop.VAD_Initialize($"{Application.streamingAssetsPath}/{k_TargetFileName}");
 #endif
-            m_InitSampleMode = m_SamplingMode;
+            m_PrevSampleMode = m_SamplingMode;
             m_DumpAudioAction = InworldAI.InputActions["DumpAudio"];
             base.Init();
         }
@@ -180,7 +179,7 @@ namespace Inworld.AEC
         {
             if (!EnableVAD)
                 return base.DetectPlayerSpeaking();
-            float[] processedWave = WavUtility.ConvertInt16ArrayToFloatArray(m_CurrentVADCheckBuffer.ToArray());
+            float[] processedWave = WavUtility.ConvertInt16ArrayToFloatArray(m_PlayerVolumeCheckBuffer.ToArray());
             float vadResult = VADInterop.VAD_Process(processedWave, processedWave.Length);
             return !IsMute && AutoDetectPlayerSpeaking && vadResult * 30 > m_PlayerVolumeThreshold;
         }
@@ -201,9 +200,7 @@ namespace Inworld.AEC
             short[] filterTmp = new short[k_NumSamples];
             if (outputData == null || outputData.Length == 0 || !EnableAEC)
             {
-                if (EnableAEC)
-                    InworldAI.LogWarning("AEC Disabled");
-                m_CurrentVADCheckBuffer.AddRange(inputData);
+                m_PlayerVolumeCheckBuffer.AddRange(inputData);
                 m_ProcessedWaveData.AddRange(inputData);
             }
             else
@@ -214,7 +211,7 @@ namespace Inworld.AEC
                 }
                 AECInterop.WebRtcAec3_BufferFarend(m_AECHandle, outputData);
                 AECInterop.WebRtcAec3_Process(m_AECHandle, inputData, filterTmp);
-                m_CurrentVADCheckBuffer.AddRange(filterTmp);
+                m_PlayerVolumeCheckBuffer.AddRange(filterTmp);
                 m_ProcessedWaveData.AddRange(filterTmp);
             }
             if (m_IsAudioDebugging)

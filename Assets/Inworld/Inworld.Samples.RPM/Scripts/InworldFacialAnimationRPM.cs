@@ -90,12 +90,12 @@ namespace Inworld.Sample.RPM
                 if (m_Skin.sharedMesh.GetBlendShapeName(i) == m_VisemeSil)
                 {
                     m_VisemeIndex = i;
-                    Debug.Log($"Find Viseme Index {m_VisemeIndex}");
+                    InworldAI.Log($"Find Viseme Index {m_VisemeIndex}");
                 }
                 if (m_Skin.sharedMesh.GetBlendShapeName(i) == m_BlinkBlendShape)
                 {
                     m_BlinkIndex = i;
-                    Debug.Log($"Find Blink Index {m_BlinkIndex}");
+                    InworldAI.Log($"Find Blink Index {m_BlinkIndex}");
                 }
             }
             return m_BlinkIndex + m_VisemeIndex != 0;
