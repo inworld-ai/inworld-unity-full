@@ -1,3 +1,13 @@
+# 3.6.0
+1. Supported sending packets during disconnecting.
+2. Released GroupChat mode by default.
+3. Added fallback voice recognition method.
+
+# 3.5.0
+1. Updated Unity Editor Panel. Supported for Studio API Key.
+2. Added experimental map/entities support.
+3. Bug Fixes.
+
 # 3.4.2
 1. Upgrade with Unity's Input system for better customized key mapping.
 2. Simplify Editor extension workflow.

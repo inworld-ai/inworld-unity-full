@@ -40,7 +40,10 @@ namespace Inworld.Editors
         /// Triggers when other general update logic has been finished.
         /// </summary>
         public void PostUpdate();
-
+        /// <summary>
+        /// Trigers when the window is closed.
+        /// </summary>
+        void OnClose();
     }
 }
 #endif

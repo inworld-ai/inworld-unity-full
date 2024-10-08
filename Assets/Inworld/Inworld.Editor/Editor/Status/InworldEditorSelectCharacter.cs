@@ -10,7 +10,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
-using Inworld.Sample;
+
 using Inworld.Entities;
 using System.Collections.Generic;
 using UnityEditor.SceneManagement;
@@ -21,6 +21,7 @@ namespace Inworld.Editors
     public class InworldEditorSelectCharacter: IEditorState
     {
         const string k_DefaultScene = "All Characters";
+        const string k_DataMissing = "All Characters are not supported in the 2D mode.\nPlease make sure you have selected at least one scene with characters";
         string m_CurrentSceneName = "All Characters";
         List<string> m_SceneNames;
         InworldWorkspaceData m_CurrentWorkspace;
@@ -56,7 +57,7 @@ namespace Inworld.Editors
         /// </summary>
         public void DrawContent()
         {
-            if (!InworldEditor.Is3D || m_CurrentWorkspace == null || !m_CurrentGameData)
+            if (m_CurrentWorkspace == null || !m_CurrentGameData)
                 return;
             _DrawSceneSelectionDropDown();
             _DrawCharacterSelection();
@@ -111,6 +112,10 @@ namespace Inworld.Editors
                 _CreatePrefabVariants();
             }
         }
+        public void OnClose()
+        {
+            
+        }
         void _InitDataSelection()
         {
             m_SceneNames = new List<string>
@@ -147,28 +152,34 @@ namespace Inworld.Editors
 
         void _DrawCharacterSelection()
         {
-            // 1. Get the character prefab for character in current scene. (Default or Specific)
-            m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition);
-            EditorGUILayout.BeginHorizontal();
-            if (m_CurrentSceneName == k_DefaultScene)
-                _ListAllCharacters();
-            else
-                _ListCharactersInScene(m_CurrentSceneName);
+            EditorGUILayout.LabelField("Choose GameMode:", InworldEditor.Instance.TitleStyle);
+            GUILayout.BeginHorizontal();
+            InworldEditor.Is3D = EditorGUILayout.Toggle("3D Game", InworldEditor.Is3D);
+            InworldEditor.Is3D = !EditorGUILayout.Toggle("2D Game", !InworldEditor.Is3D);
+            GUILayout.EndHorizontal();
+            if (InworldEditor.Is3D)
+            {
+                // 1. Get the character prefab for character in current scene. (Default or Specific)
+                m_ScrollPosition = EditorGUILayout.BeginScrollView(m_ScrollPosition);
+                EditorGUILayout.BeginHorizontal();
+                if (m_CurrentSceneName == k_DefaultScene)
+                    _ListAllCharacters();
+                else
+                    _ListCharactersInScene(m_CurrentSceneName);
 
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndScrollView();
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndScrollView();
+            }
+            else
+            {
+                if (m_CurrentSceneName == k_DefaultScene)
+                    EditorGUILayout.LabelField(k_DataMissing, InworldEditor.Instance.TitleStyle);
+                else
+                    InworldController.Client.EnableGroupChat = false;
+            }
             if (GUILayout.Button("Add PlayerController to Scene", GUILayout.ExpandWidth(true)))
             {
-                Camera mainCamera = Camera.main;
-                if (mainCamera)
-                {
-                    if (EditorUtility.DisplayDialog("Note", "Adding player controller will delete current main camera. Continue?", "OK", "Cancel"))
-                    {
-                        Undo.DestroyObjectImmediate(mainCamera.gameObject);
-                    }
-                }
-                if (!Object.FindObjectOfType<PlayerController>())
-                    Object.Instantiate(InworldEditor.PlayerController);
+                InworldEditorUtil.AddPlayerController(InworldEditor.Is3D ? InworldEditor.PlayerController : InworldEditor.PlayerController2D);
             }
         }
         void _ListCharactersInScene(string currentSceneName)

@@ -67,6 +67,10 @@ namespace Inworld.Editors
         {
             
         }
+        public void OnClose()
+        {
+            
+        }
     }
 }
 #endif

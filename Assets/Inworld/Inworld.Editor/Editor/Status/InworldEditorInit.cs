@@ -99,6 +99,10 @@ namespace Inworld.Editors
         {
             
         }
+        public void OnClose()
+        {
+            
+        }
 
         void _ListWorkspace()
         {

@@ -5,6 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 #if UNITY_EDITOR
+using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -29,6 +30,10 @@ namespace Inworld.Editors
         void OnEnable()
         {
             InworldEditor.Instance.CurrentState.OnOpenWindow();
+        }
+        void OnDisable()
+        {
+            InworldEditor.Instance.CurrentState.OnClose();
         }
         void OnGUI()
         {

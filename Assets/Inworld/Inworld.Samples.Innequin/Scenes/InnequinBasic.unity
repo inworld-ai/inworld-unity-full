@@ -224,6 +224,14 @@ PrefabInstance:
       propertyPath: m_EnableGroupChat
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2395919966041133306, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_APIKey
+      value: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
+      objectReference: {fileID: 0}
+    - target: {fileID: 2395919966041133306, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_APISecret
+      value: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
+      objectReference: {fileID: 0}
     - target: {fileID: 3753617577465698405, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -565,7 +573,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ContinueButton: {fileID: 0}
-  m_Interruptable: 1
   m_AutoProceed: 1
   m_MaxItemCount: 100
   m_TextSpeedMultipler: 0.02
