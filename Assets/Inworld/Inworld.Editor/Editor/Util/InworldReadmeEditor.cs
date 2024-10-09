@@ -12,7 +12,7 @@ using UnityEditor;
 namespace Inworld.Editors
 {
     [CustomEditor(typeof(InworldReadme))][InitializeOnLoad]
-    public class InworldReadmeEditor : Editor 
+    public class InworldReadmeEditor : UnityEditor.Editor 
     {
         [SerializeField] GUIStyle m_LinkStyle;
         [SerializeField] GUIStyle m_TitleStyle;
