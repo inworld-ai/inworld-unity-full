@@ -149,11 +149,11 @@ namespace Inworld.Editors
         /// </summary>
         public static GameObject PlayerController => Instance.m_PlayerController;
         /// <summary>
-        /// Gets the current Player Controller prefab.
+        /// Gets the current Player Controller prefab for 2D integration.
         /// </summary>
         public static GameObject PlayerController2D => Instance.m_PlayerController2D;
         /// <summary>
-        /// Gets the current Player Controller prefab.
+        /// Gets the current Player Controller prefab for LLM.
         /// </summary>
         public static GameObject PlayerControllerLLM => Instance.m_PlayerControllerLLM;
         

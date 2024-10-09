@@ -2,6 +2,7 @@
 1. Supported sending packets during disconnecting.
 2. Released GroupChat mode by default.
 3. Added fallback voice recognition method.
+4. Added Inworld's llm runtime support.
 
 # 3.5.0
 1. Updated Unity Editor Panel. Supported for Studio API Key.
