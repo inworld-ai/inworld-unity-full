@@ -46,8 +46,6 @@ namespace Inworld.Sample
             if (SelectingMethod == CharSelectingMethod.Manual || SelectingMethod == CharSelectingMethod.KeyCode)
                 SelectingMethod = CharSelectingMethod.SightAngle;
             else if (SelectingMethod == CharSelectingMethod.SightAngle)
-                SelectingMethod = CharSelectingMethod.AutoChat;
-            else if (SelectingMethod == CharSelectingMethod.AutoChat)
                 SelectingMethod = CharSelectingMethod.KeyCode;
         }
 
