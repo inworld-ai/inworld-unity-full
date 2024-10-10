@@ -32,7 +32,7 @@ namespace Inworld.Sample.RPM
             string autoChat = m_AutoChat.bindings[0].path;
             autoChat = autoChat.Substring(autoChat.LastIndexOf("/", StringComparison.Ordinal) + 1).ToUpper();
             m_Instruction = $"Press <color=green>\"{switchSelection}\"</color> to switch character selection method.\n" +
-                            $"Press <color=green>\"{autoChat}\"</color> to toggle auto chat.\n.";
+                            $"Press <color=green>\"{autoChat}\"</color> to toggle auto chat.\n";
         }
         
         protected override void OnCharacterSelected(string newCharacter)
