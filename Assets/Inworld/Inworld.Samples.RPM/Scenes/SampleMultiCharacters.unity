@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -460,21 +459,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Title: {fileID: 1934973846}
   m_Content: {fileID: 1624441892}
-  m_SwitchSelectionMethodInputAction:
-    m_Name: Switch Selection Method Input
-    m_Type: 1
-    m_ExpectedControlType: Button
-    m_Id: 7ae33099-fe68-4d0f-9317-9bdaaaafbd86
+  m_SwitchSelectionMethod:
+    m_Name: Switch Selection Method
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 064f46ad-5503-403a-973f-05960a5a35e8
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings:
     - m_Name: 
-      m_Id: cbadae68-708e-48ba-8774-5ab69764a397
+      m_Id: 62fc9545-4a18-4e06-8000-30c2198f51e3
       m_Path: <Keyboard>/tab
       m_Interactions: 
       m_Processors: 
       m_Groups: 
-      m_Action: Switch Selection Method Input
+      m_Action: Switch Selection Method
+      m_Flags: 0
+    m_Flags: 0
+  m_AutoChat:
+    m_Name: Auto Chat
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 91bc4d11-72e3-477d-92c0-c59fb378b330
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 50d12efd-e779-4b77-b42f-17ade909fc9a
+      m_Path: <Keyboard>/capsLock
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Auto Chat
       m_Flags: 0
     m_Flags: 0
 --- !u!1 &1351384361
