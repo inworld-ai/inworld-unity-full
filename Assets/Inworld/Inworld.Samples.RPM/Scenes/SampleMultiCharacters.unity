@@ -493,6 +493,17 @@ MonoBehaviour:
       m_Action: Auto Chat
       m_Flags: 0
     m_Flags: 0
+--- !u!114 &1183694501 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1508805550564489285, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+  m_PrefabInstance: {fileID: 1654719496}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3241affa9c0462fa7193839038c32c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1351384361
 GameObject:
   m_ObjectHideFlags: 0
@@ -734,6 +745,10 @@ PrefabInstance:
       value: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
       objectReference: {fileID: 0}
     - target: {fileID: 1109287189565502095, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_AutoChat
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1109287189565502095, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_APISecret
       value: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
       objectReference: {fileID: 0}
@@ -803,7 +818,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7934926759504941807, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_SamplingMode
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7934926759504941807, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_PlayerVolumeThreshold
@@ -1237,13 +1252,29 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6329374199901625135, guid: 45210386c16e25040a80180d7008a479, type: 3}
+      propertyPath: m_CharacterEvents.onEndSpeaking.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6329374199901625135, guid: 45210386c16e25040a80180d7008a479, type: 3}
       propertyPath: m_CharacterEvents.onEndSpeaking.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1131924869}
+      objectReference: {fileID: 1183694501}
+    - target: {fileID: 6329374199901625135, guid: 45210386c16e25040a80180d7008a479, type: 3}
+      propertyPath: m_CharacterEvents.onEndSpeaking.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: NextTurn
+      objectReference: {fileID: 0}
+    - target: {fileID: 6329374199901625135, guid: 45210386c16e25040a80180d7008a479, type: 3}
+      propertyPath: m_CharacterEvents.onEndSpeaking.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Inworld.CharacterHandler, Inworld.AI
+      objectReference: {fileID: 0}
     - target: {fileID: 6329374199901625135, guid: 45210386c16e25040a80180d7008a479, type: 3}
       propertyPath: m_CharacterEvents.onEndSpeaking.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
-      objectReference: {fileID: 8996923506770352439}
+      objectReference: {fileID: 0}
+    - target: {fileID: 6329374199901625135, guid: 45210386c16e25040a80180d7008a479, type: 3}
+      propertyPath: m_CharacterEvents.onEndSpeaking.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1310,40 +1341,34 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9024378369211073086, guid: ddb9540567195fc4e8fce1c7b05b361f, type: 3}
+      propertyPath: m_CharacterEvents.onEndSpeaking.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9024378369211073086, guid: ddb9540567195fc4e8fce1c7b05b361f, type: 3}
       propertyPath: m_CharacterEvents.onEndSpeaking.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1131924869}
+      objectReference: {fileID: 1183694501}
+    - target: {fileID: 9024378369211073086, guid: ddb9540567195fc4e8fce1c7b05b361f, type: 3}
+      propertyPath: m_CharacterEvents.onEndSpeaking.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: NextTurn
+      objectReference: {fileID: 0}
+    - target: {fileID: 9024378369211073086, guid: ddb9540567195fc4e8fce1c7b05b361f, type: 3}
+      propertyPath: m_CharacterEvents.onEndSpeaking.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Inworld.CharacterHandler, Inworld.AI
+      objectReference: {fileID: 0}
     - target: {fileID: 9024378369211073086, guid: ddb9540567195fc4e8fce1c7b05b361f, type: 3}
       propertyPath: m_CharacterEvents.onEndSpeaking.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
-      objectReference: {fileID: 8996923505721057139}
+      objectReference: {fileID: 0}
+    - target: {fileID: 9024378369211073086, guid: ddb9540567195fc4e8fce1c7b05b361f, type: 3}
+      propertyPath: m_CharacterEvents.onEndSpeaking.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ddb9540567195fc4e8fce1c7b05b361f, type: 3}
---- !u!114 &8996923505721057139 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6329374199901625135, guid: 45210386c16e25040a80180d7008a479, type: 3}
-  m_PrefabInstance: {fileID: 3709626071462293800}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64744fd8922740478ac4edb57c452bfb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8996923506770352439 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9024378369211073086, guid: ddb9540567195fc4e8fce1c7b05b361f, type: 3}
-  m_PrefabInstance: {fileID: 6455311369820056614}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64744fd8922740478ac4edb57c452bfb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
