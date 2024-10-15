@@ -78,6 +78,7 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
+  m_ScrollDeltaPerTick: 6
 --- !u!1 &7802538726591345284
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,6 +535,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: ConfigCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 2927241712891837011, guid: 9841628818dcd5e41a9b397352631e4e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2927241712891837011, guid: 9841628818dcd5e41a9b397352631e4e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8347850658182716545}
+    - target: {fileID: 2927241712891837011, guid: 9841628818dcd5e41a9b397352631e4e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Close
+      objectReference: {fileID: 0}
+    - target: {fileID: 2927241712891837011, guid: 9841628818dcd5e41a9b397352631e4e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Inworld.Sample.PlayerCanvas, Inworld.AI
+      objectReference: {fileID: 0}
     - target: {fileID: 4817700856780111101, guid: 9841628818dcd5e41a9b397352631e4e, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -614,6 +631,50 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6873169161160180609, guid: 9841628818dcd5e41a9b397352631e4e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873169161160180609, guid: 9841628818dcd5e41a9b397352631e4e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8347850658182716545}
+    - target: {fileID: 6873169161160180609, guid: 9841628818dcd5e41a9b397352631e4e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Close
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873169161160180609, guid: 9841628818dcd5e41a9b397352631e4e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Inworld.Sample.PlayerCanvas, Inworld.AI
+      objectReference: {fileID: 0}
+    - target: {fileID: 8700355036730035427, guid: 9841628818dcd5e41a9b397352631e4e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8700355036730035427, guid: 9841628818dcd5e41a9b397352631e4e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8700355036730035427, guid: 9841628818dcd5e41a9b397352631e4e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 8347850658182716545}
+    - target: {fileID: 8700355036730035427, guid: 9841628818dcd5e41a9b397352631e4e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8700355036730035427, guid: 9841628818dcd5e41a9b397352631e4e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: Close
+      objectReference: {fileID: 0}
+    - target: {fileID: 8700355036730035427, guid: 9841628818dcd5e41a9b397352631e4e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Inworld.Sample.PlayerCanvas, Inworld.AI
+      objectReference: {fileID: 0}
+    - target: {fileID: 8700355036730035427, guid: 9841628818dcd5e41a9b397352631e4e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -637,6 +698,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4136739465161379550}
     m_Modifications:
+    - target: {fileID: 6324352257510048748, guid: f3accf5b99b74554aaf15144227a78e7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6324352257510048748, guid: f3accf5b99b74554aaf15144227a78e7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8019965327725698932}
+    - target: {fileID: 6324352257510048748, guid: f3accf5b99b74554aaf15144227a78e7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Close
+      objectReference: {fileID: 0}
+    - target: {fileID: 6324352257510048748, guid: f3accf5b99b74554aaf15144227a78e7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Inworld.Sample.PlayerCanvas, Inworld.AI
+      objectReference: {fileID: 0}
     - target: {fileID: 6744769533249455243, guid: f3accf5b99b74554aaf15144227a78e7, type: 3}
       propertyPath: m_Name
       value: ErrorCanvas
