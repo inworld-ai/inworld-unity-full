@@ -11,7 +11,7 @@ namespace Inworld.Editors
     {
         Init,
         SelectGameData,
-        SelectGameMode,
+        SelectLLMConfig,
         SelectCharacter,
         Error
     }
