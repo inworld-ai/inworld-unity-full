@@ -146,7 +146,7 @@ namespace Inworld.Editors
         void _SaveCurrentSettings()
         {
             InworldGameData gameData = _CreateGameDataAssets();
-            InworldController controller = Object.FindObjectOfType<InworldController>();
+            InworldController controller = Object.FindFirstObjectByType<InworldController>();
             if (!controller)
                 controller = PrefabUtility.InstantiatePrefab(InworldEditor.Instance.ControllerPrefab) as InworldController;
             if (!controller)
