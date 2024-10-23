@@ -55,6 +55,8 @@ namespace Inworld.Editors
             InworldAI.Capabilities.relations = EditorGUILayout.Toggle("Relations", InworldAI.Capabilities.relations);
             InworldAI.Capabilities.narratedActions = EditorGUILayout.Toggle("Narrated Actions", InworldAI.Capabilities.narratedActions);
             InworldAI.Capabilities.phonemeInfo = EditorGUILayout.Toggle("Lipsync", InworldAI.Capabilities.phonemeInfo);
+            InworldAI.Capabilities.multiAgent = EditorGUILayout.Toggle("Group Chat", InworldAI.Capabilities.multiAgent);
+            InworldAI.Capabilities.multiModalActionPlanning = EditorGUILayout.Toggle("Map Actions", InworldAI.Capabilities.multiModalActionPlanning);
             GUILayout.Space(20);
             InworldAI.IsDebugMode = EditorGUILayout.Toggle("Debug Mode", InworldAI.IsDebugMode);
             if (GUI.changed)
@@ -62,7 +64,6 @@ namespace Inworld.Editors
                 EditorUtility.SetDirty(InworldAI.Instance);
             }
         }
-
     }
 }
 #endif

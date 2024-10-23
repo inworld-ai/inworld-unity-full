@@ -6,6 +6,7 @@
  *************************************************************************************************/
 
 using Inworld.Entities;
+using Inworld.Sample;
 using System;
 using System.Globalization;
 using TMPro;
@@ -15,8 +16,9 @@ using UnityEngine.UI;
 
 namespace Inworld.Assets
 {
-    public class ConfigCanvas : MonoBehaviour
+    public class ConfigCanvas : PlayerCanvas
     {
+        [Space(10)][Header("References: ")]
         [SerializeField] Slider m_VolumeSlider;
         [SerializeField] TMP_Text m_VolumeValue;
         [SerializeField] TMP_InputField m_PlayerNameField;
@@ -31,7 +33,7 @@ namespace Inworld.Assets
         string m_CurrentPlayerName;
 
         Capabilities m_Capabilities;
-        void OnEnable()
+        protected override void OnCanvasOpen()
         {
             if (m_VolumeSlider)
                 m_VolumeSlider.value = InworldController.Audio.Volume * 100;
@@ -58,29 +60,16 @@ namespace Inworld.Assets
         {
             if (InworldController.Client.Status != InworldConnectionStatus.Connected)
                 return;
-            _SendPlayerChangeRequest();
+            _SendSessionUpdateRequest();
             _SendSceneChangeRequest();
-            _SendCapabilityChangeRequest();
         }
-
-        void _SendPlayerChangeRequest()
+        void _SendSessionUpdateRequest()
         {
-            if (m_CurrentPlayerName == m_PlayerNameField.text)
-                return;
-            InworldAI.User.Name = m_PlayerNameField.text;
-            InworldController.Client.SendSessionConfig();
-            m_CurrentPlayerName = InworldAI.User.Name;
-        }
-        void _SendSceneChangeRequest()
-        {
-            if (m_CurrentSceneName == m_SceneField.text)
-                return;
-            InworldController.Instance.StopAudio();
-            InworldController.Client.LoadScene(m_SceneField.text);
-            m_CurrentSceneName = m_SceneField.text;
-        }
-        void _SendCapabilityChangeRequest()
-        {
+            if (m_CurrentPlayerName != m_PlayerNameField.text)
+            {
+                InworldAI.User.Name = m_PlayerNameField.text;
+                m_CurrentPlayerName = InworldAI.User.Name;
+            }
             if (m_Emotion)
                 m_Capabilities.emotions = m_Emotion.isOn;
             if (m_Relation)
@@ -91,6 +80,15 @@ namespace Inworld.Assets
                 m_Capabilities.phonemeInfo = m_Lipsync.isOn;
             InworldAI.Capabilities = m_Capabilities;
             InworldController.Client.SendSessionConfig();
+        }
+
+        void _SendSceneChangeRequest()
+        {
+            if (m_CurrentSceneName == m_SceneField.text)
+                return;
+            InworldController.Instance.StopAudio();
+            InworldController.Client.LoadScene(m_SceneField.text);
+            m_CurrentSceneName = m_SceneField.text;
         }
     }
 }

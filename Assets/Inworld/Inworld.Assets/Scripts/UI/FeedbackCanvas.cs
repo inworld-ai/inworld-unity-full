@@ -6,6 +6,7 @@
  *************************************************************************************************/
 
 using Inworld.Entities;
+using Inworld.Sample;
 using System.Collections.Generic;
 
 using TMPro;
@@ -15,7 +16,7 @@ using UnityEngine.InputSystem;
 
 namespace Inworld.Assets
 {
-    public class FeedbackCanvas : MonoBehaviour
+    public class FeedbackCanvas : PlayerCanvas
     {
         [SerializeField] TMP_InputField m_InputField;
         [SerializeField] GameObject m_Result;
@@ -25,22 +26,22 @@ namespace Inworld.Assets
         
         Feedback m_Feedback = new Feedback();
 
-        void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             m_SubmitInputAction = InworldAI.InputActions["Submit"];
         }
 
-        void Update()
+        protected override void HandleInput()
         {
+            base.HandleInput();
             if (!m_InputField)
                 return;
-            if (m_SubmitInputAction != null && m_SubmitInputAction.WasReleasedThisFrame())
-            {
+            if (m_CanvasObj.activeSelf && m_SubmitInputAction != null && m_SubmitInputAction.WasReleasedThisFrame())
                 Submit();
-            }
         }
         
-        public void Open(string interactionID, string correlationID)
+        public void Init(string interactionID, string correlationID)
         {
             m_InteractionID = interactionID;
             m_CorrelationID = correlationID;

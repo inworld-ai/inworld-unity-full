@@ -200,17 +200,19 @@ namespace Inworld.Editors
         static void _AddDebugMacro()
         {
             BuildTargetGroup buildTargetGroup = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
-            string strSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
+            NamedBuildTarget namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(buildTargetGroup);
+            string strSymbols = PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget);
             if (!strSymbols.Contains("INWORLD_DEBUG"))
                 strSymbols = string.IsNullOrEmpty(strSymbols) ? "INWORLD_DEBUG" : strSymbols + ";INWORLD_DEBUG";
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, strSymbols);
+            PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, strSymbols);
         }
         static void _RemoveDebugMacro()
         {
             BuildTargetGroup buildTargetGroup = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
-            string strSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
+            NamedBuildTarget namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(buildTargetGroup);
+            string strSymbols = PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget);
             strSymbols = strSymbols.Replace(";INWORLD_DEBUG", "").Replace("INWORLD_DEBUG", "");
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, strSymbols);
+            PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, strSymbols);
         }
     }
 }
