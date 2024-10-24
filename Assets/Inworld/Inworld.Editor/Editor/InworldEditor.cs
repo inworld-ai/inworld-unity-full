@@ -40,12 +40,16 @@ namespace Inworld.Editors
         [SerializeField] string m_ThumbnailPath;
         [SerializeField] string m_AvatarPath;
         [SerializeField] string m_PrefabPath;
+        [SerializeField] string m_EntityPath;
+        [SerializeField] string m_TaskPath;
         [Header("URLs:")]
         [SerializeField] InworldServerConfig m_ServerConfig;
         [SerializeField] string m_WorkspaceURL;
         [SerializeField] string m_KeyURL;
         [SerializeField] string m_ScenesURL;
         [SerializeField] string m_CharactersURL;
+        [SerializeField] string m_EntitiesURL;
+        [SerializeField] string m_TasksURL;
 
         const string k_EntryV1Alpha = "v1alpha";
         const string k_EntryV1 = "studio/v1";
@@ -135,6 +139,14 @@ namespace Inworld.Editors
         /// Gets the location for generating and storing the prefabs for the Inworld character.
         /// </summary>
         public static string PrefabPath => Instance.m_PrefabPath;
+        /// <summary>
+        /// Gets the location for generating and storing the entities for Behavior Engine.
+        /// </summary>
+        public static string EntityPath => Instance.m_EntityPath;
+        /// <summary>
+        /// Gets the location for generating and storing the tasks for Behavior Engine.
+        /// </summary>
+        public static string TaskPath => Instance.m_TaskPath;
         public static string Entry => 
             Instance && !string.IsNullOrEmpty(Instance.m_StudioTokenForExchange) && 
             Instance.m_StudioTokenForExchange.Split(':').Length >= 2 
@@ -326,6 +338,16 @@ namespace Inworld.Editors
         /// </summary>
         /// <param name="wsFullName">the full name of the target workspace</param>
         public static string ListKeyURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/{Entry}/{wsFullName}/{Instance.m_KeyURL}";
+        /// <summary>
+        /// Gets the url for listing entities.
+        /// </summary>
+        /// <param name="wsFullName">the full name of the target workspace</param>
+        public static string ListEntitiesURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/{Entry}/{wsFullName}/{Instance.m_EntitiesURL}";
+        /// <summary>
+        /// Gets the url for listing tasks.
+        /// </summary>
+        /// <param name="wsFullName">the full name of the target workspace</param>
+        public static string ListTasksURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/{Entry}/{wsFullName}/{Instance.m_TasksURL}";
 
         /// <summary>
         /// Save all the current scriptable objects.

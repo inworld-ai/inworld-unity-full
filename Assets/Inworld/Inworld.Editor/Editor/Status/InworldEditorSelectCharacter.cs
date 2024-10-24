@@ -5,13 +5,14 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 #if UNITY_EDITOR
+using Inworld.BehaviorEngine;
 using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
-using Inworld.Entities;
+using Inworld.Data;
 using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
@@ -61,7 +62,7 @@ namespace Inworld.Editors
                 return;
             _DrawSceneSelectionDropDown();
             _DrawCharacterSelection();
-            
+            _DrawBehaviorEngineOptions();
         }
         /// <summary>
         /// Triggers when drawing the buttons at the bottom of the editor panel page.
@@ -148,6 +149,89 @@ namespace Inworld.Editors
             EditorGUILayout.LabelField("Choose Scenes:", InworldEditor.Instance.TitleStyle);
             InworldEditorUtil.DrawDropDown(m_CurrentSceneName, m_SceneNames, _SelectScenes);
             m_CurrentSceneName = m_SceneNames.Count == 1 ? m_SceneNames[0] : m_CurrentSceneName;
+        }
+
+        void _DrawBehaviorEngineOptions()
+        {
+            EditorGUILayout.LabelField("Behavior Engine:", InworldEditor.Instance.TitleStyle);
+            if (GUILayout.Button("Generate Entity and Task Objects", GUILayout.ExpandWidth(true)))
+            {
+                _CreateTasks();
+                _CreateEntities();
+            }
+        }
+
+        void _CreateTasks()
+        {
+            string taskDirectoryPath = Path.Combine(InworldEditorUtil.UserDataPath, "Resources", InworldEditor.TaskPath);
+            if (!Directory.Exists(taskDirectoryPath))
+            {
+                Directory.CreateDirectory(taskDirectoryPath);
+            }
+                
+            foreach (InworldTaskData inworldTaskData in m_CurrentWorkspace.tasks)
+            {
+                string newAssetPath = _GetTaskPath(inworldTaskData.ShortName);
+                Task task = AssetDatabase.LoadAssetAtPath<Task>(newAssetPath);
+                bool isLoaded = task != null;
+                if (!isLoaded)
+                    task = ScriptableObject.CreateInstance<Task>();
+
+                task.Initialize(inworldTaskData.name, new List<TaskParameter>(inworldTaskData.parameters));
+                
+                if(!isLoaded)
+                    AssetDatabase.CreateAsset(task, newAssetPath);
+            }
+                
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            
+            InworldAI.Log($"Generated Tasks at: {taskDirectoryPath}.");
+        }
+
+        void _CreateEntities()
+        {
+            string entityDirectoryPath = Path.Combine(InworldEditorUtil.UserDataPath,"Resources", InworldEditor.EntityPath);
+            if (!Directory.Exists(entityDirectoryPath))
+            {
+                Directory.CreateDirectory(entityDirectoryPath);
+            }
+                
+            foreach (InworldEntityData inworldEntityData in m_CurrentWorkspace.entities)
+            {
+                string newAssetPath = $"{InworldEditorUtil.UserDataPath}/Resources/{InworldEditor.EntityPath}/{inworldEntityData.displayName} Entity.asset";
+                Entity entity = AssetDatabase.LoadAssetAtPath<Entity>(newAssetPath);
+                bool isLoaded = entity != null;
+                if (!isLoaded)
+                    entity = ScriptableObject.CreateInstance<Entity>();
+
+                List<Task> tasks = new List<Task>();
+                foreach (TaskReference taskRef in inworldEntityData.customTasks)
+                {
+                    string taskPath = _GetTaskPath(taskRef.ShortName);
+                    Task task = AssetDatabase.LoadAssetAtPath<Task>(taskPath);
+                    
+                    if(task != null)
+                        tasks.Add(task);
+                    else
+                        InworldAI.LogError($"Could not find referenced task: {taskRef.task}");
+                }
+                
+                entity.Initialize(inworldEntityData.name, inworldEntityData.displayName, inworldEntityData.description, tasks);
+                
+                if(!isLoaded)
+                    AssetDatabase.CreateAsset(entity, newAssetPath);
+            }
+                
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            
+            InworldAI.Log($"Generated Entities at: {entityDirectoryPath}.");
+        }
+
+        string _GetTaskPath(string taskShortName)
+        {
+            return $"{InworldEditorUtil.UserDataPath}/Resources/{InworldEditor.TaskPath}/{taskShortName.ToLower()}Task.asset";
         }
 
         void _DrawCharacterSelection()

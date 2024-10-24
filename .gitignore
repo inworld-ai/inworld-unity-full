@@ -63,3 +63,7 @@ sysinfo.txt
 crashlytics-build.properties
 
 **/.DS_Store
+
+# User Data
+**/UserData/
+UserData.meta

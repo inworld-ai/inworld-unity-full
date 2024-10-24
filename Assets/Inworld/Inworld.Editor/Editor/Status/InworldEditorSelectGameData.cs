@@ -13,7 +13,7 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using UnityEditor.SceneManagement;
-using Inworld.Entities;
+using Inworld.Data;
 using Newtonsoft.Json;
 
 namespace Inworld.Editors
@@ -316,6 +316,48 @@ namespace Inworld.Editors
                 return;
             InworldEditorUtil.SendWebGetRequest(InworldEditor.ListCharactersURL(wsFullName), true, _ListCharactersCompleted);
         }
+        void _ListEntitiesTasks()
+        {
+            string wsFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspaceName);
+            if (string.IsNullOrEmpty(wsFullName))
+                return;
+            InworldEditorUtil.SendWebGetRequest(InworldEditor.ListEntitiesURL(wsFullName), true, _ListEntitiesCompleted);
+            InworldEditorUtil.SendWebGetRequest(InworldEditor.ListTasksURL(wsFullName), true, _ListTasksCompleted);
+        }
+        void _ListEntitiesCompleted(AsyncOperation obj) 
+        {
+            UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
+            if (uwr.result != UnityWebRequest.Result.Success)
+            {
+                InworldEditor.Instance.Error = $"List Entities Failed: {InworldEditor.GetError(uwr.error)}";
+                EditorUtility.ClearProgressBar();
+                return;
+            }            
+
+            ListEntityResponse resp = JsonConvert.DeserializeObject<ListEntityResponse>(uwr.downloadHandler.text);
+            InworldWorkspaceData ws = CurrentWorkspace;
+            if (ws.entities == null)
+                ws.entities = new List<InworldEntityData>();
+            ws.entities.Clear();
+            ws.entities.AddRange(resp.entities); 
+        }
+        void _ListTasksCompleted(AsyncOperation obj) 
+        {
+            UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
+            if (uwr.result != UnityWebRequest.Result.Success)
+            {
+                InworldEditor.Instance.Error = $"List Tasks Failed: {InworldEditor.GetError(uwr.error)}";
+                EditorUtility.ClearProgressBar();
+                return;
+            }            
+            
+            ListTaskResponse resp = JsonConvert.DeserializeObject<ListTaskResponse>(uwr.downloadHandler.text);
+            InworldWorkspaceData ws = CurrentWorkspace;
+            if (ws.tasks == null)
+                ws.tasks = new List<InworldTaskData>();
+            ws.tasks.Clear();
+            ws.tasks.AddRange(resp.customTasks); 
+        }
         void _ListCharactersCompleted(AsyncOperation obj)
         {
             UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
@@ -381,6 +423,7 @@ namespace Inworld.Editors
             _ListCharacters();
             _ListScenes();
             _ListKeys();
+            _ListEntitiesTasks();
         }
         void _SelectKeys(string keyDisplayName)
         {

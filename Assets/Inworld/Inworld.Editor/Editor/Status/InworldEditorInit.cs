@@ -5,7 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 #if UNITY_EDITOR
-using Inworld.Entities;
+using Inworld.Data;
 using Newtonsoft.Json;
 using System.IO;
 using UnityEditor;

@@ -5,7 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
-using Inworld.Entities;
+using Inworld.Data;
 using Inworld.Inworld.Native.VAD;
 using System;
 using System.Collections.Generic;

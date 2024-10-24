@@ -22,14 +22,18 @@ MonoBehaviour:
   m_PlayerController: {fileID: 7802538726591345284, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
   m_PlayerController2D: {fileID: 7216582453331693882, guid: 41177cdca0cf65d4b88318d5107c053c, type: 3}
   m_PlayerControllerLLM: {fileID: 3952073688223741148, guid: 4d0ceebff7c50a74e9999a4c34d89e47, type: 3}
-  m_CurrentStatus: 0
+  m_CurrentStatus: 3
   m_UserDataPath: UserData
   m_GameDataPath: GameData
   m_ThumbnailPath: Thumbnail
   m_AvatarPath: Avatar
   m_PrefabPath: Prefabs
-  m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_EntityPath: Entities
+  m_TaskPath: Tasks
+  m_ServerConfig: {fileID: 11400000, guid: aa7112138d40e14408f96cd96a17bf6c, type: 2}
   m_WorkspaceURL: workspaces
   m_KeyURL: apikeys
   m_ScenesURL: scenes
   m_CharactersURL: characters
+  m_EntitiesURL: entities
+  m_TasksURL: custom-tasks
