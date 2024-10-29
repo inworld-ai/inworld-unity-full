@@ -5,6 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
+using Inworld.Data;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEditor;
@@ -37,15 +38,29 @@ namespace Inworld.BehaviorEngine
         [SerializeField] protected string m_Description;
         [SerializeField] protected List<Task> m_Tasks;
 
-        [SerializeField] ReadOnlyCollection<Task> m_ReadOnlyTasks;
+        public bool Compare(InworldEntityData inworldEntityData)
+        {
+            if (inworldEntityData.name != m_Id ||
+                inworldEntityData.displayName != m_DisplayName ||
+                inworldEntityData.description != m_Description ||
+                inworldEntityData.customTasks == null || m_Tasks == null ||
+                inworldEntityData.customTasks.Count != m_Tasks.Count)
+                return false;
 
+            for (int i = 0; i < m_Tasks.Count; i++)
+            {
+                if (m_Tasks[i].name != inworldEntityData.customTasks[i].task)
+                    return false;
+            }
+            return true;
+        }
+        
         public void Initialize(string id, string displayName, string description, List<Task> tasks)
         {
             m_Id = id;
             m_DisplayName = displayName;
             m_Description = description;
             m_Tasks = tasks;
-            m_ReadOnlyTasks = new ReadOnlyCollection<Task>(m_Tasks);
         }
     }
 }

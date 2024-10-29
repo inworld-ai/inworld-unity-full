@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -80,6 +81,22 @@ namespace Inworld.BehaviorEngine
         protected TaskHandler m_TaskHandler;
 
         [SerializeField] ReadOnlyCollection<TaskParameter> m_ReadOnlyTaskParameters;
+
+        public bool Compare(InworldTaskData inworldTaskData)
+        {
+            if (inworldTaskData.name != m_TaskName ||
+                inworldTaskData.parameters == null ||
+                m_TaskParameters == null ||
+                inworldTaskData.parameters.Count != m_TaskParameters.Count)
+                return false;
+
+            for (int i = 0; i < m_TaskParameters.Count; i++)
+            {
+                if (!m_TaskParameters[i].Equals(inworldTaskData.parameters[i]))
+                    return false;
+            }
+            return true;
+        }
         
         public void Initialize(string taskName, List<TaskParameter> parameters)
         {
@@ -116,7 +133,5 @@ namespace Inworld.BehaviorEngine
                 m_TaskHandler.Initialize(this);
             }
         }
-        
-        
     }
 }

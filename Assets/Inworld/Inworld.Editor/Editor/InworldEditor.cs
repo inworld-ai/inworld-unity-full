@@ -339,15 +339,15 @@ namespace Inworld.Editors
         /// <param name="wsFullName">the full name of the target workspace</param>
         public static string ListKeyURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/{Entry}/{wsFullName}/{Instance.m_KeyURL}";
         /// <summary>
-        /// Gets the url for listing entities.
+        /// Gets the url for fetching entities.
         /// </summary>
         /// <param name="wsFullName">the full name of the target workspace</param>
-        public static string ListEntitiesURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/{Entry}/{wsFullName}/{Instance.m_EntitiesURL}";
+        public static string GetEntitiesURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/{Entry}/{wsFullName}/{Instance.m_EntitiesURL}";
         /// <summary>
-        /// Gets the url for listing tasks.
+        /// Gets the url for fetching tasks.
         /// </summary>
         /// <param name="wsFullName">the full name of the target workspace</param>
-        public static string ListTasksURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/{Entry}/{wsFullName}/{Instance.m_TasksURL}";
+        public static string GetTasksURL(string wsFullName) => $"https://{Instance.m_ServerConfig.web}/{Entry}/{wsFullName}/{Instance.m_TasksURL}";
 
         /// <summary>
         /// Save all the current scriptable objects.

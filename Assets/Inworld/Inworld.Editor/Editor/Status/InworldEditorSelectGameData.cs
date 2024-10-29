@@ -316,20 +316,20 @@ namespace Inworld.Editors
                 return;
             InworldEditorUtil.SendWebGetRequest(InworldEditor.ListCharactersURL(wsFullName), true, _ListCharactersCompleted);
         }
-        void _ListEntitiesTasks()
+        void _DownloadEntitiesTasks()
         {
             string wsFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspaceName);
             if (string.IsNullOrEmpty(wsFullName))
                 return;
-            InworldEditorUtil.SendWebGetRequest(InworldEditor.ListEntitiesURL(wsFullName), true, _ListEntitiesCompleted);
-            InworldEditorUtil.SendWebGetRequest(InworldEditor.ListTasksURL(wsFullName), true, _ListTasksCompleted);
+            InworldEditorUtil.SendWebGetRequest(InworldEditor.GetEntitiesURL(wsFullName), true, _DownloadEntitiesCompleted);
+            InworldEditorUtil.SendWebGetRequest(InworldEditor.GetTasksURL(wsFullName), true, _DownloadTasksCompleted);
         }
-        void _ListEntitiesCompleted(AsyncOperation obj) 
+        void _DownloadEntitiesCompleted(AsyncOperation obj) 
         {
             UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
             if (uwr.result != UnityWebRequest.Result.Success)
             {
-                InworldEditor.Instance.Error = $"List Entities Failed: {InworldEditor.GetError(uwr.error)}";
+                InworldEditor.Instance.Error = $"Get Entities Failed: {InworldEditor.GetError(uwr.error)}";
                 EditorUtility.ClearProgressBar();
                 return;
             }            
@@ -341,12 +341,12 @@ namespace Inworld.Editors
             ws.entities.Clear();
             ws.entities.AddRange(resp.entities); 
         }
-        void _ListTasksCompleted(AsyncOperation obj) 
+        void _DownloadTasksCompleted(AsyncOperation obj) 
         {
             UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
             if (uwr.result != UnityWebRequest.Result.Success)
             {
-                InworldEditor.Instance.Error = $"List Tasks Failed: {InworldEditor.GetError(uwr.error)}";
+                InworldEditor.Instance.Error = $"Get Tasks Failed: {InworldEditor.GetError(uwr.error)}";
                 EditorUtility.ClearProgressBar();
                 return;
             }            
@@ -423,7 +423,7 @@ namespace Inworld.Editors
             _ListCharacters();
             _ListScenes();
             _ListKeys();
-            _ListEntitiesTasks();
+            _DownloadEntitiesTasks();
         }
         void _SelectKeys(string keyDisplayName)
         {
