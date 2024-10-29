@@ -5,6 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
+using Inworld.Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -18,13 +19,37 @@ namespace Inworld.BehaviorEngine
         public event CompleteTask onTaskComplete;
         public event FailTask onTaskFail;
 
-        public abstract bool Validate(InworldCharacter inworldCharacter, Dictionary<string, string> parameters, out string message);
-        public abstract IEnumerator Execute(InworldCharacter inworldCharacter, Dictionary<string, string> parameters);
+        protected Task m_Task;
 
-        public void ClearEventListeners()
+        protected Dictionary<string, EntityItem> m_EntityItems = new Dictionary<string, EntityItem>();
+
+        public void Initialize(Task task)
         {
-            onTaskComplete = null;
-            onTaskFail = null;
+            m_Task = task;
         }
-    }
+        
+        public virtual bool Validate(InworldCharacter inworldCharacter, Dictionary<string, string> parameters, out string message)
+        {
+            foreach (TaskParameter taskParameter in m_Task.TaskParameters)
+            {
+                if (parameters.TryGetValue(taskParameter.name, out string itemID) && EntityManager.Instance.FindItem(itemID, out EntityItem entityItem))
+                    m_EntityItems.Add(itemID, entityItem);
+                else
+                {
+                    message = $"Could not find the Entity Item: {itemID} for the given task: {m_Task.TaskShortName}";
+                    return false;
+                }
+            }
+            message = "";
+            return true;
+        }
+        
+        public abstract IEnumerator Execute(InworldCharacter inworldCharacter);
+
+            public void ClearEventListeners()
+            {
+                onTaskComplete = null;
+                onTaskFail = null;
+            }
+        }
 }

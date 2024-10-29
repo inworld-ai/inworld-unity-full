@@ -81,7 +81,7 @@ namespace Inworld.BehaviorEngine
             m_CurrentTaskParameters = parameters;
             
             onTaskStart?.Invoke(m_InworldCharacter.BrainName, task.TaskName, parameters);
-            StartCoroutine(task.Execute(m_InworldCharacter, parameters, CompleteCurrentTask, FailCurrentTask));
+            StartCoroutine(task.Execute(m_InworldCharacter, CompleteCurrentTask, FailCurrentTask));
             InworldAI.Log($"{m_InworldCharacter.Name} started task: {task.name}");
         }
         

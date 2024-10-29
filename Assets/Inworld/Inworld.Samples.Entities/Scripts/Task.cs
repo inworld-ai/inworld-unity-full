@@ -96,7 +96,7 @@ namespace Inworld.BehaviorEngine
             return m_TaskHandler.Validate(inworldCharacter, parameters, out message);
         }
 
-        public IEnumerator Execute(InworldCharacter inworldCharacter, Dictionary<string, string> parameters, TaskHandler.CompleteTask completeCallback, TaskHandler.FailTask failCallback)
+        public IEnumerator Execute(InworldCharacter inworldCharacter, TaskHandler.CompleteTask completeCallback, TaskHandler.FailTask failCallback)
         {
             if(m_TaskHandler == null)
                 InworldAI.LogException("This task is missing a Task Handler.");
@@ -105,13 +105,16 @@ namespace Inworld.BehaviorEngine
             m_TaskHandler.onTaskComplete += completeCallback;
             m_TaskHandler.onTaskFail += failCallback;
             
-            return m_TaskHandler.Execute(inworldCharacter, parameters);
+            return m_TaskHandler.Execute(inworldCharacter);
         }
         
         void OnEnable()
         {
-            if(m_TaskHandlerMonoScript)
+            if (m_TaskHandlerMonoScript)
+            {
                 m_TaskHandler = Activator.CreateInstance(m_TaskHandlerMonoScript.GetClass()) as TaskHandler;
+                m_TaskHandler.Initialize(this);
+            }
         }
         
         
