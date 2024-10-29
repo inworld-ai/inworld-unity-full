@@ -173,15 +173,28 @@ MonoBehaviour:
     agentId: 
     brainName: 
     givenName: 
-    description: 
+    description:
+      givenName: 
+      description: 
+      pronoun: 0
+      nickNames: []
+      motivation: 
+      personalityAdjectives: []
+      lifeStage: 0
+      hobbyOrInterests: []
+      characterRole: 
+      flaws: 
     characterAssets:
       rpmModelUri: 
-      rpmImageUriPortrait: 
-      rpmImageUriPosture: 
+      rpmImageUri: 
       avatarImg: 
       avatarImgOriginal: 
+      rpmAvatar:
+        rpmModelUri: 
+        rpmImageUri: 
       thumbnailProgress: 0
       avatarProgress: 0
+    language: 
     thumbnail: {fileID: 0}
   m_CharacterEvents:
     onCharacterSelected:
@@ -235,7 +248,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ContinueButton: {fileID: 3768078368984134795}
-  m_Interruptable: 1
   m_AutoProceed: 1
   m_MaxItemCount: 100
   m_TextSpeedMultipler: 0.02
@@ -266,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HeadTransform: {fileID: 0}
+  m_HeadTransform: {fileID: 9011823262032557823}
   m_PlayerTransform: {fileID: 0}
   m_SightAngle: 122
   m_SightDistance: 10
@@ -568,6 +580,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6447768932718320031}
     - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+      propertyPath: m_Canvas
+      value: 
+      objectReference: {fileID: 5034623706060455901}
+    - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
       propertyPath: m_Character
       value: 
       objectReference: {fileID: 4560116734280050820}
@@ -694,5 +710,10 @@ PrefabInstance:
 --- !u!4 &1179303230527543875 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -6769691430286951708, guid: fa144c1a81e68f84fa337f35027d9ee0, type: 3}
+  m_PrefabInstance: {fileID: 3625542323538878631}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &9011823262032557823 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -3512545981279201704, guid: fa144c1a81e68f84fa337f35027d9ee0, type: 3}
   m_PrefabInstance: {fileID: 3625542323538878631}
   m_PrefabAsset: {fileID: 0}
