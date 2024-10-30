@@ -90,11 +90,10 @@ namespace Inworld
             await _AddUnityPackage(k_DependencyPackage, _GetTgzFileName());
             if (!Directory.Exists(k_InworldAssetsPath) && File.Exists(k_ExtraPackagePath))
                 AssetDatabase.ImportPackage(k_ExtraPackagePath, false);
-            if (!File.Exists("Assets/TextMesh Pro/Resources/TMP Settings.asset"))
-            {
-                string packageFullPath = TMP_EditorUtility.packageFullPath;
-                AssetDatabase.ImportPackage(packageFullPath + "/Package Resources/TMP Essential Resources.unitypackage", false);
-            }
+            if (System.Type.GetType("TMPro.TextMeshPro, Unity.TextMeshPro") != null)
+                return;
+            string packageFullPath = TMP_EditorUtility.packageFullPath;
+            AssetDatabase.ImportPackage(packageFullPath + "/Package Resources/TMP Essential Resources.unitypackage", false);
         }
     }
 }
