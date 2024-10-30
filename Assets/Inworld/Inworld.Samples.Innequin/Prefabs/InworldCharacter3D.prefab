@@ -1211,7 +1211,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ContinueButton: {fileID: 6103775307306153032}
-  m_Interruptable: 1
   m_AutoProceed: 1
   m_MaxItemCount: 100
   m_TextSpeedMultipler: 0.02
@@ -1262,7 +1261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HeadTransform: {fileID: 0}
+  m_HeadTransform: {fileID: 2612087345680360057}
   m_PlayerTransform: {fileID: 0}
   m_SightAngle: 150
   m_SightDistance: 10
@@ -2846,6 +2845,10 @@ PrefabInstance:
       propertyPath: m_Dots
       value: 
       objectReference: {fileID: 4258198779179739924}
+    - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+      propertyPath: m_Canvas
+      value: 
+      objectReference: {fileID: 41986333818989496}
     - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
       propertyPath: m_Character
       value: 
