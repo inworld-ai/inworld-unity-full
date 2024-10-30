@@ -211,7 +211,7 @@ namespace Inworld.Editors
                 if (!entity)
                     return false;
 
-                if (entity.Compare(inworldEntityData))
+                if (!entity.Compare(inworldEntityData))
                     return false;
             }
             

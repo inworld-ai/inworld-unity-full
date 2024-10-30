@@ -80,8 +80,6 @@ namespace Inworld.BehaviorEngine
 
         protected TaskHandler m_TaskHandler;
 
-        [SerializeField] ReadOnlyCollection<TaskParameter> m_ReadOnlyTaskParameters;
-
         public bool Compare(InworldTaskData inworldTaskData)
         {
             if (inworldTaskData.name != m_TaskName ||
@@ -102,7 +100,6 @@ namespace Inworld.BehaviorEngine
         {
             m_TaskName = taskName;
             m_TaskParameters = parameters;
-            m_ReadOnlyTaskParameters = new ReadOnlyCollection<TaskParameter>(m_TaskParameters);
         }
         
         public bool Validate(InworldCharacter inworldCharacter, Dictionary<string, string> parameters, out string message)

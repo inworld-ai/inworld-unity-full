@@ -49,7 +49,7 @@ namespace Inworld.BehaviorEngine
 
             for (int i = 0; i < m_Tasks.Count; i++)
             {
-                if (m_Tasks[i].name != inworldEntityData.customTasks[i].task)
+                if (m_Tasks[i].TaskName != inworldEntityData.customTasks[i].task)
                     return false;
             }
             return true;
