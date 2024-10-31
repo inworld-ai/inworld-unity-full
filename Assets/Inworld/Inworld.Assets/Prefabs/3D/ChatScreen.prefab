@@ -63,11 +63,14 @@ MonoBehaviour:
     relation: 1
     trigger: 0
     longBubbleMode: 0
+    task: 0
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
   m_Relation: {fileID: 6438212808533980119}
   m_EmoIcon: {fileID: 4048534747072681779}
+  m_Dots: {fileID: 0}
   m_Character: {fileID: 0}
+  m_Canvas: {fileID: 0}
 --- !u!1 &2048185186962985660
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,8 +371,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0d978873da4cbb246aced65b3450ebcf, type: 2}
-  m_sharedMaterial: {fileID: -4501209170994636121, guid: 0d978873da4cbb246aced65b3450ebcf, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: f65701f62f15fa6408500d4805250802, type: 2}
+  m_sharedMaterial: {fileID: 3138125702208915100, guid: f65701f62f15fa6408500d4805250802, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
