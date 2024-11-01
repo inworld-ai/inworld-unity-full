@@ -17,7 +17,7 @@ using UnityEngine.SceneManagement;
 
 namespace Inworld.Editors
 {
-    public class InworldEditorSelectGameMode : IEditorState
+    public class InworldEditorSelectLLM : IEditorState
     {
         ModelName m_ModelName;
         TextGenerationConfig m_TextGenerationConfig;

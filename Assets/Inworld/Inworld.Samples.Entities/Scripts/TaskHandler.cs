@@ -8,11 +8,11 @@
 using Inworld.Data;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+using UnityEngine;
 
 namespace Inworld.BehaviorEngine
 {
-    public abstract class TaskHandler : MonoScript
+    public abstract class TaskHandler : ScriptableObject
     {
         public delegate void CompleteTask();
         public delegate void FailTask(string reason);

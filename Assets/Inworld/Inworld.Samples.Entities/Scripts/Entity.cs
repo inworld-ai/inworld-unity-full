@@ -8,22 +8,10 @@
 using Inworld.Data;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using UnityEditor;
 using UnityEngine;
 
 namespace Inworld.BehaviorEngine
 {
-    [CustomEditor(typeof(Entity))]
-    public class EntityCustomInspector : Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            EditorGUI.BeginDisabledGroup(true);
-            base.OnInspectorGUI();
-            EditorGUI.EndDisabledGroup();
-        }
-    }
-    
     public class Entity : ScriptableObject
     {
         public string ID => m_Id;

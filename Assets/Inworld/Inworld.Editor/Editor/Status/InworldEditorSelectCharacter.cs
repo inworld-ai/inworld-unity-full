@@ -5,7 +5,6 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 #if UNITY_EDITOR
-using Inworld.BehaviorEngine;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -13,7 +12,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 using Inworld.Data;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
@@ -29,8 +27,6 @@ namespace Inworld.Editors
         InworldWorkspaceData m_CurrentWorkspace;
         InworldGameData m_CurrentGameData;
         bool m_StartDownload = false;
-        bool m_AreEntitiesTasksUpToDate;
-        int m_EntitiesDownloadProgress = 0;
         Vector2 m_ScrollPosition;
 
         InworldSceneData CurrentScene => m_CurrentWorkspace?.scenes.FirstOrDefault(scene => scene.displayName == m_CurrentSceneName);
@@ -65,7 +61,6 @@ namespace Inworld.Editors
                 return;
             _DrawSceneSelectionDropDown();
             _DrawCharacterSelection();
-            _DrawBehaviorEngineOptions();
         }
         /// <summary>
         /// Triggers when drawing the buttons at the bottom of the editor panel page.
@@ -81,7 +76,6 @@ namespace Inworld.Editors
             if (GUILayout.Button("Refresh", InworldEditor.Instance.BtnStyle))
             {
                 _DownloadRelatedAssets();
-                _DownloadEntitiesTasks();
             }
             GUILayout.EndHorizontal();
         }
@@ -133,8 +127,6 @@ namespace Inworld.Editors
             if (InworldAI.User && InworldAI.User.Workspace != null && InworldAI.User.Workspace.Count != 0)
                 m_CurrentWorkspace = InworldAI.User.Workspace.FirstOrDefault(ws => ws.name == m_CurrentGameData.workspaceFullName);
             m_CurrentWorkspace?.scenes.ForEach(s => m_SceneNames.Add(s.displayName));
-            
-            m_AreEntitiesTasksUpToDate = _CheckEntitiesTasksUpToDate();
         }
         void _CreatePrefabVariants()
         {
@@ -155,142 +147,6 @@ namespace Inworld.Editors
             EditorGUILayout.LabelField("Choose Scenes:", InworldEditor.Instance.TitleStyle);
             InworldEditorUtil.DrawDropDown(m_CurrentSceneName, m_SceneNames, _SelectScenes);
             m_CurrentSceneName = m_SceneNames.Count == 1 ? m_SceneNames[0] : m_CurrentSceneName;
-        }
-
-        void _DrawBehaviorEngineOptions()
-        {
-            if (m_CurrentWorkspace == null)
-                return;
-            
-            if(m_AreEntitiesTasksUpToDate)
-                EditorGUILayout.LabelField("Behavior Engine:", InworldEditor.Instance.TitleStyle);
-            else
-            {
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("Behavior Engine:", InworldEditor.Instance.TitleStyle);
-                EditorGUILayout.LabelField("Outdated", new GUIStyle(InworldEditor.Instance.TitleStyle)
-                {
-                    normal = new GUIStyleState()
-                    {
-                        textColor = Color.red
-                    },
-                    alignment = TextAnchor.MiddleRight
-                });
-                EditorGUILayout.EndHorizontal();
-            }
-
-            if (GUILayout.Button("Generate Entity and Task Objects", GUILayout.ExpandWidth(true)))
-            {
-                _CreateTasks();
-                _CreateEntities();
-            }
-        }
-
-        bool _CheckEntitiesTasksUpToDate()
-        {
-            string taskDirectoryPath = Path.Combine(InworldEditorUtil.UserDataPath, "Resources", InworldEditor.TaskPath);
-            string entityDirectoryPath = Path.Combine(InworldEditorUtil.UserDataPath, "Resources", InworldEditor.EntityPath);
-            if (!Directory.Exists(taskDirectoryPath) || !Directory.Exists(entityDirectoryPath))
-                return false;
-                
-            foreach (InworldTaskData inworldTaskData in m_CurrentWorkspace.tasks)
-            {
-                string newAssetPath = _GetTaskPath(inworldTaskData.ShortName);
-                Task task = AssetDatabase.LoadAssetAtPath<Task>(newAssetPath);
-                if (!task)
-                    return false;
-
-                if (!task.Compare(inworldTaskData))
-                    return false;
-            }
-
-            foreach (InworldEntityData inworldEntityData in m_CurrentWorkspace.entities)
-            {
-                string newAssetPath = $"{InworldEditorUtil.UserDataPath}/Resources/{InworldEditor.EntityPath}/{inworldEntityData.displayName} Entity.asset";
-                Entity entity = AssetDatabase.LoadAssetAtPath<Entity>(newAssetPath);
-                if (!entity)
-                    return false;
-
-                if (!entity.Compare(inworldEntityData))
-                    return false;
-            }
-            
-            return true;
-        }
-
-        void _CreateTasks()
-        {
-            string taskDirectoryPath = Path.Combine(InworldEditorUtil.UserDataPath, "Resources", InworldEditor.TaskPath);
-            if (!Directory.Exists(taskDirectoryPath))
-            {
-                Directory.CreateDirectory(taskDirectoryPath);
-            }
-                
-            foreach (InworldTaskData inworldTaskData in m_CurrentWorkspace.tasks)
-            {
-                string newAssetPath = _GetTaskPath(inworldTaskData.ShortName);
-                Task task = AssetDatabase.LoadAssetAtPath<Task>(newAssetPath);
-                bool isLoaded = task != null;
-                if (!isLoaded)
-                    task = ScriptableObject.CreateInstance<Task>();
-
-                task.Initialize(inworldTaskData.name, new List<TaskParameter>(inworldTaskData.parameters));
-                
-                if(!isLoaded)
-                    AssetDatabase.CreateAsset(task, newAssetPath);
-            }
-                
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            
-            InworldAI.Log($"Generated Tasks at: {taskDirectoryPath}.");
-        }
-
-        void _CreateEntities()
-        {
-            string entityDirectoryPath = Path.Combine(InworldEditorUtil.UserDataPath,"Resources", InworldEditor.EntityPath);
-            if (!Directory.Exists(entityDirectoryPath))
-            {
-                Directory.CreateDirectory(entityDirectoryPath);
-            }
-                
-            foreach (InworldEntityData inworldEntityData in m_CurrentWorkspace.entities)
-            {
-                string newAssetPath = $"{InworldEditorUtil.UserDataPath}/Resources/{InworldEditor.EntityPath}/{inworldEntityData.displayName} Entity.asset";
-                Entity entity = AssetDatabase.LoadAssetAtPath<Entity>(newAssetPath);
-                bool isLoaded = entity != null;
-                if (!isLoaded)
-                    entity = ScriptableObject.CreateInstance<Entity>();
-
-                List<Task> tasks = new List<Task>();
-                foreach (TaskReference taskRef in inworldEntityData.customTasks)
-                {
-                    string taskPath = _GetTaskPath(taskRef.ShortName);
-                    Task task = AssetDatabase.LoadAssetAtPath<Task>(taskPath);
-                    
-                    if(task != null)
-                        tasks.Add(task);
-                    else
-                        InworldAI.LogError($"Could not find referenced task: {taskRef.task}");
-                }
-                
-                entity.Initialize(inworldEntityData.name, inworldEntityData.displayName, inworldEntityData.description, tasks);
-                
-                if(!isLoaded)
-                    AssetDatabase.CreateAsset(entity, newAssetPath);
-            }
-                
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            
-            InworldAI.Log($"Generated Entities at: {entityDirectoryPath}.");
-
-            m_AreEntitiesTasksUpToDate = _CheckEntitiesTasksUpToDate();
-        }
-
-        string _GetTaskPath(string taskShortName)
-        {
-            return $"{InworldEditorUtil.UserDataPath}/Resources/{InworldEditor.TaskPath}/{taskShortName.ToLower()}Task.asset";
         }
 
         void _DrawCharacterSelection()
@@ -490,56 +346,6 @@ namespace Inworld.Editors
             string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterFileName}.png";
             File.WriteAllBytes(newAssetPath, uwr.downloadHandler.data);
             charRef.characterAssets.thumbnailProgress = 1;
-        }
-        
-        void _DownloadEntitiesTasks()
-        {
-            string wsFullName = m_CurrentWorkspace.name;
-            if (string.IsNullOrEmpty(wsFullName))
-                return;
-            m_EntitiesDownloadProgress = 0;
-            InworldEditorUtil.SendWebGetRequest(InworldEditor.GetEntitiesURL(wsFullName), true, _DownloadEntitiesCompleted);
-            InworldEditorUtil.SendWebGetRequest(InworldEditor.GetTasksURL(wsFullName), true, _DownloadTasksCompleted);
-        }
-        void _DownloadEntitiesCompleted(AsyncOperation obj) 
-        {
-            UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
-            if (uwr.result != UnityWebRequest.Result.Success)
-            {
-                InworldEditor.Instance.Error = $"Get Entities Failed: {InworldEditor.GetError(uwr.error)}";
-                EditorUtility.ClearProgressBar();
-                return;
-            }            
-
-            ListEntityResponse resp = JsonConvert.DeserializeObject<ListEntityResponse>(uwr.downloadHandler.text);
-            InworldWorkspaceData ws = m_CurrentWorkspace;
-            if (ws.entities == null)
-                ws.entities = new List<InworldEntityData>();
-            ws.entities.Clear();
-            ws.entities.AddRange(resp.entities);
-            
-            if(++m_EntitiesDownloadProgress >= 2)
-                m_AreEntitiesTasksUpToDate = _CheckEntitiesTasksUpToDate();
-        }
-        void _DownloadTasksCompleted(AsyncOperation obj) 
-        {
-            UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
-            if (uwr.result != UnityWebRequest.Result.Success)
-            {
-                InworldEditor.Instance.Error = $"Get Tasks Failed: {InworldEditor.GetError(uwr.error)}";
-                EditorUtility.ClearProgressBar();
-                return;
-            }            
-            
-            ListTaskResponse resp = JsonConvert.DeserializeObject<ListTaskResponse>(uwr.downloadHandler.text);
-            InworldWorkspaceData ws = m_CurrentWorkspace;
-            if (ws.tasks == null)
-                ws.tasks = new List<InworldTaskData>();
-            ws.tasks.Clear();
-            ws.tasks.AddRange(resp.customTasks); 
-            
-            if(++m_EntitiesDownloadProgress >= 2)
-                m_AreEntitiesTasksUpToDate = _CheckEntitiesTasksUpToDate();
         }
     }
 }

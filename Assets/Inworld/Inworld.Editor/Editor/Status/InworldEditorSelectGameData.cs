@@ -15,6 +15,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using Inworld.Data;
 using Newtonsoft.Json;
+using Object = UnityEngine.Object;
 
 namespace Inworld.Editors
 {
@@ -27,11 +28,11 @@ namespace Inworld.Editors
         const string k_DataMissing = "Some data is missing.\nPlease make sure you have at least one scene and one key/secret in your workspace";
         const string k_LLMService = "LLM Service";
         const string k_CharacterIntegration = "Character Integration";
+        const string k_BehaviorEngineSetup = "Behavior Engine Setup";
         string m_CurrentWorkspaceName = "--- SELECT WORKSPACE ---";
         string m_CurrentKey = "--- SELECT KEY---";
         string m_CurrentGameMode = "--- SELECT GAMEMODE ---";
 
-        bool m_IsCharIntegration = true;
         bool m_DisplayDataMissing;
         bool m_StartDownload;
        
@@ -91,10 +92,18 @@ namespace Inworld.Editors
                 {
                     _SaveCurrentSettings();
                     _CreatePrefabVariants();
-                    if (m_IsCharIntegration)
-                        InworldEditor.Instance.Status = EditorStatus.SelectCharacter; 
-                    else
-                        InworldEditor.Instance.Status = EditorStatus.SelectGameMode;
+                    switch (m_CurrentGameMode)
+                    {
+                        case k_CharacterIntegration:
+                            InworldEditor.Instance.Status = EditorStatus.SelectCharacter; 
+                            break;
+                        case k_BehaviorEngineSetup:
+                            InworldEditor.Instance.Status = EditorStatus.SelectBehaviorEngine;
+                            break;
+                        case k_LLMService:
+                            InworldEditor.Instance.Status = EditorStatus.SelectLLM;
+                            break;
+                    }
                 }
             }
             GUILayout.EndHorizontal();
@@ -228,7 +237,7 @@ namespace Inworld.Editors
             if (m_CurrentKey == k_DefaultKey || string.IsNullOrEmpty(m_CurrentKey))
                 return;
             EditorGUILayout.LabelField("Choose Game mode:", InworldEditor.Instance.TitleStyle);
-            List<string> wsList = new List<string>{k_LLMService, k_CharacterIntegration};
+            List<string> wsList = new List<string>{k_LLMService, k_CharacterIntegration, k_BehaviorEngineSetup};
             InworldEditorUtil.DrawDropDown(m_CurrentGameMode, wsList, _SelectGameMode);
         }
         void _DrawKeyDropDown()
@@ -316,48 +325,7 @@ namespace Inworld.Editors
                 return;
             InworldEditorUtil.SendWebGetRequest(InworldEditor.ListCharactersURL(wsFullName), true, _ListCharactersCompleted);
         }
-        void _DownloadEntitiesTasks()
-        {
-            string wsFullName = InworldAI.User.GetWorkspaceFullName(m_CurrentWorkspaceName);
-            if (string.IsNullOrEmpty(wsFullName))
-                return;
-            InworldEditorUtil.SendWebGetRequest(InworldEditor.GetEntitiesURL(wsFullName), true, _DownloadEntitiesCompleted);
-            InworldEditorUtil.SendWebGetRequest(InworldEditor.GetTasksURL(wsFullName), true, _DownloadTasksCompleted);
-        }
-        void _DownloadEntitiesCompleted(AsyncOperation obj) 
-        {
-            UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
-            if (uwr.result != UnityWebRequest.Result.Success)
-            {
-                InworldEditor.Instance.Error = $"Get Entities Failed: {InworldEditor.GetError(uwr.error)}";
-                EditorUtility.ClearProgressBar();
-                return;
-            }            
 
-            ListEntityResponse resp = JsonConvert.DeserializeObject<ListEntityResponse>(uwr.downloadHandler.text);
-            InworldWorkspaceData ws = CurrentWorkspace;
-            if (ws.entities == null)
-                ws.entities = new List<InworldEntityData>();
-            ws.entities.Clear();
-            ws.entities.AddRange(resp.entities); 
-        }
-        void _DownloadTasksCompleted(AsyncOperation obj) 
-        {
-            UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
-            if (uwr.result != UnityWebRequest.Result.Success)
-            {
-                InworldEditor.Instance.Error = $"Get Tasks Failed: {InworldEditor.GetError(uwr.error)}";
-                EditorUtility.ClearProgressBar();
-                return;
-            }            
-            
-            ListTaskResponse resp = JsonConvert.DeserializeObject<ListTaskResponse>(uwr.downloadHandler.text);
-            InworldWorkspaceData ws = CurrentWorkspace;
-            if (ws.tasks == null)
-                ws.tasks = new List<InworldTaskData>();
-            ws.tasks.Clear();
-            ws.tasks.AddRange(resp.customTasks); 
-        }
         void _ListCharactersCompleted(AsyncOperation obj)
         {
             UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
@@ -423,7 +391,7 @@ namespace Inworld.Editors
             _ListCharacters();
             _ListScenes();
             _ListKeys();
-            _DownloadEntitiesTasks();
+            BehaviorEngineEditorUtil.DownloadEntitiesTasks(CurrentWorkspace);
         }
         void _SelectKeys(string keyDisplayName)
         {
@@ -432,7 +400,6 @@ namespace Inworld.Editors
         void _SelectGameMode(string gameMode)
         {
             m_CurrentGameMode = gameMode;
-            m_IsCharIntegration = gameMode == k_CharacterIntegration;
         }
         // Download Avatars and put under User name's folder.
         void _OnCharModelDownloaded(string charFullName, AsyncOperation downloadContent)

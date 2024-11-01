@@ -8,27 +8,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 namespace Inworld.BehaviorEngine
 {
-#if UNITY_EDITOR
-    [CustomEditor(typeof(EntityItem))]
-    public class EntityItemEditor : UnityEditor.Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            if (GUILayout.Button("Generate ID"))
-            {
-                serializedObject.FindProperty("m_ID").stringValue = Guid.NewGuid().ToString();
-            }
-            serializedObject.ApplyModifiedProperties();
-            
-            base.OnInspectorGUI();
-        }
-    }
-#endif
     public class EntityItem : MonoBehaviour
     {
         public string ID => m_ID;

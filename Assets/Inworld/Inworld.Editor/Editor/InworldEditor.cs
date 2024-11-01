@@ -11,6 +11,7 @@ using UnityEditor;
 using UnityEngine;
 using Inworld.Sample;
 using Inworld.UI;
+using System.IO;
 using TMPro;
 
 
@@ -42,6 +43,7 @@ namespace Inworld.Editors
         [SerializeField] string m_PrefabPath;
         [SerializeField] string m_EntityPath;
         [SerializeField] string m_TaskPath;
+        [SerializeField] string m_TaskHandlerPath;
         [Header("URLs:")]
         [SerializeField] InworldServerConfig m_ServerConfig;
         [SerializeField] string m_WorkspaceURL;
@@ -55,13 +57,34 @@ namespace Inworld.Editors
         const string k_EntryV1 = "studio/v1";
         const string k_DefaultPlayerName = "player";
         const string k_InstancePath = "Assets/Inworld/Inworld.Editor/Data/InworldEditor.asset";
+        const string k_BehaviorEngineDirectory = "BehaviorEngine";
         public const string k_TokenErrorInstruction = "Token Error or Expired.\nPlease login again";
         const float k_LuminanceRed = 0.2126f;
         const float k_LuminanceGreen = 0.7152f;
         const float k_LuminanceBlue = 0.0722f;
         static InworldEditor __inst;
-        
-        Dictionary<EditorStatus, IEditorState> m_InworldEditorStates = new Dictionary<EditorStatus, IEditorState>();
+
+        Dictionary<EditorStatus, IEditorState> m_InworldEditorStates = new Dictionary<EditorStatus, IEditorState>()
+        {
+            {
+                EditorStatus.Init, new InworldEditorInit()
+            },
+            {
+                EditorStatus.SelectGameData, new InworldEditorSelectGameData()
+            },
+            {
+                EditorStatus.SelectLLM, new InworldEditorSelectLLM()
+            },
+            {
+                EditorStatus.SelectBehaviorEngine, new InworldEditorSelectBehaviorEngine()
+            },
+            {
+                EditorStatus.SelectCharacter, new InworldEditorSelectCharacter()
+            },
+            {
+                EditorStatus.Error, new InworldEditorError()
+            }
+        };
         string m_StudioTokenForExchange;
         string m_InputUserName;
         string m_ErrorMsg;
@@ -142,11 +165,15 @@ namespace Inworld.Editors
         /// <summary>
         /// Gets the location for generating and storing the entities for Behavior Engine.
         /// </summary>
-        public static string EntityPath => Instance.m_EntityPath;
+        public static string EntityPath => Path.Combine(k_BehaviorEngineDirectory, Instance.m_EntityPath);
         /// <summary>
         /// Gets the location for generating and storing the tasks for Behavior Engine.
         /// </summary>
-        public static string TaskPath => Instance.m_TaskPath;
+        public static string TaskPath => Path.Combine(k_BehaviorEngineDirectory, Instance.m_TaskPath);
+        /// <summary>
+        /// Gets the location for generating and storing the task handlers for Behavior Engine.
+        /// </summary>
+        public static string TaskHandlerPath => Path.Combine(k_BehaviorEngineDirectory, Instance.m_TaskHandlerPath);
         public static string Entry => 
             Instance && !string.IsNullOrEmpty(Instance.m_StudioTokenForExchange) && 
             Instance.m_StudioTokenForExchange.Split(':').Length >= 2 
@@ -359,14 +386,6 @@ namespace Inworld.Editors
             EditorUtility.SetDirty(Instance);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-        }
-        void OnEnable()
-        {
-            m_InworldEditorStates[EditorStatus.Init] = new InworldEditorInit();
-            m_InworldEditorStates[EditorStatus.SelectGameData] = new InworldEditorSelectGameData();
-            m_InworldEditorStates[EditorStatus.SelectGameMode] = new InworldEditorSelectGameMode();
-            m_InworldEditorStates[EditorStatus.SelectCharacter] = new InworldEditorSelectCharacter();
-            m_InworldEditorStates[EditorStatus.Error] = new InworldEditorError();
         }
     }
 }

@@ -30,6 +30,7 @@ MonoBehaviour:
   m_PrefabPath: Prefabs
   m_EntityPath: Entities
   m_TaskPath: Tasks
+  m_TaskHandlerPath: TaskHandlers
   m_ServerConfig: {fileID: 11400000, guid: aa7112138d40e14408f96cd96a17bf6c, type: 2}
   m_WorkspaceURL: workspaces
   m_KeyURL: apikeys
