@@ -503,6 +503,10 @@ PrefabInstance:
       value: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
       objectReference: {fileID: 0}
     - target: {fileID: 2395919966041133306, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_GameData
+      value: 
+      objectReference: {fileID: 11400000, guid: 89ad72e3967970b409e67b00bab60c22, type: 2}
+    - target: {fileID: 2395919966041133306, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_APISecret
       value: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
       objectReference: {fileID: 0}
@@ -843,6 +847,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 131081461936041141, guid: a8b83b8368e1aea40bba47e6c9ab58fe, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2357591238808935622, guid: a8b83b8368e1aea40bba47e6c9ab58fe, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
