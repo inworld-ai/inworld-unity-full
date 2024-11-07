@@ -25,6 +25,8 @@ namespace Inworld.Editors
         static string k_TaskHandlerObjectDirectoryPath = Path.Combine(k_TaskHandlerDirectoryPath, "ScriptableObjects");
         static string k_TaskDirectoryPath = Path.Combine(InworldEditorUtil.UserDataPath, InworldEditor.TaskPath);
         static string k_EntityDirectoryPath = Path.Combine(InworldEditorUtil.UserDataPath, InworldEditor.EntityPath);
+        static string k_EntityManagerDirectoryPath = Path.Combine(InworldEditorUtil.UserDataPath, InworldEditor.BehaviorEngineDirectoryPath);
+        static string k_EntityManagerPath = Path.Combine(k_EntityManagerDirectoryPath, InworldEditor.EntityManagerPrefab.name + ".prefab");
 
         static int m_EntitiesDownloadProgress = 0;
         
@@ -51,6 +53,11 @@ namespace Inworld.Editors
         public static Task GetTaskObject(string taskShortName)
         {
             return AssetDatabase.LoadAssetAtPath<Task>(_GetTaskPath(taskShortName));
+        }
+        
+        public static GameObject GetEntityManagerObject()
+        {
+            return AssetDatabase.LoadAssetAtPath<GameObject>(k_EntityManagerPath);
         }
 
         public static void LinkTaskHandlerObject(Task task, bool refreshDatabase = true)
@@ -118,36 +125,6 @@ namespace Inworld.Editors
             if(refreshDatabase)
                 AssetDatabase.Refresh();
         }
-        
-        public static bool CheckEntitiesTasksUpToDate(InworldWorkspaceData inworldWorkspaceData)
-        {
-            if (!Directory.Exists(k_TaskDirectoryPath) || !Directory.Exists(k_EntityDirectoryPath))
-                return false;
-                
-            foreach (InworldTaskData inworldTaskData in inworldWorkspaceData.tasks)
-            {
-                string newAssetPath = _GetTaskPath(inworldTaskData.ShortName);
-                Task task = AssetDatabase.LoadAssetAtPath<Task>(newAssetPath);
-                if (!task)
-                    return false;
-
-                if (!task.Compare(inworldTaskData))
-                    return false;
-            }
-
-            foreach (InworldEntityData inworldEntityData in inworldWorkspaceData.entities)
-            {
-                string newAssetPath = _GetEntityPath(inworldEntityData.displayName);
-                Entity entity = AssetDatabase.LoadAssetAtPath<Entity>(newAssetPath);
-                if (!entity)
-                    return false;
-
-                if (!entity.Compare(inworldEntityData))
-                    return false;
-            }
-            
-            return true;
-        }
 
         public static void DownloadEntitiesTasks(InworldWorkspaceData inworldWorkspaceData)
         {
@@ -170,6 +147,7 @@ namespace Inworld.Editors
             }            
 
             ListEntityResponse resp = JsonConvert.DeserializeObject<ListEntityResponse>(uwr.downloadHandler.text);
+            
             if (ws.entities == null)
                 ws.entities = new List<InworldEntityData>();
             ws.entities.Clear();
@@ -187,10 +165,7 @@ namespace Inworld.Editors
             );
             
             if (++m_EntitiesDownloadProgress >= 2)
-            {
-                _CreateTasks(ws);
-                _CreateEntities(ws);
-            }
+                _CreateObjects(ws);
         }
         
         static void _DownloadTasksCompleted(AsyncOperation obj, InworldWorkspaceData ws) 
@@ -202,7 +177,7 @@ namespace Inworld.Editors
                 EditorUtility.ClearProgressBar();
                 return;
             }            
-            
+
             ListTaskResponse resp = JsonConvert.DeserializeObject<ListTaskResponse>(uwr.downloadHandler.text);
             if (ws.tasks == null)
                 ws.tasks = new List<InworldTaskData>();
@@ -221,16 +196,50 @@ namespace Inworld.Editors
             );
             
             if (++m_EntitiesDownloadProgress >= 2)
-            {
-                _CreateTasks(ws);
-                _CreateEntities(ws);
-            }
+                _CreateObjects(ws);
+        }
+
+        static void _CreateObjects(InworldWorkspaceData inworldWorkspaceData)
+        {
+            List<Entity> entities = _CreateEntities(inworldWorkspaceData);
+            List<Task> tasks = _CreateTasks(inworldWorkspaceData, entities);
+            _CreateEntityManager(tasks);
         }
         
-        static void _CreateTasks(InworldWorkspaceData inworldWorkspaceData)
+        static List<Entity> _CreateEntities(InworldWorkspaceData inworldWorkspaceData)
+        {
+            if (!Directory.Exists(k_EntityDirectoryPath))
+                Directory.CreateDirectory(k_EntityDirectoryPath);
+
+            List<Entity> entities = new List<Entity>();
+                
+            foreach (InworldEntityData inworldEntityData in inworldWorkspaceData.entities)
+            {
+                string newAssetPath = _GetEntityPath(inworldEntityData.displayName);
+                Entity entity = AssetDatabase.LoadAssetAtPath<Entity>(newAssetPath);
+                bool isLoaded = entity != null;
+                if (!isLoaded)
+                    entity = ScriptableObject.CreateInstance<Entity>();
+                
+                entity.Initialize(inworldEntityData.name, inworldEntityData.displayName, inworldEntityData.description);
+                
+                if(!isLoaded)
+                    AssetDatabase.CreateAsset(entity, newAssetPath);
+                
+                entities.Add(entity);
+            }
+                
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            return entities;
+        }
+        
+        static List<Task> _CreateTasks(InworldWorkspaceData inworldWorkspaceData, List<Entity> entities)
         {
             if (!Directory.Exists(k_TaskDirectoryPath))
                 Directory.CreateDirectory(k_TaskDirectoryPath);
+
+            List<Task> tasks = new List<Task>();
                 
             foreach (InworldTaskData inworldTaskData in inworldWorkspaceData.tasks)
             {
@@ -240,49 +249,63 @@ namespace Inworld.Editors
                 if (!isLoaded)
                     task = ScriptableObject.CreateInstance<Task>();
 
-                task.Initialize(inworldTaskData.name, new List<TaskParameter>(inworldTaskData.parameters));
+                List<TaskParameter> taskParameters = new List<TaskParameter>();
+                foreach (TaskParameterData taskParameterData in inworldTaskData.parameters)
+                {
+                    List<Entity> parameterEntities = new List<Entity>();
+                    foreach (string entityID in taskParameterData.entities)
+                    {
+                        Entity entity = entities.Find((entity) => entity.ID == entityID);
+                        
+                        if(entity)
+                            parameterEntities.Add(entity);
+                    }
+                    taskParameters.Add(new TaskParameter(taskParameterData.name, taskParameterData.description, parameterEntities));
+                }
+
+                task.Initialize(inworldTaskData.name, taskParameters);
                 
                 if(!isLoaded)
                     AssetDatabase.CreateAsset(task, newAssetPath);
+
+                tasks.Add(task);
             }
                 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+
+            return tasks;
         }
-
-        static void _CreateEntities(InworldWorkspaceData inworldWorkspaceData)
+        
+        static void _CreateEntityManager(List<Task> tasks)
         {
-            if (!Directory.Exists(k_EntityDirectoryPath))
-                Directory.CreateDirectory(k_EntityDirectoryPath);
-                
-            foreach (InworldEntityData inworldEntityData in inworldWorkspaceData.entities)
-            {
-                string newAssetPath = _GetEntityPath(inworldEntityData.displayName);
-                Entity entity = AssetDatabase.LoadAssetAtPath<Entity>(newAssetPath);
-                bool isLoaded = entity != null;
-                if (!isLoaded)
-                    entity = ScriptableObject.CreateInstance<Entity>();
+            GameObject entityManagerObject = GetEntityManagerObject();
+            bool objectExists = entityManagerObject != null;
+            if(!objectExists)
+                entityManagerObject = PrefabUtility.InstantiatePrefab(InworldEditor.EntityManagerPrefab) as GameObject;
+            
+            if (entityManagerObject == null)
+                return;
 
-                List<Task> tasks = new List<Task>();
-                foreach (TaskReference taskRef in inworldEntityData.customTasks)
-                {
-                    string taskPath = _GetTaskPath(taskRef.ShortName);
-                    Task task = AssetDatabase.LoadAssetAtPath<Task>(taskPath);
-                    
-                    if(task != null)
-                        tasks.Add(task);
-                    else
-                        InworldAI.LogError($"Could not find referenced task: {taskRef.task}");
-                }
-                
-                entity.Initialize(inworldEntityData.name, inworldEntityData.displayName, inworldEntityData.description, tasks);
-                
-                if(!isLoaded)
-                    AssetDatabase.CreateAsset(entity, newAssetPath);
+            EntityManager entityManager = entityManagerObject.GetComponent<EntityManager>();
+            SerializedObject so = new SerializedObject(entityManager);
+            SerializedProperty tasksProperty = so.FindProperty("m_Tasks");
+            
+            tasksProperty.ClearArray();
+            tasksProperty.arraySize = tasks.Count;
+            for (int i = 0; i < tasks.Count; i++)
+            {
+                SerializedProperty taskProperty = tasksProperty.GetArrayElementAtIndex(i);
+                taskProperty.objectReferenceValue = tasks[i];
             }
-                
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            so.ApplyModifiedProperties();
+            
+            if (!Directory.Exists(k_EntityManagerDirectoryPath))
+                Directory.CreateDirectory(k_EntityManagerDirectoryPath);
+            PrefabUtility.SaveAsPrefabAsset(entityManagerObject, k_EntityManagerPath);
+            
+            if(!objectExists)
+                UnityEngine.Object.DestroyImmediate(entityManagerObject);
         }
         
         static string _CapitalizeString(string value)

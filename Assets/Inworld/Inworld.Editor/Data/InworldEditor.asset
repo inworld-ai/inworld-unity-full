@@ -22,6 +22,7 @@ MonoBehaviour:
   m_PlayerController: {fileID: 7802538726591345284, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
   m_PlayerController2D: {fileID: 7216582453331693882, guid: 41177cdca0cf65d4b88318d5107c053c, type: 3}
   m_PlayerControllerLLM: {fileID: 3952073688223741148, guid: 4d0ceebff7c50a74e9999a4c34d89e47, type: 3}
+  m_EntityManagerPrefab: {fileID: 9144809998315277450, guid: 4dd8ef10da5537345b701eb6d8aecf42, type: 3}
   m_CurrentStatus: 3
   m_UserDataPath: UserData
   m_GameDataPath: GameData

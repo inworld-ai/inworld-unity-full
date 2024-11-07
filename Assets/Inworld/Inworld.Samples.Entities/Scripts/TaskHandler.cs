@@ -32,7 +32,7 @@ namespace Inworld.BehaviorEngine
         {
             foreach (TaskParameter taskParameter in m_Task.TaskParameters)
             {
-                if (parameters.TryGetValue(taskParameter.name, out string itemID) && EntityManager.Instance.FindItem(itemID, out EntityItem entityItem))
+                if (parameters.TryGetValue(taskParameter.Name, out string itemID) && EntityManager.Instance.FindItem(itemID, out EntityItem entityItem))
                     m_EntityItems.Add(itemID, entityItem);
                 else
                 {

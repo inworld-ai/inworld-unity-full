@@ -32,6 +32,7 @@ namespace Inworld.Editors
         [SerializeField] GameObject m_PlayerController;
         [SerializeField] GameObject m_PlayerController2D;
         [SerializeField] GameObject m_PlayerControllerLLM;
+        [SerializeField] GameObject m_EntityManagerPrefab;
         [Space(10)][Header("Status")]
         [SerializeField] EditorStatus m_CurrentStatus;
         EditorStatus m_LastStatus;
@@ -163,6 +164,10 @@ namespace Inworld.Editors
         /// </summary>
         public static string PrefabPath => Instance.m_PrefabPath;
         /// <summary>
+        /// Gets the location for the Behavior Engine directory.
+        /// </summary>
+        public static string BehaviorEngineDirectoryPath => k_BehaviorEngineDirectory;
+        /// <summary>
         /// Gets the location for generating and storing the entities for Behavior Engine.
         /// </summary>
         public static string EntityPath => Path.Combine(k_BehaviorEngineDirectory, Instance.m_EntityPath);
@@ -195,7 +200,10 @@ namespace Inworld.Editors
         /// Gets the current Player Controller prefab for LLM.
         /// </summary>
         public static GameObject PlayerControllerLLM => Instance.m_PlayerControllerLLM;
-        
+        /// <summary>
+        /// Gets the current Entity Manager prefab.
+        /// </summary>
+        public static GameObject EntityManagerPrefab => Instance.m_EntityManagerPrefab;
         /// <summary>
         /// Gets if it's using Innequin model.
         /// </summary>

@@ -12,8 +12,10 @@ namespace Inworld.BehaviorEngine
 {
     public class EntityManager : SingletonBehavior<EntityManager>
     {
-        protected Dictionary<string, Task> m_Tasks;
+        protected Dictionary<string, Task> m_TaskDictionary;
         protected List<EntityItem> m_Items;
+
+        [SerializeField] List<Task> m_Tasks;
 
         public void AddItem(EntityItem entityItem)
         {
@@ -55,7 +57,7 @@ namespace Inworld.BehaviorEngine
 
         public bool FindTask(string taskName, out Task task)
         {
-            return m_Tasks.TryGetValue(taskName, out task);
+            return m_TaskDictionary.TryGetValue(taskName, out task);
         }
 
         public bool FindItem(string id, out EntityItem item)
@@ -67,14 +69,10 @@ namespace Inworld.BehaviorEngine
         protected virtual void Awake()
         {
             m_Items = new List<EntityItem>();
-            m_Tasks = new Dictionary<string, Task>();
-
-            Entity[] entities = Resources.FindObjectsOfTypeAll<Entity>();
-            foreach (Entity entity in entities)
-            {
-                foreach (Task task in entity.Tasks)
-                    m_Tasks.TryAdd(task.TaskShortName, task);
-            }
+            m_TaskDictionary = new Dictionary<string, Task>();
+            
+            foreach (Task task in m_Tasks)
+                m_TaskDictionary.TryAdd(task.TaskShortName, task);
         }
     }
 }

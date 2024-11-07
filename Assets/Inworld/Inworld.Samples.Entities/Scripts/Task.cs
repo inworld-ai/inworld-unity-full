@@ -5,7 +5,7 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
-using Inworld.Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,22 +24,6 @@ namespace Inworld.BehaviorEngine
         [SerializeField] protected List<TaskParameter> m_TaskParameters;
         [SerializeField] [HideInInspector] protected TaskHandler m_TaskHandler;
 
-        public bool Compare(InworldTaskData inworldTaskData)
-        {
-            if (inworldTaskData.name != m_TaskName ||
-                inworldTaskData.parameters == null ||
-                m_TaskParameters == null ||
-                inworldTaskData.parameters.Count != m_TaskParameters.Count)
-                return false;
-
-            for (int i = 0; i < m_TaskParameters.Count; i++)
-            {
-                if (!m_TaskParameters[i].Equals(inworldTaskData.parameters[i]))
-                    return false;
-            }
-            return true;
-        }
-        
         public void Initialize(string taskName, List<TaskParameter> parameters)
         {
             m_TaskName = taskName;

@@ -21,11 +21,13 @@ namespace Inworld.Editors
         InworldWorkspaceData m_CurrentWorkspace;
         InworldGameData m_CurrentGameData;
         
+        Vector2 m_EntitiesScrollPosition, m_TasksScrollPosition;
+        
         public void OnOpenWindow()
         {
             if (!InworldController.Instance || !InworldController.Instance.GameData)
             {
-                InworldEditor.Instance.Status = EditorStatus.SelectGameData; // YAN: Fall back.
+                InworldEditor.Instance.Status = EditorStatus.SelectGameData;
             }
             else
                 _InitDataSelection();
@@ -40,15 +42,42 @@ namespace Inworld.Editors
                 return;
 
             GUILayout.Label("Behavior Engine Setup", EditorStyles.whiteLargeLabel);
-            
+   
             GUILayout.BeginHorizontal();
             _ListEntities();
             _ListTasks();
             _ListTaskHandlers();
             GUILayout.EndHorizontal();
+            
+            _DrawEntityManagerButtons();
+        }
+
+        void _DrawEntityManagerButtons()
+        {
+            GameObject entityManagerGameObject = BehaviorEngineEditorUtil.GetEntityManagerObject();
+
+            if (!entityManagerGameObject)
+                return;
+            
+            GUILayout.Space(20);
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Entity Manager", GUILayout.MaxWidth(140));
+            
+            if(GUILayout.Button("Prefab", GUILayout.MaxWidth(100)))
+            {
+                Selection.activeObject = entityManagerGameObject;
+                EditorGUIUtility.PingObject(Selection.activeObject);
+            }
+            if(GUILayout.Button("Add to Scene", GUILayout.MaxWidth(100)))
+            {
+                if(!Object.FindObjectOfType<EntityManager>())
+                    PrefabUtility.InstantiatePrefab(entityManagerGameObject);
+                else 
+                    Debug.LogError("Scene already contains an Entity Manager.");
+            }
+            GUILayout.EndHorizontal();
         }
         
-        Vector2 m_EntitiesScrollPosition, m_TasksScrollPosition;
         void _ListEntities()
         {
             GUILayout.BeginVertical(GUILayout.MaxWidth(256));
