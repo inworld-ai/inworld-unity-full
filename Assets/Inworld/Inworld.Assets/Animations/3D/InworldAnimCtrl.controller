@@ -4518,14 +4518,6 @@ BlendTree:
   m_Name: Confuse Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 6f2a5dc57ac23794895db6c822b99cdf, type: 2}
-    m_Threshold: 6.1
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
-    m_CycleOffset: 0
-    m_DirectBlendParameter: HelloSec
-    m_Mirror: 0
-  - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 99808ff70e1b41343b597e3eedbc3020, type: 2}
     m_Threshold: 6.467
     m_Position: {x: 0, y: 0}
