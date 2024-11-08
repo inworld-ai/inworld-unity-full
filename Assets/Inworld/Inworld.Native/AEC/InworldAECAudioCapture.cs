@@ -50,7 +50,7 @@ namespace Inworld.AEC
                     return null;
                 if (m_Probe)
                     return m_Probe;
-                AudioListener listener = FindObjectOfType<AudioListener>();
+                AudioListener listener = FindFirstObjectByType<AudioListener>();
                 if (!listener)
                 {
                     InworldAI.LogError("Cannot Find Audio Listener!");

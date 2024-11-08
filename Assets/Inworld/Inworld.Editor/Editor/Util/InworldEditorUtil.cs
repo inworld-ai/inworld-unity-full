@@ -5,11 +5,9 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 #if UNITY_EDITOR
-using Inworld.Sample;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using TMPro;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Build;
@@ -200,17 +198,19 @@ namespace Inworld.Editors
         static void _AddDebugMacro()
         {
             BuildTargetGroup buildTargetGroup = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
-            string strSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
+            NamedBuildTarget namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(buildTargetGroup);
+            string strSymbols = PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget);
             if (!strSymbols.Contains("INWORLD_DEBUG"))
                 strSymbols = string.IsNullOrEmpty(strSymbols) ? "INWORLD_DEBUG" : strSymbols + ";INWORLD_DEBUG";
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, strSymbols);
+            PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, strSymbols);
         }
         static void _RemoveDebugMacro()
         {
             BuildTargetGroup buildTargetGroup = BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget);
-            string strSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
+            NamedBuildTarget namedBuildTarget = NamedBuildTarget.FromBuildTargetGroup(buildTargetGroup);
+            string strSymbols = PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget);
             strSymbols = strSymbols.Replace(";INWORLD_DEBUG", "").Replace("INWORLD_DEBUG", "");
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, strSymbols);
+            PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, strSymbols);
         }
     }
 }

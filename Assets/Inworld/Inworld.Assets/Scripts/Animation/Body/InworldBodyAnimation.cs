@@ -76,7 +76,6 @@ namespace Inworld.Assets
         
         protected virtual void OnCharacterDeselected(string brainName) => HandleMainStatus(AnimMainStatus.Goodbye);
 
-
         protected virtual void HandleMainStatus(AnimMainStatus status) => m_BodyAnimator.SetInteger(s_Motion, (int)status);
         
         protected override void HandleEmotion(EmotionPacket packet)

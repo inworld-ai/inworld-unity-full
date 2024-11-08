@@ -169,8 +169,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0d978873da4cbb246aced65b3450ebcf, type: 2}
-  m_sharedMaterial: {fileID: -4501209170994636121, guid: 0d978873da4cbb246aced65b3450ebcf, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: f65701f62f15fa6408500d4805250802, type: 2}
+  m_sharedMaterial: {fileID: 3138125702208915100, guid: f65701f62f15fa6408500d4805250802, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -495,7 +495,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4075385947309156079}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.41569477, z: -0, w: 0.9095042}
+  m_LocalRotation: {x: 0, y: 0.41569355, z: 0, w: 0.9095048}
   m_LocalPosition: {x: -7.8025002, y: 0, z: 0.0011429726}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -503,7 +503,7 @@ Transform:
   - {fileID: 3470200727616562042}
   - {fileID: 364196114125631914}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 49.126, z: 0}
 --- !u!95 &7848796120062237008
 Animator:
   serializedVersion: 5
@@ -637,15 +637,28 @@ MonoBehaviour:
     agentId: 
     brainName: workspaces/unitytest/characters/amy_the_amish
     givenName: Amy Amish
-    description: 
+    description:
+      givenName: 
+      description: 
+      pronoun: 0
+      nickNames: []
+      motivation: 
+      personalityAdjectives: []
+      lifeStage: 0
+      hobbyOrInterests: []
+      characterRole: 
+      flaws: 
     characterAssets:
       rpmModelUri: 
-      rpmImageUriPortrait: 
-      rpmImageUriPosture: 
+      rpmImageUri: 
       avatarImg: 
       avatarImgOriginal: 
+      rpmAvatar:
+        rpmModelUri: 
+        rpmImageUri: 
       thumbnailProgress: 0
       avatarProgress: 0
+    language: 
     thumbnail: {fileID: 0}
   m_CharacterEvents:
     onCharacterSelected:
@@ -711,7 +724,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ContinueButton: {fileID: 7286065230466744711}
-  m_Interruptable: 1
   m_AutoProceed: 1
   m_MaxItemCount: 100
   m_TextSpeedMultipler: 0.02
@@ -1031,12 +1043,14 @@ MonoBehaviour:
     relation: 1
     trigger: 1
     longBubbleMode: 0
+    task: 0
   m_EmotionMap: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
   m_Emotion: {fileID: 11400000, guid: 1950e7dba45ab6b439c74be8a0f8dd73, type: 2}
   m_Relation: {fileID: 4102769783880381045}
   m_EmoIcon: {fileID: 4799229814398726590}
   m_Dots: {fileID: 5364876556830792352}
   m_Character: {fileID: 9024378369211073086}
+  m_Canvas: {fileID: 1620577602383600712}
 --- !u!1 &7286065230466744711
 GameObject:
   m_ObjectHideFlags: 0

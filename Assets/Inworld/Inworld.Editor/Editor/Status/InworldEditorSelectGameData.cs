@@ -24,14 +24,14 @@ namespace Inworld.Editors
     {
         const string k_DefaultWorkspace = "--- SELECT WORKSPACE ---";
         const string k_DefaultKey = "--- SELECT KEY---";
-        const string k_DefaultGameMode = "--- SELECT GAMEMODE ---";
+        const string k_DefaultGameMode = "--- SELECT USAGE ---";
         const string k_DataMissing = "Some data is missing.\nPlease make sure you have at least one scene and one key/secret in your workspace";
         const string k_LLMService = "LLM Service";
         const string k_CharacterIntegration = "Character Integration";
         const string k_BehaviorEngineSetup = "Behavior Engine Setup";
         string m_CurrentWorkspaceName = "--- SELECT WORKSPACE ---";
         string m_CurrentKey = "--- SELECT KEY---";
-        string m_CurrentGameMode = "--- SELECT GAMEMODE ---";
+        string m_CurrentGameMode = "--- SELECT USAGE ---";
 
         bool m_DisplayDataMissing;
         bool m_StartDownload;
@@ -101,7 +101,7 @@ namespace Inworld.Editors
                             InworldEditor.Instance.Status = EditorStatus.SelectBehaviorEngine;
                             break;
                         case k_LLMService:
-                            InworldEditor.Instance.Status = EditorStatus.SelectLLM;
+                            InworldEditor.Instance.Status = EditorStatus.SelectLLMConfig;
                             break;
                     }
                 }
@@ -155,7 +155,7 @@ namespace Inworld.Editors
         void _SaveCurrentSettings()
         {
             InworldGameData gameData = _CreateGameDataAssets();
-            InworldController controller = Object.FindObjectOfType<InworldController>();
+            InworldController controller = Object.FindFirstObjectByType<InworldController>();
             if (!controller)
                 controller = PrefabUtility.InstantiatePrefab(InworldEditor.Instance.ControllerPrefab) as InworldController;
             if (!controller)
@@ -236,7 +236,7 @@ namespace Inworld.Editors
                 return;
             if (m_CurrentKey == k_DefaultKey || string.IsNullOrEmpty(m_CurrentKey))
                 return;
-            EditorGUILayout.LabelField("Choose Game mode:", InworldEditor.Instance.TitleStyle);
+            EditorGUILayout.LabelField("Choose Usage:", InworldEditor.Instance.TitleStyle);
             List<string> wsList = new List<string>{k_LLMService, k_CharacterIntegration, k_BehaviorEngineSetup};
             InworldEditorUtil.DrawDropDown(m_CurrentGameMode, wsList, _SelectGameMode);
         }

@@ -39,6 +39,8 @@ namespace Inworld.Sample
         }
         protected virtual void OnCharacterJoined(InworldCharacter character)
         {
+            if (InworldController.Instance && InworldController.CurrentCharacter == null)
+                InworldController.CurrentCharacter = character;
             // YAN: Clear existing event listener to avoid adding multiple times.
             character.Event.onPacketReceived.RemoveListener(OnInteraction); 
             character.Event.onPacketReceived.AddListener(OnInteraction);

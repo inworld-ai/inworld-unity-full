@@ -74,7 +74,7 @@ namespace Inworld.Editors
                 EditorStatus.SelectGameData, new InworldEditorSelectGameData()
             },
             {
-                EditorStatus.SelectLLM, new InworldEditorSelectLLM()
+                EditorStatus.SelectLLMConfig, new InworldEditorSelectLLMConfig()
             },
             {
                 EditorStatus.SelectBehaviorEngine, new InworldEditorSelectBehaviorEngine()

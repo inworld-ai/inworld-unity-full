@@ -23,11 +23,18 @@ namespace Inworld.Assets
         [SerializeField] Image m_EmoIcon;
         [SerializeField] GameObject m_Dots;
         [SerializeField] InworldCharacter m_Character;
-
+        [SerializeField] GameObject m_Canvas;
         void Start()
         {
             if (m_Dots)
                 m_Dots.SetActive(false);
+        }
+        void Update()
+        {
+            if (!PlayerController.Instance || !m_Canvas)
+                return;
+            m_Canvas.transform.LookAt(PlayerController.Instance.transform.position);
+            m_Canvas.transform.eulerAngles = Vector3.up * (m_Canvas.transform.eulerAngles.y + 180f); 
         }
         protected override void OnInteraction(InworldPacket incomingPacket)
         {

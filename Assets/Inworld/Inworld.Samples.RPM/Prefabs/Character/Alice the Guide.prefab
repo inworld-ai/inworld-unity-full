@@ -285,6 +285,7 @@ GameObject:
   - component: {fileID: 7079616633953659760}
   - component: {fileID: 2566652673883597910}
   - component: {fileID: 2830172767831720487}
+  - component: {fileID: 772588302867157264}
   m_Layer: 0
   m_Name: Alice the Guide
   m_TagString: Untagged
@@ -517,7 +518,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ContinueButton: {fileID: 0}
-  m_Interruptable: 1
   m_AutoProceed: 1
   m_MaxItemCount: 100
   m_TextSpeedMultipler: 0.02
@@ -624,6 +624,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &772588302867157264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2717743084740492485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: accf62cedd854ed08422a6cf04d9af8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HeadTransform: {fileID: 3624553879139003962}
+  m_PlayerTransform: {fileID: 0}
+  m_SightAngle: 90
+  m_SightDistance: 10
+  m_PlayerAngleWeight: 1
+  m_DistanceWeight: 0.5
+  m_CharacterAngleWeight: 0.15
+  m_RefreshRate: 0.25
 --- !u!1 &4162607404096159169
 GameObject:
   m_ObjectHideFlags: 0
@@ -691,8 +711,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0d978873da4cbb246aced65b3450ebcf, type: 2}
-  m_sharedMaterial: {fileID: -4501209170994636121, guid: 0d978873da4cbb246aced65b3450ebcf, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: f65701f62f15fa6408500d4805250802, type: 2}
+  m_sharedMaterial: {fileID: 3138125702208915100, guid: f65701f62f15fa6408500d4805250802, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1088,6 +1108,7 @@ MonoBehaviour:
   m_EmoIcon: {fileID: 7575428023401961657}
   m_Dots: {fileID: 1488135493140826217}
   m_Character: {fileID: 4590294231651289280}
+  m_Canvas: {fileID: 5899891318616716573}
 --- !u!1001 &9011120692824422498
 PrefabInstance:
   m_ObjectHideFlags: 0
