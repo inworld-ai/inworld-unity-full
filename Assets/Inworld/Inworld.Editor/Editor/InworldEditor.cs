@@ -52,9 +52,6 @@ namespace Inworld.Editors
         const string k_DefaultPlayerName = "player";
         const string k_InstancePath = "Assets/Inworld/Inworld.Editor/Data/InworldEditor.asset";
         public const string k_TokenErrorInstruction = "Token Error or Expired.\nPlease login again";
-        const float k_LuminanceRed = 0.2126f;
-        const float k_LuminanceGreen = 0.7152f;
-        const float k_LuminanceBlue = 0.0722f;
         static InworldEditor __inst;
         
         Dictionary<EditorStatus, IEditorState> m_InworldEditorStates = new Dictionary<EditorStatus, IEditorState>();
@@ -284,18 +281,12 @@ namespace Inworld.Editors
         /// <param name="strErrorFromWeb">the received error message.</param>
         public static string GetError(string strErrorFromWeb) => strErrorFromWeb.Contains("Unauthorized") ? k_TokenErrorInstruction : strErrorFromWeb;
         /// <summary>
-        /// Get the picture's luminance. Used to display the opposite color of the text.
-        /// </summary>
-        /// <param name="color">the color of a pixel.</param>
-        float GetLuminance(Color color) => k_LuminanceRed * color.r + k_LuminanceGreen * color.g + k_LuminanceBlue * color.b;
-        /// <summary>
         /// Gets the GUI style for the text floating on the thumbnails.
         /// </summary>
         /// <param name="bg">The character's thumbnail</param>
         /// <returns></returns>
         public GUIStyle BtnCharStyle(Texture2D bg)
         {
-            float avgLuminance = bg == InworldAI.DefaultThumbnail ? 0 : bg.GetPixels().Average(GetLuminance);
             return new GUIStyle(GUI.skin.button)
             {
                 fixedHeight = 100,
@@ -305,7 +296,7 @@ namespace Inworld.Editors
                 fontStyle = FontStyle.Bold,
                 normal = new GUIStyleState
                 {
-                    textColor = avgLuminance > 0.5 ? Color.black : Color.white,
+                    textColor = InworldAssetProcessor.GetFontColor(bg),
                     background = bg
                 }
             };
