@@ -128,6 +128,8 @@ namespace Inworld.Editors
             if (InworldAI.User && InworldAI.User.Workspace != null && InworldAI.User.Workspace.Count != 0)
                 m_CurrentWorkspace = InworldAI.User.Workspace.FirstOrDefault(ws => ws.name == m_CurrentGameData.workspaceFullName);
             m_CurrentWorkspace?.scenes.ForEach(s => m_SceneNames.Add(s.displayName));
+            if (m_CurrentWorkspace == null)
+                InworldAI.LogError("Cannot Find Workspace.");
         }
         void _CreatePrefabVariants()
         {
@@ -225,10 +227,10 @@ namespace Inworld.Editors
             foreach (InworldCharacterData charRef in wsData.characters)
             {
                 string thumbURL = charRef.characterAssets.ThumbnailURL;
-                string thumbFileName = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterFileName}.png";
+                string thumbFileName = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{m_CurrentWorkspace.displayName}/{charRef.CharacterFileName}.png";
                 
                 string modelURL = charRef.characterAssets.rpmModelUri;
-                string modelFileName = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
+                string modelFileName = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{m_CurrentWorkspace.displayName}/{charRef.CharacterFileName}.glb";
 
                 if (!string.IsNullOrEmpty(thumbURL) && !File.Exists(thumbFileName))
                 {
@@ -247,7 +249,7 @@ namespace Inworld.Editors
             }
             // Meanwhile, showcasing progress bar.
         }
-        static void _CreateVariant(InworldCharacterData charRef, GameObject customModel)
+        void _CreateVariant(InworldCharacterData charRef, GameObject customModel)
         { 
             // Use Current Model
             InworldCharacter avatar = customModel ?
@@ -273,7 +275,11 @@ namespace Inworld.Editors
             {
                 Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}");
             }
-            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{charRef.CharacterFileName}.prefab";
+            if (!Directory.Exists($"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{m_CurrentWorkspace.displayName}"))
+            {
+                Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{m_CurrentWorkspace.displayName}");
+            }
+            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{m_CurrentWorkspace.displayName}/{charRef.CharacterFileName}.prefab";
             PrefabUtility.SaveAsPrefabAsset(avatar.gameObject, newAssetPath);
             AssetDatabase.SaveAssets();
             Object.DestroyImmediate(avatar.gameObject);
@@ -282,12 +288,12 @@ namespace Inworld.Editors
         GameObject _GetModel(InworldCharacterData charRef)
         {
             AssetDatabase.Refresh();
-            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
+            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{m_CurrentWorkspace.displayName}/{charRef.CharacterFileName}.glb";
             return !File.Exists(filePath) ? null : AssetDatabase.LoadAssetAtPath<GameObject>(filePath);
         }
         Texture2D _GetTexture2D(InworldCharacterData charRef)
         {
-            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterFileName}.png";
+            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{m_CurrentWorkspace.displayName}/{charRef.CharacterFileName}.png";
             if (!File.Exists(filePath))
                 return InworldAI.DefaultThumbnail;
             byte[] imgBytes = File.ReadAllBytes(filePath);
@@ -297,7 +303,7 @@ namespace Inworld.Editors
         }
         GameObject _GetPrefab(InworldCharacterData charRef)
         {
-            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{charRef.CharacterFileName}.prefab";
+            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{m_CurrentWorkspace.displayName}/{charRef.CharacterFileName}.prefab";
             if (File.Exists(filePath))
                 return AssetDatabase.LoadAssetAtPath<GameObject>(filePath);
             InworldAI.LogError($"Cannot find {charRef.CharacterFileName}.prefab");
@@ -322,7 +328,11 @@ namespace Inworld.Editors
             {
                 Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}");
             }
-            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
+            if (!Directory.Exists($"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{m_CurrentWorkspace.displayName}"))
+            {
+                Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{m_CurrentWorkspace.displayName}");
+            }
+            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{m_CurrentWorkspace.displayName}/{charRef.CharacterFileName}.glb";
             File.WriteAllBytes(newAssetPath, uwr.downloadHandler.data);
             AssetDatabase.Refresh();
             charRef.characterAssets.avatarProgress = 1;
@@ -344,7 +354,11 @@ namespace Inworld.Editors
             {
                 Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}");
             }
-            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterFileName}.png";
+            if (!Directory.Exists($"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{m_CurrentWorkspace.displayName}"))
+            {
+                Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{m_CurrentWorkspace.displayName}");
+            }
+            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{m_CurrentWorkspace.displayName}/{charRef.CharacterFileName}.png";
             File.WriteAllBytes(newAssetPath, uwr.downloadHandler.data);
             charRef.characterAssets.thumbnailProgress = 1;
         }

@@ -113,7 +113,6 @@ namespace Inworld.Editors
         {
             // Create a new SO.
             InworldUserSetting newUser = ScriptableObject.CreateInstance<InworldUserSetting>();
-            
             if (!Directory.Exists(InworldEditor.UserDataPath))
             {
                 Directory.CreateDirectory(InworldEditor.UserDataPath);
@@ -150,7 +149,6 @@ namespace Inworld.Editors
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             InworldEditor.Instance.Status = EditorStatus.SelectGameData;
-            
         }
     }
 }

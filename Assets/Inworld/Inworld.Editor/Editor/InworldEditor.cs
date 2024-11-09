@@ -287,6 +287,8 @@ namespace Inworld.Editors
         /// <returns></returns>
         public GUIStyle BtnCharStyle(Texture2D bg)
         {
+            if (!bg)
+                bg = InworldAI.DefaultThumbnail;
             return new GUIStyle(GUI.skin.button)
             {
                 fixedHeight = 100,

@@ -263,7 +263,7 @@ namespace Inworld.Editors
             string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
             return !File.Exists(filePath) ? null : AssetDatabase.LoadAssetAtPath<GameObject>(filePath);
         }
-        static void _CreateVariant(InworldCharacterData charRef, GameObject customModel)
+        void _CreateVariant(InworldCharacterData charRef, GameObject customModel)
         { 
             // Use Current Model
             InworldCharacter avatar = customModel ?
@@ -289,7 +289,11 @@ namespace Inworld.Editors
             {
                 Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}");
             }
-            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{charRef.CharacterFileName}.prefab";
+            if (!Directory.Exists($"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{m_CurrentWorkspaceName}"))
+            {
+                Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{m_CurrentWorkspaceName}");
+            }
+            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.PrefabPath}/{m_CurrentWorkspaceName}/{charRef.CharacterFileName}.prefab";
             PrefabUtility.SaveAsPrefabAsset(avatar.gameObject, newAssetPath);
             AssetDatabase.SaveAssets();
             Object.DestroyImmediate(avatar.gameObject);
@@ -396,21 +400,32 @@ namespace Inworld.Editors
         {
             InworldCharacterData charRef = CurrentWorkspace?.characters.FirstOrDefault(c => c.brainName == charFullName);
             if (charRef == null)
-                return;
-            UnityWebRequest uwr = InworldEditorUtil.GetResponse(downloadContent);
-            
-            if (string.IsNullOrEmpty(InworldEditorUtil.UserDataPath) || uwr.result != UnityWebRequest.Result.Success)
             {
-                InworldAI.LogError($"Failed to download model: {charFullName} with {uwr.url}");
-                charRef.characterAssets.avatarProgress = 1;
+                InworldAI.LogError($"Cannot Find download data.");
                 return;
             }
+            if (string.IsNullOrEmpty(m_CurrentWorkspaceName))
+            {
+                InworldAI.LogError($"Stage Error. Cannot find workspace.");
+                return;
+            }
+            if (string.IsNullOrEmpty(InworldEditorUtil.UserDataPath))
+            {
+                InworldAI.LogError($"User Data Path Not Exist.");
+                charRef.characterAssets.thumbnailProgress = 1;
+                return;
+            }
+            UnityWebRequest uwr = InworldEditorUtil.GetResponse(downloadContent);
             // YAN: Currently we only download .glb files.
             if (!Directory.Exists($"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}"))
             {
                 Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}");
             }
-            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
+            if (!Directory.Exists($"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{m_CurrentWorkspaceName}"))
+            {
+                Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{m_CurrentWorkspaceName}");
+            }
+            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{m_CurrentWorkspaceName}/{charRef.CharacterFileName}.glb";
             File.WriteAllBytes(newAssetPath, uwr.downloadHandler.data);
             FileInfo currentProgress = new FileInfo(newAssetPath);
             charRef.characterAssets.avatarProgress = (float)currentProgress.Length / uwr.downloadHandler.data.Length;
@@ -421,10 +436,23 @@ namespace Inworld.Editors
         {
             InworldCharacterData charRef = CurrentWorkspace?.characters.FirstOrDefault(c => c.brainName == charFullName);
             if (charRef == null)
+            {
+                InworldAI.LogError($"Cannot Find download data.");
                 return;
+            }
+            if (string.IsNullOrEmpty(m_CurrentWorkspaceName))
+            {
+                InworldAI.LogError($"Stage Error. Cannot find workspace.");
+                return;
+            }
+            if (string.IsNullOrEmpty(InworldEditorUtil.UserDataPath))
+            {
+                InworldAI.LogError($"User Data Path Not Exist.");
+                charRef.characterAssets.thumbnailProgress = 1;
+                return;
+            }
             UnityWebRequest uwr = InworldEditorUtil.GetResponse(downloadContent);
-            
-            if (string.IsNullOrEmpty(InworldEditorUtil.UserDataPath) || uwr.result != UnityWebRequest.Result.Success)
+            if (uwr.result != UnityWebRequest.Result.Success)
             {
                 InworldAI.LogError($"Failed to download Thumbnail: {charFullName} with {uwr.url}");
                 charRef.characterAssets.thumbnailProgress = 1;
@@ -434,7 +462,11 @@ namespace Inworld.Editors
             {
                 Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}");
             }
-            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{charRef.CharacterFileName}.png";
+            if (!Directory.Exists($"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{m_CurrentWorkspaceName}"))
+            {
+                Directory.CreateDirectory($"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{m_CurrentWorkspaceName}");
+            }
+            string newAssetPath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.ThumbnailPath}/{m_CurrentWorkspaceName}/{charRef.CharacterFileName}.png";
             File.WriteAllBytes(newAssetPath, uwr.downloadHandler.data);
             FileInfo currentProgress = new FileInfo(newAssetPath);
             charRef.characterAssets.thumbnailProgress = (float)currentProgress.Length / uwr.downloadHandler.data.Length;
