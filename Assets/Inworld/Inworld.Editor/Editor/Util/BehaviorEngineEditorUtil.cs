@@ -79,6 +79,11 @@ namespace Inworld.Editors
                 return;
             
             TaskHandler taskHandler = ScriptableObject.CreateInstance(taskHandlerClassName) as TaskHandler;
+            if (!taskHandler)
+            {
+                InworldAI.LogError("Failed to create Task Handler object.");
+                return;
+            }
             
             if (!Directory.Exists(k_TaskHandlerObjectDirectoryPath))
                 Directory.CreateDirectory(k_TaskHandlerObjectDirectoryPath);

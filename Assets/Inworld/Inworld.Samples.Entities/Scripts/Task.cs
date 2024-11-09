@@ -5,7 +5,6 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -35,7 +34,7 @@ namespace Inworld.BehaviorEngine
             if(m_TaskHandler == null)
                 InworldAI.LogException("This task is missing a Task Handler.");
             
-            return m_TaskHandler.Validate(inworldCharacter, parameters, out message);
+            return m_TaskHandler.Validate(this, inworldCharacter, parameters, out message);
         }
 
         public IEnumerator Execute(InworldCharacter inworldCharacter, TaskHandler.CompleteTask completeCallback, TaskHandler.FailTask failCallback)

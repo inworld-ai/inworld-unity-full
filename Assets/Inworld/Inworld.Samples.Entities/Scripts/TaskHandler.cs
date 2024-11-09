@@ -5,7 +5,6 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
-using Inworld.Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,24 +18,18 @@ namespace Inworld.BehaviorEngine
         public event CompleteTask onTaskComplete;
         public event FailTask onTaskFail;
 
-        protected Task m_Task;
-
         protected Dictionary<string, EntityItem> m_EntityItems = new Dictionary<string, EntityItem>();
-
-        public void Initialize(Task task)
-        {
-            m_Task = task;
-        }
         
-        public virtual bool Validate(InworldCharacter inworldCharacter, Dictionary<string, string> parameters, out string message)
+        public virtual bool Validate(Task task, InworldCharacter inworldCharacter, Dictionary<string, string> parameters, out string message)
         {
-            foreach (TaskParameter taskParameter in m_Task.TaskParameters)
+            m_EntityItems.Clear();
+            foreach (TaskParameter taskParameter in task.TaskParameters)
             {
                 if (parameters.TryGetValue(taskParameter.Name, out string itemID) && EntityManager.Instance.FindItem(itemID, out EntityItem entityItem))
-                    m_EntityItems.Add(itemID, entityItem);
+                    m_EntityItems.Add(taskParameter.Name, entityItem);
                 else
                 {
-                    message = $"Could not find the Entity Item: {itemID} for the given task: {m_Task.TaskShortName}";
+                    message = $"Could not find the Entity Item: {itemID} for the given task: {task.TaskShortName}";
                     return false;
                 }
             }
@@ -46,10 +39,20 @@ namespace Inworld.BehaviorEngine
         
         public abstract IEnumerator Execute(InworldCharacter inworldCharacter);
 
-            public void ClearEventListeners()
-            {
-                onTaskComplete = null;
-                onTaskFail = null;
-            }
+        public void ClearEventListeners()
+        {
+            onTaskComplete = null;
+            onTaskFail = null;
         }
+        
+        protected void Complete()
+        {
+            onTaskComplete?.Invoke();
+        }
+        
+        protected void Fail(string reason)
+        {
+            onTaskFail?.Invoke(reason);
+        }
+    }
 }
