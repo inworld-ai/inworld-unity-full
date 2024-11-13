@@ -22,7 +22,7 @@ namespace Inworld.Sample
         [SerializeField] protected TMP_Dropdown m_Dropdown;
         [SerializeField] protected Button m_SendButton;
         [SerializeField] protected Button m_RecordButton;
-        [SerializeField] protected BubblePanel m_BubblePanel;
+        [SerializeField] protected BubbleContainer m_BubblePanel;
         [SerializeField] protected string m_SubmitName;
         [SerializeField] protected bool m_IsCharacterInteraction = true;
 

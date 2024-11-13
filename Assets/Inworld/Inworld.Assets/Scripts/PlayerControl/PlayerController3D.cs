@@ -12,17 +12,11 @@ namespace Inworld.Sample
 {
     public class PlayerController3D : PlayerController
     {
-        FeedbackCanvas m_FeedbackDlg;
         InworldCameraController m_CameraController;
         protected void Awake()
         {
             m_CameraController = GetComponent<InworldCameraController>();
-            m_FeedbackDlg = GetComponent<FeedbackCanvas>();
-        }
-        public override void OpenFeedback(string interactionID, string correlationID)
-        {
-            m_FeedbackDlg.Open();
-            m_FeedbackDlg.Init(interactionID, correlationID);
+            m_BubbleChat = GetComponent<BubbleChat>();
         }
     }
 }

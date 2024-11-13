@@ -7,6 +7,7 @@
 
 using Inworld.Packet;
 using Inworld.Sample;
+using Inworld.UI;
 using System;
 using TMPro;
 using UnityEngine;
@@ -15,7 +16,7 @@ using UnityEngine.UI;
 
 namespace Inworld.Assets
 {
-    public class ChatPanel3D : ChatPanel
+    public class ChatPanel3D : BubbleChat
     {
         [SerializeField] EmotionMap m_EmotionMap;
         [SerializeField] InworldFacialEmotion m_Emotion;
