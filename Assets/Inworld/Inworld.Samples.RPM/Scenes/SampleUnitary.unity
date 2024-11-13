@@ -1285,7 +1285,7 @@ PrefabInstance:
       objectReference: {fileID: -2377694252290491158, guid: d0117f5b80179ce48b02e8c3816d2fb7, type: 3}
     - target: {fileID: 4454345176880031466, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
       propertyPath: m_ChatOptions.hasFeedback
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6080833715374965281, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
