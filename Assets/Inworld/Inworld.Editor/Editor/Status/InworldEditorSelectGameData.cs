@@ -260,7 +260,7 @@ namespace Inworld.Editors
         GameObject _GetModel(InworldCharacterData charRef)
         {
             AssetDatabase.Refresh();
-            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{charRef.CharacterFileName}.glb";
+            string filePath = $"{InworldEditorUtil.UserDataPath}/{InworldEditor.AvatarPath}/{m_CurrentWorkspaceName}/{charRef.CharacterFileName}.glb";
             return !File.Exists(filePath) ? null : AssetDatabase.LoadAssetAtPath<GameObject>(filePath);
         }
         void _CreateVariant(InworldCharacterData charRef, GameObject customModel)
