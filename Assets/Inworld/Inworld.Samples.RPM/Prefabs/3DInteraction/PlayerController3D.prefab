@@ -2094,7 +2094,7 @@ PrefabInstance:
       objectReference: {fileID: 635667636488429425}
     - target: {fileID: 9134668228124160802, guid: bb9da82e71ed13e4395ac3ecf4f7277f, type: 3}
       propertyPath: m_Name
-      value: FeedbackCanvas
+      value: ContentEditingCanvas
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5458056919294274427, guid: bb9da82e71ed13e4395ac3ecf4f7277f, type: 3}

@@ -16,7 +16,8 @@ using UnityEngine.InputSystem;
 
 namespace Inworld.Assets
 {
-    public class FeedbackCanvas : PlayerCanvas
+    //TODO(Yan): Remove the feedback related tasks.
+    public class ContentEditingCanvas : PlayerCanvas
     {
         [SerializeField] TMP_InputField m_InputField;
         [SerializeField] GameObject m_Result;
