@@ -6,6 +6,7 @@
 *************************************************************************************************/
 using Inworld.Interactions;
 using Inworld.Runtime.RPM;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,6 +56,7 @@ namespace Inworld.Sample.RPM
             if (!loadHistory)
                 InworldController.Client.SessionHistory = "";
             InworldController.CharacterHandler.Register(m_Character);
+            InworldController.CharacterHandler.CurrentCharacter = m_Character;
         }
 
         public void QuitGame()
@@ -73,7 +75,6 @@ namespace Inworld.Sample.RPM
                 return;
             m_Interaction.IsMute = isOn;
         }
-
         /// <summary>
         /// Save game
         /// </summary>
