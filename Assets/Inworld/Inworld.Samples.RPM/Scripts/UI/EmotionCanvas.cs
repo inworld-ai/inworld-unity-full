@@ -124,6 +124,7 @@ namespace Inworld.Sample.RPM
         protected override void OnEnable()
         {
             base.OnEnable();
+            InworldController.CharacterHandler.CurrentCharacter = m_Character;
             m_Character.Event.onPacketReceived.AddListener(OnPacketEvents);
             Debug.Log("EmotionCanvas Start");
         }

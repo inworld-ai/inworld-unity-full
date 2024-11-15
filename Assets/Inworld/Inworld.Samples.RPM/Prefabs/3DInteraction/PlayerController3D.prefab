@@ -281,7 +281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ContentAnchor: {fileID: 8422684618343011769}
-  m_BubbleLeft: {fileID: 3364394929633695711, guid: f324550a32836b94693f21f7a416411a, type: 3}
+  m_BubbleLeft: {fileID: 4700556965938599861, guid: 21defec30991a4e419bd575e9824ae92, type: 3}
   m_BubbleRight: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
   m_ChatOptions:
     audio: 0
@@ -2094,7 +2094,7 @@ PrefabInstance:
       objectReference: {fileID: 635667636488429425}
     - target: {fileID: 9134668228124160802, guid: bb9da82e71ed13e4395ac3ecf4f7277f, type: 3}
       propertyPath: m_Name
-      value: FeedbackCanvas
+      value: ContentEditingCanvas
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5458056919294274427, guid: bb9da82e71ed13e4395ac3ecf4f7277f, type: 3}

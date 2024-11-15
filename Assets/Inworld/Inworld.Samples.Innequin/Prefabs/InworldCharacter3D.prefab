@@ -2854,9 +2854,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2030273176201225856}
     - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+      propertyPath: m_BubbleLeft
+      value: 
+      objectReference: {fileID: 4370749978030050877, guid: 6e31716df34c4f04a8a382ad03c5790d, type: 3}
+    - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
       propertyPath: m_EmotionMap
       value: 
       objectReference: {fileID: 11400000, guid: 9991e8a9d037f9842aef3b51e6c79262, type: 2}
+    - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
+      propertyPath: m_BubbleRight
+      value: 
+      objectReference: {fileID: 3195912804919175791, guid: ce19183024b657340b5e830b1549618e, type: 3}
     - target: {fileID: 5950857796144700953, guid: b4e0ff05a9335624a8ef7746e26343f5, type: 3}
       propertyPath: m_ChatOptions.relation
       value: 1

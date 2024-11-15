@@ -536,6 +536,10 @@ PrefabInstance:
       propertyPath: m_EnableGroupChat
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1508805550564489285, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_SelectingMethod
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2395919966041133306, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_APIKey
       value: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
@@ -706,7 +710,6 @@ GameObject:
   - component: {fileID: 5095182497582714995}
   - component: {fileID: 7365399475508524621}
   - component: {fileID: 7545006411209502295}
-  - component: {fileID: 730931117579850477}
   - component: {fileID: 7545006411209502296}
   m_Layer: 0
   m_Name: PlayerController
@@ -715,27 +718,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &730931117579850477
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 401423953611440462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce9dce1e431f53e4db0037f46907bc2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onPlayerSpeaks:
-    m_PersistentCalls:
-      m_Calls: []
-  onCanvasOpen:
-    m_PersistentCalls:
-      m_Calls: []
-  onCanvasClosed:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1001 &2287690362095020954
 PrefabInstance:
   m_ObjectHideFlags: 0
