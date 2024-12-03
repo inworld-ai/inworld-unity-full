@@ -8,6 +8,8 @@
 using Inworld.Entities;
 using Inworld.Inworld.Native.VAD;
 using System;
+using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 using System.Linq;
@@ -26,9 +28,11 @@ namespace Inworld.AEC
         AECProbe m_Probe;
         bool m_IsAudioDebugging = false;
         IntPtr m_AECHandle;
-        protected List<short> m_OutputBuffer = new List<short>();
+        protected ConcurrentQueue<short> m_OutputBuffer = new ConcurrentQueue<short>();
         protected InputAction m_DumpAudioAction;
         protected float m_AECTimer = 5;
+        protected bool m_AudioFilterStarted;
+        [Range(0, 10000)][SerializeField] protected int m_OutputBufferOffset = 4800;
         [Range(1, 10)][SerializeField] float m_AECResetCountDown = 5f;
         
 #region Debug Dump Audio
@@ -89,10 +93,48 @@ namespace Inworld.AEC
         /// <param name="channels">the channels</param>
         public override void GetOutputData(float[] data, int channels)
         {
+            if (!m_AudioFilterStarted)
+                return;
 #if !UNITY_WEBGL
             WavUtility.ConvertAudioClipDataToInt16Array(ref m_OutputBuffer, data, m_OutputSampleRate, channels);
 #endif
         }
+
+        public override bool StartMicrophone(string deviceName)
+        {
+            if (base.StartMicrophone(deviceName))
+            {
+                m_InputBuffer.Clear();
+                m_OutputBuffer.Clear();
+                m_AudioFilterStarted = false;
+                for(int i = 0; i < m_OutputBufferOffset; i++)
+                    m_OutputBuffer.Enqueue(0);
+                Recording.Play();
+                return true;
+            }
+            return false;
+        }
+
+        protected override IEnumerator AudioCoroutine()
+        {
+            while (true)
+            {
+#if UNITY_WEBGL && !UNITY_EDITOR
+                if (WebGLIsRecording() == 0)
+                    StartMicrophone(m_DeviceName);
+#else
+                if (!Microphone.IsRecording(m_DeviceName))
+                    StartMicrophone(m_DeviceName);
+#endif
+                
+                ProcessAudio();
+                Calibrate();
+                Collect();
+                yield return OutputData();
+                yield return new WaitForSecondsRealtime(0.1f);
+            }
+        }
+        
         protected override void ProcessAudio()
         {
             if (!Probe || !Probe.enabled)
@@ -101,11 +143,16 @@ namespace Inworld.AEC
                 return;
             }
             m_PlayerVolumeCheckBuffer.Clear();
-            while (m_InputBuffer.Count > k_NumSamples && m_OutputBuffer.Count > k_NumSamples)
+            while (m_InputBuffer.Count >= k_NumSamples && m_OutputBuffer.Count >= k_NumSamples)
             {
-                FilterAudio(m_InputBuffer.Take(k_NumSamples).ToArray(), m_OutputBuffer.Take(k_NumSamples).ToArray());
-                m_InputBuffer.RemoveRange(0, k_NumSamples);
-                m_OutputBuffer.RemoveRange(0, k_NumSamples);
+                short[] inputData = new short[k_NumSamples];
+                short[] outputData = new short[k_NumSamples];
+                for (int i = 0; i < k_NumSamples; i++)
+                {
+                    m_InputBuffer.TryDequeue(out inputData[i]);
+                    m_OutputBuffer.TryDequeue(out outputData[i]);
+                }
+                FilterAudio(inputData, outputData);
             }
             if (EnableAEC)
             {
@@ -120,9 +167,7 @@ namespace Inworld.AEC
                 }
                 m_AECTimer -= 0.1f;
             }
-            RemoveOverDueData(ref m_InputBuffer);
-            RemoveOverDueData(ref m_OutputBuffer);
-            RemoveOverDueData(ref m_ProcessedWaveData);
+            RemoveOverDueData(ref m_ProcessedWaveData, k_SampleRate);
         }
         /// <summary>
         /// Call it when you switch AudioListener(mostly Main Camera)
@@ -173,6 +218,8 @@ namespace Inworld.AEC
 #endif
             m_PrevSampleMode = m_SamplingMode;
             m_DumpAudioAction = InworldAI.InputActions["DumpAudio"];
+
+            Recording.loop = true;
             base.Init();
         }
         protected override bool DetectPlayerSpeaking()
@@ -221,6 +268,16 @@ namespace Inworld.AEC
                 if (outputData != null)
                     m_DebugOutput.AddRange(outputData);
             }
+        }
+        
+        void OnAudioFilterRead(float[] data, int channels)
+        {
+            if (!m_AudioFilterStarted)
+            {
+                m_AudioFilterStarted = true;
+                return;
+            }
+            WavUtility.ConvertAudioClipDataToInt16Array(ref m_InputBuffer, data, m_OutputSampleRate, channels);
         }
     }
 }
