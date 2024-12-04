@@ -42,9 +42,9 @@ AudioSource:
   m_GameObject: {fileID: 917422910403801994}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: cebd8f957b7bfbb41bee47abb8a8575e, type: 2}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -142,13 +142,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SamplingMode: 3
-  m_PushToTalkKey: 0
   m_PlayerVolumeThreshold: 6
+  m_CaptureCheckingDuration: 0.5
   m_BufferSeconds: 1
   m_AudioToPushCapacity: 100
   m_DeviceName: 
   m_DetectPlayerSpeaking: 1
-  m_SwitchingAudioTimer: 0.5
+  m_MutePlayerMic: 0
+  m_TestMode: 0
   m_AudioEvent:
     onStartCalibrating:
       m_PersistentCalls:
@@ -168,5 +169,4 @@ MonoBehaviour:
     onPlayerStopSpeaking:
       m_PersistentCalls:
         m_Calls: []
-  m_DumpAudioHotKey: 0
-  m_AECResetDuration: 0.5
+  m_AECResetCountDown: 5
