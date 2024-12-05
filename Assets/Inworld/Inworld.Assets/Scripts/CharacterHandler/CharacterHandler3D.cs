@@ -58,6 +58,9 @@ namespace Inworld.Sample
         {
             switch (m_SelectingMethod)
             {
+                case CharSelectingMethod.Auto:
+                    AutoSelectCharacter();
+                    break;
                 case CharSelectingMethod.KeyCode:
                     SelectCharacterByKey();
                     break;
@@ -65,6 +68,11 @@ namespace Inworld.Sample
                     SelectCharacterBySightAngle();
                     break;
             }
+        }
+        void AutoSelectCharacter()
+        {
+            if (!CurrentCharacter && m_CharacterList.Count != 0)
+                CurrentCharacter = m_CharacterList[0];
         }
         protected virtual void SelectCharacterBySightAngle()
         {
