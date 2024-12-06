@@ -760,6 +760,10 @@ PrefabInstance:
       propertyPath: m_EnableGroupChat
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1508805550564489285, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_SelectingMethod
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2395919966041133306, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_APIKey
       value: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
