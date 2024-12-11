@@ -9,6 +9,7 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Mm]emoryCaptures/
+/[Uu]ser[Ss]ettings/
 /.idea/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
@@ -64,3 +65,9 @@ sysinfo.txt
 crashlytics-build.properties
 
 **/.DS_Store
+
+# Inworld Related
+Assets/StreamingAssets/*
+Assets/Inworld/UserData
+Assets/Inworld/UserData.meta
+*.unitypackage.meta
