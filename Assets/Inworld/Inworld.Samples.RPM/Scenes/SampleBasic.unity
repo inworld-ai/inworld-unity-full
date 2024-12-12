@@ -259,6 +259,10 @@ PrefabInstance:
       propertyPath: m_VolumeOnPlayerSpeaking
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8216417436946439030, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: 2959e7c83a4719e49be9d20621fa24ca, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
