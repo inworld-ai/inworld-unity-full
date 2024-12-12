@@ -104,7 +104,6 @@ namespace Inworld
             }; 
             AssetDatabase.ExportPackage(assetPaths, k_ExtraPackagePath, ExportPackageOptions.Recurse); 
         }
- 
         public static void BuildTestScene()
         {
             string[] scenes = { k_TestScenePath };
@@ -141,6 +140,5 @@ namespace Inworld
                     break;
             }
         }
-        
     }
 }
