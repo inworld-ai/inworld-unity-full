@@ -44,7 +44,7 @@ namespace Inworld
             };
         }
         
-        [MenuItem("Inworld/Export Package/Install Dependencies")]
+        [MenuItem("Inworld/Install Dependencies/SDK")]
         public static async void InstallDependencies()
         {
             if (Directory.Exists($"Assets/{k_LegacyPkgName}") || Directory.Exists($"{k_InworldPath}/{k_LegacyPkgName}"))
