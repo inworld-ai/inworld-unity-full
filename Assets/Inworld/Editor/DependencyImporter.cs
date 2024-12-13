@@ -98,7 +98,7 @@ namespace Inworld
         {
             await _AddUnityPackage(k_DependencyPackage, _GetTgzFileName());
             if (!Directory.Exists($"{k_InworldPath}/Inworld.Assets") 
-                && File.Exists($"{k_InworldPath}/InworldExtraAssets.unitypackage"))
+                && File.Exists($"{k_InworldPath}/{k_ExtraAssets}.unitypackage"))
                 AssetDatabase.ImportPackage($"{k_InworldPath}/InworldExtraAssets.unitypackage", false);
         }
         
