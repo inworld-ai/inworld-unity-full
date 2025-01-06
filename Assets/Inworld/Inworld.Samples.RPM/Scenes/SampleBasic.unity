@@ -259,6 +259,10 @@ PrefabInstance:
       propertyPath: m_VolumeOnPlayerSpeaking
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8216417436946439030, guid: 809fb4511befe9142893b7b016bea809, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: 2959e7c83a4719e49be9d20621fa24ca, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -375,6 +379,10 @@ PrefabInstance:
       value: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
       objectReference: {fileID: 0}
     - target: {fileID: 1109287189565502095, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_AutoScene
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1109287189565502095, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_SceneFullName
       value: workspaces/unitytest/scenes/unity_gallery
       objectReference: {fileID: 0}
@@ -412,6 +420,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1109287189565502095, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_Continuation.dialogHistory.history.Array.data[1].actor.type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1508805550564489285, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_SelectingMethod
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2395919966041133306, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}

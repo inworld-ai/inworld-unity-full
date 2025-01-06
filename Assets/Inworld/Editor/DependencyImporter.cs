@@ -19,26 +19,35 @@ namespace Inworld
     [InitializeOnLoad]
     public class DependencyImporter : AssetPostprocessor
     {
-        const string k_Pathv2 = "Assets/Inworld.AI";
-        const string k_Pathv3 = "Assets/Inworld/Inworld.AI"; // YAN: These 2 folders are incompatible.
+        
+        const string k_LegacyPkgName = "Inworld.AI";
+        const string k_PkgName = "InworldAI.Full";
+        const string k_ExtraAssets = "InworldExtraAssets";
+        const string k_DependencyPackage = "com.inworld.unity.core";
+        const string k_InworldPath = "Assets/Inworld";
         const string k_UpgradeTitle = "Legacy Inworld found";
         const string k_UpgradeContent = "Unable to upgrade. Please delete the folder Assets/Inworld, and reimport this package";
-        const string k_DependencyPackage = "com.inworld.unity.core";
-        const string k_InworldAssetsPath = "Assets/Inworld/Inworld.Assets";
-        const string k_ExtraPackagePath = "Assets/Inworld/InworldExtraAssets.unitypackage";
         
         static DependencyImporter()
         {
-            AssetDatabase.importPackageCompleted += _ =>
+            AssetDatabase.importPackageCompleted += name =>
             {
-                InstallDependencies();
+                switch (name)
+                {
+                    case k_PkgName:
+                        InstallDependencies();
+                        break;
+                    case k_ExtraAssets:
+                        _InstallTMP();
+                        break;
+                }
             };
         }
         
-        [MenuItem("Inworld/Export Package/Install Dependencies")]
+        [MenuItem("Inworld/Install Dependencies/SDK")]
         public static async void InstallDependencies()
         {
-            if (Directory.Exists(k_Pathv2) || Directory.Exists(k_Pathv3))
+            if (Directory.Exists($"Assets/{k_LegacyPkgName}") || Directory.Exists($"{k_InworldPath}/{k_LegacyPkgName}"))
             {
                 if (EditorUtility.DisplayDialog(k_UpgradeTitle, k_UpgradeContent, "OK"))
                     return;
@@ -88,9 +97,14 @@ namespace Inworld
         static async Task _AddPackage()
         {
             await _AddUnityPackage(k_DependencyPackage, _GetTgzFileName());
-            if (!Directory.Exists(k_InworldAssetsPath) && File.Exists(k_ExtraPackagePath))
-                AssetDatabase.ImportPackage(k_ExtraPackagePath, false);
-            if (System.Type.GetType("TMPro.TextMeshPro, Unity.TextMeshPro") != null)
+            if (!Directory.Exists($"{k_InworldPath}/Inworld.Assets") 
+                && File.Exists($"{k_InworldPath}/{k_ExtraAssets}.unitypackage"))
+                AssetDatabase.ImportPackage($"{k_InworldPath}/InworldExtraAssets.unitypackage", false);
+        }
+        
+        static void _InstallTMP()
+        {
+            if (File.Exists("Assets/TextMesh Pro/Resources/TMP Settings.asset"))
                 return;
             string packageFullPath = TMP_EditorUtility.packageFullPath;
             AssetDatabase.ImportPackage(packageFullPath + "/Package Resources/TMP Essential Resources.unitypackage", false);

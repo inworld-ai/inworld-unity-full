@@ -28,7 +28,7 @@ namespace Inworld
         const string k_ExtraPackagePath = "Assets/Inworld/InworldExtraAssets.unitypackage";
         const string k_TestScenePath = "Assets/Inworld/Inworld.Samples.RPM/Scenes/SampleBasic.unity";
 
-        [MenuItem("Inworld/Export Package/Core")]
+        [MenuItem("Inworld/Export Package/Core", false, 100)]
         public static async void ExportCore()
         {
             PackRequest req = UnityEditor.PackageManager.Client.Pack(k_CorePackagePath, k_FullPackagePath);
@@ -55,7 +55,7 @@ namespace Inworld
         /// <summary>
         ///     Call it via outside command line to export package.
         /// </summary>
-        [MenuItem("Inworld/Export Package/Full")]
+        [MenuItem("Inworld/Export Package/SDK/Full", false, 102)]
         public static void ExportFull()
         {
             string corePath = _GetTgzFileName();
@@ -73,25 +73,8 @@ namespace Inworld
             }; 
             AssetDatabase.ExportPackage(assetPaths, $"{k_FullPackagePath}/{k_FullPackageName}.unitypackage", ExportPackageOptions.Recurse);
         }
-        /// <summary>
-        ///     Call it via outside command line to export package.
-        /// </summary>
-        [MenuItem("Inworld/Export Package/Unity Asset Store")]
-        public static void ExportUAS()
-        {
-            string corePath = _GetTgzFileName();
-            if (string.IsNullOrEmpty(corePath))
-            {
-                Debug.LogError("Please extract core package first!");
-                return;
-            }
-            string[] assetPaths =
-            {
-                k_FullPackagePath
-            }; 
-            AssetDatabase.ExportPackage(assetPaths, $"{k_FullPackagePath}/{k_FullPackageName}.unitypackage", ExportPackageOptions.Recurse);
-        }
-        [MenuItem("Inworld/Export Package/Extra Assets")]
+
+        [MenuItem("Inworld/Export Package/SDK/Extra Assets", false, 101)]
         public static void ExportExtraAssets()
         {
             string[] assetPaths =
@@ -104,7 +87,6 @@ namespace Inworld
             }; 
             AssetDatabase.ExportPackage(assetPaths, k_ExtraPackagePath, ExportPackageOptions.Recurse); 
         }
- 
         public static void BuildTestScene()
         {
             string[] scenes = { k_TestScenePath };
@@ -141,6 +123,5 @@ namespace Inworld
                     break;
             }
         }
-        
     }
 }
