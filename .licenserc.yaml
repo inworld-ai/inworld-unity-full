@@ -96,6 +96,7 @@ header:
     - '**/*.yml'
     - '**/*.config'   
     - '**/*.editorconfig'     
+    - '**/*.mixer'  
     
   comment: on-failure
 
