@@ -113,27 +113,29 @@ namespace Inworld.AEC
             }
             return false;
         }
-
-        protected override IEnumerator AudioCoroutine()
+        protected override int GetAudioData()
         {
-            while (true)
-            {
 #if UNITY_WEBGL && !UNITY_EDITOR
-                if (WebGLIsRecording() == 0)
-                    StartMicrophone(m_DeviceName);
-#else
-                if (!Microphone.IsRecording(m_DeviceName))
-                    StartMicrophone(m_DeviceName);
-#endif
-                
-                ProcessAudio();
-                Calibrate();
-                Collect();
-                yield return OutputData();
-                yield return new WaitForSecondsRealtime(0.1f);
+            if (WebGLIsRecording() == 0)
+                StartMicrophone(m_DeviceName);
+            m_nPosition = WebGLGetPosition();
+            if (m_nPosition < m_LastPosition)
+                m_nPosition = Recording.clip.samples;
+            if (m_nPosition <= m_LastPosition)
+            {
+                return -1;
             }
+            int nSize = m_nPosition - m_LastPosition;
+            if (!WebGLGetAudioData())
+                return -1;
+            m_LastPosition = m_nPosition % Recording.clip.samples;
+            return nSize;
+#else
+            if (!Microphone.IsRecording(m_DeviceName))
+                StartMicrophone(m_DeviceName);
+            return 1;
+#endif
         }
-        
         protected override void ProcessAudio()
         {
             if (!Probe || !Probe.enabled)
