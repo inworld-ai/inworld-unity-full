@@ -21,15 +21,20 @@ namespace Inworld.Editors
     // YAN: At this moment, the ws data has already filled.
     public class InworldEditorSelectGameData : IEditorState
     {
+        const string k_DefaultProject = "All Workspaces";
         const string k_DefaultWorkspace = "--- SELECT WORKSPACE ---";
         const string k_DefaultKey = "--- SELECT KEY---";
         const string k_DefaultGameMode = "--- SELECT USAGE ---";
         const string k_DataMissing = "Some data is missing.\nPlease make sure you have at least one scene and one key/secret in your workspace";
         const string k_LLMService = "LLM Service";
         const string k_CharacterIntegration = "Character Integration";
+        
+        string m_CurrentProject = "All Workspaces";
         string m_CurrentWorkspaceName = "--- SELECT WORKSPACE ---";
         string m_CurrentKey = "--- SELECT KEY---";
         string m_CurrentGameMode = "--- SELECT USAGE ---";
+        
+        List<string> m_CurrentWorkspaces = new List<string>();
 
         bool m_IsCharIntegration = true;
         bool m_DisplayDataMissing;
@@ -60,6 +65,7 @@ namespace Inworld.Editors
         /// </summary>
         public void DrawContent()
         {
+            _DrawProjectDropDown();
             _DrawWorkspaceDropDown();
             _DrawKeyDropDown();
             _DrawGameModedDropDown();
@@ -113,11 +119,35 @@ namespace Inworld.Editors
         {
             m_DisplayDataMissing = false;
             m_StartDownload = false;
-            m_CurrentKey = k_DefaultKey;
+            m_CurrentProject = k_DefaultProject;
             m_CurrentWorkspaceName = k_DefaultWorkspace;
+            m_CurrentKey = k_DefaultKey;
+            _ListAllWorkspaces();
             if (InworldAI.User.Workspace.Count != 1)
                 return;
             _SelectWorkspace(InworldAI.User.Workspace[0].displayName);
+        }
+        void _ListAllWorkspaces()
+        {
+            m_CurrentWorkspaces.Clear();
+            m_CurrentWorkspaces.Add(k_DefaultWorkspace);
+            m_CurrentWorkspaces.AddRange(InworldAI.User.WorkspaceList);
+        }
+        void _ListSelectedWorkspaces(string projName)
+        {
+            InworldProjectData proj = InworldAI.User.GetProjectByDisplayName(projName);
+            if (proj == null)
+            {
+                _ListAllWorkspaces();
+                return;
+            }
+            m_CurrentWorkspaces.Clear();
+            m_CurrentWorkspaces.Add(k_DefaultWorkspace);
+            m_CurrentWorkspaces.AddRange(proj.WorkspaceList);
+            if (!proj.WorkspaceList.Contains(m_CurrentWorkspaceName))
+                m_CurrentWorkspaceName = k_DefaultWorkspace;
+            if (proj.WorkspaceList.Count == 1)
+                _SelectWorkspace(proj.WorkspaceList[0]);
         }
 
         /// <summary>
@@ -214,11 +244,18 @@ namespace Inworld.Editors
             AssetDatabase.Refresh();
             return gameData;
         }
+        void _DrawProjectDropDown()
+        {
+            EditorGUILayout.LabelField("Choose Project:", InworldEditor.Instance.TitleStyle);
+            List<string> projList = new List<string>();
+            projList.Add(k_DefaultProject);
+            projList.AddRange(InworldAI.User.Projects.Select(ws => ws.DisplayName).ToList());
+            InworldEditorUtil.DrawDropDown(m_CurrentProject, projList, _SelectProject);
+        }
         void _DrawWorkspaceDropDown()
         {
             EditorGUILayout.LabelField("Choose Workspace:", InworldEditor.Instance.TitleStyle);
-            List<string> wsList = InworldAI.User.Workspace.Select(ws => ws.displayName).ToList();
-            InworldEditorUtil.DrawDropDown(m_CurrentWorkspaceName, wsList, _SelectWorkspace);
+            InworldEditorUtil.DrawDropDown(m_CurrentWorkspaceName, m_CurrentWorkspaces, _SelectWorkspace);
         }
 
         void _DrawGameModedDropDown()
@@ -371,6 +408,14 @@ namespace Inworld.Editors
                 ws.keySecrets = new List<InworldKeySecret>();
             ws.keySecrets.Clear();
             ws.keySecrets.AddRange(resp.apiKeys); 
+        }
+        void _SelectProject(string projectName)
+        {
+            m_CurrentProject = projectName;
+            if (projectName == k_DefaultProject)
+                _ListAllWorkspaces();
+            else
+                _ListSelectedWorkspaces(projectName);
         }
         void _SelectWorkspace(string workspaceDisplayName)
         {

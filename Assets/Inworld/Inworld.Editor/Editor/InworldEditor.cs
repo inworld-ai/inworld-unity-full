@@ -42,6 +42,7 @@ namespace Inworld.Editors
         [SerializeField] string m_PrefabPath;
         [Header("URLs:")]
         [SerializeField] InworldServerConfig m_ServerConfig;
+        [SerializeField] string m_ProjectURL;
         [SerializeField] string m_WorkspaceURL;
         [SerializeField] string m_KeyURL;
         [SerializeField] string m_ScenesURL;
@@ -260,6 +261,10 @@ namespace Inworld.Editors
         {
             margin = new RectOffset(10, 10, 0, 0)
         };
+        /// <summary>
+        /// Gets the URL for listing projects.
+        /// </summary>
+        public static string ListProjectURL => $"https://{Instance.m_ServerConfig.web}/{k_EntryV1}/{Instance.m_ProjectURL}";
         /// <summary>
         /// Gets the URL for listing workspaces
         /// </summary>

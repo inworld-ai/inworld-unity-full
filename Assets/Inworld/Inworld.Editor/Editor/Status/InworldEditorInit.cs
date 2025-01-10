@@ -103,11 +103,15 @@ namespace Inworld.Editors
         {
             
         }
-
+        void _ListProject()
+        {
+            InworldEditorUtil.SendWebGetRequest(InworldEditor.ListProjectURL, true, OnListProjectsCompleted);
+            EditorUtility.DisplayProgressBar("Inworld", "Getting Projects...", 0.3f);
+        }
         void _ListWorkspace()
         {
             InworldEditorUtil.SendWebGetRequest(InworldEditor.ListWorkspaceURL, true, OnListWorkspaceCompleted);
-            EditorUtility.DisplayProgressBar("Inworld", "Getting Workspace data...", 0.75f);
+            EditorUtility.DisplayProgressBar("Inworld", "Getting Workspace data...", 0.5f);
         }
         void _CreateUserDirectory()
         {
@@ -128,8 +132,26 @@ namespace Inworld.Editors
             AssetDatabase.Refresh();
             InworldAI.User = newUser;
             InworldAI.User.Name = InworldEditor.InputUserName;
-            EditorUtility.DisplayProgressBar("Inworld", "Create User Profile Completed!", 0.5f);
+            EditorUtility.DisplayProgressBar("Inworld", "Create User Profile Completed!", 0.2f);
             InworldAI.LogEvent("Login_Studio");
+            _ListProject();
+        }
+        void OnListProjectsCompleted(AsyncOperation op)
+        {
+            UnityWebRequest uwr = InworldEditorUtil.GetResponse(op);
+            if (uwr.result != UnityWebRequest.Result.Success)
+            {
+                EditorUtility.ClearProgressBar();
+                InworldEditor.Instance.Error = $"List Workspace Failed: {InworldEditor.GetError(uwr.error)}";
+                return;
+            }
+            EditorUtility.DisplayProgressBar("Inworld", "Getting Project data Completed", 0.4f);
+            ListProjectResponse response = JsonConvert.DeserializeObject<ListProjectResponse>(uwr.downloadHandler.text);
+            InworldAI.User.Projects.Clear();
+            InworldAI.User.Projects.AddRange(response.workspaceCollections);
+            EditorUtility.SetDirty(InworldAI.User);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
             _ListWorkspace();
         }
         void OnListWorkspaceCompleted(AsyncOperation obj)
@@ -141,7 +163,7 @@ namespace Inworld.Editors
                 InworldEditor.Instance.Error = $"List Workspace Failed: {InworldEditor.GetError(uwr.error)}";
                 return;
             }
-            EditorUtility.DisplayProgressBar("Inworld", "Getting Workspace data Completed", 1f);
+            EditorUtility.DisplayProgressBar("Inworld", "Getting Workspace data Completed", 0.75f);
             ListWorkspaceResponse response = JsonConvert.DeserializeObject<ListWorkspaceResponse>(uwr.downloadHandler.text);
             InworldAI.User.Workspace.Clear();
             InworldAI.User.Workspace.AddRange(response.workspaces);
