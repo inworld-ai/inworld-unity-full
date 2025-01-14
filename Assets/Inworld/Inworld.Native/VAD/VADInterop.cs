@@ -6,7 +6,7 @@
  *************************************************************************************************/
 
 using System.Runtime.InteropServices;
-namespace Inworld.Inworld.Native.VAD
+namespace Inworld.Audio.VAD
 {
     public class VADInterop
     {

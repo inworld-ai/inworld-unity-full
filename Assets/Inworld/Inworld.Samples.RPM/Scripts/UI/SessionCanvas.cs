@@ -45,7 +45,8 @@ namespace Inworld.Sample.RPM
         /// </summary>
         public void MicrophoneControl(bool isOn)
         {
-            InworldController.Audio.AutoDetectPlayerSpeaking = !isOn;
+            // TODO(Yan): Replaced with DetecterPlayerSpeakingModule.
+            // InworldController.Audio.AutoDetectPlayerSpeaking = !isOn;
         }
 
         /// <summary>

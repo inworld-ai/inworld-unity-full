@@ -119,7 +119,8 @@ PrefabInstance:
       propertyPath: m_CaptureCheckingDuration
       value: 0.3
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7149944113521181875, guid: 897c70b9b015fa24598240162321b053, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

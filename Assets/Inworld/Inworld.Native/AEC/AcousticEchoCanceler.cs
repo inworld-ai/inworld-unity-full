@@ -5,26 +5,27 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
-
-using System;
 using UnityEngine;
 
 namespace Inworld.Audio.AEC
 {
-    public class AECProbe : MonoBehaviour
+    public class AcousticEchoCanceler : InworldAudioModule
     {
-        AcousticEchoCanceler m_AECModule;
-        protected virtual void Awake()
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
         {
-            m_AECModule = InworldController.Audio.GetModule<AcousticEchoCanceler>();
+        
         }
-        public virtual void Init(AcousticEchoCanceler aecModule)
+
+        // Update is called once per frame
+        void Update()
         {
-            m_AECModule = aecModule;
+        
         }
-        protected void OnAudioFilterRead(float[] data, int channels)
+        public void GetOutputData(float[] data, int channels)
         {
-            m_AECModule.GetOutputData(data, channels);
+            
         }
     }
 }
+

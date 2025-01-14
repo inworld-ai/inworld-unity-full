@@ -7,7 +7,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Inworld.AEC
+namespace Inworld.Audio.AEC
 {
 	public class AECInterop
 	{

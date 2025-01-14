@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2877408197283925981}
   - component: {fileID: 1682433929766609623}
-  - component: {fileID: 7149944113521181875}
+  - component: {fileID: 983475450524616932}
   m_Layer: 0
   m_Name: AudioCapture
   m_TagString: Untagged
@@ -44,6 +44,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: cebd8f957b7bfbb41bee47abb8a8575e, type: 2}
   m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -129,7 +130,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &7149944113521181875
+--- !u!114 &983475450524616932
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -138,35 +139,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 917422910403801994}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37c7724d7f1e0394c9a79e9ff4fbd818, type: 3}
+  m_Script: {fileID: 11500000, guid: c87e374328fd42828582b926dfde774b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SamplingMode: 3
-  m_PlayerVolumeThreshold: 6
-  m_CaptureCheckingDuration: 0.5
-  m_BufferSeconds: 1
-  m_AudioToPushCapacity: 100
-  m_DeviceName: 
-  m_DetectPlayerSpeaking: 1
-  m_MutePlayerMic: 0
-  m_TestMode: 0
-  m_AudioEvent:
-    onStartCalibrating:
-      m_PersistentCalls:
-        m_Calls: []
-    onStopCalibrating:
-      m_PersistentCalls:
-        m_Calls: []
-    onRecordingStart:
-      m_PersistentCalls:
-        m_Calls: []
-    onRecordingEnd:
-      m_PersistentCalls:
-        m_Calls: []
-    onPlayerStartSpeaking:
-      m_PersistentCalls:
-        m_Calls: []
-    onPlayerStopSpeaking:
-      m_PersistentCalls:
-        m_Calls: []
-  m_AECResetCountDown: 5
+  m_AudioModules: []

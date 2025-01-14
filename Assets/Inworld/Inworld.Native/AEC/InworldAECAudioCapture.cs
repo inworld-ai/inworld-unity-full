@@ -6,7 +6,7 @@
  *************************************************************************************************/
 
 using Inworld.Entities;
-using Inworld.Inworld.Native.VAD;
+using Inworld.Audio.VAD;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Inworld.AEC
+namespace Inworld.Audio.AEC
 {
     public class InworldAECAudioCapture : AudioCapture
     {
@@ -175,8 +175,9 @@ namespace Inworld.AEC
         /// </summary>
         public void SendProbeToAudioListener()
         {
-            if (IsAvailable)
-                Probe.Init(this);
+            // TODO(Yan): Mark Send Probe.
+            // if (IsAvailable)
+            //     Probe.Init(this);
         }
 
         protected override void OnDestroy()
