@@ -57,6 +57,7 @@ namespace Inworld.Editors
             InworldAI.Capabilities.phonemeInfo = EditorGUILayout.Toggle("Lipsync", InworldAI.Capabilities.phonemeInfo);
             InworldAI.Capabilities.multiAgent = EditorGUILayout.Toggle("Group Chat", InworldAI.Capabilities.multiAgent);
             InworldAI.Capabilities.multiModalActionPlanning = EditorGUILayout.Toggle("Map Actions", InworldAI.Capabilities.multiModalActionPlanning);
+            InworldAI.Capabilities.logs = EditorGUILayout.Toggle("Logs", InworldAI.Capabilities.logs);
             GUILayout.Space(20);
             InworldAI.IsDebugMode = EditorGUILayout.Toggle("Debug Mode", InworldAI.IsDebugMode);
             if (GUI.changed)

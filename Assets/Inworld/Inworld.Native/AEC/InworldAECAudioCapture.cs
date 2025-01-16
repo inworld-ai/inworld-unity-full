@@ -29,10 +29,9 @@ namespace Inworld.AEC
         IntPtr m_AECHandle;
         protected ConcurrentQueue<short> m_OutputBuffer = new ConcurrentQueue<short>();
         protected InputAction m_DumpAudioAction;
-        protected float m_AECTimer = 5;
         protected bool m_AudioFilterStarted;
         [Range(0, 10000)][SerializeField] protected int m_OutputBufferOffset = 4800;
-        [Range(1, 10)][SerializeField] float m_AECResetCountDown = 5f;
+
         
 #region Debug Dump Audio
         List<short> m_DebugOutput = new List<short>();
@@ -154,19 +153,6 @@ namespace Inworld.AEC
                     m_OutputBuffer.TryDequeue(out outputData[i]);
                 }
                 FilterAudio(inputData, outputData);
-            }
-            if (EnableAEC)
-            {
-                if (!IsPlayerSpeaking && m_AECTimer < 0)
-                {
-                    if (m_AECHandle != IntPtr.Zero)
-                    {
-                        AECInterop.WebRtcAec3_Free(m_AECHandle);
-                        m_AECHandle = IntPtr.Zero;
-                    }
-                    m_AECTimer = m_AECResetCountDown;
-                }
-                m_AECTimer -= 0.1f;
             }
             RemoveOverDueData(ref m_ProcessedWaveData, k_SampleRate);
         }
