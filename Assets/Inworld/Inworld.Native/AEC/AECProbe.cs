@@ -6,25 +6,27 @@
  *************************************************************************************************/
 
 
-using System;
 using UnityEngine;
 
 namespace Inworld.Audio.AEC
 {
+    public enum SignalEnd
+    {
+        FarEnd,
+        NearEnd
+    }
     public class AECProbe : MonoBehaviour
     {
         AcousticEchoCanceler m_AECModule;
+        public SignalEnd end;
         protected virtual void Awake()
         {
             m_AECModule = InworldController.Audio.GetModule<AcousticEchoCanceler>();
         }
-        public virtual void Init(AcousticEchoCanceler aecModule)
-        {
-            m_AECModule = aecModule;
-        }
+
         protected void OnAudioFilterRead(float[] data, int channels)
         {
-            m_AECModule.GetOutputData(data, channels);
+            m_AECModule?.GetOutputData(end, data, channels);
         }
     }
 }
