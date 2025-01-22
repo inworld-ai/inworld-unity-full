@@ -63,7 +63,8 @@ namespace Inworld.Audio.AEC
         }
         void Update()
         {
-            m_IsAudioDebugging = m_DumpAudioAction.IsPressed();
+            if (m_DumpAudioAction.IsPressed())
+                m_IsAudioDebugging = !m_IsAudioDebugging;
         }
         void OnDestroy()
         {
@@ -71,6 +72,11 @@ namespace Inworld.Audio.AEC
                 return;
             AECInterop.WebRtcAec3_Free(m_AECHandle);
             m_AECHandle = IntPtr.Zero;
+            if (!m_IsAudioDebugging)
+                return;
+            WavUtility.ShortArrayToWavFile(m_DebugInput.ToArray(),"DebugInput.wav");
+            WavUtility.ShortArrayToWavFile(m_DebugOutput.ToArray(),"DebugOutput.wav");
+            WavUtility.ShortArrayToWavFile(m_DebugFilter.ToArray(),"DebugFilter.wav");
         }
         bool InitProbe<T>(ref AECProbe probe, SignalEnd end) where T : Behaviour
         {
@@ -129,7 +135,6 @@ namespace Inworld.Audio.AEC
         void FilterAudio(short[] inputData, short[] outputData)
         {
             short[] filterTmp = new short[k_NumSamples];
-            
             if (m_AECHandle == IntPtr.Zero)
             {
                 m_AECHandle = AECInterop.WebRtcAec3_Create(k_SampleRate);
@@ -137,7 +142,7 @@ namespace Inworld.Audio.AEC
             AECInterop.WebRtcAec3_BufferFarend(m_AECHandle, outputData);
             AECInterop.WebRtcAec3_Process(m_AECHandle, inputData, filterTmp);
 
-            Audio.ProcessedWaveData.Enqueue(filterTmp.ToList());
+            ProcessedBuffer.Enqueue(filterTmp.ToList());
 
             if (!m_IsAudioDebugging)
                 return;
