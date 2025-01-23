@@ -6,16 +6,21 @@
  *************************************************************************************************/
 
 using Inworld.Audio;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Inworld.Sample
 {
-    public class AudioCaptureTest : AudioCapture
+    public class AudioCaptureTest : MonoBehaviour
     {
+        [SerializeField] InworldAudioCapture m_Audio;
+        [SerializeField] AudioCaptureModule m_AudioCapturer;
+        [SerializeField] PlayerVoiceDetector m_VolumeDetector;
         [SerializeField] TMP_Dropdown m_Dropdown;
         [SerializeField] TMP_Text m_Text;
         [SerializeField] Image m_Volume;
@@ -37,10 +42,9 @@ namespace Inworld.Sample
                 m_Text.text = "Please Choose Input Device!";
                 return;
             }
-            ChangeInputDevice(Microphone.devices[nDeviceIndex]);
+            m_AudioCapturer.ChangeInputDevice(Microphone.devices[nDeviceIndex]);
             m_MicButton.interactable = true;
             m_CalibButton.interactable = true;
-            IsRecording = true;
             m_MicButton.image.sprite = m_MicOff;
     #endif
         }
@@ -54,24 +58,40 @@ namespace Inworld.Sample
             if (m_MicButton.image.sprite == m_MicOff)
             {
                 m_MicButton.image.sprite = m_MicOn;
-                IsRecording = false;
+                m_AudioCapturer.StopMicrophone();
             }
             else
             {
                 m_MicButton.image.sprite = m_MicOff;
-                IsRecording = true;
+                m_AudioCapturer.StartMicrophone();
             }
         }
-        protected override void Awake()
+
+        public void Calibrate() => m_Audio.StartCalibrate();
+        
+        protected void Awake()
         {
-            base.Awake();
             _InitUI();
         }
-        protected override void OnEnable()
+        
+        void OnEnable()
         {
-            m_AudioCoroutine = AudioCoroutine();
-            StartCoroutine(m_AudioCoroutine);
+            m_Audio.Event.onStartCalibrating.AddListener(()=>Title("Calibrating"));
+            m_Audio.Event.onStopCalibrating.AddListener(()=>Title("Calibrated"));
+            m_Audio.Event.onPlayerStartSpeaking.AddListener(()=>Title("PlayerSpeaking"));
+            m_Audio.Event.onPlayerStopSpeaking.AddListener(()=>Title(""));
         }
+
+        void Title(string newText)
+        {
+            m_Text.text = newText;
+        }
+
+        void Update()
+        {
+            m_Volume.fillAmount = m_VolumeDetector.CalculateSNR() * 0.05f;
+        }
+
         void _InitUI()
         {
     #if !UNITY_WEBGL
@@ -85,15 +105,6 @@ namespace Inworld.Sample
                 m_Dropdown.options.Add(new TMP_Dropdown.OptionData(device));
             }
     #endif
-        }
-        protected override bool Collect()
-        {
-            m_Volume.fillAmount = IsRecording ? CalculateSNR() * 0.05f : 0f;
-            return true;
-        }
-        protected override IEnumerator OutputData()
-        {
-            yield break;
         }
     }
 }
