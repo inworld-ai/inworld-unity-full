@@ -17,16 +17,17 @@ namespace Inworld.Audio.AEC
     public class AcousticEchoCanceler : InworldAudioModule, ICollectAudioHandler, IProcessAudioHandler
     {
         [SerializeField] bool m_AutoReconnect;
-        const int k_SampleRate = 16000;
+        [SerializeField] bool m_IsAudioDebugging;
+        
         const int k_NumSamples = 160;
         IntPtr m_AECHandle;
         ConcurrentQueue<short> m_InputBuffer = new ConcurrentQueue<short>();
         ConcurrentQueue<short> m_OutputBuffer = new ConcurrentQueue<short>();
         int m_OutputSampleRate;
-        int m_OutputChannels;
+        bool m_AudioFilterStarted;
         AECProbe m_FarendProbe;
         AECProbe m_NearendProbe;
-        bool m_IsAudioDebugging;
+
         InputAction m_DumpAudioAction;
         List<short> m_DebugInput = new List<short>();
         List<short> m_DebugOutput = new List<short>();
@@ -45,20 +46,19 @@ namespace Inworld.Audio.AEC
         {
             AudioConfiguration audioSetting = AudioSettings.GetConfiguration();
             m_OutputSampleRate = audioSetting.sampleRate;
-            m_OutputChannels = audioSetting.speakerMode == AudioSpeakerMode.Stereo ? 2 : 1;
-            ProcessedBuffer = new CircularBuffer<short>(k_SampleRate);
+            ProcessedBuffer = new CircularBuffer<short>(k_InputSampleRate);
             enabled = IsAvailable 
                       && InitProbe<AudioListener>(ref m_FarendProbe, SignalEnd.FarEnd) 
                       && InitProbe<InworldAudioCapture>(ref m_NearendProbe, SignalEnd.NearEnd);
             if (enabled)
             {
-                m_AECHandle = AECInterop.WebRtcAec3_Create(k_SampleRate);
+                m_AECHandle = AECInterop.WebRtcAec3_Create(k_InputSampleRate);
                 m_DumpAudioAction = InworldAI.InputActions["DumpAudio"];
             }
-                
             else
             {
-                //Fallback to turn based.
+                //Fallback.
+                InworldAI.LogWarning("AEC Not supported in this platform.\nPlease make sure you're using headphones, or using TurnBased or PushToTalk modules");
             }
         }
         void Update()
@@ -97,9 +97,21 @@ namespace Inworld.Audio.AEC
         public void GetOutputData(SignalEnd end, float[] data, int channels)
         {
             if (end == SignalEnd.FarEnd)
+            {
+                if (!m_AudioFilterStarted)
+                    return;
                 WavUtility.ConvertAudioClipDataToInt16Array(ref m_OutputBuffer, data, m_OutputSampleRate, channels);
+            }
             else
+            {
+                if (!m_AudioFilterStarted)
+                {
+                    m_AudioFilterStarted = true;
+                    return;
+                }
                 WavUtility.ConvertAudioClipDataToInt16Array(ref m_InputBuffer, data, m_OutputSampleRate, channels);
+            }
+                
         }
         public bool OnPreProcessAudio()
         {
@@ -137,7 +149,7 @@ namespace Inworld.Audio.AEC
             short[] filterTmp = new short[k_NumSamples];
             if (m_AECHandle == IntPtr.Zero)
             {
-                m_AECHandle = AECInterop.WebRtcAec3_Create(k_SampleRate);
+                m_AECHandle = AECInterop.WebRtcAec3_Create(k_InputSampleRate);
             }
             AECInterop.WebRtcAec3_BufferFarend(m_AECHandle, outputData);
             AECInterop.WebRtcAec3_Process(m_AECHandle, inputData, filterTmp);
