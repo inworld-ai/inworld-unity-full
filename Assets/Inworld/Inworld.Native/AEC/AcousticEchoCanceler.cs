@@ -47,10 +47,10 @@ namespace Inworld.Audio.AEC
             AudioConfiguration audioSetting = AudioSettings.GetConfiguration();
             m_OutputSampleRate = audioSetting.sampleRate;
             ProcessedBuffer = new CircularBuffer<short>(k_InputSampleRate);
-            enabled = IsAvailable 
-                      && InitProbe<AudioListener>(ref m_FarendProbe, SignalEnd.FarEnd) 
-                      && InitProbe<InworldAudioCapture>(ref m_NearendProbe, SignalEnd.NearEnd);
-            if (enabled)
+            gameObject.SetActive( IsAvailable 
+                                  && InitProbe<AudioListener>(ref m_FarendProbe, SignalEnd.FarEnd) 
+                                  && InitProbe<InworldAudioManager>(ref m_NearendProbe, SignalEnd.NearEnd)); 
+            if (gameObject.activeSelf)
             {
                 m_AECHandle = AECInterop.WebRtcAec3_Create(k_InputSampleRate);
                 m_DumpAudioAction = InworldAI.InputActions["DumpAudio"];

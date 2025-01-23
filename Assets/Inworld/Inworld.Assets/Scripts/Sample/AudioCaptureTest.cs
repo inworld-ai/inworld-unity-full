@@ -18,7 +18,7 @@ namespace Inworld.Sample
 {
     public class AudioCaptureTest : MonoBehaviour
     {
-        [SerializeField] InworldAudioCapture m_Audio;
+        [SerializeField] InworldAudioManager m_Audio;
         [SerializeField] AudioCaptureModule m_AudioCapturer;
         [SerializeField] PlayerVoiceDetector m_VolumeDetector;
         [SerializeField] TMP_Dropdown m_Dropdown;

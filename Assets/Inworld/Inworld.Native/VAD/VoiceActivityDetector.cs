@@ -15,23 +15,25 @@ namespace Inworld.Audio.VAD
         //TODO(Yan): Replace directly with Sentis when it supports IF condition.
         const string k_SourceFilePath = "Inworld/Inworld.Native/VAD/Plugins";
         const string k_TargetFileName =  "silero_vad.onnx";
+        bool m_Initialized; 
         
-        bool IsAvailable =>  Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor;
+        public bool IsAvailable =>  Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor;
         protected override void OnEnable()
         {
-            enabled = IsAvailable;
-            if (!enabled)
+            gameObject.SetActive(IsAvailable);
+            if (!gameObject.activeSelf)
                 return;
 #if UNITY_EDITOR
             VADInterop.VAD_Initialize($"{Application.dataPath}/{k_SourceFilePath}/{k_TargetFileName}");
 #else
             VADInterop.VAD_Initialize($"{Application.streamingAssetsPath}/{k_TargetFileName}");
 #endif
+            m_Initialized = true;
             base.OnEnable();
         }
         protected void OnDestroy()
         {
-            if (enabled)
+            if (m_Initialized)
                 VADInterop.VAD_Terminate();
         }
         protected override bool DetectPlayerSpeaking()

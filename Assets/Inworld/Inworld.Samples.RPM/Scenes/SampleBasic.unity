@@ -424,7 +424,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1508805550564489285, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_SelectingMethod
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2395919966041133306, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_APIKey
@@ -509,62 +509,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 116080753040139734, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 683096042}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
---- !u!1 &683096041 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 116080753040139734, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
-  m_PrefabInstance: {fileID: 683096040}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &683096042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 683096041}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 393ccca29f43636448025acee26204bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SamplingMode: 1
-  m_PlayerVolumeThreshold: 10
-  m_CaptureCheckingDuration: 0.5
-  m_BufferSeconds: 1
-  m_AudioToPushCapacity: 100
-  m_DeviceName: 
-  m_DetectPlayerSpeaking: 1
-  m_MutePlayerMic: 0
-  m_TestMode: 0
-  m_AudioEvent:
-    OnAudioStatusExit:
-      m_PersistentCalls:
-        m_Calls: []
-    OnAudioStatusEnter:
-      m_PersistentCalls:
-        m_Calls: []
-    onStartCalibrating:
-      m_PersistentCalls:
-        m_Calls: []
-    onStopCalibrating:
-      m_PersistentCalls:
-        m_Calls: []
-    onRecordingStart:
-      m_PersistentCalls:
-        m_Calls: []
-    onRecordingEnd:
-      m_PersistentCalls:
-        m_Calls: []
-    onPlayerStartSpeaking:
-      m_PersistentCalls:
-        m_Calls: []
-    onPlayerStopSpeaking:
-      m_PersistentCalls:
-        m_Calls: []
 --- !u!1001 &934002599
 PrefabInstance:
   m_ObjectHideFlags: 0
