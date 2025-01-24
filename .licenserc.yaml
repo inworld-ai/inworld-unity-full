@@ -30,6 +30,7 @@ header:
   paths-ignore:
     - '.github/ISSUE_TEMPLATE'
     - '.github/PULL_REQUEST_TEMPLATE'
+    - '.github/builds/free.sh'
     - '**/.gitignore'
     - '.gitmodules'
     - '.lift'
