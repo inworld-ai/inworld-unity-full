@@ -1,5 +1,5 @@
 /*************************************************************************************************
- * Copyright 2022-2024 Theai, Inc. dba Inworld AI
+ * Copyright 2022-2025 Theai, Inc. dba Inworld AI
  *
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
@@ -26,7 +26,9 @@ namespace Inworld
         const string k_CorePackagePath = "../inworld-unity-core";
         const string k_FullPackagePath = "Assets/Inworld";
         const string k_ExtraPackagePath = "Assets/Inworld/InworldExtraAssets.unitypackage";
-        const string k_TestScenePath = "Assets/Inworld/Inworld.Samples.RPM/Scenes/SampleBasic.unity";
+        const string k_TestScenePath = "Assets/Inworld/Inworld.Samples.Innequin/Scenes/InnequinBasic.unity";
+        const string k_TestSceneWebGL = "Assets/Inworld/Inworld.Samples.Innequin/Scenes/InnequinWebGL.unity";
+        const string k_TestSceneMobile = "Assets/Inworld/Inworld.Samples.Innequin/Scenes/InnequinMobile.unity";
 
         [MenuItem("Inworld/Export Package/Core", false, 100)]
         public static async void ExportCore()
@@ -89,12 +91,26 @@ namespace Inworld
         }
         public static void BuildTestScene()
         {
-            string[] scenes = { k_TestScenePath };
+            string sceneToBuild = "";
+            switch (EditorUserBuildSettings.activeBuildTarget)
+            {
+                case BuildTarget.Android:
+                case BuildTarget.iOS:
+                    sceneToBuild = k_TestSceneMobile;
+                    break;
+                case BuildTarget.WebGL:
+                    sceneToBuild = k_TestSceneWebGL;
+                    break;
+                default:
+                    sceneToBuild = k_TestScenePath;
+                    break;
+            }
+            string[] scenes = { sceneToBuild };
 
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = scenes,
-                locationPathName = $"{EditorUserBuildSettings.activeBuildTarget}/BuildTest", // YAN: As a build test, we don't care the extension name
+                locationPathName = $"{EditorUserBuildSettings.activeBuildTarget}/BuildTest", 
                 target = EditorUserBuildSettings.activeBuildTarget,
                 options = BuildOptions.None
             };

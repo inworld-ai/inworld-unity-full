@@ -20,16 +20,19 @@ jobs:
       matrix:
         targetPlatform:
           - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
-          - StandaloneWindows # Build a Windows standalone.
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - Android # Build a Windows standalone.
           - iOS # Build an iOS player.
           - WebGL
     steps:
+        - name: Free disk
+          run: chmod +x ./.github/builds/free.sh && ./.github/builds/free.sh
+
         - name: Checkout Repo
           uses: actions/checkout@v4
           with:
-            lfs: true        
-
+            lfs: true       
+            
         - name: Cleanup before build
           run: |
             docker system prune -af
