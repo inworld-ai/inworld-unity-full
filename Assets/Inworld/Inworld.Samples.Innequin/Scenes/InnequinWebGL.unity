@@ -163,7 +163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cd0c8f0601a4ecaab4c8185c8123317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoStart: 1
 --- !u!1001 &395020187
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -241,51 +240,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
---- !u!1 &686653366
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 686653367}
-  - component: {fileID: 686653368}
-  m_Layer: 0
-  m_Name: AudioCollector
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &686653367
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 686653366}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3083182406253217222}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &686653368
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 686653366}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5683a1494e384c57bf97f01436158129, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AutoReconnect: 1
 --- !u!1 &1062531477
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,7 +474,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AudioModules:
   - {fileID: 48052900}
-  - {fileID: 686653368}
   - {fileID: 1537912007}
   - {fileID: 4597860675041027147}
   m_AudioEvent:
@@ -1678,7 +1631,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 48052899}
-  - {fileID: 686653367}
   - {fileID: 1537912006}
   - {fileID: 2846035014876664812}
   m_Father: {fileID: 3753617578552476706}

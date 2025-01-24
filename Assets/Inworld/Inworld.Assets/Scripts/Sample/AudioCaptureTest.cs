@@ -19,7 +19,6 @@ namespace Inworld.Sample
     public class AudioCaptureTest : MonoBehaviour
     {
         [SerializeField] InworldAudioManager m_Audio;
-        [SerializeField] AudioCaptureModule m_AudioCapturer;
         [SerializeField] PlayerVoiceDetector m_VolumeDetector;
         [SerializeField] TMP_Dropdown m_Dropdown;
         [SerializeField] TMP_Text m_Text;
@@ -29,24 +28,25 @@ namespace Inworld.Sample
         [SerializeField] Sprite m_MicOn;
         [SerializeField] Sprite m_MicOff;
         
+        IMicrophoneHandler m_AudioCapturer;
+        List<string> m_Devices = new List<string>();
+        
         /// <summary>
         /// Change the current input device from the selection of drop down field.
         /// </summary>
         /// <param name="nIndex">the index of the audio input devices.</param>
         public void UpdateAudioInput(int nIndex)
         {
-    #if !UNITY_WEBGL
             int nDeviceIndex = nIndex - 1;
             if (nDeviceIndex < 0)
             {
                 m_Text.text = "Please Choose Input Device!";
                 return;
             }
-            m_AudioCapturer.ChangeInputDevice(Microphone.devices[nDeviceIndex]);
+            m_AudioCapturer.ChangeInputDevice(m_Devices[nIndex]);
             m_MicButton.interactable = true;
             m_CalibButton.interactable = true;
             m_MicButton.image.sprite = m_MicOff;
-    #endif
         }
         /// <summary>
         /// Mute/Unmute microphone.
@@ -71,6 +71,8 @@ namespace Inworld.Sample
         
         protected void Awake()
         {
+            if (m_Audio)
+                m_AudioCapturer = m_Audio.GetModule<IMicrophoneHandler>();
             _InitUI();
         }
         
@@ -94,17 +96,15 @@ namespace Inworld.Sample
 
         void _InitUI()
         {
-    #if !UNITY_WEBGL
-            string[] devices = Microphone.devices;
+            m_Devices = m_AudioCapturer.ListMicDevices();
             if (m_Dropdown.options == null)
                 m_Dropdown.options = new List<TMP_Dropdown.OptionData>();
             m_Dropdown.options.Clear();
             m_Dropdown.options.Add(new TMP_Dropdown.OptionData("--- CHOOSE YOUR DEVICE ---"));
-            foreach (string device in devices)
+            foreach (string device in m_Devices)
             {
                 m_Dropdown.options.Add(new TMP_Dropdown.OptionData(device));
             }
-    #endif
         }
     }
 }

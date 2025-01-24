@@ -20,8 +20,8 @@ jobs:
       matrix:
         targetPlatform:
           - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
-          - StandaloneWindows # Build a Windows standalone.
           - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - Android # Build a Windows standalone.
           - iOS # Build an iOS player.
           - WebGL
     steps:
