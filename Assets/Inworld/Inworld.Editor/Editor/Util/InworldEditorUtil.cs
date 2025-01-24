@@ -69,11 +69,11 @@ namespace Inworld.Editors
                 return;
             _RemoveDebugMacro();
         }
+
         static void OnEditorQuitting()
         {
             InworldEditor.Instance.SaveData();
         }
-        
 
 #region Top Menu
         [MenuItem("Inworld/Inworld Studio Panel", false, 0)]
@@ -88,7 +88,6 @@ namespace Inworld.Editors
         [MenuItem("Inworld/Editor Settings", false, 1)]
         static void TopMenuEditorPanel() => Selection.SetActiveObjectWithContext(InworldEditor.Instance, InworldEditor.Instance);
 #endregion
-
 
 #region Asset Menu
         [MenuItem("Assets/Inworld/Studio Panel", false, 0)]
