@@ -30,6 +30,9 @@ jobs:
           with:
             lfs: true        
 
+        - name: Free disk
+          run: chmod +x ./.github/builds/free.sh && ./.github/builds/free.sh
+          
         - name: Cleanup before build
           run: |
             docker system prune -af
