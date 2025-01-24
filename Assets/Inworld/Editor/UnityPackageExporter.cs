@@ -27,8 +27,8 @@ namespace Inworld
         const string k_FullPackagePath = "Assets/Inworld";
         const string k_ExtraPackagePath = "Assets/Inworld/InworldExtraAssets.unitypackage";
         const string k_TestScenePath = "Assets/Inworld/Inworld.Samples.Innequin/Scenes/InnequinBasic.unity";
-        const string k_TestSceneWebGL = "Assets/Inworld/Inworld.Samples.RPM/Scenes/InnequinWebGL.unity";
-        const string k_TestSceneMobile = "Assets/Inworld/Inworld.Samples.RPM/Scenes/InnequinMobile.unity";
+        const string k_TestSceneWebGL = "Assets/Inworld/Inworld.Samples.Innequin/Scenes/InnequinWebGL.unity";
+        const string k_TestSceneMobile = "Assets/Inworld/Inworld.Samples.Innequin/Scenes/InnequinMobile.unity";
 
         [MenuItem("Inworld/Export Package/Core", false, 100)]
         public static async void ExportCore()
