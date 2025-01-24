@@ -43,7 +43,15 @@ namespace Inworld.Editors
         InworldWorkspaceData CurrentWorkspace => InworldAI.User.GetWorkspaceByDisplayName(m_CurrentWorkspaceName);
         InworldKeySecret CurrentKey  => CurrentWorkspace?.keySecrets.FirstOrDefault(key => key.key == m_CurrentKey);
 
-        bool _IsReadyToProceed => CurrentWorkspace.Progress > 0.95f;
+        bool _IsReadyToProceed
+        {
+            get
+            {
+                if (CurrentWorkspace != null)
+                    return CurrentWorkspace.Progress > 0.95f;
+                return false;
+            }
+        }
         /// <summary>
         /// Triggers when open editor window.
         /// </summary>
