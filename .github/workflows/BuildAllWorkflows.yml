@@ -36,16 +36,6 @@ jobs:
             docker system prune -af
             docker volume prune -f
 
-        - name: Free disk
-          run: chmod +x ./.github/builds/free.sh && ./.github/builds/free.sh
-
-        - name: Cache Library          
-          uses: actions/cache@v4
-          with:
-            path: Library
-            key: Library-${{ matrix.targetPlatform }}
-            restore-keys: Library-
-
         - name: Build Test
           uses: game-ci/unity-builder@v4
           with:
