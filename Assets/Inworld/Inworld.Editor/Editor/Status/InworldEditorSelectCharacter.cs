@@ -126,7 +126,7 @@ namespace Inworld.Editors
                 return;
             m_CurrentGameData = InworldController.Instance.GameData;
             if (InworldAI.User && InworldAI.User.Workspace != null && InworldAI.User.Workspace.Count != 0)
-                m_CurrentWorkspace = InworldAI.User.Workspace.FirstOrDefault(ws => ws.name == m_CurrentGameData.workspaceFullName);
+                m_CurrentWorkspace = InworldAI.User.Workspace.FirstOrDefault(ws => ws.name == InworldAI.GetWorkspaceFullName(m_CurrentGameData.workspaceName));
             m_CurrentWorkspace?.scenes.ForEach(s => m_SceneNames.Add(s.displayName));
         }
         void _CreatePrefabVariants()
@@ -207,7 +207,7 @@ namespace Inworld.Editors
         void _SelectScenes(string sceneDisplayName)
         {
             m_CurrentSceneName = sceneDisplayName;
-            m_CurrentGameData.sceneFullName = CurrentScene?.name ?? "";
+            m_CurrentGameData.sceneName = CurrentScene?.SceneFileName ?? "";
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
@@ -218,7 +218,7 @@ namespace Inworld.Editors
             if (!InworldController.Instance || !m_CurrentGameData)
                 return;
             Debug.Log("Download Related Assets...");
-            InworldWorkspaceData wsData = InworldAI.User.Workspace.FirstOrDefault(ws => ws.name == m_CurrentGameData.workspaceFullName);
+            InworldWorkspaceData wsData = InworldAI.User.Workspace.FirstOrDefault(ws => ws.name == InworldAI.GetWorkspaceFullName(m_CurrentGameData.workspaceName));
             if (wsData == null)
                 return;
             m_StartDownload = true;
@@ -256,6 +256,7 @@ namespace Inworld.Editors
 
             InworldCharacter iwChar = avatar.GetComponent<InworldCharacter>();
             iwChar.Data = charRef;
+            iwChar.Data.brainName = charRef.ShortBrainName;
             if (customModel)
             {
                 GameObject newModel = PrefabUtility.InstantiatePrefab(customModel) as GameObject;
