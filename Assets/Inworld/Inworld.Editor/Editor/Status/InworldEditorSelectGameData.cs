@@ -234,7 +234,7 @@ namespace Inworld.Editors
             InworldWorkspaceData ws = CurrentWorkspace;
             if (ws != null)
             {
-                gameData.Init(ws.name, CurrentKey);
+                gameData.Init(ws.FileName, CurrentKey);
             }
             gameData.capabilities = new Capabilities(InworldAI.Capabilities);
             if (string.IsNullOrEmpty(InworldEditorUtil.UserDataPath))
@@ -317,6 +317,7 @@ namespace Inworld.Editors
 
             InworldCharacter iwChar = avatar.GetComponent<InworldCharacter>();
             iwChar.Data = charRef;
+            iwChar.Data.brainName = charRef.ShortBrainName;
             if (customModel)
             {
                 GameObject newModel = PrefabUtility.InstantiatePrefab(customModel) as GameObject;
