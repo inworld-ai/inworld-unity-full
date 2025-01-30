@@ -17,7 +17,14 @@ namespace Inworld.Audio.VAD
         const string k_TargetFileName =  "silero_vad.onnx";
         bool m_Initialized; 
         
-        public bool IsAvailable =>  Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor;
+        /// <summary>
+        ///     Check Available, will add mac support in the next update.
+        ///     For mobile device such as Android/iOS they naturally supported via hardware.
+        /// </summary>
+        public bool IsAvailable => Application.platform == RuntimePlatform.WindowsPlayer 
+                                   || Application.platform == RuntimePlatform.WindowsEditor
+                                   || Application.platform == RuntimePlatform.OSXEditor
+                                   || Application.platform == RuntimePlatform.OSXPlayer;
         protected override void OnEnable()
         {
             gameObject.SetActive(IsAvailable);
