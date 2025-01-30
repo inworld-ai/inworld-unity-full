@@ -63,7 +63,7 @@ namespace Inworld.Audio.AEC
         }
         void Update()
         {
-            if (m_DumpAudioAction.IsPressed())
+            if (m_DumpAudioAction != null && m_DumpAudioAction.IsPressed())
                 m_IsAudioDebugging = !m_IsAudioDebugging;
         }
         void OnDestroy()
