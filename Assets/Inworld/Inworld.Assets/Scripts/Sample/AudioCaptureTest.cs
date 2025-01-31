@@ -29,6 +29,7 @@ namespace Inworld.Sample
         [SerializeField] Sprite m_MicOff;
         
         IMicrophoneHandler m_AudioCapturer;
+        bool m_IsCalibrated;
         List<string> m_Devices = new List<string>();
         
         /// <summary>
@@ -89,11 +90,15 @@ namespace Inworld.Sample
             if (!m_Audio)
                 return;
             m_Audio.Event.onStartCalibrating.AddListener(()=>Title("Calibrating"));
-            m_Audio.Event.onStopCalibrating.AddListener(()=>Title("Calibrated"));
+            m_Audio.Event.onStopCalibrating.AddListener(Calibrated);
             m_Audio.Event.onPlayerStartSpeaking.AddListener(()=>Title("PlayerSpeaking"));
             m_Audio.Event.onPlayerStopSpeaking.AddListener(()=>Title(""));
         }
-
+        void Calibrated()
+        {
+            Title("Calibrated");
+            m_IsCalibrated = true;
+        }
         void Title(string newText)
         {
             if (m_Text)
@@ -102,7 +107,7 @@ namespace Inworld.Sample
 
         void Update()
         {
-            if (m_Volume && m_VolumeDetector)
+            if (m_IsCalibrated && m_Volume && m_VolumeDetector)
                 m_Volume.fillAmount = m_VolumeDetector.CalculateSNR() * 0.05f;
         }
 
@@ -115,7 +120,6 @@ namespace Inworld.Sample
             if (m_Dropdown.options == null)
                 m_Dropdown.options = new List<TMP_Dropdown.OptionData>();
             m_Dropdown.options.Clear();
-            m_Dropdown.options.Add(new TMP_Dropdown.OptionData("--- CHOOSE YOUR DEVICE ---"));
             foreach (string device in m_Devices)
             {
                 m_Dropdown.options.Add(new TMP_Dropdown.OptionData(device));
