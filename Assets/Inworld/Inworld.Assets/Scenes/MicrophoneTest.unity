@@ -227,7 +227,7 @@ AudioSource:
   m_GameObject: {fileID: 353148134}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: cebd8f957b7bfbb41bee47abb8a8575e, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
@@ -677,7 +677,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145bb2cdf859447dbec8aeb61f622abb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AutoStart: 0
+  autoStart: 1
 --- !u!4 &1912146018
 Transform:
   m_ObjectHideFlags: 0
@@ -732,14 +732,14 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 5470420654127522790}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3177197487955852964}
         m_TargetAssemblyTypeName: Inworld.Sample.AudioCaptureTest, Inworld.Assets
-        m_MethodName: Recalibrate
+        m_MethodName: Calibrate
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1329,7 +1329,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Audio: {fileID: 353148135}
-  m_AudioCapturer: {fileID: 1912146017}
   m_VolumeDetector: {fileID: 1015518731}
   m_Dropdown: {fileID: 3177197487527682283}
   m_Text: {fileID: 3177197488449660891}
@@ -2323,7 +2322,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 3177197488967340860}
   m_OnClick:
     m_PersistentCalls:
