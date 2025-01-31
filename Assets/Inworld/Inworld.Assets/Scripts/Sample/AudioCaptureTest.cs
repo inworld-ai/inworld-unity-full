@@ -40,12 +40,16 @@ namespace Inworld.Sample
             int nDeviceIndex = nIndex - 1;
             if (nDeviceIndex < 0)
             {
-                m_Text.text = "Please Choose Input Device!";
+                if (m_Text)
+                    m_Text.text = "Please Choose Input Device!";
                 return;
             }
-            m_AudioCapturer.ChangeInputDevice(m_Devices[nIndex]);
+            m_AudioCapturer?.ChangeInputDevice(m_Devices[nIndex]);
+            if (m_CalibButton)
+                m_CalibButton.interactable = true;
+            if (!m_MicButton)
+                return;
             m_MicButton.interactable = true;
-            m_CalibButton.interactable = true;
             m_MicButton.image.sprite = m_MicOff;
         }
         /// <summary>
@@ -53,22 +57,26 @@ namespace Inworld.Sample
         /// </summary>
         public void SwitchMicrophone()
         {
-            if (!m_MicButton.interactable)
+            if (!m_MicButton || !m_MicButton.interactable)
                 return;
             if (m_MicButton.image.sprite == m_MicOff)
             {
                 m_MicButton.image.sprite = m_MicOn;
-                m_AudioCapturer.StopMicrophone();
+                m_AudioCapturer?.StopMicrophone();
             }
             else
             {
                 m_MicButton.image.sprite = m_MicOff;
-                m_AudioCapturer.StartMicrophone();
+                m_AudioCapturer?.StartMicrophone();
             }
         }
 
-        public void Calibrate() => m_Audio.StartCalibrate();
-        
+        public void Calibrate()
+        {
+            if (m_Audio)
+                m_Audio.StartCalibrate();
+        }
+
         protected void Awake()
         {
             if (m_Audio)
@@ -78,6 +86,8 @@ namespace Inworld.Sample
         
         void OnEnable()
         {
+            if (!m_Audio)
+                return;
             m_Audio.Event.onStartCalibrating.AddListener(()=>Title("Calibrating"));
             m_Audio.Event.onStopCalibrating.AddListener(()=>Title("Calibrated"));
             m_Audio.Event.onPlayerStartSpeaking.AddListener(()=>Title("PlayerSpeaking"));
@@ -86,17 +96,22 @@ namespace Inworld.Sample
 
         void Title(string newText)
         {
-            m_Text.text = newText;
+            if (m_Text)
+                m_Text.text = newText;
         }
 
         void Update()
         {
-            m_Volume.fillAmount = m_VolumeDetector.CalculateSNR() * 0.05f;
+            if (m_Volume && m_VolumeDetector)
+                m_Volume.fillAmount = m_VolumeDetector.CalculateSNR() * 0.05f;
         }
 
         void _InitUI()
         {
-            m_Devices = m_AudioCapturer.ListMicDevices();
+            if (m_AudioCapturer != null)
+                m_Devices = m_AudioCapturer.ListMicDevices();
+            if (!m_Dropdown)
+                return;
             if (m_Dropdown.options == null)
                 m_Dropdown.options = new List<TMP_Dropdown.OptionData>();
             m_Dropdown.options.Clear();
