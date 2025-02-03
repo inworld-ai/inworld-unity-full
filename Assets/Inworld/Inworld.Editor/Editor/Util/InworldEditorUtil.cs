@@ -28,7 +28,8 @@ namespace Inworld.Editors
         /// Interface property. 
         /// </summary>
         public int callbackOrder { get; }
-        
+
+
         /// <summary>
         /// Get the path for UserData.
         /// </summary>
@@ -58,6 +59,7 @@ namespace Inworld.Editors
                     break;
             }
         }
+
         /// <summary>
         /// Remove all the Inworld logs. those log will not be printed out in the runtime.
         /// Needs to be public to be called outside Unity.

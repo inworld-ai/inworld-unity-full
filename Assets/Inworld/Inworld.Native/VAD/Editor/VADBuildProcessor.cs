@@ -6,21 +6,27 @@
  *************************************************************************************************/
 
 #if !UNITY_WEBGL && UNITY_EDITOR
+using Inworld.Audio.VAD;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.Build;
+using UnityEditor.Build.Reporting;
 
 // TODO(Yan): Enable Sentis instead once future Sentis supported.
 // Currently, put the onnx inside the StreamingAssets folder, to pass the C++ runtime build.
 
 namespace Inworld.Native
 {
-    public class VADBuildProcessor
+    public class VADBuildProcessor : IPreprocessBuildWithReport
     {
         const string k_SourceFilePath = "Inworld/Inworld.Native/VAD/Plugins";
         const string k_TargetFileName =  "silero_vad.onnx";
+        const string k_TargetMismatchTitle = "Error AudioManager detected.";
+        const string k_TargetMismatchMobile = "AudioManager with AEC or VAD is not supported in your platform.\nPlease use AudioManagerMobile instead.";
+        const string k_TargetMismatchWebGL = "AudioManager is not supported in your platform.\nPlease use AudioManagerWebGL instead.";
     
         [InitializeOnLoadMethod]
         static void OnProjectLoadedInEditor()
@@ -50,6 +56,25 @@ namespace Inworld.Native
                 }
             }
             BuildPipeline.BuildPlayer(options);
+        }
+        public int callbackOrder { get; }
+        public void OnPreprocessBuild(BuildReport report)
+        {
+            switch (report.summary.platform)
+            {
+                case BuildTarget.Android:
+                case BuildTarget.iOS:
+                    if (InworldController.Instance && 
+                        (InworldController.Audio.GetModule<AudioEchoFilter>() || InworldController.Audio.GetModule<VoiceActivityDetector>()))
+                    {
+                        EditorUtility.DisplayDialog(k_TargetMismatchTitle, k_TargetMismatchMobile, "OK");
+                    }
+                    break;
+            }
+        }
+        public void OnActiveBuildTargetChanged(BuildTarget previousTarget, BuildTarget newTarget)
+        {
+            Debug.Log($"Switch from {previousTarget} to {newTarget}");
         }
     }
 }
