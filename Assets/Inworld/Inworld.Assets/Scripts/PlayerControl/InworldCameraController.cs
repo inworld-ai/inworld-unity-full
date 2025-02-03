@@ -36,15 +36,13 @@ namespace Inworld.Sample
         InputAction m_LeftClickInputAction;
         InputAction m_MouseDeltaInputAction;
         InputAction m_SpeedUpInputAction;
-        InputAction m_SpeedInputAction;
         InputAction m_MoveInputAction;
 
         void Awake()
         {
             m_LeftClickInputAction = InworldAI.InputActions["LeftClick"];
-            m_MouseDeltaInputAction = InworldAI.InputActions["MouseDelta"];
+            m_MouseDeltaInputAction = InworldAI.InputActions["Rotate"];
             m_SpeedUpInputAction = InworldAI.InputActions["SpeedUp"];
-            m_SpeedInputAction = InworldAI.InputActions["Speed"];
             m_MoveInputAction = InworldAI.InputActions["Move"];
         }
         void OnEnable()
@@ -52,35 +50,15 @@ namespace Inworld.Sample
             m_TargetCameraState.SetFromTransform(transform);
             m_InterpolatingCameraState.SetFromTransform(transform);
         }
-        void OnDisable()
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
         void Update()
         {
-            // Hide and lock cursor when right mouse button pressed
-            if (m_LeftClickInputAction.WasPressedThisFrame())
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
-
-            // Unlock and show cursor when right mouse button released
-            if (m_LeftClickInputAction.WasReleasedThisFrame())
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            // Rotation
-            if (Cursor.lockState != CursorLockMode.None)
-            {
-                Vector2 mouseMovement = m_MouseDeltaInputAction.ReadValue<Vector2>() * 0.1f;
-                mouseMovement.y *= (invertY ? 1 : -1);
-                float mouseSensitivityFactor = mouseSensitivityCurve.Evaluate(mouseMovement.magnitude);
-                m_TargetCameraState.yaw += mouseMovement.x * mouseSensitivityFactor;
-                m_TargetCameraState.pitch += mouseMovement.y * mouseSensitivityFactor;
-            }
+            Vector2 mouseMovement = m_MouseDeltaInputAction.ReadValue<Vector2>() * 0.1f;
+            if (mouseMovement.magnitude > 20f)
+                return;
+            mouseMovement.y *= (invertY ? 1 : -1);
+            float mouseSensitivityFactor = mouseSensitivityCurve.Evaluate(mouseMovement.magnitude);
+            m_TargetCameraState.yaw += mouseMovement.x * mouseSensitivityFactor;
+            m_TargetCameraState.pitch += mouseMovement.y * mouseSensitivityFactor;
             // Translation
             Vector3 translation = GetInputTranslationDirection() * Time.deltaTime;
 
@@ -91,7 +69,7 @@ namespace Inworld.Sample
             }
 
             // Modify movement by a boost factor (defined in Inspector and modified in play mode through the mouse scroll wheel)
-            boost += m_SpeedInputAction.ReadValue<float>() * 0.001f;
+            boost += m_SpeedUpInputAction.ReadValue<float>() * 0.001f;
             boost = Mathf.Clamp(boost, 0, 5);
             translation *= Mathf.Pow(2.0f, boost);
             m_TargetCameraState.Translate(translation);
@@ -109,7 +87,8 @@ namespace Inworld.Sample
 
         Vector3 GetInputTranslationDirection()
         {
-            return m_MoveInputAction.ReadValue<Vector3>();
+            Vector2 delta = m_MoveInputAction.ReadValue<Vector2>();
+            return Vector3.right * delta.x + Vector3.forward * delta.y;
         }
         class CameraState
         {
@@ -148,7 +127,6 @@ namespace Inworld.Sample
                 m_Roll = Mathf.Lerp(m_Roll, target.m_Roll, rotationLerpPct);
 
                 m_X = Mathf.Lerp(m_X, target.m_X, positionLerpPct);
-                m_Y = Mathf.Lerp(m_Y, target.m_Y, positionLerpPct);
                 m_Z = Mathf.Lerp(m_Z, target.m_Z, positionLerpPct);
             }
 
