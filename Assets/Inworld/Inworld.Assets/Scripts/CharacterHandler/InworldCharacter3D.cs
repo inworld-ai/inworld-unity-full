@@ -15,6 +15,8 @@ namespace Inworld.Sample.Innequin
         [SerializeField] bool m_AutoStart = true;
         void Start()
         {
+            if (!string.IsNullOrEmpty(Data.brainName) && Data.brainName.Split('/').Length <= 1 && InworldController.Instance.GameData)
+                Data.brainName = InworldAI.GetCharacterFullName(InworldController.Instance.GameData.workspaceName, Data.brainName);
             if (m_AutoStart)
                 InworldController.CharacterHandler.Register(this);
         }

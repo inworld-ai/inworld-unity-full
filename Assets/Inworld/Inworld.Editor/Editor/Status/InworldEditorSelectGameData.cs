@@ -317,7 +317,6 @@ namespace Inworld.Editors
 
             InworldCharacter iwChar = avatar.GetComponent<InworldCharacter>();
             iwChar.Data = charRef;
-            iwChar.Data.brainName = charRef.ShortBrainName;
             if (customModel)
             {
                 GameObject newModel = PrefabUtility.InstantiatePrefab(customModel) as GameObject;
