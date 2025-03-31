@@ -5,16 +5,18 @@
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
  *************************************************************************************************/
 
-using System.Collections;
+using Microsoft.ML.OnnxRuntime.Unity;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 namespace Inworld.Audio.VAD
 {
     public class VoiceActivityDetector : PlayerVoiceDetector
     {
         //TODO(Yan): Replace directly with Sentis when it supports IF condition.
-        const string k_SourceFilePath = "Inworld/Inworld.Native/VAD/Plugins";
-        const string k_TargetFileName =  "silero_vad.onnx";
+        [SerializeField] OrtAsset m_Model;
+
+        LocalVAD m_VADLocal;
         bool m_Initialized; 
         
         /// <summary>
@@ -27,21 +29,14 @@ namespace Inworld.Audio.VAD
                                    || Application.platform == RuntimePlatform.OSXPlayer;
         protected override void OnEnable()
         {
-            gameObject.SetActive(IsAvailable);
-            if (!gameObject.activeSelf)
-                return;
-#if UNITY_EDITOR
-            VADInterop.VAD_Initialize($"{Application.dataPath}/{k_SourceFilePath}/{k_TargetFileName}");
-#else
-            VADInterop.VAD_Initialize($"{Application.streamingAssetsPath}/{k_TargetFileName}");
-#endif
+            m_VADLocal = new LocalVAD(m_Model, m_PlayerVolumeThreashold);
             m_Initialized = true;
             base.OnEnable();
         }
         protected void OnDestroy()
         {
             if (m_Initialized)
-                VADInterop.VAD_Terminate();
+                m_VADLocal.Dispose();
         }
         protected override bool DetectPlayerSpeaking()
         {
@@ -52,8 +47,8 @@ namespace Inworld.Audio.VAD
             if (data.Count == 0)
                 return false;
             float[] processedWave = WavUtility.ConvertInt16ArrayToFloatArray(data.ToArray());
-            float vadResult = VADInterop.VAD_Process(processedWave, processedWave.Length);
-            return vadResult * 30 > m_PlayerVolumeThreashold;
+            float vadResult = m_VADLocal.Process(new List<float>(processedWave)) * 30;
+            return vadResult > m_PlayerVolumeThreashold;
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Inworld.Sample.RPM
         Vector2 m_LastViseme = Vector2.zero;
         float m_RandomOffset;
 
-        protected SkinnedMeshRenderer m_Skin;
+        [SerializeField] protected SkinnedMeshRenderer m_Skin;
         protected int m_VisemeIndex;
         protected int m_BlinkIndex;
         /// <summary>

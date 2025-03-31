@@ -1,0 +1,26 @@
+{
+  "name": "com.github.asus4.onnxruntime.win-x64-gpu",
+  "version": "0.1.14",
+  "displayName": "ONNX Runtime - Windows x64 GPU",
+  "description": "ONNX Runtime for Unity - Windows x64 GPU Provider",
+  "keywords": [
+    "unity",
+    "onnxruntime"
+  ],
+  "unity": "2022.3",
+  "unityRelease": "0f1",
+  "dependencies": {
+    "com.github.asus4.onnxruntime": "0.1.14"
+  },
+  "repository": {
+    "type": "git",
+    "repository": "https://github.com/asus4/onnxruntime-unity.git"
+  },
+  "documentationUrl": "https://github.com/asus4/onnxruntime-unity",
+  "changelogUrl": "https://github.com/asus4/onnxruntime-unity/releases",
+  "licensesUrl": "https://github.com/asus4/onnxruntime-unity/blob/main/onnxruntime.win-x64-gpu/LICENSE",
+  "author": {
+    "name": "Koki Ibukuro",
+    "url": "https://github.com/asus4"
+  }
+}

@@ -16,8 +16,9 @@ namespace Inworld.Native
     {
         [SerializeField] ModelAsset m_Model;
         Model m_RuntimeModel;
-        IWorker m_CurrWorker;
+        Worker m_CurrWorker;
         int m_CurrFrame;
+        int m_CurrentPhonemeIndex = 0;
         List<VisemeData> m_VisemeList = new List<VisemeData>();
         List<int> m_InputArray = new List<int>();
         protected virtual bool IsSentisSupported => m_Model;
@@ -25,10 +26,10 @@ namespace Inworld.Native
         protected virtual void LoadSentis()
         {
             m_RuntimeModel = ModelLoader.Load(m_Model);
-            m_CurrWorker = WorkerFactory.CreateWorker(BackendType.GPUCompute, m_RuntimeModel);
-            TensorInt dummyTensor = new TensorInt(new TensorShape(1, 14), new int[14]);
-            m_CurrWorker.Execute(dummyTensor);
-            m_CurrWorker.PeekOutput().CompleteOperationsAndDownload();
+            m_CurrWorker = new Worker(m_RuntimeModel, BackendType.GPUCompute);
+            Tensor<int> dummyTensor = new Tensor<int>(new TensorShape(1, 14), new int[14]);
+            m_CurrWorker.Schedule(dummyTensor);
+            m_CurrWorker.PeekOutput().ReadbackRequest();
             dummyTensor.Dispose();
         }
         protected virtual void LoadPhonemeInfo(AudioPacket audioPacket)
@@ -76,16 +77,14 @@ namespace Inworld.Native
             if (m_InputArray.Count == 0)
                 return;
             Debug.Log($"Input Array Count: {m_InputArray.Count}");
-            TensorInt inputTensor = new TensorInt(new TensorShape(1, m_InputArray.Count), m_InputArray.ToArray());
-            m_CurrWorker.Execute(inputTensor);
-            TensorFloat outputTensor = m_CurrWorker.PeekOutput() as TensorFloat;
-            if (outputTensor == null)
+            Tensor<int> inputTensor = new Tensor<int>(new TensorShape(1, m_InputArray.Count), m_InputArray.ToArray());
+            m_CurrWorker.Schedule(inputTensor);
+            if (!(m_CurrWorker.PeekOutput() is Tensor<float> outputTensor))
             {
                 Debug.LogError("No Output!");
                 return;
             }
-            outputTensor.CompleteOperationsAndDownload();
-            float[] array = outputTensor.ToReadOnlyArray();
+            float[] array = outputTensor.DownloadToArray();
             VisemeData data = new VisemeData();
             for (int i = 0; i < array.Length; i+=15)
             {
