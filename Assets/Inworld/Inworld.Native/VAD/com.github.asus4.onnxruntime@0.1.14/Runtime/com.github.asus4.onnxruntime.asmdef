@@ -1,0 +1,20 @@
+{
+    "name": "com.github.asus4.onnxruntime",
+    "rootNamespace": "",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.github.asus4.onnxruntime.win-x64-gpu",
+            "expression": "0.1.4",
+            "define": "ORT_GPU_PROVIDER_WIN"
+        }
+    ],
+    "noEngineReferences": true
+}

@@ -127,6 +127,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 928350430333564137, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
+    - target: {fileID: 1957878372463033090, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 2310237008755668363, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
       propertyPath: m_Name
       value: PlayerControllerInnequin
@@ -134,6 +142,10 @@ PrefabInstance:
     - target: {fileID: 2311024790950539498, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
       propertyPath: m_text
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2311024790950539498, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 5395921512146893128, guid: 171587bd3eb30114dabe2a9bbc214f2e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -301,9 +313,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1508805550564489285, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
-      propertyPath: m_SelectingMethod
-      value: 1
+    - target: {fileID: 1340402167059864240, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_Text
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3753617577465698405, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_LocalPosition.x
