@@ -139,7 +139,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 917422910403801994}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c87e374328fd42828582b926dfde774b, type: 3}
+  m_Script: {fileID: 11500000, guid: ab16f3dd0a7edbd4fbaee753a05b7865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_AudioModules: []
+  m_AudioEvent:
+    onStartCalibrating:
+      m_PersistentCalls:
+        m_Calls: []
+    onStopCalibrating:
+      m_PersistentCalls:
+        m_Calls: []
+    onRecordingStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onRecordingEnd:
+      m_PersistentCalls:
+        m_Calls: []
+    onPlayerStartSpeaking:
+      m_PersistentCalls:
+        m_Calls: []
+    onPlayerStopSpeaking:
+      m_PersistentCalls:
+        m_Calls: []
+  m_DeviceName: 
