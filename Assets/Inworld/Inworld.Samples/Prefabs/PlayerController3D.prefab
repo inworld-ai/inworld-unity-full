@@ -277,12 +277,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7802538726591345284}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cae72343a18248318c024c7f8211c762, type: 3}
+  m_Script: {fileID: 11500000, guid: 76b1d62b3d29a954f964044483b381e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_ContentAnchor: {fileID: 8422684618343011769}
   m_BubbleLeft: {fileID: 4700556965938599861, guid: 21defec30991a4e419bd575e9824ae92, type: 3}
-  m_BubbleRight: {fileID: 818457071051776631, guid: 5024602b533211241bb0ab4fd7e088e3, type: 3}
+  m_BubbleRight: {fileID: 818457071051776631, guid: 22816b6b86972ba449e6771254cf98c0, type: 3}
   m_ChatOptions:
     audio: 0
     text: 1
@@ -1743,7 +1743,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2767796687439207646}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c7852f669f38f34a98d110bcdd840a9, type: 3}
+  m_Script: {fileID: 11500000, guid: a0283156df32d2f4f80dfee0242f97e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_ActionName: 

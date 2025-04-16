@@ -23,71 +23,26 @@ namespace Inworld
         // The name of the unitypackage to output.
         const string k_FullPackageName = "InworldAI.Full";
         // The path to the package under the `Assets/` folder.
-        const string k_CorePackagePath = "../inworld-unity-core";
         const string k_FullPackagePath = "Assets/Inworld";
-        const string k_ExtraPackagePath = "Assets/Inworld/InworldExtraAssets.unitypackage";
         const string k_TestScenePath = "Assets/Inworld/Inworld.Samples/Scenes/InnequinBasic.unity";
         const string k_TestSceneWebGL = "Assets/Inworld/Inworld.Samples/Scenes/InnequinWebGL.unity";
         const string k_TestSceneMobile = "Assets/Inworld/Inworld.Samples/Scenes/InnequinMobile.unity";
 
-        [MenuItem("Inworld/Export Package/Core", false, 100)]
-        public static async void ExportCore()
-        {
-            PackRequest req = UnityEditor.PackageManager.Client.Pack(k_CorePackagePath, k_FullPackagePath);
-            while (!req.IsCompleted)
-            {
-                await Task.Yield();
-            }
-            switch (req.Status)
-            {
-                case StatusCode.Success:
-                    Debug.Log($"Core Package Exported to {req.Result.tarballPath}!");
-                    break;
-                case StatusCode.Failure:
-                    Debug.LogError(req.Error.message);
-                    break;
-            }
-        }
-        static string _GetTgzFileName()
-        {
-            string searchDirectory = Path.Combine(Application.dataPath, "Inworld");
-            string[] tgzFiles = Directory.GetFiles(searchDirectory, "*.tgz", SearchOption.TopDirectoryOnly);
-            return tgzFiles.Length > 0 ? $"{k_FullPackagePath}/{Path.GetFileName(tgzFiles[0])}" : "";
-        }
+
         /// <summary>
         ///     Call it via outside command line to export package.
         /// </summary>
-        [MenuItem("Inworld/Export Package/SDK/Full", false, 102)]
+        [MenuItem("Inworld/Export Package/SDK", false, 102)]
         public static void ExportFull()
         {
-            string corePath = _GetTgzFileName();
-            if (string.IsNullOrEmpty(corePath))
-            {
-                Debug.LogError("Please extract core package first!");
-                return;
-            }
-            ExportExtraAssets();
             string[] assetPaths =
             {
-                corePath,
-                $"{k_FullPackagePath}/Editor",
-                k_ExtraPackagePath
+                k_FullPackagePath
             }; 
             AssetDatabase.ExportPackage(assetPaths, $"{k_FullPackagePath}/{k_FullPackageName}.unitypackage", ExportPackageOptions.Recurse);
         }
 
-        [MenuItem("Inworld/Export Package/SDK/Extra Assets", false, 101)]
-        public static void ExportExtraAssets()
-        {
-            string[] assetPaths =
-            {
-                $"{k_FullPackagePath}/Inworld.Assets", 
-                $"{k_FullPackagePath}/Inworld.Editor",
-                $"{k_FullPackagePath}/Inworld.Native",
-                $"{k_FullPackagePath}/Inworld.Samples"
-            }; 
-            AssetDatabase.ExportPackage(assetPaths, k_ExtraPackagePath, ExportPackageOptions.Recurse); 
-        }
+
         public static void BuildTestScene()
         {
             string sceneToBuild = "";

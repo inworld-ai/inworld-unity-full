@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcf7219bab7fe46a1ad266029b2fee19, type: 3}
+  m_Name: README
+  m_EditorClassIdentifier: 
+  titleFont: {fileID: 12800000, guid: ac1308377b6e09a4d8349fc0033248ed, type: 3}
+  contentFont: {fileID: 12800000, guid: 2c9ee65233da755438228fafa684047d, type: 3}
+  icon: {fileID: 2800000, guid: eba83e009e6da2a4ab4d9e016b19216b, type: 3}
+  title: Inworld.AI
+  sections:
+  - heading: 
+    text: This is the core Unity package of Inworld.AI. It uses Websocket to communicate
+      with the Inworld Server and does not reference any third-party libraries. It
+      supports all platforms.
+    linkText: 
+    url: 
+  - heading: 'Basic Requirements:'
+    text: Unity 2020.2
+    linkText: 
+    url: 
+  - heading: 'Dependencies:'
+    text: 1. TextMesh Pro
+    linkText: 
+    url: 
+  - heading: 
+    text: 
+    linkText: 2. UnityWebSocket
+    url: https://github.com/psygames/UnityWebSocket
+  - heading: 'Preparation:'
+    text: 'To integrate your own characters into your Unity project, you will need
+      to ensure that you can access:  At least one Workspace. At least one API Key
+      in your workspace. At least one Character in your workspace. At least one Inworld
+      Scene in your workspace. Ensure that your Inworld Scene contains all the Characters
+      you need to interact with. If you do not know how to create them, please check
+      our '
+    linkText: Prerequisities page
+    url: https://docs.inworld.ai/docs/tutorial-integrations/Unity/create-your-own/Prerequisites
+  - heading: 
+    text: For more information, please check
+    linkText: Studio Tutorial Series
+    url: https://docs.inworld.ai/docs/tutorial-basics/
+  loadedLayout: 0

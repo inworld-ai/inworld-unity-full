@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: InworldEditor
   m_EditorClassIdentifier: 
   m_Banner: {fileID: 2800000, guid: 27826f5951914a745bd751c0b8d249c8, type: 3}
-  m_InworldReadme: {fileID: 11400000, guid: bf7bf48dac1202d4da597adcd1fe7733, type: 2}
+  m_InworldReadme: {fileID: 11400000, guid: 025d4187bf657b04bb175e646362d3cb, type: 2}
   m_DisplayReadmeOnLoad: 1
   m_ControllerPrefab: {fileID: 2395919966041133306, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
-  m_Character2DPrefab: {fileID: 6956750892874934237, guid: 5841ee4822a3dae49bc57f6d3c851e6e, type: 3}
+  m_Character2DPrefab: {fileID: 6956750892874934237, guid: 4950a55560c87034f9236c7f92ff1533, type: 3}
   m_RPMPrefab: {fileID: 4560116734280050820, guid: 4f93a187a84c6b14da4a4bac1375b751, type: 3}
   m_InnequinPrefab: {fileID: 2030273176201225856, guid: 9e56f48d974372b4f85a8045992432de, type: 3}
   m_PlayerController: {fileID: 7802538726591345284, guid: eaefc8aac22db1d479ef21e362e3747e, type: 3}
-  m_PlayerController2D: {fileID: 7216582453331693882, guid: 41177cdca0cf65d4b88318d5107c053c, type: 3}
+  m_PlayerController2D: {fileID: 401423953070606001, guid: 80c5b2be96aee5047aa1bcd41c68d514, type: 3}
   m_PlayerControllerLLM: {fileID: 3952073688223741148, guid: 4d0ceebff7c50a74e9999a4c34d89e47, type: 3}
   m_CurrentStatus: 0
   m_UserDataPath: UserData
@@ -28,7 +28,7 @@ MonoBehaviour:
   m_ThumbnailPath: Thumbnail
   m_AvatarPath: Avatar
   m_PrefabPath: Prefabs
-  m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_ServerConfig: {fileID: 11400000, guid: 3ddcf6485e077bb4a86267046910b416, type: 2}
   m_ProjectURL: workspace-collections
   m_WorkspaceURL: workspaces
   m_KeyURL: apikeys

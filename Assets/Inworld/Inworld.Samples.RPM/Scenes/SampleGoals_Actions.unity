@@ -206,6 +206,10 @@ PrefabInstance:
       value: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
       objectReference: {fileID: 0}
     - target: {fileID: 1109287189565502095, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
+      propertyPath: m_SceneName
+      value: workspaces/unitytest/scenes/transform
+      objectReference: {fileID: 0}
+    - target: {fileID: 1109287189565502095, guid: f787cea5870c91b4ebe8571dc197a25f, type: 3}
       propertyPath: m_SceneFullName
       value: workspaces/unitytest/scenes/transform
       objectReference: {fileID: 0}
