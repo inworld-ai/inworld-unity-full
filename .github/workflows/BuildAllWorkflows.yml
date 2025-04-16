@@ -36,6 +36,14 @@ jobs:
             docker system prune -af
             docker volume prune -f
 
+        - name: Add TMP to manifest
+          run: |
+            echo '{
+              "dependencies": {
+                "com.unity.textmeshpro": "3.0.1"
+              }
+            }' > Packages/manifest.json
+
         - name: Build Test
           uses: game-ci/unity-builder@v4
           with:
