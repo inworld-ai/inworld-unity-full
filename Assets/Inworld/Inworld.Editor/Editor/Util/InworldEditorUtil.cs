@@ -224,8 +224,8 @@ namespace Inworld.Editors
             {
                 EditorUtility.DisplayDialog(
                     "Warning: Demo Scene",
-                    "You are currently in the Demo Scene. " +
-                    "Please clone this scene or create a new one to avoid overwriting demo data. " +
+                    "You are currently in the Demo Scene.\n" +
+                    "Please clone this scene or create a new one to avoid overwriting demo data.\n" +
                     "Modifications in the Demo Scene might be lost or cause conflicts.",
                     "OK");
             }

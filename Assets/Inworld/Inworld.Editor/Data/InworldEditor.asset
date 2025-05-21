@@ -23,6 +23,20 @@ MonoBehaviour:
   m_PlayerController2D: {fileID: 401423953070606001, guid: 80c5b2be96aee5047aa1bcd41c68d514, type: 3}
   m_PlayerControllerLLM: {fileID: 3952073688223741148, guid: 4d0ceebff7c50a74e9999a4c34d89e47, type: 3}
   m_CurrentStatus: 0
+  m_DemoScenes:
+  - {fileID: 102900000, guid: bd2207dc21da4f74c987591cbc8570b8, type: 3}
+  - {fileID: 102900000, guid: 7ba35924534441349a4a251d6bca9b17, type: 3}
+  - {fileID: 102900000, guid: d61c2ce301c01fb468082d243a187ecc, type: 3}
+  - {fileID: 102900000, guid: 45142416efac59248b62f0cde30eb3f9, type: 3}
+  - {fileID: 102900000, guid: 7459b2458775765439b9664d3127953e, type: 3}
+  - {fileID: 102900000, guid: 104959ea07cb07d4ba87364e03a33b8c, type: 3}
+  - {fileID: 102900000, guid: fa499c9c2cecc3247929d6a92f08b3cd, type: 3}
+  - {fileID: 102900000, guid: 7dab07e442f63ee47bccfebbdcf8cb4c, type: 3}
+  - {fileID: 102900000, guid: eabb358582f3fe94e844f07e9d6c96ea, type: 3}
+  - {fileID: 102900000, guid: 090aa76a92cd7084a954372770cafd87, type: 3}
+  - {fileID: 102900000, guid: 1765ca4a3060db74fa69cf461f295c87, type: 3}
+  - {fileID: 102900000, guid: f2c052b36676ee543bcb4ba30e94c2dd, type: 3}
+  - {fileID: 102900000, guid: 614285a552fb48a49b3b257f12feef93, type: 3}
   m_UserDataPath: UserData
   m_GameDataPath: GameData
   m_ThumbnailPath: Thumbnail
