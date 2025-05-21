@@ -29,7 +29,11 @@ header:
 
   paths:
     - '**/*.cs'
-   
+
+  paths-ignore:
+    - '**/UnityWebSocket/**/*.cs'
+    - '**/Inworld.Native/**/*.cs'
+
   comment: on-failure
 
 dependency:
