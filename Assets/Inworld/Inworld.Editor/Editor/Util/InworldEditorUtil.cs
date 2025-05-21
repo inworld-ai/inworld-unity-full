@@ -12,7 +12,9 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
+using UnityEditor.SceneManagement;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
 
@@ -79,7 +81,7 @@ namespace Inworld.Editors
 
 #region Top Menu
         [MenuItem("Inworld/Inworld Studio Panel", false, 0)]
-        static void TopMenuConnectStudio() => InworldStudioPanel.Instance.ShowPanel();
+        static void TopMenuConnectStudio() => _ShowStudioPanel();
 
         [MenuItem("Inworld/Inworld Settings", false, 1)]
         static void TopMenuShowPanel() => InworldAIEditor.Instance.ShowPanel();
@@ -93,7 +95,7 @@ namespace Inworld.Editors
 
 #region Asset Menu
         [MenuItem("Assets/Inworld/Studio Panel", false, 0)]
-        static void ConnectStudio() => InworldStudioPanel.Instance.ShowPanel();
+        static void ConnectStudio() => _ShowStudioPanel();
 
         [MenuItem("Assets/Inworld/Default Settings", false, 1)]
         static void ShowPanel() => InworldAIEditor.Instance.ShowPanel();
@@ -212,6 +214,23 @@ namespace Inworld.Editors
             string strSymbols = PlayerSettings.GetScriptingDefineSymbols(namedBuildTarget);
             strSymbols = strSymbols.Replace(";INWORLD_DEBUG", "").Replace("INWORLD_DEBUG", "");
             PlayerSettings.SetScriptingDefineSymbols(namedBuildTarget, strSymbols);
+        }
+
+        static void _ShowStudioPanel()
+        {
+            Scene currentScene = SceneManager.GetActiveScene();
+            SceneAsset asset = AssetDatabase.LoadAssetAtPath<SceneAsset>(currentScene.path);
+            if (InworldEditor.Instance.DemoScenes.Contains(asset))
+            {
+                EditorUtility.DisplayDialog(
+                    "Warning: Demo Scene",
+                    "You are currently in the Demo Scene. " +
+                    "Please clone this scene or create a new one to avoid overwriting demo data. " +
+                    "Modifications in the Demo Scene might be lost or cause conflicts.",
+                    "OK");
+            }
+            else
+                InworldStudioPanel.Instance.ShowPanel();
         }
     }
 }
