@@ -18,10 +18,10 @@ namespace Inworld
         [SerializeField] string m_PlayerName;
         [SerializeField] Texture2D m_PlayerThumbnail;
         [SerializeField] List<PlayerProfileField> m_PlayerData = new List<PlayerProfileField>();
-        [SerializeField] List<InworldProjectData> m_Projects = new List<InworldProjectData>();
-        [SerializeField] List<InworldWorkspaceData> m_Workspaces = new List<InworldWorkspaceData>();
-        [SerializeField] string m_UserID;
-        [HideInInspector][SerializeField] string m_BillingAccount;
+        [HideInInspector] [SerializeField] List<InworldProjectData> m_Projects = new List<InworldProjectData>();
+        [HideInInspector] [SerializeField] List<InworldWorkspaceData> m_Workspaces = new List<InworldWorkspaceData>();
+        [HideInInspector] [SerializeField] string m_UserID;
+        [HideInInspector] [SerializeField] string m_BillingAccount;
         /// <summary>
         /// Get/Set the player name, which will be displayed in the game.
         /// If you want to change the name in the runtime, you need to call SendUserConfig().
