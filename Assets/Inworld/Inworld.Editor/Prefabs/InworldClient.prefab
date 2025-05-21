@@ -41,13 +41,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2635911920446476283}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a83291b474642d697cd7963c55a608e, type: 3}
+  m_Script: {fileID: 11500000, guid: c80006d077cc4fa46a3df27453295b4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
-  m_SceneFullName: 
-  m_APIKey: 
-  m_APISecret: 
+  m_SceneName: 
   m_AutoScene: 0
   m_MaxWaitingListSize: 100
   m_Continuation:
@@ -56,6 +53,4 @@ MonoBehaviour:
       history: []
     externallySavedState: 
   m_EnableGroupChat: 0
-  m_CustomToken: 
-  m_PublicWorkspace: 
-  m_GameSessionID: 
+  m_AutoChat: 0

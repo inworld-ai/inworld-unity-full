@@ -15,10 +15,9 @@ namespace Inworld.Audio.VAD
     {
         //TODO(Yan): Replace directly with Sentis when it supports IF condition.
         [SerializeField] OrtAsset m_Model;
-
-        LocalVAD m_VADLocal;
-        bool m_Initialized; 
         
+        LocalVAD m_VADLocal;
+        bool m_Initialized;
         /// <summary>
         ///     Check Available, will add mac support in the next update.
         ///     For mobile device such as Android/iOS they naturally supported via hardware.
@@ -27,6 +26,8 @@ namespace Inworld.Audio.VAD
                                    || Application.platform == RuntimePlatform.WindowsEditor
                                    || Application.platform == RuntimePlatform.OSXEditor
                                    || Application.platform == RuntimePlatform.OSXPlayer;
+        
+        
         protected override void OnEnable()
         {
             m_VADLocal = new LocalVAD(m_Model, m_PlayerVolumeThreashold);
@@ -40,6 +41,8 @@ namespace Inworld.Audio.VAD
         }
         protected override bool DetectPlayerSpeaking()
         {
+            if (!m_Initialized || !IsAvailable)
+                return base.DetectPlayerSpeaking();
             CircularBuffer<short> buffer = ShortBufferToSend;
             if (buffer == null || m_CurrPosition == ShortBufferToSend.currPos)
                 return false;

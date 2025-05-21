@@ -1,9 +1,11 @@
 {
   "dependencies": {
-    "com.inworld.unity.core": "file:../Assets/Inworld/com.inworld.unity.core-3.8.1.tgz",
+    "com.unity.cloud.gltfast": "6.12.1",
+    "com.unity.textmeshpro": "3.0.6",
     "com.unity.collab-proxy": "2.5.2",
     "com.unity.feature.development": "1.0.2",
     "com.unity.inputsystem": "1.11.2",
+    "com.unity.nuget.newtonsoft-json": "3.2.1",
     "com.unity.sentis": "2.1.2",
     "com.unity.shadergraph": "17.0.3",
     "com.unity.timeline": "1.8.7",

@@ -28,6 +28,7 @@ namespace Inworld.Sample
             InworldController.CharacterHandler.Event.onCharacterListJoined.AddListener(OnCharacterJoined);
             InworldController.CharacterHandler.Event.onCharacterListLeft.AddListener(OnCharacterLeft);
         }
+
         protected override void OnDisable()
         {
             base.OnDisable();

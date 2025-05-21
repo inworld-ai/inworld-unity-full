@@ -35,8 +35,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6253734799884903879}
   - {fileID: 4969889924391347627}
+  - {fileID: 6253734799884903879}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 4.181, y: 180, z: 0}
 --- !u!20 &3963973871213933636
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2310237008755668363}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d80c9a6866b34b13b68dd12cc79d11f2, type: 3}
+  m_Script: {fileID: 11500000, guid: 68b74da84690d1a48898502441b96788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Status: {fileID: 5569203801443586707}
@@ -281,6 +281,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5376000406935717479, guid: 8158db3ddc0bbad428de34f54ae5b5a2, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 6724580330193979788, guid: 8158db3ddc0bbad428de34f54ae5b5a2, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -293,6 +297,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6724580330193979788, guid: 8158db3ddc0bbad428de34f54ae5b5a2, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 7380030771377259108, guid: 8158db3ddc0bbad428de34f54ae5b5a2, type: 3}
       propertyPath: m_fontAsset
       value: 
@@ -304,6 +312,10 @@ PrefabInstance:
     - target: {fileID: 7380030771377259108, guid: 8158db3ddc0bbad428de34f54ae5b5a2, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7380030771377259108, guid: 8158db3ddc0bbad428de34f54ae5b5a2, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
