@@ -27,21 +27,37 @@ namespace Inworld
         const string k_TestScenePath = "Assets/Inworld/Inworld.Samples/Scenes/InnequinBasic.unity";
         const string k_TestSceneWebGL = "Assets/Inworld/Inworld.Samples/Scenes/InnequinWebGL.unity";
         const string k_TestSceneMobile = "Assets/Inworld/Inworld.Samples/Scenes/InnequinMobile.unity";
-
+        const string k_ExtraPackagePath = "Assets/Inworld/InworldExtraAssets.unitypackage";
 
         /// <summary>
         ///     Call it via outside command line to export package.
         /// </summary>
-        [MenuItem("Inworld/Export Package/SDK", false, 102)]
+        [MenuItem("Inworld/Export Package/SDK/Full", false, 102)]
         public static void ExportFull()
         {
+            ExportExtraAssets();
             string[] assetPaths =
             {
-                k_FullPackagePath
+                $"{k_FullPackagePath}/Editor",
+                k_ExtraPackagePath
             }; 
             AssetDatabase.ExportPackage(assetPaths, $"{k_FullPackagePath}/{k_FullPackageName}.unitypackage", ExportPackageOptions.Recurse);
         }
 
+        [MenuItem("Inworld/Export Package/SDK/Extra Assets", false, 101)]
+        public static void ExportExtraAssets()
+        {
+            string[] assetPaths =
+            {
+                $"{k_FullPackagePath}/Inworld.AI", 
+                $"{k_FullPackagePath}/Inworld.Assets", 
+                $"{k_FullPackagePath}/Inworld.Editor",
+                $"{k_FullPackagePath}/Inworld.Native",
+                $"{k_FullPackagePath}/Inworld.Samples",
+                $"{k_FullPackagePath}/Inworld.Samples.RPM"
+            }; 
+            AssetDatabase.ExportPackage(assetPaths, k_ExtraPackagePath, ExportPackageOptions.Recurse); 
+        }
 
         public static void BuildTestScene()
         {
