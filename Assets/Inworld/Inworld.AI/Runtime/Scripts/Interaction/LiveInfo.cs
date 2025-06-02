@@ -107,11 +107,22 @@ namespace Inworld.Entities
 			AudioSession.ID = packetID;
 			AudioSession.Target = IsConversation ? InworldController.CharacterHandler ? InworldController.CharacterHandler.ConversationID : "" : Character?.brainName;
 		}
+        public void StopConversation()
+        {
+            Conversation.Status = ConversationEventType.EVICTED;
+            Conversation.ID = "";
+            Conversation.BrainNames.Clear();
+        }
 		public void StopAudioSession()
 		{
 			AudioSession.ID = "";
 			AudioSession.Target = "";
 		}
+        public void ClearSession()
+        {
+            StopConversation();
+            StopAudioSession();
+        }
 		public string Name => IsConversation ? "the Chat group" : Character?.givenName;
 	}
 }

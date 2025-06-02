@@ -16,7 +16,7 @@ namespace Inworld.Audio
         {
             while (isActiveAndEnabled)
             {
-                Audio.IsPlayerSpeaking = !InworldController.CharacterHandler.IsAnyCharacterSpeaking;
+                Audio.IsPlayerSpeaking = IsActive && !InworldController.CharacterHandler.IsAnyCharacterSpeaking;
                 yield return new WaitForSecondsRealtime(0.1f);
             }
         }

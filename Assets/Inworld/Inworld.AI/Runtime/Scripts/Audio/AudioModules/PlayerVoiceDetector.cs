@@ -46,7 +46,7 @@ namespace Inworld.Audio
                     if (isPlayerSpeaking)
                     {
                         m_AudioSessionSwitchingTime = 0;
-                        Audio.IsPlayerSpeaking = true;
+                        Audio.IsPlayerSpeaking = IsActive;
                     }
                     else
                     {
