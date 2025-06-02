@@ -25,7 +25,7 @@ namespace Inworld.Audio
         {
             while (isActiveAndEnabled)
             {
-                Audio.IsPlayerSpeaking = m_PushToTalkInputAction.IsPressed();
+                Audio.IsPlayerSpeaking = IsActive && m_PushToTalkInputAction.IsPressed();
                 yield return new WaitForSecondsRealtime(0.1f);
             }
         }

@@ -1262,6 +1262,7 @@ namespace Inworld
                 m_Continuation.externallySavedState = ""; 
             if (Status != InworldConnectionStatus.Error)
                 Status = InworldConnectionStatus.Idle;
+            Current.ClearSession();
         }
         void OnSocketError(object sender, ErrorEventArgs e)
         {

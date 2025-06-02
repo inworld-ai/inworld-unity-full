@@ -12,21 +12,35 @@ namespace Inworld.Audio
 {
     public class PlayerEventModule : InworldAudioModule, IPlayerAudioEventHandler
     {
+        public bool autoStart = true;
+        
+        public bool IsActive { get; set; }
         protected virtual void OnEnable()
         {
+            if (InworldController.Instance)
+                InworldController.Client.OnStatusChanged += OnStatusChanged;
+            if (autoStart)
+                IsActive = true;
             StartModule(OnPlayerUpdate());
         }
 
         protected virtual void OnDisable()
         {
+            if (InworldController.Instance)
+                InworldController.Client.OnStatusChanged -= OnStatusChanged;
             StopModule();
+        }
+        
+        void OnStatusChanged(InworldConnectionStatus status)
+        {
+            IsActive = status == InworldConnectionStatus.Connected;
         }
         
         public virtual IEnumerator OnPlayerUpdate()
         {
             while (isActiveAndEnabled)
             {
-                Audio.IsPlayerSpeaking = true;
+                Audio.IsPlayerSpeaking = IsActive;
                 yield return new WaitForSecondsRealtime(0.1f);
             }
         }
