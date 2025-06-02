@@ -101,6 +101,7 @@ namespace Inworld.Interactions
         }
         protected virtual void OnEnable()
         {
+            InworldController.Client.OnStatusChanged += OnStatusChanged;
             InworldController.Audio.Event.onPlayerStartSpeaking.AddListener(OnPlayerStartSpeaking);
             InworldController.Audio.Event.onPlayerStopSpeaking.AddListener(OnPlayerStopSpeaking);
             InworldController.Client.OnPacketReceived += ReceivePacket;
@@ -114,9 +115,15 @@ namespace Inworld.Interactions
 
             if (!InworldController.Instance)
                 return;
+            InworldController.Client.OnStatusChanged -= OnStatusChanged;
             InworldController.Audio.Event.onPlayerStartSpeaking.RemoveListener(OnPlayerStartSpeaking);
             InworldController.Audio.Event.onPlayerStopSpeaking.RemoveListener(OnPlayerStopSpeaking);
             InworldController.Client.OnPacketReceived -= ReceivePacket;
+        }
+        void OnStatusChanged(InworldConnectionStatus status)
+        {
+            if (status == InworldConnectionStatus.Idle)
+                strCurrCorrespond = "";
         }
 
         protected virtual void OnCharacterDeselected(string brainName)
@@ -177,6 +184,7 @@ namespace Inworld.Interactions
                 yield return null;
             }
         }
+        string strCurrCorrespond = "";
         protected IEnumerator HandleUtterances()
         {
             if (m_Proceed)
@@ -184,6 +192,7 @@ namespace Inworld.Interactions
                 HideContinue();
                 if (m_CurrentInteraction == null)
                 {
+                    strCurrCorrespond = "";
                     m_CurrentInteraction = GetNextInteraction();
                 }
                 if (m_CurrentInteraction != null && m_CurrentInteraction.CurrentUtterance == null)
@@ -216,6 +225,8 @@ namespace Inworld.Interactions
         {
             if (!IsRelated(incomingPacket))
                 return;
+            if (!string.IsNullOrEmpty(strCurrCorrespond) && incomingPacket.packetId.correlationId != strCurrCorrespond)
+                return;
             if (incomingPacket.Source == SourceType.PLAYER && (incomingPacket.IsBroadCast || incomingPacket.IsTarget(m_Character.ID)))
             {
                 if (!(incomingPacket is AudioPacket))
@@ -228,6 +239,10 @@ namespace Inworld.Interactions
                     return;
                 m_LastFromPlayer = false;
                 HandleAgentPackets(incomingPacket);
+                if (incomingPacket is CustomPacket)
+                {
+                    strCurrCorrespond = incomingPacket.packetId.correlationId;
+                }
             }
         }
         protected void HandleAgentPackets(InworldPacket packet)
