@@ -145,10 +145,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 34182410}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5683a1494e384c57bf97f01436158129, type: 3}
+  m_Script: {fileID: 11500000, guid: a158ca9dbb3e2e04582c8fb05ca599a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AutoReconnect: 0
+  m_AutoReconnect: 1
 --- !u!4 &34182412
 Transform:
   m_ObjectHideFlags: 0
@@ -191,13 +191,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 353148134}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c87e374328fd42828582b926dfde774b, type: 3}
+  m_Script: {fileID: 11500000, guid: ab16f3dd0a7edbd4fbaee753a05b7865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_AudioModules:
   - {fileID: 1912146017}
   - {fileID: 34182411}
-  - {fileID: 1015518731}
+  - {fileID: 1015518733}
   m_AudioEvent:
     onStartCalibrating:
       m_PersistentCalls:
@@ -439,7 +439,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1015518732}
-  - component: {fileID: 1015518731}
+  - component: {fileID: 1015518733}
   m_Layer: 0
   m_Name: PlayerVoiceDetector
   m_TagString: Untagged
@@ -447,21 +447,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1015518731
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1015518730}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf5273d026d24d27825a542873faf0b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BufferSeconds: 0.5
-  m_MinAudioSessionDuration: 0.5
-  m_PlayerVolumeThreashold: 10
 --- !u!4 &1015518732
 Transform:
   m_ObjectHideFlags: 0
@@ -477,6 +462,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 353148137}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1015518733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1015518730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 156494d7c5734e5ab08c81540848ba22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BufferSeconds: 1
+  m_MinAudioSessionDuration: 0.5
+  m_PlayerVolumeThreashold: 10
+  m_Model: {fileID: 1840921532545725537, guid: 5e3d643eb76a06148807e1816a13970a, type: 3}
 --- !u!1 &1402211008
 GameObject:
   m_ObjectHideFlags: 0
@@ -674,7 +675,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1912146016}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 145bb2cdf859447dbec8aeb61f622abb, type: 3}
+  m_Script: {fileID: 11500000, guid: 3c6ab119430a14f4b9c52949f11ab2a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   autoStart: 1
@@ -1329,7 +1330,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Audio: {fileID: 353148135}
-  m_VolumeDetector: {fileID: 1015518731}
+  m_VolumeDetector: {fileID: 1015518733}
   m_Dropdown: {fileID: 3177197487527682283}
   m_Text: {fileID: 3177197488449660891}
   m_Volume: {fileID: 3177197489201090704}

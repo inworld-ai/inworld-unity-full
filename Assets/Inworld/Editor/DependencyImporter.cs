@@ -1,5 +1,5 @@
 ﻿/*************************************************************************************************
- * Copyright 2022-2025 Theai, Inc. dba Inworld AI
+ * Copyright 2022-2024 Theai, Inc. dba Inworld AI
  *
  * Use of this source code is governed by the Inworld.ai Software Development Kit License Agreement
  * that can be found in the LICENSE.md file or at https://www.inworld.ai/sdk-license
@@ -19,35 +19,32 @@ namespace Inworld
     [InitializeOnLoad]
     public class DependencyImporter : AssetPostprocessor
     {
-        
-        const string k_LegacyPkgName = "Inworld.AI";
         const string k_PkgName = "InworldAI.Full";
         const string k_ExtraAssets = "InworldExtraAssets";
-        const string k_DependencyPackage = "com.inworld.unity.core";
         const string k_InworldPath = "Assets/Inworld";
         const string k_UpgradeTitle = "Legacy Inworld found";
         const string k_UpgradeContent = "Unable to upgrade. Please delete the folder Assets/Inworld, and reimport this package";
+
+        static readonly string[] s_DependentPackages = {
+            "com.unity.nuget.newtonsoft-json",
+            "com.unity.cloud.gltfast"
+        };
         
         static DependencyImporter()
         {
             AssetDatabase.importPackageCompleted += name =>
             {
-                switch (name)
-                {
-                    case k_PkgName:
-                        InstallDependencies();
-                        break;
-                    case k_ExtraAssets:
-                        _InstallTMP();
-                        break;
-                }
+                if (name.Contains(k_PkgName))
+                    InstallDependencies();
+                else if (name == k_ExtraAssets)
+                    _InstallTMP();
             };
         }
         
         [MenuItem("Inworld/Install Dependencies/SDK")]
         public static async void InstallDependencies()
         {
-            if (Directory.Exists($"Assets/{k_LegacyPkgName}") || Directory.Exists($"{k_InworldPath}/{k_LegacyPkgName}"))
+            if (Directory.Exists($"Assets/Inworld.AI"))
             {
                 if (EditorUtility.DisplayDialog(k_UpgradeTitle, k_UpgradeContent, "OK"))
                     return;
@@ -56,13 +53,7 @@ namespace Inworld
             await _AddPackage(); 
         }
 
-        static string _GetTgzFileName()
-        {
-            string searchDirectory = Path.Combine(Application.dataPath, "Inworld");
-            string[] tgzFiles = Directory.GetFiles(searchDirectory, "*.tgz", SearchOption.TopDirectoryOnly);
-            return tgzFiles.Length > 0 ? $"file:{tgzFiles[0]}" : "";
-        }
-        static async Task _AddUnityPackage(string package, string detail = "")
+        static async Task _AddUnityPackage(string package)
         {
             ListRequest listRequest = UnityEditor.PackageManager.Client.List();
 
@@ -80,8 +71,7 @@ namespace Inworld
                 Debug.Log($"{package} Found.");
                 return;
             }
-            string pkgToLoad = string.IsNullOrEmpty(detail) ? package : detail;
-            AddRequest addRequest = UnityEditor.PackageManager.Client.Add(pkgToLoad);
+            AddRequest addRequest = UnityEditor.PackageManager.Client.Add(package);
             while (!addRequest.IsCompleted)
             {
                 await Task.Yield();
@@ -96,7 +86,10 @@ namespace Inworld
         
         static async Task _AddPackage()
         {
-            await _AddUnityPackage(k_DependencyPackage, _GetTgzFileName());
+            foreach (string dependentPackage in s_DependentPackages)
+            {
+                await _AddUnityPackage(dependentPackage);
+            }
             if (!Directory.Exists($"{k_InworldPath}/Inworld.Assets") 
                 && File.Exists($"{k_InworldPath}/{k_ExtraAssets}.unitypackage"))
                 AssetDatabase.ImportPackage($"{k_InworldPath}/InworldExtraAssets.unitypackage", false);

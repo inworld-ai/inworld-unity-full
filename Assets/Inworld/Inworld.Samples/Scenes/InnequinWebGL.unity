@@ -629,14 +629,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8351152837507148103}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec0023079ae244cf88d8e53bebcd9542, type: 3}
+  m_Script: {fileID: 11500000, guid: 480ba6bf9a6e35143878e8001d7ab7a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_ContinueButton: {fileID: 0}
   m_AutoProceed: 1
   m_MaxItemCount: 100
   m_TextSpeedMultipler: 0.02
-  m_VolumeOnPlayerSpeaking: 0.5
+  m_VolumeOnPlayerSpeaking: 1
 --- !u!4 &458959186419827011
 Transform:
   m_ObjectHideFlags: 0
@@ -850,7 +850,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 206316847294408253}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a83291b474642d697cd7963c55a608e, type: 3}
+  m_Script: {fileID: 11500000, guid: c80006d077cc4fa46a3df27453295b4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_SceneName: 
@@ -1181,13 +1181,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5556377778853991224}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78696971f17345f8b3a604c50919e8f1, type: 3}
+  m_Script: {fileID: 11500000, guid: 09fd025a005490c42ab02f275ed5fd1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_GameData: {fileID: 0}
   m_APIKey: 2og83K3KNs8ImVaoL93pVNPc0XzKk9XV
   m_APISecret: 5aRjDzBGPf5PTzd25rHFiazxIyqZ88n1qLjJlQV2ZQA31nmx62QcQta9q24R8GT7
-  m_ServerConfig: {fileID: 11400000, guid: 5d4b4994cd4c627409e9c619e5e369e5, type: 2}
+  m_ServerConfig: {fileID: 11400000, guid: 3ddcf6485e077bb4a86267046910b416, type: 2}
   m_CustomToken: 
   m_PublicWorkspace: 
   m_GameSessionID: 
@@ -1312,7 +1312,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3245450934760567514}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4b6f91b2e7f4dda9f33fd704df850b6, type: 3}
+  m_Script: {fileID: 11500000, guid: 1c1ca730dd6530e4abf34f6a1971d357, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_ModelName: 0

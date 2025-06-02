@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 625542477148928998}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e86de61851c45a6994c49336b0b4fd6, type: 3}
+  m_Script: {fileID: 11500000, guid: 377ec912b92d433418ad239c75d56203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_SamplingMode: 1
@@ -89,7 +89,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1408711654736138334}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 145bb2cdf859447dbec8aeb61f622abb, type: 3}
+  m_Script: {fileID: 11500000, guid: 3c6ab119430a14f4b9c52949f11ab2a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   autoStart: 1
@@ -186,6 +186,7 @@ MonoBehaviour:
   m_BufferSeconds: 1
   m_MinAudioSessionDuration: 0.5
   m_PlayerVolumeThreashold: 10
+  m_Model: {fileID: 1840921532545725537, guid: 5e3d643eb76a06148807e1816a13970a, type: 3}
 --- !u!1001 &9035506154215759749
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -196,7 +197,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 917422910403801994, guid: 897c70b9b015fa24598240162321b053, type: 3}
       propertyPath: m_Name
-      value: AudioManager Variant
+      value: AECAudioManager
       objectReference: {fileID: 0}
     - target: {fileID: 983475450524616932, guid: 897c70b9b015fa24598240162321b053, type: 3}
       propertyPath: m_AudioModules.Array.size

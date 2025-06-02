@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 using Inworld.Entities;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
@@ -76,7 +77,8 @@ namespace Inworld.Editors
             }
             if (GUILayout.Button("Refresh", InworldEditor.Instance.BtnStyle))
             {
-                _DownloadRelatedAssets();
+                _ListCharacters();
+                _ListScenes();
             }
             GUILayout.EndHorizontal();
         }
@@ -115,6 +117,56 @@ namespace Inworld.Editors
         public void OnClose()
         {
             
+        }
+        void _ListScenes()
+        {
+
+            string wsFullName = InworldAI.GetWorkspaceFullName(m_CurrentGameData.workspaceName);
+            if (string.IsNullOrEmpty(wsFullName))
+                return;
+            InworldEditorUtil.SendWebGetRequest(InworldEditor.ListScenesURL(wsFullName), true, _ListSceneCompleted);
+        }
+        void _ListCharacters()
+        {
+            string wsFullName = InworldAI.GetWorkspaceFullName(m_CurrentGameData.workspaceName);
+            if (string.IsNullOrEmpty(wsFullName))
+                return;
+            InworldEditorUtil.SendWebGetRequest(InworldEditor.ListCharactersURL(wsFullName), true, _ListCharactersCompleted);
+        }
+        void _ListCharactersCompleted(AsyncOperation obj)
+        {
+            UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
+            if (uwr.result != UnityWebRequest.Result.Success)
+            {
+                InworldEditor.Instance.Error = $"List Characters Failed: {InworldEditor.GetError(uwr.error)}";
+                EditorUtility.ClearProgressBar();
+                return;
+            }            
+            ListCharacterResponse resp = JsonConvert.DeserializeObject<ListCharacterResponse>(uwr.downloadHandler.text);
+            InworldWorkspaceData wsData = InworldAI.User.Workspace.FirstOrDefault(ws => ws.name == InworldAI.GetWorkspaceFullName(m_CurrentGameData.workspaceName));
+            if (wsData == null)
+                return;
+            wsData.characters.Clear();
+            resp.characters.ForEach(charOverLoad => wsData.characters.Add(new InworldCharacterData(charOverLoad)));
+            _DownloadRelatedAssets();
+        }
+        void _ListSceneCompleted(AsyncOperation obj)
+        {
+            UnityWebRequest uwr = InworldEditorUtil.GetResponse(obj);
+            if (uwr.result != UnityWebRequest.Result.Success)
+            {
+                InworldEditor.Instance.Error = $"List Scene Failed: {InworldEditor.GetError(uwr.error)}";
+                EditorUtility.ClearProgressBar();
+                return;
+            }
+            ListSceneResponse resp = JsonConvert.DeserializeObject<ListSceneResponse>(uwr.downloadHandler.text);
+            InworldWorkspaceData wsData = InworldAI.User.Workspace.FirstOrDefault(ws => ws.name == InworldAI.GetWorkspaceFullName(m_CurrentGameData.workspaceName));
+            if (wsData == null)
+                return;
+            if (wsData.scenes == null)
+                wsData.scenes = new List<InworldSceneData>();
+            wsData.scenes.Clear();
+            wsData.scenes.AddRange(resp.scenes); 
         }
         void _InitDataSelection()
         {

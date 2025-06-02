@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89370f7c6e77dfc4e8e0a1ba49f7d36a, type: 3}
+  m_Name: InworldAI
+  m_EditorClassIdentifier: 
+  m_UserSetting: {fileID: 11400000, guid: 0581b3fab8d80304593015d10050bd9b, type: 2}
+  m_Capabilities:
+    audio: 1
+    emotions: 1
+    interruptions: 1
+    narratedActions: 0
+    regenerateResponse: 1
+    text: 1
+    triggers: 1
+    phonemeInfo: 1
+    relations: 1
+    debugInfo: 0
+    multiAgent: 1
+    multiModalActionPlanning: 0
+    pingPongReport: 1
+    perceivedLatencyReport: 1
+    logs: 0
+    logs_warning: 0
+    logs_info: 0
+    logs_debug: 0
+  m_DefaultThumbnail: {fileID: 2800000, guid: 2f2ad2a87cf90074f9f8b67461eb11e5, type: 3}
+  m_InworldLogo: {fileID: 2800000, guid: c5aafa432df50b64ab37de6456a9ed16, type: 3}
+  m_DefaultUserSetting: {fileID: 11400000, guid: fd7626f3dfd25444bb8b693f3f2d9021, type: 2}
+  m_ControllerPrefab: {fileID: 2395919966041133306, guid: b3a96f8fd8b5b6e4c8a577036de8768d, type: 3}
+  m_InputActions: {fileID: -944628639613478452, guid: cbc6491915db89947a5d8c6bdb2a392a, type: 3}
+  m_Initialized: 0
+  m_Version: 3.8.2
+  m_MicrophoneWebGLModule: {fileID: 4900000, guid: 24b656fc0296eac4391b4d055c847e96, type: 3}
+  m_MicrophoneWebGLResampler: {fileID: 4900000, guid: 93dcc299af2b23d43b63b214da6b3b0e, type: 3}
+  m_DebugMode: 1

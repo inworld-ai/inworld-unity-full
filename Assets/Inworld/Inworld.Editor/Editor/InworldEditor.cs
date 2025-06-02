@@ -12,6 +12,7 @@ using UnityEngine;
 using Inworld.Sample;
 using Inworld.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 
 namespace Inworld.Editors
@@ -34,6 +35,7 @@ namespace Inworld.Editors
         [Space(10)][Header("Status")]
         [SerializeField] EditorStatus m_CurrentStatus;
         EditorStatus m_LastStatus;
+        [SerializeField] List<SceneAsset> m_DemoScenes; 
         [Header("Paths:")]
         [SerializeField] string m_UserDataPath;
         [SerializeField] string m_GameDataPath;
@@ -108,6 +110,7 @@ namespace Inworld.Editors
                 CurrentState.OnEnter();
             }
         }
+        public List<SceneAsset> DemoScenes => m_DemoScenes;
         /// <summary>
         /// Gets the last Editor State.
         /// </summary>
